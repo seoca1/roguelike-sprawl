@@ -525,36 +525,27 @@ def _end_combat(state: AppState, combat_state: CombatState) -> None:
 
         # Advance RunState: if we're on the DEFEAT_ICE stage, this
         # victory satisfies the objective and we should move forward.
-        from ..run import check_combat_victory, ensure_run_state
+        from ..run import Stage, check_combat_victory, ensure_run_state
 
         run_state = ensure_run_state(state)
         if check_combat_victory(run_state):
             run_state.mark_advance()
             state.status_messages.append(f">>> Stage complete: {run_state.current_info().title}")
 
+            # If we advanced to JACK_OUT, switch to the jack out screen
+            if run_state.current_stage is Stage.JACK_OUT:
+                from .jack_out_view import enter_jack_out
+
+                enter_jack_out(state)
+                # Mark current ICE node as defeated before returning
+                _defeat_current_ice_node(state)
+                # Trigger victory event (ICE destruction)
+                _check_post_combat_event(state, "standard_ice_victory")
+                return  # Don't return to matrix; we're entering JACK_OUT
+
         # Mark current ICE node as defeated - removed from dungeon
         if state.matrix is not None and state.current_node_id is not None:
-            defeated_id = state.current_node_id
-            # Add to defeated set
-            state.defeated_nodes.add(defeated_id)
-            state.status_messages.append(f">>> ICE [{defeated_id}] destroyed")
-
-            # Remove the node from the matrix (graph is rebuilt)
-            state.matrix = _remove_node_from_graph(state.matrix, defeated_id)
-
-            # Move player to a connected neighbor
-            if state.matrix is not None and len(state.matrix.nodes) > 0:
-                # Find a remaining neighbor
-                neighbors = (
-                    state.matrix.neighbors(defeated_id)
-                    if defeated_id in [n.id for n in state.matrix.nodes]
-                    else []
-                )
-                if neighbors:
-                    state.current_node_id = neighbors[0].id
-                else:
-                    # Just pick the entry or first node
-                    state.current_node_id = state.matrix.entry_id
+            _defeat_current_ice_node(state)
 
         # Return to matrix (player can continue exploring)
         state.screen = ScreenKind.MATRIX
@@ -592,6 +583,30 @@ def _check_post_combat_event(state: AppState, trigger_id: str) -> None:
     if event is not None:
         state.active_event = EventState(event=event)
         state.screen = ScreenKind.EVENT
+
+
+def _defeat_current_ice_node(state: AppState) -> None:
+    """Mark the current ICE node as defeated and remove from graph.
+
+    Helper for _end_combat() — used in both the JACK_OUT path and
+    the standard matrix-return path.
+    """
+    if state.matrix is None or state.current_node_id is None:
+        return
+    defeated_id = state.current_node_id
+    state.defeated_nodes.add(defeated_id)
+    state.status_messages.append(f">>> ICE [{defeated_id}] destroyed")
+    state.matrix = _remove_node_from_graph(state.matrix, defeated_id)
+    if state.matrix is not None and len(state.matrix.nodes) > 0:
+        neighbors = (
+            state.matrix.neighbors(defeated_id)
+            if defeated_id in [n.id for n in state.matrix.nodes]
+            else []
+        )
+        if neighbors:
+            state.current_node_id = neighbors[0].id
+        else:
+            state.current_node_id = state.matrix.entry_id
 
 
 def _remove_node_from_graph(matrix: MatrixGraph | None, node_id: str) -> MatrixGraph | None:

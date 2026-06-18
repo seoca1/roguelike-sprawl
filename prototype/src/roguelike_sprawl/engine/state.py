@@ -39,6 +39,9 @@ class ScreenKind(StrEnum):
     DEATH = "death"
     NPC = "npc"  # NPC encounter with dialogue choices
     EVENT = "event"  # Event story (cutscene with character art)
+    JACK_OUT = "jack_out"  # Matrix disconnect animation (Stage.JACK_OUT)
+    REWARD = "reward"  # Mission rewards screen (Stage.REWARD)
+    DEBRIEF = "debrief"  # Optional narrative between REWARD and COMPLETE
 
 
 # A grade-1 (1-up) loadout: Ono-Sendai 4 (T1) + Wisp (T1) + Standard (T1).
@@ -137,3 +140,9 @@ class AppState:
     run_state: RunState | None = None
     # Sound configuration (per-category on/off + master volume)
     sound_config: SoundConfig | None = None
+    # Jack Out animation state (Stage.JACK_OUT)
+    jack_out_started_at: float = 0.0
+    jack_out_frame_index: int = 0
+    # Debrief state (Stage.DEBRIEF)
+    debrief_character: str = "novice"
+    debrief_index: int = 0

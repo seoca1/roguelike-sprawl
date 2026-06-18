@@ -1,0 +1,240 @@
+"""Reward screen — mission completion summary.
+
+When a Run enters Stage.REWARD, this screen shows what the player
+earned: credits, materials, and any unlocked intel. Player presses
+ENTER to return to the Hub.
+
+References:
+    run.state.Stage.REWARD
+    design/systems/stage_structure.json
+"""
+
+from __future__ import annotations
+
+import tcod.console
+import tcod.event
+
+from ..audio import sound_manager as _sm_module
+from ..run import Stage, start_run
+from . import config as _engine_config
+from .state import AppState, ScreenKind
+
+# --- Stage transition helpers ---
+
+
+def enter_reward(state: AppState) -> None:
+    """Transition into the Reward screen.
+
+    Called from jack_out_view.advance_to_reward().
+    Awards credits/materials to the player based on mission rewards.
+    """
+    state.screen = ScreenKind.REWARD
+
+    # Award rewards from the mission
+    if state.current_mission is not None:
+        mission = state.current_mission
+        if mission.rewards is not None:
+            credits_earned = mission.rewards.credits
+            if credits_earned:
+                state.credits += credits_earned
+                state.status_messages.append(f">>> +{credits_earned} credits")
+
+            materials = mission.rewards.materials
+            for mat_id, qty in materials.items():
+                state.inventory[mat_id] = state.inventory.get(mat_id, 0) + qty
+                state.status_messages.append(f">>> +{qty}x {mat_id}")
+
+    state.status_messages.append(">>> Press ENTER to return to hub")
+
+    # Play victory sound
+    try:
+        _sm_module.play("combat/victory")
+    except Exception:
+        pass
+
+
+def return_to_hub_from_reward(state: AppState) -> None:
+    """Move from REWARD to COMPLETE stage, then return to Hub.
+
+    Called when the player dismisses the reward screen.
+    """
+    if state.run_state is None:
+        return
+
+    # Advance run state to COMPLETE
+    while state.run_state.current_stage not in (Stage.COMPLETE, Stage.FAILED):
+        state.run_state.mark_advance()
+        # Safety: prevent infinite loop
+        if state.run_state.current_stage in (Stage.COMPLETE, Stage.FAILED):
+            break
+
+    # Mark mission as completed
+    if state.current_mission is not None:
+        mission_id = state.current_mission.id
+        if mission_id not in state.completed_missions:
+            state.completed_missions.add(mission_id)
+        state.mission_progress[mission_id] = 100  # Mark as 100% complete
+        state.status_messages.append(f">>> Mission '{mission_id}' completed")
+
+    # Clean up matrix state
+    state.matrix = None
+    state.current_node_id = None
+    state.cyberspace_layouts = None
+    state.server_subgraph = None
+    state.in_server_browser = True
+    state.selected_server_index = 0
+
+    # Reset mission
+    state.current_mission = None
+    state.mission_progress = {}
+
+    # Reset run state for next run
+    state.run_state = start_run(mission_id="first_jack")
+
+    # Switch to hub
+    state.screen = ScreenKind.HUB
+    state.status_messages.append(">>> Returned to hub. Ready for next job.")
+
+
+# --- Rendering ---
+
+
+def render_reward(console: tcod.console.Console, state: AppState) -> None:
+    """Render the Reward screen.
+
+    Shows mission title, credits earned, materials, and "Press ENTER" prompt.
+    """
+    SCREEN_WIDTH = _engine_config.SCREEN_WIDTH  # noqa: N806
+    SCREEN_HEIGHT = _engine_config.SCREEN_HEIGHT  # noqa: N806
+
+    console.clear(bg=(0, 0, 0))
+
+    # Title box
+    box_y = 4
+    box_h = 12
+    box_x = (SCREEN_WIDTH - 50) // 2
+    box_w = 50
+
+    # Top border
+    console.print(x=box_x, y=box_y, string="┌" + "─" * (box_w - 2) + "┐", fg=(0, 255, 100))
+    for y in range(box_y + 1, box_y + box_h - 1):
+        console.print(x=box_x, y=y, string="│" + " " * (box_w - 2) + "│", fg=(0, 255, 100))
+    console.print(
+        x=box_x, y=box_y + box_h - 1, string="└" + "─" * (box_w - 2) + "┘", fg=(0, 255, 100)
+    )
+
+    # Title
+    title = "✓ MISSION COMPLETE"
+    console.print(
+        x=box_x + (box_w - len(title)) // 2,
+        y=box_y + 1,
+        string=title,
+        fg=(0, 255, 100),
+    )
+
+    # Mission title
+    if state.current_mission is not None:
+        mission_name = state.current_mission.title
+        console.print(
+            x=box_x + (box_w - len(mission_name)) // 2,
+            y=box_y + 3,
+            string=mission_name,
+            fg=(255, 200, 100),
+        )
+
+    # Credits
+    credits_line = f"Credits:  {state.credits}"
+    if state.current_mission is not None and state.current_mission.rewards:
+        earned = state.current_mission.rewards.credits
+        credits_line = f"Credits:  +{earned}  (total: {state.credits})"
+    console.print(
+        x=box_x + 4,
+        y=box_y + 5,
+        string=credits_line,
+        fg=(255, 200, 100),
+    )
+
+    # Materials
+    mat_y = box_y + 7
+    console.print(x=box_x + 4, y=mat_y, string="Materials:", fg=(200, 200, 200))
+    if state.inventory:
+        for i, (mat_id, qty) in enumerate(sorted(state.inventory.items())):
+            mat_line = f"  • {qty}x {mat_id}"
+            console.print(
+                x=box_x + 4,
+                y=mat_y + 1 + i,
+                string=mat_line,
+                fg=(100, 200, 255),
+            )
+            if i >= 3:  # Limit to 4 materials
+                remaining = len(state.inventory) - 4
+                if remaining > 0:
+                    console.print(
+                        x=box_x + 4,
+                        y=mat_y + 2 + i,
+                        string=f"  • ... and {remaining} more",
+                        fg=(150, 150, 150),
+                    )
+                break
+    else:
+        console.print(
+            x=box_x + 4,
+            y=mat_y + 1,
+            string="  (none)",
+            fg=(150, 150, 150),
+        )
+
+    # Bottom border accent
+    console.print(
+        x=box_x + 1,
+        y=box_y + box_h - 1,
+        string="─" * (box_w - 2),
+        fg=(0, 200, 80),
+    )
+
+    # Prompt
+    prompt = "[ENTER] Return to Hub"
+    console.print(
+        x=(SCREEN_WIDTH - len(prompt)) // 2,
+        y=box_y + box_h + 2,
+        string=prompt,
+        fg=(200, 200, 200),
+    )
+
+    # Recent status
+    if state.status_messages:
+        for i, msg in enumerate(state.status_messages[-5:]):
+            console.print(
+                x=2,
+                y=SCREEN_HEIGHT - 7 + i,
+                string=msg,
+                fg=(120, 120, 120),
+            )
+
+
+# --- Input ---
+
+
+def handle_reward_input(
+    event: tcod.event.Event,
+    state: AppState,
+) -> bool:
+    """Handle input on the Reward screen. Returns False to quit."""
+    if not isinstance(event, tcod.event.KeyDown):
+        return True
+
+    if event.sym is tcod.event.KeySym.Q:
+        return False
+    if event.sym is tcod.event.KeySym.ESCAPE:
+        return False
+
+    # ENTER or SPACE advances
+    if event.sym in (
+        tcod.event.KeySym.RETURN,
+        tcod.event.KeySym.SPACE,
+        tcod.event.KeySym.KP_ENTER,
+    ):
+        return_to_hub_from_reward(state)
+        return True
+
+    return True

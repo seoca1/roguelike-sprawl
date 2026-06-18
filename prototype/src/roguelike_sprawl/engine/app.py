@@ -116,6 +116,18 @@ def _render(
         from . import death as death_screen
 
         death_screen.render_death_screen(console, state)
+    elif state.screen is ScreenKind.JACK_OUT:
+        from . import jack_out_view
+
+        jack_out_view.render_jack_out(console, state)
+    elif state.screen is ScreenKind.REWARD:
+        from . import reward_view
+
+        reward_view.render_reward(console, state)
+    elif state.screen is ScreenKind.DEBRIEF:
+        from . import debrief_view
+
+        debrief_view.render_debrief(console, state)
 
 
 def _handle_input(
@@ -189,6 +201,18 @@ def _handle_input(
         from . import death as death_screen
 
         return death_screen.handle_death_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.JACK_OUT:
+        from . import jack_out_view
+
+        return jack_out_view.handle_jack_out_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.REWARD:
+        from . import reward_view
+
+        return reward_view.handle_reward_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.DEBRIEF:
+        from . import debrief_view
+
+        return debrief_view.handle_debrief_input(event, state)  # type: ignore[arg-type]
     return True
 
 
