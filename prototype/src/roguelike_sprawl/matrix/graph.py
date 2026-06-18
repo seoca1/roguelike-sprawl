@@ -5,6 +5,7 @@ from __future__ import annotations
 from collections import deque
 from collections.abc import Iterator
 from dataclasses import dataclass
+from typing import cast
 
 from .node import Node, NodeKind
 
@@ -21,6 +22,15 @@ class Edge:
             raise ValueError("Edge endpoints must be non-empty")
         if self.src == self.dst:
             raise ValueError("Edge cannot be a self-loop")
+
+    def to_dict(self) -> dict[str, str]:
+        """Serialize to JSON-compatible dict."""
+        return {"src": self.src, "dst": self.dst}
+
+    @classmethod
+    def from_dict(cls, data: dict[str, str]) -> Edge:
+        """Deserialize from JSON dict."""
+        return cls(src=data["src"], dst=data["dst"])
 
 
 @dataclass(frozen=True, slots=True)
@@ -81,6 +91,90 @@ class MatrixGraph:
 
     def __repr__(self) -> str:
         return f"MatrixGraph(nodes={len(self.nodes)}, edges={len(self.edges)}, entry={self.entry_id!r})"
+
+    def to_dict(self) -> dict[str, object]:
+        """Serialize to JSON-compatible dict for save/load.
+
+        Includes nodes (with all fields), edges, and entry_id.
+        """
+        return {
+            "nodes": [self._node_to_dict(n) for n in self.nodes],
+            "edges": [e.to_dict() for e in self.edges],
+            "entry_id": self.entry_id,
+        }
+
+    @staticmethod
+    def _node_to_dict(node: Node) -> dict[str, object]:
+        """Convert a Node to a JSON-compatible dict."""
+
+        return {
+            "id": node.id,
+            "kind": node.kind.value,
+            "label": node.label,
+            "zone": node.zone.value,
+            "ice": node.ice.value,
+            "alarm": node.alarm.value,
+            "faction": node.faction.value,
+        }
+
+    @classmethod
+    def from_dict(cls, data: dict[str, object]) -> MatrixGraph:
+        """Deserialize from JSON dict.
+
+        Args:
+            data: Dict with 'nodes', 'edges', 'entry_id' keys.
+
+        Returns:
+            A new MatrixGraph instance.
+
+        Raises:
+            ValueError: If data is malformed.
+        """
+        from .node import AlarmLevel, Faction, IceKind, NodeKind, ZoneDepth
+
+        # Cast to known types (JSON-loaded dicts are dict[str, object] in mypy)
+        nodes_raw = cast(list[object], data.get("nodes", []))
+        edges_raw = cast(list[object], data.get("edges", []))
+        entry_id_raw = cast(str, data.get("entry_id", ""))
+
+        # Type narrowing for mypy strict
+        nodes_data: list[dict[str, object]] = []
+        for n in nodes_raw:
+            if isinstance(n, dict):
+                nodes_data.append(n)
+            else:
+                raise ValueError(f"Invalid node data: {n!r}")
+
+        edges_data: list[dict[str, str]] = []
+        for e in edges_raw:
+            if isinstance(e, dict):
+                edges_data.append(e)
+            else:
+                raise ValueError(f"Invalid edge data: {e!r}")
+
+        nodes_list: list[Node] = []
+        for n in nodes_data:
+            try:
+                node = Node(
+                    id=str(n["id"]),
+                    kind=NodeKind(str(n["kind"])),
+                    label=str(n["label"]),
+                    zone=ZoneDepth(str(n["zone"])),
+                    ice=IceKind(str(n.get("ice", IceKind.NONE.value))),
+                    alarm=AlarmLevel(str(n.get("alarm", AlarmLevel.LOW.value))),
+                    faction=Faction(str(n.get("faction", Faction.NONE.value))),
+                )
+            except (KeyError, ValueError) as e:
+                raise ValueError(f"Invalid node {n!r}: {e}") from e
+            nodes_list.append(node)
+
+        edges_list = [Edge.from_dict(e) for e in edges_data]
+
+        return cls(
+            nodes=tuple(nodes_list),
+            edges=tuple(edges_list),
+            entry_id=entry_id_raw,
+        )
 
 
 def compute_layout(

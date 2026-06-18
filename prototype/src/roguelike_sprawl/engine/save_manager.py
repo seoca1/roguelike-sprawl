@@ -349,6 +349,14 @@ class SaveManager:
             }
 
         # App state — only the fields needed to resume a Run
+        # Include matrix graph if present (for complete state restoration)
+        matrix_dict: dict[str, object] | None = None
+        if state.matrix is not None:
+            try:
+                matrix_dict = state.matrix.to_dict()
+            except Exception:
+                matrix_dict = None
+
         app_state_dict: dict[str, Any] = {
             "inventory": dict(state.inventory),
             "credits": state.credits,
@@ -359,6 +367,7 @@ class SaveManager:
             "in_server_browser": state.in_server_browser,
             "selected_server_index": state.selected_server_index,
             "current_mission_id": state.current_mission.id if state.current_mission else None,
+            "matrix": matrix_dict,
         }
 
         # Metadata for display
@@ -466,10 +475,36 @@ class SaveManager:
         if saved.metadata.get("player_grade") is not None:
             state.player_grade = int(saved.metadata["player_grade"])
 
-        # Matrix and other state are NOT restored (would need full graph serialization)
-        # The player will need to re-jack-in
-        state.matrix = None
-        state.cyberspace_layouts = None
+        # Matrix and other state — try to restore from saved data.
+        # If the matrix can't be restored (corrupted/missing), the player
+        # will need to re-jack-in but other state is preserved.
+        matrix_data = app_data.get("matrix")
+        matrix_restored = False
+        if matrix_data and isinstance(matrix_data, dict):
+            try:
+                from ..matrix.graph import MatrixGraph
+
+                state.matrix = MatrixGraph.from_dict(matrix_data)
+                matrix_restored = True
+            except Exception as e:
+                state.status_messages.append(
+                    f">>> Warning: matrix restore failed ({e}), re-jack-in required"
+                )
+                state.matrix = None
+        else:
+            state.matrix = None
+
+        # Recompute cyberspace_layouts if matrix was restored
+        if matrix_restored and state.matrix is not None:
+            try:
+                from ..matrix.graph import compute_layout
+
+                state.cyberspace_layouts = dict(compute_layout(state.matrix))
+            except Exception:
+                state.cyberspace_layouts = None
+        else:
+            state.cyberspace_layouts = None
+
         state.server_subgraph = None
         state.combat_state = None
         state.cinematic_state = None
@@ -489,9 +524,10 @@ class SaveManager:
                 state.current_mission = None
 
         # Set screen based on saved stage
-        # If we were on JACK_OUT, REWARD, DEBRIEF — return to matrix or hub
+        # If matrix was restored, go to MATRIX (continue exploration).
+        # Otherwise, fall back to HUB (player must re-jack-in).
         if current_stage in (Stage.PENDING, Stage.MEET_NPC, Stage.EXTRACT_DATA, Stage.DEFEAT_ICE):
-            state.screen = ScreenKind.MATRIX if state.matrix else ScreenKind.HUB
+            state.screen = ScreenKind.MATRIX if state.matrix is not None else ScreenKind.HUB
         elif current_stage in (Stage.JACK_OUT, Stage.REWARD, Stage.DEBRIEF):
             # Post-combat: return to hub to continue
             state.screen = ScreenKind.HUB
@@ -502,6 +538,11 @@ class SaveManager:
 
         state.status_messages.append(f">>> Game loaded from slot {slot}")
         state.status_messages.append(f">>> Stage: {current_stage.value}")
+        if matrix_restored and state.matrix is not None:
+            state.status_messages.append(
+                f">>> Matrix restored: {len(state.matrix.nodes)} nodes, "
+                f"{len(state.matrix.edges)} edges"
+            )
 
     def delete(self, slot: int) -> bool:
         """Delete a save slot.

@@ -173,6 +173,40 @@ def verify_save_load(slot: int) -> int:
     assert loaded.credits == initial_credits
     print(f"    ✓ quick save/load roundtrip: credits={loaded.credits}")
 
+    # 9b. Test matrix serialization roundtrip
+    print()
+    print("[9b] Matrix graph serialization")
+    from roguelike_sprawl.matrix.graph import Edge, MatrixGraph
+    from roguelike_sprawl.matrix.node import (
+        IceKind,
+        Node,
+        NodeKind,
+        ZoneDepth,
+    )
+
+    matrix_state = _make_state()
+    entry = Node("entry", NodeKind.ENTRY, "Entry", ZoneDepth.SURFACE)
+    data_node = Node("data1", NodeKind.DATA, "Data", ZoneDepth.SURFACE)
+    matrix_state.matrix = MatrixGraph(
+        nodes=(entry, data_node),
+        edges=(Edge("entry", "data1"),),
+        entry_id="entry",
+    )
+    matrix_state.current_node_id = "entry"
+    manager.save(2, matrix_state)
+
+    loaded_matrix_state = AppState()
+    manager.restore_state(2, loaded_matrix_state)
+    assert loaded_matrix_state.matrix is not None
+    assert len(loaded_matrix_state.matrix.nodes) == 2
+    assert loaded_matrix_state.matrix.is_connected("entry", "data1")
+    assert loaded_matrix_state.cyberspace_layouts is not None
+    assert loaded_matrix_state.screen is ScreenKind.MATRIX
+    print(
+        f"    ✓ matrix restored: {len(loaded_matrix_state.matrix.nodes)} nodes, "
+        f"layout positions: {len(loaded_matrix_state.cyberspace_layouts)}"
+    )
+
     # 10. Test Save/Load browser UI
     print()
     print("[10] Save/Load browser UI flow")
