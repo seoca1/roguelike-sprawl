@@ -42,6 +42,7 @@ class ScreenKind(StrEnum):
     JACK_OUT = "jack_out"  # Matrix disconnect animation (Stage.JACK_OUT)
     REWARD = "reward"  # Mission rewards screen (Stage.REWARD)
     DEBRIEF = "debrief"  # Optional narrative between REWARD and COMPLETE
+    SAVE_LOAD = "save_load"  # Save/Load slot browser (Hub)
 
 
 # A grade-1 (1-up) loadout: Ono-Sendai 4 (T1) + Wisp (T1) + Standard (T1).
@@ -146,3 +147,5 @@ class AppState:
     # Debrief state (Stage.DEBRIEF)
     debrief_character: str = "novice"
     debrief_index: int = 0
+    # Save/Load browser state (ScreenKind.SAVE_LOAD)
+    save_load_selected: int = 1

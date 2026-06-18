@@ -75,11 +75,15 @@ def render_hub(console: tcod.console.Console, t: Translator, state: AppState) ->
         draw_side(console, side_r, label="Mission Details", lines=["No mission selected"])
 
     # Controls
+    from .save_manager import SaveManager
+
+    has_saves = any(meta.exists for meta in SaveManager().list_slots())
+    save_hint = "[F5] Save  [L] Load  " if has_saves else "[F5] Save  "
     draw_controls(
         console,
         ctrl_r,
         lines=[
-            "[1-9] Select Mission  [ESC] Back to Menu",
+            f"{save_hint}[1-9] Select Mission  [ESC] Back to Menu",
             "[Q] Quit",
         ],
     )
@@ -312,6 +316,12 @@ def handle_hub_input(event: tcod.event.Event, state: AppState) -> bool:
             return True
         if event.sym is KeySym.Q:
             return False
+        # L: open save/load browser
+        if event.sym is KeySym.L:
+            from .save_load_view import enter_save_load
+
+            enter_save_load(state)
+            return True
         if event.sym in (KeySym.N1, KeySym.N2, KeySym.N3, KeySym.N4, KeySym.N5):
             available = state.job_board.available_for(state.player_grade)
             idx = int(event.sym.name[1:]) - 1

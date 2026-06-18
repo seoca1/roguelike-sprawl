@@ -128,6 +128,10 @@ def _render(
         from . import debrief_view
 
         debrief_view.render_debrief(console, state)
+    elif state.screen is ScreenKind.SAVE_LOAD:
+        from . import save_load_view
+
+        save_load_view.render_save_load(console, state)
 
 
 def _handle_input(
@@ -238,6 +242,10 @@ def _handle_input(
         from . import debrief_view
 
         return debrief_view.handle_debrief_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.SAVE_LOAD:
+        from . import save_load_view
+
+        return save_load_view.handle_save_load_input(event, state)  # type: ignore[arg-type]
     return True
 
 

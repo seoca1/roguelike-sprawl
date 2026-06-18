@@ -27,7 +27,9 @@ from roguelike_sprawl.engine import (
     AppState,
     SaveManager,
     SaveSlotEmptyError,
+    ScreenKind,
 )
+from roguelike_sprawl.engine import save_load_view
 from roguelike_sprawl.matrix.node import ZoneDepth
 from roguelike_sprawl.missions.mission import Mission, Rewards
 from roguelike_sprawl.run import Stage, start_run
@@ -170,6 +172,70 @@ def verify_save_load(slot: int) -> int:
     manager.quick_load(loaded)
     assert loaded.credits == initial_credits
     print(f"    ✓ quick save/load roundtrip: credits={loaded.credits}")
+
+    # 10. Test Save/Load browser UI
+    print()
+    print("[10] Save/Load browser UI flow")
+    # Save a real save in tmp_dir so browser can find it
+    save_state = _make_state()
+    save_state.credits = 777
+    manager.save(1, save_state)
+
+    # Enter save/load browser
+    ui_state = AppState()
+    ui_state.screen = ScreenKind.HUB
+    ui_state.credits = 0
+    # Patch SaveManager to use our tmp_dir
+    import unittest.mock
+
+    with unittest.mock.patch.object(save_load_view, "SaveManager") as mock_cls:
+        mock_cls.return_value = manager
+        save_load_view.enter_save_load(ui_state)
+        assert ui_state.screen is ScreenKind.SAVE_LOAD
+        print(f"    ✓ enter_save_load: screen={ui_state.screen.value}")
+
+    # Navigation: up arrow (1 -> 5)
+    import tcod.event
+
+    event = tcod.event.KeyDown(sym=tcod.event.KeySym.UP, mod=0, scancode=0)
+    save_load_view.handle_save_load_input(event, ui_state)
+    assert ui_state.save_load_selected == 5
+    print(f"    ✓ UP arrow: slot 1 -> 5 (wrap)")
+
+    # Down arrow (5 -> 1)
+    event = tcod.event.KeyDown(sym=tcod.event.KeySym.DOWN, mod=0, scancode=0)
+    save_load_view.handle_save_load_input(event, ui_state)
+    assert ui_state.save_load_selected == 1
+    print(f"    ✓ DOWN arrow: slot 5 -> 1 (wrap)")
+
+    # Number key jump
+    event = tcod.event.KeyDown(sym=tcod.event.KeySym.N3, mod=0, scancode=0)
+    save_load_view.handle_save_load_input(event, ui_state)
+    assert ui_state.save_load_selected == 3
+    print(f"    ✓ N3: jump to slot 3")
+
+    # ENTER to load slot 1
+    with unittest.mock.patch.object(save_load_view, "SaveManager") as mock_cls:
+        mock_cls.return_value = manager
+        event = tcod.event.KeyDown(sym=tcod.event.KeySym.N1, mod=0, scancode=0)
+        save_load_view.handle_save_load_input(event, ui_state)
+        event = tcod.event.KeyDown(sym=tcod.event.KeySym.RETURN, mod=0, scancode=0)
+        save_load_view.handle_save_load_input(event, ui_state)
+        assert ui_state.screen is ScreenKind.HUB
+        assert ui_state.credits == 777
+        print(f"    ✓ ENTER load slot 1: credits={ui_state.credits}, screen={ui_state.screen.value}")
+
+    # Render (no crash)
+    import tcod.console
+
+    ui_state2 = AppState()
+    ui_state2.save_load_selected = 2
+    with unittest.mock.patch.object(save_load_view, "SaveManager") as mock_cls:
+        mock_cls.return_value = manager
+        save_load_view.enter_save_load(ui_state2)
+        console = tcod.console.Console(80, 50, order="F")
+        save_load_view.render_save_load(console, ui_state2)
+        print("    ✓ render_save_load: no crash")
 
     # Cleanup
     shutil.rmtree(tmp_dir)
