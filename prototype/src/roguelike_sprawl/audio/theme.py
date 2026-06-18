@@ -123,9 +123,7 @@ class ThemePlayer:
         """Set theme volume (0.0-1.0)."""
         self._volume = max(0.0, min(1.0, volume))
 
-    def _play_one_shot_fallback(
-        self, theme_name: str, path: Path, config: SoundConfig
-    ) -> bool:
+    def _play_one_shot_fallback(self, theme_name: str, path: Path, config: SoundConfig) -> bool:
         """Play a single-shot sound as a theme fallback.
 
         Used when the theme WAV file doesn't exist. Plays the
@@ -162,6 +160,7 @@ class ThemePlayer:
                     # Windows: use winsound
                     try:
                         import winsound as _ws  # type: ignore[import-not-found]
+
                         self._process = None
                         _ws.PlaySound(
                             str(path),

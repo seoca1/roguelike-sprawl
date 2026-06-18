@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 
 # --- Run lifecycle ---
 
+
 def ensure_run_state(state: AppState) -> RunState:
     """Get state.run_state, creating it if missing."""
     if state.run_state is None:
@@ -34,6 +35,7 @@ def start_new_run(state: AppState, initial_stage: Stage = Stage.MEET_NPC) -> Run
 
 
 # --- Target resolution ---
+
 
 def resolve_target_for_stage(
     run_state: RunState,
@@ -70,6 +72,7 @@ def resolve_target_for_stage(
 
 
 # --- Objective detection ---
+
 
 def check_objective_at_node(
     run_state: RunState,

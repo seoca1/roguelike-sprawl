@@ -243,7 +243,9 @@ def handle_browser_input(
         # Reset server index to 0 and clamp to new sector's server count
         new_sector = wm.get_current_sector()
         if new_sector is not None and new_sector.servers:
-            state.selected_server_index = min(state.selected_server_index, len(new_sector.servers) - 1)
+            state.selected_server_index = min(
+                state.selected_server_index, len(new_sector.servers) - 1
+            )
         else:
             state.selected_server_index = 0
         return True
@@ -253,7 +255,9 @@ def handle_browser_input(
         _cycle_world(wm, event.sym)
         new_sector = wm.get_current_sector()
         if new_sector is not None and new_sector.servers:
-            state.selected_server_index = min(state.selected_server_index, len(new_sector.servers) - 1)
+            state.selected_server_index = min(
+                state.selected_server_index, len(new_sector.servers) - 1
+            )
         else:
             state.selected_server_index = 0
         return True

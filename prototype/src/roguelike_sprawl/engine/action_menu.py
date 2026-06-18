@@ -272,9 +272,7 @@ def _execute_action(
         run_state = ensure_run_state(state)
         if check_extract_complete(run_state):
             run_state.mark_advance()
-            state.status_messages.append(
-                f">>> Stage complete: {run_state.current_info().title}"
-            )
+            state.status_messages.append(f">>> Stage complete: {run_state.current_info().title}")
     elif action_id == "engage":
         # Start combat (Phase 5: implemented)
         state.status_messages.append(f">>> ENGAGE: Initiating combat with {node.label}")

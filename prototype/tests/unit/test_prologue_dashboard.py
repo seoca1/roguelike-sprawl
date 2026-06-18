@@ -126,7 +126,9 @@ class TestDashboardHtml:
             "dialogue-line",
             "ending-block",
         ):
-            assert f'"{cls}"' in html or f".{cls}" in html or f"class=\"{cls}" in html, f"Missing style class: {cls}"
+            assert f'"{cls}"' in html or f".{cls}" in html or f'class="{cls}' in html, (
+                f"Missing style class: {cls}"
+            )
 
 
 class TestDataAndCodeConsistency:

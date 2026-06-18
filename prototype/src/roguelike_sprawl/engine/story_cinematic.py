@@ -286,10 +286,10 @@ def render_cinematic(
     else:
         # Show different hint based on whether we're typing or paused
         scene = cinematic_state.scene
-        if (
-            cinematic_state.current_line_index < len(scene.lines)
-            and cinematic_state.current_char_index
-            < len(scene.lines[cinematic_state.current_line_index].text_en)
+        if cinematic_state.current_line_index < len(
+            scene.lines
+        ) and cinematic_state.current_char_index < len(
+            scene.lines[cinematic_state.current_line_index].text_en
         ):
             # Currently typing
             draw_controls(
@@ -398,6 +398,8 @@ def _apply_typing_effect(
             revealed = revealed[:-1] + glitch_char if revealed else glitch_char
 
     return revealed
+
+
 def step_cinematic(cinematic_state: CinematicState, elapsed_ms: int) -> None:
     """Update the cinematic state (typing progression).
 
@@ -457,10 +459,7 @@ def step_cinematic(cinematic_state: CinematicState, elapsed_ms: int) -> None:
         if cinematic_state.line_completed_at_ms < 0:
             cinematic_state.line_completed_at_ms = elapsed_ms
         # After the pause, advance to the next line.
-        elif (
-            elapsed_ms - cinematic_state.line_completed_at_ms
-            >= current_line.pause_ms
-        ):
+        elif elapsed_ms - cinematic_state.line_completed_at_ms >= current_line.pause_ms:
             _advance_to_next_line(cinematic_state)
 
 
@@ -582,7 +581,6 @@ def stop_scene_theme(cinematic_state: CinematicState) -> None:
     cinematic_state.current_theme = None
 
 
-
 # ============================================================================
 # Canonical Story Scenes (Neuromancer opening + The Finn briefing)
 # ============================================================================
@@ -668,8 +666,8 @@ BRIEFING_FINN_SCENE = StoryScene(
             pause_ms=1200,
         ),
         StoryLine(
-            text_en="The Finn: \"Got a job for you, cowboy. Sense/Net, first run. Simple data extraction.\"",
-            text_ko="더 핀: \"자네를 위한 일이 있네, 카우보이. 센스넷, 첫 실행. 간단한 데이터 추출이야.\"",
+            text_en='The Finn: "Got a job for you, cowboy. Sense/Net, first run. Simple data extraction."',
+            text_ko='더 핀: "자네를 위한 일이 있네, 카우보이. 센스넷, 첫 실행. 간단한 데이터 추출이야."',
             speaker="finn",
             portrait="art:the_finn",
             effect=EffectKind.NONE,
@@ -678,7 +676,7 @@ BRIEFING_FINN_SCENE = StoryScene(
         ),
         StoryLine(
             text_en="\"The data's in a construct. You'll need to find it. ICE will be light - Wisp-class, maybe Hammer.\"",
-            text_ko="\"데이터는 컨스트럭트 안에 있네. 찾아내야 해. ICE는 가벼울 거야 - 위스프급, 어쩌면 해머급.\"",
+            text_ko='"데이터는 컨스트럭트 안에 있네. 찾아내야 해. ICE는 가벼울 거야 - 위스프급, 어쩌면 해머급."',
             speaker="finn",
             portrait="art:the_finn",
             effect=EffectKind.NONE,
@@ -687,7 +685,7 @@ BRIEFING_FINN_SCENE = StoryScene(
         ),
         StoryLine(
             text_en="\"Don't get fancy. Jack in, find the data, jack out. I'll wire the creds when you deliver.\"",
-            text_ko="\"화려하게 하지 마. 접속하고, 데이터 찾고, 나오게. 배달하면 크레딧 이체하지.\"",
+            text_ko='"화려하게 하지 마. 접속하고, 데이터 찾고, 나오게. 배달하면 크레딧 이체하지."',
             speaker="finn",
             portrait="art:the_finn",
             effect=EffectKind.NONE,
@@ -696,7 +694,7 @@ BRIEFING_FINN_SCENE = StoryScene(
         ),
         StoryLine(
             text_en="Dixie's voice crackles through the deck: \"Hey cowboy. You and me, we're gonna have some fun.\"",
-            text_ko="딕시의 목소리가 데크를 통해 째깍거린다: \"어이 카우보이. 당신과 나, 좀 신나게 놀게 될 거야.\"",
+            text_ko='딕시의 목소리가 데크를 통해 째깍거린다: "어이 카우보이. 당신과 나, 좀 신나게 놀게 될 거야."',
             speaker="dixie",
             portrait="art:dixie",
             effect=EffectKind.GLITCH,

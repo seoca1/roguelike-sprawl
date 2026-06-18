@@ -284,11 +284,15 @@ class TestCategoryLabel:
 
     def test_theme_label(self) -> None:
         """THEME has Korean label."""
-        assert "배경" in category_label(SoundCategory.THEME) or "Theme" in category_label(SoundCategory.THEME)
+        assert "배경" in category_label(SoundCategory.THEME) or "Theme" in category_label(
+            SoundCategory.THEME
+        )
 
     def test_keys_label(self) -> None:
         """KEYS has Korean label."""
-        assert "키" in category_label(SoundCategory.KEYS) or "Keys" in category_label(SoundCategory.KEYS)
+        assert "키" in category_label(SoundCategory.KEYS) or "Keys" in category_label(
+            SoundCategory.KEYS
+        )
 
     def test_all_categories_have_labels(self) -> None:
         """All categories return non-empty labels."""

@@ -182,9 +182,7 @@ def _run_full_scenario(character: str, ending: str) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Verify original Sprawl Jockey story (Phase 2)"
-    )
+    parser = argparse.ArgumentParser(description="Verify original Sprawl Jockey story (Phase 2)")
     parser.add_argument(
         "--character",
         choices=["novice", "veteran", "heretic", "all"],

@@ -16,11 +16,11 @@ class Status(Enum):
     Determines avatar body pose (Pillar 3 visualization).
     """
 
-    SAFE = "safe"          # PPL >> ZDR
-    MATCH = "match"        # PPL ~= ZDR
-    TOUGH = "tough"        # PPL slightly < ZDR
-    DEADLY = "deadly"      # PPL << ZDR
-    FUTILE = "futile"      # Nearly dead
+    SAFE = "safe"  # PPL >> ZDR
+    MATCH = "match"  # PPL ~= ZDR
+    TOUGH = "tough"  # PPL slightly < ZDR
+    DEADLY = "deadly"  # PPL << ZDR
+    FUTILE = "futile"  # Nearly dead
 
 
 class ConstructKind(Enum):
@@ -38,9 +38,9 @@ class ProgramSlot:
     Frozen so it can be used as dict key.
     """
 
-    id: str           # e.g. "wisp", "hammer"
-    tier: int         # 1-5
-    depleted: bool    # True = used (one-shot)
+    id: str  # e.g. "wisp", "hammer"
+    tier: int  # 1-5
+    depleted: bool  # True = used (one-shot)
 
 
 @dataclass(frozen=True, slots=True)
@@ -55,10 +55,10 @@ class AvatarState:
     max_hp: int
     status: Status
     programs: tuple[ProgramSlot, ...]
-    deck_tier: int                # 0-5
-    wetware_tier: int             # 0-5
+    deck_tier: int  # 0-5
+    wetware_tier: int  # 0-5
     construct: ConstructKind | None = None
-    glitching: bool = False       # True = random flicker
+    glitching: bool = False  # True = random flicker
 
     @property
     def hp_pct(self) -> float:

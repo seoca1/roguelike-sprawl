@@ -382,7 +382,13 @@ class TestResolveTargetForStage:
             Node(id="entry", label="Entry", kind=NodeKind.ENTRY, zone=ZoneDepth.SURFACE),
             Node(id="npc1", label="Dixie", kind=NodeKind.CONSTRUCT, zone=ZoneDepth.SURFACE),
             Node(id="data1", label="Data", kind=NodeKind.DATA, zone=ZoneDepth.SURFACE),
-            Node(id="ice1", label="ICE", kind=NodeKind.ICE, zone=ZoneDepth.SURFACE, ice=IceKind.STANDARD),
+            Node(
+                id="ice1",
+                label="ICE",
+                kind=NodeKind.ICE,
+                zone=ZoneDepth.SURFACE,
+                ice=IceKind.STANDARD,
+            ),
         ]
         edges = ()
         return nodes, edges
@@ -485,7 +491,13 @@ class TestCheckObjectiveAtNode:
             Node(id="entry", label="Entry", kind=NodeKind.ENTRY, zone=ZoneDepth.SURFACE),
             Node(id="npc1", label="Dixie", kind=NodeKind.CONSTRUCT, zone=ZoneDepth.SURFACE),
             Node(id="data1", label="Data", kind=NodeKind.DATA, zone=ZoneDepth.SURFACE),
-            Node(id="ice1", label="ICE", kind=NodeKind.ICE, zone=ZoneDepth.SURFACE, ice=IceKind.STANDARD),
+            Node(
+                id="ice1",
+                label="ICE",
+                kind=NodeKind.ICE,
+                zone=ZoneDepth.SURFACE,
+                ice=IceKind.STANDARD,
+            ),
         )
         return MatrixGraph(nodes=nodes, edges=(), entry_id="entry")
 

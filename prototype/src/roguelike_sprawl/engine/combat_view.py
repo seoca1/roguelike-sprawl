@@ -469,6 +469,7 @@ def handle_combat_input(
                     state.status_messages.append(f">>> Used skill: {skill.name}")
                     # Play skill sound based on effect (with random pitch variation)
                     from ..audio import sound_manager as _sm
+
                     sound_name = _SKILL_SOUND_MAP.get(skill.effect, "combat/skill_physical")
                     _sm.get_sound_manager().play(sound_name)
                     use_skill(combat_state, skill)
@@ -529,9 +530,7 @@ def _end_combat(state: AppState, combat_state: CombatState) -> None:
         run_state = ensure_run_state(state)
         if check_combat_victory(run_state):
             run_state.mark_advance()
-            state.status_messages.append(
-                f">>> Stage complete: {run_state.current_info().title}"
-            )
+            state.status_messages.append(f">>> Stage complete: {run_state.current_info().title}")
 
         # Mark current ICE node as defeated - removed from dungeon
         if state.matrix is not None and state.current_node_id is not None:
@@ -659,6 +658,7 @@ def start_combat(
 
     # Apply equipment stats
     from ..equipment.equipment import EquipmentLoadout, EquipStats
+
     loadout = state.equipment_loadout
     stats: EquipStats | None = None
     if isinstance(loadout, EquipmentLoadout):
@@ -716,4 +716,3 @@ def start_combat(
     ice_kind = "standard"  # Placeholder: extract from ice_node
     enemy = build_ice_enemy(ice_kind, ice_registry)
     return CombatState(player=player, enemy=enemy)
-

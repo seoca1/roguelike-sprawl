@@ -283,5 +283,3 @@ def _tier_color(tier: object) -> tuple[int, int, int]:
         "T5": (255, 50, 200),
     }
     return colors.get(str(getattr(tier, "value", tier)), (200, 200, 200))
-
-

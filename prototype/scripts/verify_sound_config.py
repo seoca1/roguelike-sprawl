@@ -206,7 +206,9 @@ def _verify_key_bindings() -> None:
     print("  Global hotkeys for sound control:")
     print()
     print(f"  {ANSI_CYAN}M{ANSI_RESET}        = master mute toggle")
-    print(f"  {ANSI_CYAN}+{ANSI_RESET}/{ANSI_CYAN}-{ANSI_RESET}      = master volume up/down (0.1 steps)")
+    print(
+        f"  {ANSI_CYAN}+{ANSI_RESET}/{ANSI_CYAN}-{ANSI_RESET}      = master volume up/down (0.1 steps)"
+    )
     print()
     print("  Per-category toggles:")
     print()
@@ -255,7 +257,15 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.no_color:
-        global ANSI_RESET, ANSI_BOLD, ANSI_DIM, ANSI_CYAN, ANSI_YELLOW, ANSI_GREEN, ANSI_RED, ANSI_GRAY
+        global \
+            ANSI_RESET, \
+            ANSI_BOLD, \
+            ANSI_DIM, \
+            ANSI_CYAN, \
+            ANSI_YELLOW, \
+            ANSI_GREEN, \
+            ANSI_RED, \
+            ANSI_GRAY
         for attr in (
             "ANSI_RESET",
             "ANSI_BOLD",

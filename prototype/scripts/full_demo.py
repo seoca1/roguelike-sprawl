@@ -216,10 +216,7 @@ def main() -> int:
                 )
                 cyberspace_browser.handle_browser_input(ev, state)
                 state._browser_auto_step = state.demo_step
-            elif (
-                not args.interactive
-                and state.screen is ScreenKind.CYBERSPACE_BROWSER
-            ):
+            elif not args.interactive and state.screen is ScreenKind.CYBERSPACE_BROWSER:
                 # First time entering browser — start the auto timer
                 state._browser_auto_step = state.demo_step
 
@@ -247,9 +244,7 @@ def main() -> int:
                             # stage's objective determines which node to seek.
                             run_state = ensure_run_state(state)
                             run_state.mark_visited(state.current_node_id)
-                            target_id = resolve_target_for_stage(
-                                run_state, state.matrix
-                            )
+                            target_id = resolve_target_for_stage(run_state, state.matrix)
                             # Keep the resolved target in RunState so other
                             # systems (status panel) can read it.
                             run_state.set_target(target_id)
@@ -270,9 +265,7 @@ def main() -> int:
                                     state.screen = ScreenKind.NPC
                                     npc_triggered = True
                                     print(f"\n=== NPC ENCOUNTER: {current_node.label} ===")
-                                elif (
-                                    run_state.objective_kind() is ObjectiveKind.DATA
-                                ):
+                                elif run_state.objective_kind() is ObjectiveKind.DATA:
                                     from roguelike_sprawl.engine import action_menu
 
                                     action_menu._execute_action(
@@ -292,10 +285,7 @@ def main() -> int:
                                     print(f"\n=== ICE detected: {current_node.label} ===")
 
                             # Move toward target using cyberspace movement
-                            at_stop = (
-                                target_id is not None
-                                and state.current_node_id == target_id
-                            )
+                            at_stop = target_id is not None and state.current_node_id == target_id
                             if target_id and state.current_node_id != target_id and not at_stop:
                                 # Get current and target positions
                                 if state.cyberspace_layouts is None:

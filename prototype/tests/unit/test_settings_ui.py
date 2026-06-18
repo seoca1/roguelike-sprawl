@@ -88,4 +88,5 @@ class TestSettingsUI:
 def pytest_approx(value: float) -> object:
     """Helper for approximate float comparison."""
     import pytest
+
     return pytest.approx(value)

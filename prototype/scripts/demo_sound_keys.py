@@ -52,7 +52,9 @@ def render_status(config: SoundConfig) -> str:
     mute_str = "MUTED" if config.muted else "ON"
     vol_pct = int(config.master_volume * 100)
     mute_color = ANSI_RED if config.muted else ANSI_GREEN
-    lines.append(f"  [{ANSI_CYAN}M{ANSI_RESET}] Master: {mute_color}{mute_str}{ANSI_RESET}  Volume: {vol_pct}%")
+    lines.append(
+        f"  [{ANSI_CYAN}M{ANSI_RESET}] Master: {mute_color}{mute_str}{ANSI_RESET}  Volume: {vol_pct}%"
+    )
     lines.append("")
     lines.append(f"  {ANSI_DIM}Categories (T/E/K/B/V/I to toggle):{ANSI_RESET}")
     for cat in SoundCategory:
@@ -137,9 +139,7 @@ def getch() -> str:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Interactive demo of sound config + key bindings"
-    )
+    parser = argparse.ArgumentParser(description="Interactive demo of sound config + key bindings")
     parser.add_argument(
         "--input",
         type=str,
@@ -158,7 +158,16 @@ def main() -> int:
     args = parser.parse_args()
 
     if args.no_color:
-        global ANSI_RESET, ANSI_BOLD, ANSI_DIM, ANSI_CYAN, ANSI_YELLOW, ANSI_GREEN, ANSI_RED, ANSI_GRAY, ANSI_WHITE
+        global \
+            ANSI_RESET, \
+            ANSI_BOLD, \
+            ANSI_DIM, \
+            ANSI_CYAN, \
+            ANSI_YELLOW, \
+            ANSI_GREEN, \
+            ANSI_RED, \
+            ANSI_GRAY, \
+            ANSI_WHITE
         for attr in (
             "ANSI_RESET",
             "ANSI_BOLD",

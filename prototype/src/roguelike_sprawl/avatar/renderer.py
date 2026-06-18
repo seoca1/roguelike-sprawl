@@ -20,11 +20,11 @@ from .state import (
 
 # --- Color palette ---
 
-COL_HEAD_FULL = (0, 255, 0)        # Green
-COL_HEAD_HIGH = (180, 255, 0)     # Yellow-green
-COL_HEAD_MID = (255, 255, 0)      # Yellow
-COL_HEAD_LOW = (255, 80, 0)       # Red
-COL_HEAD_DEAD = (140, 0, 0)       # Dark red
+COL_HEAD_FULL = (0, 255, 0)  # Green
+COL_HEAD_HIGH = (180, 255, 0)  # Yellow-green
+COL_HEAD_MID = (255, 255, 0)  # Yellow
+COL_HEAD_LOW = (255, 80, 0)  # Red
+COL_HEAD_DEAD = (140, 0, 0)  # Dark red
 
 COL_BODY_NORMAL = (200, 200, 200)
 COL_BODY_LOW = (180, 100, 100)
@@ -52,6 +52,7 @@ COL_DIM = (100, 100, 100)
 
 # --- Head ---
 
+
 def _render_head(state: AvatarState) -> tuple[str, tuple[int, int, int]]:
     """Render head based on HP percentage."""
     if state.is_dead:
@@ -68,6 +69,7 @@ def _render_head(state: AvatarState) -> tuple[str, tuple[int, int, int]]:
 
 
 # --- Body (pose) ---
+
 
 def _render_body_pose(state: AvatarState) -> tuple[str, str, tuple[int, int, int]]:
     """Render body trunk (3 lines: shoulders, torso, hips) by status.
@@ -97,6 +99,7 @@ def _render_color_for_status(status: Status) -> tuple[int, int, int]:
 
 
 # --- Programs (arms) ---
+
 
 def _render_program(slot: ProgramSlot) -> tuple[str, tuple[int, int, int]]:
     """Render one program slot.
@@ -151,6 +154,7 @@ def _render_programs_colors(programs: tuple[ProgramSlot, ...]) -> list[tuple[int
 
 # --- Deck ---
 
+
 def _render_deck(tier: int) -> tuple[str, tuple[int, int, int]]:
     """Render deck body block."""
     if tier <= 0:
@@ -160,6 +164,7 @@ def _render_deck(tier: int) -> tuple[str, tuple[int, int, int]]:
 
 # --- Wetware (legs) ---
 
+
 def _render_wetware(tier: int) -> str:
     """Render wetware legs as filled cells."""
     if tier <= 0:
@@ -168,6 +173,7 @@ def _render_wetware(tier: int) -> str:
 
 
 # --- Construct (echo) ---
+
 
 def _render_construct(kind: ConstructKind | None) -> tuple[str, tuple[int, int, int]]:
     """Render construct companion echo (only if present)."""
@@ -182,6 +188,7 @@ def _render_construct(kind: ConstructKind | None) -> tuple[str, tuple[int, int, 
 
 
 # --- Main renderer ---
+
 
 def render_avatar_lines(state: AvatarState) -> AvatarLines:
     """Render the full avatar as AvatarLines.
@@ -271,6 +278,7 @@ def render_avatar(
 
 
 # --- State builder from engine state ---
+
 
 def build_avatar_state(
     *,

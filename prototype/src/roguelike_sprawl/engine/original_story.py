@@ -71,6 +71,7 @@ CHARACTER_SELECT_EVENT = NPCEvent(
 # Common: Jack-In
 # ============================================================================
 
+
 def _make_jackin_line(character: str) -> DialogueLine:
     """Jack-In scene (shared). Different flavor text per character."""
     flavor = {
@@ -81,7 +82,7 @@ def _make_jackin_line(character: str) -> DialogueLine:
     ko_flavor = {
         "novice": "케이의 손이 떨린다. Wisp T1. 싸구려. 하지만 이게 전부다.",
         "veteran": "실은 여기 와본 적이 있다. Hammer T2. ICE가 뭘 올지 모른다.",
-        "heretic": "카스의 viral은 무기가 아니다. 설교다. \"나는 너를 추방한다.\"",
+        "heretic": '카스의 viral은 무기가 아니다. 설교다. "나는 너를 추방한다."',
     }
     return DialogueLine(
         speaker="",
@@ -289,10 +290,10 @@ def get_ending_description(character: str, ending: str) -> str:
 
 # Theme for each original story scene (background music)
 SCENE_THEMES: dict[str, str] = {
-    "character_select": "finn_office",   # The Finn's underground office
-    "prologue_novice": "matrix_rain",    # Standard cyberspace
-    "prologue_veteran": "cyberspace",    # Deeper cyberspace
-    "prologue_heretic": "sense_net",     # Corporate fortress / Tessier-Ashpool
+    "character_select": "finn_office",  # The Finn's underground office
+    "prologue_novice": "matrix_rain",  # Standard cyberspace
+    "prologue_veteran": "cyberspace",  # Deeper cyberspace
+    "prologue_heretic": "sense_net",  # Corporate fortress / Tessier-Ashpool
 }
 
 

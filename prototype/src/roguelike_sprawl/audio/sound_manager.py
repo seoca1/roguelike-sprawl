@@ -158,9 +158,7 @@ class SoundManager:
             # Restore original volume (in case it differs)
             self.set_volume(original_volume)
 
-    def play_category(
-        self, category: str, sound_name: str, pitch: float | None = None
-    ) -> bool:
+    def play_category(self, category: str, sound_name: str, pitch: float | None = None) -> bool:
         """Play a sound from a specific category, ignoring config.
 
         Useful for tests or explicit overrides.
@@ -210,6 +208,7 @@ class SoundManager:
             return False
         try:
             import winsound as _ws
+
             threading.Thread(
                 target=lambda p: _ws.PlaySound(p, _ws.SND_FILENAME | _ws.SND_ASYNC),
                 args=(str(path),),

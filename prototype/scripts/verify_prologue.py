@@ -133,10 +133,7 @@ def _verify_line(
     # Header for this line
     effect_str = f" [{line.effect.value}]" if line.effect.value != "none" else ""
     speed_str = f" ({speed.value})"
-    print(
-        f"{ANSI_DIM}[line {line_index + 1}/{total_lines}"
-        f"{speed_str}{effect_str}]{ANSI_RESET}"
-    )
+    print(f"{ANSI_DIM}[line {line_index + 1}/{total_lines}{speed_str}{effect_str}]{ANSI_RESET}")
 
     # Speaker + portrait
     if line.speaker:
@@ -151,15 +148,11 @@ def _verify_line(
             )
         else:
             # Legacy single-glyph portrait
-            print(
-                f"{ANSI_CYAN}{line.portrait} {line.speaker.upper()}:{ANSI_RESET}"
-            )
+            print(f"{ANSI_CYAN}{line.portrait} {line.speaker.upper()}:{ANSI_RESET}")
     elif line.portrait:
         art = resolve_line_art(line.portrait, scene.id)
         if art is not None:
-            print(
-                f"{ANSI_DIM}[narrator art: {art.style.value}]{ANSI_RESET}"
-            )
+            print(f"{ANSI_DIM}[narrator art: {art.style.value}]{ANSI_RESET}")
 
     # English text with typing effect
     _typing_simulate(line.text_en, speed, line)
@@ -205,9 +198,7 @@ def _verify_transitions() -> None:
 
     for scene in scenes:
         next_label = scene.next_scene or "(none - end of cinematic)"
-        print(
-            f"  {ANSI_CYAN}{scene.id:35s}{ANSI_RESET} → {next_label}"
-        )
+        print(f"  {ANSI_CYAN}{scene.id:35s}{ANSI_RESET} → {next_label}")
 
     print()
     print(f"{ANSI_DIM}Flow: PROLOGUE → BRIEFING → (exit to Hub){ANSI_RESET}")
@@ -293,14 +284,8 @@ def main() -> int:
     speed = speed_map[args.speed]
 
     _print_header("PROLOGUE VERIFICATION DEMO")
-    print(
-        f"{ANSI_DIM}This demo runs through the prologue and briefing scenes"
-        f"{ANSI_RESET}"
-    )
-    print(
-        f"{ANSI_DIM}to verify text, art mapping, and bilingual coverage."
-        f"{ANSI_RESET}"
-    )
+    print(f"{ANSI_DIM}This demo runs through the prologue and briefing scenes{ANSI_RESET}")
+    print(f"{ANSI_DIM}to verify text, art mapping, and bilingual coverage.{ANSI_RESET}")
     print(
         f"{ANSI_DIM}Speed: {args.speed}  |  Delay: {args.delay}s  |  "
         f"Color: {'off' if args.no_color else 'on'}{ANSI_RESET}"
@@ -318,9 +303,7 @@ def main() -> int:
 
     _print_header("VERIFICATION COMPLETE")
     print(f"{ANSI_GREEN}All scenes rendered successfully.{ANSI_RESET}")
-    print(
-        f"{ANSI_DIM}Run the GUI demo to see the actual rendered output:{ANSI_RESET}"
-    )
+    print(f"{ANSI_DIM}Run the GUI demo to see the actual rendered output:{ANSI_RESET}")
     print(f"{ANSI_DIM}  make run  (or)  make prologue{ANSI_RESET}")
     return 0
 

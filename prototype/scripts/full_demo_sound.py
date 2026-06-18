@@ -80,9 +80,7 @@ def main() -> int:
     parser.add_argument("--no-korean", action="store_true", help="Disable Korean subtitles")
     parser.add_argument("--interactive", action="store_true", help="Interactive mode")
     parser.add_argument("--manual-combat", action="store_true", help="Manual combat")
-    parser.add_argument(
-        "--no-sound", action="store_true", help="Disable sound (silent mode)"
-    )
+    parser.add_argument("--no-sound", action="store_true", help="Disable sound (silent mode)")
     parser.add_argument(
         "--volume", type=float, default=0.2, help="Master volume 0.0-1.0 (default 0.2)"
     )
@@ -97,8 +95,10 @@ def main() -> int:
 
         sm = sound_manager.get_sound_manager()
         sm.set_volume(args.volume)
-        print(f"[SOUND] Backend: {sm._tool} | Volume: {int(args.volume * 100)}% | "
-              f"Available: {sm.is_available()} | Sounds: {len(sm.list_sounds())}")
+        print(
+            f"[SOUND] Backend: {sm._tool} | Volume: {int(args.volume * 100)}% | "
+            f"Available: {sm.is_available()} | Sounds: {len(sm.list_sounds())}"
+        )
 
     # Font check
     if not config.FONT_PATH.exists() and config.find_ttf_font() is None:
@@ -234,10 +234,7 @@ def main() -> int:
                 )
                 _cs_browser.handle_browser_input(ev, state)
                 state._browser_auto_step = state.demo_step
-            elif (
-                not args.interactive
-                and state.screen is ScreenKind.CYBERSPACE_BROWSER
-            ):
+            elif not args.interactive and state.screen is ScreenKind.CYBERSPACE_BROWSER:
                 # First time entering browser — start the auto timer
                 state._browser_auto_step = state.demo_step
 
@@ -345,9 +342,7 @@ def main() -> int:
                                 if state.cyberspace_layouts is None:
                                     # Layouts not initialized — skip movement
                                     continue
-                                current_layout = state.cyberspace_layouts.get(
-                                    state.current_node_id
-                                )
+                                current_layout = state.cyberspace_layouts.get(state.current_node_id)
                                 target_layout = state.cyberspace_layouts.get(target_id)
                                 if current_layout and target_layout:
                                     cx, cy = current_layout.x, current_layout.y
@@ -503,9 +498,7 @@ def _render_demo(
     if state.screen is ScreenKind.CINEMATIC:
         if state.cinematic_state is not None:
             elapsed_ms = int(state.demo_elapsed_s * 1000)
-            story_cinematic.render_cinematic(
-                console, t, state, state.cinematic_state, elapsed_ms
-            )
+            story_cinematic.render_cinematic(console, t, state, state.cinematic_state, elapsed_ms)
     elif state.screen is ScreenKind.MENU:
         console.clear(bg=(0, 0, 0))
         console.print(x=35, y=20, string="ROGUELIKE SPRAWL", fg=(0, 255, 255))
@@ -564,9 +557,7 @@ def _handle_demo_input(
     if state.screen is ScreenKind.CINEMATIC:
         if state.cinematic_state is not None:
             _safe_play("story/dialogue_advance")
-            result = story_cinematic.handle_cinematic_input(
-                event, state, state.cinematic_state
-            )
+            result = story_cinematic.handle_cinematic_input(event, state, state.cinematic_state)
             if state.screen is ScreenKind.MENU:
                 print("\n=== Cinematic skipped (ESC) → Advancing demo ===")
                 _advance_demo_stage(state, prog_registry, ice_registry)
@@ -599,9 +590,7 @@ def _handle_demo_input(
             tcod.event.KeySym.RIGHT,
         ):
             _safe_play("movement/nav_step")
-        result = cyberspace_view.handle_cyberspace_input(
-            event, state, prog_registry, ice_registry
-        )
+        result = cyberspace_view.handle_cyberspace_input(event, state, prog_registry, ice_registry)
         if (
             state.matrix is not None
             and state.current_node_id is not None

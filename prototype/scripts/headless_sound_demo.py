@@ -60,12 +60,8 @@ def main() -> int:
         help="Which stage to demo (default: all)",
     )
     parser.add_argument("--fast", action="store_true", help="Skip narration delays")
-    parser.add_argument(
-        "--no-sound", action="store_true", help="Print cues without playing audio"
-    )
-    parser.add_argument(
-        "--volume", type=float, default=0.2, help="Volume 0.0-1.0 (default 0.2)"
-    )
+    parser.add_argument("--no-sound", action="store_true", help="Print cues without playing audio")
+    parser.add_argument("--volume", type=float, default=0.2, help="Volume 0.0-1.0 (default 0.2)")
     global args
     args = parser.parse_args()
 
@@ -92,9 +88,7 @@ def main() -> int:
     pause = 0.05 if args.fast else 0.4
 
     stages_to_run = (
-        ["prologue", "briefing", "matrix", "combat"]
-        if args.stage == "all"
-        else [args.stage]
+        ["prologue", "briefing", "matrix", "combat"] if args.stage == "all" else [args.stage]
     )
 
     try:

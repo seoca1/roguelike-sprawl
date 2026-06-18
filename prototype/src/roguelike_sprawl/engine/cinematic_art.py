@@ -19,13 +19,13 @@ from enum import StrEnum
 class ArtStyle(StrEnum):
     """Visual style for the ASCII art."""
 
-    NEON = "neon"          # Bright cyan/magenta cyberpunk
-    GLITCH = "glitch"      # Corrupted, distorted
-    SHADOW = "shadow"      # Dim, mysterious
-    FIRE = "fire"          # Red/orange, intense
-    MATRIX = "matrix"      # Green, code-rain style
-    GHOST = "ghost"        # Faded, ethereal
-    STATIC = "static"      # TV static / noise
+    NEON = "neon"  # Bright cyan/magenta cyberpunk
+    GLITCH = "glitch"  # Corrupted, distorted
+    SHADOW = "shadow"  # Dim, mysterious
+    FIRE = "fire"  # Red/orange, intense
+    MATRIX = "matrix"  # Green, code-rain style
+    GHOST = "ghost"  # Faded, ethereal
+    STATIC = "static"  # TV static / noise
 
 
 @dataclass(frozen=True, slots=True)

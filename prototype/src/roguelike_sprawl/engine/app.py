@@ -134,13 +134,19 @@ def _handle_input(
             label = "MUTED" if muted else "UNMUTED"
             state.status_messages.append(f">>> Audio {label}")
             return True
-        if event.sym in (tcod.event.KeySym.EQUALS, tcod.event.KeySym.PLUS, tcod.event.KeySym.KP_PLUS):
+        if event.sym in (
+            tcod.event.KeySym.EQUALS,
+            tcod.event.KeySym.PLUS,
+            tcod.event.KeySym.KP_PLUS,
+        ):
             from .settings_ui import adjust_volume
+
             new_vol = adjust_volume(+0.1)
             state.status_messages.append(f">>> Volume: {int(new_vol * 100)}%")
             return True
         if event.sym in (tcod.event.KeySym.MINUS, tcod.event.KeySym.KP_MINUS):
             from .settings_ui import adjust_volume
+
             new_vol = adjust_volume(-0.1)
             state.status_messages.append(f">>> Volume: {int(new_vol * 100)}%")
             return True
@@ -162,9 +168,7 @@ def _handle_input(
             category = category_by_key[event.sym]
             new_state = toggle_category(category)
             label = "ON" if new_state else "OFF"
-            state.status_messages.append(
-                f">>> Sound category '{category.value}' toggled: {label}"
-            )
+            state.status_messages.append(f">>> Sound category '{category.value}' toggled: {label}")
             return True
 
     if state.screen is ScreenKind.MENU:

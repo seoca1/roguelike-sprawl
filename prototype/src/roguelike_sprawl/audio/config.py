@@ -31,12 +31,12 @@ from enum import StrEnum
 class SoundCategory(StrEnum):
     """Sound categories with default-enabled state."""
 
-    THEME = "theme"          # Background music / ambient
-    EVENTS = "events"        # Story / event triggers
-    KEYS = "keys"            # UI key sounds (default OFF)
-    COMBAT = "combat"        # Combat effects
-    MOVEMENT = "movement"    # Movement sounds
-    ITEMS = "items"          # Inventory/equipment
+    THEME = "theme"  # Background music / ambient
+    EVENTS = "events"  # Story / event triggers
+    KEYS = "keys"  # UI key sounds (default OFF)
+    COMBAT = "combat"  # Combat effects
+    MOVEMENT = "movement"  # Movement sounds
+    ITEMS = "items"  # Inventory/equipment
 
 
 # Default: KEYS off (per user request), others on

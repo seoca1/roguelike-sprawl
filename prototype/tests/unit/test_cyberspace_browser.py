@@ -36,8 +36,22 @@ def _make_test_worldmap() -> WorldMap:
         description="Data fortress",
     )
     s1.servers = [
-        Server(id="chiba_b1", name="Yakusa_DB", sector=SectorId("sense_net"), difficulty=1, description="", mission_id=None),
-        Server(id="chiba_b2", name="Ripper_Node", sector=SectorId("sense_net"), difficulty=2, description="", mission_id=None),
+        Server(
+            id="chiba_b1",
+            name="Yakusa_DB",
+            sector=SectorId("sense_net"),
+            difficulty=1,
+            description="",
+            mission_id=None,
+        ),
+        Server(
+            id="chiba_b2",
+            name="Ripper_Node",
+            sector=SectorId("sense_net"),
+            difficulty=2,
+            description="",
+            mission_id=None,
+        ),
     ]
     s2 = Sector(
         id=SectorId("public_grid"),
@@ -45,8 +59,22 @@ def _make_test_worldmap() -> WorldMap:
         description="Open network",
     )
     s2.servers = [
-        Server(id="chiba_n1", name="Chat_Server", sector=SectorId("public_grid"), difficulty=3, description="", mission_id=None),
-        Server(id="chiba_n2", name="Market_Hub", sector=SectorId("public_grid"), difficulty=4, description="", mission_id=None),
+        Server(
+            id="chiba_n1",
+            name="Chat_Server",
+            sector=SectorId("public_grid"),
+            difficulty=3,
+            description="",
+            mission_id=None,
+        ),
+        Server(
+            id="chiba_n2",
+            name="Market_Hub",
+            sector=SectorId("public_grid"),
+            difficulty=4,
+            description="",
+            mission_id=None,
+        ),
     ]
     chiba.add_sector(s1)
     chiba.add_sector(s2)
@@ -64,7 +92,14 @@ def _make_test_worldmap() -> WorldMap:
         description="Megacorp",
     )
     s3.servers = [
-        Server(id="nc_a1", name="Arasaka_DB", sector=SectorId("arasaka"), difficulty=5, description="", mission_id=None),
+        Server(
+            id="nc_a1",
+            name="Arasaka_DB",
+            sector=SectorId("arasaka"),
+            difficulty=5,
+            description="",
+            mission_id=None,
+        ),
     ]
     s4 = Sector(
         id=SectorId("militech"),
@@ -72,7 +107,14 @@ def _make_test_worldmap() -> WorldMap:
         description="Defense",
     )
     s4.servers = [
-        Server(id="nc_m1", name="Militech_FW", sector=SectorId("militech"), difficulty=6, description="", mission_id=None),
+        Server(
+            id="nc_m1",
+            name="Militech_FW",
+            sector=SectorId("militech"),
+            difficulty=6,
+            description="",
+            mission_id=None,
+        ),
     ]
     night_city.add_sector(s3)
     night_city.add_sector(s4)

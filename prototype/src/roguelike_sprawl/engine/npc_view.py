@@ -321,9 +321,7 @@ def _advance_dialogue(state: AppState, npc_state: NPCState) -> None:
         run_state = ensure_run_state(state)
         if check_npc_talk_complete(run_state):
             run_state.mark_advance()
-            state.status_messages.append(
-                f">>> Stage complete: {run_state.current_info().title}"
-            )
+            state.status_messages.append(f">>> Stage complete: {run_state.current_info().title}")
 
     # Reset choice index
     state.npc_choice_index = 0

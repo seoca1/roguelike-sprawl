@@ -109,8 +109,13 @@ class TestTopIndexPage:
 
     def test_index_has_quick_links(self) -> None:
         html = INDEX.read_text(encoding="utf-8")
-        for link in ("characters.md", "prologue.md", "prologue_data.json",
-                     "event_dialogues.json", "stage_structure.json"):
+        for link in (
+            "characters.md",
+            "prologue.md",
+            "prologue_data.json",
+            "event_dialogues.json",
+            "stage_structure.json",
+        ):
             assert link in html, f"Missing quick link: {link}"
 
     def test_index_fetches_json(self) -> None:

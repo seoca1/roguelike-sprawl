@@ -236,9 +236,7 @@ def handle_death_input(
         category = category_by_key[event.sym]
         new_state = toggle_category(category)
         label = "ON" if new_state else "OFF"
-        state.status_messages.append(
-            f">>> Sound category '{category.value}' toggled: {label}"
-        )
+        state.status_messages.append(f">>> Sound category '{category.value}' toggled: {label}")
         return True
 
     return True

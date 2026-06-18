@@ -102,9 +102,7 @@ def update_mission_progress(
         # Not the primary objective; ignore
         return False
 
-    state.mission_progress[objective_type] = (
-        state.mission_progress.get(objective_type, 0) + count
-    )
+    state.mission_progress[objective_type] = state.mission_progress.get(objective_type, 0) + count
 
     state.status_messages.append(
         f">>> Progress: {objective_type} {state.mission_progress[objective_type]}"

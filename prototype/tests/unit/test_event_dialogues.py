@@ -91,7 +91,9 @@ class TestEventDataFile:
         # endings and other special markers
         valid_specials = {f"ending_{c}_{e}" for c in "ABC" for e in "AB"}
         valid_specials |= {
-            "character_select", "freeside_journey", "maelcum_intro",
+            "character_select",
+            "freeside_journey",
+            "maelcum_intro",
         }
         for did, dlg in data["dialogues"].items():
             if "choices" not in dlg:
@@ -106,7 +108,9 @@ class TestEventDataFile:
                 if lt.startswith("ending_"):
                     continue
                 # Anything else: warn but don't fail (allow forward references)
-                print(f"  [INFO] {did} choice: leads_to '{lt}' not in current dialogues (forward reference OK)")
+                print(
+                    f"  [INFO] {did} choice: leads_to '{lt}' not in current dialogues (forward reference OK)"
+                )
 
 
 class TestEventDashboardHtml:

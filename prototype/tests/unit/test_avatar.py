@@ -86,7 +86,10 @@ class TestAvatarPrograms:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             programs=[("wisp", 5, False)],
         )
         rendered = render_avatar_lines(state)
@@ -100,7 +103,10 @@ class TestAvatarPrograms:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             programs=[("hammer", 1, False)],
         )
         rendered = render_avatar_lines(state)
@@ -113,7 +119,10 @@ class TestAvatarPrograms:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             programs=[("shield", 3, True)],
         )
         rendered = render_avatar_lines(state)
@@ -126,7 +135,10 @@ class TestAvatarPrograms:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             programs=[],
         )
         rendered = render_avatar_lines(state)
@@ -144,7 +156,10 @@ class TestAvatarDeck:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             deck_tier=4,
         )
         rendered = render_avatar_lines(state)
@@ -157,7 +172,10 @@ class TestAvatarDeck:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             deck_tier=0,
         )
         rendered = render_avatar_lines(state)
@@ -174,7 +192,10 @@ class TestAvatarWetware:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             wetware_tier=3,
         )
         rendered = render_avatar_lines(state)
@@ -187,7 +208,10 @@ class TestAvatarWetware:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             wetware_tier=5,
         )
         rendered = render_avatar_lines(state)
@@ -204,7 +228,10 @@ class TestAvatarConstruct:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             construct_id="dixie",
         )
         rendered = render_avatar_lines(state)
@@ -218,7 +245,10 @@ class TestAvatarConstruct:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             construct_id=None,
         )
         rendered = render_avatar_lines(state)
@@ -231,7 +261,10 @@ class TestAvatarConstruct:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=10, zdr=5,
+            hp=100,
+            max_hp=100,
+            ppl=10,
+            zdr=5,
             construct_id="dixie",
         )
         rendered = render_avatar_lines(state)
@@ -247,7 +280,10 @@ class TestAvatarIntegration:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=100, max_hp=100, ppl=25, zdr=2,
+            hp=100,
+            max_hp=100,
+            ppl=25,
+            zdr=2,
             programs=[("wisp", 5, False), ("hammer", 2, False), ("probe", 3, False)],
             deck_tier=4,
             wetware_tier=4,
@@ -271,7 +307,10 @@ class TestAvatarIntegration:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=50, max_hp=100, ppl=25, zdr=20,
+            hp=50,
+            max_hp=100,
+            ppl=25,
+            zdr=20,
             programs=[("wisp", 1, True), ("hammer", 2, False), ("probe", 3, False)],
             deck_tier=4,
             wetware_tier=4,
@@ -289,7 +328,10 @@ class TestAvatarIntegration:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=25, max_hp=100, ppl=17, zdr=30,
+            hp=25,
+            max_hp=100,
+            ppl=17,
+            zdr=30,
             programs=[("hammer", 2, False), ("probe", 3, False)],  # wisp LOST
             deck_tier=4,
             wetware_tier=4,
@@ -305,7 +347,10 @@ class TestAvatarIntegration:
         from roguelike_sprawl.avatar.renderer import render_avatar_lines
 
         state = build_avatar_state(
-            hp=0, max_hp=100, ppl=25, zdr=20,
+            hp=0,
+            max_hp=100,
+            ppl=25,
+            zdr=20,
             programs=[("wisp", 5, False), ("hammer", 2, False), ("probe", 3, False)],
             deck_tier=4,
             wetware_tier=4,

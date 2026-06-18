@@ -22,12 +22,12 @@ class Stage(StrEnum):
       MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → COMPLETE
     """
 
-    PENDING = "pending"          # Run not started
-    MEET_NPC = "meet_npc"        # Find and talk to a construct NPC
+    PENDING = "pending"  # Run not started
+    MEET_NPC = "meet_npc"  # Find and talk to a construct NPC
     EXTRACT_DATA = "extract_data"  # Find data node, extract payload
-    DEFEAT_ICE = "defeat_ice"    # Find ICE node, win combat
-    COMPLETE = "complete"        # Run finished, return to hub
-    FAILED = "failed"            # Player flatlined
+    DEFEAT_ICE = "defeat_ice"  # Find ICE node, win combat
+    COMPLETE = "complete"  # Run finished, return to hub
+    FAILED = "failed"  # Player flatlined
 
 
 class ObjectiveKind(StrEnum):
@@ -36,13 +36,14 @@ class ObjectiveKind(StrEnum):
     Used to find the right node in the matrix and detect completion.
     """
 
-    NPC = "npc"             # Node with kind=CONSTRUCT (talk to)
-    DATA = "data"           # Node with kind=DATA (extract from)
-    ICE = "ice"             # Node with kind=ICE (combat)
-    NONE = "none"           # No specific target (e.g. PENDING, COMPLETE)
+    NPC = "npc"  # Node with kind=CONSTRUCT (talk to)
+    DATA = "data"  # Node with kind=DATA (extract from)
+    ICE = "ice"  # Node with kind=ICE (combat)
+    NONE = "none"  # No specific target (e.g. PENDING, COMPLETE)
 
 
 # --- Stage metadata ---
+
 
 @dataclass(frozen=True, slots=True)
 class StageInfo:
@@ -118,6 +119,7 @@ def get_stage_info(stage: Stage) -> StageInfo:
 
 
 # --- RunState ---
+
 
 @dataclass
 class RunState:
@@ -220,6 +222,7 @@ class RunState:
 
 
 # --- Factory ---
+
 
 def start_run(initial_stage: Stage = Stage.MEET_NPC) -> RunState:
     """Create a fresh RunState starting at the given stage."""

@@ -82,8 +82,18 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Cinematic ASCII art demo")
     parser.add_argument(
         "--character",
-        choices=["finn", "dixie", "molly", "armitage", "case", "chiba",
-                 "cyberspace", "matrix_rain", "sense_net", "glitch"],
+        choices=[
+            "finn",
+            "dixie",
+            "molly",
+            "armitage",
+            "case",
+            "chiba",
+            "cyberspace",
+            "matrix_rain",
+            "sense_net",
+            "glitch",
+        ],
         help="Show one specific character/location",
     )
     parser.add_argument(
