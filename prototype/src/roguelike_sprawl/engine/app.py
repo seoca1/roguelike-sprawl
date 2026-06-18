@@ -141,6 +141,31 @@ def _handle_input(
 
     # Global hotkeys (work on all screens)
     if isinstance(event, tcod.event.KeyDown):
+        # F5: quick save (slot 1)
+        if event.sym is tcod.event.KeySym.F5:
+            from .save_manager import SaveManager, SaveSlotEmptyError
+
+            manager = SaveManager()
+            try:
+                meta = manager.save(1, state, elapsed_seconds=int(state.demo_elapsed_s))
+                state.status_messages.append(f">>> Quicksaved to slot 1 ({meta.size_bytes} bytes)")
+            except Exception as e:
+                state.status_messages.append(f">>> Quicksave failed: {e}")
+            return True
+
+        # F9: quick load (slot 1)
+        if event.sym is tcod.event.KeySym.F9:
+            from .save_manager import SaveError, SaveManager, SaveSlotEmptyError
+
+            manager = SaveManager()
+            try:
+                manager.restore_state(1, state)
+            except SaveSlotEmptyError:
+                state.status_messages.append(">>> Quickload failed: slot 1 is empty")
+            except SaveError as e:
+                state.status_messages.append(f">>> Quickload failed: {e}")
+            return True
+
         if event.sym is tcod.event.KeySym.M:
             muted = sound_manager.toggle_mute()
             label = "MUTED" if muted else "UNMUTED"

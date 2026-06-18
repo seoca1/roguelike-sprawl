@@ -86,6 +86,22 @@ def enter_jack_out(state: AppState) -> None:
     except Exception:
         pass
 
+    # Auto-save on JACK_OUT (critical point — player has earned rewards)
+    _try_auto_save(state, slot=2)  # Use slot 2 for autosave
+
+
+def _try_auto_save(state: AppState, slot: int = 2) -> None:
+    """Try to auto-save the current run, silently ignoring errors."""
+    try:
+        from .save_manager import SaveManager
+
+        manager = SaveManager()
+        manager.save(slot, state, elapsed_seconds=int(state.demo_elapsed_s))
+        state.status_messages.append(f">>> Auto-saved to slot {slot}")
+    except Exception:
+        # Silent failure — auto-save is best-effort
+        pass
+
 
 def advance_to_reward(state: AppState) -> None:
     """Move from JACK_OUT to REWARD stage.

@@ -38,6 +38,16 @@ def trigger_death(state: AppState, reason: str = "Combat") -> None:
     except Exception:
         pass
 
+    # Auto-save on death (player can choose to reload and try again)
+    try:
+        from .save_manager import SaveManager
+
+        manager = SaveManager()
+        manager.save(slot=3, state=state, elapsed_seconds=int(state.demo_elapsed_s))
+        state.status_messages.append(">>> Auto-saved death state to slot 3")
+    except Exception:
+        pass
+
 
 def jack_out_to_hub(state: AppState) -> None:
     """Recover from death: return to hub, lose current run progress.
