@@ -116,35 +116,23 @@ class TestStageValidation:
     """Stage transitions are validated against mission flow."""
 
     def test_first_jack_valid_transition_meet_to_extract(self) -> None:
-        assert validate_stage_transition(
-            Stage.MEET_NPC, Stage.EXTRACT_DATA, "first_jack"
-        )
+        assert validate_stage_transition(Stage.MEET_NPC, Stage.EXTRACT_DATA, "first_jack")
 
     def test_first_jack_valid_transition_extract_to_defeat(self) -> None:
-        assert validate_stage_transition(
-            Stage.EXTRACT_DATA, Stage.DEFEAT_ICE, "first_jack"
-        )
+        assert validate_stage_transition(Stage.EXTRACT_DATA, Stage.DEFEAT_ICE, "first_jack")
 
     def test_first_jack_valid_transition_defeat_to_jackout(self) -> None:
-        assert validate_stage_transition(
-            Stage.DEFEAT_ICE, Stage.JACK_OUT, "first_jack"
-        )
+        assert validate_stage_transition(Stage.DEFEAT_ICE, Stage.JACK_OUT, "first_jack")
 
     def test_first_jack_valid_transition_jackout_to_reward(self) -> None:
-        assert validate_stage_transition(
-            Stage.JACK_OUT, Stage.REWARD, "first_jack"
-        )
+        assert validate_stage_transition(Stage.JACK_OUT, Stage.REWARD, "first_jack")
 
     def test_first_jack_valid_transition_reward_to_complete(self) -> None:
-        assert validate_stage_transition(
-            Stage.REWARD, Stage.COMPLETE, "first_jack"
-        )
+        assert validate_stage_transition(Stage.REWARD, Stage.COMPLETE, "first_jack")
 
     def test_invalid_transition_skip_to_complete(self) -> None:
         """Cannot skip from MEET_NPC directly to COMPLETE in first_jack."""
-        assert not validate_stage_transition(
-            Stage.MEET_NPC, Stage.COMPLETE, "first_jack"
-        )
+        assert not validate_stage_transition(Stage.MEET_NPC, Stage.COMPLETE, "first_jack")
 
     def test_failed_reachable_from_any_in_progress(self) -> None:
         for stage in (Stage.MEET_NPC, Stage.EXTRACT_DATA, Stage.DEFEAT_ICE, Stage.JACK_OUT):
@@ -342,9 +330,9 @@ class TestStageEventBus:
         meet_npc_count = [0]
 
         bus.subscribe_stage(
-            StageEventKind.ENTER, Stage.MEET_NPC, lambda e: meet_npc_count.__setitem__(
-                0, meet_npc_count[0] + 1
-            )
+            StageEventKind.ENTER,
+            Stage.MEET_NPC,
+            lambda e: meet_npc_count.__setitem__(0, meet_npc_count[0] + 1),
         )
 
         run = start_run("first_jack")

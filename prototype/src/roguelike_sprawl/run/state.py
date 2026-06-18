@@ -215,8 +215,12 @@ DEFAULT_FLOW: dict[Stage, StageInfo] = {
 
 def get_stage_info(stage: Stage) -> StageInfo:
     """Return the StageInfo for a given Stage."""
-    return DEFAULT_FLOW.get(stage, StageInfo(stage=stage, title=stage.value.title(),
-                                              objective_kind=ObjectiveKind.NONE, hint=""))
+    return DEFAULT_FLOW.get(
+        stage,
+        StageInfo(
+            stage=stage, title=stage.value.title(), objective_kind=ObjectiveKind.NONE, hint=""
+        ),
+    )
 
 
 # --- Per-mission stage flows ---
