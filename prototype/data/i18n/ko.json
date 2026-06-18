@@ -1,0 +1,64 @@
+{
+  "app": {
+    "title": "ROGUELIKE SPRAWL",
+    "subtitle": "윌리엄 깁슨 스프롤 3부작 기반 로그라이크",
+    "controls": "[ESC] 종료  [Q] 종료",
+    "phase": "Phase: {phase}"
+  },
+  "menu": {
+    "new_run": "새 런",
+    "archive": "스토리 아카이브",
+    "settings": "설정",
+    "quit": "종료",
+    "phase": "Phase: 메인 메뉴",
+    "controls": "[1] 새 런  [2] 아카이브  [3] 설정  [Q] 종료"
+  },
+  "hub": {
+    "title": "허브: 사이버스페이스 구성체",
+    "subtitle": "의뢰를 골라라. 플랫라인은 금물.",
+    "fixer_intro": "♠F♠ The Finn  --  자네에게 줄 게 있네.",
+    "grade": "등급: {grade}-up",
+    "ppl": "PPL: {ppl}",
+    "no_jobs": "등급에 맞는 의뢰가 없네. 좀 기다려.",
+    "select_hint": "[1-9] 선택  [ESC] 잭 아웃",
+    "entry": "진입점  ZDR {zdr}",
+    "objective": "목표: {objective}",
+    "reward": "보상: T{tier} + {credits} 크레딧"
+  },
+  "matrix": {
+    "title": "매트릭스: {zone} 시스템",
+    "entry_message": "잭인. 세계가 회색이 된다.",
+    "exit_message": "철수. 심장이 뛴다.",
+    "flatline_message": "플랫라인. 정적. 침묵.",
+    "ppl_hud": "PPL: {ppl}",
+    "zdr_hud": "ZDR: {zdr}",
+    "status_hud": "상태: {status} ({ratio:.2f}x)",
+    "current_label": "현재: {label}",
+    "connected_label": "연결됨: {neighbors}",
+    "controls": "[←/→/↑/↓] 이동  [ENTER] 진입  [ESC] 잭 아웃",
+    "action_menu_title": "노드: {label}",
+    "action_scan": "스캔",
+    "action_extract": "데이터 추출",
+    "action_engage": "ICE 교전",
+    "action_communicate": "교신",
+    "action_jack_out": "잭 아웃",
+    "action_placeholder": "(Phase 5+: 미구현)",
+    "death_title": "플랫라인",
+    "death_message": "매트릭스는 광활하다. 자네는 작았다. 정적. 침묵."
+  },
+  "aftermath": {
+    "title": "후일담",
+    "tap_to_continue": "[Space] 계속",
+    "section_narrative": "후일담",
+    "section_reaction": "반응",
+    "loading": "후일담을 불러오는 중...",
+    "subtitle_hint": "이벤트 메시지는 한글 자막 형식으로 표시됩니다 (ADR-0019)"
+  },
+  "status": {
+    "safe": "안전",
+    "match": "균등",
+    "tough": "불리",
+    "deadly": "치명",
+    "futile": "자살행위"
+  }
+}

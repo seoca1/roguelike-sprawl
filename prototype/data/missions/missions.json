@@ -1,0 +1,142 @@
+{
+  "first_jack": {
+    "id": "first_jack",
+    "title": "First Jack",
+    "fixer": "finn",
+    "arc": 1,
+    "grade_min": 1,
+    "grade_max": 1,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "demo_file"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.standard",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 42,
+    "zone": "surface",
+    "rewards": {
+      "credits": 500,
+      "materials": {
+        "data_fragment": 2
+      }
+    }
+  },
+  "watchdog_patrol": {
+    "id": "watchdog_patrol",
+    "title": "Watchdog Patrol",
+    "fixer": "finn",
+    "arc": 1,
+    "grade_min": 1,
+    "grade_max": 1,
+    "primary_objective": {
+      "type": "defeat",
+      "enemy": "ice.watchdog",
+      "count": 2
+    },
+    "secondary_objectives": [
+      {
+        "type": "collect_material",
+        "material": "ice_shard",
+        "count": 3
+      }
+    ],
+    "matrix_seed": 1337,
+    "zone": "surface",
+    "rewards": {
+      "credits": 750,
+      "materials": {
+        "ice_shard": 2
+      }
+    }
+  },
+  "ice_run": {
+    "id": "ice_run",
+    "title": "Ice Run",
+    "fixer": "finn",
+    "arc": 1,
+    "grade_min": 1,
+    "grade_max": 2,
+    "primary_objective": {
+      "type": "collect_material",
+      "material": "ice_shard",
+      "count": 5
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.standard",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 7,
+    "zone": "surface",
+    "rewards": {
+      "credits": 500,
+      "materials": {
+        "data_fragment": 2
+      }
+    }
+  },
+  "delivery_to_finn": {
+    "id": "delivery_to_finn",
+    "title": "Delivery to Finn",
+    "fixer": "finn",
+    "arc": 1,
+    "grade_min": 1,
+    "grade_max": 2,
+    "primary_objective": {
+      "type": "deliver_material",
+      "material": "data_fragment",
+      "count": 3
+    },
+    "secondary_objectives": [
+      {
+        "type": "extract_data",
+        "data_id": "any",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 99,
+    "zone": "surface",
+    "rewards": {
+      "credits": 800,
+      "materials": {
+        "upgrade_t1": 1
+      }
+    }
+  },
+  "craft_job": {
+    "id": "craft_job",
+    "title": "Craft Job",
+    "fixer": "finn",
+    "arc": 2,
+    "grade_min": 1,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "craft_item",
+      "item_type": "program",
+      "tier_level": 1,
+      "count": 1
+    },
+    "secondary_objectives": [
+      {
+        "type": "collect_material",
+        "material": "combat_module",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 256,
+    "zone": "surface",
+    "rewards": {
+      "credits": 1000,
+      "materials": {
+        "upgrade_t2": 1
+      }
+    }
+  }
+}

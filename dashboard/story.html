@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Roguelike Sprawl — Story Project Dashboard</title>
+<style>
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0a0e14; border-bottom: 1px solid #2a3540;
+    padding: 8px 24px; margin: -24px -24px 16px -24px;
+    display: flex; gap: 16px; align-items: center;
+  }
+  .top-nav a { color: #66ffcc; text-decoration: none; font-size: 13px; }
+  .top-nav a:hover { color: #00ccff; }
+  .top-nav .current { color: #ffaa55; font-weight: 600; }
+  .top-nav .sep { color: #2a3540; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    background: #0a0e14;
+    color: #c5d4e3;
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1, h2, h3 { color: #66ffcc; font-weight: 600; }
+  h1 { font-size: 28px; margin-bottom: 8px; text-shadow: 0 0 8px #66ffcc33; }
+  h2 { font-size: 20px; margin: 32px 0 16px; border-bottom: 1px solid #2a3540; padding-bottom: 8px; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #ffaa55; }
+  .subtitle { color: #6a7888; font-size: 14px; margin-bottom: 24px; }
+  .phase-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px; }
+  .phase-card {
+    background: #131a23;
+    border: 1px solid #2a3540;
+    border-radius: 6px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+  .phase-card.complete { border-color: #66ffcc; }
+  .phase-card.in-progress { border-color: #ffaa55; box-shadow: 0 0 12px #ffaa5533; }
+  .phase-num { font-size: 32px; font-weight: 700; color: #2a3540; position: absolute; right: 16px; top: 8px; }
+  .phase-card.complete .phase-num { color: #66ffcc33; }
+  .phase-card.in-progress .phase-num { color: #ffaa5533; }
+  .phase-title { font-size: 16px; color: #66ffcc; margin-bottom: 8px; }
+  .phase-desc { font-size: 13px; color: #8a9aa8; }
+  .phase-status { font-size: 12px; margin-top: 12px; padding: 4px 8px; background: #1a2530; border-radius: 3px; display: inline-block; }
+  .complete .phase-status { background: #66ffcc22; color: #66ffcc; }
+  .in-progress .phase-status { background: #ffaa5522; color: #ffaa55; }
+  .pending .phase-status { background: #2a354022; color: #6a7888; }
+  .progress-bar { background: #1a2530; height: 8px; border-radius: 4px; margin-top: 12px; overflow: hidden; }
+  .progress-fill { background: linear-gradient(90deg, #66ffcc, #00ccff); height: 100%; }
+  .character-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+  .character-card {
+    background: #131a23;
+    border: 1px solid #2a3540;
+    border-radius: 6px;
+    padding: 16px;
+    font-size: 12px;
+  }
+  .character-card .name { font-size: 18px; color: #ffaa55; margin-bottom: 4px; }
+  .character-card .role { color: #6a7888; font-size: 11px; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .character-card .quote { color: #c5d4e3; font-style: italic; margin-bottom: 12px; border-left: 2px solid #ffaa55; padding-left: 8px; }
+  .character-card .stat { display: flex; justify-content: space-between; padding: 2px 0; border-bottom: 1px dotted #2a3540; }
+  .character-card .stat .label { color: #6a7888; }
+  .character-card .stat .value { color: #66ffcc; }
+  .checklist { background: #131a23; border: 1px solid #2a3540; border-radius: 6px; padding: 16px; margin-bottom: 24px; }
+  .checklist .item { display: flex; align-items: center; padding: 6px 0; border-bottom: 1px dotted #2a354033; }
+  .checklist .item:last-child { border-bottom: none; }
+  .checklist .item input[type="checkbox"] { width: 18px; height: 18px; margin-right: 12px; accent-color: #66ffcc; cursor: pointer; }
+  .checklist .item.done { color: #66ffcc; }
+  .checklist .item.pending { color: #6a7888; }
+  .checklist .item .status { margin-left: auto; font-size: 11px; padding: 2px 8px; border-radius: 3px; }
+  .checklist .item.done .status { background: #66ffcc22; color: #66ffcc; }
+  .checklist .item.pending .status { background: #2a354022; color: #6a7888; }
+  .endings { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 24px; }
+  .ending-card { background: #131a23; border-radius: 6px; padding: 16px; border: 1px solid #2a3540; }
+  .ending-card.a { border-left: 4px solid #66ffcc; }
+  .ending-card.b { border-left: 4px solid #ff5577; }
+  .ending-card h3 { color: #ffaa55; margin-bottom: 8px; }
+  .ending-card.a h3 { color: #66ffcc; }
+  .ending-card.b h3 { color: #ff5577; }
+  .ending-card ul { padding-left: 20px; font-size: 12px; }
+  .ending-card li { padding: 2px 0; color: #8a9aa8; }
+  pre {
+    background: #050810;
+    border: 1px solid #2a3540;
+    border-radius: 4px;
+    padding: 12px;
+    overflow-x: auto;
+    font-size: 12px;
+    color: #c5d4e3;
+    margin: 8px 0;
+  }
+  .ascii-art { color: #00ff88; text-shadow: 0 0 4px #00ff8866; }
+  .meta { color: #6a7888; font-size: 11px; }
+  .docs-link { color: #00ccff; text-decoration: none; }
+  .docs-link:hover { text-decoration: underline; }
+  .footer { margin-top: 48px; padding-top: 16px; border-top: 1px solid #2a3540; color: #6a7888; font-size: 12px; text-align: center; }
+  .footer code { background: #1a2530; padding: 2px 6px; border-radius: 3px; }
+
+  /* Prologue Viewer */
+  .prologue-viewer { background: #131a23; border: 1px solid #2a3540; border-radius: 6px; padding: 20px; margin-bottom: 24px; }
+  .character-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .char-tab {
+    flex: 1; min-width: 140px;
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 4px;
+    padding: 12px 16px; cursor: pointer; transition: all 0.15s ease;
+    display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+    color: inherit; font-family: inherit;
+  }
+  .char-tab:hover { border-color: #66ffcc; background: #1a2530; }
+  .char-tab.active { border-color: #66ffcc; background: #1a2530; box-shadow: 0 0 8px #66ffcc33; }
+  .char-tab .char-name { color: #66ffcc; font-weight: 600; font-size: 14px; }
+  .char-tab .char-arch { color: #6a7888; font-size: 11px; }
+  .char-tab.active .char-arch { color: #8a9aa8; }
+
+  .lang-toggle { display: flex; gap: 4px; margin-bottom: 16px; }
+  .lang-btn {
+    background: #0a0e14; border: 1px solid #2a3540; color: #8a9aa8;
+    padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 12px;
+    font-family: inherit;
+  }
+  .lang-btn:hover { border-color: #66ffcc; color: #c5d4e3; }
+  .lang-btn.active { background: #66ffcc22; color: #66ffcc; border-color: #66ffcc; }
+
+  .char-info {
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 4px;
+    padding: 12px 16px; margin-bottom: 16px;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;
+  }
+  .char-info-row { display: flex; flex-direction: column; gap: 2px; }
+  .char-info-row .label { color: #6a7888; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .char-info-row .value { color: #c5d4e3; font-size: 13px; }
+
+  .prologue-scenes { display: flex; flex-direction: column; gap: 16px; }
+  .scene { background: #0a0e14; border: 1px solid #1a2530; border-radius: 4px; padding: 16px; }
+  .scene-title { color: #ffaa55; font-size: 14px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid #1a2530; }
+  .scene-ascii {
+    background: #050a10; border: 1px solid #1a2530; border-radius: 3px;
+    padding: 10px; color: #66ffcc; font-size: 12px; line-height: 1.2;
+    margin-bottom: 12px; overflow-x: auto; white-space: pre;
+  }
+  .dialogue-line { margin-bottom: 12px; padding-left: 12px; border-left: 2px solid #2a3540; }
+  .dialogue-line:last-child { margin-bottom: 0; }
+  .dialogue-speaker { color: #66ffcc; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+  .dialogue-text { color: #c5d4e3; font-size: 13px; line-height: 1.6; font-style: italic; }
+  .dialogue-text-en { color: #8a9aa8; font-size: 12px; line-height: 1.5; margin-top: 4px; padding-top: 4px; border-top: 1px dashed #1a2530; }
+
+  .scene-choice { background: #1a2530; border: 1px solid #2a3540; border-radius: 4px; padding: 12px; margin-top: 12px; }
+  .scene-choice .prompt { color: #ffaa55; font-size: 13px; margin-bottom: 8px; }
+  .choice-options { display: flex; flex-direction: column; gap: 6px; }
+  .choice-option { display: flex; gap: 8px; align-items: flex-start; padding: 8px; background: #0a0e14; border-radius: 3px; border-left: 3px solid #66ffcc; }
+  .choice-option .key { color: #66ffcc; font-weight: 700; min-width: 20px; }
+  .choice-option .text { color: #c5d4e3; font-size: 13px; flex: 1; }
+  .choice-option .response { color: #8a9aa8; font-size: 11px; margin-top: 4px; padding-top: 4px; border-top: 1px dashed #2a3540; }
+
+  .endings-title { color: #ffaa55; font-size: 16px; margin: 24px 0 12px; padding-bottom: 8px; border-bottom: 1px solid #2a3540; }
+  .prologue-endings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .ending-block { background: #0a0e14; border: 1px solid #1a2530; border-radius: 4px; padding: 14px; }
+  .ending-block.a { border-left: 3px solid #66ffcc; }
+  .ending-block.b { border-left: 3px solid #ff5555; }
+  .ending-block h4 { margin: 0 0 4px; font-size: 14px; }
+  .ending-block.a h4 { color: #66ffcc; }
+  .ending-block.b h4 { color: #ff8888; }
+  .ending-block .desc { color: #8a9aa8; font-size: 12px; margin-bottom: 8px; }
+  .ending-block .ending-line { color: #c5d4e3; font-size: 12px; margin: 4px 0; padding-left: 8px; border-left: 2px solid #2a3540; }
+
+  @media (max-width: 720px) {
+    .prologue-endings { grid-template-columns: 1fr; }
+  }
+
+  /* Event Dialogue Viewer */
+  .event-viewer { background: #131a23; border: 1px solid #2a3540; border-radius: 6px; padding: 20px; margin-bottom: 24px; }
+  .event-controls { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap; }
+  .npc-filter { display: flex; gap: 4px; flex-wrap: wrap; }
+  .npc-btn {
+    background: #0a0e14; border: 1px solid #2a3540; color: #8a9aa8;
+    padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 12px;
+    font-family: inherit;
+  }
+  .npc-btn:hover { border-color: #66ffcc; color: #c5d4e3; }
+  .npc-btn.active { background: #66ffcc22; color: #66ffcc; border-color: #66ffcc; }
+  .event-lang-toggle { display: flex; gap: 4px; }
+  .evt-lang-btn {
+    background: #0a0e14; border: 1px solid #2a3540; color: #8a9aa8;
+    padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 12px;
+    font-family: inherit;
+  }
+  .evt-lang-btn:hover { border-color: #66ffcc; color: #c5d4e3; }
+  .evt-lang-btn.active { background: #66ffcc22; color: #66ffcc; border-color: #66ffcc; }
+
+  .event-stats { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .stat-pill {
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 12px;
+    padding: 4px 12px; color: #c5d4e3; font-size: 12px;
+  }
+  .stat-pill .stat-num { color: #66ffcc; font-weight: 700; }
+
+  .event-list { display: flex; flex-direction: column; gap: 16px; }
+  .event-block {
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 4px;
+    padding: 16px; border-left: 3px solid #66ffcc;
+  }
+  .event-block[data-npc="finn"] { border-left-color: #ffaa55; }
+  .event-block[data-npc="dixie"] { border-left-color: #66ffcc; }
+  .event-block[data-npc="maelcum"] { border-left-color: #00ccff; }
+  .event-block[data-npc="bartender"] { border-left-color: #ffaa00; }
+  .event-block[data-npc="ta_rep"] { border-left-color: #ff5555; }
+  .event-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .event-title { color: #ffaa55; font-size: 14px; margin: 0; }
+  .event-npc-tag { font-size: 11px; color: #6a7888; }
+  .event-context { background: #050a10; border: 1px solid #1a2530; border-radius: 3px; padding: 8px 12px; margin-bottom: 12px; color: #8a9aa8; font-size: 12px; font-style: italic; }
+  .event-lines { display: flex; flex-direction: column; gap: 8px; }
+  .event-line { padding-left: 10px; border-left: 2px solid #2a3540; }
+  .event-line .speaker { color: #66ffcc; font-size: 12px; font-weight: 600; }
+  .event-line .text { color: #c5d4e3; font-size: 13px; line-height: 1.5; font-style: italic; margin-top: 2px; }
+  .event-line .text-en { color: #8a9aa8; font-size: 12px; line-height: 1.4; margin-top: 4px; padding-top: 4px; border-top: 1px dashed #1a2530; }
+  .event-choices { margin-top: 12px; background: #1a2530; border-radius: 4px; padding: 10px; }
+  .event-choices .prompt { color: #ffaa55; font-size: 12px; margin-bottom: 6px; }
+  .event-choice { display: flex; gap: 8px; align-items: flex-start; padding: 6px 8px; background: #0a0e14; border-radius: 3px; border-left: 3px solid #66ffcc; margin-bottom: 4px; }
+  .event-choice:last-child { margin-bottom: 0; }
+  .event-choice .key { color: #66ffcc; font-weight: 700; min-width: 18px; }
+  .event-choice .body { flex: 1; }
+  .event-choice .choice-text { color: #c5d4e3; font-size: 12px; }
+  .event-choice .response { color: #8a9aa8; font-size: 11px; margin-top: 4px; padding-top: 4px; border-top: 1px dashed #2a3540; }
+  .event-choice .leads-to { color: #6a7888; font-size: 10px; margin-top: 2px; }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../../dashboard/index.html">🌐 Hub</a>
+  <span class="sep">|</span>
+  <a href="index.html">◀ Roguelike</a>
+  <span class="sep">|</span>
+  <span class="current">📖 Story</span>
+  <span class="sep">|</span>
+  <a href="stages.html">⏱ Stages</a>
+</nav>
+
+<h1>🌆 ROGUELIKE SPRAWL — Story Project Dashboard</h1>
+<div class="subtitle">
+  3-단계 구조: 소설(1) → 데모(2) → 게임(3). 마지막 업데이트: <span id="last-updated"></span>
+</div>
+
+<!-- 3-Phase Progress -->
+<h2>📊 3-Phase Progress</h2>
+<div class="phase-grid">
+  <div class="phase-card complete">
+    <div class="phase-num">1</div>
+    <div class="phase-title">소설 형식 문서</div>
+    <div class="phase-desc">오리지널 주인공 3인 + 프로로그 줄거리 1-2페이지</div>
+    <div class="phase-status">✓ COMPLETE</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+  </div>
+  <div class="phase-card complete">
+    <div class="phase-num">2</div>
+    <div class="phase-title">데모 형식 검증</div>
+    <div class="phase-desc">original_story 모듈 + verify_original_prologue.py (6 시나리오)</div>
+    <div class="phase-status">✓ COMPLETE</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+  </div>
+  <div class="phase-card pending">
+    <div class="phase-num">3</div>
+    <div class="phase-title">게임 구조 반영</div>
+    <div class="phase-desc">PROLOGUE_SCENE 교체, 분기 시스템 적용</div>
+    <div class="phase-status">◯ PENDING</div>
+    <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- Characters -->
+<h2>🎭 오리지널 주인공 3인</h2>
+<div class="character-grid">
+  <div class="character-card">
+    <div class="name">케이 (K)</div>
+    <div class="role">Novice · 초짜</div>
+    <div class="quote">"I just wanted to pay off my debt. I didn't ask for this."</div>
+    <div class="stat"><span class="label">나이</span><span class="value">22</span></div>
+    <div class="stat"><span class="label">데크</span><span class="value">Ono-Sendai T1</span></div>
+    <div class="stat"><span class="label">무기</span><span class="value">Wisp T1</span></div>
+    <div class="stat"><span class="label">동기</span><span class="value">빚 (생존)</span></div>
+    <div class="stat"><span class="label">연관 인물</span><span class="value">Finn, Dixie</span></div>
+    <div class="stat"><span class="label">엔딩 A</span><span class="value">케이 살아남음</span></div>
+    <div class="stat"><span class="label">엔딩 B</span><span class="value">케이 flatline</span></div>
+  </div>
+  <div class="character-card">
+    <div class="name">실 (Sil)</div>
+    <div class="role">Veteran · 베테랑</div>
+    <div class="quote">"I've done this for fifteen years. I know when a job is too good."</div>
+    <div class="stat"><span class="label">나이</span><span class="value">38</span></div>
+    <div class="stat"><span class="label">데크</span><span class="value">Hosaka T3</span></div>
+    <div class="stat"><span class="label">무기</span><span class="value">Hammer T2 + Probe T2</span></div>
+    <div class="stat"><span class="label">동기</span><span class="value">복수</span></div>
+    <div class="stat"><span class="label">연관 인물</span><span class="value">Finn, Armitage</span></div>
+    <div class="stat"><span class="label">엔딩 A</span><span class="value">실 복수 성공</span></div>
+    <div class="stat"><span class="label">엔딩 B</span><span class="value">실 flatline</span></div>
+  </div>
+  <div class="character-card">
+    <div class="name">카스 (Kas)</div>
+    <div class="role">Heretic · 이단자</div>
+    <div class="quote">"The system is the virus. I'm the cure."</div>
+    <div class="stat"><span class="label">나이</span><span class="value">28</span></div>
+    <div class="stat"><span class="label">데크</span><span class="value">MaaS Bio T2</span></div>
+    <div class="stat"><span class="label">무기</span><span class="value">Viral T2 (커스텀)</span></div>
+    <div class="stat"><span class="label">동기</span><span class="value">시스템 폭로</span></div>
+    <div class="stat"><span class="label">연관 인물</span><span class="value">Maelcum, Loa</span></div>
+    <div class="stat"><span class="label">엔딩 A</span><span class="value">카스 Sprawl 변화</span></div>
+    <div class="stat"><span class="label">엔딩 B</span><span class="value">카스 침묵</span></div>
+  </div>
+</div>
+
+<!-- Endings -->
+<h2>🎬 엔딩 (2개)</h2>
+<div class="endings">
+  <div class="ending-card a">
+    <h3>엔딩 A: Jockey Lives (성공)</h3>
+    <ul>
+      <li>Case: Sprawl 탈출, 새로운 자키로 살아남음</li>
+      <li>Sil: 데이터 폭로, 복수 성공. 새로운 적 생성</li>
+      <li>Kas: 선언문 배포, Sprawl 변화 시작</li>
+    </ul>
+    <p class="meta">스포일러: 이후 게임에서 새로운 의뢰로 연결</p>
+  </div>
+  <div class="ending-card b">
+    <h3>엔딩 B: Jockey Flatlines (실패)</h3>
+    <ul>
+      <li>Case: Finn이 추적, ICE에 잡힘. Sprawl의 시체 더미</li>
+      <li>Sil: Tessier-Ashpool의 보복. Sprawl의 시체 더미</li>
+      <li>Kas: Tessier-Ashpool의 ICE 차단. 자키 네트워크 추방</li>
+    </ul>
+    <p class="meta">스포일러: Pillar 3 — The Flatline</p>
+  </div>
+</div>
+
+<!-- Event Dialogue Viewer -->
+<h2>💬 이벤트 대사 (Event Dialogues)</h2>
+<p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+  NPC, 미션 브리핑, ICE, Hub 대화 모음. 출처: <code>design/story/event_dialogues.json</code>
+</p>
+
+<div class="event-viewer" data-event-src="../design/story/event_dialogues.json">
+  <div class="event-controls">
+    <div class="npc-filter" id="npcFilter">
+      <button class="npc-btn active" data-npc="all">전체 (All)</button>
+      <button class="npc-btn" data-npc="finn">더 핀</button>
+      <button class="npc-btn" data-npc="dixie">딕시</button>
+      <button class="npc-btn" data-npc="maelcum">멜컴</button>
+      <button class="npc-btn" data-npc="bartender">빔</button>
+      <button class="npc-btn" data-npc="ta_rep">T-A</button>
+    </div>
+    <div class="event-lang-toggle">
+      <button class="evt-lang-btn active" data-evt-lang="ko">한글</button>
+      <button class="evt-lang-btn" data-evt-lang="en">English</button>
+      <button class="evt-lang-btn" data-evt-lang="both">Both</button>
+    </div>
+  </div>
+
+  <div class="event-stats" id="eventStats">
+    <span class="stat-pill"><span class="stat-num" data-stat="npcs">-</span> NPCs</span>
+    <span class="stat-pill"><span class="stat-num" data-stat="dialogues">-</span> Dialogues</span>
+    <span class="stat-pill"><span class="stat-num" data-stat="lines">-</span> Lines</span>
+    <span class="stat-pill"><span class="stat-num" data-stat="choices">-</span> Choices</span>
+  </div>
+
+  <div class="event-list" id="eventList"></div>
+</div>
+
+<!-- Prologue Viewer -->
+<h2>▶ 프롤로그 뷰어 (Prologue Viewer)</h2>
+<p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+  캐릭터별로 전체 프롤로그 대사를 확인할 수 있습니다. 출처: <code>design/story/prologue_data.json</code> · <code>src/.../original_story.py</code>
+</p>
+
+<div class="prologue-viewer" data-prologue-src="../design/story/prologue_data.json">
+  <div class="character-tabs" id="charTabs">
+    <button class="char-tab active" data-char="novice">
+      <span class="char-name">케이 (K)</span>
+      <span class="char-arch">Novice · 초짜</span>
+    </button>
+    <button class="char-tab" data-char="veteran">
+      <span class="char-name">실 (Sil)</span>
+      <span class="char-arch">Veteran · 베테랑</span>
+    </button>
+    <button class="char-tab" data-char="heretic">
+      <span class="char-name">카스 (Kas)</span>
+      <span class="char-arch">Heretic · 이단자</span>
+    </button>
+  </div>
+
+  <div class="lang-toggle">
+    <button class="lang-btn active" data-lang="ko">한글</button>
+    <button class="lang-btn" data-lang="en">English</button>
+    <button class="lang-btn" data-lang="both">Both · EN+KO</button>
+  </div>
+
+  <div class="char-info" id="charInfo">
+    <div class="char-info-row">
+      <span class="label">나이</span><span class="value" data-field="age"></span>
+    </div>
+    <div class="char-info-row">
+      <span class="label">출신</span><span class="value" data-field="origin"></span>
+    </div>
+    <div class="char-info-row">
+      <span class="label">데크</span><span class="value" data-field="deck"></span>
+    </div>
+    <div class="char-info-row">
+      <span class="label">무기</span><span class="value" data-field="weapon"></span>
+    </div>
+    <div class="char-info-row">
+      <span class="label">동기</span><span class="value" data-field="motivation"></span>
+    </div>
+  </div>
+
+  <div class="prologue-scenes" id="prologueScenes"></div>
+
+  <h3 class="endings-title">엔딩 (Endings)</h3>
+  <div class="prologue-endings" id="prologueEndings"></div>
+</div>
+
+<!-- Phase 1 Checklist -->
+<h2>✓ Phase 1: 소설 문서 (체크리스트)</h2>
+<div class="checklist">
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>오리지널 주인공 3인 설계 (Case / Sil / Kas)</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>프로로그 줄거리 (Finn's Office → Jack-In → Combat → Data → Choice)</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>엔딩 2개 정의 (성공/실패) — 깁슨 톤 유지</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>깁슨 톤 체크리스트 (Pillar 2, 5)</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>캐릭터/프로로그 문서 작성 (<code>design/story/characters.md</code>, <code>prologue.md</code>)</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>대시보드 HTML 작성 (<code>dashboard/index.html</code>)</span>
+    <span class="status">DONE</span>
+  </div>
+</div>
+
+<!-- Phase 2 Checklist -->
+<h2>◐ Phase 2: 데모 형식 검증 (체크리스트)</h2>
+<div class="checklist">
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span><code>original_story.py</code> 모듈 작성 (CHARACTER_SELECT + 3개 프로로그)</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>캐릭터 선택지 3-way branching 구현</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>2개 엔딩 골격 (A: Lives / B: Flatlines)</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>verify_original_prologue.py 작성 (3 캐릭터 × 2 엔딩 = 6 시나리오)</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>44개 단위 테스트 (test_original_story.py)</span>
+    <span class="status">DONE</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>단축 데모 end-to-end 테스트 (408 tests passing)</span>
+    <span class="status">DONE</span>
+  </div>
+</div>
+
+<!-- Phase 3 Checklist -->
+<h2>◯ Phase 3: 게임 구조 반영 (체크리스트)</h2>
+<div class="checklist">
+  <div class="item pending">
+    <input type="checkbox" disabled>
+    <span>기존 PROLOGUE_SCENE/BRIEFING_FINN_SCENE 교체</span>
+    <span class="status">PENDING</span>
+  </div>
+  <div class="item pending">
+    <input type="checkbox" disabled>
+    <span>분기 시스템 적용 (DialogueChoice + next_line_index)</span>
+    <span class="status">PENDING</span>
+  </div>
+  <div class="item pending">
+    <input type="checkbox" disabled>
+    <span>엔딩 A → 다음 미션 unlock</span>
+    <span class="status">PENDING</span>
+  </div>
+  <div class="item pending">
+    <input type="checkbox" disabled>
+    <span>엔딩 B → death screen + retry</span>
+    <span class="status">PENDING</span>
+  </div>
+  <div class="item pending">
+    <input type="checkbox" disabled>
+    <span>full_demo.py에 통합</span>
+    <span class="status">PENDING</span>
+  </div>
+</div>
+
+<!-- Sound System (Phase 4) -->
+<h2>🔊 사운드 시스템 (Sound System)</h2>
+<div class="endings">
+  <div class="ending-card a">
+    <h3>6 카테고리 (6 Categories)</h3>
+    <p style="color: #8a9aa8; font-size: 12px; margin-bottom: 8px;">사운드를 6개 카테고리로 분류. 각각 on/off 토글 가능.</p>
+    <ul>
+      <li><b>T — Theme (배경음악)</b>: matrix_rain, cyberspace, chiba, sense_net, finn_office</li>
+      <li><b>E — Events (이벤트)</b>: typing, dialogue_advance, victory, defeat</li>
+      <li><b>K — Keys (키보드)</b>: menu_select, confirm, cancel, error, notification</li>
+      <li><b>B — Combat (전투)</b>: hit, skill, block, stun</li>
+      <li><b>V — Movement (이동)</b>: nav_step, jack_in/out</li>
+      <li><b>I — Items (아이템)</b>: equip, pickup, cant</li>
+    </ul>
+  </div>
+  <div class="ending-card b">
+    <h3>키 바인딩 (Key Bindings)</h3>
+    <p style="color: #8a9aa8; font-size: 12px; margin-bottom: 8px;">모든 화면에서 동작.</p>
+    <ul>
+      <li><b>M</b> = master mute toggle (전체 음소거)</li>
+      <li><b>+/-</b> = master volume ±0.1</li>
+      <li><b>T/E/K/B/V/I</b> = per-category toggle</li>
+    </ul>
+  </div>
+</div>
+<div style="background: #131a23; border: 1px solid #2a3540; border-radius: 6px; padding: 16px; margin-bottom: 24px;">
+  <h3 style="margin-top: 0; color: #66ffcc;">기본 설정 (Default: KEYS off)</h3>
+  <p style="color: #8a9aa8; font-size: 13px;">
+    사용자 요청: "키보드 반응 효과음은 끈 설정으로 진행". <code>KEYS</code> 카테고리는 기본 OFF.
+    테마와 이벤트는 검증 단계에서 우선 완성.
+    <br><br>
+    <b>Volume default:</b> 0.2 (20%)<br>
+    <b>KEYS default:</b> OFF (사용자 요청)<br>
+    <b>Other categories default:</b> ON<br>
+    <b>Tests:</b> 42 unit tests + 8-step headless verify_sound_config.py
+  </p>
+</div>
+
+<!-- Decisions -->
+<h2>📐 결정 사항 (Decisions)</h2>
+<div class="checklist">
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>오리지널 주인공 사용 (깁슨 등장인물 X)</span>
+    <span class="status">CONFIRMED</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>3명 캐릭터 선택 (병렬 방식)</span>
+    <span class="status">CONFIRMED</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>엔딩 2개 (성공/실패)</span>
+    <span class="status">CONFIRMED</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>다양한 톤: 초짜/베테랑/이단자</span>
+    <span class="status">CONFIRMED</span>
+  </div>
+  <div class="item done">
+    <input type="checkbox" checked disabled>
+    <span>프롤로그 1-2페이지 분량 (1단계)</span>
+    <span class="status">CONFIRMED</span>
+  </div>
+  <div class="item pending">
+    <input type="checkbox" disabled>
+    <span>Phase 2에서 한 캐릭터 깊게 구현 vs 3개 모두 단축</span>
+    <span class="status">TBD (Phase 2 시작 시 결정)</span>
+  </div>
+</div>
+
+<!-- Docs -->
+<h2>📄 문서</h2>
+<ul style="padding-left: 24px; line-height: 2;">
+  <li><a class="docs-link" href="../design/story/characters.md">design/story/characters.md</a> — 오리지널 주인공 3인</li>
+  <li><a class="docs-link" href="../design/story/prologue.md">design/story/prologue.md</a> — 프로로그 줄거리 (1-2페이지)</li>
+  <li><a class="docs-link" href="https://github.com/anomalyco/opencode">AGENTS.md</a> — AI 작업 규약</li>
+  <li><a class="docs-link" href="../Fiction/wiki/works/neuromancer.md">Fiction wiki / Neuromancer</a> — 깁슨 원전 참고</li>
+  <li><a class="docs-link" href="../Fiction/wiki/works/count-zero.md">Fiction wiki / Count Zero</a> — Maelcum, Loa</li>
+</ul>
+
+<!-- ASCII art -->
+<h2>🎨 분위기 (ASCII art)</h2>
+<pre class="ascii-art">
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+░                                            ░
+░  The Sprawl — Boston-Atlanta Axis         ░
+░  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢  ░
+░                                            ░
+░  ░▒▓█▓▒░ ░▒▓█▓▒░ ░▒▓█▓▒░ ░▒▓█▓▒░  data    ░
+░  ░▒▓█▓▒░ ░▒▓█▓▒░ ░▒▓█▓▒░ ░▒▓█▓▒░  grid    ░
+░                                            ░
+░  ▶ entry ──── data1 ──── ice1            ░
+░                                            ░
+░  "I just wanted to pay off my debt."     ░
+░       — K, age 22, Ono-Sendai T1          ░
+░                                            ░
+░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+</pre>
+
+<div class="footer">
+  Roguelike Sprawl — AI 작업 대시보드<br>
+  Generated by AI agent following <code>AGENTS.md</code> · 깁슨 Sprawl 3부작 기반 오리지널 스토리
+</div>
+
+<script>
+  document.getElementById('last-updated').textContent = new Date().toISOString().slice(0, 10);
+
+  // Prologue Viewer
+  (function() {
+    const state = { data: null, character: 'novice', lang: 'ko' };
+
+    const src = document.querySelector('.prologue-viewer').dataset.prologueSrc;
+
+    function pick(obj, base) {
+      // obj: { en: ..., ko: ... } - returns active language
+      if (state.lang === 'en') return obj[base + '_en'] || '';
+      if (state.lang === 'ko') return obj[base + '_ko'] || '';
+      // both
+      return { en: obj[base + '_en'] || '', ko: obj[base + '_ko'] || '' };
+    }
+
+    function renderDialogue(line) {
+      const speaker = state.lang === 'en'
+        ? (line.speaker_en || line.speaker_ko || '')
+        : state.lang === 'ko'
+          ? (line.speaker_ko || line.speaker_en || '')
+          : `${line.speaker_en || line.speaker_ko} / ${line.speaker_ko || line.speaker_en}`;
+      const textKo = line.text_ko || '';
+      const textEn = line.text_en || '';
+      const out = [`<div class="dialogue-line">`,
+        `<div class="dialogue-speaker">${speaker}</div>`];
+      if (state.lang === 'ko') {
+        out.push(`<div class="dialogue-text">${textKo}</div>`);
+      } else if (state.lang === 'en') {
+        out.push(`<div class="dialogue-text">${textEn}</div>`);
+      } else {
+        out.push(`<div class="dialogue-text">${textEn}</div>`);
+        out.push(`<div class="dialogue-text-en">${textKo}</div>`);
+      }
+      out.push('</div>');
+      return out.join('');
+    }
+
+    function renderScene(scene) {
+      const title = state.lang === 'en' ? scene.title_en
+        : state.lang === 'ko' ? scene.title_ko
+        : `${scene.title_en} / ${scene.title_ko}`;
+      let html = `<div class="scene"><h3 class="scene-title">${title}</h3>`;
+      if (scene.ascii_art && state.lang !== 'en') {
+        html += `<div class="scene-ascii">${scene.ascii_art.join('\n')}</div>`;
+      }
+      html += scene.lines.map(renderDialogue).join('');
+      if (scene.choice) {
+        const prompt = state.lang === 'en' ? scene.choice.prompt_en
+          : state.lang === 'ko' ? scene.choice.prompt_ko
+          : `${scene.choice.prompt_en} / ${scene.choice.prompt_ko}`;
+        html += `<div class="scene-choice">`;
+        html += `<div class="prompt">▶ ${prompt}</div>`;
+        html += `<div class="choice-options">`;
+        scene.choice.options.forEach(opt => {
+          const text = state.lang === 'en' ? opt.text_en
+            : state.lang === 'ko' ? opt.text_ko
+            : `${opt.text_en} / ${opt.text_ko}`;
+          const response = state.lang === 'en' ? opt.response_en
+            : state.lang === 'ko' ? opt.response_ko
+            : `${opt.response_en} / ${opt.response_ko}`;
+          html += `<div class="choice-option">`;
+          html += `<span class="key">${opt.key}</span>`;
+          html += `<div style="flex:1">`;
+          html += `<div class="text">${text}</div>`;
+          html += `<div class="response">→ ${response}</div>`;
+          html += `</div></div>`;
+        });
+        html += `</div></div>`;
+      }
+      html += '</div>';
+      return html;
+    }
+
+    function renderEndings() {
+      const endings = state.data.endings[state.character] || [];
+      return endings.map(end => {
+        const name = state.lang === 'en' ? end.name_en
+          : state.lang === 'ko' ? end.name_ko
+          : `${end.name_en} / ${end.name_ko}`;
+        const desc = state.lang === 'en' ? end.description_en
+          : state.lang === 'ko' ? end.description_ko
+          : `${end.description_en} / ${end.description_ko}`;
+        const cls = end.id === 'A' ? 'a' : 'b';
+        let html = `<div class="ending-block ${cls}">`;
+        html += `<h4>엔딩 ${end.id} (${end.id === 'A' ? '성공' : '실패'}) — ${name}</h4>`;
+        html += `<div class="desc">${desc}</div>`;
+        end.lines.forEach(line => {
+          html += renderDialogue(line);
+        });
+        html += '</div>';
+        return html;
+      }).join('');
+    }
+
+    function render() {
+      if (!state.data) return;
+      const char = state.data.characters[state.character];
+      // char info
+      const fields = ['age', 'origin', 'deck', 'weapon', 'motivation'];
+      fields.forEach(f => {
+        const el = document.querySelector(`[data-field="${f}"]`);
+        if (el) {
+          const enVal = char[f + '_en'] || '';
+          const koVal = char[f + '_ko'] || '';
+          if (state.lang === 'en') el.textContent = enVal;
+          else if (state.lang === 'ko') el.textContent = koVal;
+          else el.innerHTML = `${enVal}<br><span style="color:#8a9aa8;font-size:11px">${koVal}</span>`;
+        }
+      });
+      // char-specific flavor
+      const flavorEl = document.querySelector('[data-field="flavor"]');
+      if (flavorEl) {
+        flavorEl.textContent = state.lang === 'en' ? char.flavor_en : char.flavor_ko;
+      }
+      // scenes
+      const scenesHtml = state.data.scenes.map(renderScene).join('');
+      document.getElementById('prologueScenes').innerHTML = scenesHtml;
+      // endings
+      document.getElementById('prologueEndings').innerHTML = renderEndings();
+    }
+
+    // Event listeners
+    document.querySelectorAll('.char-tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.char-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.character = btn.dataset.char;
+        render();
+      });
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.lang = btn.dataset.lang;
+        render();
+      });
+    });
+
+    // Load JSON
+    fetch(src)
+      .then(r => r.json())
+      .then(data => {
+        state.data = data;
+        render();
+      })
+      .catch(err => {
+        document.getElementById('prologueScenes').innerHTML =
+          `<div style="color:#ff8888;padding:20px;">
+            ⚠ JSON 로드 실패: <code>${src}</code><br>
+            대시보드를 HTTP 서버로 열어주세요 (e.g. <code>python -m http.server</code>).<br>
+            <small>file:// 프로토콜에서는 fetch가 차단됩니다.</small><br>
+            <small style="color:#6a7888">${err.message}</small>
+          </div>`;
+      });
+  })();
+
+  // Event Dialogue Viewer
+  (function() {
+    const evState = { data: null, npcFilter: 'all', lang: 'ko' };
+    const src = document.querySelector('.event-viewer').dataset.eventSrc;
+
+    function renderEventLine(line) {
+      const speaker = evState.lang === 'en' ? (line.speaker_en || line.speaker_ko || '')
+        : evState.lang === 'ko' ? (line.speaker_ko || line.speaker_en || '')
+        : `${line.speaker_en || line.speaker_ko} / ${line.speaker_ko || line.speaker_en}`;
+      const textEn = line.text_en || '';
+      const textKo = line.text_ko || '';
+      let html = `<div class="event-line"><div class="speaker">${speaker}</div>`;
+      if (evState.lang === 'ko') {
+        html += `<div class="text">${textKo}</div>`;
+      } else if (evState.lang === 'en') {
+        html += `<div class="text">${textEn}</div>`;
+      } else {
+        html += `<div class="text">${textEn}</div><div class="text-en">${textKo}</div>`;
+      }
+      html += '</div>';
+      return html;
+    }
+
+    function renderEventChoice(choice) {
+      const text = evState.lang === 'en' ? choice.text_en
+        : evState.lang === 'ko' ? choice.text_ko
+        : `${choice.text_en} / ${choice.text_ko}`;
+      const response = evState.lang === 'en' ? choice.response_en
+        : evState.lang === 'ko' ? choice.response_ko
+        : `${choice.response_en} / ${choice.response_ko}`;
+      const leadsTo = choice.leads_to ? `→ ${choice.leads_to}` : '';
+      return `<div class="event-choice">
+        <span class="key">${choice.key}</span>
+        <div class="body">
+          <div class="choice-text">${text}</div>
+          <div class="response">→ ${response}</div>
+          ${leadsTo ? `<div class="leads-to">${leadsTo}</div>` : ''}
+        </div>
+      </div>`;
+    }
+
+    function renderEvent(did, dlg) {
+      const npc = evState.data.npcs[dlg.npc];
+      const npcName = evState.lang === 'en' ? npc.name_en
+        : evState.lang === 'ko' ? npc.name_ko
+        : `${npc.name_en} / ${npc.name_ko}`;
+      const title = evState.lang === 'en' ? dlg.title_en
+        : evState.lang === 'ko' ? dlg.title_ko
+        : `${dlg.title_en} / ${dlg.title_ko}`;
+      const context = evState.lang === 'en' ? dlg.context_en
+        : evState.lang === 'ko' ? dlg.context_ko
+        : `${dlg.context_en} / ${dlg.context_ko}`;
+
+      let html = `<div class="event-block" data-npc="${dlg.npc}">`;
+      html += `<div class="event-header">`;
+      html += `<h3 class="event-title">${title}</h3>`;
+      html += `<span class="event-npc-tag">${npcName} · ${npc.portrait}</span>`;
+      html += `</div>`;
+      html += `<div class="event-context">${context}</div>`;
+      html += `<div class="event-lines">`;
+      dlg.lines.forEach(line => html += renderEventLine(line));
+      html += `</div>`;
+      if (dlg.choices && dlg.choices.length) {
+        html += `<div class="event-choices">`;
+        html += `<div class="prompt">▶ 선택지</div>`;
+        dlg.choices.forEach(c => html += renderEventChoice(c));
+        html += `</div>`;
+      }
+      html += `</div>`;
+      return html;
+    }
+
+    function renderEvents() {
+      if (!evState.data) return;
+      const dlgEntries = Object.entries(evState.data.dialogues);
+      const filtered = evState.npcFilter === 'all'
+        ? dlgEntries
+        : dlgEntries.filter(([_, d]) => d.npc === evState.npcFilter);
+      const html = filtered.map(([id, d]) => renderEvent(id, d)).join('');
+      document.getElementById('eventList').innerHTML = html || '<div style="color:#8a9aa8">No dialogues found.</div>';
+
+      // stats
+      const allLines = dlgEntries.reduce((sum, [_, d]) => sum + d.lines.length, 0);
+      const allChoices = dlgEntries.reduce((sum, [_, d]) => sum + (d.choices ? d.choices.length : 0), 0);
+      document.querySelector('[data-stat="npcs"]').textContent = Object.keys(evState.data.npcs).length;
+      document.querySelector('[data-stat="dialogues"]').textContent = dlgEntries.length;
+      document.querySelector('[data-stat="lines"]').textContent = allLines;
+      document.querySelector('[data-stat="choices"]').textContent = allChoices;
+    }
+
+    document.querySelectorAll('.npc-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.npc-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        evState.npcFilter = btn.dataset.npc;
+        renderEvents();
+      });
+    });
+    document.querySelectorAll('.evt-lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.evt-lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        evState.lang = btn.dataset.evtLang;
+        renderEvents();
+      });
+    });
+
+    fetch(src)
+      .then(r => r.json())
+      .then(data => {
+        evState.data = data;
+        renderEvents();
+      })
+      .catch(err => {
+        document.getElementById('eventList').innerHTML =
+          `<div style="color:#ff8888;padding:20px;">
+            ⚠ JSON 로드 실패: <code>${src}</code><br>
+            <small style="color:#6a7888">${err.message}</small>
+          </div>`;
+      });
+  })();
+</script>
+
+</body>
+</html>

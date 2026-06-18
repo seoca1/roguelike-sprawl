@@ -1,0 +1,321 @@
+{
+  "version": "0.1.0",
+  "title": "Stage Structure & Progression",
+  "title_ko": "스테이지 구조 & 진행",
+  "description": "Single Run = Prologue → Mission → Completion. 6 stages total.",
+  "stages": [
+    {
+      "id": "pending",
+      "name_en": "Pending",
+      "name_ko": "대기",
+      "type": "hub",
+      "is_terminal": false,
+      "objective_kind": "none",
+      "description_en": "Run not started. Player is at the Hub.",
+      "description_ko": "Run 미시작. 플레이어는 Hub에 있음.",
+      "next_stage": "meet_npc",
+      "trigger_en": "Accept a mission at the Hub.",
+      "trigger_ko": "Hub에서 미션을 수락.",
+      "ascii_art": [
+        "  ┌──────────────────────┐",
+        "  │  HUB — The Sprawl Hole │",
+        "  │  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣  │",
+        "  │  ░▒▓█ Wim's bar  ▓▒░  │",
+        "  │  ░▒▓█ Job board  ▓▒░  │",
+        "  │  ░▒▓█ Couch      ▓▒░  │",
+        "  └──────────────────────┘"
+      ],
+      "ui_elements": ["hub_view", "mission_board", "wim_dialogue"]
+    },
+    {
+      "id": "meet_npc",
+      "name_en": "Meet the NPC",
+      "name_ko": "NPC 만나기",
+      "type": "matrix",
+      "is_terminal": false,
+      "objective_kind": "npc",
+      "description_en": "Find and talk to a construct NPC (e.g. Dixie Flatline).",
+      "description_ko": "구성체 NPC (예: Dixie Flatline) 를 만나서 대화.",
+      "next_stage": "extract_data",
+      "trigger_en": "Talk to the construct NPC node in the matrix.",
+      "trigger_ko": "매트릭스의 구성체 NPC 노드와 대화.",
+      "ascii_art": [
+        "  ░░░░░░░░░░░░░░░░░░░░░░",
+        "  ░  MATRIX — Surface ░",
+        "  ░  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣  ░",
+        "  ░                     ░",
+        "  ░  ★ Dixie (CONSTRUCT) ░",
+        "  ░  ░ data            ░",
+        "  ░  ▲ ice             ░",
+        "  ░░░░░░░░░░░░░░░░░░░░░░"
+      ],
+      "ui_elements": ["matrix_view", "npc_dialogue", "status_panel"]
+    },
+    {
+      "id": "extract_data",
+      "name_en": "Extract the Data",
+      "name_ko": "데이터 추출",
+      "type": "matrix",
+      "is_terminal": false,
+      "objective_kind": "data",
+      "description_en": "Locate the data node and extract the payload.",
+      "description_ko": "데이터 노드를 찾아 페이로드를 추출.",
+      "next_stage": "defeat_ice",
+      "trigger_en": "Click the data node and confirm extraction.",
+      "trigger_ko": "데이터 노드를 클릭하고 추출 확정.",
+      "ascii_art": [
+        "  ░░░░░░░░░░░░░░░░░░░░░░",
+        "  ░  MATRIX — Surface ░",
+        "  ░  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣  ░",
+        "  ░                     ░",
+        "  ░  ✓ Dixie talked    ░",
+        "  ░  ★ data (TARGET)   ░",
+        "  ░  ▲ ice             ░",
+        "  ░░░░░░░░░░░░░░░░░░░░░░"
+      ],
+      "ui_elements": ["matrix_view", "extract_action", "status_panel"]
+    },
+    {
+      "id": "defeat_ice",
+      "name_en": "Defeat the ICE",
+      "name_ko": "ICE 격파",
+      "type": "combat",
+      "is_terminal": false,
+      "objective_kind": "ice",
+      "description_en": "Engage and defeat the ICE protecting the data.",
+      "description_ko": "데이터를 지키는 ICE와 교전하여 격파.",
+      "next_stage": "complete",
+      "trigger_en": "Win the combat (HP > 0, ICE HP = 0).",
+      "trigger_ko": "전투 승리 (HP > 0, ICE HP = 0).",
+      "ascii_art": [
+        "  ░░░░░░░░░░░░░░░░░░░░░░",
+        "  ░  COMBAT — RT-MS    ░",
+        "  ░  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣  ░",
+        "  ░                     ░",
+        "  ░  ▶ Player  HP 18/20 ░",
+        "  ░  ▲ ICE     HP 12/12 ░",
+        "  ░  [E] skill [R] run  ░",
+        "  ░░░░░░░░░░░░░░░░░░░░░░"
+      ],
+      "ui_elements": ["combat_view", "skill_menu", "status_panel"]
+    },
+    {
+      "id": "complete",
+      "name_en": "Run Complete",
+      "name_ko": "Run 완료",
+      "type": "hub",
+      "is_terminal": true,
+      "objective_kind": "none",
+      "description_en": "Mission complete. Return to hub for rewards.",
+      "description_ko": "미션 완료. 보상을 위해 Hub 복귀.",
+      "next_stage": null,
+      "trigger_en": "Auto-trigger after DEFEAT_ICE victory.",
+      "trigger_ko": "DEFEAT_ICE 승리 후 자동 발생.",
+      "ascii_art": [
+        "  ┌──────────────────────┐",
+        "  │  ✓ MISSION COMPLETE  │",
+        "  │  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣  │",
+        "  │  ░▒▓ Credits  +500  ▓▒░  │",
+        "  │  ░▒▓ Materials +2   ▓▒░  │",
+        "  │  ░▒▓ Return to hub  ▓▒░  │",
+        "  └──────────────────────┘"
+      ],
+      "ui_elements": ["mission_summary", "reward_screen"]
+    },
+    {
+      "id": "failed",
+      "name_en": "Flatline",
+      "name_ko": "플랫라인",
+      "type": "death",
+      "is_terminal": true,
+      "objective_kind": "none",
+      "description_en": "Your run ended in cyberspace. Equipment lost. Grade preserved.",
+      "description_ko": "Run 종료. 장비 손실. 등급은 유지.",
+      "next_stage": null,
+      "trigger_en": "Combat defeat (HP = 0) or matrix trap.",
+      "trigger_ko": "전투 패배 (HP = 0) 또는 매트릭스 함정.",
+      "ascii_art": [
+        "  ┌──────────────────────┐",
+        "  │  ✗ FLATLINE          │",
+        "  │  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣  │",
+        "  │  ░▒▓ Equipment LOST ▓▒░  │",
+        "  │  ░▒▓ Grade kept     ▓▒░  │",
+        "  │  ░▒▓ [ENTER] restart ▓▒░  │",
+        "  └──────────────────────┘"
+      ],
+      "ui_elements": ["death_screen", "jack_out_to_hub"]
+    }
+  ],
+  "transitions": [
+    {
+      "from": "pending",
+      "to": "meet_npc",
+      "trigger_en": "Mission accepted at Hub",
+      "trigger_ko": "Hub에서 미션 수락",
+      "system": "RunState.start_run()"
+    },
+    {
+      "from": "meet_npc",
+      "to": "extract_data",
+      "trigger_en": "Talked to construct NPC",
+      "trigger_ko": "구성체 NPC와 대화 완료",
+      "system": "RunState.mark_advance() after dialogue"
+    },
+    {
+      "from": "extract_data",
+      "to": "defeat_ice",
+      "trigger_en": "Data extracted",
+      "trigger_ko": "데이터 추출 완료",
+      "system": "RunState.mark_advance() after extract"
+    },
+    {
+      "from": "defeat_ice",
+      "to": "complete",
+      "trigger_en": "ICE defeated (HP > 0)",
+      "trigger_ko": "ICE 격파 (HP > 0)",
+      "system": "RunState.mark_advance() after combat victory"
+    },
+    {
+      "from": "any",
+      "to": "failed",
+      "trigger_en": "Player HP = 0 (combat) or matrix trap",
+      "trigger_ko": "플레이어 HP = 0 (전투) 또는 매트릭스 함정",
+      "system": "death.trigger_death()"
+    }
+  ],
+  "missions": [
+    {
+      "id": "first_jack",
+      "title_en": "First Jack",
+      "title_ko": "첫 잭-인",
+      "fixer": "finn",
+      "arc": 1,
+      "grade_min": 1,
+      "grade_max": 1,
+      "stages": ["pending", "meet_npc", "extract_data", "defeat_ice", "complete"],
+      "primary_objective_en": "Extract demo_file from Sense/Net",
+      "primary_objective_ko": "Sense/Net에서 demo_file 추출",
+      "secondary_objective_en": "Defeat 1 ICE (Wisp-class)",
+      "secondary_objective_ko": "ICE 1개 격파 (Wisp급)",
+      "rewards": {
+        "credits": 500,
+        "materials": {"data_fragment": 2}
+      },
+      "estimated_minutes": 8
+    },
+    {
+      "id": "watchdog_patrol",
+      "title_en": "Watchdog Patrol",
+      "title_ko": "와치독 순찰",
+      "fixer": "finn",
+      "arc": 1,
+      "grade_min": 1,
+      "grade_max": 1,
+      "stages": ["pending", "meet_npc", "defeat_ice", "complete"],
+      "primary_objective_en": "Defeat 2 ICE (Watchdog-class)",
+      "primary_objective_ko": "ICE 2개 격파 (Watchdog급)",
+      "secondary_objective_en": "Collect 3 ice_shard",
+      "secondary_objective_ko": "ice_shard 3개 수집",
+      "rewards": {
+        "credits": 750,
+        "materials": {"ice_shard": 2}
+      },
+      "estimated_minutes": 12
+    },
+    {
+      "id": "ice_run",
+      "title_en": "Ice Run",
+      "title_ko": "아이스 런",
+      "fixer": "finn",
+      "arc": 1,
+      "grade_min": 1,
+      "grade_max": 2,
+      "stages": ["pending", "meet_npc", "extract_data", "defeat_ice", "complete"],
+      "primary_objective_en": "Collect 5 ice_shard",
+      "primary_objective_ko": "ice_shard 5개 수집",
+      "secondary_objective_en": "Defeat 2 ICE (Wisp-class)",
+      "secondary_objective_ko": "ICE 2개 격파 (Wisp급)",
+      "rewards": {
+        "credits": 500,
+        "materials": {"ice_shard": 1}
+      },
+      "estimated_minutes": 10
+    }
+  ],
+  "death_flow": {
+    "name_en": "Death Flow (Pillar 3: The Flatline)",
+    "name_ko": "사망 흐름 (Pillar 3: 플랫라인)",
+    "description_en": "Triggered on combat defeat. Equipment lost, grade preserved.",
+    "description_ko": "전투 패배 시 발생. 장비 손실, 등급 유지.",
+    "ascii_art": [
+      "  COMBAT DEFEAT",
+      "         ↓",
+      "  trigger_death() called",
+      "         ↓",
+      "  state.is_dead = True",
+      "         ↓",
+      "  DEATH SCREEN rendered",
+      "         ↓",
+      "  player presses ENTER",
+      "         ↓",
+      "  jack_out_to_hub()",
+      "         ↓",
+      "  inventory cleared, grade kept"
+    ],
+    "steps": [
+      {
+        "id": "defeat",
+        "name_en": "Combat Defeat",
+        "name_ko": "전투 패배",
+        "description_en": "Player HP reaches 0 in combat.",
+        "description_ko": "전투 중 플레이어 HP 0 도달."
+      },
+      {
+        "id": "trigger",
+        "name_en": "Death Triggered",
+        "name_ko": "사망 트리거",
+        "description_en": "death.trigger_death() called from combat_view._end_combat().",
+        "description_ko": "combat_view._end_combat() 에서 death.trigger_death() 호출."
+      },
+      {
+        "id": "screen",
+        "name_en": "Death Screen",
+        "name_ko": "사망 화면",
+        "description_en": "ASCII skull with avatar, 'FLATLINE' text, prompt to restart.",
+        "description_ko": "아바타와 함께 ASCII 해골, 'FLATLINE' 텍스트, 재시작 프롬프트."
+      },
+      {
+        "id": "restart",
+        "name_en": "Jack Out to Hub",
+        "name_ko": "잭아웃 → Hub",
+        "description_en": "ENTER pressed. Player returns to Hub. Inventory cleared, grade preserved.",
+        "description_ko": "ENTER 입력. 플레이어 Hub 복귀. 인벤토리 초기화, 등급 유지."
+      }
+    ]
+  },
+  "hub_loop": {
+    "name_en": "Hub Loop (Main Game Loop)",
+    "name_ko": "허브 루프 (메인 게임 루프)",
+    "description_en": "Between runs, player is at the Hub. Accept missions, talk to NPCs, manage equipment.",
+    "description_ko": "Run 사이, 플레이어는 Hub에 있음. 미션 수락, NPC 대화, 장비 관리.",
+    "ascii_art": [
+      "  ┌────────────────────────┐",
+      "  │  HUB — Between Runs    │",
+      "  │                        │",
+      "  │  [1] Mission board     │",
+      "  │  [2] Equipment         │",
+      "  │  [3] Talk to Wim       │",
+      "  │  [4] Talk to Finn      │",
+      "  │  [5] Sleep (heal)      │",
+      "  │                        │",
+      "  │  → Accept mission      │",
+      "  │     → Stage: pending   │",
+      "  │     → Jack in          │",
+      "  │     → Stage: meet_npc  │",
+      "  │     → ...              │",
+      "  │     → Stage: complete  │",
+      "  │     → Return to Hub    │",
+      "  └────────────────────────┘"
+    ]
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "t1_program": {
+    "id": "t1_program",
+    "name": "T1 Program",
+    "tier": 2,
+    "category": "program",
+    "result_tier": 1,
+    "recipe": {
+      "combat_module": 1,
+      "upgrade_t1": 1
+    },
+    "examples": ["wisp", "shield", "probe"]
+  },
+  "t2_program": {
+    "id": "t2_program",
+    "name": "T2 Program",
+    "tier": 2,
+    "category": "program",
+    "result_tier": 2,
+    "recipe": {
+      "combat_module": 2,
+      "upgrade_t2": 1
+    },
+    "examples": ["hammer", "virus", "worm"]
+  },
+  "t3_program": {
+    "id": "t3_program",
+    "name": "T3 Program",
+    "tier": 2,
+    "category": "program",
+    "result_tier": 3,
+    "recipe": {
+      "combat_module": 3,
+      "upgrade_t3": 1
+    },
+    "examples": ["goliath"]
+  },
+  "t4_program": {
+    "id": "t4_program",
+    "name": "T4 Program",
+    "tier": 2,
+    "category": "program",
+    "result_tier": 4,
+    "recipe": {
+      "combat_module": 4,
+      "upgrade_t4": 1
+    },
+    "examples": ["wardrone"]
+  },
+  "kraken": {
+    "id": "kraken",
+    "name": "Kraken",
+    "tier": 2,
+    "category": "program",
+    "result_tier": 5,
+    "recipe": {
+      "combat_module": 5,
+      "upgrade_t5": 1
+    },
+    "crafting_only": true
+  },
+  "black_ice_program": {
+    "id": "black_ice_program",
+    "name": "Black ICE-tier Program",
+    "tier": 2,
+    "category": "program",
+    "result_tier": 4,
+    "recipe": {
+      "ice_construct": 1,
+      "upgrade_t3": 1
+    },
+    "crafting_only": true
+  },
+  "t1_item": {
+    "id": "t1_item",
+    "name": "T1 Item",
+    "tier": 2,
+    "category": "item",
+    "result_tier": 1,
+    "recipe": {
+      "wetware_data": 1,
+      "upgrade_t1": 1
+    }
+  },
+  "t3_item": {
+    "id": "t3_item",
+    "name": "T3 Item",
+    "tier": 2,
+    "category": "item",
+    "result_tier": 3,
+    "recipe": {
+      "wetware_data": 3,
+      "upgrade_t3": 1
+    }
+  },
+  "construct_fragment": {
+    "id": "construct_fragment",
+    "name": "Construct Fragment",
+    "tier": 2,
+    "category": "construct",
+    "recipe": {
+      "construct_shard": 3
+    }
+  }
+}

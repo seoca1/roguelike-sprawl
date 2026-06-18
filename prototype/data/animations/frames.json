@@ -1,0 +1,113 @@
+{
+  "normal_attack": {
+    "id": "normal_attack",
+    "name": "Normal Attack",
+    "frames": [
+      {"at_ms": 0, "console": [["◉P◉", " ", "▲ICE▲"]]},
+      {"at_ms": 80, "console": [["◉P◉", ">", "▲ICE▲"]], "color": [128, 128, 128]},
+      {"at_ms": 160, "console": [["◉P◉", " ", "▲ICE▲"]]}
+    ],
+    "duration_ms": 240,
+    "color": [128, 128, 128],
+    "screen_shake": 0
+  },
+  "player_damage": {
+    "id": "player_damage",
+    "name": "Player Damage",
+    "frames": [
+      {"at_ms": 0, "console": [["◉P◉", " ", "▲ICE▲"]]},
+      {"at_ms": 60, "console": [["◉Px", "←hit", "▲ICE▲"]], "color": [255, 0, 64]},
+      {"at_ms": 120, "console": [["◉Px", " ", "▲ICE▲"]], "color": [255, 64, 64]},
+      {"at_ms": 180, "console": [["◉P◉", " ", "▲ICE▲"]]}
+    ],
+    "duration_ms": 240,
+    "color": [255, 0, 64],
+    "screen_shake": 1
+  },
+  "goliath_attack": {
+    "id": "goliath_attack",
+    "name": "Goliath",
+    "frames": [
+      {"at_ms": 0, "console": [["◉P◉", " ", "▲ICE▲"]]},
+      {"at_ms": 100, "console": [["◉P◉", "⚔", "▲ICE▲"]], "color": [255, 0, 255]},
+      {"at_ms": 200, "console": [["◉P◉", "⚔▓▓▓", "▲ICE▲"]], "color": [255, 0, 255]},
+      {"at_ms": 300, "console": [["◉P◉", "⚔▓▓▓", "⚡", "▲ICE▲"]], "color": [255, 200, 255]},
+      {"at_ms": 400, "console": [["◉P◉", " ", "▲.CE▲"]], "color": [255, 64, 64]},
+      {"at_ms": 500, "console": [["◉P◉", " ", "▲ICE▲"]]}
+    ],
+    "duration_ms": 600,
+    "color": [255, 0, 255],
+    "screen_shake": 2,
+    "screen_flash": false
+  },
+  "kraken_attack": {
+    "id": "kraken_attack",
+    "name": "Kraken",
+    "frames": [
+      {"at_ms": 0, "console": [["◉P◉", " ", "▲ICE▲"]]},
+      {"at_ms": 100, "console": [["◉P◉", "⚔▓▓▓▓▓▓", "▲ICE▲"]], "color": [255, 0, 0]},
+      {"at_ms": 200, "console": [["◉P◉", "⚔▓▓▓▓▓▓☠", "▲ICE▲"]], "color": [255, 0, 0]},
+      {"at_ms": 300, "console": [["◉P◉", "⚔▓▓▓▓▓▓☠", "⚡▲ICE▲"]], "color": [255, 200, 200]},
+      {"at_ms": 400, "console": [["◉P◉", " ", "█ICE█"]], "color": [255, 0, 0]},
+      {"at_ms": 500, "console": [["◉P◉", " ", "▲ICE▲"]]}
+    ],
+    "duration_ms": 600,
+    "color": [255, 0, 0],
+    "screen_shake": 3,
+    "screen_flash": true
+  },
+  "wisp_shield": {
+    "id": "wisp_shield",
+    "name": "Wisp Shield",
+    "frames": [
+      {"at_ms": 0, "console": [["◉P◉", " ", "▲ICE▲"]]},
+      {"at_ms": 100, "console": [["◉P◉", "+", "▲ICE▲"]], "color": [0, 255, 255]},
+      {"at_ms": 200, "console": [["◉P◉", "+ +", "▲ICE▲"]], "color": [0, 255, 255]},
+      {"at_ms": 300, "console": [["◉P◉", "+ + +", "▲ICE▲"]], "color": [0, 255, 255]},
+      {"at_ms": 400, "console": [["◉P◉", "[▓▓▓]", "▲ICE▲"]], "color": [0, 255, 255]},
+      {"at_ms": 500, "console": [["◉P◉", "[▓▓▓]", "▲ICE▲"]], "color": [0, 255, 255]}
+    ],
+    "duration_ms": 600,
+    "color": [0, 255, 255]
+  },
+  "probe_reveal": {
+    "id": "probe_reveal",
+    "name": "Probe Reveal",
+    "frames": [
+      {"at_ms": 0, "console": [["◉P◉", " ", "▲ICE▲"]]},
+      {"at_ms": 100, "console": [["◉P◉", "?PRB?", "▲ICE▲"]], "color": [255, 255, 0]},
+      {"at_ms": 200, "console": [["◉P◉", "?PRB?", "▲ICE▲"]], "color": [255, 255, 0]},
+      {"at_ms": 300, "console": [["◉P◉", " ", "▲ICE▲ HP 80"]]},
+      {"at_ms": 400, "console": [["◉P◉", " ", "▲ICE▲ HP 80"]]}
+    ],
+    "duration_ms": 500,
+    "color": [255, 255, 0]
+  },
+  "ice_destroyed": {
+    "id": "ice_destroyed",
+    "name": "ICE Destroyed",
+    "frames": [
+      {"at_ms": 0, "console": [["◉P◉", " ", "▲ICE▲"]]},
+      {"at_ms": 100, "console": [["◉P◉", " ", "▲.CE▲"]], "color": [255, 64, 64]},
+      {"at_ms": 200, "console": [["◉P◉", " ", "▲_E_▲"]], "color": [128, 32, 32]},
+      {"at_ms": 300, "console": [["◉P◉", " ", ". _ ."]], "color": [64, 16, 16]},
+      {"at_ms": 400, "console": [["◉P◉", " ", ". . ."]]}
+    ],
+    "duration_ms": 500
+  },
+  "death": {
+    "id": "death",
+    "name": "Death",
+    "frames": [
+      {"at_ms": 0, "console": [["◉P◉"]]},
+      {"at_ms": 200, "console": [["◉Px"]], "color": [255, 0, 64]},
+      {"at_ms": 400, "console": [["◉/x"]], "color": [255, 0, 64]},
+      {"at_ms": 600, "console": [["◉_x"]], "color": [200, 0, 50]},
+      {"at_ms": 800, "console": [[".Xx"]], "color": [150, 0, 40]},
+      {"at_ms": 1000, "console": [["XX."]], "color": [128, 0, 32]},
+      {"at_ms": 1200, "console": [["X"]], "color": [128, 0, 32]}
+    ],
+    "duration_ms": 2400,
+    "color": [128, 0, 32]
+  }
+}

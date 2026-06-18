@@ -1,0 +1,76 @@
+# Auto-label config
+# PR/Issue 제목 또는 본문에 키워드 매칭 → 라벨 자동 적용
+
+phase-1:
+  - phase-1
+  - "Phase 1"
+  - 소설 문서
+phase-2:
+  - phase-2
+  - "Phase 2"
+  - 데모
+phase-3:
+  - phase-3
+  - "Phase 3"
+  - 게임 구조
+phase-4:
+  - phase-4
+  - "Phase 4"
+  - 사운드
+phase-5:
+  - phase-5
+  - "Phase 5"
+  - 통합
+phase-6:
+  - phase-6
+  - "Phase 6"
+  - 엔딩 확장
+
+prologue:
+  - prologue
+  - 프롤로그
+event:
+  - event-dialogue
+  - event_dialogue
+  - 이벤트
+stage:
+  - stage
+  - 스테이지
+  - 진행
+dashboard:
+  - dashboard
+  - 대시보드
+combat:
+  - combat
+  - 전투
+  - RT-MS
+cyberspace:
+  - cyberspace
+  - 사이버스페이스
+  - 매트릭스
+equipment:
+  - equipment
+  - 장비
+  - 인벤토리
+sound:
+  - sound
+  - 사운드
+  - audio
+i18n:
+  - i18n
+  - 번역
+  - 한영
+
+python:
+  - "*.py"
+  - "src/roguelike_sprawl/"
+html:
+  - "*.html"
+  - "dashboard/"
+  - "*.css"
+json:
+  - "*.json"
+  - "design/"
+markdown:
+  - "*.md"
+  - "docs/"

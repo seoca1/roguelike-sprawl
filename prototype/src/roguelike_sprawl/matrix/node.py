@@ -1,0 +1,92 @@
+"""Matrix node data model (ADR-0005, design/systems/hacking.md).
+
+A `Node` is a single point in the cyberspace graph. It carries the
+attributes needed to compute ZDR and to render a portrait/label.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from enum import StrEnum
+
+
+class NodeKind(StrEnum):
+    """Kinds of matrix nodes (ADR-0005)."""
+
+    ENTRY = "entry"
+    DATA = "data"
+    SYSTEM = "system"
+    ICE = "ice"
+    CONSTRUCT = "construct"
+    ROUTER = "router"
+    CORE = "core"
+    EXIT = "exit"
+
+
+class ZoneDepth(StrEnum):
+    """Matrix depth zones (ADR-0012). Base ZDR ranges."""
+
+    SURFACE = "surface"  # 1-3
+    MID = "mid"  # 4-8
+    CORE = "core"  # 9-15
+    TA = "ta"  # 20-30
+
+
+class IceKind(StrEnum):
+    """ICE categories. Affects ZDR and combat behavior (ADR-0012, ADR-0003)."""
+
+    NONE = "none"
+    STANDARD = "standard"
+    WATCHDOG = "watchdog"
+    BLACK = "black"
+
+
+class AlarmLevel(StrEnum):
+    """Alarm state of a node. Affects ZDR."""
+
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    CRITICAL = "critical"
+
+
+class Faction(StrEnum):
+    """Faction modifier source (ADR-0012)."""
+
+    NONE = "none"
+    HOSAKA = "hosaka"
+    MAAS = "maas"
+    SENSE_NET = "sense_net"
+    TA = "ta"
+
+
+@dataclass(frozen=True, slots=True)
+class Node:
+    """A single node in the cyberspace graph.
+
+    Attributes:
+        id: Unique node id (e.g. ``"E_first_jack"``).
+        kind: Node kind (entry / data / ice / ...).
+        label: Short human-readable label (e.g. ``"Entry"``).
+        zone: Depth zone.
+        ice: ICE present at this node (usually ``NONE`` for non-ice nodes).
+        alarm: Alarm level.
+        faction: Faction modifier.
+    """
+
+    id: str
+    kind: NodeKind
+    label: str
+    zone: ZoneDepth
+    ice: IceKind = IceKind.NONE
+    alarm: AlarmLevel = AlarmLevel.LOW
+    faction: Faction = Faction.NONE
+
+    def __post_init__(self) -> None:
+        if not self.id:
+            raise ValueError("Node id must be non-empty")
+        if not self.label:
+            raise ValueError(f"Node {self.id!r}: label must be non-empty")
+        # ice nodes should have an IceKind != NONE
+        if self.kind is NodeKind.ICE and self.ice is IceKind.NONE:
+            raise ValueError(f"ICE node {self.id!r} must have an IceKind != NONE")

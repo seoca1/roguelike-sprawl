@@ -1,0 +1,47 @@
+{
+  "aftermath_black_ice": {
+    "id": "aftermath_black_ice",
+    "importance": "major",
+    "trigger": "combat.defeat.black_ice",
+    "duration_ms": 5000,
+    "narrative_en": "Somewhere in the matrix, the Black ICE's last packet dissolves. The construct that housed it — a memory of someone's cruelty — flickers. Static. Silence.\n\nYou have a moment of vertigo. Then it's gone.\n\nIn the meat, somewhere, a corporate server farm registers a small blip. Security will investigate. They'll find nothing.",
+    "narrative_ko": "매트릭스 어딘가에서, 블랙 ICE의 마지막 패킷이 흩어진다. 그것을 담고 있던 구성체 — 누군가의 잔혹함에 대한 기억 — 이 깜빡인다. 정적. 침묵.\n\n잠시 현기증이 찾아온다. 그리고 사라진다.\n\n어딘가 메트스페이스의 기업 서버 팜에서, 작은 blip이 기록된다. 보안팀이 조사할 것이다. 아무것도 못 찾을 것이다.",
+    "reactions": ["dixie_react_black_ice", "case_react_black_ice"]
+  },
+  "aftermath_construct_first": {
+    "id": "aftermath_construct_first",
+    "importance": "legendary",
+    "trigger": "combat.defeat.construct.first",
+    "duration_ms": 7000,
+    "narrative_en": "You did it. You killed a construct — not a routine ICE, not a corporate sentry, but a *person*. A ROM personality, a dead hacker's ghost, an AI's careful memory.\n\nThe data it left behind is heavy. It weighs on your deck, on your hands, on the back of your neck.\n\nIn Sprawl, they say construct-killing is bad luck. You don't believe in luck. You believe in work.",
+    "narrative_ko": "해냈다. 구성체를 죽였다 — 평범한 ICE도, 기업 sentry도 아닌, *사람*을. ROM 인격, 죽은 해커의 유령, AI의 정성스러운 기억.\n\n그것이 남긴 데이터는 무겁다. 네 데크 위에, 네 손 위에, 네 목덜미 위에 무게를 실어놓는다.\n\n스프롤에서는, 구성체 살해는 나쁜 luck이라고들 한다. 너는 luck을 안 믿는다. work를 믿는다.",
+    "reactions": ["dixie_react_construct", "case_react_construct", "finn_react_construct"]
+  },
+  "aftermath_zone_core_first": {
+    "id": "aftermath_zone_core_first",
+    "importance": "major",
+    "trigger": "matrix.zone.core_first_time",
+    "duration_ms": 5000,
+    "narrative_en": "You've reached the core. The data here is older, stranger. Light doesn't recede so much as *fold*.\n\nThe constructs here are different. Slower. They watch you back.\n\nIn the meat, your heart rate spikes. The deck is warm against your spine. You jack deeper.",
+    "narrative_ko": "코어에 도달했다.这里的 데이터는 더 오래되고, 더 기묘하다. 빛은 물러나기보다는 *접힌다*.\n\n这里的 구성체들은 다르다. 더 느리다. 너를 되돌아본다.\n\n메트스페이스에서, 네 심박수가 치솟는다. 데크가 네 척추에 닿아 따뜻하다. 더 깊이 잭인한다.",
+    "reactions": ["case_react_core", "maelcum_react_core"]
+  },
+  "aftermath_mission_first": {
+    "id": "aftermath_mission_first",
+    "importance": "notable",
+    "trigger": "mission.complete.first",
+    "duration_ms": 4000,
+    "narrative_en": "First job. First payout. First time you jack out and find your hands aren't shaking as much as you expected.\n\nThe matrix doesn't congratulate. It just unfolds.",
+    "narrative_ko": "첫 의뢰. 첫 보상. 처음으로 잭아웃했는데, 손이 예상만큼 떨리지 않는다.\n\n매트릭스는 축하하지 않는다. 그냥 펼쳐질 뿐.",
+    "reactions": ["finn_react_mission_first"]
+  },
+  "aftermath_arc_advance": {
+    "id": "aftermath_arc_advance",
+    "importance": "notable",
+    "trigger": "mission.complete.arc",
+    "duration_ms": 4500,
+    "narrative_en": "You crossed a line tonight. The fixers noticed. The AIs noticed. Even the meat, somewhere, knows — the way a city knows a storm is coming.\n\nYou jack out. The world is still gray. But you're a different shape now.",
+    "narrative_ko": "오늘 밤, 너는 선을 넘었다. 픽서들이 알아차렸다. AI들이 알아차렸다. 메트의 어딘가에서도 안다 — 도시가 폭풍이 오는 걸 아는 것처럼.\n\n잭아웃한다. 세계는 여전히 회색이다. 하지만 너는 이제 다른 모양이다.",
+    "reactions": ["case_react_arc", "3jane_react_arc"]
+  }
+}

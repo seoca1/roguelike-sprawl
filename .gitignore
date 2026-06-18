@@ -1,0 +1,63 @@
+# Python (project root covers prototype/ as well)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Type checking
+.mypy_cache/
+
+# Linting
+.ruff_cache/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Project specific
+data/sounds_test/
+data/sounds/*.wav
+data/portraits/.cache/
+
+# Sensitive
+.env
+.env.local
+*.pem
+*.key
+secrets.yaml
+
+# Generated
+*.pyc
+*.wasm
+*.map
+
+# Old notes (work-in-progress)
+TODO.local.md
+NOTES.local.md

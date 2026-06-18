@@ -1,0 +1,64 @@
+{
+  "app": {
+    "title": "ROGUELIKE SPRAWL",
+    "subtitle": "A roguelike based on William Gibson's Sprawl trilogy",
+    "controls": "[ESC] Quit  [Q] Quit",
+    "phase": "Phase: {phase}"
+  },
+  "menu": {
+    "new_run": "New Run",
+    "archive": "Story Archive",
+    "settings": "Settings",
+    "quit": "Quit",
+    "phase": "Phase: Main Menu",
+    "controls": "[1] New Run  [2] Archive  [3] Settings  [Q] Quit"
+  },
+  "hub": {
+    "title": "HUB: Cyberspace Construct",
+    "subtitle": "Pick a job. Don't flatline.",
+    "fixer_intro": "♠F♠ The Finn  --  Got something for you.",
+    "grade": "Grade: {grade}-up",
+    "ppl": "PPL: {ppl}",
+    "no_jobs": "No jobs for your grade. Sit tight.",
+    "select_hint": "[1-9] Select  [ESC] Jack out",
+    "entry": "Entry  ZDR {zdr}",
+    "objective": "Objective: {objective}",
+    "reward": "Reward: T{tier} + {credits} credits"
+  },
+  "matrix": {
+    "title": "MATRIX: {zone} System",
+    "entry_message": "You jack in. The world goes gray.",
+    "exit_message": "You pull out, heart racing.",
+    "flatline_message": "You flatline. Static. Silence.",
+    "ppl_hud": "PPL: {ppl}",
+    "zdr_hud": "ZDR: {zdr}",
+    "status_hud": "Status: {status} ({ratio:.2f}x)",
+    "current_label": "Current: {label}",
+    "connected_label": "Connected: {neighbors}",
+    "controls": "[←/→/↑/↓] Move  [ENTER] Enter  [ESC] Jack out",
+    "action_menu_title": "Node: {label}",
+    "action_scan": "Scan",
+    "action_extract": "Extract data",
+    "action_engage": "Engage ICE",
+    "action_communicate": "Communicate",
+    "action_jack_out": "Jack out",
+    "action_placeholder": "(Phase 5+: not yet implemented)",
+    "death_title": "FLATLINE",
+    "death_message": "The matrix is vast. You were small. Static. Silence."
+  },
+  "aftermath": {
+    "title": "AFTERMATH",
+    "tap_to_continue": "[Space] Continue",
+    "section_narrative": "Aftermath",
+    "section_reaction": "Reaction",
+    "loading": "Loading aftermath...",
+    "subtitle_hint": "이벤트 메시지는 한글 자막 형식으로 표시됩니다 (ADR-0019)"
+  },
+  "status": {
+    "safe": "SAFE",
+    "match": "MATCH",
+    "tough": "TOUGH",
+    "deadly": "DEADLY",
+    "futile": "FUTILE"
+  }
+}

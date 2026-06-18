@@ -1,0 +1,64 @@
+name: Deploy Dashboard to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build dashboard artifact
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify dashboard files exist
+        run: |
+          ls -la dashboard/
+          ls -la Game/dashboard/ 2>/dev/null || true
+          echo "Dashboard files OK"
+
+      - name: Prepare Pages artifact
+        run: |
+          mkdir -p _pages
+          # Copy top hub
+          cp Game/dashboard/index.html _pages/index.html
+          # Copy roguelike_sprawl submenu and sub-dashboards
+          mkdir -p _pages/roguelike_sprawl
+          cp roguelike_sprawl/dashboard/index.html _pages/roguelike_sprawl/index.html
+          cp roguelike_sprawl/dashboard/story.html _pages/roguelike_sprawl/story.html
+          cp roguelike_sprawl/dashboard/stages.html _pages/roguelike_sprawl/stages.html
+          # Copy design data so fetch() works
+          mkdir -p _pages/roguelike_sprawl/design
+          cp -r roguelike_sprawl/design/* _pages/roguelike_sprawl/design/
+          echo "Artifact contents:"
+          find _pages -type f | head -20
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './_pages'
+
+  deploy:
+    name: Deploy to GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

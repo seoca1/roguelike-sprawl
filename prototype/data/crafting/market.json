@@ -1,0 +1,43 @@
+{
+  "t1_program": {
+    "item_id": "t1_program",
+    "name": "T1 Program",
+    "price": 100,
+    "tier_level": 1,
+    "available": true,
+    "examples": ["wisp", "shield", "probe"]
+  },
+  "t2_program": {
+    "item_id": "t2_program",
+    "name": "T2 Program",
+    "price": 300,
+    "tier_level": 2,
+    "available": true,
+    "examples": ["hammer", "virus", "worm"]
+  },
+  "t3_program": {
+    "item_id": "t3_program",
+    "name": "T3 Program",
+    "price": 800,
+    "tier_level": 3,
+    "available": true,
+    "examples": ["goliath"]
+  },
+  "t4_program": {
+    "item_id": "t4_program",
+    "name": "T4 Program",
+    "price": 2000,
+    "tier_level": 4,
+    "available": true,
+    "examples": ["wardrone"]
+  },
+  "t5_program": {
+    "item_id": "t5_program",
+    "name": "T5 Program (Kraken)",
+    "price": null,
+    "tier_level": 5,
+    "available": false,
+    "crafting_only": true,
+    "note": "T5 programs are crafting only. The Kraken is not for sale."
+  }
+}

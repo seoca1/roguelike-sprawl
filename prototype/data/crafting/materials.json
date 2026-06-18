@@ -1,0 +1,91 @@
+{
+  "ice_shard": {
+    "id": "ice_shard",
+    "name": "ICE Shard",
+    "tier": 0,
+    "category": "raw",
+    "rarity": "common",
+    "description": "Residual data from a defeated ICE. Glitches when held.",
+    "drop_sources": ["combat.ice.standard", "combat.ice.watchdog"]
+  },
+  "data_fragment": {
+    "id": "data_fragment",
+    "name": "Data Fragment",
+    "tier": 0,
+    "category": "raw",
+    "rarity": "common",
+    "description": "Partially corrupted data remnants.",
+    "drop_sources": ["combat", "data_nodes", "story_events"]
+  },
+  "rom_echo": {
+    "id": "rom_echo",
+    "name": "ROM Echo",
+    "tier": 0,
+    "category": "raw",
+    "rarity": "uncommon",
+    "description": "Memory trace of a construct. Voices echo when held.",
+    "drop_sources": ["construct_nodes", "story_events.dixie", "story_events.loa"]
+  },
+  "wetware_chip": {
+    "id": "wetware_chip",
+    "name": "Wetware Chip",
+    "tier": 0,
+    "category": "raw",
+    "rarity": "rare",
+    "description": "Bio-software component. Connects directly to the nervous system.",
+    "drop_sources": ["story_events.biossoft", "rare_drops"]
+  },
+  "biosoft_agent": {
+    "id": "biosoft_agent",
+    "name": "Biosoft Agent",
+    "tier": 0,
+    "category": "raw",
+    "rarity": "rare",
+    "description": "Living software. Organic code. Held close, it almost breathes.",
+    "drop_sources": ["construct_encounters", "high_tier_events"]
+  },
+  "combat_module": {
+    "id": "combat_module",
+    "name": "Combat Module",
+    "tier": 1,
+    "category": "component",
+    "description": "Stabilized combat data. Base for program crafting.",
+    "recipe": {
+      "ice_shard": 2,
+      "data_fragment": 1
+    }
+  },
+  "construct_shard": {
+    "id": "construct_shard",
+    "name": "Construct Shard",
+    "tier": 1,
+    "category": "component",
+    "description": "Fragment of a construct's identity. Used for construct crafting.",
+    "recipe": {
+      "rom_echo": 1,
+      "biosoft_agent": 1
+    }
+  },
+  "wetware_data": {
+    "id": "wetware_data",
+    "name": "Wetware Data",
+    "tier": 1,
+    "category": "component",
+    "description": "Hybrid bio-informational data. Base for item crafting.",
+    "recipe": {
+      "data_fragment": 2,
+      "wetware_chip": 1
+    }
+  },
+  "ice_construct": {
+    "id": "ice_construct",
+    "name": "ICE Construct",
+    "tier": 1,
+    "category": "component",
+    "description": "Residual ICE data with construct echoes. Black ICE-class base.",
+    "recipe": {
+      "ice_shard": 3,
+      "rom_echo": 1
+    }
+  }
+}

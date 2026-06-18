@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Roguelike Sprawl — Stage & Progression Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    background: #0a0e14;
+    color: #c5d4e3;
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1, h2, h3 { color: #66ffcc; font-weight: 600; }
+  h1 { font-size: 28px; margin-bottom: 8px; text-shadow: 0 0 8px #66ffcc33; }
+  h2 { font-size: 20px; margin: 32px 0 16px; border-bottom: 1px solid #2a3540; padding-bottom: 8px; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #ffaa55; }
+  .subtitle { color: #6a7888; font-size: 14px; margin-bottom: 24px; }
+
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0a0e14; border-bottom: 1px solid #2a3540;
+    padding: 8px 24px; margin: -24px -24px 16px -24px;
+    display: flex; gap: 16px; align-items: center;
+  }
+  .top-nav a { color: #66ffcc; text-decoration: none; font-size: 13px; }
+  .top-nav a:hover { color: #00ccff; }
+  .top-nav .current { color: #ffaa55; font-weight: 600; }
+  .top-nav .sep { color: #2a3540; }
+
+  .lang-toggle { display: flex; gap: 4px; margin-bottom: 16px; }
+  .lang-btn {
+    background: #0a0e14; border: 1px solid #2a3540; color: #8a9aa8;
+    padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 12px;
+    font-family: inherit;
+  }
+  .lang-btn:hover { border-color: #66ffcc; color: #c5d4e3; }
+  .lang-btn.active { background: #66ffcc22; color: #66ffcc; border-color: #66ffcc; }
+
+  /* Stage flow diagram */
+  .stage-flow {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 6px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .flow-diagram {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    margin: 16px 0; justify-content: center;
+  }
+  .flow-node {
+    background: #0a0e14; border: 2px solid #2a3540; border-radius: 6px;
+    padding: 10px 16px; min-width: 120px; text-align: center;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .flow-node:hover { border-color: #66ffcc; transform: translateY(-2px); }
+  .flow-node.hub { border-color: #ffaa55; }
+  .flow-node.matrix { border-color: #00ccff; }
+  .flow-node.combat { border-color: #ff5555; }
+  .flow-node.terminal { background: #1a2530; }
+  .flow-node.failed { border-color: #ff5555; background: #2a1015; }
+  .flow-node.completed { border-color: #66ffcc; background: #0a2018; }
+  .flow-node .stage-name { color: #ffaa55; font-weight: 600; font-size: 13px; }
+  .flow-node .stage-type { color: #6a7888; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+  .flow-arrow { color: #66ffcc; font-size: 20px; padding: 0 4px; }
+  .flow-branch { color: #ff5555; font-size: 20px; padding: 0 4px; }
+
+  /* Stage cards */
+  .stage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+  .stage-card {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 6px;
+    padding: 16px; position: relative;
+  }
+  .stage-card.hub { border-left: 3px solid #ffaa55; }
+  .stage-card.matrix { border-left: 3px solid #00ccff; }
+  .stage-card.combat { border-left: 3px solid #ff5555; }
+  .stage-card.terminal { border-left: 3px solid #66ffcc; }
+  .stage-card.failed { border-left: 3px solid #ff5555; }
+  .stage-card .stage-id {
+    position: absolute; top: 8px; right: 12px;
+    color: #2a3540; font-size: 11px; font-family: monospace;
+  }
+  .stage-card h3 { color: #ffaa55; margin: 0 0 4px; }
+  .stage-card .stage-subtitle { color: #6a7888; font-size: 12px; margin-bottom: 8px; }
+  .stage-card .ascii-art {
+    background: #050a10; border: 1px solid #1a2530; border-radius: 3px;
+    padding: 10px; color: #66ffcc; font-size: 12px; line-height: 1.2;
+    margin: 8px 0; overflow-x: auto; white-space: pre;
+  }
+  .stage-card .description { color: #c5d4e3; font-size: 13px; margin: 8px 0; line-height: 1.5; }
+  .stage-card .description-en { color: #8a9aa8; font-size: 12px; margin: 4px 0; padding-top: 4px; border-top: 1px dashed #1a2530; }
+  .stage-card .trigger {
+    background: #1a2530; border-radius: 3px; padding: 8px 12px;
+    color: #8a9aa8; font-size: 12px; margin-top: 8px;
+    border-left: 2px solid #66ffcc;
+  }
+  .stage-card .meta { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .stage-card .meta .pill {
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 12px;
+    padding: 2px 8px; font-size: 11px; color: #8a9aa8;
+  }
+  .stage-card .pill.terminal { color: #66ffcc; border-color: #66ffcc; }
+  .stage-card .pill.failed { color: #ff8888; border-color: #ff5555; }
+  .stage-card .ui-list { margin-top: 8px; }
+  .stage-card .ui-list .ui-tag {
+    display: inline-block; background: #1a2530; color: #66ffcc;
+    padding: 2px 8px; border-radius: 3px; font-size: 11px; margin: 2px 4px 2px 0;
+  }
+
+  /* Transitions table */
+  .transitions-table { width: 100%; border-collapse: collapse; background: #131a23; border: 1px solid #2a3540; border-radius: 6px; overflow: hidden; }
+  .transitions-table th { background: #1a2530; color: #66ffcc; padding: 10px 12px; text-align: left; font-size: 12px; }
+  .transitions-table td { padding: 10px 12px; border-top: 1px solid #1a2530; color: #c5d4e3; font-size: 13px; }
+  .transitions-table tr:hover { background: #1a2530; }
+  .transitions-table code { color: #00ccff; background: #0a0e14; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+  .transitions-table .arrow-cell { color: #66ffcc; font-weight: 700; }
+  .transitions-table .from-failed { color: #ff5555; }
+
+  /* Mission cards */
+  .mission-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+  .mission-card {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 6px;
+    padding: 16px;
+  }
+  .mission-card h3 { color: #ffaa55; margin: 0 0 4px; }
+  .mission-card .mission-stage-flow {
+    display: flex; gap: 4px; align-items: center; flex-wrap: wrap; margin: 8px 0;
+  }
+  .mission-card .mini-stage {
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 3px;
+    padding: 3px 8px; font-size: 11px; color: #8a9aa8;
+  }
+  .mission-card .mini-arrow { color: #66ffcc; font-size: 12px; }
+  .mission-card .objectives { margin: 8px 0; font-size: 12px; }
+  .mission-card .objectives li { color: #8a9aa8; list-style: none; margin: 2px 0; padding-left: 12px; }
+  .mission-card .objectives li::before { content: "▸ "; color: #66ffcc; }
+  .mission-card .rewards {
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 3px;
+    padding: 6px 10px; margin-top: 8px; font-size: 12px;
+  }
+  .mission-card .rewards .credit { color: #ffaa55; font-weight: 700; }
+  .mission-card .rewards .material { color: #00ccff; }
+  .mission-card .meta { display: flex; gap: 6px; margin-top: 6px; font-size: 11px; }
+  .mission-card .meta .pill { background: #1a2530; padding: 2px 8px; border-radius: 3px; color: #8a9aa8; }
+
+  /* Death flow */
+  .death-flow {
+    background: #131a23; border: 1px solid #ff5555; border-radius: 6px;
+    padding: 20px; margin-bottom: 24px; border-left: 4px solid #ff5555;
+  }
+  .death-flow h2 { color: #ff8888; border-bottom-color: #ff5555; }
+  .death-flow .steps { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .death-flow .step {
+    display: grid; grid-template-columns: 40px 1fr; gap: 12px;
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 4px;
+    padding: 12px;
+  }
+  .death-flow .step .step-num {
+    color: #ff5555; font-size: 18px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .death-flow .step h3 { margin: 0 0 4px; color: #ffaa55; }
+  .death-flow .step p { color: #c5d4e3; font-size: 13px; margin: 4px 0; }
+  .death-flow .step p.en { color: #8a9aa8; font-size: 12px; }
+  .death-flow .step .arrow { color: #ff5555; text-align: center; font-size: 14px; }
+
+  /* Hub loop */
+  .hub-loop {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 6px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .hub-loop pre {
+    background: #050a10; border: 1px solid #1a2530; border-radius: 3px;
+    padding: 16px; color: #66ffcc; font-size: 12px; line-height: 1.2;
+    margin: 12px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .footer { text-align: center; color: #6a7888; font-size: 12px; margin-top: 48px; padding: 24px; border-top: 1px solid #2a3540; }
+  .footer code { background: #1a2530; padding: 2px 6px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../../dashboard/index.html">🌐 Hub</a>
+  <span class="sep">|</span>
+  <a href="index.html">◀ Roguelike</a>
+  <span class="sep">|</span>
+  <a href="story.html">📖 Story</a>
+  <span class="sep">|</span>
+  <span class="current">⏱ Stages</span>
+</nav>
+
+<h1>⏱ ROGUELIKE SPRAWL — Stage & Progression Dashboard</h1>
+<div class="subtitle">
+  Single Run = Prologue → Mission → Completion. 6 stages, 5 transitions, 3 missions (Arc 1).
+  <br>
+  출처: <code>design/systems/stage_structure.json</code> · <code>src/run/state.py</code>
+</div>
+
+<div class="lang-toggle">
+  <button class="lang-btn active" data-lang="ko">한글</button>
+  <button class="lang-btn" data-lang="en">English</button>
+  <button class="lang-btn" data-lang="both">Both</button>
+</div>
+
+<!-- Stage Flow Diagram -->
+<h2>🔄 Stage Flow (스테이지 흐름)</h2>
+<div class="stage-flow" data-stage-src="../design/systems/stage_structure.json">
+  <div class="flow-diagram" id="flowDiagram"></div>
+  <div style="text-align: center; color: #6a7888; font-size: 11px;">
+    [Hub] = orange · [Matrix] = blue · [Combat] = red · [Terminal] = green
+  </div>
+</div>
+
+<!-- Stage Cards -->
+<h2>📦 Stages (스테이지 상세)</h2>
+<div class="stage-grid" id="stageGrid"></div>
+
+<!-- Transitions -->
+<h2>↗ Transitions (전이 트리거)</h2>
+<table class="transitions-table" id="transitionsTable">
+  <thead>
+    <tr>
+      <th>From</th>
+      <th></th>
+      <th>To</th>
+      <th>Trigger</th>
+      <th>System</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- Missions -->
+<h2>🎯 Arc 1 Missions (Arc 1 미션)</h2>
+<div class="mission-grid" id="missionGrid"></div>
+
+<!-- Death Flow -->
+<h2>💀 Death Flow (사망 흐름)</h2>
+<div class="death-flow">
+  <div class="steps" id="deathSteps"></div>
+</div>
+
+<!-- Hub Loop -->
+<h2>🏠 Hub Loop (메인 게임 루프)</h2>
+<div class="hub-loop" id="hubLoop">
+  <div id="hubDescription"></div>
+  <pre id="hubAscii"></pre>
+</div>
+
+<div class="footer">
+  Roguelike Sprawl — Stage & Progression Dashboard<br>
+  <code>design/systems/stage_structure.json</code> · <code>src/run/state.py</code> · <code>src/engine/death.py</code>
+</div>
+
+<script>
+  document.getElementById('last-updated').textContent = new Date().toISOString().slice(0, 10);
+
+  // Stage Dashboard
+  (function() {
+    const state = { data: null, lang: 'ko' };
+    const src = document.querySelector('.stage-flow').dataset.stageSrc;
+
+    function text(obj, base) {
+      if (!obj) return '';
+      if (state.lang === 'en') return obj[base + '_en'] || '';
+      if (state.lang === 'ko') return obj[base + '_ko'] || '';
+      return { en: obj[base + '_en'] || '', ko: obj[base + '_ko'] || '' };
+    }
+
+    function textBoth(obj, base) {
+      const en = obj[base + '_en'] || '';
+      const ko = obj[base + '_ko'] || '';
+      if (state.lang === 'en') return en;
+      if (state.lang === 'ko') return ko;
+      return `${en}<br><span style="color:#8a9aa8;font-size:12px;display:block;margin-top:4px;padding-top:4px;border-top:1px dashed #1a2530">${ko}</span>`;
+    }
+
+    function renderFlowDiagram() {
+      const stages = state.data.stages;
+      const order = ['pending', 'meet_npc', 'extract_data', 'defeat_ice', 'complete'];
+      const html = [];
+      order.forEach((sid, i) => {
+        const stage = stages.find(s => s.id === sid);
+        if (!stage) return;
+        const cls = stage.type;
+        const name = state.lang === 'en' ? stage.name_en
+          : state.lang === 'ko' ? stage.name_ko
+          : `${stage.name_en} / ${stage.name_ko}`;
+        html.push(`<div class="flow-node ${cls} ${stage.is_terminal ? (sid === 'complete' ? 'completed' : 'failed') : ''}" data-stage="${sid}">
+          <div class="stage-name">${name}</div>
+          <div class="stage-type">${stage.type}</div>
+        </div>`);
+        if (i < order.length - 1) {
+          html.push(`<div class="flow-arrow">→</div>`);
+        }
+      });
+      // Branch to failed
+      html.push(`<div class="flow-branch" style="margin-left: 20px;">↘</div>`);
+      const failed = stages.find(s => s.id === 'failed');
+      const fName = state.lang === 'en' ? failed.name_en : state.lang === 'ko' ? failed.name_ko : `${failed.name_en} / ${failed.name_ko}`;
+      html.push(`<div class="flow-node failed">
+        <div class="stage-name">${fName}</div>
+        <div class="stage-type">death</div>
+      </div>`);
+      document.getElementById('flowDiagram').innerHTML = html.join('');
+    }
+
+    function renderStageCard(stage) {
+      const desc = state.lang === 'en' ? stage.description_en
+        : state.lang === 'ko' ? stage.description_ko
+        : `<div>${stage.description_en}</div><div class="description-en">${stage.description_ko}</div>`;
+      const trigger = state.lang === 'en' ? stage.trigger_en
+        : state.lang === 'ko' ? stage.trigger_ko
+        : `<div>${stage.trigger_en}</div><div style="color:#8a9aa8;font-size:11px;margin-top:4px">${stage.trigger_ko}</div>`;
+      const name = state.lang === 'en' ? stage.name_en
+        : state.lang === 'ko' ? stage.name_ko
+        : `${stage.name_en} / ${stage.name_ko}`;
+      const objectivePill = stage.objective_kind === 'none'
+        ? '<span class="pill">—</span>'
+        : `<span class="pill">objective: ${stage.objective_kind}</span>`;
+      const terminalPill = stage.is_terminal
+        ? (stage.id === 'failed'
+            ? '<span class="pill failed">TERMINAL (DEATH)</span>'
+            : '<span class="pill terminal">TERMINAL (COMPLETE)</span>')
+        : '<span class="pill">in progress</span>';
+      const nextPill = stage.next_stage
+        ? `<span class="pill">next → ${stage.next_stage}</span>`
+        : '<span class="pill">end</span>';
+      const uiTags = (stage.ui_elements || []).map(u => `<span class="ui-tag">${u}</span>`).join('');
+
+      return `<div class="stage-card ${stage.type}">
+        <div class="stage-id">${stage.id}</div>
+        <h3>${name}</h3>
+        <div class="stage-subtitle">type: ${stage.type}</div>
+        <div class="ascii-art">${stage.ascii_art.join('\n')}</div>
+        <div class="description">${desc}</div>
+        <div class="trigger"><b>Trigger:</b> ${trigger}</div>
+        <div class="meta">
+          ${terminalPill}
+          ${objectivePill}
+          ${nextPill}
+        </div>
+        <div class="ui-list">${uiTags}</div>
+      </div>`;
+    }
+
+    function renderStages() {
+      const html = state.data.stages.map(renderStageCard).join('');
+      document.getElementById('stageGrid').innerHTML = html;
+    }
+
+    function renderTransitions() {
+      const tbody = document.querySelector('#transitionsTable tbody');
+      const html = state.data.transitions.map(t => {
+        const trig = state.lang === 'en' ? t.trigger_en
+          : state.lang === 'ko' ? t.trigger_ko
+          : `${t.trigger_en} / ${t.trigger_ko}`;
+        const fromClass = t.from === 'any' ? 'from-failed' : '';
+        return `<tr>
+          <td><code class="${fromClass}">${t.from}</code></td>
+          <td class="arrow-cell">→</td>
+          <td><code>${t.to}</code></td>
+          <td>${trig}</td>
+          <td><code>${t.system}</code></td>
+        </tr>`;
+      }).join('');
+      tbody.innerHTML = html;
+    }
+
+    function renderMissions() {
+      const html = state.data.missions.map(m => {
+        const title = state.lang === 'en' ? m.title_en
+          : state.lang === 'ko' ? m.title_ko
+          : `${m.title_en} / ${m.title_ko}`;
+        const prim = state.lang === 'en' ? m.primary_objective_en
+          : state.lang === 'ko' ? m.primary_objective_ko
+          : `${m.primary_objective_en} / ${m.primary_objective_ko}`;
+        const sec = m.secondary_objective_en
+          ? (state.lang === 'en' ? m.secondary_objective_en
+              : state.lang === 'ko' ? m.secondary_objective_ko
+              : `${m.secondary_objective_en} / ${m.secondary_objective_ko}`)
+          : null;
+        const stagesHtml = m.stages.map(sid =>
+          `<span class="mini-stage">${sid}</span>`
+        ).join('<span class="mini-arrow">→</span>');
+        const rewards = [];
+        if (m.rewards.credits) rewards.push(`<span class="credit">+${m.rewards.credits} credits</span>`);
+        if (m.rewards.materials) {
+          Object.entries(m.rewards.materials).forEach(([k, v]) => {
+            rewards.push(`<span class="material">+${v} ${k}</span>`);
+          });
+        }
+        return `<div class="mission-card">
+          <h3>${title}</h3>
+          <div style="color: #6a7888; font-size: 12px;">fixer: ${m.fixer} · arc ${m.arc} · grade ${m.grade_min}-${m.grade_max}</div>
+          <div class="mission-stage-flow">${stagesHtml}</div>
+          <ul class="objectives">
+            <li>${prim}</li>
+            ${sec ? `<li>${sec}</li>` : ''}
+          </ul>
+          <div class="rewards">${rewards.join(' · ')}</div>
+          <div class="meta">
+            <span class="pill">~${m.estimated_minutes} min</span>
+            <span class="pill">${m.stages.length} stages</span>
+          </div>
+        </div>`;
+      }).join('');
+      document.getElementById('missionGrid').innerHTML = html;
+    }
+
+    function renderDeathFlow() {
+      const df = state.data.death_flow;
+      const html = df.steps.map((step, i) => {
+        const name = state.lang === 'en' ? step.name_en
+          : state.lang === 'ko' ? step.name_ko
+          : `${step.name_en} / ${step.name_ko}`;
+        const desc = state.lang === 'en' ? step.description_en
+          : state.lang === 'ko' ? step.description_ko
+          : `<div>${step.description_en}</div><div class="en" style="color:#8a9aa8;font-size:12px;margin-top:4px">${step.description_ko}</div>`;
+        const arrow = i < df.steps.length - 1
+          ? '<div class="arrow" style="grid-column: 1 / -1;">▼</div>'
+          : '';
+        return `<div class="step">
+          <div class="step-num">${i + 1}</div>
+          <div>
+            <h3>${name}</h3>
+            <p>${desc}</p>
+          </div>
+          ${arrow}
+        </div>`;
+      }).join('');
+      document.getElementById('deathSteps').innerHTML = html;
+    }
+
+    function renderHubLoop() {
+      const hl = state.data.hub_loop;
+      const name = state.lang === 'en' ? hl.name_en
+        : state.lang === 'ko' ? hl.name_ko
+        : `${hl.name_en} / ${hl.name_ko}`;
+      const desc = state.lang === 'en' ? hl.description_en
+        : state.lang === 'ko' ? hl.description_ko
+        : `<div>${hl.description_en}</div><div style="color:#8a9aa8;font-size:13px;margin-top:4px">${hl.description_ko}</div>`;
+      document.getElementById('hubDescription').innerHTML = `<h3 style="color: #ffaa55; margin: 0 0 8px;">${name}</h3><div>${desc}</div>`;
+      document.getElementById('hubAscii').textContent = hl.ascii_art.join('\n');
+    }
+
+    function render() {
+      if (!state.data) return;
+      renderFlowDiagram();
+      renderStages();
+      renderTransitions();
+      renderMissions();
+      renderDeathFlow();
+      renderHubLoop();
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.lang = btn.dataset.lang;
+        render();
+      });
+    });
+
+    fetch(src)
+      .then(r => r.json())
+      .then(data => {
+        state.data = data;
+        render();
+      })
+      .catch(err => {
+        document.getElementById('stageGrid').innerHTML =
+          `<div style="color:#ff8888;padding:20px;">
+            ⚠ JSON 로드 실패: <code>${src}</code><br>
+            <small style="color:#6a7888">${err.message}</small>
+          </div>`;
+      });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "dixie_react_black_ice": {
+    "id": "dixie_react_black_ice",
+    "character": "dixie",
+    "trigger": "combat.defeat.black_ice",
+    "text_en": "야, 잘 했어. 근데 조심해 — 그건 그냥 sentry였어. T-A가 더 큰 거 가지고 있어.",
+    "text_ko": "야, 잘 했어. 근데 조심해 — 그건 그냥 sentry였어. T-A가 더 큰 거 가지고 있어.",
+    "portrait": "construct.dixie"
+  },
+  "case_react_black_ice": {
+    "id": "case_react_black_ice",
+    "character": "case",
+    "trigger": "combat.defeat.black_ice",
+    "text_en": "Your hands are shaking. The deck's warm. You jack out, and the shaking doesn't stop. That's how it starts.",
+    "text_ko": "네 손이 떨린다. 데크가 따뜻하다. 잭아웃해도, 떨림은 멈추지 않는다. 그렇게 시작된다.",
+    "portrait": "player"
+  },
+  "dixie_react_construct": {
+    "id": "dixie_react_construct",
+    "character": "dixie",
+    "trigger": "combat.defeat.construct.first",
+    "text_en": "I was a cowboy once. Killed a few. Doesn't make it easier. Don't let it make you cold.",
+    "text_ko": "나도 한때 카우보이였다. 몇 개 죽였다. 그게 쉬워지진 않는다. 너를 차갑게 만들지도 마라.",
+    "portrait": "construct.dixie"
+  },
+  "case_react_construct": {
+    "id": "case_react_construct",
+    "character": "case",
+    "trigger": "combat.defeat.construct.first",
+    "text_en": "It's not murder. They're not alive. But you keep telling yourself that, and the telling gets louder every time.",
+    "text_ko": "살인이 아니다. 살아있지 않으니까. 하지만 너는 계속 그렇게 말하고, 그 말이 매번 더 커진다.",
+    "portrait": "player"
+  },
+  "finn_react_construct": {
+    "id": "finn_react_construct",
+    "character": "finn",
+    "trigger": "combat.defeat.construct.first",
+    "text_en": "Construct data is good money. The Romantics pay double. Don't ask what they want it for.",
+    "text_ko": "구성체 데이터는 좋은 돈이다. 로맨틱들이 두 배로 산다. 그들이 뭘 하려는지 묻지 마라.",
+    "portrait": "construct.finn"
+  },
+  "case_react_core": {
+    "id": "case_react_core",
+    "character": "case",
+    "trigger": "matrix.zone.core_first_time",
+    "text_en": "The deeper you go, the smaller the constructs get. Or maybe the larger. Hard to tell down here.",
+    "text_ko": "더 깊이 가면, 구성체들이 더 작아진다. 아니면 더 커지거나. 여기선 알기 어렵다.",
+    "portrait": "player"
+  },
+  "maelcum_react_core": {
+    "id": "maelcum_react_core",
+    "character": "maelcum",
+    "trigger": "matrix.zone.core_first_time",
+    "text_en": "The matrix is vast. You are small. But the small can dream, and the dream is not small, cowboy.",
+    "text_ko": "매트릭스는 광활하다. 너는 작다. 하지만 작은 자도 꿈을 꿀 수 있고, 그 꿈은 작지 않아, 카우보이.",
+    "portrait": "construct.maelcum"
+  },
+  "finn_react_mission_first": {
+    "id": "finn_react_mission_first",
+    "character": "finn",
+    "trigger": "mission.complete.first",
+    "text_en": "First jack, eh. Don't make a habit of dying. The Finn pays for results, not for funerals.",
+    "text_ko": "첫 잭이야, 어. 죽는 데 익숙해지지 마. The Finn은 결과를 사고, 장례식이 아니라.",
+    "portrait": "construct.finn"
+  },
+  "case_react_arc": {
+    "id": "case_react_arc",
+    "character": "case",
+    "trigger": "mission.complete.arc",
+    "text_en": "Something's watching. Has been since the first run. You tell yourself it's just the code. You're not sure anymore.",
+    "text_ko": "뭔가가 지켜보고 있다. 첫 런부터 그랬다. 코드라고 너는 혼잣말한다. 더 이상 확신하지 못한다.",
+    "portrait": "player"
+  },
+  "3jane_react_arc": {
+    "id": "3jane_react_arc",
+    "character": "3jane",
+    "trigger": "mission.complete.arc",
+    "text_en": "I see you. The construct I sent was a test. The next will not be.",
+    "text_ko": "당신을 본다. 보낸 구성체는 시험이었다. 다음은 그렇지 않을 거다.",
+    "portrait": "faction.ta"
+  }
+}

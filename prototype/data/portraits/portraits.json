@@ -1,0 +1,47 @@
+{
+  "player": {
+    "ascii": "◉P◉",
+    "color": "green",
+    "name": "you"
+  },
+  "construct.dixie": {
+    "ascii": "◊D◊",
+    "color": "cyan",
+    "name": "Dixie Flatline"
+  },
+  "construct.finn": {
+    "ascii": "♠F♠",
+    "color": "magenta",
+    "name": "The Finn"
+  },
+  "ice.standard": {
+    "ascii": "▲ICE▲",
+    "color": "magenta",
+    "name": "ICE"
+  },
+  "ice.black": {
+    "ascii": "█ICE█",
+    "color": "red",
+    "name": "Black ICE"
+  },
+  "prog.goliath": {
+    "ascii": "⚔GOL⚔",
+    "color": "magenta",
+    "name": "Goliath"
+  },
+  "prog.wisp": {
+    "ascii": "⛨WSP⛨",
+    "color": "cyan",
+    "name": "Wisp"
+  },
+  "prog.probe": {
+    "ascii": "?PRB?",
+    "color": "yellow",
+    "name": "Probe"
+  },
+  "faction.ta": {
+    "ascii": "▲T-A▲",
+    "color": "red",
+    "name": "Tessier-Ashpool"
+  }
+}

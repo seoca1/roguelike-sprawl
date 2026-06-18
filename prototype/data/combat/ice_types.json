@@ -1,0 +1,37 @@
+{
+  "standard": {
+    "name": "ICE — Standard",
+    "portrait": "ice.standard",
+    "hp": 80,
+    "base_damage": 3,
+    "tier": 1
+  },
+  "watchdog": {
+    "name": "ICE — Watchdog",
+    "portrait": "ice.standard",
+    "hp": 50,
+    "base_damage": 2,
+    "tier": 1
+  },
+  "black": {
+    "name": "ICE — Black",
+    "portrait": "ice.black",
+    "hp": 200,
+    "base_damage": 8,
+    "tier": 3
+  },
+  "goliath": {
+    "name": "ICE — Goliath (heavy)",
+    "portrait": "ice.standard",
+    "hp": 150,
+    "base_damage": 5,
+    "tier": 3
+  },
+  "construct": {
+    "name": "Construct — Dixie",
+    "portrait": "construct.dixie",
+    "hp": 300,
+    "base_damage": 6,
+    "tier": 4
+  }
+}

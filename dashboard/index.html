@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Roguelike Sprawl — Project Dashboard Hub</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    background: #0a0e14;
+    color: #c5d4e3;
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  h1, h2, h3 { color: #66ffcc; font-weight: 600; }
+  h1 { font-size: 32px; margin-bottom: 8px; text-shadow: 0 0 12px #66ffcc44; }
+  .subtitle { color: #6a7888; font-size: 14px; margin-bottom: 32px; }
+
+  /* Hero / Header */
+  .hero {
+    text-align: center; padding: 32px 0 24px;
+    border-bottom: 1px solid #2a3540; margin-bottom: 32px;
+  }
+  .hero h1 { font-size: 36px; }
+  .hero .tag { color: #00ccff; font-size: 13px; margin-top: 8px; }
+
+  /* Menu grid */
+  .menu-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px; margin-bottom: 32px;
+  }
+  .menu-card {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 8px;
+    padding: 24px; text-decoration: none; color: inherit;
+    display: flex; flex-direction: column; gap: 12px;
+    transition: all 0.15s ease; position: relative; overflow: hidden;
+  }
+  .menu-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #66ffcc, #00ccff);
+    opacity: 0; transition: opacity 0.15s;
+  }
+  .menu-card:hover {
+    border-color: #66ffcc; transform: translateY(-2px);
+    box-shadow: 0 4px 20px #66ffcc22;
+  }
+  .menu-card:hover::before { opacity: 1; }
+  .menu-card.disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+  .menu-card .icon { font-size: 36px; }
+  .menu-card h3 { color: #66ffcc; font-size: 18px; margin: 0; }
+  .menu-card p { color: #8a9aa8; font-size: 13px; line-height: 1.5; flex: 1; }
+  .menu-card .stats { display: flex; gap: 8px; flex-wrap: wrap; }
+  .menu-card .stat {
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 3px;
+    padding: 2px 8px; font-size: 11px; color: #8a9aa8;
+  }
+  .menu-card .stat .num { color: #ffaa55; font-weight: 700; }
+  .menu-card .arrow {
+    color: #66ffcc; font-size: 14px; align-self: flex-end; margin-top: 4px;
+  }
+
+  /* Status panel */
+  .status-panel {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 8px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .status-panel h2 { color: #ffaa55; font-size: 16px; margin: 0 0 12px; }
+  .status-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px;
+  }
+  .status-item {
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 4px;
+    padding: 12px;
+  }
+  .status-item .label { color: #6a7888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .status-item .value { color: #66ffcc; font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .status-item .sub { color: #8a9aa8; font-size: 11px; margin-top: 2px; }
+
+  /* Phase progress */
+  .phases {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 8px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .phases h2 { color: #ffaa55; font-size: 16px; margin: 0 0 16px; }
+  .phase-row {
+    display: flex; align-items: center; gap: 12px; padding: 8px 0;
+    border-bottom: 1px dashed #1a2530;
+  }
+  .phase-row:last-child { border-bottom: none; }
+  .phase-num {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+    background: #1a2530; color: #6a7888;
+  }
+  .phase-num.done { background: #66ffcc22; color: #66ffcc; }
+  .phase-num.active { background: #ffaa5522; color: #ffaa55; box-shadow: 0 0 8px #ffaa5544; }
+  .phase-info { flex: 1; }
+  .phase-info .name { color: #c5d4e3; font-size: 14px; }
+  .phase-info .desc { color: #6a7888; font-size: 12px; }
+  .phase-status { font-size: 11px; padding: 2px 8px; border-radius: 3px; }
+  .phase-status.done { background: #66ffcc22; color: #66ffcc; }
+  .phase-status.active { background: #ffaa5522; color: #ffaa55; }
+  .phase-status.pending { background: #2a354022; color: #6a7888; }
+
+  /* Quick links */
+  .quick-links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .quick-link {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 4px;
+    padding: 8px 12px; color: #66ffcc; text-decoration: none; font-size: 12px;
+  }
+  .quick-link:hover { border-color: #66ffcc; }
+
+  .footer {
+    text-align: center; color: #6a7888; font-size: 12px; margin-top: 48px;
+    padding: 24px; border-top: 1px solid #2a3540;
+  }
+  .footer code { background: #1a2530; padding: 2px 6px; border-radius: 3px; }
+
+  .ascii-banner {
+    text-align: center; color: #66ffcc; font-size: 11px; line-height: 1.2;
+    margin: 16px 0; opacity: 0.6;
+  }
+  .top-hub-link {
+    display: inline-block; background: #131a23; border: 1px solid #2a3540;
+    border-radius: 4px; padding: 6px 12px; color: #00d9ff; text-decoration: none;
+    font-size: 12px; margin-bottom: 16px;
+  }
+  .top-hub-link:hover { border-color: #00d9ff; }
+</style>
+</head>
+<body>
+
+<a class="top-hub-link" href="../../dashboard/index.html">🌐 ◀ Projects Hub (상위 허브)</a>
+
+<div class="hero">
+  <h1>🌆 ROGUELIKE SPRAWL</h1>
+  <div class="tag">깁슨 스프롤 3부작 기반 로그라이크 · Project Dashboard Hub</div>
+  <pre class="ascii-banner">
+  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+  ░  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢  ░
+  ░  ░▒▓█ The Sprawl — Boston-Atlanta Axis ▓▒░  ░
+  ░  ░▒▓█ "The sky was the color of TV  ▓▒░  ░
+  ░  ░▒▓█  tuned to a dead channel."     ▓▒░  ░
+  ░  ░▒▓█   — William Gibson, 1984       ▓▒░  ░
+  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+  </pre>
+</div>
+
+<!-- Status panel -->
+<div class="status-panel">
+  <h2>📊 Project Status (프로젝트 상태)</h2>
+  <div class="status-grid">
+    <div class="status-item">
+      <div class="label">Tests</div>
+      <div class="value" id="stat-tests">—</div>
+      <div class="sub">passing</div>
+    </div>
+    <div class="status-item">
+      <div class="label">Story lines</div>
+      <div class="value" id="stat-lines">—</div>
+      <div class="sub">across all dialogues</div>
+    </div>
+    <div class="status-item">
+      <div class="label">NPCs</div>
+      <div class="value" id="stat-npcs">—</div>
+      <div class="sub">unique characters</div>
+    </div>
+    <div class="status-item">
+      <div class="label">Stages</div>
+      <div class="value" id="stat-stages">—</div>
+      <div class="sub">per Run</div>
+    </div>
+    <div class="status-item">
+      <div class="label">Missions</div>
+      <div class="value" id="stat-missions">—</div>
+      <div class="sub">Arc 1</div>
+    </div>
+    <div class="status-item">
+      <div class="label">Last updated</div>
+      <div class="value" id="stat-updated" style="font-size: 16px;">—</div>
+      <div class="sub" id="stat-updated-sub"></div>
+    </div>
+  </div>
+</div>
+
+<h2>📂 Dashboards (대시보드 메뉴)</h2>
+<div class="menu-grid">
+
+  <a class="menu-card" href="story.html">
+    <div class="icon">📖</div>
+    <h3>Story Dashboard</h3>
+    <p>캐릭터, 프롤로그, NPC, 미션 브리핑, ICE, Hub 대화. 캐릭터별 탭 + 언어 토글. 디자인/구현 일관성 검증.</p>
+    <div class="stats">
+      <span class="stat"><span class="num">3</span> 캐릭터</span>
+      <span class="stat"><span class="num">5</span> 씬</span>
+      <span class="stat"><span class="num">5</span> NPC</span>
+      <span class="stat"><span class="num">14</span> 대화</span>
+    </div>
+    <div class="arrow">→</div>
+  </a>
+
+  <a class="menu-card" href="stages.html">
+    <div class="icon">⏱</div>
+    <h3>Stage Dashboard</h3>
+    <p>Run 스테이지 흐름, 전이 트리거, 미션 정의, 사망 흐름, Hub 루프. 시스템 동작 검증 및 디버깅.</p>
+    <div class="stats">
+      <span class="stat"><span class="num">6</span> stages</span>
+      <span class="stat"><span class="num">5</span> transitions</span>
+      <span class="stat"><span class="num">3</span> 미션</span>
+      <span class="stat"><span class="num">4</span> death steps</span>
+    </div>
+    <div class="arrow">→</div>
+  </a>
+
+  <div class="menu-card disabled">
+    <div class="icon">🔊</div>
+    <h3>Sound Dashboard <span style="font-size:11px;color:#6a7888">(TBD)</span></h3>
+    <p>사운드 카테고리, 키 바인딩, 테마 매핑, 오디오 출력 검증. (구현 예정)</p>
+    <div class="stats">
+      <span class="stat"><span class="num">6</span> categories</span>
+      <span class="stat"><span class="num">27</span> sounds</span>
+      <span class="stat"><span class="num">5</span> themes</span>
+    </div>
+  </div>
+
+  <div class="menu-card disabled">
+    <div class="icon">⚔</div>
+    <h3>Combat Dashboard <span style="font-size:11px;color:#6a7888">(TBD)</span></h3>
+    <p>RT-MS 전투 시스템, 스킬, ICE 등급, 보상. (구현 예정)</p>
+    <div class="stats">
+      <span class="stat"><span class="num">20</span> skills</span>
+      <span class="stat"><span class="num">14</span> effects</span>
+    </div>
+  </div>
+
+  <div class="menu-card disabled">
+    <div class="icon">🌐</div>
+    <h3>Cyberspace Dashboard <span style="font-size:11px;color:#6a7888">(TBD)</span></h3>
+    <p>World → Sector → Server → Node 계층, 매트릭스 탐색. (구현 예정)</p>
+    <div class="stats">
+      <span class="stat"><span class="num">2</span> worlds</span>
+      <span class="stat"><span class="num">4</span> sectors</span>
+      <span class="stat"><span class="num">6</span> servers</span>
+    </div>
+  </div>
+
+  <div class="menu-card disabled">
+    <div class="icon">📦</div>
+    <h3>Equipment Dashboard <span style="font-size:11px;color:#6a7888">(TBD)</span></h3>
+    <p>장비 슬롯, 등급, 통계. 인벤토리 관리. (구현 예정)</p>
+    <div class="stats">
+      <span class="stat"><span class="num">15</span> items</span>
+      <span class="stat"><span class="num">8</span> slots</span>
+      <span class="stat"><span class="num">6</span> tiers</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Phase progress -->
+<div class="phases">
+  <h2>🛠 Project Phases (프로젝트 단계)</h2>
+  <div class="phase-row">
+    <div class="phase-num done">1</div>
+    <div class="phase-info">
+      <div class="name">Phase 1 — 소설 문서 (Story Document)</div>
+      <div class="desc">characters.md, prologue.md — 깁슨 톤의 오리지널 스토리</div>
+    </div>
+    <div class="phase-status done">DONE</div>
+  </div>
+  <div class="phase-row">
+    <div class="phase-num done">2</div>
+    <div class="phase-info">
+      <div class="name">Phase 2 — 데모 형식 검증 (Demo Format)</div>
+      <div class="desc">original_story.py — 3 캐릭터 × 2 엔딩 = 6 시나리오</div>
+    </div>
+    <div class="phase-status done">DONE</div>
+  </div>
+  <div class="phase-row">
+    <div class="phase-num done">3</div>
+    <div class="phase-info">
+      <div class="name">Phase 3 — 게임 구조 (Game Structure)</div>
+      <div class="desc">전투, 매트릭스, 인벤토리, 미션 — RT-MS + ASCII + Korean TTF</div>
+    </div>
+    <div class="phase-status done">DONE</div>
+  </div>
+  <div class="phase-row">
+    <div class="phase-num done">4</div>
+    <div class="phase-info">
+      <div class="name">Phase 4 — 사운드 시스템 (Sound System)</div>
+      <div class="desc">6 categories, 27 sounds, 5 themes, key bindings</div>
+    </div>
+    <div class="phase-status done">DONE</div>
+  </div>
+  <div class="phase-row">
+    <div class="phase-num done">5</div>
+    <div class="phase-info">
+      <div class="name">Phase 5 — 통합 & 확장 (Integration)</div>
+      <div class="desc">original prologue 적용, 미션 시스템 Arc 1, 대시보드 확장</div>
+    </div>
+    <div class="phase-status done">DONE</div>
+  </div>
+  <div class="phase-row">
+    <div class="phase-num">6</div>
+    <div class="phase-info">
+      <div class="name">Phase 6 — 엔딩 확장 (Endings Expansion)</div>
+      <div class="desc">2개 엔딩 → 추가 엔딩 분기, 캐릭터별 unlock</div>
+    </div>
+    <div class="phase-status pending">PENDING</div>
+  </div>
+</div>
+
+<div style="text-align: center; margin: 24px 0;">
+  <h3 style="color: #6a7888; font-size: 12px; margin-bottom: 8px;">Quick Links</h3>
+  <div class="quick-links">
+    <a class="quick-link" href="../design/story/characters.md">📄 characters.md</a>
+    <a class="quick-link" href="../design/story/prologue.md">📄 prologue.md</a>
+    <a class="quick-link" href="../design/story/prologue_data.json">📊 prologue_data.json</a>
+    <a class="quick-link" href="../design/story/event_dialogues.json">📊 event_dialogues.json</a>
+    <a class="quick-link" href="../design/systems/stage_structure.json">📊 stage_structure.json</a>
+    <a class="quick-link" href="../ROADMAP.md">🗺 ROADMAP.md</a>
+    <a class="quick-link" href="../AGENTS.md">🤖 AGENTS.md</a>
+  </div>
+</div>
+
+<div class="footer">
+  Roguelike Sprawl — Project Dashboard Hub · <code id="last-updated"></code><br>
+  깁슨 Sprawl 3부작 기반 오리지널 로그라이크
+</div>
+
+<script>
+  document.getElementById('last-updated').textContent = new Date().toISOString().slice(0, 10);
+
+  // Fetch stats from JSON files
+  async function loadStats() {
+    let totalLines = 0;
+    let totalNpcs = 0;
+    let totalStages = 0;
+    let totalMissions = 0;
+    try {
+      const proData = await fetch('../design/story/prologue_data.json').then(r => r.json());
+      totalLines += proData.scenes.reduce((s, sc) => s + sc.lines.length, 0);
+      // Endings lines
+      Object.values(proData.endings).forEach(ends => {
+        ends.forEach(e => { totalLines += e.lines.length; });
+      });
+      totalNpcs = 3; // The 3 protagonists
+    } catch (e) { /* ignore */ }
+    try {
+      const evtData = await fetch('../design/story/event_dialogues.json').then(r => r.json());
+      totalNpcs = Math.max(totalNpcs, Object.keys(evtData.npcs).length);
+      Object.values(evtData.dialogues).forEach(d => { totalLines += d.lines.length; });
+    } catch (e) { /* ignore */ }
+    try {
+      const stgData = await fetch('../design/systems/stage_structure.json').then(r => r.json());
+      totalStages = stgData.stages.length;
+      totalMissions = stgData.missions.length;
+    } catch (e) { /* ignore */ }
+    document.getElementById('stat-lines').textContent = totalLines;
+    document.getElementById('stat-npcs').textContent = totalNpcs;
+    document.getElementById('stat-stages').textContent = totalStages;
+    document.getElementById('stat-missions').textContent = totalMissions;
+  }
+  loadStats();
+</script>
+</body>
+</html>
