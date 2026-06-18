@@ -1,8 +1,8 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Stage Structure & Progression",
   "title_ko": "스테이지 구조 & 진행",
-  "description": "Single Run = Prologue → Mission → Completion. 6 stages total.",
+  "description": "Single Run = PENDING → Mission flow (per-mission) → COMPLETE/FAILED. v0.2: JACK_OUT, REWARD, DEBRIEF, DEATH_RESTART added.",
   "stages": [
     {
       "id": "pending",
@@ -84,7 +84,7 @@
       "objective_kind": "ice",
       "description_en": "Engage and defeat the ICE protecting the data.",
       "description_ko": "데이터를 지키는 ICE와 교전하여 격파.",
-      "next_stage": "complete",
+      "next_stage": "jack_out",
       "trigger_en": "Win the combat (HP > 0, ICE HP = 0).",
       "trigger_ko": "전투 승리 (HP > 0, ICE HP = 0).",
       "ascii_art": [
@@ -100,27 +100,117 @@
       "ui_elements": ["combat_view", "skill_menu", "status_panel"]
     },
     {
-      "id": "complete",
-      "name_en": "Run Complete",
-      "name_ko": "Run 완료",
-      "type": "hub",
-      "is_terminal": true,
+      "id": "jack_out",
+      "name_en": "Jack Out",
+      "name_ko": "잭아웃",
+      "type": "animation",
+      "is_terminal": false,
       "objective_kind": "none",
-      "description_en": "Mission complete. Return to hub for rewards.",
-      "description_ko": "미션 완료. 보상을 위해 Hub 복귀.",
-      "next_stage": null,
-      "trigger_en": "Auto-trigger after DEFEAT_ICE victory.",
-      "trigger_ko": "DEFEAT_ICE 승리 후 자동 발생.",
+      "description_en": "Disconnecting from the matrix. Animation + transition.",
+      "description_ko": "매트릭스에서 연결 해제. 애니메이션 + 전환.",
+      "next_stage": "reward",
+      "trigger_en": "Player presses any key to dismiss.",
+      "trigger_ko": "플레이어가 아무 키나 눌러 닫기.",
+      "ascii_art": [
+        "  ░░░░░░░░░░░░░░░░░░░░░░░░░░",
+        "  ░  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣  ░",
+        "  ░  ── JACKING OUT ──     ░",
+        "  ░  ░▒▓█             ▓▒░  ░",
+        "  ░  ░▒▓█             ▓▒░  ░",
+        "  ░░░░░░░░░░░░░░░░░░░░░░░░░░"
+      ],
+      "ui_elements": ["jackout_animation", "press_any_key"]
+    },
+    {
+      "id": "reward",
+      "name_en": "Mission Rewards",
+      "name_ko": "미션 보상",
+      "type": "hub",
+      "is_terminal": false,
+      "objective_kind": "none",
+      "description_en": "Show mission rewards: credits, materials, intel.",
+      "description_ko": "미션 보상 표시: 크레딧, 재료, 정보.",
+      "next_stage": "complete",
+      "trigger_en": "Player presses ENTER to return to hub.",
+      "trigger_ko": "플레이어가 ENTER를 눌러 Hub 복귀.",
       "ascii_art": [
         "  ┌──────────────────────┐",
         "  │  ✓ MISSION COMPLETE  │",
         "  │  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣  │",
         "  │  ░▒▓ Credits  +500  ▓▒░  │",
         "  │  ░▒▓ Materials +2   ▓▒░  │",
-        "  │  ░▒▓ Return to hub  ▓▒░  │",
+        "  │  ░▒▓ Press ENTER    ▓▒░  │",
         "  └──────────────────────┘"
       ],
-      "ui_elements": ["mission_summary", "reward_screen"]
+      "ui_elements": ["reward_screen", "credits_display", "materials_display"]
+    },
+    {
+      "id": "debrief",
+      "name_en": "Debrief",
+      "name_ko": "데브리핑",
+      "type": "hub",
+      "is_terminal": false,
+      "objective_kind": "none",
+      "description_en": "Optional narrative between COMPLETE and Hub return. World-building, intel unlocked.",
+      "description_ko": "COMPLETE와 Hub 복귀 사이 선택적 내러티브. 세계관, 정보 unlock.",
+      "next_stage": "complete",
+      "trigger_en": "Player dismisses the debrief message.",
+      "trigger_ko": "플레이어가 데브리핑 메시지 닫기.",
+      "ascii_art": [
+        "  ┌──────────────────────┐",
+        "  │  📜 DEBRIEF          │",
+        "  │  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣  │",
+        "  │  ░▒▓ 'The Finn's    ▓▒░  │",
+        "  │  ░▒▓  gone. T-A     ▓▒░  │",
+        "  │  ░▒▓  is watching.' ▓▒░  │",
+        "  └──────────────────────┘"
+      ],
+      "ui_elements": ["debrief_overlay", "intel_unlock"]
+    },
+    {
+      "id": "complete",
+      "name_en": "Run Complete",
+      "name_ko": "Run 완료",
+      "type": "hub",
+      "is_terminal": true,
+      "objective_kind": "none",
+      "description_en": "Mission complete. Return to hub for next job.",
+      "description_ko": "미션 완료. 다음 의뢰를 위해 Hub 복귀.",
+      "next_stage": null,
+      "trigger_en": "Auto-transition from REWARD (or DEBRIEF if enabled).",
+      "trigger_ko": "REWARD에서 자동 전환 (또는 DEBRIEF 활성화 시).",
+      "ascii_art": [
+        "  ┌──────────────────────┐",
+        "  │  ✓ RUN COMPLETE     │",
+        "  │  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣  │",
+        "  │  ░▒▓ → Hub         ▓▒░  │",
+        "  └──────────────────────┘"
+      ],
+      "ui_elements": ["mission_summary", "return_to_hub"]
+    },
+    {
+      "id": "death_restart",
+      "name_en": "Death Restart",
+      "name_ko": "재시작",
+      "type": "death",
+      "is_terminal": true,
+      "objective_kind": "none",
+      "description_en": "After death screen. Player chooses to restart or quit.",
+      "description_ko": "사망 화면 후. 재시작 또는 종료 선택.",
+      "next_stage": "pending",
+      "trigger_en": "Player presses ENTER to restart, ESC to quit.",
+      "trigger_ko": "ENTER로 재시작, ESC로 종료.",
+      "ascii_art": [
+        "  ┌──────────────────────┐",
+        "  │  ⚠ FLATLINE         │",
+        "  │  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣  │",
+        "  │  ░▒▓ Equipment LOST ▓▒░  │",
+        "  │  ░▒▓ Grade kept     ▓▒░  │",
+        "  │  ░▒▓ [ENTER] restart ▓▒░  │",
+        "  │  ░▒▓ [ESC]   quit    ▓▒░  │",
+        "  └──────────────────────┘"
+      ],
+      "ui_elements": ["death_screen", "restart_prompt"]
     },
     {
       "id": "failed",
@@ -129,9 +219,9 @@
       "type": "death",
       "is_terminal": true,
       "objective_kind": "none",
-      "description_en": "Your run ended in cyberspace. Equipment lost. Grade preserved.",
-      "description_ko": "Run 종료. 장비 손실. 등급은 유지.",
-      "next_stage": null,
+      "description_en": "Your run ended in cyberspace.",
+      "description_ko": "Run 종료.",
+      "next_stage": "death_restart",
       "trigger_en": "Combat defeat (HP = 0) or matrix trap.",
       "trigger_ko": "전투 패배 (HP = 0) 또는 매트릭스 함정.",
       "ascii_art": [
@@ -140,7 +230,6 @@
         "  │  ◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣◢◣  │",
         "  │  ░▒▓ Equipment LOST ▓▒░  │",
         "  │  ░▒▓ Grade kept     ▓▒░  │",
-        "  │  ░▒▓ [ENTER] restart ▓▒░  │",
         "  └──────────────────────┘"
       ],
       "ui_elements": ["death_screen", "jack_out_to_hub"]
@@ -152,7 +241,7 @@
       "to": "meet_npc",
       "trigger_en": "Mission accepted at Hub",
       "trigger_ko": "Hub에서 미션 수락",
-      "system": "RunState.start_run()"
+      "system": "start_run(mission_id)"
     },
     {
       "from": "meet_npc",
@@ -170,17 +259,45 @@
     },
     {
       "from": "defeat_ice",
-      "to": "complete",
+      "to": "jack_out",
       "trigger_en": "ICE defeated (HP > 0)",
       "trigger_ko": "ICE 격파 (HP > 0)",
       "system": "RunState.mark_advance() after combat victory"
+    },
+    {
+      "from": "jack_out",
+      "to": "reward",
+      "trigger_en": "Player dismisses jackout animation",
+      "trigger_ko": "잭아웃 애니메이션 닫기",
+      "system": "RunState.mark_advance() after input"
+    },
+    {
+      "from": "reward",
+      "to": "complete",
+      "trigger_en": "Player presses ENTER",
+      "trigger_ko": "ENTER 입력",
+      "system": "RunState.mark_advance() after input"
+    },
+    {
+      "from": "debrief",
+      "to": "complete",
+      "trigger_en": "Player dismisses debrief",
+      "trigger_ko": "데브리핑 닫기",
+      "system": "RunState.mark_advance() after input"
     },
     {
       "from": "any",
       "to": "failed",
       "trigger_en": "Player HP = 0 (combat) or matrix trap",
       "trigger_ko": "플레이어 HP = 0 (전투) 또는 매트릭스 함정",
-      "system": "death.trigger_death()"
+      "system": "RunState.mark_failed()"
+    },
+    {
+      "from": "failed",
+      "to": "death_restart",
+      "trigger_en": "Death screen dismissed",
+      "trigger_ko": "사망 화면 닫기",
+      "system": "RunState.mark_death_restart()"
     }
   ],
   "missions": [
@@ -192,7 +309,7 @@
       "arc": 1,
       "grade_min": 1,
       "grade_max": 1,
-      "stages": ["pending", "meet_npc", "extract_data", "defeat_ice", "complete"],
+      "stages": ["meet_npc", "extract_data", "defeat_ice", "jack_out", "reward", "complete"],
       "primary_objective_en": "Extract demo_file from Sense/Net",
       "primary_objective_ko": "Sense/Net에서 demo_file 추출",
       "secondary_objective_en": "Defeat 1 ICE (Wisp-class)",
@@ -211,7 +328,7 @@
       "arc": 1,
       "grade_min": 1,
       "grade_max": 1,
-      "stages": ["pending", "meet_npc", "defeat_ice", "complete"],
+      "stages": ["meet_npc", "defeat_ice", "jack_out", "reward", "complete"],
       "primary_objective_en": "Defeat 2 ICE (Watchdog-class)",
       "primary_objective_ko": "ICE 2개 격파 (Watchdog급)",
       "secondary_objective_en": "Collect 3 ice_shard",
@@ -230,7 +347,7 @@
       "arc": 1,
       "grade_min": 1,
       "grade_max": 2,
-      "stages": ["pending", "meet_npc", "extract_data", "defeat_ice", "complete"],
+      "stages": ["meet_npc", "extract_data", "defeat_ice", "jack_out", "reward", "complete"],
       "primary_objective_en": "Collect 5 ice_shard",
       "primary_objective_ko": "ice_shard 5개 수집",
       "secondary_objective_en": "Defeat 2 ICE (Wisp-class)",
@@ -242,6 +359,49 @@
       "estimated_minutes": 10
     }
   ],
+  "stage_event_bus": {
+    "name_en": "Stage Event Bus",
+    "name_ko": "스테이지 이벤트 버스",
+    "description_en": "Pub/sub for stage lifecycle events. Subscribe globally, by kind, or by stage.",
+    "description_ko": "스테이지 라이프사이클 이벤트 Pub/Sub. 전역, 종류별, 스테이지별로 구독.",
+    "event_kinds": [
+      {
+        "id": "enter",
+        "name_en": "Stage Enter",
+        "name_ko": "스테이지 진입",
+        "description_en": "Fired when entering a stage."
+      },
+      {
+        "id": "exit",
+        "name_en": "Stage Exit",
+        "name_ko": "스테이지 이탈",
+        "description_en": "Fired when leaving a stage."
+      },
+      {
+        "id": "complete",
+        "name_en": "Stage Complete",
+        "name_ko": "스테이지 완료",
+        "description_en": "Fired when a stage's objective is satisfied."
+      },
+      {
+        "id": "failed",
+        "name_en": "Run Failed",
+        "name_ko": "Run 실패",
+        "description_en": "Fired when the run transitions to FAILED."
+      },
+      {
+        "id": "advance",
+        "name_en": "Stage Advance",
+        "name_ko": "스테이지 전이",
+        "description_en": "Fired on any stage transition."
+      }
+    ],
+    "subscription_methods": [
+      "subscribe(handler) — all events",
+      "subscribe_kind(kind, handler) — specific kind",
+      "subscribe_stage(kind, stage, handler) — specific stage + kind"
+    ]
+  },
   "death_flow": {
     "name_en": "Death Flow (Pillar 3: The Flatline)",
     "name_ko": "사망 흐름 (Pillar 3: 플랫라인)",
@@ -254,13 +414,21 @@
       "         ↓",
       "  state.is_dead = True",
       "         ↓",
+      "  mark_failed() called",
+      "         ↓",
+      "  FAILED stage entered",
+      "         ↓",
       "  DEATH SCREEN rendered",
       "         ↓",
       "  player presses ENTER",
       "         ↓",
-      "  jack_out_to_hub()",
+      "  mark_death_restart() called",
       "         ↓",
-      "  inventory cleared, grade kept"
+      "  DEATH_RESTART stage",
+      "         ↓",
+      "  player chooses [ENTER] restart / [ESC] quit",
+      "         ↓",
+      "  (back to PENDING for new run)"
     ],
     "steps": [
       {
@@ -309,11 +477,11 @@
       "  │  [5] Sleep (heal)      │",
       "  │                        │",
       "  │  → Accept mission      │",
-      "  │     → Stage: pending   │",
-      "  │     → Jack in          │",
       "  │     → Stage: meet_npc  │",
-      "  │     → ...              │",
-      "  │     → Stage: complete  │",
+      "  │     → Jack in          │",
+      "  │     → Matrix: ...      │",
+      "  │     → Jack out         │",
+      "  │     → Stage: reward    │",
       "  │     → Return to Hub    │",
       "  └────────────────────────┘"
     ]

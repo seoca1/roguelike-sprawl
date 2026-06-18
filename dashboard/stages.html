@@ -49,6 +49,17 @@
     display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
     margin: 16px 0; justify-content: center;
   }
+  .mission-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .mission-tab {
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 4px;
+    padding: 8px 14px; cursor: pointer; transition: all 0.15s;
+    color: inherit; font-family: inherit; text-align: left;
+  }
+  .mission-tab:hover { border-color: #66ffcc; background: #1a2530; }
+  .mission-tab.active { border-color: #66ffcc; background: #1a2530; box-shadow: 0 0 8px #66ffcc33; }
+  .mission-tab .mission-name { color: #ffaa55; font-size: 13px; font-weight: 600; }
+  .mission-tab .mission-stages { color: #6a7888; font-size: 11px; margin-top: 2px; }
+  .mission-tab.active .mission-stages { color: #8a9aa8; }
   .flow-node {
     background: #0a0e14; border: 2px solid #2a3540; border-radius: 6px;
     padding: 10px 16px; min-width: 120px; text-align: center;
@@ -205,12 +216,13 @@
   <button class="lang-btn" data-lang="both">Both</button>
 </div>
 
-<!-- Stage Flow Diagram -->
-<h2>🔄 Stage Flow (스테이지 흐름)</h2>
+<!-- Mission Flow Selector -->
+<h2>🎯 Mission Stage Flows (미션별 스테이지 흐름)</h2>
 <div class="stage-flow" data-stage-src="../design/systems/stage_structure.json">
+  <div class="mission-tabs" id="missionTabs"></div>
   <div class="flow-diagram" id="flowDiagram"></div>
-  <div style="text-align: center; color: #6a7888; font-size: 11px;">
-    [Hub] = orange · [Matrix] = blue · [Combat] = red · [Terminal] = green
+  <div class="flow-legend" style="text-align: center; color: #6a7888; font-size: 11px; margin-top: 8px;">
+    [Hub] 주황 · [Matrix] 파랑 · [Combat] 빨강 · [Animation] 보라 · [Death] 검정 · [Terminal] 초록
   </div>
 </div>
 
@@ -260,7 +272,7 @@
 
   // Stage Dashboard
   (function() {
-    const state = { data: null, lang: 'ko' };
+    const state = { data: null, lang: 'ko', missionId: 'first_jack' };
     const src = document.querySelector('.stage-flow').dataset.stageSrc;
 
     function text(obj, base) {
@@ -278,33 +290,98 @@
       return `${en}<br><span style="color:#8a9aa8;font-size:12px;display:block;margin-top:4px;padding-top:4px;border-top:1px dashed #1a2530">${ko}</span>`;
     }
 
+    function renderMissionTabs() {
+      const missions = state.data.missions || [];
+      const html = missions.map(m => {
+        const title = state.lang === 'en' ? m.title_en
+          : state.lang === 'ko' ? m.title_ko
+          : `${m.title_en} / ${m.title_ko}`;
+        const isActive = m.id === state.missionId;
+        return `<button class="mission-tab ${isActive ? 'active' : ''}" data-mission="${m.id}">
+          <div class="mission-name">${title}</div>
+          <div class="mission-stages">${m.stages.length} stages</div>
+        </button>`;
+      }).join('');
+      document.getElementById('missionTabs').innerHTML = html;
+
+      // Bind click handlers
+      document.querySelectorAll('.mission-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.missionId = btn.dataset.mission;
+          renderMissionTabs();
+          renderFlowDiagram();
+        });
+      });
+    }
+
     function renderFlowDiagram() {
       const stages = state.data.stages;
-      const order = ['pending', 'meet_npc', 'extract_data', 'defeat_ice', 'complete'];
+      const missions = state.data.missions || [];
+      const mission = missions.find(m => m.id === state.missionId) || missions[0];
+      if (!mission) return;
+
+      const stageOrder = mission.stages;
       const html = [];
-      order.forEach((sid, i) => {
+
+      // PENDING (start)
+      const pending = stages.find(s => s.id === 'pending');
+      if (pending) {
+        const name = state.lang === 'en' ? pending.name_en
+          : state.lang === 'ko' ? pending.name_ko
+          : `${pending.name_en} / ${pending.name_ko}`;
+        html.push(`<div class="flow-node hub">
+          <div class="stage-name">${name}</div>
+          <div class="stage-type">${pending.type}</div>
+        </div>`);
+        html.push(`<div class="flow-arrow">→</div>`);
+      }
+
+      // Mission stages
+      stageOrder.forEach((sid, i) => {
         const stage = stages.find(s => s.id === sid);
         if (!stage) return;
         const cls = stage.type;
         const name = state.lang === 'en' ? stage.name_en
           : state.lang === 'ko' ? stage.name_ko
           : `${stage.name_en} / ${stage.name_ko}`;
-        html.push(`<div class="flow-node ${cls} ${stage.is_terminal ? (sid === 'complete' ? 'completed' : 'failed') : ''}" data-stage="${sid}">
+        const isTerminal = stage.is_terminal;
+        const nodeCls = isTerminal && sid === 'complete' ? 'completed'
+          : isTerminal && sid === 'failed' ? 'failed'
+          : '';
+        html.push(`<div class="flow-node ${cls} ${nodeCls}" data-stage="${sid}">
           <div class="stage-name">${name}</div>
           <div class="stage-type">${stage.type}</div>
         </div>`);
-        if (i < order.length - 1) {
+        if (i < stageOrder.length - 1) {
           html.push(`<div class="flow-arrow">→</div>`);
         }
       });
-      // Branch to failed
-      html.push(`<div class="flow-branch" style="margin-left: 20px;">↘</div>`);
+
+      // Failure branch
+      html.push(`<div class="flow-branch">↘</div>`);
       const failed = stages.find(s => s.id === 'failed');
-      const fName = state.lang === 'en' ? failed.name_en : state.lang === 'ko' ? failed.name_ko : `${failed.name_en} / ${failed.name_ko}`;
-      html.push(`<div class="flow-node failed">
-        <div class="stage-name">${fName}</div>
-        <div class="stage-type">death</div>
-      </div>`);
+      if (failed) {
+        const fName = state.lang === 'en' ? failed.name_en
+          : state.lang === 'ko' ? failed.name_ko
+          : `${failed.name_en} / ${failed.name_ko}`;
+        html.push(`<div class="flow-node failed">
+          <div class="stage-name">${fName}</div>
+          <div class="stage-type">death</div>
+        </div>`);
+        // FAILED -> DEATH_RESTART
+        const dr = stages.find(s => s.id === 'death_restart');
+        if (dr) {
+          html.push(`<div class="flow-arrow">→</div>`);
+          const drName = state.lang === 'en' ? dr.name_en
+            : state.lang === 'ko' ? dr.name_ko
+            : `${dr.name_en} / ${dr.name_ko}`;
+          html.push(`<div class="flow-node death">
+            <div class="stage-name">${drName}</div>
+            <div class="stage-type">${dr.type}</div>
+          </div>`);
+        }
+      }
+
       document.getElementById('flowDiagram').innerHTML = html.join('');
     }
 
@@ -449,6 +526,7 @@
 
     function render() {
       if (!state.data) return;
+      renderMissionTabs();
       renderFlowDiagram();
       renderStages();
       renderTransitions();

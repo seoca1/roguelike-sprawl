@@ -83,7 +83,7 @@ class TestCombatVictoryAdvancesStage:
     """Combat victory during DEFEAT_ICE stage advances the RunState."""
 
     def test_victory_advances_defeat_ice(self) -> None:
-        """A combat victory during DEFEAT_ICE moves the run to COMPLETE."""
+        """A combat victory during DEFEAT_ICE moves to JACK_OUT (not directly to COMPLETE)."""
         state = AppState()
         state.run_state = RunState(current_stage=Stage.DEFEAT_ICE)
         combat = _make_combat_state()
@@ -94,8 +94,8 @@ class TestCombatVictoryAdvancesStage:
 
         _end_combat(state, combat)
 
-        # After combat ends, run_state should be at COMPLETE
-        assert state.run_state.current_stage is Stage.COMPLETE
+        # New flow: DEFEAT_ICE -> JACK_OUT (player advances through REWARD -> COMPLETE)
+        assert state.run_state.current_stage is Stage.JACK_OUT
         assert Stage.DEFEAT_ICE in state.run_state.completed_stages
 
     def test_victory_during_wrong_stage_no_advance(self) -> None:
@@ -344,6 +344,12 @@ class TestRunStateFullFlow:
         state.current_node_id = "ice1"
         state.screen = ScreenKind.COMBAT
         _end_combat(state, combat)
+        # New flow: DEFEAT_ICE -> JACK_OUT (animation), player must advance through
+        assert state.run_state.current_stage is Stage.JACK_OUT
+        # Advance through JACK_OUT -> REWARD -> COMPLETE
+        state.run_state.mark_advance()
+        assert state.run_state.current_stage is Stage.REWARD
+        state.run_state.mark_advance()
         assert state.run_state.current_stage is Stage.COMPLETE
         assert state.run_state.is_complete() is True
 

@@ -2,6 +2,7 @@
 
 These functions handle the boilerplate of:
 - Lazy-initializing ``state.run_state`` if it's None
+- Starting a new run for a given mission
 - Finding the next target node in the matrix for the active stage
 - Detecting when a player's action satisfies the current stage's objective
 """
@@ -11,11 +12,40 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from ..matrix.node import NodeKind
-from .state import ObjectiveKind, RunState, Stage, start_run
+from .state import (
+    DEFAULT_FLOW,
+    ObjectiveKind,
+    RunState,
+    Stage,
+    get_mission_flow,
+    get_next_stage_in_flow,
+    get_stage_info,
+    start_run,
+    validate_stage_transition,
+)
 
 if TYPE_CHECKING:
     from ..engine.state import AppState
     from ..matrix.graph import MatrixGraph
+
+
+# --- Re-exports ---
+
+__all__ = [
+    "DEFAULT_FLOW",
+    "ensure_run_state",
+    "start_new_run",
+    "resolve_target_for_stage",
+    "check_objective_at_node",
+    "check_combat_victory",
+    "check_extract_complete",
+    "check_npc_talk_complete",
+    "advance_stage",
+    "get_mission_flow",
+    "get_next_stage_in_flow",
+    "get_stage_info",
+    "validate_stage_transition",
+]
 
 
 # --- Run lifecycle ---
@@ -28,10 +58,35 @@ def ensure_run_state(state: AppState) -> RunState:
     return state.run_state
 
 
-def start_new_run(state: AppState, initial_stage: Stage = Stage.MEET_NPC) -> RunState:
-    """Reset run state to start a new run at the given stage."""
-    state.run_state = start_run(initial_stage)
+def start_new_run(state: AppState, mission_id: str = "first_jack") -> RunState:
+    """Reset run state to start a new run for the given mission.
+
+    Args:
+        state: The app state.
+        mission_id: The mission to start. Each mission has its own
+            stage flow (see MISSION_FLOWS in state.py).
+
+    Returns:
+        The new RunState.
+    """
+    state.run_state = start_run(mission_id)
     return state.run_state
+
+
+# --- Stage advancement ---
+
+
+def advance_stage(run_state: RunState) -> Stage:
+    """Advance to the next stage in the mission flow.
+
+    Wraps RunState.mark_advance() and returns the NEW current stage
+    (so callers can react to the transition).
+
+    Returns the stage AFTER the advance. If the run was already at
+    a terminal stage, returns the same stage.
+    """
+    run_state.mark_advance()
+    return run_state.current_stage
 
 
 # --- Target resolution ---
@@ -83,7 +138,7 @@ def check_objective_at_node(
 
     Returns True if the stage is now complete (call mark_advance next).
     """
-    if matrix is None or not run_state.is_in_progress():
+    if matrix is None or not run_state.is_in_cyberspace():
         return False
 
     node = matrix.get(node_id)
@@ -106,14 +161,28 @@ def check_combat_victory(run_state: RunState) -> bool:
     Used by the combat_view after a victory: if the stage was DEFEAT_ICE
     and the player won, the stage is complete.
     """
-    return run_state.is_in_progress() and run_state.objective_kind() is ObjectiveKind.ICE
+    return run_state.is_in_cyberspace() and run_state.objective_kind() is ObjectiveKind.ICE
 
 
 def check_extract_complete(run_state: RunState) -> bool:
     """Check if a data extraction satisfied the current stage."""
-    return run_state.is_in_progress() and run_state.objective_kind() is ObjectiveKind.DATA
+    return run_state.is_in_cyberspace() and run_state.objective_kind() is ObjectiveKind.DATA
 
 
 def check_npc_talk_complete(run_state: RunState) -> bool:
     """Check if talking to the NPC satisfied the current stage."""
-    return run_state.is_in_progress() and run_state.objective_kind() is ObjectiveKind.NPC
+    return run_state.is_in_cyberspace() and run_state.objective_kind() is ObjectiveKind.NPC
+
+
+# --- Progress display ---
+
+
+def get_progress_text(run_state: RunState) -> str:
+    """Return a human-readable progress string for status panel.
+
+    Example: "Stage 2/5 — Extract the Data"
+    """
+    total = run_state.stages_total()
+    current = run_state.stages_completed() + (1 if run_state.is_in_progress() else 0)
+    title = run_state.title()
+    return f"Stage {current}/{total} — {title}"

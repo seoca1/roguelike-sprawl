@@ -71,7 +71,8 @@ class TestStageInfo:
         """DEFEAT_ICE stage has ICE objective."""
         info = get_stage_info(Stage.DEFEAT_ICE)
         assert info.objective_kind is ObjectiveKind.ICE
-        assert info.next_stage is Stage.COMPLETE
+        # New flow: DEFEAT_ICE -> JACK_OUT -> REWARD -> COMPLETE
+        assert info.next_stage is Stage.JACK_OUT
 
     def test_get_stage_info_complete(self) -> None:
         """COMPLETE stage has no next."""
@@ -83,21 +84,25 @@ class TestStageInfo:
         """PENDING stage has no objective."""
         info = get_stage_info(Stage.PENDING)
         assert info.objective_kind is ObjectiveKind.NONE
-        assert info.next_stage is None
+        # New flow: PENDING -> MEET_NPC (when starting a run)
+        assert info.next_stage is Stage.MEET_NPC
 
     def test_get_stage_info_failed(self) -> None:
-        """FAILED stage has no next."""
+        """FAILED stage transitions to DEATH_RESTART."""
         info = get_stage_info(Stage.FAILED)
         assert info.objective_kind is ObjectiveKind.NONE
-        assert info.next_stage is None
+        # New flow: FAILED -> DEATH_RESTART -> PENDING (new run)
+        assert info.next_stage is Stage.DEATH_RESTART
 
     def test_default_flow_order(self) -> None:
-        """DEFAULT_FLOW goes MEET_NPC → EXTRACT → DEFEAT → COMPLETE."""
-        # Find indices
-        flow = {info.stage: info for info in DEFAULT_FLOW}
+        """DEFAULT_FLOW goes MEET_NPC → EXTRACT → DEFEAT → JACK_OUT → REWARD → COMPLETE."""
+        # DEFAULT_FLOW is now a dict mapping Stage -> StageInfo
+        flow = DEFAULT_FLOW
         assert flow[Stage.MEET_NPC].next_stage is Stage.EXTRACT_DATA
         assert flow[Stage.EXTRACT_DATA].next_stage is Stage.DEFEAT_ICE
-        assert flow[Stage.DEFEAT_ICE].next_stage is Stage.COMPLETE
+        assert flow[Stage.DEFEAT_ICE].next_stage is Stage.JACK_OUT
+        assert flow[Stage.JACK_OUT].next_stage is Stage.REWARD
+        assert flow[Stage.REWARD].next_stage is Stage.COMPLETE
 
 
 class TestRunStateInit:
@@ -122,14 +127,16 @@ class TestRunStateInit:
         assert rs.current_stage is Stage.MEET_NPC
 
     def test_reset(self) -> None:
-        """reset() returns to PENDING."""
+        """reset() returns to PENDING (for new run)."""
         rs = start_run(initial_stage=Stage.MEET_NPC)
         rs.completed_stages = (Stage.MEET_NPC,)
         rs.current_target_node = "n1"
-        rs.reset()
-        assert rs.current_stage is Stage.PENDING
+        rs.reset("first_jack")
+        # New: reset goes to MEET_NPC (active state), not PENDING
+        assert rs.current_stage is Stage.MEET_NPC
         assert rs.completed_stages == ()
         assert rs.current_target_node is None
+        assert rs.mission_id == "first_jack"
 
 
 class TestRunStateProperties:
@@ -196,11 +203,16 @@ class TestRunStateMarkAdvance:
         assert Stage.EXTRACT_DATA in rs.completed_stages
 
     def test_advance_defeat_to_complete(self) -> None:
-        """DEFEAT_ICE → COMPLETE."""
+        """DEFEAT_ICE → JACK_OUT → REWARD → COMPLETE (3 advances)."""
         rs = RunState(current_stage=Stage.DEFEAT_ICE)
         rs.mark_advance()
-        assert rs.current_stage is Stage.COMPLETE
+        assert rs.current_stage is Stage.JACK_OUT
         assert Stage.DEFEAT_ICE in rs.completed_stages
+        rs.mark_advance()
+        assert rs.current_stage is Stage.REWARD
+        rs.mark_advance()
+        assert rs.current_stage is Stage.COMPLETE
+        assert Stage.REWARD in rs.completed_stages
 
     def test_advance_clears_target(self) -> None:
         """advancing clears current_target_node."""
@@ -365,10 +377,12 @@ class TestStartNewRun:
         assert state.run_state is rs
 
     def test_start_new_run_with_stage(self) -> None:
-        """start_new_run accepts custom initial stage."""
+        """start_new_run accepts custom initial stage via start_run()."""
+        from roguelike_sprawl.run import start_run as _start_run
+
         state = AppState()
-        rs = start_new_run(state, initial_stage=Stage.DEFEAT_ICE)
-        assert rs.current_stage is Stage.DEFEAT_ICE
+        state.run_state = _start_run(initial_stage=Stage.DEFEAT_ICE)
+        assert state.run_state.current_stage is Stage.DEFEAT_ICE
 
 
 class TestResolveTargetForStage:
