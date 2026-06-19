@@ -493,6 +493,122 @@ if PPL &lt; ZDR:  TOUGH/DEADLY (어려움)</div>
 .vfx-card.layer5 h3 { color: #ff5599; }
 </style>
 
+<div class="container">
+<h2>👑 BOSS ICE (다단계 페이즈 보스)</h2>
+<p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+  <code>src/roguelike_sprawl/combat/bosses.py</code> — 3 BOSS × 다단계 페이즈 × 확장된 시네마틱.
+  각 BOSS는 3-4 단계로 전환되며, 단계마다 공격력·속도·특수능력이 강화됩니다.
+</p>
+
+<div class="boss-grid">
+  <div class="boss-card goliath">
+    <h3>👹 GOLIATH PRIME</h3>
+    <div class="boss-stats">
+      <span>HP ×4.0</span> · <span>ATK ×2.0</span> · <span>DEF ×1.8</span>
+    </div>
+    <div class="boss-phases">
+      <div class="phase">P0 정상 (100%)</div>
+      <div class="phase">P1 경계 (75%): +20% ATK, +10% SPD</div>
+      <div class="phase">P2 격노 (50%): +40% ATK, <code>ground_slam</code></div>
+      <div class="phase">P3 자폭 (25%): +80% ATK, <code>desperate_strike</code></div>
+    </div>
+    <div class="boss-text">
+      <b>인트로</b>: "[ 경고: GOLIATH PRIME ]" → "코어 노출" → "출현."<br>
+      <b>데스</b>: 4 시퀀스, 13 프레임, 3.5초
+    </div>
+  </div>
+  <div class="boss-card black">
+    <h3>👁 BLACK ICE LORD</h3>
+    <div class="boss-stats">
+      <span>HP ×3.5</span> · <span>ATK ×2.5</span> · <span>DEF ×1.4</span>
+    </div>
+    <div class="boss-phases">
+      <div class="phase">P0 위장 (100%)</div>
+      <div class="phase">P1 노출 (66%): +30% ATK, <code>glitch_burst</code></div>
+      <div class="phase">P2 붕괴 (33%): +60% ATK, <code>corrupt_payload</code></div>
+    </div>
+    <div class="boss-text">
+      <b>인트로</b>: "▓▓▓ 오류: ICE 권한 초과 ▓▓▓" → "[연결 종료]"<br>
+      <b>데스</b>: 4 시퀀스, 13 프레임, 글리치 효과
+    </div>
+  </div>
+  <div class="boss-card watchdog">
+    <h3>🐕 WATCHDOG ALPHA</h3>
+    <div class="boss-stats">
+      <span>HP ×3.0</span> · <span>ATK ×1.8</span> · <span>DEF ×1.2</span>
+    </div>
+    <div class="boss-phases">
+      <div class="phase">P0 추적 (100%)</div>
+      <div class="phase">P1 분노 (50%): +25% ATK, +50% SPD, <code>pack_howl</code></div>
+      <div class="phase">P2 집중 (20%): +100% ATK, <code>alpha_strike</code></div>
+    </div>
+    <div class="boss-text">
+      <b>인트로</b>: "WATCHDOG ALPHA 가 잠에서 깨어남" → "도망칠 수 없다"<br>
+      <b>데스</b>: 4 시퀀스, 11 프레임, "...woof?"
+    </div>
+  </div>
+</div>
+
+<style>
+.boss-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.boss-card {
+  background: #131a23;
+  border: 1px solid #2a3540;
+  border-radius: 8px;
+  padding: 18px 20px;
+  border-top: 3px solid;
+}
+.boss-card.goliath { border-top-color: #ff5555; }
+.boss-card.black { border-top-color: #ff55ff; }
+.boss-card.watchdog { border-top-color: #ffaa55; }
+.boss-card h3 {
+  color: #66ffcc;
+  font-size: 18px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+.boss-stats {
+  color: #ffaa55;
+  font-size: 12px;
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.boss-phases {
+  background: #0a0e14;
+  border: 1px solid #2a3540;
+  border-radius: 4px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+.phase {
+  color: #c5d4e3;
+  font-size: 12px;
+  padding: 2px 0;
+  font-family: monospace;
+}
+.phase code {
+  color: #ff7799;
+  background: #131a23;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.boss-text {
+  color: #8a9aa8;
+  font-size: 11px;
+  line-height: 1.6;
+}
+.boss-text b {
+  color: #66ffcc;
+}
+</style>
+
+</div>
+
 </div>
 
 </body>
