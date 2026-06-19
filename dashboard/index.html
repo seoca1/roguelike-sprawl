@@ -124,6 +124,16 @@
     text-align: center; color: #66ffcc; font-size: 11px; line-height: 1.2;
     margin: 16px 0; opacity: 0.6;
   }
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #06090f; border-bottom: 1px solid #2a3540;
+    padding: 8px 24px; margin: -24px -24px 16px -24px;
+    display: flex; gap: 16px; align-items: center;
+  }
+  .top-nav a { color: #66ffcc; text-decoration: none; font-size: 13px; }
+  .top-nav a:hover { color: #00ccff; }
+  .top-nav .current { color: #ffaa55; font-weight: 600; }
+  .top-nav .sep { color: #2a3540; }
   .top-hub-link {
     display: inline-block; background: #131a23; border: 1px solid #2a3540;
     border-radius: 4px; padding: 6px 12px; color: #00d9ff; text-decoration: none;
@@ -134,7 +144,11 @@
 </head>
 <body>
 
-<a class="top-hub-link" href="../../dashboard/index.html">🌐 ◀ Projects Hub (상위 허브)</a>
+<nav class="top-nav">
+  <a href="../../Game/dashboard/index.html">🌐 Hub</a>
+  <span class="sep">|</span>
+  <span class="current">🌆 Roguelike</span>
+</nav>
 
 <div class="hero">
   <h1>🌆 ROGUELIKE SPRAWL</h1>
@@ -229,48 +243,55 @@
     <div class="arrow">→</div>
   </a>
 
-  <div class="menu-card disabled">
+  <a class="menu-card" href="sound.html">
     <div class="icon">🔊</div>
-    <h3>Sound Dashboard <span style="font-size:11px;color:#6a7888">(TBD)</span></h3>
-    <p>사운드 카테고리, 키 바인딩, 테마 매핑, 오디오 출력 검증. (구현 예정)</p>
+    <h3>Sound Dashboard</h3>
+    <p>사운드 카테고리, 키 바인딩, 테마, 27 사운드, 엔진 통합.</p>
     <div class="stats">
       <span class="stat"><span class="num">6</span> categories</span>
       <span class="stat"><span class="num">27</span> sounds</span>
       <span class="stat"><span class="num">5</span> themes</span>
+      <span class="stat"><span class="num">8</span> keys</span>
     </div>
-  </div>
+    <div class="arrow">→</div>
+  </a>
 
-  <div class="menu-card disabled">
+  <a class="menu-card" href="combat.html">
     <div class="icon">⚔</div>
-    <h3>Combat Dashboard <span style="font-size:11px;color:#6a7888">(TBD)</span></h3>
-    <p>RT-MS 전투 시스템, 스킬, ICE 등급, 보상. (구현 예정)</p>
+    <h3>Combat Dashboard</h3>
+    <p>RT-MS 전투, 5 ICE 등급, 14 스킬 효과, PPL/ZDR 시스템.</p>
     <div class="stats">
-      <span class="stat"><span class="num">20</span> skills</span>
+      <span class="stat"><span class="num">5</span> ICE</span>
       <span class="stat"><span class="num">14</span> effects</span>
+      <span class="stat"><span class="num">12</span> sounds</span>
     </div>
-  </div>
+    <div class="arrow">→</div>
+  </a>
 
-  <div class="menu-card disabled">
+  <a class="menu-card" href="cyberspace.html">
     <div class="icon">🌐</div>
-    <h3>Cyberspace Dashboard <span style="font-size:11px;color:#6a7888">(TBD)</span></h3>
-    <p>World → Sector → Server → Node 계층, 매트릭스 탐색. (구현 예정)</p>
+    <h3>Cyberspace Dashboard</h3>
+    <p>World → Sector → Server → Node 계층, 매트릭스 탐색.</p>
     <div class="stats">
       <span class="stat"><span class="num">2</span> worlds</span>
       <span class="stat"><span class="num">4</span> sectors</span>
       <span class="stat"><span class="num">6</span> servers</span>
+      <span class="stat"><span class="num">8</span> nodes</span>
     </div>
-  </div>
+    <div class="arrow">→</div>
+  </a>
 
-  <div class="menu-card disabled">
+  <a class="menu-card" href="equipment.html">
     <div class="icon">📦</div>
-    <h3>Equipment Dashboard <span style="font-size:11px;color:#6a7888">(TBD)</span></h3>
-    <p>장비 슬롯, 등급, 통계. 인벤토리 관리. (구현 예정)</p>
+    <h3>Equipment Dashboard</h3>
+    <p>8 슬롯, 6 등급, 9 기술 유형, 3-tier 제작.</p>
     <div class="stats">
-      <span class="stat"><span class="num">15</span> items</span>
       <span class="stat"><span class="num">8</span> slots</span>
       <span class="stat"><span class="num">6</span> tiers</span>
+      <span class="stat"><span class="num">9</span> types</span>
     </div>
-  </div>
+    <div class="arrow">→</div>
+  </a>
 
 </div>
 

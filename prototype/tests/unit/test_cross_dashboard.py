@@ -107,12 +107,12 @@ class TestRoguelikeSubmenu:
     @skip_in_ci
     def test_submenu_links_to_top_hub(self) -> None:
         html = ROGUE_DASH.read_text(encoding="utf-8")
-        assert "../../dashboard/index.html" in html, "Should link to top hub"
+        assert "../../Game/dashboard/index.html" in html, "Should link to top hub"
 
     @skip_in_ci
     def test_submenu_has_top_hub_link_visible(self) -> None:
         html = ROGUE_DASH.read_text(encoding="utf-8")
-        assert "Projects Hub" in html or "상위 허브" in html
+        assert "🌐 Hub" in html or "Projects Hub" in html
 
     def test_submenu_has_sub_dashboards(self) -> None:
         """Submenu links to story, stages, stories dashboards (always present)."""
@@ -147,12 +147,12 @@ class TestRoguelikeSubDashboards:
     @skip_in_ci
     def test_story_has_top_hub_link(self) -> None:
         html = ROGUE_STORY.read_text(encoding="utf-8")
-        assert "../../dashboard/index.html" in html
+        assert "../../Game/dashboard/index.html" in html
 
     @skip_in_ci
     def test_stages_has_top_hub_link(self) -> None:
         html = ROGUE_STAGES.read_text(encoding="utf-8")
-        assert "../../dashboard/index.html" in html
+        assert "../../Game/dashboard/index.html" in html
 
 
 class TestTypingDashboardExists:
@@ -179,7 +179,7 @@ class TestNavigation:
     @skip_in_ci
     def test_roguelike_submenu_to_hub(self) -> None:
         sub = ROGUE_DASH.read_text(encoding="utf-8")
-        assert "../../dashboard/index.html" in sub
+        assert "../../Game/dashboard/index.html" in sub
 
     def test_submenu_to_sub_dashboards(self) -> None:
         sub = ROGUE_DASH.read_text(encoding="utf-8")

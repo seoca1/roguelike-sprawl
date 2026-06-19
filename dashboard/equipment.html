@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Roguelike Sprawl — Equipment Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    background: #06090f;
+    color: #c5d4e3;
+    line-height: 1.7;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  h1, h2, h3 { font-weight: 600; }
+  h1 { font-size: 28px; margin-bottom: 8px; color: #f39c12; text-shadow: 0 0 12px #f39c1244; }
+  h2 { font-size: 20px; margin: 32px 0 16px; color: #66ffcc; border-bottom: 1px solid #1a2530; padding-bottom: 8px; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #ffaa55; }
+  .subtitle { color: #6a7888; font-size: 13px; margin-bottom: 24px; }
+
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #06090f; border-bottom: 1px solid #1a2530;
+    padding: 8px 24px; margin: -24px -24px 16px -24px;
+    display: flex; gap: 16px; align-items: center; flex-wrap: wrap;
+  }
+  .top-nav a { color: #66ffcc; text-decoration: none; font-size: 13px; }
+  .top-nav a:hover { color: #00ccff; }
+  .top-nav .current { color: #ffaa55; font-weight: 600; }
+  .top-nav .sep { color: #2a3540; }
+
+  /* Stats */
+  .stats-panel {
+    background: #0d1420; border: 1px solid #1a2530; border-radius: 8px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .stat-item {
+    background: #06090f; border: 1px solid #1a2530; border-radius: 4px; padding: 12px;
+  }
+  .stat-item .label { color: #6a7888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-item .value { color: #f39c12; font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .stat-item .sub { color: #6a7888; font-size: 10px; margin-top: 2px; }
+
+  .section {
+    background: #0d1420; border: 1px solid #1a2530; border-radius: 6px;
+    padding: 20px; margin-bottom: 24px;
+  }
+
+  /* Slot grid */
+  .slot-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px; margin-top: 12px;
+  }
+  .slot-card {
+    background: #06090f; border: 1px solid #1a2530; border-radius: 4px;
+    padding: 12px; position: relative; overflow: hidden;
+  }
+  .slot-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: #f39c12;
+  }
+  .slot-card .name { color: #ffaa55; font-size: 14px; font-weight: 600; }
+  .slot-card .name-en { color: #6a7888; font-size: 11px; }
+  .slot-card .id { color: #6a7888; font-size: 11px; font-family: monospace; }
+  .slot-card .desc { color: #8a9aa8; font-size: 12px; margin-top: 4px; }
+
+  /* Tier table */
+  .tier-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+  .tier-table th {
+    background: #1a2530; color: #f39c12; padding: 10px 12px;
+    text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .tier-table td {
+    padding: 10px 12px; border-top: 1px solid #1a2530; color: #c5d4e3; font-size: 13px;
+  }
+  .tier-table tr:hover td { background: #1a2530; }
+  .tier-table code { color: #00ccff; }
+  .tier-1 { color: #66ffcc; }
+  .tier-2 { color: #3498db; }
+  .tier-3 { color: #f39c12; }
+  .tier-4 { color: #e74c3c; }
+  .tier-5 { color: #9b59b6; }
+  .tier-6 { color: #ff55ff; }
+
+  .footer {
+    text-align: center; color: #6a7888; font-size: 12px; margin-top: 48px;
+    padding: 24px; border-top: 1px solid #1a2530;
+  }
+  .footer code { background: #1a2530; padding: 2px 6px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../../Game/dashboard/index.html">🌐 Hub</a>
+  <span class="sep">|</span>
+  <a href="index.html">◀ Roguelike</a>
+  <span class="sep">|</span>
+  <a href="story.html">📖 Story</a>
+  <span class="sep">|</span>
+  <a href="stages.html">⏱ Stages</a>
+  <span class="sep">|</span>
+  <a href="stories.html">📚 Short Stories</a>
+  <span class="sep">|</span>
+  <a href="sound.html">🔊 Sound</a>
+  <span class="sep">|</span>
+  <a href="combat.html">⚔ Combat</a>
+  <span class="sep">|</span>
+  <span class="current">📦 Equipment</span>
+  <span class="sep">|</span>
+  <a href="cyberspace.html">🌐 Cyberspace</a>
+</nav>
+
+<h1>📦 Equipment Dashboard</h1>
+<div class="subtitle">
+  8 body slots · 6 tiers · 15+ items · 9 tech types
+  <br>
+  <code>src/roguelike_sprawl/equipment/</code> · <code>data/crafting/</code>
+</div>
+
+<!-- Stats -->
+<div class="stats-panel">
+  <h2>📊 Overview</h2>
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="label">Body Slots</div>
+      <div class="value" data-stat="slots">8</div>
+      <div class="sub">equipment positions</div>
+    </div>
+    <div class="stat-item">
+      <div class="label">Tech Types</div>
+      <div class="value" data-stat="tech-types">9</div>
+      <div class="sub">cyber, bio, nano, ...</div>
+    </div>
+    <div class="stat-item">
+      <div class="label">Tiers</div>
+      <div class="value" data-stat="tiers">6</div>
+      <div class="sub">T1-T6 rarity</div>
+    </div>
+    <div class="stat-item">
+      <div class="label">Materials</div>
+      <div class="value" data-stat="materials">~30</div>
+      <div class="sub">raw + components</div>
+    </div>
+    <div class="stat-item">
+      <div class="label">Crafting Tiers</div>
+      <div class="value" data-stat="crafting">3</div>
+      <div class="sub">raw → component → final</div>
+    </div>
+  </div>
+</div>
+
+<!-- Body Slots -->
+<h2>🧍 Body Slots (8)</h2>
+<div class="section">
+  <p style="color: #8a9aa8; font-size: 13px;">자키의 신체 부위에 장비를 장착. 각 슬롯은 특정 유형의 장비를 수용.</p>
+  <div class="slot-grid">
+    <div class="slot-card">
+      <div class="name">DECK</div>
+      <div class="name-en">사이버덱 (Cyberdeck)</div>
+      <div class="id">slot: deck</div>
+      <div class="desc">메인 컴퓨터. 사이버스페이스 접속.</div>
+    </div>
+    <div class="slot-card">
+      <div class="name">HEADWARE</div>
+      <div class="name-en">신경 잭, 두개골 임플란트</div>
+      <div class="id">slot: headware</div>
+      <div class="desc">Neural jack, 두개골 인터페이스</div>
+    </div>
+    <div class="slot-card">
+      <div class="name">EYEWARE</div>
+      <div class="name-en">시각 보강</div>
+      <div class="id">slot: eyeware</div>
+      <div class="desc">눈/시각 augment. AR, 열감지 등.</div>
+    </div>
+    <div class="slot-card">
+      <div class="name">BODYSUIT</div>
+      <div class="name-en">바디 아머</div>
+      <div class="id">slot: bodysuit</div>
+      <div class="desc">신체 보호. 방탄, 내열, 전자기 차폐.</div>
+    </div>
+    <div class="slot-card">
+      <div class="name">GLOVES</div>
+      <div class="name-en">손 augment</div>
+      <div class="id">slot: gloves</div>
+      <div class="desc">핸드 augment. 근력, 정밀도.</div>
+    </div>
+    <div class="slot-card">
+      <div class="name">BOOTS</div>
+      <div class="name-en">발/다리 augment</div>
+      <div class="id">slot: boots</div>
+      <div class="desc">이동 augment. 점프, 흡음, 자석.</div>
+    </div>
+    <div class="slot-card">
+      <div class="name">IMPLANT</div>
+      <div class="name-en">내부 장기 임플란트</div>
+      <div class="id">slot: implant</div>
+      <div class="desc">내부 기관 augment. 간, 심장, 폐 등.</div>
+    </div>
+    <div class="slot-card">
+      <div class="name">TRODES</div>
+      <div class="name-en">보조 연결</div>
+      <div class="id">slot: trodes</div>
+      <div class="desc">Auxiliary 연결. 추가 센서, 통신.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Tier System -->
+<h2>💎 Tier System (6)</h2>
+<div class="section">
+  <p style="color: #8a9aa8; font-size: 13px;">장비 등급. 높을수록 강력하지만 희귀.</p>
+  <table class="tier-table">
+    <thead>
+      <tr><th>Tier</th><th>Name</th><th>Color</th><th>Example</th><th>Drop Source</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="tier-1">T1</span></td>
+        <td>Consumable / Basic</td>
+        <td>Green (66ffcc)</td>
+        <td><code>wisp</code>, Ono-Sendai Cyberspace 7</td>
+        <td>기본 드롭, 스토어</td>
+      </tr>
+      <tr>
+        <td><span class="tier-2">T2</span></td>
+        <td>Standard</td>
+        <td>Blue (3498db)</td>
+        <td><code>watchdog</code>, Hitachi-MSU N-206</td>
+        <td>일반 미션 보상</td>
+      </tr>
+      <tr>
+        <td><span class="tier-3">T3</span></td>
+        <td>Military / Heavy</td>
+        <td>Orange (f39c12)</td>
+        <td><code>goliath</code>, <code>black_ice</code></td>
+        <td>어려운 미션, Arc 2+</td>
+      </tr>
+      <tr>
+        <td><span class="tier-4">T4</span></td>
+        <td>Rare / Construct</td>
+        <td>Red (e74c3c)</td>
+        <td><code>construct</code> (Dixie)</td>
+        <td>스토리 이벤트, Arc 3</td>
+      </tr>
+      <tr>
+        <td><span class="tier-5">T5</span></td>
+        <td>Legendary</td>
+        <td>Purple (9b59b6)</td>
+        <td>Tessier-Ashpool 유물</td>
+        <td>Arc 4+ 보스</td>
+      </tr>
+      <tr>
+        <td><span class="tier-6">T6</span></td>
+        <td>Unique / Story</td>
+        <td>Magenta (ff55ff)</td>
+        <td>케이의 Ono-Sendai, 실의 구형 데크</td>
+        <td>엔딩/스토리 한정</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Tech Types -->
+<h2>🔧 Tech Types (9)</h2>
+<div class="section">
+  <p style="color: #8a9aa8; font-size: 13px;">장비/소재의 기술 분류.</p>
+  <table class="tier-table">
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>cybernetic</code></td>
+        <td>Cybernetic</td>
+        <td>기계-생체 하이브리드 (팔, 다리, 눈)</td>
+      </tr>
+      <tr>
+        <td><code>software</code></td>
+        <td>Software</td>
+        <td>AI/에이전트 프로그램</td>
+      </tr>
+      <tr>
+        <td><code>bioware</code></td>
+        <td>Bioware</td>
+        <td>유기체 기술 (유전자 조작, 세포 배양)</td>
+      </tr>
+      <tr>
+        <td><code>nanoware</code></td>
+        <td>Nanoware</td>
+        <td>나노 기술 (분자 수준 augment)</td>
+      </tr>
+      <tr>
+        <td><code>wetware</code></td>
+        <td>Wetware</td>
+        <td>뇌 인터페이스 (직접 신경 연결)</td>
+      </tr>
+      <tr>
+        <td><code>hardware</code></td>
+        <td>Hardware</td>
+        <td>물리적 도구 (총, 폭발물)</td>
+      </tr>
+      <tr>
+        <td><code>icebreaker</code></td>
+        <td>ICE Breaker</td>
+        <td>해킹 전용 프로그램</td>
+      </tr>
+      <tr>
+        <td><code>daemon</code></td>
+        <td>Daemon</td>
+        <td>AI 프로그램 (고급)</td>
+      </tr>
+      <tr>
+        <td><code>consumable</code></td>
+        <td>Consumable</td>
+        <td>1회용 (드럭, 음식)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Stat System -->
+<h2>📊 Stat System (EquipStats)</h2>
+<div class="section">
+  <p style="color: #8a9aa8; font-size: 13px;">장비가 제공하는 능력치. PPL 계산에 사용됨.</p>
+  <table class="tier-table">
+    <thead>
+      <tr><th>Stat</th><th>Effect</th><th>Example</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>hp_bonus</code></td><td>최대 HP 증가</td><td>체력 +20</td></tr>
+      <tr><td><code>attack_bonus</code></td><td>공격력 증가</td><td>ATK +5</td></tr>
+      <tr><td><code>defense_bonus</code></td><td>방어력 증가</td><td>DEF +3</td></tr>
+      <tr><td><code>speed_bonus</code></td><td>속도 증가</td><td>SPD +2</td></tr>
+      <tr><td><code>ice_resistance</code></td><td>ICE 저항</td><td>받는 피해 10% 감소</td></tr>
+      <tr><td><code>jack_speed</code></td><td>잭-인/아웃 속도</td><td>잭 시간 20% 감소</td></tr>
+      <tr><td><code>stealth</code></td><td>은신</td><td>ICE 어그로 감소</td></tr>
+      <tr><td><code>scan_range</code></td><td>스캔 범위</td><td>노드 정보 +1</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Crafting -->
+<h2>🔨 Crafting System (3-tier)</h2>
+<div class="section">
+  <p style="color: #8a9aa8; font-size: 13px;">제작 흐름: 5 raw → 4 components → final equipment</p>
+  <div style="background: #050a10; border: 1px solid #1a2530; border-radius: 4px; padding: 16px; margin-top: 12px; color: #66ffcc; font-size: 13px; line-height: 1.8;">
+<pre style="margin: 0; color: #66ffcc;">
+[Tier 1] RAW MATERIALS (5 types)
+  ├─ scrap_metal
+  ├─ data_fragment
+  ├─ ice_shard
+  ├─ biotech_tissue
+  └─ nano_dust
+        ↓
+[Tier 2] COMPONENTS (4 types)
+  ├─ circuit_board (3× scrap_metal + 1× data_fragment)
+  ├─ processor_chip (2× ice_shard + 1× data_fragment)
+  ├─ biotech_membrane (2× biotech_tissue + 1× nano_dust)
+  └─ neural_interface (2× data_fragment + 1× biotech_tissue)
+        ↓
+[Tier 3] FINAL EQUIPMENT (per slot)
+  ├─ DECK: 1× processor_chip + 1× circuit_board
+  ├─ EYEWARE: 1× processor_chip + 1× neural_interface
+  ├─ BODYSUIT: 2× biotech_membrane + 1× circuit_board
+  └─ ... (per body slot)
+</pre>
+  </div>
+</div>
+
+<!-- Sounds -->
+<h2>🔊 Equipment Sounds (3)</h2>
+<div class="section">
+  <p style="color: #8a9aa8; font-size: 13px;">장비 관련 사운드 (<code>I</code> 키로 토글).</p>
+  <table class="tier-table">
+    <thead>
+      <tr><th>Sound</th><th>Trigger</th><th>File</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>items_equip</code></td><td>장비 장착</td><td><code>data/sounds_test/items_equip.wav</code></td></tr>
+      <tr><td><code>items_pickup</code></td><td>아이템 획득</td><td><code>data/sounds_test/items_pickup.wav</code></td></tr>
+      <tr><td><code>items_cant</code></td><td>사용 불가</td><td><code>data/sounds_test/items_cant.wav</code></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Hub Integration -->
+<h2>🏠 Hub Integration</h2>
+<div class="section">
+  <p style="color: #8a9aa8; font-size: 13px;">장비는 Hub의 4-패널 중 한 곳에서 관리:</p>
+  <ul style="color: #c5d4e3; font-size: 13px; line-height: 1.8; padding-left: 24px;">
+    <li><strong>Panel 1: Avatar</strong> — Stick figure with body parts (HP=head, programs=arms, deck=torso, wetware=legs)</li>
+    <li><strong>Panel 2: Materials</strong> — Raw components inventory (Tier 1)</li>
+    <li><strong>Panel 3: Recipes</strong> — Component recipes tree (Tier 2 → Tier 3)</li>
+    <li><strong>Panel 4: Job Board</strong> — Missions (separate from equipment)</li>
+  </ul>
+</div>
+
+<div class="footer">
+  Roguelike Sprawl — Equipment Dashboard<br>
+  <code>src/roguelike_sprawl/equipment/</code> · <code>data/crafting/</code> · 8 slots · 6 tiers
+</div>
+
+</body>
+</html>
