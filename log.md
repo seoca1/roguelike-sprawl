@@ -1043,3 +1043,142 @@ prototype/
 - **Modified**: `README.md` (CI/Pages 배지 + 라이브 대시보드 링크)
 - **Modified**: `decisions/README.md` (ADR-0030 추가, 인덱스 동기화)
 - **Status**: Draft — 사용자 결정 대기 (저장소 이름, 공개 범위, 라이선스)
+
+## 2026-06-19 - Pages 활성화 + 자동 배포
+
+- **Manual**: GitHub Settings → Pages → Source = "Deploy from a branch", branch = gh-pages / (root)
+  - gh-pages 브랜치에 1st push 실패 (auto-enable API가 admin 권한 필요)
+  - **Plan B**: pages.yml을 `peaceiris/actions-gh-pages@v4`로 변경 (admin 불필요)
+  - 자동 배포 검증: `git push` → 1-2분 → https://seoca1.github.io/roguelike-sprawl/ 라이브
+- **Added**: `docs/DEPLOYMENT_GUIDE.md` (207 lines)
+  - 배포 파이프라인 다이어그램, 자동 트리거, 검증, 트러블슈팅, 롤백
+- **Verified**: 7/7 CI ✅ (CI, Pages build, Pages deploy)
+- **Verified**: 8 dashboard HTTP 200 (main, story, stages, stories, sound, combat, equipment, cyberspace)
+
+## 2026-06-19 - 5-Layer VFX 시스템
+
+- **Added**: `src/roguelike_sprawl/combat/effects.py` (~1030 lines, NEW)
+  - Layer 1: HitFlash, FloatingNumber, ParticleSystem, ScreenShake
+  - Layer 2: 15 SkillEffect 애니메이션 (ATTACK, HEAVY_ATTACK, PIERCE, MULTI_HIT, DOT, SHIELD, HEAL, REGEN, BUFF, DEBUFF, STUN, COUNTER, LIFESTEAL, DETECT, POISON)
+  - Layer 3: 5 ICE 타입별 ice_intro_sequence + ice_death_sequence
+  - Layer 4: 8 상태이상 아이콘 (P/B/S/❖/↑/↓/+/•)
+  - Layer 5: CinematicSequence, ComboCounter (2x HIT! → 5x RAMPAGE!)
+- **Added**: `src/roguelike_sprawl/combat/hud.py` (~510 lines, NEW)
+  - HealthState, 2-tier HP bar (HP + shield), smooth drain 200ms
+  - LowHpState, AlertLevel (HEALTHY/LOW/CRITICAL)
+  - PhaseColorState (boss phase colors)
+  - BarFlash (damage/heal)
+  - CameraVignette
+  - CombatHUD container
+- **Modified**: `src/roguelike_sprawl/engine/state.py` (combat_effects field)
+- **Modified**: `src/roguelike_sprawl/engine/combat_view.py`
+  - HP snapshot → VFX spawn (L1+L2)
+  - ICE intro/death cinematic
+  - VFX overlay rendering (shake, particles, numbers, flash, cinematic)
+- **Added**: `scripts/verify_combat_vfx.py` (ANSI terminal demo)
+- **Added**: `tests/unit/test_combat_effects.py` (136 tests)
+- **Added**: `tests/unit/test_combat_hud.py` (52 tests)
+- **Added**: `tests/unit/test_combat_vfx_dashboard.py` (32 tests)
+- **Verified**: 1235 tests pass (+220)
+
+## 2026-06-19 - 3 BOSS + 확장 시네마틱
+
+- **Added**: `src/roguelike_sprawl/combat/bosses.py` (~600 lines, NEW)
+  - 3 BOSS: GOLIATH PRIME (4 phases), BLACK ICE LORD (3), WATCHDOG ALPHA (3)
+  - BossPhase dataclass, BossSpec, ALL_BOSSES dict
+  - get_next_phase (HP threshold), apply_phase_buff
+  - boss_intro_sequence (5 lines, 3-5s), boss_phase_transition (8 phases)
+  - boss_death_sequence (4 sub-sequences, 12-15 frames)
+  - High-level spawners: spawn_boss_intro/transition/death
+- **Added**: `tests/unit/test_combat_bosses.py` (88 tests)
+- **Added**: `tests/unit/test_combat_bosses_dashboard.py` (10 tests)
+- **Verified**: 1333 tests pass (+98)
+
+## 2026-06-19 - HUD 시스템 (2-tier HP + 카메라)
+
+- **Added**: `src/roguelike_sprawl/combat/hud.py` (~510 lines)
+  - HealthState: 2-tier (HP + shield), smooth drain animation (200ms)
+  - AlertLevel (HEALTHY/LOW/CRITICAL), LowHpState (pulse, vignette, desat)
+  - PhaseColorState (boss phase colors), BarFlash (damage/heal)
+  - CameraVignette (low HP / boss phase), render_vignette
+  - CombatHUD container (player + enemy)
+- **Added**: `tests/unit/test_combat_hud.py` (52 tests)
+- **Added**: `tests/unit/test_combat_hud_dashboard.py` (23 tests)
+- **Verified**: 1408 tests pass (+75)
+
+## 2026-06-19 - 5-Stage 콤보 시스템
+
+- **Added**: `src/roguelike_sprawl/combat/combo.py` (~700 lines, NEW)
+  - 5 ComboStage: WARMUP → CHAIN (+20%) → FLURRY (+50%, +1 AP) → RAMPAGE (+100%, +2 AP) → ANNIHILATION (+200%, +3 AP)
+  - CombatCombo: register_hit, window expiry (3.5s), damage bonus
+  - StageAvatar (5 아이콘), TimingBar (3-tier), ComboFinisher (3종)
+  - render_combo_full (avatar + counter + timing bar)
+- **Added**: `tests/unit/test_combat_combo.py` (53 tests)
+- **Added**: `tests/unit/test_combat_combo_dashboard.py` (20 tests)
+- **Added**: `tests/unit/test_combat_stage_ui_dashboard.py` (26 tests)
+- **Verified**: 1540 tests pass (+132)
+
+## 2026-06-19 - 업적 시스템 (28 Achievements)
+
+- **Added**: `src/roguelike_sprawl/achievements.py` (~890 lines, NEW)
+  - 5 카테고리: COMBAT (7), EXPLORATION (6), STORY (5), MASTERY (6), HIDDEN (4)
+  - 4 tier: BRONZE (5), SILVER (7), GOLD (9), PLATINUM (7)
+  - Achievement dataclass (frozen), AchievementState, AchievementUnlock
+  - Event checkers: check_combat/exploration/story/mastery_event
+  - 28 정의 (first_blood, sharpshooter, combo_master, undefeated,
+    boss_slayer, goliath_slayer, centurion, first_jackin, world_walker,
+    server_domination, data_extractor, jackout_survivor, matrix_explorer,
+    case_journey, sil_awakening, kas_rise, five_tales, the_truth,
+    ppl_10/20/30, matrix_master, combo_quant, flawless,
+    ghost_protocol, phoenix, void_walker, true_hacker)
+- **Added**: `dashboard/achievements.html` (28 cards, 17KB, NEW)
+- **Added**: `tests/unit/test_achievements.py` (69 tests)
+- **Added**: `tests/unit/test_achievements_dashboard.py` (44 tests)
+- **Modified**: 8 dashboard에 🏆 Achievements nav 추가
+- **Verified**: 1653 tests pass (+113)
+
+## 2026-06-19 - 설정 시스템 (30+ Settings)
+
+- **Added**: `src/roguelike_sprawl/settings.py` (~540 lines, NEW)
+  - 5 enums: ColorTheme, GlyphStyle, Language, SubtitleMode, Difficulty
+  - GameSettings: 30+ 설정 (audio 9, display 5, input 15, language 2, gameplay 4, meta 2)
+  - Defaults: master_volume=0.2, KEYS off, language=both, subtitle, normal, 3500ms
+  - validate_settings, apply_fixes, reset_settings, clone_settings
+  - JSON persistence (save/load to file, to_dict/from_dict)
+  - apply_audio_settings, apply_combo_settings, apply_difficulty_settings
+  - Difficulty multipliers: easy 0.5x/1.5x, normal 1.0x, hard 1.5x/0.8x, nightmare 2.0x/0.6x
+- **Added**: `dashboard/settings.html` (6 categories, 14KB, NEW)
+- **Added**: `tests/unit/test_settings.py` (57 tests)
+- **Added**: `tests/unit/test_settings_dashboard.py` (34 tests)
+- **Modified**: 9 dashboard에 ⚙ Settings nav 추가 (10 total)
+- **Verified**: 1744 tests pass (+91)
+
+## 2026-06-19 - 코드 리팩토링 (팔레트 중앙화 + 번들)
+
+- **Added**: `src/roguelike_sprawl/combat/palette.py` (~290 lines, NEW)
+  - 40+ 색상 상수 (HP/damage/status/phase/ICE/combo/finisher/tier)
+  - 5 ICE 팔레트 (standard/watchdog/goliath/black/construct)
+  - 6 헬퍼 함수 (HP%, phase, combo, ICE, tier, fade)
+- **Added**: `src/roguelike_sprawl/combat/bundle.py` (~120 lines, NEW)
+  - CombatEffectsBundle: 4 시스템 통합 (effects/hud/combo/visual)
+  - step(dt_ms), clear(), has_active_effects(), setup_combat()
+  - create_bundle() factory
+- **Refactored**:
+  - effects.py: 11 색상 → palette import
+  - hud.py: 5 색상 + PHASE_COLORS → palette import
+  - combo.py: ComboStage.color → COMBO_STAGE_COLORS, TimingBar.get_color → COMBO_BAR_*
+  - bosses.py: 3 color_palette 인라인 → ICE_*_PALETTE
+- **Added**: `tests/unit/test_combat_palette.py` (70 tests)
+- **Verified**: 1814 tests pass (+70)
+- **Refactor benefits**:
+  - 색상 단일 source of truth
+  - 효과 시스템 step() 4번 → 1번
+  - 새 테마 추가 4곳 → 1곳
+
+## 2026-06-19 - 세션 종합 (최종 상태)
+
+**Tests**: 1814 passing (+648 from start of day)
+**Source files**: 87 (15 modules added today)
+**Dashboards**: 10 all live on https://seoca1.github.io/roguelike-sprawl/
+**CI**: 6/6 ✅ (lint, typecheck, test 3.11+3.12, dashboard validation, status)
+**Deployment**: `git push origin main` → 1-2분 → 자동 라이브
