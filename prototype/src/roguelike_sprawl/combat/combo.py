@@ -22,6 +22,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
+from .palette import COMBO_STAGE_COLORS
+
 if TYPE_CHECKING:
     pass
 
@@ -64,7 +66,7 @@ WARMUP = ComboStage(
     damage_bonus_pct=0,
     ap_regen=0,
     screen_shake=0.0,
-    color=(200, 200, 200),
+    color=COMBO_STAGE_COLORS[0],
     label="",
 )
 
@@ -76,7 +78,7 @@ CHAIN = ComboStage(
     damage_bonus_pct=20,
     ap_regen=0,
     screen_shake=0.5,
-    color=(100, 230, 130),
+    color=COMBO_STAGE_COLORS[1],
     label="CHAIN!",
 )
 
@@ -88,7 +90,7 @@ FLURRY = ComboStage(
     damage_bonus_pct=50,
     ap_regen=1,
     screen_shake=1.5,
-    color=(255, 200, 80),
+    color=COMBO_STAGE_COLORS[2],
     label="FLURRY!",
 )
 
@@ -100,7 +102,7 @@ RAMPAGE = ComboStage(
     damage_bonus_pct=100,
     ap_regen=2,
     screen_shake=2.5,
-    color=(255, 100, 80),
+    color=COMBO_STAGE_COLORS[3],
     label="RAMPAGE!",
 )
 
@@ -112,7 +114,7 @@ ANNIHILATION = ComboStage(
     damage_bonus_pct=200,
     ap_regen=3,
     screen_shake=4.0,
-    color=(255, 30, 30),
+    color=COMBO_STAGE_COLORS[4],
     label="ANNIHILATION!",
 )
 
@@ -510,14 +512,16 @@ class TimingBar:
 
     def get_color(self, combo: CombatCombo) -> tuple[int, int, int]:
         """Get the bar color based on time remaining."""
+        from .palette import COMBO_BAR_GREEN, COMBO_BAR_RED, COMBO_BAR_YELLOW
+
         if combo.count == 0:
             return (100, 100, 100)
         pct_remaining = 1.0 - combo.window_progress
         if pct_remaining > 0.5:
-            return (100, 230, 130)  # green
+            return COMBO_BAR_GREEN
         if pct_remaining > 0.25:
-            return (255, 200, 80)  # yellow
-        return (255, 80, 80)  # red
+            return COMBO_BAR_YELLOW
+        return COMBO_BAR_RED
 
     def is_urgent(self, combo: CombatCombo) -> bool:
         """True if combo is about to expire (< 25% remaining)."""

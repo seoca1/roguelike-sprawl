@@ -19,12 +19,12 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from .effects import (
-    GLITCH_COLOR,
     CinematicSequence,
     CombatEffects,
     IceType,
     spawn_hit_effects,
 )
+from .palette import GLITCH_COLOR
 
 # ----------------------------------------------------------------------------
 # Boss data structures
@@ -294,31 +294,18 @@ def boss_intro_sequence(spec: BossSpec) -> CinematicSequence:
     """
     if spec.base_ice_type == IceType.GOLIATH:
         # Heavy, earth-shattering intro
-        color_palette = (
-            (200, 200, 220),  # silver
-            (255, 180, 100),  # orange (warning)
-            (255, 100, 100),  # red (danger)
-            (255, 200, 50),  # gold (boss)
-            (255, 50, 50),  # crimson (peak)
-        )
+        from .palette import ICE_GOLIATH_PALETTE
+
+        color_palette = ICE_GOLIATH_PALETTE
     elif spec.base_ice_type == IceType.BLACK:
         # Glitchy, digital corruption intro
-        color_palette = (
-            (180, 180, 180),  # gray
-            (200, 200, 200),  # light gray
-            GLITCH_COLOR,  # magenta
-            (255, 0, 100),  # hot pink
-            (150, 0, 200),  # deep purple
-        )
+        from .palette import ICE_BLACK_PALETTE
+
+        color_palette = ICE_BLACK_PALETTE
     else:  # WATCHDOG
-        # Hunting, predatory intro
-        color_palette = (
-            (200, 150, 100),  # tan
-            (220, 170, 100),  # light tan
-            (255, 100, 100),  # red
-            (255, 50, 50),  # crimson
-            (255, 0, 0),  # red (peak)
-        )
+        from .palette import ICE_WATCHDOG_PALETTE
+
+        color_palette = ICE_WATCHDOG_PALETTE
 
     phases: list[tuple[str, tuple[int, int, int], int]] = []
     for i, line in enumerate(spec.intro_lines):

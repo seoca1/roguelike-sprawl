@@ -24,16 +24,19 @@ if TYPE_CHECKING:
     pass
 
 # ASCII palette for combat effects. Colors use tcod conventions.
-DAMAGE_COLOR = (255, 80, 80)  # bright red
-HEAL_COLOR = (80, 255, 120)  # bright green
-SHIELD_COLOR = (100, 200, 255)  # cyan
-BUFF_COLOR = (255, 220, 100)  # yellow
-DEBUFF_COLOR = (200, 100, 255)  # purple
-STUN_COLOR = (255, 255, 100)  # bright yellow
-CRIT_COLOR = (255, 150, 50)  # orange
-ICE_BREAK_COLOR = (180, 200, 220)  # light blue-white
-GLITCH_COLOR = (255, 0, 255)  # magenta
-DEFAULT_COLOR = (200, 200, 200)  # gray-white
+# All colors are now centralized in palette.py.
+from .palette import (  # noqa: E402
+    BUFF_COLOR,
+    CRIT_COLOR,
+    DAMAGE_COLOR,
+    DEBUFF_COLOR,
+    DEFAULT_COLOR,
+    GLITCH_COLOR,
+    HEAL_COLOR,
+    ICE_BREAK_COLOR,
+    SHIELD_COLOR,
+    STUN_COLOR,
+)
 
 
 class IceType(StrEnum):

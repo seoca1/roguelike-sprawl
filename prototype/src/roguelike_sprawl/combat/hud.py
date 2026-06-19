@@ -24,19 +24,16 @@ if TYPE_CHECKING:
 
 
 # ASCII palette for HUD
-HP_HIGH_COLOR = (100, 230, 130)  # green
-HP_MID_COLOR = (255, 200, 80)  # yellow
-HP_LOW_COLOR = (255, 100, 80)  # orange-red
-HP_CRIT_COLOR = (255, 30, 30)  # critical red
-SHIELD_COLOR = (100, 200, 255)  # cyan
-PHASE_COLORS = (
-    (180, 180, 200),  # P0 - silver
-    (255, 180, 100),  # P1 - warning
-    (255, 100, 100),  # P2 - danger
-    (255, 50, 50),  # P3 - critical
+# All colors are now centralized in palette.py
+from .palette import (  # noqa: E402
+    HP_CRIT_COLOR,
+    HP_HIGH_COLOR,
+    HP_LOW_COLOR,
+    HP_MID_COLOR,
+    PHASE_COLORS,
+    SHIELD_COLOR,
+    VIGNETTE_COLOR,
 )
-VIGNETTE_COLOR = (50, 0, 0)  # dark red
-
 
 # ----------------------------------------------------------------------------
 # Health state
