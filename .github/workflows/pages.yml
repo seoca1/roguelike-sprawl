@@ -42,6 +42,7 @@ jobs:
           cp dashboard/combat.html _pages/combat.html
           cp dashboard/equipment.html _pages/equipment.html
           cp dashboard/cyberspace.html _pages/cyberspace.html
+          cp dashboard/favicon.svg _pages/favicon.svg
           cp -r design/ _pages/design/
           cp .nojekyll _pages/.nojekyll 2>/dev/null || touch _pages/.nojekyll
           echo ""
