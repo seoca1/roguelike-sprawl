@@ -768,6 +768,153 @@ hud.step(dt_ms=50)  # 20 fps tick</code></pre>
 }
 </style>
 
+<div class="container">
+<h2>🔥 스킬 콤보 시스템</h2>
+<p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+  <code>src/roguelike_sprawl/combat/combo.py</code> — 3.5초 안에 스킬을 연속 사용 시 보너스. 5 단계 (WARMUP → CHAIN → FLURRY → RAMPAGE → ANNIHILATION).
+  데미지 +0% → +200%, AP 회복 0~3, 스크린 셰이크 0~4.0.
+</p>
+
+<div class="combo-grid">
+  <div class="combo-stage warmup">
+    <h3>0️⃣ WARMUP (웜업)</h3>
+    <div class="combo-meta">
+      <code>1-2 hits</code> · <code>+0% DMG</code> · <code>0 AP</code>
+    </div>
+    <div class="combo-label">콤보 시작</div>
+  </div>
+  <div class="combo-stage chain">
+    <h3>1️⃣ CHAIN (연쇄)</h3>
+    <div class="combo-meta">
+      <code>3 hits</code> · <code>+20% DMG</code> · <code>0 AP</code>
+    </div>
+    <div class="combo-label">3x CHAIN!</div>
+  </div>
+  <div class="combo-stage flurry">
+    <h3>2️⃣ FLURRY (폭주)</h3>
+    <div class="combo-meta">
+      <code>4 hits</code> · <code>+50% DMG</code> · <code>+1 AP</code> · <code>shake 1.5</code>
+    </div>
+    <div class="combo-label">4x FLURRY!</div>
+  </div>
+  <div class="combo-stage rampage">
+    <h3>3️⃣ RAMPAGE (섬멸)</h3>
+    <div class="combo-meta">
+      <code>5 hits</code> · <code>+100% DMG</code> · <code>+2 AP</code> · <code>shake 2.5</code>
+    </div>
+    <div class="combo-label">5x RAMPAGE!</div>
+  </div>
+  <div class="combo-stage annihilation">
+    <h3>4️⃣ ANNIHILATION (초월)</h3>
+    <div class="combo-meta">
+      <code>6+ hits</code> · <code>+200% DMG</code> · <code>+3 AP</code> · <code>shake 4.0</code>
+    </div>
+    <div class="combo-label">6x ANNIHILATION!</div>
+  </div>
+</div>
+
+<div class="combo-window-info">
+  <h3>⏱ 콤보 윈도우 (3.5초)</h3>
+  <div class="window-bar">
+    <code>[████████████████░░░░░░░░░░░░] 60% 남음</code>
+  </div>
+  <p>3.5초 안에 다음 스킬을 사용해야 콤보가 유지됨. 시간 초과 시 자동 종료.</p>
+  <p><b>콤보 종료</b> 시 화면 중앙에 <code>[ 콤보 종료 ]  최대 N 히트, X 데미지</code> 표시.</p>
+</div>
+
+<style>
+.combo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.combo-stage {
+  background: #131a23;
+  border: 1px solid #2a3540;
+  border-left: 3px solid;
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.combo-stage.warmup { border-left-color: #c8c8c8; }
+.combo-stage.chain { border-left-color: #64e682; }
+.combo-stage.flurry { border-left-color: #ffc850; }
+.combo-stage.rampage { border-left-color: #ff6450; }
+.combo-stage.annihilation {
+  border-left-color: #ff1e1e;
+  background: linear-gradient(135deg, #131a23 0%, #1a0e0e 100%);
+}
+.combo-stage h3 {
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.combo-stage.warmup h3 { color: #c8c8c8; }
+.combo-stage.chain h3 { color: #64e682; }
+.combo-stage.flurry h3 { color: #ffc850; }
+.combo-stage.rampage h3 { color: #ff6450; }
+.combo-stage.annihilation h3 { color: #ff1e1e; text-shadow: 0 0 8px #ff1e1e44; }
+.combo-meta {
+  color: #8a9aa8;
+  font-size: 11px;
+  margin-bottom: 10px;
+}
+.combo-meta code {
+  color: #ffaa55;
+  background: #0a0e14;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-right: 4px;
+}
+.combo-label {
+  font-family: monospace;
+  font-size: 16px;
+  font-weight: 700;
+  text-align: center;
+  padding: 8px 0;
+  border-top: 1px solid #2a3540;
+}
+.combo-stage.warmup .combo-label { color: #c8c8c8; }
+.combo-stage.chain .combo-label { color: #64e682; }
+.combo-stage.flurry .combo-label { color: #ffc850; }
+.combo-stage.rampage .combo-label { color: #ff6450; }
+.combo-stage.annihilation .combo-label { color: #ff1e1e; }
+.combo-window-info {
+  background: #131a23;
+  border: 1px solid #2a3540;
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 16px 0;
+}
+.combo-window-info h3 {
+  color: #ffaa55;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.combo-window-info p {
+  color: #c5d4e3;
+  font-size: 12px;
+  line-height: 1.6;
+  margin: 8px 0;
+}
+.combo-window-info code {
+  color: #ffaa55;
+  background: #0a0e14;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+.window-bar code {
+  display: block;
+  color: #66ffcc;
+  font-size: 12px;
+  font-family: monospace;
+  background: #0a0e14;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #2a3540;
+}
+</style>
+
 </div>
 
 </div>
