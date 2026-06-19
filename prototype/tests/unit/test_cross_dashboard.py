@@ -115,10 +115,16 @@ class TestRoguelikeSubmenu:
         assert "Projects Hub" in html or "상위 허브" in html
 
     def test_submenu_has_sub_dashboards(self) -> None:
-        """Submenu links to story and stages dashboards (always present)."""
+        """Submenu links to story, stages, stories dashboards (always present)."""
         html = ROGUE_DASH.read_text(encoding="utf-8")
         assert 'href="story.html"' in html
         assert 'href="stages.html"' in html
+        assert 'href="stories.html"' in html
+
+    def test_submenu_has_stories_card(self) -> None:
+        """Submenu has a 'Short Stories' card."""
+        html = ROGUE_DASH.read_text(encoding="utf-8")
+        assert "Short Stories" in html or "단편" in html
 
 
 class TestRoguelikeSubDashboards:

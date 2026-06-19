@@ -2,11 +2,19 @@
 
 > **상위 결정**: 디자인/문서화 결정 필요 (Draft)
 > **관련**: `../../../Fiction/wiki/works/neuromancer.md`, `count-zero.md`, `mona-lisa-overdrive.md`
+> **단편 연결**: `../../../Fiction/derivative/sprawl-trilogy/`
 > **용도**: 1단계 소설 / 2단계 데모 / 3단계 게임 캐릭터 선택
 
 깁슨 스프롤 3부작 세계관을 배경으로 하되, **등장인물은 모두 오리지널**. 플레이어가 3명 중 한 명을 선택해 다른 이야기를 진행한다.
 
 각 캐릭터는 같은 시작 (Sprawl의 자키, 빚, 의뢰) 을 공유하지만, 동기/성격/엔딩이 다르다.
+
+**각 캐릭터는 Fiction/derivative/ 단편에서 영감을 받음**:
+- **케이 (K)** — Case 단편 ("잭아웃 후 30초")
+- **실 (Sil)** — Marly 단편 ("루이지아나의 신")
+- **카스 (Kas)** — Kumiko 단편 ("매나리사의 자정")
+
+자세한 연결: `wiki/world/derivative_stories.md`
 
 ---
 

@@ -1,8 +1,31 @@
 {
-  "version": "0.1.0",
+  "version": "0.2.0",
   "title": "Sprawl Event Dialogues",
   "title_ko": "스프롤 이벤트 대사",
-  "description": "NPC, mission, combat, hub 대화 모음. Phase 3+ 게임 진행 중 사용.",
+  "description": "NPC, mission, combat, hub dialogues. v0.2: +3 derivative-story NPCs from Fiction/derivative/.",
+  "derivative_sources": {
+    "base_path": "../../../Fiction/derivative/sprawl-trilogy/short-stories/",
+    "stories": [
+      {
+        "file": "2026-06-19_case_jackout-30sec.md",
+        "character": "Case",
+        "work": "Neuromancer",
+        "game_character_inspiration": "케이 (K) — Novice"
+      },
+      {
+        "file": "2026-06-19_marly_louisiana-god.md",
+        "character": "Marly Krushkhova",
+        "work": "Count Zero",
+        "game_character_inspiration": "실 (Sil) — Veteran"
+      },
+      {
+        "file": "2026-06-19_kumiko_manarase-midnight.md",
+        "character": "Kumiko Yanaka",
+        "work": "Mona Lisa Overdrive",
+        "game_character_inspiration": "카스 (Kas) — Heretic"
+      }
+    ]
+  },
   "npcs": {
     "finn": {
       "id": "finn",

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Roguelike Sprawl — Short Stories (이차 창작 단편)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    background: #06090f;
+    color: #c5d4e3;
+    line-height: 1.7;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    min-height: 100vh;
+  }
+  h1, h2, h3 { font-weight: 600; }
+  h1 { font-size: 28px; margin-bottom: 4px; color: #ffaa55; text-shadow: 0 0 12px #ffaa5544; }
+  h2 { font-size: 20px; margin: 32px 0 16px; color: #66ffcc; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #ffaa55; }
+  .subtitle { color: #6a7888; font-size: 13px; margin-bottom: 24px; }
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #06090f; border-bottom: 1px solid #1a2530;
+    padding: 8px 24px; margin: -24px -24px 16px -24px;
+    display: flex; gap: 16px; align-items: center;
+  }
+  .top-nav a { color: #66ffcc; text-decoration: none; font-size: 13px; }
+  .top-nav a:hover { color: #00ccff; }
+  .top-nav .current { color: #ffaa55; font-weight: 600; }
+  .top-nav .sep { color: #2a3540; }
+
+  .ascii-banner {
+    text-align: center; color: #66ffcc; font-size: 11px; line-height: 1.2;
+    margin: 16px 0; opacity: 0.7; white-space: pre;
+  }
+
+  /* Stats panel */
+  .stats-panel {
+    background: #0d1420; border: 1px solid #1a2530; border-radius: 8px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+  .stat-item {
+    background: #06090f; border: 1px solid #1a2530; border-radius: 4px; padding: 12px;
+  }
+  .stat-item .label { color: #6a7888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+  .stat-item .value { color: #ffaa55; font-size: 24px; font-weight: 700; margin-top: 4px; }
+  .stat-item .sub { color: #6a7888; font-size: 10px; margin-top: 2px; }
+
+  /* Story cards */
+  .story-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 16px; margin-bottom: 24px;
+  }
+  .story-card {
+    background: #0d1420; border: 1px solid #1a2530; border-radius: 6px;
+    padding: 20px; position: relative; overflow: hidden;
+    transition: all 0.15s ease;
+  }
+  .story-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, #ffaa55, #ff5555);
+    opacity: 0.6; transition: opacity 0.15s;
+  }
+  .story-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px #ffaa5522;
+  }
+  .story-card:hover::before { opacity: 1; }
+  .story-card .icon { font-size: 28px; margin-bottom: 8px; }
+  .story-card h3 { color: #ffaa55; margin-bottom: 4px; }
+  .story-card .subtitle { color: #6a7888; font-size: 12px; margin-bottom: 8px; }
+  .story-card .pov {
+    display: inline-block; background: #1a2530; padding: 2px 8px;
+    border-radius: 3px; font-size: 11px; color: #00ccff; margin-bottom: 8px;
+  }
+  .story-card .quote {
+    background: #050a10; border-left: 2px solid #ffaa55;
+    padding: 8px 12px; margin: 8px 0; color: #8a9aa8;
+    font-style: italic; font-size: 12px;
+  }
+  .story-card .meta {
+    display: flex; gap: 6px; flex-wrap: wrap; margin: 8px 0;
+  }
+  .story-card .meta .pill {
+    background: #1a2530; padding: 2px 8px; border-radius: 12px; font-size: 11px; color: #8a9aa8;
+  }
+  .story-card .meta .pill.char { color: #66ffcc; }
+  .story-card .meta .pill.work { color: #00ccff; }
+  .story-card .meta .pill.theme { color: #ffaa55; }
+  .story-card .meta .pill.status { color: #66ffcc; }
+  .story-card .desc {
+    color: #8a9aa8; font-size: 12px; line-height: 1.5; margin: 8px 0;
+  }
+  .story-card .links {
+    display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px;
+    padding-top: 12px; border-top: 1px dashed #1a2530;
+  }
+  .story-card .link {
+    background: #1a2530; color: #66ffcc; padding: 3px 8px;
+    border-radius: 3px; font-size: 11px; text-decoration: none;
+  }
+  .story-card .link:hover { background: #66ffcc22; }
+
+  /* System docs section */
+  .docs-section {
+    background: #0d1420; border: 1px solid #1a2530; border-radius: 8px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .docs-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px; margin-top: 12px;
+  }
+  .doc-card {
+    background: #06090f; border: 1px solid #1a2530; border-radius: 4px;
+    padding: 12px;
+  }
+  .doc-card h4 { color: #66ffcc; font-size: 13px; margin-bottom: 4px; }
+  .doc-card p { color: #8a9aa8; font-size: 11px; }
+
+  /* Footer */
+  .footer {
+    text-align: center; color: #6a7888; font-size: 12px; margin-top: 48px;
+    padding: 24px; border-top: 1px solid #1a2530;
+  }
+  .footer code { background: #1a2530; padding: 2px 6px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../../Game/dashboard/index.html">🌐 Hub</a>
+  <span class="sep">|</span>
+  <a href="index.html">◀ Roguelike</a>
+  <span class="sep">|</span>
+  <a href="story.html">📖 Story</a>
+  <span class="sep">|</span>
+  <a href="stages.html">⏱ Stages</a>
+  <span class="sep">|</span>
+  <span class="current">📚 Short Stories</span>
+</nav>
+
+<h1>📚 Short Stories (이차 창작 단편)</h1>
+<div class="subtitle">
+  깁슨 스프롤 3부작 기반 단편 3편 · 게임 캐릭터 영감 출처
+  <br>
+  <code>Game/roguelike_sprawl/design/story/</code> · <code>Fiction/derivative/sprawl-trilogy/</code>
+</div>
+
+<pre class="ascii-banner">
+  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+  ░  "The sky was the color of television,    ░
+  ░   tuned to a dead channel."                 ░
+  ░  — William Gibson, Neuromancer, 1984      ░
+  ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
+</pre>
+
+<!-- Stats panel -->
+<div class="stats-panel">
+  <h2>📊 Production Stats (제작 통계)</h2>
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="label">Stories</div>
+      <div class="value" data-stat="stories">3</div>
+      <div class="sub">final status</div>
+    </div>
+    <div class="stat-item">
+      <div class="label">Korean Chars</div>
+      <div class="value" data-stat="chars">~4,200</div>
+      <div class="sub">across all</div>
+    </div>
+    <div class="stat-item">
+      <div class="label">Wiki Refs</div>
+      <div class="value" data-stat="refs">14</div>
+      <div class="sub">cross-references</div>
+    </div>
+    <div class="stat-item">
+      <div class="label">Source Quotes</div>
+      <div class="value" data-stat="quotes">3</div>
+      <div class="sub">integrated</div>
+    </div>
+    <div class="stat-item">
+      <div class="label">Game Char. Insp.</div>
+      <div class="value" data-stat="chars-game">3/3</div>
+      <div class="sub">all 3 protagonists</div>
+    </div>
+  </div>
+</div>
+
+<!-- Story cards -->
+<h2>📖 단편 목록 (Stories)</h2>
+<div class="story-grid" data-stories-src="../../../Fiction/derivative/sprawl-trilogy/INDEX.md">
+
+  <div class="story-card" data-story="case">
+    <div class="icon">🧠</div>
+    <h3>잭아웃 후 30초</h3>
+    <div class="subtitle">Thirty Seconds After Jack-Out</div>
+    <div class="pov">1인칭 · Case</div>
+    <div class="quote">"The sky above the port was the color of television, tuned to a dead channel."</div>
+    <div class="meta">
+      <span class="pill work">Neuromancer (1984)</span>
+      <span class="pill char">→ 케이 (K)</span>
+      <span class="pill theme">정체성 · 금단</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      케이스가 매트릭스에서 잭아웃한 직후 30초. Ono-Sendai의 전극이 떨어지고, 손가락이 떨리고, 차가운 금속이 "살아있다는 증거"가 된다. Chiba의 비가 매트릭스의 비와 다르지 않다 — 둘 다 같은 몸에 떨어진다.
+    </div>
+    <div class="links">
+      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-19_case_jackout-30sec.md">📄 원문</a>
+      <a class="link" href="../../../Fiction/wiki/works/neuromancer.md">📚 원작</a>
+      <a class="link" href="../../../Fiction/wiki/characters/case.md">👤 Case</a>
+    </div>
+  </div>
+
+  <div class="story-card" data-story="marly">
+    <div class="icon">🔮</div>
+    <h3>루이지아나의 신</h3>
+    <div class="subtitle">The God of Louisiana</div>
+    <div class="pov">3인칭 · Marly Krushkhova</div>
+    <div class="quote">"He'd operated on an almost purely visual level, the result of a childhood spent largely in front of screens."</div>
+    <div class="meta">
+      <span class="pill work">Count Zero (1986)</span>
+      <span class="pill char">→ 실 (Sil)</span>
+      <span class="pill theme">Loa · 파편화</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      Marie-France가 죽었다. Marly는 로잔에서 비를 보며, 보스턴의 아파트로 날아간다. Virek의 24개 몸 중 하나가 전화를 건다. 조각, 습기, 그리고 의문의 *Loa* — 매트릭스에 사는 의식체가 Marly의 갤러리 안에 있다.
+    </div>
+    <div class="links">
+      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-19_marly_louisiana-god.md">📄 원문</a>
+      <a class="link" href="../../../Fiction/wiki/works/count-zero.md">📚 원작</a>
+      <a class="link" href="../../../Fiction/wiki/characters/marly-krushkhova.md">👤 Marly</a>
+    </div>
+  </div>
+
+  <div class="story-card" data-story="kumiko">
+    <div class="icon">🌙</div>
+    <h3>매나리사의 자정</h3>
+    <div class="subtitle">Midnight at the Manarase</div>
+    <div class="pov">3인칭 · Kumiko Yanaka</div>
+    <div class="quote">"The sky was the color of a television tuned to a dead channel." <small>(Neuromancer 의도적 인용)</small></div>
+    <div class="meta">
+      <span class="pill work">Mona Lisa Overdrive (1988)</span>
+      <span class="pill char">→ 카스 (Kas)</span>
+      <span class="pill theme">각성 · 정체성</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      Freeside L5, Manarase 모텔, 자정. Kumiko는 Salila의 "각성" 수술 전야에 있다. "각성이 무엇이 될까요?" — 그녀는 잊었다. 그리고 기억한다. 그리고 잊는다. 매트릭스 밖의 의식, 의식의 매트릭스.
+    </div>
+    <div class="links">
+      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-19_kumiko_manarase-midnight.md">📄 원문</a>
+      <a class="link" href="../../../Fiction/wiki/works/mona-lisa-overdrive.md">📚 원작</a>
+      <a class="link" href="../../../Fiction/wiki/characters/kumiko-yanaka.md">👤 Kumiko</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- System docs section -->
+<div class="docs-section">
+  <h2>📋 시스템 문서 (System Docs)</h2>
+  <p style="color: #8a9aa8; font-size: 13px;">
+    단편 창작 시스템 — 깁슨 보이스로의 단편 생성 파이프라인
+  </p>
+  <div class="docs-grid">
+    <div class="doc-card">
+      <h4>📘 README</h4>
+      <p>파생 저작물 시스템 개요. 디렉토리 구조와 통합 지점.</p>
+      <a class="link" href="../../../Fiction/derivative/_system/README.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
+    </div>
+    <div class="doc-card">
+      <h4>✍️ Writing Process</h4>
+      <p>5단계 창작 과정: 주제 선택 → 윤곽 → 초안 → 리뷰 → 완성 → 게임 통합.</p>
+      <a class="link" href="../../../Fiction/derivative/_system/WRITING_PROCESS.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
+    </div>
+    <div class="doc-card">
+      <h4>🎨 Style Guide</h4>
+      <p>깁슨 보이스 가이드. 문장 리듬, 어휘, POV 규칙, 클리셰 회피.</p>
+      <a class="link" href="../../../Fiction/derivative/_system/STYLE_GUIDE.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
+    </div>
+    <div class="doc-card">
+      <h4>📝 Templates</h4>
+      <p>Markdown 템플릿: 단편, INDEX, 상태 정의. frontmatter 표준.</p>
+      <a class="link" href="../../../Fiction/derivative/_system/TEMPLATES.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
+    </div>
+    <div class="doc-card">
+      <h4>🤖 LLM Prompts</h4>
+      <p>3개 단편의 재현 가능한 LLM 프롬프트 템플릿.</p>
+      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/prompts/README.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
+    </div>
+    <div class="doc-card">
+      <h4>📑 INDEX</h4>
+      <p>스프롤 3부작 단편 카탈로그. 메타데이터, 테마, 게임 통합.</p>
+      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/INDEX.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Roguelike Sprawl — Short Stories Dashboard<br>
+  <code>Fiction/derivative/sprawl-trilogy/</code> · <code>Game/roguelike_sprawl/design/story/</code>
+</div>
+
+</body>
+</html>
