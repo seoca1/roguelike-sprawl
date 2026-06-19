@@ -915,6 +915,272 @@ hud.step(dt_ms=50)  # 20 fps tick</code></pre>
 }
 </style>
 
+<div class="container">
+<h2>🎨 스테이지 UI 시스템</h2>
+<p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+  <code>combo.py</code>에 추가된 4개 컴포넌트: Stage Avatar (5종 ASCII 아이콘), Timing Bar (3.5초 카운트다운), Stage Counter UI, Combo Finisher (3종 필살기).
+</p>
+
+<h3>👤 스테이지 아바타 (5종)</h3>
+<div class="avatar-grid">
+  <div class="avatar-card warmup">
+    <div class="avatar-icon">◦</div>
+    <div class="avatar-name">WARMUP</div>
+    <div class="avatar-frames">
+      <code>◦</code> idle · <code>○</code> pulse · <code>◉</code> special
+    </div>
+    <div class="avatar-stage">1/5</div>
+  </div>
+  <div class="avatar-card chain">
+    <div class="avatar-icon">⫶</div>
+    <div class="avatar-name">CHAIN</div>
+    <div class="avatar-frames">
+      <code>⫶</code> idle · <code>⫷⫸</code> pulse · <code>⫴</code> special
+    </div>
+    <div class="avatar-stage">2/5</div>
+  </div>
+  <div class="avatar-card flurry">
+    <div class="avatar-icon">⚡</div>
+    <div class="avatar-name">FLURRY</div>
+    <div class="avatar-frames">
+      <code>⚡</code> idle · <code>⚡⚡</code> pulse · <code>✦⚡</code> special
+    </div>
+    <div class="avatar-stage">3/5</div>
+  </div>
+  <div class="avatar-card rampage">
+    <div class="avatar-icon">☠</div>
+    <div class="avatar-name">RAMPAGE</div>
+    <div class="avatar-frames">
+      <code>☠</code> idle · <code>☠☠</code> pulse · <code>☠✦</code> special
+    </div>
+    <div class="avatar-stage">4/5</div>
+  </div>
+  <div class="avatar-card annihilation">
+    <div class="avatar-icon">✦</div>
+    <div class="avatar-name">ANNIHILATION</div>
+    <div class="avatar-frames">
+      <code>✦</code> idle · <code>✦✦✦</code> pulse · <code>✦★✦</code> special
+    </div>
+    <div class="avatar-stage">5/5</div>
+  </div>
+</div>
+
+<h3>⏱ 타이밍 바 (3색 강도)</h3>
+<div class="timing-demo">
+  <div class="timing-row">
+    <span class="timing-label">100% (Safe)</span>
+    <code>[████████████████████] 100%</code>
+  </div>
+  <div class="timing-row warn">
+    <span class="timing-label">57% (Warning)</span>
+    <code>[▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░░░░] 57%</code>
+  </div>
+  <div class="timing-row urgent">
+    <span class="timing-label">20% (Urgent)</span>
+    <code>[▓▓▓▓· · · · · · · · · · ·] 20%</code>
+  </div>
+</div>
+
+<h3>⚔ 콤보 필살기 (3종)</h3>
+<div class="finisher-grid">
+  <div class="finisher-card flurry">
+    <h4>⚡ QUICK SLASH <span class="finisher-kr">빠른 참격</span></h4>
+    <div class="finisher-stats">
+      <span>FLURRY 단계</span> · <span>×2.0 데미지</span> · <span>CD 5초</span>
+    </div>
+    <p>3회 빠른 참격 (대상 1명). FLURRY 진입 후 사용 가능.</p>
+  </div>
+  <div class="finisher-card rampage">
+    <h4>☠ RAMPAGE BURST <span class="finisher-kr">섬멸 폭발</span></h4>
+    <div class="finisher-stats">
+      <span>RAMPAGE 단계</span> · <span>×3.0 데미지</span> · <span>CD 8초</span>
+    </div>
+    <p>광역 폭발 (모든 적). RAMPAGE 진입 후 사용 가능.</p>
+  </div>
+  <div class="finisher-card annihilation">
+    <h4>✦ FINAL STRIKE <span class="finisher-kr">최후의 일격</span></h4>
+    <div class="finisher-stats">
+      <span>ANNIHILATION 단계</span> · <span>×5.0 데미지</span> · <span>CD 12초</span>
+    </div>
+    <p>즉사급 데미지 + 화면 클리어. ANNIHILATION 진입 후 사용 가능.</p>
+  </div>
+</div>
+
+<h3>🖼 풀 콤보 HUD (실제 출력)</h3>
+<div class="hud-preview">
+  <div class="hud-frame">
+    <pre><code>⚡  4x FLURRY!
+[████████████████████] 100%</code></pre>
+    <div class="hud-caption">CHAIN → FLURRY (4 hits)</div>
+  </div>
+  <div class="hud-frame">
+    <pre><code>☠☠  5x RAMPAGE!
+[▓▓▓▓▓▓▓▓▓▓▓▓▓▓░░░░░░] 70%</code></pre>
+    <div class="hud-caption">RAMPAGE (5 hits, 70% time left)</div>
+  </div>
+  <div class="hud-frame">
+    <pre><code>✦✦✦  6x ANNIHILATION!
+[▓▓▓· · · · · · · · · · ·] 20%</code></pre>
+    <div class="hud-caption">ANNIHILATION (6 hits, 20% urgent)</div>
+  </div>
+</div>
+
+<style>
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.avatar-card {
+  background: #131a23;
+  border: 1px solid #2a3540;
+  border-radius: 8px;
+  padding: 16px 12px;
+  text-align: center;
+}
+.avatar-icon {
+  font-size: 32px;
+  margin-bottom: 6px;
+  line-height: 1;
+}
+.avatar-card.warmup .avatar-icon { color: #c8c8c8; }
+.avatar-card.chain .avatar-icon { color: #64e682; }
+.avatar-card.flurry .avatar-icon { color: #ffc850; }
+.avatar-card.rampage .avatar-icon { color: #ff6450; }
+.avatar-card.annihilation .avatar-icon {
+  color: #ff1e1e;
+  text-shadow: 0 0 8px #ff1e1e66;
+}
+.avatar-name {
+  color: #66ffcc;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.avatar-frames {
+  font-size: 10px;
+  color: #8a9aa8;
+  margin-bottom: 8px;
+}
+.avatar-frames code {
+  color: #ffaa55;
+  background: #0a0e14;
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+.avatar-stage {
+  font-family: monospace;
+  color: #ffaa55;
+  font-size: 11px;
+  padding-top: 6px;
+  border-top: 1px solid #2a3540;
+}
+.timing-demo {
+  background: #131a23;
+  border: 1px solid #2a3540;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 12px 0;
+}
+.timing-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 6px 0;
+}
+.timing-label {
+  min-width: 140px;
+  color: #c5d4e3;
+  font-size: 12px;
+}
+.timing-row code {
+  color: #66ffcc;
+  font-family: monospace;
+  font-size: 12px;
+}
+.timing-row.warn code { color: #ffc850; }
+.timing-row.urgent code { color: #ff5050; }
+.finisher-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.finisher-card {
+  background: #131a23;
+  border: 1px solid #2a3540;
+  border-left: 3px solid;
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.finisher-card.flurry { border-left-color: #ffc850; }
+.finisher-card.rampage { border-left-color: #ff6450; }
+.finisher-card.annihilation { border-left-color: #ff1e1e; }
+.finisher-card h4 {
+  font-size: 14px;
+  color: #66ffcc;
+  margin-bottom: 6px;
+}
+.finisher-kr {
+  color: #ffaa55;
+  font-size: 12px;
+  font-weight: normal;
+  margin-left: 6px;
+}
+.finisher-stats {
+  color: #c5d4e3;
+  font-size: 11px;
+  margin-bottom: 8px;
+  font-family: monospace;
+}
+.finisher-stats span {
+  background: #0a0e14;
+  padding: 2px 6px;
+  border-radius: 3px;
+  margin-right: 4px;
+  color: #ffaa55;
+}
+.finisher-card p {
+  color: #8a9aa8;
+  font-size: 11px;
+  line-height: 1.5;
+  margin: 0;
+}
+.hud-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.hud-frame {
+  background: #0a0e14;
+  border: 1px solid #2a3540;
+  border-radius: 6px;
+  padding: 12px;
+  text-align: center;
+}
+.hud-frame pre {
+  margin: 0;
+  text-align: left;
+  background: transparent;
+  padding: 0;
+}
+.hud-frame code {
+  color: #66ffcc;
+  font-size: 13px;
+  font-family: monospace;
+  background: transparent;
+  padding: 0;
+}
+.hud-caption {
+  color: #8a9aa8;
+  font-size: 11px;
+  margin-top: 8px;
+  font-style: italic;
+}
+</style>
+
 </div>
 
 </div>

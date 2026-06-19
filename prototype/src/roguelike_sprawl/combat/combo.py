@@ -390,19 +390,292 @@ def spawn_combo_hit(
     return new_stage
 
 
+# ----------------------------------------------------------------------------
+# Stage Avatar (per-stage icon)
+# ----------------------------------------------------------------------------
+
+
+@dataclass(frozen=True, slots=True)
+class StageAvatar:
+    """ASCII icon for a combo stage.
+
+    Each stage has 3 frames (idle, pulse, special) for animation.
+    """
+
+    stage: ComboStage
+    icon_idle: str
+    icon_pulse: str
+    icon_special: str
+    frame_label: str  # e.g. "1/5", "2/5"
+
+    def get_frame(self, pulse_active: bool = False, special: bool = False) -> str:
+        if special:
+            return self.icon_special
+        if pulse_active:
+            return self.icon_pulse
+        return self.icon_idle
+
+
+# Per-stage avatars
+AVATAR_WARMUP = StageAvatar(
+    stage=WARMUP,
+    icon_idle="◦",
+    icon_pulse="○",
+    icon_special="◉",
+    frame_label="1/5",
+)
+AVATAR_CHAIN = StageAvatar(
+    stage=CHAIN,
+    icon_idle="⫶",
+    icon_pulse="⫷⫸",
+    icon_special="⫴",
+    frame_label="2/5",
+)
+AVATAR_FLURRY = StageAvatar(
+    stage=FLURRY,
+    icon_idle="⚡",
+    icon_pulse="⚡⚡",
+    icon_special="✦⚡",
+    frame_label="3/5",
+)
+AVATAR_RAMPAGE = StageAvatar(
+    stage=RAMPAGE,
+    icon_idle="☠",
+    icon_pulse="☠☠",
+    icon_special="☠✦",
+    frame_label="4/5",
+)
+AVATAR_ANNIHILATION = StageAvatar(
+    stage=ANNIHILATION,
+    icon_idle="✦",
+    icon_pulse="✦✦✦",
+    icon_special="✦★✦",
+    frame_label="5/5",
+)
+
+AVATAR_BY_STAGE: dict[ComboStage, StageAvatar] = {
+    WARMUP: AVATAR_WARMUP,
+    CHAIN: AVATAR_CHAIN,
+    FLURRY: AVATAR_FLURRY,
+    RAMPAGE: AVATAR_RAMPAGE,
+    ANNIHILATION: AVATAR_ANNIHILATION,
+}
+
+
+def get_avatar_for_stage(stage: ComboStage) -> StageAvatar:
+    """Get the avatar for a stage. Falls back to WARMUP if unknown."""
+    return AVATAR_BY_STAGE.get(stage, AVATAR_WARMUP)
+
+
+# ----------------------------------------------------------------------------
+# Timing bar
+# ----------------------------------------------------------------------------
+
+
+@dataclass(slots=True)
+class TimingBar:
+    """Visual timing bar for the combo window.
+
+    Renders a horizontal bar that drains from full to empty
+    over the combo window. Color changes as time runs out:
+    - > 50%: green (safe)
+    - 50-25%: yellow (warning)
+    - < 25%: red (urgent)
+    - < 10%: pulsing red
+    """
+
+    width: int = 20
+    last_pulse_ms: int = 0
+    pulse_period_ms: int = 200
+
+    def render(self, combo: CombatCombo) -> str:
+        """Render the timing bar string."""
+        if combo.count == 0:
+            return ""
+
+        pct_remaining = 1.0 - combo.window_progress
+        filled = int(round(pct_remaining * self.width))
+        empty = self.width - filled
+
+        # Color tier drives character selection
+        if pct_remaining > 0.5:
+            bar_chars = "█" * filled + "░" * empty
+        elif pct_remaining > 0.25:
+            bar_chars = "▓" * filled + "░" * empty
+        else:
+            bar_chars = "▓" * filled + "·" * empty
+
+        result = f"[{bar_chars}] {int(pct_remaining * 100)}%"
+        return result
+
+    def get_color(self, combo: CombatCombo) -> tuple[int, int, int]:
+        """Get the bar color based on time remaining."""
+        if combo.count == 0:
+            return (100, 100, 100)
+        pct_remaining = 1.0 - combo.window_progress
+        if pct_remaining > 0.5:
+            return (100, 230, 130)  # green
+        if pct_remaining > 0.25:
+            return (255, 200, 80)  # yellow
+        return (255, 80, 80)  # red
+
+    def is_urgent(self, combo: CombatCombo) -> bool:
+        """True if combo is about to expire (< 25% remaining)."""
+        return 0.0 < (1.0 - combo.window_progress) < 0.25
+
+
+def render_timing_bar(combo: CombatCombo, width: int = 20) -> str:
+    """Convenience function: render the timing bar."""
+    bar = TimingBar(width=width)
+    return bar.render(combo)
+
+
+# ----------------------------------------------------------------------------
+# Combo Finishers (special moves at high stages)
+# ----------------------------------------------------------------------------
+
+
+@dataclass(frozen=True, slots=True)
+class ComboFinisher:
+    """A special finisher move unlocked at a high combo stage.
+
+    Activated by player input (e.g. spacebar) when combo is at
+    the right stage. Provides massive damage/utility.
+    """
+
+    id: str
+    name: str
+    name_ko: str
+    required_stage: ComboStage
+    damage_multiplier: float  # e.g. 2.0 = 200% of base damage
+    ap_cost: int  # 0 for free, but consumes a skill slot
+    cooldown_ms: int  # Reuse cooldown
+    description: str
+    color: tuple[int, int, int]
+    icon: str  # ASCII icon
+    visual_animation: str  # Animation name from effects
+
+
+FINISHER_QUICK_SLASH = ComboFinisher(
+    id="quick_slash",
+    name="QUICK SLASH",
+    name_ko="빠른 참격",
+    required_stage=FLURRY,
+    damage_multiplier=2.0,
+    ap_cost=0,
+    cooldown_ms=5000,
+    description="FLURRY 단계에서 사용 가능. 3회 빠른 참격 (대상 1명).",
+    color=(255, 200, 80),
+    icon="⚡",
+    visual_animation="multi_hit",
+)
+
+FINISHER_RAMPAGE_BURST = ComboFinisher(
+    id="rampage_burst",
+    name="RAMPAGE BURST",
+    name_ko="섬멸 폭발",
+    required_stage=RAMPAGE,
+    damage_multiplier=3.0,
+    ap_cost=0,
+    cooldown_ms=8000,
+    description="RAMPAGE 단계에서 사용 가능. 광역 폭발 (모든 적).",
+    color=(255, 100, 80),
+    icon="☠",
+    visual_animation="heavy_attack",
+)
+
+FINISHER_FINAL_STRIKE = ComboFinisher(
+    id="final_strike",
+    name="FINAL STRIKE",
+    name_ko="최후의 일격",
+    required_stage=ANNIHILATION,
+    damage_multiplier=5.0,
+    ap_cost=0,
+    cooldown_ms=12000,
+    description="ANNIHILATION 단계에서 사용 가능. 즉사급 데미지 + 화면 클리어.",
+    color=(255, 30, 30),
+    icon="✦",
+    visual_animation="critical_hit",
+)
+
+ALL_FINISHERS: tuple[ComboFinisher, ...] = (
+    FINISHER_QUICK_SLASH,
+    FINISHER_RAMPAGE_BURST,
+    FINISHER_FINAL_STRIKE,
+)
+
+
+def get_finisher_for_stage(stage: ComboStage) -> ComboFinisher | None:
+    """Get the finisher available at a stage, or None."""
+    for finisher in ALL_FINISHERS:
+        if finisher.required_stage.index == stage.index:
+            return finisher
+    return None
+
+
+# ----------------------------------------------------------------------------
+# Full combo HUD (avatar + counter + timing bar)
+# ----------------------------------------------------------------------------
+
+
+def render_combo_full(
+    combo: CombatCombo,
+    visual: ComboVisual | None = None,
+    show_avatar: bool = True,
+    show_timing: bool = True,
+    width: int = 30,
+) -> str:
+    """Render the full combo HUD as a multi-line string.
+
+    Layout (top to bottom):
+      [avatar] 3x CHAIN!
+      [████████████████░░░░] 60%
+    """
+    if combo.count == 0:
+        return ""
+
+    lines: list[str] = []
+
+    if show_avatar:
+        avatar = get_avatar_for_stage(combo.current_stage)
+        # Use pulse frame if pulse is active
+        pulse_active = visual is not None and visual.counter_pulse_ms > 0
+        icon = avatar.get_frame(pulse_active=pulse_active)
+        # Avatar + counter on one line
+        counter = (
+            f"{combo.display_count}x {combo.current_stage.label}"
+            if combo.current_stage.label
+            else f"{combo.display_count}x"
+        )
+        lines.append(f"{icon} {counter}")
+
+    if show_timing:
+        bar = TimingBar(width=width)
+        lines.append(bar.render(combo))
+
+    return "\n".join(lines)
+
+
 __all__ = [
     "ALL_STAGES",
     "ANNIHILATION",
     "CHAIN",
     "CombatCombo",
+    "ComboFinisher",
     "ComboStage",
     "ComboVisual",
     "FLURRY",
     "RAMPAGE",
+    "StageAvatar",
+    "TimingBar",
     "WARMUP",
+    "get_avatar_for_stage",
+    "get_finisher_for_stage",
     "render_combo_counter",
     "render_combo_end",
+    "render_combo_full",
     "render_combo_stage_up",
+    "render_timing_bar",
     "spawn_combo_hit",
     "update_combo_visual",
 ]
