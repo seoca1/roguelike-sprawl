@@ -383,5 +383,117 @@ if PPL &lt; ZDR:  TOUGH/DEADLY (어려움)</div>
   <code>src/roguelike_sprawl/combat/</code> · <code>data/combat/ice_types.json</code> · RT-MS
 </div>
 
+<div class="container">
+<h2>🎬 VFX (시각 효과) — 5-Layer System</h2>
+<p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+  <code>src/roguelike_sprawl/combat/effects.py</code> — 모든 스킬·ICE·크리티컬에 ASCII 애니메이션, 파티클, 스크린 셰이크, 시네마틱 인트로/데스 시퀀스.
+</p>
+
+<div class="vfx-grid">
+  <div class="vfx-card layer1">
+    <h3>Layer 1 — 즉각 히트 피드백</h3>
+    <ul>
+      <li><b>히트 플래시</b>: 타겟 타일 120ms 백색/노랑</li>
+      <li><b>플로팅 숫자</b>: 데미지/힐, 위로 떠오르며 페이드 (800ms)</li>
+      <li><b>히트 파티클</b>: 6개 ASCII 문자 외측 비산 (중력 80)</li>
+      <li><b>스크린 셰이크</b>: 무거운 히트에 1.0-3.5 강도</li>
+    </ul>
+  </div>
+  <div class="vfx-card layer2">
+    <h3>Layer 2 — 15 스킬 애니메이션</h3>
+    <ul>
+      <li><b>ATTACK</b>: <code>[=&gt;</code> → 타겟 플래시</li>
+      <li><b>HEAVY_ATTACK</b>: 차지 → 슬램 → 충격파</li>
+      <li><b>PIERCE</b>: 관통 화살표 + 이중 플래시</li>
+      <li><b>MULTI_HIT</b>: 3회 빠른 연타</li>
+      <li><b>DOT/POISON</b>: 보라색 독성 파티클</li>
+      <li><b>SHIELD</b>: <code>❖●❖</code> 육각 패턴</li>
+      <li><b>HEAL</b>: 상승하는 <code>+ ✚ ❀</code></li>
+      <li><b>STUN</b>: 회전하는 별 <code>✦·✦</code></li>
+      <li><b>LIFESTEAL</b>: 빨간 선 + 자가 힐</li>
+      <li><b>COUNTER</b>: 방패 후 반환</li>
+      <li><b>DETECT</b>: 스캔 레티클</li>
+      <li><b>...</b> BUFF/DEBUFF/REGEN 포함 15종</li>
+    </ul>
+  </div>
+  <div class="vfx-card layer3">
+    <h3>Layer 3 — ICE 타입별 고유 연출</h3>
+    <ul>
+      <li><b>standard</b>: <code>[X_X]</code> → <code>· · ·</code></li>
+      <li><b>watchdog</b>: <code>WOOF!</code> + 이빨 자국</li>
+      <li><b>goliath</b>: 균열 + 무거운 임팩트 (red)</li>
+      <li><b>black</b>: 글리치 <code>▓█▓▓█▓</code> + magenta</li>
+      <li><b>construct</b>: 회전 기어 <code>⚙⚙⚙</code></li>
+    </ul>
+  </div>
+  <div class="vfx-card layer4">
+    <h3>Layer 4 — 상태이상 아이콘</h3>
+    <ul>
+      <li><b>P</b> Poison · <b>B</b> Burn · <b>S</b> Stun</li>
+      <li><b>❖</b> Shield · <b>↑</b> Buff · <b>↓</b> Debuff</li>
+      <li><b>+</b> Regen · <b>•</b> DOT</li>
+      <li>전투원 옆 표시, 버프/디버프는 테두리 색 변화</li>
+    </ul>
+  </div>
+  <div class="vfx-card layer5">
+    <h3>Layer 5 — 시네마틱 (Cinematic)</h3>
+    <ul>
+      <li><b>전투 시작</b>: 1.5-2초 ICE 이름 글리치 등장</li>
+      <li><b>크리티컬</b>: 250ms 슬로모션 + 강 셰이크 (3.5)</li>
+      <li><b>데스 시퀀스</b>: 5-8프레임 다단계 파괴</li>
+      <li><b>콤보 카운터</b>: <code>2x HIT!</code> → <code>5x RAMPAGE!</code></li>
+    </ul>
+  </div>
+</div>
+
+<style>
+.vfx-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.vfx-card {
+  background: #131a23;
+  border: 1px solid #2a3540;
+  border-left: 3px solid #66ffcc;
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.vfx-card h3 {
+  color: #66ffcc;
+  font-size: 14px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.vfx-card ul {
+  color: #c5d4e3;
+  font-size: 12px;
+  line-height: 1.5;
+  list-style: none;
+  padding: 0;
+}
+.vfx-card li {
+  margin-bottom: 3px;
+}
+.vfx-card code {
+  color: #ffaa55;
+  font-size: 11px;
+  background: #0a0e14;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.vfx-card.layer2 { border-left-color: #00ccff; }
+.vfx-card.layer2 h3 { color: #00ccff; }
+.vfx-card.layer3 { border-left-color: #ffaa55; }
+.vfx-card.layer3 h3 { color: #ffaa55; }
+.vfx-card.layer4 { border-left-color: #ff7799; }
+.vfx-card.layer4 h3 { color: #ff7799; }
+.vfx-card.layer5 { border-left-color: #ff5599; }
+.vfx-card.layer5 h3 { color: #ff5599; }
+</style>
+
+</div>
+
 </body>
 </html>

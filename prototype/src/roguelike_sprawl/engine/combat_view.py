@@ -18,6 +18,13 @@ import tcod.event
 from tcod.event import KeyDown, KeySym
 
 from ..audio import safe_play
+from ..combat.effects import (
+    CombatEffects,
+    IceType,
+    spawn_hit_effects,
+    spawn_ice_death,
+    spawn_ice_intro,
+)
 from ..combat.registry import IceRegistry, ProgramRegistry, build_ice_enemy
 from ..combat.state import (
     Combatant,
@@ -79,6 +86,12 @@ def render_combat(
     foot_r = shell[RegionId.FOOTER]
     panel_r = shell[RegionId.STATUS_PANEL]
 
+    # Step combat VFX (animations, particles, shake, etc.)
+    state.combat_effects.step(50)  # ~20 fps tick
+
+    # Apply screen shake to draw origin
+    shake_dx, shake_dy = state.combat_effects.shake.offset()
+
     # Clear and draw dividers
     for r in shell.values():
         clear_region(console, r)
@@ -105,6 +118,8 @@ def render_combat(
     # Main area: combatants + effects
     _draw_combatants(console, main_r, combat_state)
     _draw_combat_effects(console, main_r, combat_state)
+    # VFX overlay (animations, particles, floating numbers, hit flash, cinematic)
+    _draw_vfx_overlay(console, main_r, state.combat_effects, shake_dx, shake_dy)
 
     # Action log (in main area, below combatants)
     _draw_action_log(console, main_r, combat_state)
@@ -152,6 +167,71 @@ def render_combat(
         text=f"Combat  |  T+{elapsed_s:.1f}s  |  Step {state.demo_step}",
         status_messages=state.status_messages,
     )
+
+
+def _draw_vfx_overlay(
+    console: tcod.console.Console,
+    region: Region,
+    fx: CombatEffects,
+    shake_dx: int,
+    shake_dy: int,
+) -> None:
+    """Render VFX overlay on top of combat (Layer 1-5 effects)."""
+    rx, ry, rw, rh = region.x, region.y, region.w, region.h
+
+    # Hit flash: white overlay with alpha fade
+    if fx.hit_flash.is_active:
+        flash_char = "█"
+        for y in range(ry, ry + rh):
+            for x in range(rx, rx + rw):
+                if (x + y) % 3 == 0:  # sparse flash pattern
+                    console.print(
+                        x=x,
+                        y=y,
+                        string=flash_char,
+                        fg=fx.hit_flash.color,
+                    )
+
+    # Animations: render current frame
+    for anim in fx.animations:
+        frame = anim.current_frame
+        if frame is None:
+            continue
+        # Place in center of region
+        cx = rx + rw // 2 + frame.offset[0] + shake_dx
+        cy = ry + rh // 2 + frame.offset[1] + shake_dy
+        if rx <= cx < rx + rw and ry <= cy < ry + rh:
+            console.print(x=cx, y=cy, string=frame.text, fg=frame.color)
+
+    # Particles
+    for p in fx.particles.particles:
+        px, py = int(p.x) + rx + shake_dx, int(p.y) + ry + shake_dy
+        if rx <= px < rx + rw and ry <= py < ry + rh:
+            # Fade color by mixing toward black
+            alpha = p.alpha
+            r, g, b = p.color
+            faded: tuple[int, int, int] = (int(r * alpha), int(g * alpha), int(b * alpha))
+            console.print(x=px, y=py, string=p.char, fg=faded)
+
+    # Floating damage/heal numbers
+    for n in fx.floating_numbers:
+        nx, ny = int(n.x) + rx + shake_dx, int(n.y) + ry + shake_dy
+        if rx <= nx < rx + rw and ry <= ny < ry + rh:
+            # Brighten color for crits
+            color = n.color
+            if n.is_crit:
+                color = (min(255, color[0] + 50), color[1], color[2])
+            console.print(x=nx, y=ny, string=n.text, fg=color)
+
+    # Cinematic (intro/death/critical) — large centered text
+    if fx.cinematic is not None:
+        phase = fx.cinematic.current_phase
+        if phase is not None:
+            text, color, _duration = phase
+            cx = rx + (rw - len(text)) // 2
+            cy = ry + rh // 2
+            if rx <= cx < rx + rw and ry <= cy < ry + rh:
+                console.print(x=cx, y=cy, string=text, fg=color)
 
 
 def _draw_combatants(
@@ -472,7 +552,17 @@ def handle_combat_input(
 
                     sound_name = _SKILL_SOUND_MAP.get(skill.effect, "combat/skill_physical")
                     _sm.get_sound_manager().play(sound_name)
+                    # Snapshot HP for VFX damage calculation
+                    _player_hp_before = combat_state.player.hp
+                    _enemy_hp_before = combat_state.enemy.hp
                     use_skill(combat_state, skill)
+                    _spawn_skill_vfx(
+                        state,
+                        skill,
+                        combat_state,
+                        enemy_delta=_enemy_hp_before - combat_state.enemy.hp,
+                        player_delta=_player_hp_before - combat_state.player.hp,
+                    )
 
                 else:
                     cooldown = combat_state.skill_cooldowns.get(skill.id, 0)
@@ -502,13 +592,99 @@ def handle_combat_input(
             idx = int(event.sym.name[1:]) - 1
             if 0 <= idx < len(combat_state.player.skills):
                 skill = combat_state.player.skills[idx]
+                _player_hp_before = combat_state.player.hp
+                _enemy_hp_before = combat_state.enemy.hp
                 use_skill(combat_state, skill)
+                _spawn_skill_vfx(
+                    state,
+                    skill,
+                    combat_state,
+                    enemy_delta=_enemy_hp_before - combat_state.enemy.hp,
+                    player_delta=_player_hp_before - combat_state.player.hp,
+                )
     return True
+
+
+def _spawn_skill_vfx(
+    state: AppState,
+    skill: Skill,
+    combat_state: CombatState,
+    *,
+    enemy_delta: int,
+    player_delta: int,
+) -> None:
+    """Spawn VFX for a skill resolution. Called from handle_combat_input."""
+    fx = state.combat_effects
+    effect_name = skill.effect.value
+    # Determine target based on skill effect
+    if effect_name in ("heal", "regen", "buff", "shield"):
+        # Self-targeted (player)
+        target_x, target_y = 4.0, 8.0  # Left side (player)
+        damage = -player_delta  # Show as positive heal
+        spawn_hit_effects(
+            fx,
+            target_x,
+            target_y,
+            damage,
+            effect_type=effect_name,
+            is_crit=False,
+        )
+    elif effect_name in ("dot", "poison", "debuff", "stun", "detect"):
+        # Enemy-targeted debuff
+        target_x, target_y = 12.0, 8.0  # Right side (enemy)
+        damage = max(0, enemy_delta)
+        spawn_hit_effects(
+            fx,
+            target_x,
+            target_y,
+            damage,
+            effect_type=effect_name,
+            is_crit=False,
+        )
+    else:
+        # Damaging skill (attack/heavy/pierce/multi/counter/lifesteal)
+        target_x, target_y = 12.0, 8.0
+        damage = max(0, enemy_delta)
+        is_crit = damage > skill.damage * 1.4  # heuristic
+        spawn_hit_effects(
+            fx,
+            target_x,
+            target_y,
+            damage,
+            effect_type=effect_name,
+            is_crit=is_crit,
+        )
+        # Lifesteal: also show heal on player
+        if effect_name == "lifesteal" and player_delta < 0:
+            spawn_hit_effects(
+                fx,
+                4.0,
+                8.0,
+                -player_delta,
+                effect_type="heal",
+                is_crit=False,
+            )
+        # Counter: also show small hit on player if reflected
+        if effect_name == "counter" and player_delta < 0:
+            spawn_hit_effects(
+                fx,
+                4.0,
+                8.0,
+                -player_delta,
+                effect_type="attack",
+                is_crit=False,
+            )
 
 
 def _end_combat(state: AppState, combat_state: CombatState) -> None:
     """Transition from Combat to next state with rewards."""
     if combat_state.outcome == "victory":
+        # VFX: ICE death cinematic (per ICE type)
+        try:
+            ice_type = IceType(combat_state.enemy.id)
+        except ValueError:
+            ice_type = IceType.STANDARD
+        spawn_ice_death(state.combat_effects, ice_type)
         # Play victory sound
         safe_play("combat/victory")
         # Award rewards: ICE Shard material + credits
@@ -730,4 +906,11 @@ def start_combat(
     # ice_node.kind should be ICE, but we'll use a default if not
     ice_kind = "standard"  # Placeholder: extract from ice_node
     enemy = build_ice_enemy(ice_kind, ice_registry)
+    state.combat_effects.clear()
+    # Map ice_kind string to IceType enum
+    try:
+        ice_type = IceType(ice_kind)
+    except ValueError:
+        ice_type = IceType.STANDARD
+    spawn_ice_intro(state.combat_effects, ice_type, enemy.name)
     return CombatState(player=player, enemy=enemy)

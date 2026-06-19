@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import TYPE_CHECKING
 
+from ..combat.effects import CombatEffects
 from ..combat.state import CombatState
 from ..matrix.exploration import ExplorationState
 from ..matrix.graph import MatrixGraph
@@ -149,3 +150,5 @@ class AppState:
     debrief_index: int = 0
     # Save/Load browser state (ScreenKind.SAVE_LOAD)
     save_load_selected: int = 1
+    # Combat visual effects (animations, particles, screen shake, etc.)
+    combat_effects: CombatEffects = field(default_factory=CombatEffects)
