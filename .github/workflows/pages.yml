@@ -7,6 +7,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: "pages"
@@ -56,3 +58,18 @@ jobs:
           user_name: github-actions[bot]
           user_email: github-actions[bot]@users.noreply.github.com
           commit_message: "deploy: dashboard ${{ github.sha }}"
+
+      - name: Enable Pages (gh-pages branch)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            try {
+              await github.rest.repos.enablePages({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                source: { branch: 'gh-pages', path: '/' }
+              });
+              core.info('Pages enabled on gh-pages branch');
+            } catch (e) {
+              core.warning('Could not auto-enable Pages (may need manual setup): ' + e.message);
+            }
