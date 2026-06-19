@@ -607,6 +607,167 @@ if PPL &lt; ZDR:  TOUGH/DEADLY (어려움)</div>
 }
 </style>
 
+<div class="container">
+<h2>📊 HP 바 & 카메라 연출 (HUD)</h2>
+<p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+  <code>src/roguelike_sprawl/combat/hud.py</code> — 2단 HP 바, 임계치 경고, 보스 페이즈 색, 카메라 vignette. 600ms 펄스, 200ms 데미지/힐 플래시, 0.7 vignette 강도.
+</p>
+
+<div class="hud-grid">
+  <div class="hud-card hp-bar">
+    <h3>📊 2단 HP 바</h3>
+    <div class="bar-demo">
+      <code>[████████████████████] 100/100 HP</code>
+      <code class="hp-low">[██████░░░░░░░░░░░░░░] 30/100 HP</code>
+      <code class="hp-crit">[██░░░░░░░░░░░░░░░░░] 5/100 HP</code>
+      <code class="shield">[▓▓▓▓▓▓▓▓▓▓░░░░░░░░░░] SH</code>
+    </div>
+    <ul>
+      <li><b>Block chars</b>: <code>█</code> (full) / <code>░</code> (empty)</li>
+      <li><b>Shield</b>: <code>▓</code> (full) / <code>░</code> (empty)</li>
+      <li><b>Smooth drain</b>: 200ms transition, no instant jumps</li>
+      <li><b>Color tiers</b>: green (>50%) → yellow (>30%) → orange (≤30%) → red (≤10%)</li>
+    </ul>
+  </div>
+  <div class="hud-card low-hp">
+    <h3>⚠️ 저HP 경고 (AlertLevel)</h3>
+    <table class="hud-table">
+      <tr><th>HP%</th><th>Level</th><th>Effect</th></tr>
+      <tr><td>&gt; 30%</td><td>HEALTHY</td><td>None</td></tr>
+      <tr><td>≤ 30%</td><td>LOW</td><td>펄스 600ms + Vignette 0.3</td></tr>
+      <tr><td>≤ 10%</td><td>CRITICAL</td><td>강한 펄스 + Vignette 0.7 + Desaturation 0.5</td></tr>
+    </table>
+  </div>
+  <div class="hud-card phase">
+    <h3>👑 보스 페이즈 색상</h3>
+    <ul>
+      <li><b>P0</b> 정상 <code>(180,180,200)</code> silver</li>
+      <li><b>P1</b> 경계 <code>(255,180,100)</code> warning</li>
+      <li><b>P2</b> 격노 <code>(255,100,100)</code> danger</li>
+      <li><b>P3</b> 자폭 <code>(255,50,50)</code> critical</li>
+      <li><b>전환 시</b>: 400ms 백색 플래시</li>
+      <li><b>Vignette</b>: 페이즈 전환 시 0.4 강도 300ms</li>
+    </ul>
+  </div>
+  <div class="hud-card flash">
+    <h3>💥 데미지/힐 플래시</h3>
+    <ul>
+      <li><b>데미지</b>: HP 바 적색 <code>(255,50,50)</code> 200ms</li>
+      <li><b>힐</b>: HP 바 녹색 <code>(80,255,120)</code> 200ms</li>
+      <li><b>Smooth drain</b>: HP가 200ms에 걸쳐 감소</li>
+      <li><b>Shield</b>: shield bar도 동일 애니메이션</li>
+    </ul>
+  </div>
+  <div class="hud-card camera">
+    <h3>📷 카메라 연출</h3>
+    <ul>
+      <li><b>Screen Shake</b>: Layer 1에서 1.0-4.5 강도</li>
+      <li><b>Vignette</b>: 저HP 시 화면 가장자리 어두움 (0.0~0.7)</li>
+      <li><b>Desaturation</b>: CRITICAL HP에서 색상 0.5 채도 감소</li>
+      <li><b>Phase Flash</b>: 보스 페이즈 전환 시 0.4 vignette 플래시</li>
+    </ul>
+  </div>
+  <div class="hud-card api">
+    <h3>🛠 CombatHUD API</h3>
+    <pre><code>hud = CombatHUD()
+hud.take_damage("player", 30)
+hud.heal("player", 50)
+hud.set_boss_phase("enemy", 2, color=(255,50,50))
+hud.step(dt_ms=50)  # 20 fps tick</code></pre>
+  </div>
+</div>
+
+<style>
+.hud-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.hud-card {
+  background: #131a23;
+  border: 1px solid #2a3540;
+  border-radius: 8px;
+  padding: 16px 18px;
+}
+.hud-card h3 {
+  color: #66ffcc;
+  font-size: 15px;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.hud-card ul {
+  color: #c5d4e3;
+  font-size: 12px;
+  line-height: 1.6;
+  list-style: none;
+  padding: 0;
+}
+.hud-card li {
+  margin-bottom: 4px;
+}
+.hud-card code {
+  color: #ffaa55;
+  font-size: 11px;
+  background: #0a0e14;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+.bar-demo {
+  background: #0a0e14;
+  border: 1px solid #2a3540;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 12px;
+  font-family: monospace;
+}
+.bar-demo code {
+  display: block;
+  color: #66ffcc;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+.bar-demo code.hp-low { color: #ffaa55; }
+.bar-demo code.hp-crit { color: #ff3344; }
+.bar-demo code.shield { color: #88ccff; }
+.hud-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  color: #c5d4e3;
+  margin-top: 8px;
+}
+.hud-table th {
+  text-align: left;
+  color: #66ffcc;
+  padding: 4px 8px;
+  border-bottom: 1px solid #2a3540;
+}
+.hud-table td {
+  padding: 4px 8px;
+  font-family: monospace;
+}
+.hud-card.phase h3 { color: #ffaa55; }
+.hud-card.flash h3 { color: #ff7799; }
+.hud-card.camera h3 { color: #ff5599; }
+.hud-card.api h3 { color: #00ccff; }
+.hud-card pre {
+  background: #0a0e14;
+  border: 1px solid #2a3540;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 0;
+  overflow-x: auto;
+}
+.hud-card pre code {
+  color: #66ffcc;
+  font-size: 11px;
+  font-family: monospace;
+  background: transparent;
+  padding: 0;
+}
+</style>
+
 </div>
 
 </div>
