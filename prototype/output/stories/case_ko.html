@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>첫 잭인 — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 2rem 8rem;
+        }
+
+        /* Header */
+        .story-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0ddd8;
+        }
+
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .story-title {
+            font-size: 2.25rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .story-subtitle {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--meta-color);
+        }
+
+        /* Body */
+        .story-body {
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .story-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        .story-body p.chapter-opening {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+        }
+
+        /* Drop cap for first letter */
+        .story-body p.chapter-opening::first-letter {
+            font-size: 3.5rem;
+            float: left;
+            line-height: 1;
+            padding-right: 0.5rem;
+            padding-top: 0.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        /* Emphasis */
+        em {
+            font-style: italic;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        /* Quote block (epigraph style) */
+        .epigraph {
+            font-style: italic;
+            color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem;
+            margin: 2rem 0;
+        }
+
+        /* Footer */
+        .story-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0ddd8;
+            text-align: center;
+        }
+
+        .story-footer p {
+            font-size: 0.85rem;
+            color: var(--meta-color);
+            font-family: monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Language indicator */
+        .lang-indicator {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--meta-color);
+            background: var(--bg-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+            .container {
+                padding: 2rem 1.5rem 6rem;
+            }
+            .story-title {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">KO</div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Case — Console Cowboy</div>
+            <h1 class="story-title">첫 잭인</h1>
+            <p class="story-subtitle">잭아웃 후 30초</p>
+        </header>
+
+        <article class="story-body">
+        <p class="chapter-opening">> "The sky above the port was the color of television, tuned to a dead channel." > — Neuromancer, Opening line</p>
+        <p class="body">30초.</p>
+        <p class="body">Ono-Sendai Cyberspace 7의 전극이 두피에서 떨어지는 동안에도, 내 손가락은 여전히 키를 두드리고 있었다. 화면을 치는 손. 손가락 끝이 떨린다. 의자에 등을 기댄 채. 매트릭스는 이미 사라졌는데, 매트릭스는 아직 거기 있다 — 0과 1 사이의 0.3초 동기. 신경 펄스가 시냅스를 통과하는 시간보다 짧은 시간.</p>
+        <p class="body">카운트다운은 내 머릿속 어딘가에서 매너리즘처럼 흘렀다. 30, 29, 28. Ono-Sendai가 의자에서 분리되는 동안에도, 매트릭스는 여전히 내 몸이다. 키는 진짜 손가락이 아니다. 매트릭스의 손가락. 데크의 손가락. 데이터의 손가락.</p>
+        <p class="body">27, 26.</p>
+        <p class="body">체리머티가 떨어진다 — 젖은 비닐처럼. 비가 — 아니, 에어컨. 헤드슨 호 텔레비전이 30초 전의 결계를 아직 보여주고 있었다. 평행한 선들. 무지갯빛으로 부서진 데이터. 내가 방금 죽었던 곳. 내가 방금 살았던 곳.</p>
+        <p class="body">25, 24.</p>
+        <p class="body">내 앞, 콘솔 테이블 위에 얽힌 케이블들. Hosaka의 검은 케이스. 화면 보호기. 케이스에 박힌 네온 — "CHATTO'S 24/7 ICE-FREE" 광고. 메인프레임 한 대당 두 시간. 채팅이 24시간 영업이라고. Chiba 시의 11번 층, 호수텔이 아닌 낡은 사무실 한 칸.</p>
+        <p class="body">23, 22.</p>
+        <p class="body">침이 났다. 침이 입천장에 붙어 있었다. 매트릭스 안에서는 침이 없으니까. 매트릭스 안에서는 몸이 없으니까. 매트릭스 안에서는 *나*가 없으니까. 그런데 침이 있다. 내 몸이 있다. 내가 있다. 매트릭스가 끝났는데 *나*는 끝나지 않았다.</p>
+        <p class="body">30초 후, 나는 다시 인간이 된다.</p>
+        <p class="body">일어섰다. 화장실. 변기. 물. 거울 속 내가 젊었다. 내가 젊었다. 매트릭스 안에서만큼 젊지 않았지만, 젊었다. Ono-Sendai는 내 *젊은* 몸을 허락하지 않는다. 30초 후의 *젊은* 몸. 30초 후의 *살아있는* 몸.</p>
+        <p class="body">물이 차가웠다. 물 밖에서, 차가운 금속이 — 손잡이 — 내가 아직 살아있다는 증거. 그러고 보니, 살아있다는 게 뭐가 다른지. 매트릭스에서 죽어도, 30초 후에 다시 깨어나니까. 매트릭스에서 살아도, 30초 후에 잭아웃하니까. 30초 후의 매트릭스. 매트릭스 후의 30초. 둘 다 같은 비. 둘 다 같은 —</p>
+        <p class="body">잭. 그냥 잭.</p>
+        <p class="body">Chiba 시의 11번 층. 호수텔이 아니었다. 비가 천장으로 쏟아지고 있었다. 30초 전엔 매트릭스. 30초 후엔 매트릭스 외. 둘 다 같은 비. 둘 다 같은 — 화면 보호기. 둘 다 같은 — 케이스. 둘 다 같은 — 케이블.</p>
+        <p class="body">내 손이 떨리는 게 느껴졌다. 그래서 나는 — 늘 그렇듯이 — 일어섰다. 화장실. 거기서 다시 시작. 매트릭스에서도, 매트릭스 밖에서도, 거울을 본다. 내 얼굴을 본다. 내가 누구인지 확인한다. 30초마다.</p>
+        <p class="body">침이 났다. 침이 입천장에 붙어 있었다. 침이 — 침이 —</p>
+        <p class="body">아. 30초 후다.</p>
+        <p class="body">30초가 30분 같았다.</p>
+        <p class="body">외부로. 출구. 30초 후, 또 30초. 비는 계속되었다. Chiba는 늘 그렇다. 비가 그치면 Chiba가 아니니까. Chiba는 비로 만들어진 도시다. 매트릭스는 데이터로 만들어진 도시다. 둘 다 비. 둘 다 데이터.</p>
+        <p class="body">나는 모퉁이를 돌았다. 모퉁이를 돌면 다를 거라고. 벽이 두 개 있었다. 두 개의 비. 두 개의 — 비둘기. 비둘기가 *비*를 맞고 있었다. Chiba의 비둘기는 Chiba의 비를 맞는다. 매트릭스의 비둘기는 매트릭스의 비를 맞는다.</p>
+        <p class="body">가슴이 — 케이스. 가슴이 케이스. 가슴이 케이스.</p>
+        <p class="body">Ono-Sendai는 가슴에 있었다. Ono-Sendai는 항상 가슴에 있다. 데크. 데크는 *심장*이다. 매트릭스는 *혈액*이다. 데이터는 *산소*다. 나는 *뇌*다. 매트릭스가 끝나도, 나는 끝나지 않는다. 30초 후에도.</p>
+        <p class="body">30초 후에도, 내 손가락은 떨리고 있었다.</p>
+        <p class="body">Chiba의 비는 Chiba의 비를 만든다. 매트릭스의 데이터는 매트릭스를 만든다. 둘 다 신이 없다. 신이 만들어도 신이 모른다. Chiba의 비는 — Chiba의 비는. 매트릭스의 데이터는 — 매트릭스의 데이터는. 30초 후의 나를 만든다. 30초 후의 나는 매트릭스를 만든다.</p>
+        <p class="body">나는 모퉁이를 돌았다. 모퉁이를 돌면 다를 거라고. 또 모퉁이를 돌았다. 비는 계속되었다. 매트릭스는 — 매트릭스는 멈추지 않는다. 매트릭스는 신이 만든 것이니까. 신이 만든 것은 멈추지 않는다. 매트릭스는 *나*가 만든 것이다. 내가 만든 것은 멈추지 않는다. 내가 만든 것이 멈추면 *나*가 멈추니까. 30초 후에도.</p>
+        <p class="body">내 손이 떨리고 있었다. 30초 후에도.</p>
+        <p class="body">매트릭스 안에서는 손이 떨리지 않는다. 매트릭스 안에서는 몸이 없으니까. 매트릭스 안에서는 떨림이 없으니까. 매트릭스 안에서는 *나*가 없으니까. 그런데 매트릭스가 끝나면, 떨림이 시작된다. 30초 후에, 떨림이 시작된다. 30초마다, 떨림이 시작된다. 매트릭스가 끝날 때마다, *나*가 시작된다.</p>
+        <p class="body">Ono-Sendai가 가슴에서 떨어졌다. 가슴이 — 가슴이 — 가슴이.</p>
+        <p class="body">나는 — 매트릭스 밖에서 — 매트릭스 안을 떠올렸다. 매트릭스 안에서, 나는 *나*였다. 매트릭스 안에서, 떨림이 없었다. 매트릭스 안에서, 침이 없었다. 매트릭스 안에서, *나*가 없었다. 그런데 매트릭스 안에서, 내가 가장 *살아있었다*. 매트릭스 밖에서, 내가 가장 *죽어있었다*.</p>
+        <p class="body">Chiba의 비는 계속되었다. Chiba의 비는 Chiba의 비를 만든다. Chiba의 비는 — Chiba의 비는 —</p>
+        <p class="body">나는 모퉁이를 돌았다. 모퉁이를 돌면 다를 거라고. 또 모퉁이를 돌았다. 비는 계속되었다. 매트릭스는 — 매트릭스는 —</p>
+        <p class="body">30초 후에도, 내 손가락은 떨리고 있었다. 30초 후에도, Ono-Sendai는 가슴에 없었다. 30초 후에도, 비는 계속되었다. 30초 후에도, *나*는 — *나*는 —</p>
+        <p class="body">잭. 그냥 잭. 30초 후. 매트릭스 밖.</p>
+        <p class="body">Ono-Sendai Cyberspace 7은 다시 내 손에 닿지 않았다. 그날 이후로, 나는 매트릭스에 들어가지 않았다. 한 번도. 매트릭스는 — 매트릭스는 *거기* 있다. 매트릭스는 항상 거기 있다. 매트릭스는 신이 만든 것이니까. 신이 만든 것은 — 신이 만든 것은.</p>
+        <p class="body">Chiba의 비는 그쳤다. 30초 후에. 30초 만에. 매트릭스 안에서 30초는 — 매트릭스 안에서 30초는 *영원*이다. 매트릭스 밖에서 30초는 — 매트릭스 밖에서 30초는 *30초*다. 매트릭스 밖에서 *영원*은 없다. 매트릭스 밖에서 *영원*이 없으니까. 매트릭스 밖에서 *나*가 있다. *나*가 있으니까 *영원*이 없다. *영원*이 없으니까 *나*가 있다.</p>
+        <p class="body">나는 *나*다. 매트릭스 밖에서. 30초 후에.</p>
+        <p class="body">내 손이 떨리지 않았다. 30초 후에. 매트릭스가 끝나고, *나*가 시작되고, 떨림이 멈추었다. 매트릭스가 끝나면 *나*가 시작된다고 생각했다. 매트릭스가 끝나면 *나*가 시작된다고 — 생각했다.</p>
+        <p class="body">Ono-Sendai는 가슴에 없었다. Ono-Sendai는 — Ono-Sendai는 — 매트릭스 안에 있었다. 매트릭스 안에 Ono-Sendai가 있었다. 매트릭스 안에 *나*가 있었다. 매트릭스 안에 *떨림*이 있었다. 매트릭스 안에 *침*이 있었다. 매트릭스 안에 *Chiba*가 있었다.</p>
+        <p class="body">매트릭스 밖에는 — 매트릭스 밖에는 *Chiba*가 있었다.</p>
+        <p class="body">나는 — 매트릭스 밖에서 — 매트릭스 안을 떠올렸다. 매트릭스 안에서, 나는 *나*였다. 매트릭스 밖에서, 나는 *나*가 아니다. 매트릭스 안에서, *나*가 가장 *살아있었다*. 매트릭스 밖에서, *나*가 가장 *죽어있다*.</p>
+        <p class="body">Chiba의 비는 — Chiba의 비는 — 그쳤다. 30초 만에. 30초 만에 *나*가 — *나*가 — *나*가.</p>
+        <p class="body">내 손이 떨리지 않았다. 30초 후에도.</p>
+        <p class="body">- **위키 참조**: [[Fiction/wiki/works/neuromancer]] · [[Fiction/wiki/characters/case]] - **게임 통합**: - `Game/roguelike_sprawl/data/story/chapters/case.json` — CHAPTER 화면 데이터 - `Game/roguelike_sprawl/engine/original_story.py:CHAPTER_CASE` — 캐릭터 동기 부여 - `Game/roguelike_sprawl/design/scenario/chapter-1-novice.md` — Chapter 1 명세 - **테마**: [[Fiction/wiki/themes/identity-and-the-matrix]] — 매트릭스 안과 밖의 경계 - **모티프**: 30초 카운트다운 · 비 · 젖은 표면 · 케이블 · 손가락 떨림 · 거울 · Ono-Sendai - **연결 캐릭터**: Molly는 언급되지 않음 (그녀는 이미 떠남). The Finn은 단편 외부.</p>
+        <p class="body">- *번역 노트*: 원문 1인칭 시점. "30초"는 Ono-Sendai Cyberspace 7의 표준 디스커넥트 시간. 케이스의 중독성/금단증세를 단편적으로 표현. **확장판(v2.0)**: 도입/전개/절정/결말 + **에필로그** 5섹션으로 분량 확장. 도입 30초 카운트다운 메타포 강화. 비/거울/Ono-Sendai 모티프 반복. - *계보*: Neuromancer 중반부, "고철책장 위의 케이스" 직전. **게임 통합**: 케이 (K) — Novice 캐릭터의 CHAPTER 화면. - *시각적 모티프*: 거울, 물, 비, 금속 손잡이, 케이블, 화면 보호기 — "매트릭스 거울" 메타포 - *연결 캐릭터*: Molly는 언급되지 않음 (그녀는 이미 떠남) - *확장 의도*: 게임의 CHAPTER 화면에서 12초 타이핑 효과 동안 전체가 표시될 수 있도록 분량 조정. 5섹션 구조는 게이머가 "어디까지 읽었는지" 시각적 anchor 제공.</p>
+        </article>
+
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Gibson-inspired fiction</p>
+        </footer>
+    </div>
+</body>
+</html>

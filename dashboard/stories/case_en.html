@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The First Jack — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 4rem 2rem 8rem;
+        }
+
+        /* Header */
+        .story-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #e0ddd8;
+        }
+
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+
+        .story-title {
+            font-size: 2.25rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .story-subtitle {
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--meta-color);
+        }
+
+        /* Body */
+        .story-body {
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        .story-body p {
+            margin-bottom: 1.5rem;
+        }
+
+        .story-body p.chapter-opening {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+        }
+
+        /* Drop cap for first letter */
+        .story-body p.chapter-opening::first-letter {
+            font-size: 3.5rem;
+            float: left;
+            line-height: 1;
+            padding-right: 0.5rem;
+            padding-top: 0.1rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        /* Emphasis */
+        em {
+            font-style: italic;
+        }
+
+        strong {
+            font-weight: 600;
+        }
+
+        /* Quote block (epigraph style) */
+        .epigraph {
+            font-style: italic;
+            color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem;
+            margin: 2rem 0;
+        }
+
+        /* Footer */
+        .story-footer {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e0ddd8;
+            text-align: center;
+        }
+
+        .story-footer p {
+            font-size: 0.85rem;
+            color: var(--meta-color);
+            font-family: monospace;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Language indicator */
+        .lang-indicator {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            font-family: monospace;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--meta-color);
+            background: var(--bg-color);
+            padding: 0.25rem 0.5rem;
+            border-radius: 2px;
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            html {
+                font-size: 16px;
+            }
+            .container {
+                padding: 2rem 1.5rem 6rem;
+            }
+            .story-title {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">EN</div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Case — Console Cowboy</div>
+            <h1 class="story-title">The First Jack</h1>
+            <p class="story-subtitle">Thirty Seconds After Jack-Out</p>
+        </header>
+
+        <article class="story-body">
+        <p class="chapter-opening">30 seconds.</p>
+        <p class="body">The Ono-Sendai electrodes lift from my scalp and my fingers keep typing. Hands that hit a screen. The fingertips tremble. Slumped in the chair.</p>
+        <p class="body">Cherrimatti is wet. Rain — no, the air conditioning. The Headson Hotel TV still shows the boundary I crossed 30 seconds ago. Parallel lines. Data broken into rainbow shards. The place I just died. The place I just lived.</p>
+        <p class="body">Saliva. Saliva stuck to the roof of my mouth.</p>
+        <p class="body">On the console table ahead: tangled cables. A black Hosaka. A screensaver. A neon sticker on the case: CHATTO'S 24/7 ICE-FREE. Two hours per mainframe. Chat is open 24 hours.</p>
+        <p class="body">My hands tremble. So I stand — as always — and walk to the bathroom. The toilet. Water. The mirror shows I am young. I am young.</p>
+        <p class="body">Outside the water, the cold metal of the handle is proof I am still alive. Then again, what does being alive even mean? When you die in the matrix you wake up 30 seconds later. When you live in the matrix you jack out 30 seconds later. The 30 seconds after the matrix. The 30 seconds after the 30 seconds. The same rain. The same —</p>
+        <p class="body">Jack. Just jack.</p>
+        <p class="body">Chiba's 11th level. Not a coffin hotel. Rain is pouring through the ceiling. 30 seconds ago I was in the matrix. 30 seconds later I am outside the matrix. Both rain. Both —</p>
+        <p class="body">I turn a corner. Maybe things will be different. There are two walls. Two rains. Two —</p>
+        <p class="body">My chest is a case. My chest is a case. My chest is a case.</p>
+        </article>
+
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Gibson-inspired fiction</p>
+        </footer>
+    </div>
+</body>
+</html>
