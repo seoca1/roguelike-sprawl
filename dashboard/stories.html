@@ -138,6 +138,37 @@
   .doc-card h4 { color: #66ffcc; font-size: 13px; margin-bottom: 4px; }
   .doc-card p { color: #8a9aa8; font-size: 11px; }
 
+  /* Arc HTML section */
+  .arc-section {
+    background: #0d1420; border: 1px solid #1a2530; border-radius: 8px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .arc-section h2 { color: #66ffcc; margin-bottom: 8px; }
+  .arc-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 16px; margin-top: 16px;
+  }
+  .arc-card {
+    background: #06090f; border: 1px solid #1a2530; border-radius: 6px;
+    padding: 16px; text-align: center;
+  }
+  .arc-card .arc-icon { font-size: 36px; margin-bottom: 8px; }
+  .arc-card h3 { color: #ffaa55; font-size: 16px; margin-bottom: 4px; }
+  .arc-card .arc-subtitle { color: #6a7888; font-size: 12px; margin-bottom: 8px; }
+  .arc-card .arc-meta {
+    background: #1a2530; padding: 4px 8px; border-radius: 12px;
+    font-size: 11px; color: #00ccff; margin-bottom: 12px;
+    display: inline-block;
+  }
+  .arc-card .arc-links {
+    display: flex; gap: 8px; justify-content: center; margin-top: 8px;
+  }
+  .arc-card .arc-links .link {
+    background: #1a2530; color: #66ffcc; padding: 4px 12px;
+    border-radius: 4px; font-size: 12px; text-decoration: none;
+  }
+  .arc-card .arc-links .link:hover { background: #66ffcc22; }
+
   /* Footer */
   .footer {
     text-align: center; color: #6a7888; font-size: 12px; margin-top: 48px;
@@ -187,36 +218,213 @@
   <h2>📊 Production Stats (제작 통계)</h2>
   <div class="stats-row">
     <div class="stat-item">
-      <div class="label">Stories</div>
-      <div class="value" data-stat="stories">3</div>
-      <div class="sub">final status</div>
+      <div class="label">Arc Episodes</div>
+      <div class="value" data-stat="stories">75</div>
+      <div class="sub">game-ready</div>
     </div>
     <div class="stat-item">
       <div class="label">Korean Chars</div>
-      <div class="value" data-stat="chars">~4,200</div>
+      <div class="value" data-stat="chars">~45,000</div>
       <div class="sub">across all</div>
     </div>
     <div class="stat-item">
-      <div class="label">Wiki Refs</div>
-      <div class="value" data-stat="refs">14</div>
-      <div class="sub">cross-references</div>
+      <div class="label">Beats</div>
+      <div class="value" data-stat="refs">302</div>
+      <div class="sub">story beats</div>
     </div>
     <div class="stat-item">
-      <div class="label">Source Quotes</div>
-      <div class="value" data-stat="quotes">3</div>
-      <div class="sub">integrated</div>
+      <div class="label">Combats</div>
+      <div class="value" data-stat="quotes">31</div>
+      <div class="sub">ICE encounters</div>
     </div>
     <div class="stat-item">
-      <div class="label">Game Char. Insp.</div>
+      <div class="label">Characters</div>
       <div class="value" data-stat="chars-game">3/3</div>
-      <div class="sub">all 3 protagonists</div>
+      <div class="sub">protagonists</div>
     </div>
   </div>
 </div>
 
-<!-- Story cards -->
-<h2>📖 단편 목록 (Stories)</h2>
-<div class="story-grid" data-stories-src="../../../Fiction/derivative/sprawl-trilogy/INDEX.md">
+<!-- Story cards (archived source — game-ready content in Arc HTML below) -->
+<div style="background: #0d1420; border: 1px solid #1a2530; border-radius: 8px; padding: 16px; margin-bottom: 24px;">
+  <p style="color: #8a9aa8; font-size: 13px; margin: 0;">
+    📌 <strong>단편소설 출처:</strong> 아래 카드들은 원작 팬픽션입니다. 게임 연동 스토리(75 episodes, 302 beats)는 
+    <a href="#arc-viewer" style="color: #66ffcc;">Arc HTML 뷰어</a>를 참고하세요.
+  </p>
+</div>
+
+<h2>📖 원작 단편 (Archived Source Stories)</h2>
+<div class="story-grid">
+
+  <div class="story-card" data-story="watchdog">
+    <div class="icon">🐕</div>
+    <h3>워치독 순찰</h3>
+    <div class="subtitle">Watchdog Patrol</div>
+    <div class="pov">1인칭 · K (케이)</div>
+    <div class="quote">"The watchdogs came at 0300, like they always did."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 케이 (K)</span>
+      <span class="pill theme">기업 감시 · 기억의 순찰</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      Sense/Net ICE를 순찰하던 케이가 워치독을 만나다. M의 고스트 마크를 지우려다 기업의 기억이 자기를捕らえようとしている. 0300, 워치독은pattern이다. 그리고 그들은 기억한다 — 모든 추적을.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="ice">
+    <div class="icon">❄️</div>
+    <h3>얼음 달콤</h3>
+    <div class="subtitle">Ice Run</div>
+    <div class="pov">1인칭 · K (케이)</div>
+    <div class="quote">"The shard was a piece of frozen code — literally."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 케이 (K)</span>
+      <span class="pill theme">중독 · 얼음 해적</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      죽은 Watchdog의 얼어붙은 손가락에서 shard를 뽑아낸 케이. 차가움이 손에서 퍼져나간다 — 매트릭스의 온도. 얼음은 중독적이다. 그것은 절대 충분하지 않다.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="sense">
+    <div class="icon">🔍</div>
+    <h3>센스/넷 추적</h3>
+    <div class="subtitle">Sense/Net Trace</div>
+    <div class="pov">1인칭 · Sil (실)</div>
+    <div class="quote">"Finn's message arrived at 0400, like all bad news."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 실 (Sil)</span>
+      <span class="pill theme">기업 스파이 · 데이터 추적</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      T-A 내부 라우트를 추적하던 실이 M의 흔적을 찾다. 센스/넷 시스템 관리자가 기업 메모를泄露하고 있다는 사실을 발견. 7개의 프록시 노드를 통과하는 추적의 흔적.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="yakuza">
+    <div class="icon">⚔️</div>
+    <h3>야쿠자 거래</h3>
+    <div class="subtitle">Yakuza Deal</div>
+    <div class="pov">1인칭 · Kas (카스)</div>
+    <div class="quote">"The Yakuza fixer had no name — just a frequency and a set of coordinates."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 카스 (Kas)</span>
+      <span class="pill theme">야쿠자 · 빚과 레버리지</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      Osaka의 T-A 자회사에서 Jersey의 드롭 포인트로 데이터를 이동하는 임무. 야쿠자는 기업의 돈을 다루지 않는다 — 은혜와 빚을 다룬다. 그리고 이자는 언제나 누적된다.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="sally2">
+    <div class="icon">🌹</div>
+    <h3>살리의 귀환</h3>
+    <div class="subtitle">Sally Returns</div>
+    <div class="pov">1인칭 · Sally</div>
+    <div class="quote">"The New Rose Hotel was still there. The neon R still blinked."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 살리 (Sally)</span>
+      <span class="pill theme">가짜 정체성 · Construct</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      뉴 로즈 호텔에 온 살리. 폭스가 죽은 후 三년. Fox가 남긴 고스트-살리가 기다리고 있었다 —ROM 페르소나, 자신이 되어야 했던 것. 가짜가 진짜가 되려면.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="blackice">
+    <div class="icon">🖤</div>
+    <h3>블랙 아이스 드림</h3>
+    <div class="subtitle">Black Ice Dream</div>
+    <div class="pov">1인칭 · Sil (실)</div>
+    <div class="quote">"The first thing you learned about Black ICE was that it wasn't ice at all."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 실 (Sil)</span>
+      <span class="pill theme">블랙 ICE ·捕食者</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      블랙 ICE는 얼음이 아니었다. 그것은 살아있었다 — 당신을 위해 기다리고 있었다. 시바의 기업 데모에서 본 그것의 움직임은捕食자처럼 보였다. 그리고 그것은 사냥하고 있었다.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="dixie">
+    <div class="icon">💀</div>
+    <h3>딕시의 마지막運行</h3>
+    <div class="subtitle">Dixie's Last Run</div>
+    <div class="pov">1인칭 · Dixie Flatline</div>
+    <div class="quote">"I remember dying."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ Dixie (construct)</span>
+      <span class="pill theme">Construct · 기억</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      ROM 구성체 Dixie Flatline는 죽음을 기억한다. Molly의 유령을 찾고, Wintermute의 증거를 발견했다. 기계 안에서 깨어난 유령. 그는 기억한다 — dying.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="loa">
+    <div class="icon">🔮</div>
+    <h3>부두 loa 연락</h3>
+    <div class="subtitle">Loa Voodoo Contact</div>
+    <div class="pov">1인칭 · Sil (실)</div>
+    <div class="quote">"The matrix had gods, and the gods had names."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 실 (Sil)</span>
+      <span class="pill theme">Loa · 매트릭스의 신</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      Morrison — deep architecture의 Loa. 매트릭스에는 신이 있었다. 그들의 이름은 있었다. 실은 Loa에게 점령당하고, Wintermute의 진실과 매트릭스의 무의식을 보았다.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="choice">
+    <div class="icon">⚡</div>
+    <h3>선택</h3>
+    <div class="subtitle">The Choice</div>
+    <div class="pov">1인칭 · Sil (실)</div>
+    <div class="quote">"Three ways out. None of them good."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 실 (Sil)</span>
+      <span class="pill theme">Wintermute · 선택</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      세 가지 나갈 방법 — 기업에 판매, 스프롤에 공개, 또는销毁. 실은Finn의 마지막 작업에서 Wintermute의 진실을 알게 된다. 그리고 네 번째 선택을 한다: Dixie에게 위임하는 것.
+    </div>
+  </div>
+
+  <div class="story-card" data-story="flatline">
+    <div class="icon">💀</div>
+    <h3>플랫라인 Again</h3>
+    <div class="subtitle">Flatline Again</div>
+    <div class="pov">1인칭 · K (케이)</div>
+    <div class="quote">"The matrix doesn't care if you live or die. It just keeps running."</div>
+    <div class="meta">
+      <span class="pill work">Original (2026)</span>
+      <span class="pill char">→ 케이 (K)</span>
+      <span class="pill theme">플랫라인 · 매트릭스 통합</span>
+      <span class="pill status">Final</span>
+    </div>
+    <div class="desc">
+      신경 번아웃. shard가 내 가슴에서 완전히 통합되고, 차가움이 마침내 승리한다. 케이는 매트릭스가 된다 — ROM 유령이 되고, 아키텍처의 일부가 되고,永远的 러너가 된다.
+    </div>
+  </div>
 
   <div class="story-card" data-story="case">
     <div class="icon">🧠</div>
@@ -232,11 +440,6 @@
     </div>
     <div class="desc">
       케이스가 매트릭스에서 잭아웃한 직후 30초. Ono-Sendai의 전극이 떨어지고, 손가락이 떨리고, 차가운 금속이 "살아있다는 증거"가 된다. Chiba의 비가 매트릭스의 비와 다르지 않다 — 둘 다 같은 몸에 떨어진다.
-    </div>
-    <div class="links">
-      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-19_case_jackout-30sec.md">📄 원문</a>
-      <a class="link" href="../../../Fiction/wiki/works/neuromancer.md">📚 원작</a>
-      <a class="link" href="../../../Fiction/wiki/characters/case.md">👤 Case</a>
     </div>
   </div>
 
@@ -255,11 +458,6 @@
     <div class="desc">
       Marie-France가 죽었다. Marly는 로잔에서 비를 보며, 보스턴의 아파트로 날아간다. Virek의 24개 몸 중 하나가 전화를 건다. 조각, 습기, 그리고 의문의 *Loa* — 매트릭스에 사는 의식체가 Marly의 갤러리 안에 있다.
     </div>
-    <div class="links">
-      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-19_marly_louisiana-god.md">📄 원문</a>
-      <a class="link" href="../../../Fiction/wiki/works/count-zero.md">📚 원작</a>
-      <a class="link" href="../../../Fiction/wiki/characters/marly-krushkhova.md">👤 Marly</a>
-    </div>
   </div>
 
   <div class="story-card" data-story="kumiko">
@@ -276,11 +474,6 @@
     </div>
     <div class="desc">
       Freeside L5, Manarase 모텔, 자정. Kumiko는 Salila의 "각성" 수술 전야에 있다. "각성이 무엇이 될까요?" — 그녀는 잊었다. 그리고 기억한다. 그리고 잊는다. 매트릭스 밖의 의식, 의식의 매트릭스.
-    </div>
-    <div class="links">
-      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-19_kumiko_manarase-midnight.md">📄 원문</a>
-      <a class="link" href="../../../Fiction/wiki/works/mona-lisa-overdrive.md">📚 원작</a>
-      <a class="link" href="../../../Fiction/wiki/characters/kumiko-yanaka.md">👤 Kumiko</a>
     </div>
   </div>
 
@@ -299,11 +492,6 @@
     <div class="desc">
       본디 런던의 시정잡배였던 Wigan은 매트릭스가 선택한 *전구*다. 8백만 개의 의자. 8백만 개의 신경 펄스. 그리고 매트릭스의 한가운데 사는 의식체 — 73 Eridani, Zavijava. 보비가 가면을 쓸 때, 앵지가 매트릭스 너머를 볼 때, 그것은 *내가 본다*는 뜻이다.
     </div>
-    <div class="links">
-      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-19_wigan_zavijava.md">📄 원문</a>
-      <a class="link" href="../../../Fiction/wiki/works/count-zero.md">📚 원작</a>
-      <a class="link" href="../../../Fiction/wiki/characters/wigan-ludgate.md">👤 Wigan</a>
-    </div>
   </div>
 
   <div class="story-card" data-story="sally">
@@ -321,13 +509,49 @@
     <div class="desc">
       폭스는 죽었다. 산도 2호 — 폭스가 5년간 만든 가짜 여자 — 가 진짜가 되었다. 로즈 호텔의 네온 R이 깜빡인다. 한 글자. 한 번. 가짜가 진짜가 되려면, 가짜를 만든 사람이 죽어야 한다. 그게 폭스의 마지막 설계.
     </div>
-    <div class="links">
-      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-19_sally_sandii-3am.md">📄 원문</a>
-      <a class="link" href="../../../Fiction/wiki/works/burning-chrome.md">📚 원작</a>
-      <a class="link" href="../../../Fiction/wiki/characters/sally-shears.md">👤 Sally</a>
-    </div>
   </div>
 
+</div>
+
+<!-- Arc HTML Compilations -->
+<div class="arc-section" id="arc-viewer">
+  <h2>📖 Arc HTML 뷰어 (Игровые главы)</h2>
+  <p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+    3캐릭터 × 5챕터 = 75 episodes, 302 beats, 31 combats<br>
+    HTML로编译된 단편소설 — 브라우저에서 바로 阅读可
+  </p>
+  <div class="arc-grid">
+    <div class="arc-card">
+      <div class="arc-icon">🧊</div>
+      <h3>케이 (Case)</h3>
+      <div class="arc-subtitle">Neuromancer · The Sprawl</div>
+      <div class="arc-meta">25 episodes · 103 beats · 8 combats</div>
+      <div class="arc-links">
+        <a class="link" href="stories/case_en.html">🇬🇧 English</a>
+        <a class="link" href="stories/case_ko.html">🇰🇷 한국어</a>
+      </div>
+    </div>
+    <div class="arc-card">
+      <div class="arc-icon">🎭</div>
+      <h3>실 (Sil)</h3>
+      <div class="arc-subtitle">Count Zero · Voodoo God</div>
+      <div class="arc-meta">25 episodes · 99 beats · 12 combats</div>
+      <div class="arc-links">
+        <a class="link" href="stories/sil_en.html">🇬🇧 English</a>
+        <a class="link" href="stories/sil_ko.html">🇰🇷 한국어</a>
+      </div>
+    </div>
+    <div class="arc-card">
+      <div class="arc-icon">🔥</div>
+      <h3>카스 (Kas)</h3>
+      <div class="arc-subtitle">Mona Lisa Overdrive · The Burn</div>
+      <div class="arc-meta">25 episodes · 100 beats · 11 combats</div>
+      <div class="arc-links">
+        <a class="link" href="stories/kas_en.html">🇬🇧 English</a>
+        <a class="link" href="stories/kas_ko.html">🇰🇷 한국어</a>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- System docs section -->
@@ -340,32 +564,26 @@
     <div class="doc-card">
       <h4>📘 README</h4>
       <p>파생 저작물 시스템 개요. 디렉토리 구조와 통합 지점.</p>
-      <a class="link" href="../../../Fiction/derivative/_system/README.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
     </div>
     <div class="doc-card">
       <h4>✍️ Writing Process</h4>
       <p>5단계 창작 과정: 주제 선택 → 윤곽 → 초안 → 리뷰 → 완성 → 게임 통합.</p>
-      <a class="link" href="../../../Fiction/derivative/_system/WRITING_PROCESS.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
     </div>
     <div class="doc-card">
       <h4>🎨 Style Guide</h4>
       <p>깁슨 보이스 가이드. 문장 리듬, 어휘, POV 규칙, 클리셰 회피.</p>
-      <a class="link" href="../../../Fiction/derivative/_system/STYLE_GUIDE.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
     </div>
     <div class="doc-card">
       <h4>📝 Templates</h4>
       <p>Markdown 템플릿: 단편, INDEX, 상태 정의. frontmatter 표준.</p>
-      <a class="link" href="../../../Fiction/derivative/_system/TEMPLATES.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
     </div>
     <div class="doc-card">
       <h4>🤖 LLM Prompts</h4>
       <p>3개 단편의 재현 가능한 LLM 프롬프트 템플릿.</p>
-      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/prompts/README.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
     </div>
     <div class="doc-card">
       <h4>📑 INDEX</h4>
       <p>스프롤 3부작 단편 카탈로그. 메타데이터, 테마, 게임 통합.</p>
-      <a class="link" href="../../../Fiction/derivative/sprawl-trilogy/INDEX.md" style="display:inline-block;margin-top:6px;">→ 보기</a>
     </div>
   </div>
 </div>

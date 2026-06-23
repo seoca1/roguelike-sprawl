@@ -1,0 +1,127 @@
+{
+  "timestamp": "2026-06-23T16:07:06.676409",
+  "story_data": {
+    "status": "PASS",
+    "stories": {
+      "case": {
+        "episodes": 25,
+        "beats": 103,
+        "combats": 8,
+        "en_chars": 23272,
+        "ko_chars": 11901,
+        "ch5_complete": true
+      },
+      "sil": {
+        "episodes": 25,
+        "beats": 99,
+        "combats": 12,
+        "en_chars": 24549,
+        "ko_chars": 11560,
+        "ch5_complete": true
+      },
+      "kas": {
+        "episodes": 25,
+        "beats": 100,
+        "combats": 11,
+        "en_chars": 19902,
+        "ko_chars": 10543,
+        "ch5_complete": true
+      }
+    }
+  },
+  "chapter_flow": {
+    "status": "PASS",
+    "characters": {
+      "case": {
+        "chapters": 5,
+        "phases": 25,
+        "story_beats": 103,
+        "phases_without_beats": 0
+      },
+      "sil": {
+        "chapters": 5,
+        "phases": 25,
+        "story_beats": 99,
+        "phases_without_beats": 0
+      },
+      "kas": {
+        "chapters": 5,
+        "phases": 25,
+        "story_beats": 100,
+        "phases_without_beats": 0
+      }
+    }
+  },
+  "arc_data": {
+    "status": "PASS",
+    "characters": {
+      "case": {
+        "chapters": 5,
+        "phases": 25,
+        "beats": 103,
+        "beats_implemented": true
+      },
+      "sil": {
+        "chapters": 5,
+        "phases": 25,
+        "beats": 99,
+        "beats_implemented": true
+      },
+      "kas": {
+        "chapters": 5,
+        "phases": 25,
+        "beats": 100,
+        "beats_implemented": true
+      }
+    }
+  },
+  "html_output": {
+    "status": "PASS",
+    "files": {
+      "case_en": {
+        "exists": true,
+        "size": 45381
+      },
+      "case_ko": {
+        "exists": true,
+        "size": 50121
+      },
+      "sil_en": {
+        "exists": true,
+        "size": 48547
+      },
+      "sil_ko": {
+        "exists": true,
+        "size": 51530
+      },
+      "kas_en": {
+        "exists": true,
+        "size": 43801
+      },
+      "kas_ko": {
+        "exists": true,
+        "size": 48990
+      }
+    }
+  },
+  "combat_system": {
+    "status": "PASS",
+    "ice_types": 29,
+    "registry_functions": [
+      "def __init__(self, skills: dict[str, Skill]) -> None:",
+      "def load(cls, path: Path) -> ProgramRegistry:",
+      "def get(self, skill_id: str) -> Skill | None:",
+      "def __iter__(self) -> Iterator[Skill]:",
+      "def __len__(self) -> int:",
+      "def _default_skills() -> dict[str, Skill]:",
+      "def __init__(self, ice: dict[str, dict[str, int | str]]) -> None:",
+      "def load(cls, path: Path) -> IceRegistry:",
+      "def get(self, ice_id: str) -> dict[str, int | str] | None:",
+      "def __contains__(self, ice_id: object) -> bool:",
+      "def build_default_player(",
+      "def get_scaled_ice_stats(",
+      "def build_ice_enemy("
+    ]
+  },
+  "overall": "PASS"
+}

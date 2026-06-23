@@ -52,18 +52,33 @@ DEFAULT_CATEGORY_ENABLED: dict[SoundCategory, bool] = {
 
 # All known sound names mapped to their category
 SOUND_CATEGORY_MAP: dict[str, SoundCategory] = {
-    # Theme (background, ambient) — low volume loop
+    # Theme (background, ambient) — low volume loop (ADR-0032)
     "theme/matrix_rain": SoundCategory.THEME,
     "theme/cyberspace": SoundCategory.THEME,
     "theme/chiba": SoundCategory.THEME,
     "theme/sense_net": SoundCategory.THEME,
     "theme/finn_office": SoundCategory.THEME,
+    "theme/loa_drum": SoundCategory.THEME,
+    "theme/loa_drum_fade": SoundCategory.THEME,
+    "theme/loa_channel": SoundCategory.THEME,
+    "theme/manarase_drone": SoundCategory.THEME,
+    "theme/industrial": SoundCategory.THEME,
+    "theme/broadcast": SoundCategory.THEME,
+    "theme/hammer_alert": SoundCategory.THEME,
     # Events (story / cinematic)
     "story/text_typing": SoundCategory.EVENTS,
     "story/dialogue_advance": SoundCategory.EVENTS,
     "story/event_trigger": SoundCategory.EVENTS,
     "combat/victory": SoundCategory.EVENTS,
     "combat/defeat": SoundCategory.EVENTS,
+    # Jack-in/out + cinematic SFX (ADR-0032)
+    "movement/jack_in_zap": SoundCategory.MOVEMENT,
+    "movement/jack_out_buzz": SoundCategory.MOVEMENT,
+    "movement/data_extract": SoundCategory.MOVEMENT,
+    "movement/black_ice_roar": SoundCategory.MOVEMENT,
+    "movement/broadcast_static": SoundCategory.MOVEMENT,
+    "movement/broadcast_out": SoundCategory.MOVEMENT,
+    "movement/neon_hum": SoundCategory.MOVEMENT,
     # Keys (UI) — default OFF
     "ui/menu_select": SoundCategory.KEYS,
     "ui/menu_confirm": SoundCategory.KEYS,

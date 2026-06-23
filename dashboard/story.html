@@ -257,6 +257,7 @@
   <a href="stages.html">⏱ Stages</a>
   <span class="sep">|</span>
   <a href="stories.html">📚 Short Stories</a>
+  <a href="graphic-novel.html">Graphic Novel</a>
   <span class="sep">|</span>
   <a href="sound.html">🔊 Sound</a>
   <span class="sep">|</span>
@@ -295,6 +296,741 @@
     <div class="phase-desc">PROLOGUE_SCENE 교체, 분기 시스템 적용</div>
     <div class="phase-status">◯ PENDING</div>
     <div class="progress-bar"><div class="progress-fill" style="width:0%"></div></div>
+  </div>
+</div>
+
+<!-- Mission ↔ Story Comparison (ADR-0051 + ADR-0052) -->
+<style>
+.mission-story-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(480px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.mission-story-card { background: #131a23; border: 1px solid #2a3540; border-radius: 6px; padding: 16px; }
+.mission-story-card .ms-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+.mission-story-card .ms-title { font-size: 15px; color: #ffaa55; font-weight: 600; }
+.mission-story-card .ms-arc { font-size: 11px; color: #6a7888; background: #1a2530; padding: 2px 8px; border-radius: 3px; }
+.mission-story-card .ms-pillar { font-size: 11px; color: #00ccff; background: #0a2530; padding: 2px 8px; border-radius: 3px; margin-left: 4px; }
+.mission-story-card .ms-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+.mission-story-card .ms-meta-item { background: #0a0e14; border: 1px solid #1a2530; border-radius: 4px; padding: 8px; }
+.mission-story-card .ms-meta-item .label { color: #6a7888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+.mission-story-card .ms-meta-item .value { color: #66ffcc; font-size: 13px; }
+.mission-story-card .ms-synopsis { background: #050810; border: 1px solid #1a2530; border-radius: 4px; padding: 10px 12px; margin-bottom: 12px; }
+.mission-story-card .ms-synopsis .syn-label { color: #6a7888; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.mission-story-card .ms-synopsis-en { color: #c5d4e3; font-size: 12px; line-height: 1.6; font-style: italic; border-left: 2px solid #66ffcc; padding-left: 8px; margin-bottom: 8px; }
+.mission-story-card .ms-synopsis-ko { color: #8a9aa8; font-size: 12px; line-height: 1.6; border-left: 2px solid #ffaa55; padding-left: 8px; }
+.mission-story-card .ms-checklist { display: flex; gap: 6px; flex-wrap: wrap; }
+.mission-story-card .ms-check { background: #1a2530; padding: 3px 8px; border-radius: 3px; font-size: 11px; }
+.mission-story-card .ms-check.ok { color: #66ffcc; }
+.mission-story-card .ms-check.warn { color: #ffaa55; }
+.mission-story-card .ms-check.tbd { color: #6a7888; }
+.mission-story-card .ms-source { font-size: 11px; color: #6a7888; margin-top: 8px; }
+.mission-story-card .ms-source a { color: #00ccff; text-decoration: none; }
+.mission-story-card .ms-source a:hover { text-decoration: underline; }
+.ms-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
+.ms-stat { background: #0d1420; border: 1px solid #1a2530; border-radius: 6px; padding: 14px; text-align: center; }
+.ms-stat .ms-stat-num { font-size: 28px; font-weight: 700; color: #ffaa55; }
+.ms-stat .ms-stat-label { color: #6a7888; font-size: 11px; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.ms-stat .ms-stat-sub { color: #3a4858; font-size: 10px; margin-top: 2px; }
+.arc-legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.arc-legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #8a9aa8; }
+.arc-dot { width: 10px; height: 10px; border-radius: 50%; }
+</style>
+
+<h2>📖 미션 ↔ 소설 비교 (Mission ↔ Story)</h2>
+
+<div class="arc-legend">
+  <div class="arc-legend-item"><span class="arc-dot" style="background:#66ffcc;"></span> Arc 1 (Intro)</div>
+  <div class="arc-legend-item"><span class="arc-dot" style="background:#00ccff;"></span> Arc 2 (Sprawl)</div>
+  <div class="arc-legend-item"><span class="arc-dot" style="background:#ffaa55;"></span> Arc 3 (Corporate)</div>
+  <div class="arc-legend-item"><span class="arc-dot" style="background:#ff5577;"></span> Arc 4 (AI/Construct)</div>
+  <div class="arc-legend-item"><span class="arc-dot" style="background:#ff00ff;"></span> Arc 5 (Final Choice)</div>
+</div>
+
+<div class="ms-stats">
+  <div class="ms-stat">
+    <div class="ms-stat-num">15</div>
+    <div class="ms-stat-label">Missions Total</div>
+    <div class="ms-stat-sub">Arc 1–5</div>
+  </div>
+  <div class="ms-stat">
+    <div class="ms-stat-num">10</div>
+    <div class="ms-stat-label">w/ Synopsis</div>
+    <div class="ms-stat-sub">Gibson voice</div>
+  </div>
+  <div class="ms-stat">
+    <div class="ms-stat-num">3</div>
+    <div class="ms-stat-label">Stories Linked</div>
+    <div class="ms-stat-sub">of 5 existing</div>
+  </div>
+  <div class="ms-stat">
+    <div class="ms-stat-num">3/15</div>
+    <div class="ms-stat-label">Stories Written</div>
+    <div class="ms-stat-sub">source linked</div>
+  </div>
+  <div class="ms-stat">
+    <div class="ms-stat-num">10</div>
+    <div class="ms-stat-label">Stories TBD</div>
+    <div class="ms-stat-sub">short story plan</div>
+  </div>
+</div>
+
+<div class="mission-story-grid">
+  <!-- aleph_fragment -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">aleph_fragment · Aleph Fragment</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ff5577;">4 ARC</span>
+        <span class="ms-pillar">revolution_awakening</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">카스 (Kas)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">5-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">aleph_fragment</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">227 EN · 452 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The Aleph was a point in space that contained all other points — every piece of data ever stored, every consciousness ever uploaded, every ghost still..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"Aleph는 공간의 한 점이었다 — 다른 모든 포인트를 포함하는, 이전에 저장된 모든 데이터, 이전에 업로드된 모든 의식, 아직 매트릭스를 배회..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 4 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (227)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">aleph_fragment — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- black_ice_dream -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">black_ice_dream · Black Ice Dream</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ffaa55;">3 ARC</span>
+        <span class="ms-pillar">corporate_power</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">3-4-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">black_ice_dream</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">215 EN · 445 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The first thing you learned about Black ICE was that it wasn't ice at all. Ice was cold and dead and brittle — it broke when you hit it hard enough. B..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"블랙 ICE에 대해 처음 배운 것은 그것이 얼음이 아니라는 것이었다. 얼음은 차갑고 죽어 있고 부서지기 쉬웠다 — 충분히 세게 치면 부서졌다. ..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 3 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (215)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">black_ice_dream — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- craft_job -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">craft_job · Craft Job</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #00ccff;">2 ARC</span>
+        <span class="ms-pillar">revolution_awakening</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">카스 (Kas)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">?-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">kumiko_manarase-midnight</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">220 EN · 442 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The construct was a virus she'd built from nothing. Kas — they called her Kas now, though her real name was something older, something her mother had ..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"그 construct는 그녀가 무에서 지은 바이러스였다. 카스라고 불렀다. 그들은 그녀를 그렇게 불렀다. 그녀의 진짜 이름은 더 오래된 것이었다..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 2 Match</span>
+      <span class="ms-check ok">✅ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (220)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_kumiko_manarase-midnight.md">kumiko_manarase-midnight</a></div>
+  </div>
+  <!-- delivery_to_finn -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">delivery_to_finn · Delivery to Finn</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #66ffcc;">1 ARC</span>
+        <span class="ms-pillar">vengeance_loss</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">1-2-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">marly_louisiana-god</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">194 EN · 396 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"Three data fragments. Sil carried them in a Hosaka chip case, nestled in the lining of his jacket like smuggled goods. They were worth three thousand ..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"데이터 프래그먼트 세 개. 실은 그것들을 Hosaka 칩 케이스에 넣고, 재킷 안감 속에 밀수품처럼 보관하고 다녔다. 그것들은 올바른 바이어에게..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 1 Match</span>
+      <span class="ms-check ok">✅ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (194)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_marly_louisiana-god.md">marly_louisiana-god</a></div>
+  </div>
+  <!-- dixies_offer -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">dixies_offer · Dixie's Offer</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ff5577;">4 ARC</span>
+        <span class="ms-pillar">identity_withdrawal</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">4-5-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">dixies_last_run</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">216 EN · 446 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"Dixie Flatline was a ROM construct — a recording of a dead man's mind, played back through a corporate nightmare of silicon and regret. But constructs..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"딕시 플랫라인은 ROM 구성체였다 — 죽은 남자의 마음의 녹음, 실리콘과 후회의 기업 악몽을 통해 재생된. 그러나 구성체들은 거래를 해서는 안 ..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 4 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (216)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">dixies_last_run — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- final_choice -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">final_choice · The Final Choice</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ff00ff;">5 ARC</span>
+        <span class="ms-pillar">the_choice</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">5-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">the_choice</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">236 EN · 460 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The matrix had a soul, and it was dying. Sil had spent five years chasing the truth about M, and now he had it: she'd been killed by the construct she..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"매트릭스는 영혼이 있었고, 그것은 죽어가고 있었다. 실은 5년 동안 M에 대한 진실을 쫓았고, 이제 그는 그것을 가졌다: 그녀는 그녀를 구하려던..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 5 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (236)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">the_choice — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- first_jack -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">first_jack · First Jack</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #66ffcc;">1 ARC</span>
+        <span class="ms-pillar">identity_withdrawal</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">1-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">case_jackout-30sec</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">188 EN · 398 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"Thirty seconds. That's how long it takes for the Ono-Sendai electrodes to lift from his scalp, for the matrix to release its grip on his nervous syste..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"30초. Ono-Sendai 전극이 두피에서 떨어지고, 매트릭스가 신경 계통을 놓아주는 데 걸리는 시간. K는 천장의 싸구려 캡슐 호텔 방에서,..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 1 Match</span>
+      <span class="ms-check ok">✅ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (188)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_case_jackout-30sec.md">case_jackout-30sec</a></div>
+  </div>
+  <!-- first_trace -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">first_trace · First Trace</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #00ccff;">2 ARC</span>
+        <span class="ms-pillar">addiction_dependence</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">2-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">first_trace</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">210 EN · 440 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The trace came first — before the ICE, before the run, before the money. Finn had taught him that: always know who's hunting you before you start hunt..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"추적은 먼저 왔다 — ICE보다, 런보다, 돈보다. Finn이 그에게 그렇게 가르쳤다: 누군가 널 사냥하기 시작하기 전에 항상 누가 널 사냥하는..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 2 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (210)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">first_trace — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- ice_run -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">ice_run · Ice Run</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #66ffcc;">1 ARC</span>
+        <span class="ms-pillar">addiction_dependence</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">1-2-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">ice_run</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">201 EN · 446 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The shard was a piece of frozen code — literally. That's what the matrix looked like when you got close enough to the cold stuff: not lines and nodes,..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"shard는 얼어붙은 코드의 조각이었다 — 문자 그대로. 그것이 바로 차가운 것에 충분히 가까이 갔을 때 매트릭스가 보여주는 모습이었다: 선과 ..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 1 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (201)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-22_ice_run.md">ice_run</a> ✅</div>
+  </div>
+  <!-- mollys_razor -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">mollys_razor · Molly's Razor</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ffaa55;">3 ARC</span>
+        <span class="ms-pillar">revolution_awakening</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">카스 (Kas)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">3-4-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">mollys_razor</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">218 EN · 447 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"Molly Millions had been dead for three years, but her programs still circulated in the Sprawl like ghosts. Kas found one embedded in a Yakuza ICE subr..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"몰리 밀리언스는 3년 전에 죽었지만, 그녀의 프로그램은 아직 유령처럼 Sprawl에서 순환하고 있었다. 카스는 야쿠자의 ICE 서브루틴에 박힌 ..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 3 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (218)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">mollys_razor — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- sense_net_tip -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">sense_net_tip · Sense/Net Tip</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #00ccff;">2 ARC</span>
+        <span class="ms-pillar">corporate_power</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">2-3-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">sense_net_trace</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">212 EN · 441 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"Finn's message arrived at 0400, like all bad news. Sil had been tracing T-A internal routes for three days — looking for the entry point M had used, t..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"Finn의 메시지가 0400에 왔다, 나쁜 소식이 모두 그렇듯. 실은 사흘 동안 T-A 내부 경로를 추적하고 있었다 — M이 사용한 진입점을, ..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 2 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (212)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">sense_net_trace — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- ta_heist -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">ta_heist · T-A Heist</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ffaa55;">3 ARC</span>
+        <span class="ms-pillar">corporate_power</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">4-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">ta_heist</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">221 EN · 449 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"Tessier-Ashpool's core was three hundred years of data, and it was worth more than the Sprawl itself. Sil had been hired to steal it twice before — bo..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"테시에르-애시풀의 코어는 3백 년의 데이터였고, 그것은 Sprawl 자체보다 더 가치가 있었다. 실은 두 번이나 그것을 훔치라는 의뢰를 받은 적..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 3 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (221)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">ta_heist — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- voodoo_loa_encounter -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">voodoo_loa_encounter · Voodoo Loa Encounter</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ff5577;">4 ARC</span>
+        <span class="ms-pillar">loa_voodoo</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">4-5-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">voodoo_loa_contact</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">224 EN · 451 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The Loa wasn't a program. It wasn't an AI. It was something older — a pattern that had learned to want things in the dark spaces between corporate sub..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"Loa는 프로그램이 아니었다. 그것은 AI도 아니었다. 그것은 더 오래된 것이었다 — 기업 서브루틴 사이의 어둠 공간에서 뭔가를 원하도록 배운 ..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 4 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (224)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">voodoo_loa_contact — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+  <!-- watchdog_patrol -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">watchdog_patrol · Watchdog Patrol</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #66ffcc;">1 ARC</span>
+        <span class="ms-pillar">corporate_power</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">1-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">watchdog_patrol</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">191 EN · 394 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The watchdogs came at 0300, like they always did. K had been running Sense/Net ICE for three weeks by then — Wisp-class, nothing fancy, the kind of co..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"워치독이 0300에 왔다, 늘 그랬듯이. 그때까지 K는 삼 주 동안 Sense/Net ICE를 실행하고 있었다 — Wisp급, 호화 nothin..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 1 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (191)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-22_watchdog_patrol.md">watchdog_patrol</a> ✅</div>
+  </div>
+  <!-- yakuza_deal -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">yakuza_deal · Yakuza Deal</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #00ccff;">2 ARC</span>
+        <span class="ms-pillar">loyalty_betrayal</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">카스 (Kas)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">2-3-up</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">yakuza_deal</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">207 EN · 437 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The Yakuza fixer had no name — just a frequency and a set of coordinates in the deep matrix. Kas had been running for seven months and she'd never wor..."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"야쿠자 픽서에는 이름이 없었다 — 주파수와 깊은 매트릭스 내 좌표만. 카스는 7개월째 运行하고 있었지만 기업 검은 작업을 해본 적이 없었다. 야..."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 2 Match</span>
+      <span class="ms-check warn">⚠ Source TBD</span>
+      <span class="ms-check ok">✓ Word Count (207)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="#">yakuza_deal — <em style="color:#ffaa55">단편 미작성</em></a></div>
+  </div>
+</div>
+
+<div style="background:#0d1420;border:1px solid #2a3540;border-radius:6px;padding:16px;margin-bottom:24px;">
+  <h3 style="color:#ffaa55;margin:0 0 12px;font-size:14px;">정합성 체크리스트 (ADR-0051 + ADR-0052)</h3>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="color:#66ffcc;font-size:16px;">✓</span>
+      <span style="color:#c5d4e3;font-size:12px;">미션 15개 모두 story 필드 보유</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="color:#66ffcc;font-size:16px;">✓</span>
+      <span style="color:#c5d4e3;font-size:12px;">Arc 1–5 스토리 라인 연결</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="color:#ffaa55;font-size:16px;">⚠</span>
+      <span style="color:#c5d4e3;font-size:12px;">단편 3편 작성 완료, 12편 TBD</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="color:#ffaa55;font-size:16px;">⚠</span>
+      <span style="color:#c5d4e3;font-size:12px;">단편 확장 계획: Phase B–E (ADR-0052)</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="color:#66ffcc;font-size:16px;">✓</span>
+      <span style="color:#c5d4e3;font-size:12px;">Gibson 톤 검증 (전체 synopsis)</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="color:#66ffcc;font-size:16px;">✓</span>
+      <span style="color:#c5d4e3;font-size:12px;">캐릭터 ↔ Arc 매핑 완료</span>
+    </div>
   </div>
 </div>
 
@@ -934,6 +1670,212 @@
           </div>`;
       });
   })();
+</script>
+
+<!-- Chapter Flow Section -->
+<h2>📊 챕터 흐름 (Chapter Flow)</h2>
+<p style="color: #8a9aa8; font-size: 13px; margin-bottom: 16px;">
+  에피소드·전투·컷신·깨달음 순차 매핑. 출처: <code>data/story/arcs/chapter_flow.json</code> · 동적 로딩
+</p>
+
+<div class="chapter-flow-viewer" data-flow-src="../data/story/arcs/chapter_flow.json">
+  <div class="flow-controls">
+    <div class="flow-char-tabs" id="flowCharTabs">
+      <button class="flow-char-btn active" data-char="case">케이 (Case)</button>
+      <button class="flow-char-btn" data-char="sil">실 (Sil)</button>
+      <button class="flow-char-btn" data-char="kas">카스 (Kas)</button>
+    </div>
+    <div class="flow-lang-toggle">
+      <button class="flow-lang-btn active" data-flow-lang="ko">한글</button>
+      <button class="flow-lang-btn" data-flow-lang="en">English</button>
+    </div>
+  </div>
+
+  <div class="flow-stats" id="flowStats">
+    <span class="stat-pill"><span class="stat-num" id="flowChapters">-</span> Chapters</span>
+    <span class="stat-pill"><span class="stat-num" id="flowPlayable">-</span> Playable</span>
+    <span class="stat-pill"><span class="stat-num" id="flowPhases">-</span> Phases</span>
+    <span class="stat-pill"><span class="stat-num" id="flowCombats">-</span> Combats</span>
+  </div>
+
+  <div class="flow-content" id="flowContent"></div>
+</div>
+
+<style>
+  .flow-controls {
+    display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
+  }
+  .flow-char-btn, .flow-lang-btn {
+    background: #1a2530; border: 1px solid #2a3540; color: #c5d4e3;
+    padding: 6px 12px; cursor: pointer; font-size: 12px; border-radius: 4px;
+  }
+  .flow-char-btn.active, .flow-lang-btn.active {
+    background: #66ffcc22; border-color: #66ffcc; color: #66ffcc;
+  }
+  .flow-stats {
+    display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 4px;
+    padding: 4px 12px; font-size: 12px; color: #8a9aa8;
+  }
+  .stat-pill .stat-num { color: #ffaa55; font-weight: 600; margin-right: 4px; }
+  .chapter-card {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 8px;
+    padding: 16px; margin-bottom: 16px;
+  }
+  .chapter-card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px; padding-bottom: 8px; border-bottom: 1px dashed #2a3540;
+  }
+  .chapter-card-title { color: #66ffcc; font-size: 16px; font-weight: 600; }
+  .chapter-card-badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 3px;
+  }
+  .chapter-card-badge.playable { background: #66ffcc22; color: #66ffcc; }
+  .chapter-card-badge.locked { background: #2a354022; color: #6a7888; }
+  .phase-row {
+    display: grid; grid-template-columns: 40px 1fr 80px 80px 1fr; gap: 8px;
+    align-items: center; padding: 8px 0; border-bottom: 1px dashed #1a2530;
+    font-size: 13px;
+  }
+  .phase-row:last-child { border-bottom: none; }
+  .phase-num {
+    width: 32px; height: 32px; border-radius: 50%; background: #1a2530;
+    color: #6a7888; display: flex; align-items: center; justify-content: center;
+    font-weight: 600; font-size: 12px;
+  }
+  .phase-num.has-combat { background: #ffaa5522; color: #ffaa55; }
+  .phase-title { color: #c5d4e3; font-weight: 500; }
+  .phase-episode { color: #6a7888; font-size: 11px; font-family: monospace; }
+  .phase-combat { color: #ff6699; font-size: 11px; }
+  .phase-no-combat { color: #4a5568; font-size: 11px; }
+  .phase-gain { color: #66ffcc; font-size: 11px; }
+  .cutscene-row {
+    background: #0a0e14; margin: 4px 0; padding: 8px 12px; border-radius: 4px;
+    font-size: 12px; color: #8a9aa8; border-left: 3px solid #00ccff;
+  }
+  .cutscene-row.end-cutscene { border-left-color: #ff6699; }
+</style>
+
+<script>
+(function() {
+  const flowSrc = document.querySelector('.chapter-flow-viewer')?.dataset.flowSrc;
+  if (!flowSrc) return;
+
+  const flowState = { char: 'case', lang: 'ko', data: null };
+
+  function renderFlow() {
+    if (!flowState.data) return;
+    const charData = flowState.data[flowState.char];
+    if (!charData) return;
+
+    // stats
+    const totalChapters = charData.chapters.length;
+    const playableChapters = charData.chapters.filter(c => c.is_playable).length;
+    const totalPhases = charData.chapters.reduce((sum, c) => sum + c.phases.length, 0);
+    const totalCombats = charData.chapters.reduce((sum, c) =>
+      sum + c.phases.filter(p => p.combat).length, 0);
+
+    document.getElementById('flowChapters').textContent = totalChapters;
+    document.getElementById('flowPlayable').textContent = playableChapters;
+    document.getElementById('flowPhases').textContent = totalPhases;
+    document.getElementById('flowCombats').textContent = totalCombats;
+
+    let html = '';
+    for (const ch of charData.chapters) {
+      const playableBadge = ch.is_playable
+        ? '<span class="chapter-card-badge playable">PLAYABLE</span>'
+        : '<span class="chapter-card-badge locked">LOCKED</span>';
+
+      const title = flowState.lang === 'ko' ? ch.title_ko : ch.title_en;
+      const desc = flowState.lang === 'ko' ? ch.description_ko : ch.description_en;
+
+      html += `<div class="chapter-card">
+        <div class="chapter-card-header">
+          <span class="chapter-card-title">Ch${ch.chapter_number}: ${title}</span>
+          ${playableBadge}
+        </div>
+        <div style="color: #6a7888; font-size: 12px; margin-bottom: 12px;">${desc}</div>`;
+
+      // cutscene_start
+      if (ch.cutscenes.start) {
+        const csTitle = flowState.lang === 'ko' ? ch.cutscenes.start.title_ko : ch.cutscenes.start.title_en;
+        html += `<div class="cutscene-row">▶ START: ${csTitle}</div>`;
+      }
+
+      // phases
+      for (const ph of ch.phases) {
+        const phaseTitle = flowState.lang === 'ko' ? ph.title_ko : ph.title_en;
+        const hasCombat = !!ph.combat;
+        const combatClass = hasCombat ? 'has-combat' : '';
+        const combatInfo = hasCombat
+          ? `${ph.combat.enemy_type} (diff=${ph.combat.difficulty})`
+          : '<span class="phase-no-combat">—</span>';
+        const gainInfo = ph.gain ? `<span class="phase-gain">+${JSON.stringify(ph.gain)}</span>` : '';
+        const episode = ph.episode_ref || '';
+
+        html += `<div class="phase-row">
+          <div class="phase-num ${combatClass}">${ph.phase_index}</div>
+          <div>
+            <div class="phase-title">${phaseTitle}</div>
+            <div class="phase-episode">${episode}</div>
+          </div>
+          <div class="phase-combat">${combatInfo}</div>
+          <div>${gainInfo}</div>
+        </div>`;
+      }
+
+      // cutscene_mid
+      if (ch.cutscenes.mid) {
+        const csTitle = flowState.lang === 'ko' ? ch.cutscenes.mid.title_ko : ch.cutscenes.mid.title_en;
+        html += `<div class="cutscene-row">▶ MID: ${csTitle}</div>`;
+      }
+
+      // cutscene_end
+      if (ch.cutscenes.end) {
+        const csTitle = flowState.lang === 'ko' ? ch.cutscenes.end.title_ko : ch.cutscenes.end.title_en;
+        html += `<div class="cutscene-row end-cutscene">▶ END: ${csTitle}</div>`;
+      }
+
+      html += '</div>';
+    }
+
+    document.getElementById('flowContent').innerHTML = html;
+  }
+
+  document.querySelectorAll('.flow-char-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.flow-char-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      flowState.char = btn.dataset.char;
+      renderFlow();
+    });
+  });
+
+  document.querySelectorAll('.flow-lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.flow-lang-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      flowState.lang = btn.dataset.flowLang;
+      renderFlow();
+    });
+  });
+
+  fetch(flowSrc)
+    .then(r => r.json())
+    .then(data => {
+      flowState.data = data;
+      renderFlow();
+    })
+    .catch(err => {
+      document.getElementById('flowContent').innerHTML =
+        `<div style="color:#ff8888;padding:20px;">
+          ⚠ JSON 로드 실패: <code>${flowSrc}</code><br>
+          <small style="color:#6a7888">${err.message}</small>
+        </div>`;
+    });
+})();
 </script>
 
 </body>

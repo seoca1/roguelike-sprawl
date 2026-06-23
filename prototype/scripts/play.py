@@ -4,8 +4,10 @@ Single command:
     uv run python scripts/play.py
 
 The script initializes the full game state, then auto-progresses
-through the screen state machine (Menu → Hub → Matrix → Hub cycle)
-rendering every frame to stdout. Default duration is 30 seconds.
+through the screen state machine:
+    Menu → Character Select → Chapter → Hub → Matrix → Hub cycle
+
+Default duration is 30 seconds.
 
 Options:
     --duration N      Total seconds (default 30)
@@ -14,6 +16,8 @@ Options:
     --lang {en,ko}    UI language (default en)
     --seed N          Mission seed (default 42)
     --mission N       Which mission to play (1=first, default 1)
+    --character C     Auto-pick character (novice|veteran|heretic, default novice)
+    --gn-mode MODE    If set, play graphic novel mode (prologue|novice|veteran|heretic)
     --show-controls   Print controls hint at start
 """
 
@@ -29,6 +33,17 @@ import tcod.console
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from roguelike_sprawl.engine import hub, matrix_view, menu, story_view
+from roguelike_sprawl.engine.chapter_cutscene import (
+    CombatData,
+    get_arc_for_character,
+    get_chapter,
+)
+from roguelike_sprawl.engine.chapter_view import chapter_for_character, tick_chapter
+from roguelike_sprawl.engine.graphic_novel_view import (
+    Background,
+    Portrait,
+    SceneData,
+)
 from roguelike_sprawl.engine.state import AppState, ScreenKind
 from roguelike_sprawl.engine.story_view import StoryRegistry
 from roguelike_sprawl.i18n import Translator
@@ -37,6 +52,7 @@ from roguelike_sprawl.matrix.generator import MatrixGenerator
 from roguelike_sprawl.matrix.ppl import calculate_ppl
 from roguelike_sprawl.matrix.zdr import node_status, node_zdr
 from roguelike_sprawl.missions import JobBoard
+from roguelike_sprawl.run import ChapterState, Stage, ensure_run_state
 
 
 def _setup(args: argparse.Namespace) -> tuple[AppState, Translator, StoryRegistry]:
@@ -74,6 +90,120 @@ def _render_current(
     state.demo_elapsed_s = elapsed
     if state.screen is ScreenKind.MENU:
         menu.render_menu(console, t, state)
+    elif state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
+        from roguelike_sprawl.engine import graphic_novel_view
+        from roguelike_sprawl.engine.graphic_novel_save import list_save_slots
+
+        gn_save_dir = Path(__file__).parent.parent / "data" / "saves"
+        slots = list_save_slots(save_dir=gn_save_dir)
+        has_save = any(s.get("has_save", False) for s in slots)
+
+        graphic_novel_view.render_graphic_novel_menu(
+            console, t, selected_index=state.gn_scene_index, has_save=has_save
+        )
+    elif state.screen is ScreenKind.GRAPHIC_NOVEL:
+        _render_graphic_novel_frame(console, state, t, elapsed)
+    elif state.screen is ScreenKind.SAVED_PROGRESS:
+        from roguelike_sprawl.engine import save_progress as sp
+
+        console.clear()
+        summary = sp.get_progress_summary(save_dir=Path(__file__).parent.parent / "saves")
+        lines = sp.render_summary_lines(summary, t_lang=t.lang)
+        console.print(2, 2, "═══ SAVED PROGRESS ═══")
+        for i, line in enumerate(lines):
+            console.print(2, 4 + i, line)
+        console.print(2, 16, "  [1] 다른 캐릭터 보기  [2] 게임 계속  [3] 메인메뉴")
+    elif state.screen is ScreenKind.CHARACTER_SELECT:
+        # Render as a stub message (real NPC event handled in interactive flow)
+        console.clear()
+        console.print(2, 2, "═══ CHARACTER SELECT (auto-pilot) ═══")
+        console.print(2, 4, "> The Finn: I need a jockey. Sense/Net, first run.")
+        console.print(2, 6, "  1. 케이 (K) — Novice       'I just need the money.'")
+        console.print(2, 7, "  2. 실 (Sil) — Veteran     'I know the risks.'")
+        console.print(2, 8, "  3. 카스 (Kas) — Heretic    'I'm here to burn it all down.'")
+        console.print(2, 11, f"  → Auto-selected: {state.character_id}")
+    elif state.screen is ScreenKind.CHAPTER:
+        # Render the chapter typing effect
+        from roguelike_sprawl.engine import chapter_view
+
+        chapter = chapter_for_character(state.character_id, Path(__file__).parent.parent / "data")
+        state.chapter_elapsed_ms = elapsed * 1000
+        state.chapter_typed_chars = tick_chapter(
+            chapter, state.chapter_elapsed_ms, state.chapter_typed_chars
+        )
+        chapter_view.render_chapter(
+            console, chapter, t, state.chapter_typed_chars, state.chapter_elapsed_ms
+        )
+    elif state.screen is ScreenKind.ARC_PHASE:
+        # Render arc phase with beats
+        from roguelike_sprawl.engine.phase_view import render_arc_phase, tick_arc_phase
+
+        if state.current_arc is not None:
+            chapter = state.current_arc.chapters[state.current_chapter_index]
+            phase = chapter.phases[state.current_phase_index]
+
+            # Update typing
+            state.phase_elapsed_ms += elapsed * 1000
+            new_typed, should_advance = tick_arc_phase(
+                phase,
+                state.current_beat_index,
+                state.phase_elapsed_ms,
+                state.phase_typed_chars,
+                30,
+            )
+            state.phase_typed_chars = new_typed
+
+            # Advance beat if needed
+            if should_advance:
+                current_beat = phase.beats[state.current_beat_index]
+                if current_beat.type == "combat" and phase.combat is not None:
+                    _resolve_arc_combat(state, phase.combat)
+                    # Advance to next beat after auto-resolve
+                    if state.current_beat_index < len(phase.beats) - 1:
+                        state.current_beat_index += 1
+                        state.phase_typed_chars = 0
+                        state.phase_elapsed_ms = 0.0
+                    elif state.current_phase_index < len(chapter.phases) - 1:
+                        state.current_phase_index += 1
+                        state.current_beat_index = 0
+                        state.phase_typed_chars = 0
+                        state.phase_elapsed_ms = 0.0
+                    else:
+                        state.screen = ScreenKind.HUB
+                elif state.current_beat_index < len(phase.beats) - 1:
+                    state.current_beat_index += 1
+                    state.phase_typed_chars = 0
+                    state.phase_elapsed_ms = 0.0
+                elif state.current_phase_index < len(chapter.phases) - 1:
+                    state.current_phase_index += 1
+                    state.current_beat_index = 0
+                    state.phase_typed_chars = 0
+                    state.phase_elapsed_ms = 0.0
+                else:
+                    # Chapter complete - transition to next screen
+                    state.screen = ScreenKind.HUB
+
+            render_arc_phase(
+                console,
+                phase,
+                state.current_beat_index,
+                state.phase_typed_chars,
+                state.phase_elapsed_ms,
+                0,
+                t,
+                30,
+                state,
+            )
+    elif state.chapter_cutscene_state is not None:
+        # Render chapter cutscene (overlaid on current screen)
+        from roguelike_sprawl.engine.chapter_cutscene import render_cutscene_frame
+
+        cs_state = state.chapter_cutscene_state
+        dt_ms = int(elapsed * 1000) - int((elapsed - 0.4) * 1000)
+        cs_state.tick(dt_ms)
+        render_cutscene_frame(
+            console, cs_state, None, None, None, t, 0, 1
+        )
     elif state.screen is ScreenKind.HUB:
         hub.render_hub(console, t, state)
     elif state.screen is ScreenKind.MATRIX and state.matrix is not None:
@@ -87,6 +217,56 @@ def _render_current(
             aftermath_id=state.story_aftermath_id,
             elapsed_s=elapsed,
         )
+    elif state.screen is ScreenKind.ENDING:
+        state.ending_elapsed_ms += elapsed * 1000
+        _render_ending(console, state, t)
+
+
+def _render_ending(console: tcod.console.Console, state: AppState, t: Translator) -> None:
+    """Render the ending screen."""
+    from roguelike_sprawl.engine.original_story import get_ending_description
+
+    width, height = console.width, console.height
+    console.clear()
+
+    rs = state.run_state
+    ending_key = rs.chapter_state.value if rs else "ending_a"
+    character = state.character_id or "novice"
+
+    if ending_key.startswith("ending_"):
+        ending_letter = ending_key.replace("ending_", "").upper()
+    else:
+        ending_letter = "A"
+
+    console.print(0, 0, "═" * width)
+    title = f"━━━ ENDING {ending_letter} ━━━"
+    console.print((width - len(title)) // 2, 0, title)
+
+    ending_desc = get_ending_description(character, ending_letter.lower())
+
+    arc_name = state.current_arc.title_en if state.current_arc else f"{character.title()} Arc"
+
+    lines = [
+        "",
+        f"  {arc_name}",
+        "",
+        "  The story has reached its conclusion.",
+        "",
+    ]
+
+    for i, line in enumerate(lines):
+        console.print(2, 3 + i, line, fg=(200, 200, 200))
+
+    desc_lines = ending_desc.split("\n") if ending_desc else []
+    for i, line in enumerate(desc_lines[:8]):
+        color = (220, 200, 100) if i == 0 else (180, 180, 180)
+        console.print(2, 8 + i, line, fg=color)
+
+    console.print(0, height - 5, "─" * width)
+    console.print(2, height - 4, f"  Character: {character.title()}")
+    console.print(2, height - 3, f"  Ending: {ending_letter}")
+    console.print(2, height - 2, "  [ESC] Return to Main Menu")
+    console.print(0, height - 1, "═" * width)
 
 
 def _print_frame(
@@ -116,35 +296,438 @@ def state_screen_label(_: tcod.console.Console) -> str:
     return "rendered"
 
 
+# Graphic novel state cache (loaded once, reused across frames)
+_gn_cache: dict[str, Background | Portrait | list[SceneData] | None] = {}
+
+
+def _get_scene_chain(state: AppState, data_dir: Path) -> list[SceneData]:
+    """Return the scene chain for the current graphic novel mode.
+
+    ADR-0048: chain depends on ``state.gn_ending_choice`` (A/B) too.
+    """
+    from roguelike_sprawl.engine.graphic_novel_view import (
+        load_prologue_chain,
+        load_scene_chain,
+    )
+
+    cache_key = f"chain:{state.gn_mode}:{state.character_id}:{state.gn_ending_choice}"
+    cached = _gn_cache.get(cache_key)
+    if isinstance(cached, list):
+        return list(cached)
+    ending = state.gn_ending_choice or "A"
+    if state.gn_mode == "prologue":
+        chain = load_prologue_chain(data_dir / "scenes", seed=42, ending=ending)
+    else:
+        chain = load_scene_chain(data_dir / "scenes", state.gn_mode, ending=ending)
+    _gn_cache[cache_key] = list(chain)
+    return list(chain)
+
+
+def _render_graphic_novel_frame(
+    console: tcod.console.Console,
+    state: AppState,
+    t: Translator,
+    elapsed: float,
+) -> None:
+    """Render one frame of the graphic novel (auto-pilot mode)."""
+    from roguelike_sprawl.engine.graphic_novel_view import (
+        dialogue_typed_chars,
+        load_background,
+        load_portrait,
+        render_scene,
+    )
+
+    data_dir = Path(__file__).parent.parent / "data"
+    chain = _get_scene_chain(state, data_dir)
+    if not chain or state.gn_scene_index >= len(chain):
+        state.screen = ScreenKind.SAVED_PROGRESS
+        return
+    scene = chain[state.gn_scene_index]
+    if not scene.dialogue:
+        state.gn_scene_index += 1
+        state.gn_dialogue_index = 0
+        state.gn_elapsed_ms = 0.0
+        return
+    dialogue = scene.dialogue[state.gn_dialogue_index]
+    text = dialogue.text_ko if t.lang == "ko" else dialogue.text_en
+    typed = dialogue_typed_chars(dialogue.duration_ms, state.gn_elapsed_ms, len(text))
+
+    # Load art (cached per scene id)
+    bg: Background | None = None
+    p_l: Portrait | None = None
+    p_r: Portrait | None = None
+    art_dir = data_dir / "art"
+    bg_key = f"bg:{scene.background_id}"
+    if bg_key not in _gn_cache:
+        try:
+            _gn_cache[bg_key] = load_background(art_dir, scene.background_id)
+        except (KeyError, FileNotFoundError):
+            _gn_cache[bg_key] = None
+    bg_val = _gn_cache[bg_key]
+    if isinstance(bg_val, Background):
+        bg = bg_val
+    for p_id, slot in (
+        (scene.portrait_left, "p_l"),
+        (scene.portrait_right, "p_r"),
+    ):
+        if p_id:
+            pkey = f"portrait:{p_id}"
+            if pkey not in _gn_cache:
+                try:
+                    _gn_cache[pkey] = load_portrait(art_dir, p_id)
+                except (KeyError, FileNotFoundError):
+                    _gn_cache[pkey] = None
+            val = _gn_cache[pkey]
+            if isinstance(val, Portrait):
+                if slot == "p_l":
+                    p_l = val
+                else:
+                    p_r = val
+
+    render_scene(
+        console,
+        scene,
+        dialogue,
+        bg,
+        p_l,
+        p_r,
+        t,
+        typed,
+        state.gn_scene_index,
+        len(chain),
+        paused=state.gn_paused,
+    )
+
+    # Auto-advance: 100ms per frame * 10 (demo speed)
+    state.gn_elapsed_ms += 100 * 10
+    if state.gn_elapsed_ms >= dialogue.duration_ms:
+        state.gn_dialogue_index += 1
+        state.gn_elapsed_ms = 0.0
+        if state.gn_dialogue_index >= len(scene.dialogue):
+            state.gn_scene_index += 1
+            state.gn_dialogue_index = 0
+            if state.gn_scene_index >= len(chain):
+                state.screen = ScreenKind.SAVED_PROGRESS
+
+
 def _action_menu(state: AppState) -> str:
-    """MENU → HUB: select New Run (key '1')."""
+    """MENU → CHARACTER_SELECT: select New Run (key '1')."""
     if state.screen is ScreenKind.MENU:
-        state.screen = ScreenKind.HUB
-        return "Auto: New Run (selected) → Hub"
+        state.screen = ScreenKind.CHARACTER_SELECT
+        return "Auto: New Run → Character Select"
     return ""
+
+
+def _action_graphic_novel_menu(state: AppState, mode: str) -> str:
+    """GRAPHIC_NOVEL_MENU → GRAPHIC_NOVEL: start the chosen mode.
+
+    Args:
+        state: App state.
+        mode: "prologue" | "novice" | "veteran" | "heretic" | "back"
+
+    ADR-0048: For character modes (N2-N4), transition to
+    GRAPHIC_NOVEL_ENDING_MENU first; PROLOGUE skips and uses ending A.
+    """
+    if state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
+        if mode == "back":
+            state.screen = ScreenKind.MENU
+            return "Auto: Graphic Novel menu → back to main menu"
+        if mode in ("novice", "veteran", "heretic"):
+            state.gn_mode = mode
+            state.gn_ending_choice = "A"
+            state.screen = ScreenKind.GRAPHIC_NOVEL_ENDING_MENU
+            return f"Auto: Graphic Novel → choose ending for {mode}"
+        # prologue — skip ending selection, use A
+        state.gn_mode = mode
+        state.gn_ending_choice = "A"
+        state.gn_scene_index = 0
+        state.gn_dialogue_index = 0
+        state.gn_elapsed_ms = 0.0
+        state.gn_paused = False
+        state.screen = ScreenKind.GRAPHIC_NOVEL
+        return f"Auto: Graphic Novel [{mode}] → playing"
+    return ""
+
+
+def _action_graphic_novel_ending_menu(state: AppState, ending: str) -> str:
+    """GRAPHIC_NOVEL_ENDING_MENU → GRAPHIC_NOVEL: start with chosen ending.
+
+    Args:
+        state: App state.
+        ending: "A" | "B" | "C" | "back"
+
+    ADR-0048: finalize gn_ending_choice and start playback.
+    ADR-0049: ending="C" supported (vanishing / erase / unmaking).
+    """
+    if state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
+        if ending == "back":
+            state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
+            return "Auto: Ending menu → back to GN menu"
+        if ending not in ("A", "B", "C"):
+            return ""
+        state.gn_ending_choice = ending
+        state.gn_scene_index = 0
+        state.gn_dialogue_index = 0
+        state.gn_elapsed_ms = 0.0
+        state.gn_paused = False
+        state.screen = ScreenKind.GRAPHIC_NOVEL
+        return f"Auto: Graphic Novel [{state.gn_mode} ending {ending}] → playing"
+    return ""
+
+
+def _action_saved_progress(state: AppState, choice: str) -> str:
+    """SAVED_PROGRESS → next screen.
+
+    Args:
+        state: App state.
+        choice: "other_chars" | "continue" | "menu"
+    """
+    if state.screen is ScreenKind.SAVED_PROGRESS:
+        if choice == "other_chars":
+            state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
+            return "Auto: Other character stories"
+        if choice == "continue":
+            gn_to_character = {
+                "novice": "novice",
+                "veteran": "veteran",
+                "heretic": "heretic",
+                "prologue": state.character_id or "novice",
+            }
+            character = gn_to_character.get(state.gn_mode, state.character_id or "novice")
+            state.character_id = character
+            state.chapter_id = f"chapter_{character}"
+            state.chapter_elapsed_ms = 0.0
+            state.chapter_typed_chars = 0
+            run_state = ensure_run_state(state)
+            run_state.chapter_state = ChapterState.PROLOGUE
+            state.screen = ScreenKind.CHAPTER
+            return f"Auto: Continue → Chapter ({character})"
+        # menu
+        state.screen = ScreenKind.MENU
+        return "Auto: Back to main menu"
+    return ""
+
+
+def _action_character_select(state: AppState, character: str) -> str:
+    """CHARACTER_SELECT → CHAPTER: pick the requested character."""
+    if state.screen is ScreenKind.CHARACTER_SELECT:
+        state.character_id = character
+        state.chapter_id = f"chapter_{character}"
+        state.chapter_elapsed_ms = 0.0
+        state.chapter_typed_chars = 0
+        run_state = ensure_run_state(state)
+        run_state.chapter_state = ChapterState.PROLOGUE
+        state.screen = ScreenKind.CHAPTER
+        return f"Auto: selected {character} → Chapter (Prologue)"
+    return ""
+
+
+def _action_chapter(state: AppState) -> str:
+    """CHAPTER → ARC_PHASE: complete chapter intro, begin story phases."""
+    if state.screen is ScreenKind.CHAPTER:
+        if state.run_state is not None:
+            state.run_state.chapter_state = ChapterState.IN_CHAPTER_1
+            state.run_state.current_stage = Stage.PENDING
+
+        character = state.character_id or "novice"
+        arc = get_arc_for_character(Path(__file__).parent.parent / "data", character)
+        state.current_arc = arc
+        state.current_chapter_index = 0
+        state.current_phase_index = 0
+        state.current_beat_index = 0
+        state.phase_typed_chars = 0
+        state.phase_elapsed_ms = 0.0
+        state.screen = ScreenKind.ARC_PHASE
+        return f"Auto: {character} chapter 1 → ARC_PHASE"
+    return ""
+
+
+def _resolve_arc_combat(state: AppState, combat_data: CombatData) -> str:
+    """ARC_PHASE: auto-resolve combat story beat as victory (story-mode demo)."""
+    if not hasattr(state, "inventory") or state.inventory is None:
+        state.inventory = {}
+    state.inventory["ice_shard"] = state.inventory.get("ice_shard", 0) + 1
+    state.credits = getattr(state, "credits", 0) + 50
+    state.status_messages.append(f">>> VICTORY! {combat_data.enemy_type} → 1x ICE Shard + 50cr")
+
+    enemy_name = combat_data.enemy_type.replace("_", " ").title()
+    return f"[COMBAT] {enemy_name} defeated → ICE Shard + 50cr"
+
+
+def _start_chapter_cutscene(state: AppState, scene_id: str, scenes_dir: Path) -> bool:
+    """Load a GN scene as a chapter cutscene. Returns True on success."""
+    try:
+        from roguelike_sprawl.engine.chapter_cutscene import ChapterCutsceneState, load_scene
+
+        scene = load_scene(scenes_dir, scene_id)
+        state.chapter_cutscene_state = ChapterCutsceneState(scene=scene)
+        return True
+    except Exception:
+        return False
+
+
+def _get_current_chapter(chapter_state: ChapterState | None) -> int:
+    """Return chapter number (1-5) for a ChapterState, or 1 if unknown."""
+    if chapter_state is None:
+        return 1
+    mapping = {
+        ChapterState.PROLOGUE: 0,
+        ChapterState.IN_CHAPTER_1: 1,
+        ChapterState.CHAPTER_1_COMPLETE: 1,
+        ChapterState.IN_CHAPTER_2: 2,
+        ChapterState.CHAPTER_2_COMPLETE: 2,
+        ChapterState.IN_CHAPTER_3: 3,
+        ChapterState.CHAPTER_3_COMPLETE: 3,
+        ChapterState.IN_CHAPTER_4: 4,
+        ChapterState.CHAPTER_4_COMPLETE: 4,
+        ChapterState.IN_CHAPTER_5: 5,
+        ChapterState.CHAPTER_5_COMPLETE: 5,
+        ChapterState.ENDING_A: 5,
+        ChapterState.ENDING_B: 5,
+        ChapterState.ENDING_C: 5,
+    }
+    return mapping.get(chapter_state, 1)
 
 
 def _action_hub(state: AppState) -> str:
-    """HUB → MATRIX: select first mission."""
-    if state.screen is ScreenKind.HUB and state.job_board:
-        missions = list(state.job_board.available_for(state.player_grade))
-        if not missions:
-            return "No missions for this grade."
-        m = missions[0]
-        state.current_mission = m
-        state.matrix = MatrixGenerator().generate(
-            seed=m.matrix_seed, mission_grade=state.player_grade
-        )
-        state.current_node_id = state.matrix.entry_id
-        state.exploration = ExplorationState(current=state.matrix.entry_id)
-        state.screen = ScreenKind.MATRIX
-        return f"Auto: select '{m.title}' → Matrix"
-    return ""
+    """HUB → MATRIX: select first mission (or show cutscene_start first)."""
+    if state.screen is not ScreenKind.HUB or not state.job_board:
+        return ""
+
+    # If cutscene is in progress and not done, wait
+    if state.chapter_cutscene_state is not None and not state.chapter_cutscene_state.done:
+        return "Auto: waiting for cutscene..."
+
+    # If cutscene is done, clear it and proceed
+    if state.chapter_cutscene_state is not None and state.chapter_cutscene_state.done:
+        state.chapter_cutscene_state = None
+
+    scenes_dir = Path(__file__).parent.parent / "data" / "scenes"
+    rs = state.run_state
+
+    chapter_cutscenes_seen: set[int] = getattr(state, "chapter_cutscenes_seen", set())
+
+    # Auto-advance: play cutscene_end (COMPLETED chapter) then transition to next
+    if rs is not None and rs.chapter_state in (
+        ChapterState.CHAPTER_1_COMPLETE,
+        ChapterState.CHAPTER_2_COMPLETE,
+        ChapterState.CHAPTER_3_COMPLETE,
+        ChapterState.CHAPTER_4_COMPLETE,
+    ):
+        completed_chapter_num = _get_current_chapter(rs.chapter_state)
+        arc = get_arc_for_character(scenes_dir.parent, state.character_id)
+        prev_chapter = get_chapter(arc, completed_chapter_num)
+        if prev_chapter and prev_chapter.cutscene_end and 2 not in chapter_cutscenes_seen:
+            scene_id = prev_chapter.cutscene_end.scene_id
+            if _start_chapter_cutscene(state, scene_id, scenes_dir):
+                state.chapter_cutscenes_seen = chapter_cutscenes_seen | {2}
+                title = prev_chapter.cutscene_end.title_en
+                return f"Auto: cutscene_end ({title})"
+        if rs.chapter_state is ChapterState.CHAPTER_1_COMPLETE:
+            rs.start_chapter_2()
+            state.chapter_cutscenes_seen = set()
+            return "Auto: Chapter 2 starts..."
+        elif rs.chapter_state is ChapterState.CHAPTER_2_COMPLETE:
+            rs.start_chapter_3()
+            state.chapter_cutscenes_seen = set()
+            return "Auto: Chapter 3 starts..."
+        elif rs.chapter_state is ChapterState.CHAPTER_3_COMPLETE:
+            rs.start_chapter_4()
+            state.chapter_cutscenes_seen = set()
+            return "Auto: Chapter 4 starts..."
+        elif rs.chapter_state is ChapterState.CHAPTER_4_COMPLETE:
+            rs.start_chapter_5()
+            state.chapter_cutscenes_seen = set()
+            return "Auto: Chapter 5 starts..."
+
+    # Handle Chapter 5 complete → ENDING
+    if rs is not None and rs.chapter_state is ChapterState.CHAPTER_5_COMPLETE:
+        arc = get_arc_for_character(scenes_dir.parent, state.character_id)
+        ch5 = get_chapter(arc, 5)
+        if ch5 and ch5.cutscene_end and 2 not in chapter_cutscenes_seen:
+            scene_id = ch5.cutscene_end.scene_id
+            if _start_chapter_cutscene(state, scene_id, scenes_dir):
+                state.chapter_cutscenes_seen = chapter_cutscenes_seen | {2}
+                title = ch5.cutscene_end.title_en
+                return f"Auto: cutscene_end ({title})"
+        ending_type = (ch5.ending_type if ch5 else "A").upper()
+        rs.chapter_state = ChapterState(f"ending_{ending_type.lower()}")
+        state.screen = ScreenKind.ENDING
+        return f"Auto: Arc complete! ({arc.title_en} — Ending {ending_type})"
+
+    chapter_num = _get_current_chapter(rs.chapter_state if rs else None)
+    arc = get_arc_for_character(scenes_dir.parent, state.character_id)
+    chapter = get_chapter(arc, chapter_num)
+
+    # Show cutscene_start
+    if 0 not in chapter_cutscenes_seen:
+        if chapter and chapter.cutscene_start:
+            scene_id = chapter.cutscene_start.scene_id
+            if _start_chapter_cutscene(state, scene_id, scenes_dir):
+                state.chapter_cutscenes_seen = chapter_cutscenes_seen | {0}
+                title = chapter.cutscene_start.title_en
+                return f"Auto: cutscene_start ({title})"
+
+    # For non-playable chapters: show cutscene_end, then auto-complete
+    if chapter and not chapter.is_playable:
+        if 2 not in chapter_cutscenes_seen and chapter.cutscene_end:
+            scene_id = chapter.cutscene_end.scene_id
+            if _start_chapter_cutscene(state, scene_id, scenes_dir):
+                state.chapter_cutscenes_seen = chapter_cutscenes_seen | {2}
+                title = chapter.cutscene_end.title_en
+                return f"Auto: cutscene_end ({title})"
+        # Auto-complete non-playable chapter
+        if rs:
+            if rs.chapter_state is ChapterState.IN_CHAPTER_2:
+                rs.complete_chapter_2()
+            elif rs.chapter_state is ChapterState.IN_CHAPTER_3:
+                rs.complete_chapter_3()
+            elif rs.chapter_state is ChapterState.IN_CHAPTER_4:
+                rs.complete_chapter_4()
+            elif rs.chapter_state is ChapterState.IN_CHAPTER_5:
+                rs.complete_chapter_5()
+        return "Auto: Non-playable chapter complete..."
+
+    missions = list(state.job_board.available_for(state.player_grade))
+    if not missions:
+        return "No missions for this grade."
+    m = missions[0]
+    state.current_mission = m
+    state.matrix = MatrixGenerator().generate(
+        seed=m.matrix_seed, mission_grade=state.player_grade
+    )
+    state.current_node_id = state.matrix.entry_id
+    state.exploration = ExplorationState(current=state.matrix.entry_id)
+    state.screen = ScreenKind.MATRIX
+    return f"Auto: select '{m.title}' → Matrix"
 
 
 def _action_matrix(state: AppState) -> str:
     """MATRIX: navigate to next unvisited neighbor, or jack out when done."""
     if state.screen is ScreenKind.MATRIX and state.matrix is not None:
+        # If cutscene is in progress and not done, wait
+        if state.chapter_cutscene_state is not None and not state.chapter_cutscene_state.done:
+            return "Auto: waiting for cutscene_mid..."
+
+        # If cutscene_mid is done, clear it and proceed
+        if state.chapter_cutscene_state is not None and state.chapter_cutscene_state.done:
+            state.chapter_cutscene_state = None
+
+        # Check if cutscene_mid should be shown (after first node visit)
+        scenes_dir = Path(__file__).parent.parent / "data" / "scenes"
+        chapter_cutscenes_seen: set[int] = getattr(state, "chapter_cutscenes_seen", set())
+
+        if 1 not in chapter_cutscenes_seen:
+            arc = get_arc_for_character(scenes_dir.parent, state.character_id)
+            chapter_num = _get_current_chapter(state.run_state.chapter_state if state.run_state else None)
+            chapter = get_chapter(arc, chapter_num)
+            if chapter and chapter.cutscene_mid and chapter.is_playable:
+                scene_id = chapter.cutscene_mid.scene_id
+                if _start_chapter_cutscene(state, scene_id, scenes_dir):
+                    state.chapter_cutscenes_seen = chapter_cutscenes_seen | {1}
+                    title = chapter.cutscene_mid.title_en
+                    return f"Auto: cutscene_mid ({title})"
+
         nbrs = state.matrix.neighbors(state.current_node_id or "")
         unvisited = [
             n
@@ -165,8 +748,31 @@ def _action_matrix(state: AppState) -> str:
         state.current_node_id = None
         state.exploration = None
         state.current_mission = None
+        # Mark current chapter complete and advance
+        rs = state.run_state
+        if rs is not None:
+            chapter_names = {
+                ChapterState.IN_CHAPTER_1: "Chapter 1",
+                ChapterState.IN_CHAPTER_2: "Chapter 2",
+                ChapterState.IN_CHAPTER_3: "Chapter 3",
+                ChapterState.IN_CHAPTER_4: "Chapter 4",
+                ChapterState.IN_CHAPTER_5: "Chapter 5",
+            }
+            chapter_name = chapter_names.get(rs.chapter_state, "Chapter")
+            if rs.chapter_state is ChapterState.IN_CHAPTER_1:
+                rs.complete_chapter_1()
+            elif rs.chapter_state is ChapterState.IN_CHAPTER_2:
+                rs.complete_chapter_2()
+            elif rs.chapter_state is ChapterState.IN_CHAPTER_3:
+                rs.complete_chapter_3()
+            elif rs.chapter_state is ChapterState.IN_CHAPTER_4:
+                rs.complete_chapter_4()
+            elif rs.chapter_state is ChapterState.IN_CHAPTER_5:
+                rs.complete_chapter_5()
+        else:
+            chapter_name = "Unknown"
         state.screen = ScreenKind.HUB
-        return "Auto: Jack out (all neighbors visited) → Hub"
+        return f"Auto: Jack out → Hub ({chapter_name} Complete!)"
     return ""
 
 
@@ -178,10 +784,35 @@ def main() -> int:
     parser.add_argument("--lang", default="en", choices=["en", "ko"])
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--mission", type=int, default=1)
+    parser.add_argument(
+        "--character",
+        default="novice",
+        choices=["novice", "veteran", "heretic"],
+        help="Auto-selected character (default novice)",
+    )
+    parser.add_argument(
+        "--ending",
+        default=None,
+        choices=["A", "B", "C"],
+        help="Auto-pick ending when entering GRAPHIC_NOVEL_ENDING_MENU (default: A, ADR-0049)",
+    )
+    parser.add_argument(
+        "--gn-mode",
+        default=None,
+        choices=["prologue", "novice", "veteran", "heretic"],
+        help=("If set, play graphic novel mode after MENU. Otherwise defaults to NEW RUN flow."),
+    )
     parser.add_argument("--show-controls", action="store_true")
     args = parser.parse_args()
 
     state, t, story_reg = _setup(args)
+    # Apply character selection to state so CHARACTER_SELECT → CHAPTER
+    # transitions pick the requested character.
+    state.character_id = args.character
+    # If --gn-mode is set, jump straight to GRAPHIC_NOVEL_MENU
+    if args.gn_mode is not None:
+        state.gn_mode = args.gn_mode
+        state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
     console = tcod.console.Console(80, 50, order="F")
 
     if args.show_controls:
@@ -215,14 +846,65 @@ def main() -> int:
         if step % 4 == 0:
             if state.screen is ScreenKind.MENU:
                 if step > 1:
-                    narration = _action_menu(state)
-                    # After action, transition: demo the Story screen briefly
-                    if state.screen is ScreenKind.STORY:
-                        pass  # already on story
+                    # Pick flow based on --gn-mode argument
+                    if args.gn_mode is not None:
+                        narration = _action_graphic_novel_menu(state, args.gn_mode)
                     else:
+                        narration = _action_menu(state)
+                    # After action, transition: demo the Story screen briefly
+                    next_screen: ScreenKind = state.screen
+                    if next_screen is ScreenKind.HUB and state.current_mission is not None:
                         # Demo Story after first mission
-                        if state.current_mission is not None and state.screen is ScreenKind.HUB:
-                            state.screen = ScreenKind.STORY
+                        state.screen = ScreenKind.STORY
+            elif state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
+                # Auto-pick the requested mode (already in state.gn_mode from --gn-mode)
+                narration = _action_graphic_novel_menu(state, state.gn_mode)
+            elif state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
+                # ADR-0048: pick ending B/C if requested via --ending CLI
+                target_ending = getattr(args, "ending", "A") or "A"
+                narration = _action_graphic_novel_ending_menu(state, target_ending)
+            elif state.screen is ScreenKind.SAVED_PROGRESS:
+                narration = _action_saved_progress(state, "menu")
+            elif state.screen is ScreenKind.CHARACTER_SELECT:
+                narration = _action_character_select(state, args.character)
+            elif state.screen is ScreenKind.CHAPTER:
+                # Auto-skip chapter after 2 seconds of display
+                if state.chapter_elapsed_ms > 2000:
+                    narration = _action_chapter(state)
+            elif state.screen is ScreenKind.ARC_PHASE:
+                # Auto-advance to next phase after 3 seconds per beat
+                if state.phase_elapsed_ms > 3000 and state.phase_typed_chars > 0:
+                    if state.current_arc is not None:
+                        chapter = state.current_arc.chapters[state.current_chapter_index]
+                        phase = chapter.phases[state.current_phase_index]
+                        current_beat = phase.beats[state.current_beat_index]
+                        if current_beat.type == "combat" and phase.combat is not None:
+                            _resolve_arc_combat(state, phase.combat)
+                            # Advance to next beat after auto-resolve
+                            if state.current_beat_index < len(phase.beats) - 1:
+                                state.current_beat_index += 1
+                                state.phase_typed_chars = 0
+                                state.phase_elapsed_ms = 0.0
+                            elif state.current_phase_index < len(chapter.phases) - 1:
+                                state.current_phase_index += 1
+                                state.current_beat_index = 0
+                                state.phase_typed_chars = 0
+                                state.phase_elapsed_ms = 0.0
+                            else:
+                                state.screen = ScreenKind.HUB
+                                narration = "Chapter complete: → HUB"
+                        elif state.current_beat_index < len(phase.beats) - 1:
+                            state.current_beat_index += 1
+                            state.phase_typed_chars = 0
+                            state.phase_elapsed_ms = 0.0
+                        elif state.current_phase_index < len(chapter.phases) - 1:
+                            state.current_phase_index += 1
+                            state.current_beat_index = 0
+                            state.phase_typed_chars = 0
+                            state.phase_elapsed_ms = 0.0
+                        else:
+                            state.screen = ScreenKind.HUB
+                            narration = "Chapter complete: → HUB"
             elif state.screen is ScreenKind.HUB:
                 if step > 1:
                     narration = _action_hub(state)
@@ -237,6 +919,12 @@ def main() -> int:
                 else:
                     state.screen = ScreenKind.MENU
                 narration = "Auto: → next screen"
+            elif state.screen is ScreenKind.ENDING:
+                # Auto-return to MENU after 5 seconds on ENDING screen
+                if state.ending_elapsed_ms > 5000:
+                    state.screen = ScreenKind.MENU
+                    state.ending_elapsed_ms = 0.0
+                    narration = "Auto: Ending → Main Menu"
 
         _render_current(console, state, t, story_reg, elapsed)
         _print_frame(

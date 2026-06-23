@@ -510,6 +510,8 @@ class SaveManager:
         state.cinematic_state = None
         state.npc_state = None
         state.active_event = None
+        state.action_menu_open = False
+        state.action_menu_index = 0
 
         # Restore mission (just id reference; full data is in saved file)
         # The mission is reloaded from mission data when needed

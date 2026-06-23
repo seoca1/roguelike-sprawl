@@ -1,16 +1,68 @@
-"""오리지널 Sprawl Jockey story (ADR-0022 draft).
+"""오리지널 Sprawl Jockey story (ADR-0022, ADR-0031).
 
-3명의 오리지널 주인공 + 2개 엔딩 골격.
-character_select → prologue (per-character) → ending A/B.
+3명의 오리지널 주인공 + 단편 챕터 + 2개 엔딩 골격.
+character_select → chapter (단편 인용) → prologue (per-character) → ending A/B.
 
 References:
-    design/story/characters.md
-    design/story/prologue.md
+    design/scenario/README.md
+    design/scenario/chapter-1-novice.md
+    design/scenario/chapter-2-veteran.md
+    design/scenario/chapter-3-heretic.md
+    data/story/chapters/{case,sil,kas}.json
+    ../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_*.md
 """
 
 from __future__ import annotations
 
 from .npc_event import ChoiceEffect, DialogueChoice, DialogueLine, NPCEvent
+
+CHAPTER_INFO: dict[str, dict[str, str]] = {
+    "novice": {
+        "character": "novice",
+        "id": "chapter_novice",
+        "title_en": "The First Jack",
+        "title_ko": "첫 잭인",
+        "portrait": "art:case",
+        "theme": "matrix_rain",
+        "json_file": "case.json",
+    },
+    "veteran": {
+        "character": "veteran",
+        "id": "chapter_veteran",
+        "title_en": "The Old Score",
+        "title_ko": "오래된 의문",
+        "portrait": "art:marly",
+        "theme": "cyberspace",
+        "json_file": "sil.json",
+    },
+    "heretic": {
+        "character": "heretic",
+        "id": "chapter_heretic",
+        "title_en": "The Declaration",
+        "title_ko": "선언",
+        "portrait": "art:kumiko",
+        "theme": "sense_net",
+        "json_file": "kas.json",
+    },
+}
+
+
+def get_chapter_info(character: str) -> dict[str, str]:
+    """Return chapter info for the chosen character.
+
+    Args:
+        character: "novice" | "veteran" | "heretic"
+
+    Returns:
+        Dict with keys: id, title_en, title_ko, portrait, theme, json_file
+    """
+    return CHAPTER_INFO.get(character, CHAPTER_INFO["novice"])
+
+
+def list_characters() -> list[str]:
+    """Return all character ids in novice/veteran/heretic order."""
+    return ["novice", "veteran", "heretic"]
+
 
 # ============================================================================
 # Character Selection

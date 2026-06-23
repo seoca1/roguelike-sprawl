@@ -21,15 +21,23 @@ if TYPE_CHECKING:
     from ..audio import SoundConfig
     from ..cyberspace.world import WorldMap
     from ..run.state import RunState
+    from .chapter_cutscene import ChapterCutsceneState
     from .event_story import EventRegistry, EventState
     from .npc_event import NPCState
     from .story_cinematic import CinematicState
 
 
 class ScreenKind(StrEnum):
-    """Top-level screens of the game (ADR-0006, ADR-0009)."""
+    """Top-level screens of the game (ADR-0006, ADR-0009, ADR-0031, ADR-0032, ADR-0040)."""
 
     MENU = "menu"
+    GRAPHIC_NOVEL_MENU = "graphic_novel_menu"  # Graphic novel entry menu (ADR-0032)
+    GRAPHIC_NOVEL_ENDING_MENU = "graphic_novel_ending_menu"  # Ending A/B selection (ADR-0048)
+    SAVE_SLOT_SELECT = "save_slot_select"  # 3-slot picker (ADR-0051)
+    GRAPHIC_NOVEL = "graphic_novel"  # Auto-play graphic novel scenes (ADR-0032)
+    SAVED_PROGRESS = "saved_progress"  # Save progress card after graphic novel (ADR-0032)
+    CHARACTER_SELECT = "character_select"  # Original jockey pick (ADR-0031)
+    CHAPTER = "chapter"  # Short-story chapter display (ADR-0031)
     HUB = "hub"
     MATRIX = "matrix"
     CYBERSPACE_BROWSER = "cyberspace_browser"  # Browse worlds/sectors/servers
@@ -37,12 +45,16 @@ class ScreenKind(StrEnum):
     COMBAT = "combat"  # Real-Time with Menu Skills (ADR-0003)
     CINEMATIC = "cinematic"  # Story presentation with typing effects (Phase 5+)
     STORY = "story"  # Aftermath / narrative / character reactions (ADR-0019)
-    DEATH = "death"
+    DEATH = "death"  # FLATLINE screen (ADR-0040)
+    DEATH_SUMMARY = "death_summary"  # Jockey report after flatline (ADR-0040)
+    HALL_OF_DEAD = "hall_of_dead"  # Archive of deceased jockeys (ADR-0040)
     NPC = "npc"  # NPC encounter with dialogue choices
     EVENT = "event"  # Event story (cutscene with character art)
     JACK_OUT = "jack_out"  # Matrix disconnect animation (Stage.JACK_OUT)
     REWARD = "reward"  # Mission rewards screen (Stage.REWARD)
     DEBRIEF = "debrief"  # Optional narrative between REWARD and COMPLETE
+    ENDING = "ending"  # Ending A/B display (ADR-0031)
+    ARC_PHASE = "arc_phase"  # Arc phase with beats (Story → Stage → Event pipeline)
     SAVE_LOAD = "save_load"  # Save/Load slot browser (Hub)
 
 
@@ -66,6 +78,8 @@ class AppState:
     current_mission: Mission | None = None
     matrix: MatrixGraph | None = None
     current_node_id: str | None = None
+    # Matrix node navigation cursor (↑/↓ to select adjacent node, Enter to move)
+    matrix_nav_index: int = 0
     hub_selected_index: int = 0
     message: str = ""
     # Fog of war / exploration state (ADR-0020). None until a matrix
@@ -152,3 +166,39 @@ class AppState:
     save_load_selected: int = 1
     # Combat visual effects (animations, particles, screen shake, etc.)
     combat_effects: CombatEffects = field(default_factory=CombatEffects)
+    # Original scenario state (ADR-0031) — character_id, chapter_id, ending
+    character_id: str = "novice"  # "novice" | "veteran" | "heretic"
+    chapter_id: str = "chapter_novice"
+    chapter_progress: float = 0.0  # 0.0 ~ 1.0 typing progress
+    chapter_elapsed_ms: float = 0.0
+    chapter_typed_chars: int = 0
+    chapter_portrait: str = "art:case"
+    ending_choice: str = ""  # "A" | "B" | "" (pending)
+    # Chapter cutscene state (for chapter-internal cutscene playback)
+    chapter_cutscene_state: ChapterCutsceneState | None = None
+    # Arc phase state (for Story → Stage → Event pipeline)
+    current_arc: object = None  # ArcData
+    current_chapter_index: int = 0
+    current_phase_index: int = 0
+    current_beat_index: int = 0
+    phase_typed_chars: int = 0
+    phase_elapsed_ms: float = 0.0
+    ending_elapsed_ms: float = 0.0  # Auto-return from ENDING screen
+    # Graphic novel state (ADR-0032)
+    gn_scene_index: int = 0  # current scene in chain
+    gn_dialogue_index: int = 0  # current dialogue in scene
+    gn_elapsed_ms: float = 0.0  # time in current dialogue
+    gn_paused: bool = False
+    gn_typed_chars: int = 0  # typing progress in current dialogue
+    gn_mode: str = "prologue"  # "prologue" | "novice" | "veteran" | "heretic"
+    gn_scene_chain: list[str] = field(default_factory=list)  # scene IDs in order
+    gn_ending_choice: str = "A"  # "A" | "B" — which ending variant (ADR-0048)
+    gn_save_slot_selected: int = 0  # 0=none, 1..3 for slot picker (ADR-0051)
+    # Jockey cycle (ADR-0040) — Hall of Dead Jockeys
+    jockey_history_loaded: bool = False  # whether archive is loaded from disk
+    total_runs: int = 0
+    total_deaths: int = 0
+    last_jockey_summary_id: str = ""  # ID of the most recent DeceasedJockey
+    # Death flow options (after DEATH_SUMMARY)
+    death_cause: str = "Combat"  # "Combat" / "Black ICE" / "T-A ICE" / "Black ICE breach"
+    hall_of_dead_selected: int = 0  # selected index in HALL_OF_DEAD screen

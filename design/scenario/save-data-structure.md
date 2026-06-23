@@ -1,0 +1,207 @@
+# 게임 저장 데이터 구조 & 진행 현황 추적
+
+**문서 상태**: DRAFT
+**Created**: 2026-06-23
+**Purpose**: 저장 구조 + 챕터 클리어 조건 검증
+
+---
+
+## 1. 저장 데이터 구조 (JSON)
+
+```json
+{
+  "version": "0.1.0",
+  "saved_at": "2026-06-23T...",
+  "elapsed_seconds": 480,
+
+  "run_state": {
+    "current_stage": "jack_out",
+    "completed_stages": ["meet_npc", "extract_data", "defeat_ice"],
+    "pending_advance": true,
+    "current_target_node": "ice1",
+    "last_visited_node": "data1",
+    "mission_id": "first_jack",
+    "started_at_ms": 0,
+    "chapter_state": "IN_CHAPTER_1",
+    "current_phase_index": 2
+  },
+
+  "mission": {
+    "id": "first_jack",
+    "title": "First Jack",
+    "fixer": "finn",
+    "arc": 1,
+    "grade_min": 1,
+    "grade_max": 1,
+    "matrix_seed": 42,
+    "zone": "surface",
+    "rewards": {
+      "credits": 500,
+      "materials": {"data_fragment": 2}
+    }
+  },
+
+  "app_state": {
+    "character_id": "novice",
+    "chapter_id": "chapter_novice",
+    "inventory": {"data_fragment": 2, "ice_shard": 1},
+    "credits": 500,
+    "current_node_id": "data1",
+    "defeated_nodes": ["ice1"],
+    "extracted_nodes": ["data1"],
+    "mission_progress": {"extract_data": 1, "defeat": 1},
+    "player_grade": 1,
+    "matrix": { ... }
+  },
+
+  "metadata": {
+    "player_grade": 1,
+    "screen": "matrix",
+    "credits": 500,
+    "data_recovered": 2
+  }
+}
+```
+
+---
+
+## 2. 주요 필드 설명
+
+### run_state (진행 상태)
+
+| 필드 | 타입 | 설명 | 챕터 진행 |
+|------|------|------|-----------|
+| `current_stage` | Stage enum | 현재 스테이지 | MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → JACK_OUT → REWARD → DEBRIEF → COMPLETE |
+| `completed_stages` | list[Stage] | 완료된 스테이지들 | 클리어 조건과 직접 연관 |
+| `chapter_state` | ChapterState enum | 챕터 진행 상태 | PROLOGUE → IN_CHAPTER_1 → CHAPTER_1_COMPLETE → ... → ENDING_A/B/C |
+| `current_phase_index` | int | 현재 Phase 인덱스 | 0~4 (케이 Ch1의 경우 WAIT→BRIEFING→JACK_IN→EXTRACT→DEBRIEF) |
+| `mission_id` | str | 현재 미션 ID | 미션 선택과 연관 |
+| `current_target_node` | str | 현재 타겟 노드 | 매트릭스 탐색과 연관 |
+| `last_visited_node` | str | 마지막 방문 노드 | 노드 방문 추적 |
+
+### app_state (게임 상태)
+
+| 필드 | 타입 | 설명 | 진행 추적 |
+|------|------|------|----------|
+| `character_id` | str | 캐릭터 ID | novice/veteran/heretic |
+| `chapter_id` | str | 챕터 ID | chapter_novice 등 |
+| `inventory` | dict | 인벤토리 | 아이템 획득 추적 |
+| `credits` | int | 크레딧 | 화폐/보상 추적 |
+| `defeated_nodes` | set[str] | 격파한 노드 | 전투 진행 추적 |
+| `extracted_nodes` | set[str] | 추출한 노드 | 데이터 추출 진행 추적 |
+| `mission_progress` | dict[str,int] | 미션 진행도 | objective별 카운트 |
+| `completed_missions` | set[str] | 완료된 미션들 | 반복 방지 |
+| `player_grade` | int | 플레이어 등급 | 1~5, 미션 잠금 해제 |
+
+---
+
+## 3. 챕터 클리어 조건
+
+### 현재 구조 (Stage 기반)
+
+```
+챕터 클리어 조건:
+  - current_stage == COMPLETE
+  - OR 모든 required_stages 완료
+```
+
+### 케이 Ch1 예시
+
+```
+Phase 0 (WAIT):     stage = PENDING → MEET_NPC 완료
+Phase 1 (BRIEFING):  stage = MEET_NPC → NPC 대화 완료
+Phase 2 (JACK_IN):  stage = MEET_NPC → MATRIX 진입 + Wisp T1 우회
+Phase 3 (EXTRACT):  stage = EXTRACT_DATA → 데이터 추출 + Watchdog 격파
+Phase 4 (DEBRIEF):  stage = JACK_OUT → 잭아웃 → REWARD → DEBRIEF → COMPLETE
+```
+
+### 챕터 전환 로직 (play.py)
+
+```python
+# CHAPTER_1_COMPLETE 진입 시:
+if rs.chapter_state is ChapterState.CHAPTER_1_COMPLETE:
+    rs.start_chapter_2()           # → IN_CHAPTER_2
+    state.chapter_cutscenes_seen = set()  # 컷신 트래킹 리셋
+
+# CHAPTER_2_COMPLETE 진입 시:
+if rs.chapter_state is ChapterState.CHAPTER_2_COMPLETE:
+    rs.start_chapter_3()           # → IN_CHAPTER_3
+```
+
+---
+
+## 4. 진행 추적 메커니즘
+
+### Stage 진행
+
+```
+RunState.current_stage:     Stage (PENDING → MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → JACK_OUT → REWARD → DEBRIEF → COMPLETE)
+RunState.completed_stages: tuple[Stage, ...]  (완료된 스테이지 목록)
+```
+
+### Chapter 진행
+
+```
+RunState.chapter_state:        ChapterState (PROLOGUE → IN_CHAPTER_1 → CHAPTER_1_COMPLETE → IN_CHAPTER_2 → ...)
+RunState.current_phase_index:   int (0~4, 현재 Phase)
+```
+
+### 미션 진행
+
+```
+AppState.mission_progress:    dict[str, int]  (objective_type → count)
+AppState.defeated_nodes:       set[str]         (격파한 ICE 노드)
+AppState.extracted_nodes:      set[str]         (추출한 데이터 노드)
+AppState.completed_missions:   set[str]         (완료한 미션 ID)
+```
+
+### 보상/아이템
+
+```
+AppState.credits:             int              (현재 크레딧)
+AppState.inventory:            dict[str, int]   (아이템별 수량)
+AppState.player_grade:         int              (1~5, 등급)
+```
+
+---
+
+## 5. 문제점: 챕터 vs Stage 이중 구조
+
+### 현재 이슈
+
+1. **Stage 시스템**: MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → JACK_OUT → REWARD → DEBRIEF → COMPLETE
+2. **Chapter Phase 시스템**: WAIT → BRIEFING → JACK_IN → EXTRACT → DEBRIEF
+
+**두 시스템이 별도로 운영됨**:
+- `current_stage`는 미션 기반 Stage
+- `current_phase_index`는 챕터 기반 Phase
+- **这两者之间没有直接映射**
+
+### 검증 필요 사항
+
+| 검증 항목 | 현재 상태 | 비고 |
+|---------|---------|------|
+| ChapterState → current_phase_index 동기화 | ❓ 미검증 | start_chapter_N() 호출 시 reset_phase() 실행 확인 |
+| Stage → Phase 매핑 | ❓ 미검증 | phase 0이 stage PENDING과 연관되는지 |
+| 챕터 완료 조건 | ❓ 미검증 | current_stage == COMPLETE이면 챕터 완료인지 |
+
+---
+
+## 6. 다음 검증 체크리스트
+
+- [ ] 케이 Ch1 실행 시 `current_phase_index`가 0→1→2→3→4로 진행하는지
+- [ ] 챕터 완료 시 `chapter_state`가 CHAPTER_N_COMPLETE로 전환되는지
+- [ ] Phase 전환 시 `current_stage`가预期的 Stage와 일치하는지
+- [ ] `reset_phase()`가 챕터 시작 시 올바르게 호출되는지
+
+---
+
+## 7. 관련 파일
+
+| 파일 | 설명 |
+|------|------|
+| `src/roguelike_sprawl/run/state.py` | RunState, ChapterState 정의 |
+| `src/roguelike_sprawl/engine/state.py` | AppState 정의 |
+| `src/roguelike_sprawl/engine/save_manager.py` | 저장/로드 로직 |
+| `src/roguelike_sprawl/engine/save_progress.py` | ProgressSummary 생성 |
+| `scripts/play.py` | 챕터 전환 로직 |

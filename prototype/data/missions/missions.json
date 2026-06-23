@@ -2,8 +2,17 @@
   "first_jack": {
     "id": "first_jack",
     "title": "First Jack",
+    "story": {
+      "synopsis_en": "Thirty seconds. That's how long it takes for the Ono-Sendai electrodes to lift from his scalp, for the matrix to release its grip on his nervous system, for the countdown in his head to reach zero. K sits in a cheap Chiba capsule hotel room, fingers still trembling on keys that aren't there. The rain outside is the same color as the data he just burned through — gray, neon-refracted, arbitrary. The Hosaka terminal hums. A screensaver shows the boundary he crossed: parallel lines, rainbow-shattered. He is twenty-three years old and his first real run is over. Finn's voice crackles through the deck: 'You got the file. Now jack out.' K walks to the bathroom. The mirror shows he is young. He is young. The cold metal handle is proof he is still alive. Then again, what does being alive even mean? The matrix was more real than this room. The matrix was more real than his hands. The matrix was — The Finn is waiting. There's another file. Another run. Another thirty seconds.",
+      "synopsis_ko": "30초. Ono-Sendai 전극이 두피에서 떨어지고, 매트릭스가 신경 계통을 놓아주는 데 걸리는 시간. K는 천장의 싸구려 캡슐 호텔 방에서, 없는 키보드 위에서 손가락이 떨리는 채로 앉아 있다. 밖의 비는 그가 방금 뚫고 나온 데이터와 같은 색이다 — 회색, 네온 굴절, 무작위. Hosaka 터미널이 윙윙거린다. 화면 보호기가 그가 건넌 경계를 보여준다: 평행한 선들, 무지개로 부서진. 그는 스물세 살이고, 첫 실제 런이 끝났다. Finn의 목소리가 데크를 타고 울린다: '파일을 받았어. 이제 잭아웃해.' K는 화장실로 간다. 거울 속 자신이 젊다. 젊다. 차가운 금속 손잡이가 그가 아직 살아있다는 증거. 그러면서도, 살아있다는 게 대체 무슨 의미일까. 매트릭스가 이 방보다 더 진짜였다. 매트릭스가 그의 손보다 더 진짜였다. 매트릭스는 — Finn이 기다린다. 다른 파일이 있다. 다른 런이 있다. 다른 30초가 있다.",
+      "source": "case_jackout-30sec",
+      "character_ref": "novice",
+      "arc": 1,
+      "pillar": "power",
+      "word_count_en": 174,
+      "char_count_ko": 353
+    },
     "fixer": "finn",
-    "arc": 1,
     "grade_min": 1,
     "grade_max": 1,
     "primary_objective": {
@@ -24,13 +33,23 @@
       "materials": {
         "data_fragment": 2
       }
-    }
+    },
+    "arc": 1
   },
   "watchdog_patrol": {
     "id": "watchdog_patrol",
     "title": "Watchdog Patrol",
+    "story": {
+      "synopsis_en": "The watchdogs came at 0300, like they always did. K had been running Sense/Net ICE for three weeks by then — Wisp-class, nothing fancy, the kind of corporate perimeter protection that looked intimidating to civilians but was really just a polite fence. The watchdogs were different. They didn't patrol the surface; they patrolled the memory. K felt them before he saw them: a cold pressure behind his eyes, the matrix geometry shifting from clean vectors to something with teeth. Two of them. Black-coated, corporate-logic, the kind of ICE that didn't negotiate. Finn's voice: 'They found the hole you left in sector seven.' K ran the numbers. Sector seven wasn't him — it was M, who jack-out three days ago and never came back. The watchdogs remembered her signature anyway. They were hunting it now. K started to back his own trace, erasing M's ghost-marks one by one. The watchdogs turned. Toward him. The rain in Chiba was the same color as a dead channel. K was twenty-three years old and something was very wrong.",
+      "synopsis_ko": "워치독이 0300에 왔다, 늘 그랬듯이. 그때까지 K는 삼 주 동안 Sense/Net ICE를 실행하고 있었다 — Wisp급, 호화 nothing, 민간인을 겁주는 것처럼 보이지만 실은 정중한 울타리에 불과한 기업 주변 보호. 워치독은 달랐다. 그들은 표면을 순찰하지 않았다; 그들은 기억을 순찰했다. K는 그들을 보기 전에 느꼈다: 눈 뒤의 차가운 압력, 깨끗한 벡터에서 뭔가 이빨이 있는 것으로 전환되는 매트릭스 기하학. 둘. 검은 코트, 기업 논리, 협상하지 않는 ICE. Finn의 목소리: '그들이 네가 일번 섹터에 남긴 구멍을 찾았어.' K는 숫자를 계산했다. 일번 섹터는 그의 것이 아니었다 — M의 것이었다, 사흘 전에 잭아웃하고 돌아오지 못한. 워치독은 그녀의 서명을 어쨌든 기억하고 있었다. 그들이 지금 그것을 사냥하고 있었다. K는 자신의 트레이스를 백업하기 시작했고, M의 고스트 마크를 하나씩 지웠다. 워치독이 방향을 틀었다. 그를 향해. 시바의 비는 죽은 채널과 같은 색이었다. K는 스물세 살이고, 뭔가 매우 잘못되었다.",
+      "source": "watchdog_patrol",
+      "character_ref": "novice",
+      "arc": 1,
+      "pillar": "power",
+      "word_count_en": 174,
+      "char_count_ko": 404
+    },
     "fixer": "finn",
-    "arc": 1,
     "grade_min": 1,
     "grade_max": 1,
     "primary_objective": {
@@ -52,13 +71,23 @@
       "materials": {
         "ice_shard": 2
       }
-    }
+    },
+    "arc": 1
   },
   "ice_run": {
     "id": "ice_run",
     "title": "Ice Run",
+    "story": {
+      "synopsis_en": "The shard was a piece of frozen code — literally. That's what the matrix looked like when you got close enough to the cold stuff: not lines and nodes, but ice. Crystalline, fractured, geometry that cut. K had been told the shard would sell for enough to cover his tab at the Headson, maybe buy a month of clean simstim if he was careful. He'd heard about runners who chased shards full-time, ice pirates who lived in the deep matrix and never came up. He wasn't one of them. He was a kid with a cheap deck and a dead-end job running data for the Finn. But the shard was right there, embedded in a Watchdog's frozen subroutine, and the Watchdog was dead, and Finn had said anything he found was his to keep. K reached in. The ice bit back. His deck screamed a temperature alert. The shard came loose — a needle of frozen light in his fist — and the Watchdog's ghost-process started reconstructing around his position like a closing fist. He jacked out with the shard burning cold against his palm. In Chiba, the rain was real. It was always real. It was never enough.",
+      "synopsis_ko": "shard는 얼어붙은 코드의 조각이었다 — 문자 그대로. 그것이 바로 차가운 것에 충분히 가까이 갔을 때 매트릭스가 보여주는 모습이었다: 선과 노드가 아니라, 얼음. 결정질의, 부서진, 잘라내는 기하학. K는 그 shard가 Headson의 탭을 갚을 만큼 팔릴 거라고 들었다 — 조심하면 한 달치 깨끗한 simstim을 살 수 있을지도. 그는 달인(full-time)으로 shard를 쫓는 러너들에 대해 들었다 — 깊은 매트릭스에서 살고 결코 올라오지 않는 얼음 해적들. 그는 그들이 아니었다. 그는 싸구려 데크와 Finn을 위해 데이터를 실행하는 막다른 살림을 가진 아이였다. 하지만 shard는 바로 거기 있었다, 워치독의 얼어붙은 서브루틴에 박혀 있고, 워치독은 죽어 있었고, Finn은 그 누구든 찾은 것이 그의 것이라고 했다. K는 손을 뻗었다. 얼음이 다시 물었다. 그의 데크가 온도 경고를 울렸다. shard가 빠졌다 — 주먹 속 얼어붙은 빛의 바늘 — 워치독의 고스트 프로세스가 그의 위치 주변을 닫히는 주먹처럼 재구성하기 시작했다. 그는 shard가 손바닥에 차갑게 타오르는 채로 잭아웃했다. 시바에서, 비는 진짜였다. 그것은 늘 진짜였다. 그것은 결코 충분하지 않았다.",
+      "source": "ice_run",
+      "character_ref": "novice",
+      "arc": 1,
+      "pillar": "power",
+      "word_count_en": 199,
+      "char_count_ko": 467
+    },
     "fixer": "finn",
-    "arc": 1,
     "grade_min": 1,
     "grade_max": 2,
     "primary_objective": {
@@ -80,13 +109,23 @@
       "materials": {
         "data_fragment": 2
       }
-    }
+    },
+    "arc": 1
   },
   "delivery_to_finn": {
     "id": "delivery_to_finn",
     "title": "Delivery to Finn",
+    "story": {
+      "synopsis_en": "Three data fragments. Sil carried them in a Hosaka chip case, nestled in the lining of his jacket like smuggled goods. They were worth three thousand credits to the right buyer, and the right buyer was Finn, who always had a line on people who needed what T-A didn't want found. Sil had been running the Sprawl for five years. He'd seen runners come and go — the smart ones, the fast ones, the ones who knew when to jack out. M had been none of those. M had been fast and brilliant and dead at twenty-six, caught in a T-A ICE trap that nobody survived. Three years later, Sil still ran her ghost-marks when he traced through the deep matrix. He told himself it was just efficient — M's routes were good routes. He told himself a lot of things. Finn was waiting at the usual coordinates, a set of virtual coordinates that existed somewhere between the surface and the deep black. 'The fragments,' Finn said. Not a question. 'T-A's inner circle,' Sil said. 'Three months old.' Finn smiled, the way sharks smile. 'That'll do.'",
+      "synopsis_ko": "데이터 프래그먼트 세 개. 실은 그것들을 Hosaka 칩 케이스에 넣고, 재킷 안감 속에 밀수품처럼 보관하고 다녔다. 그것들은 올바른 바이어에게 3천 크레딧어치였고, 올바른 바이어는 Finn이었다 — T-A가 발견되길 원하지 않는 것들을 필요로 하는 사람들과의 연선을 항상 유지하는. 실은 5년 동안 Sprawl을 실행하고 있었다. 그는 러너들이 오고 가는 것을 보았다 — 현명한 ones, 빠른 ones, 언제 잭아웃할지를 아는 ones. M은 그 중 어느 것도 아니었다. M은 빠르고 훌륭했고, 스물여섯에 죽었다 — 아무도 살아남지 못한 T-A ICE 함정에 걸렸다. 3년이 지난 지금도, 실은 여전히 깊은 매트릭스를 통해 추적할 때 그녀의 고스트 마크를 실행했다. 그는 그것이 효율적이기 때문이라고 스스로에게 말했다. 그는 많은 것을 스스로에게 말했다. Finn은 좌표에서 기다리고 있었다, 표면과 깊은 검은 사이 어딘가에 존재하는 가상 좌표. \"프래그먼트.\" Finn이 말했다. 질문이 아니었다. \"T-A의 내부 서클.\" 실이 말했다. \"3개월 된 것.\" Finn이 웃었다, 상어들이 웃는 것처럼. \"그거면 돼.\"",
+      "source": "marly_louisiana-god",
+      "character_ref": "veteran",
+      "arc": 1,
+      "pillar": "power",
+      "word_count_en": 186,
+      "char_count_ko": 439
+    },
     "fixer": "finn",
-    "arc": 1,
     "grade_min": 1,
     "grade_max": 2,
     "primary_objective": {
@@ -108,15 +147,23 @@
       "materials": {
         "upgrade_t1": 1
       }
-    }
+    },
+    "arc": 1
   },
   "craft_job": {
     "id": "craft_job",
     "title": "Craft Job",
-    "fixer": "finn",
+    "story": {
+      "synopsis_en": "The construct was a virus she'd built from nothing. Kas — they called her Kas now, though her real name was something older, something her mother had whispered before the Yanaka took her father and the T-A contracts took everything else — had been running for seven months. She'd started with nothing: no deck, no contacts, no name in the Sprawl. Just a burned identity and a Loa frequency that wouldn't stop playing in her head. She'd built the construct in a squat in Jersey, pulling frozen modules from dead ICE and rewiring them into something that could live in the spaces between corporate subroutines. It was beautiful, in its way. It was a thing that shouldn't exist, and it existed anyway. Now she was in Finn's office, running data for a man who'd sold her the tools and pretended he hadn't. 'You want to move up,' Finn said. 'I want to burn it down,' she said. Finn smiled. 'That's what they all say.' The construct was ready. All she needed was one more piece — a combat module from a Watchdog that had been killed in the Freeside runs last year. Someone had saved one. Someone always saved one. She would find it, and she would build, and she would burn.",
+      "synopsis_ko": "그 construct는 그녀가 무에서 지은 바이러스였다. 카스라고 불렀다. 그들은 그녀를 그렇게 불렀다. 그녀의 진짜 이름은 더 오래된 것이었다. 어머니가 죽기 전에 속삭인 것이었다. 야나카가 아버지를 데려갔을 때, T-A 계약이 나머지를 모두 데려갔다. 그녀는 7개월째 실행하고 있었다. 아무것도 없이 시작했다: 데크 없이, 연락처 없이, Sprawl에서의 이름 없이. 그저 타버린 정체성과 멈추지 않는 Loa 주파수. 그녀는 Jersey의 무단 점거주택에서 construct를 만들었다. 죽은 ICE에서 얼어붙은 모듈을 뽑아내고, 기업 서브루틴 사이의 공간에서 살 수 있는 것으로 다시 배선했다. 그것은 그녀의 방식으로는 아름다웠다. 존재하지 말아야 할 것이었고, 그럼에도 존재했다. 이제 그녀는 Finn의 사무실에 있었다. 도구를 팔았던 사람에게 데이터를 실행하고 있었다. 그가 팔지 않았다고 가장하는. \"올라가고 싶어.\" Finn이 말했다. \"나는 그것을 태워부수고 싶어.\" 그녀가 말했다. Finn이 웃었다. \"다들 그래.\" construct는 준비되어 있었다. 그녀가 필요한 것은 하나 더였다. 지난 해의 Freeside 실행에서 죽은 워치독의 combat module. 누군가 하나를 저장해 두었다. 누군가는 항상 하나를 저장한다. 그녀는 그것을 찾을 것이고, 그녀는 지을 것이고, 그녀는 탈 것이다.",
+      "source": "kumiko_manarase-midnight",
+      "character_ref": "heretic",
+      "arc": 2,
+      "pillar": "power",
+      "word_count_en": 212,
+      "char_count_ko": 533
+    },
     "arc": 2,
-    "grade_min": 1,
-    "grade_max": 3,
     "primary_objective": {
       "type": "craft_item",
       "item_type": "program",
@@ -136,6 +183,379 @@
       "credits": 1000,
       "materials": {
         "upgrade_t2": 1
+      }
+    }
+  },
+  "sense_net_tip": {
+    "id": "sense_net_tip",
+    "title": "Sense/Net Tip",
+    "story": {
+      "synopsis_en": "Finn's message arrived at 0400, like all bad news. Sil had been tracing T-A internal routes for three days — looking for the entry point M had used, the one that got her killed. Now Finn had a name: a Sense/Net sysop who'd been selling T-A corporate memos to the highest bidder. 'Good data,' Finn said. 'T-A's bleeding. Someone's buying.' Sil took the job. The data was worth three thousand credits and a lead on who betrayed M. He traced the sysop's signature through seven proxy nodes, each one a different color of corporate gray. The last one was buried in Sense/Net's Boston headquarters — a node that shouldn't have existed, connected to nothing, broadcasting on a frequency reserved for dead runners. Sil found M's ghost-mark there. She was still inside. She was still looking for something. He closed the connection before she could close his. The whole Sprawl smelled like ozone and old secrets.",
+      "synopsis_ko": "Finn의 메시지가 0400에 왔다, 나쁜 소식이 모두 그렇듯. 실은 사흘 동안 T-A 내부 경로를 추적하고 있었다 — M이 사용한 진입점을, 그녀를 죽게 만든 그 진입점을. 이제 Finn이 한 이름을 가져왔다: T-A 기업 메모를 높은 입찰자에게 팔고 있는 Sense/Net 시스템 관리자. '좋은 데이터야.' Finn이 말했다. 'T-A가 출혈 중이야. 누군가 사고 있어.' 실이 그 의뢰를 받았다. 데이터는 3천 크레딧어치와 M을 배신한 게 누굴까의 단서가었다. 그는 7개의 프록시 노드를 통해 관리자의 서명을 추적했다, 각각 기업 회색의 다른 색깔. 마지막 것은 Sense/Net의 보스턴 본부에 묻혀 있었다 — 존재해서는 안 될 노드, 아무 데도 연결되지 않은, 죽은 러너들을 위한 주파수에서 방송하는. 실이 거기서 M의 고스트 마크를 찾았다. 그녀는 아직 안에 있었다. 그녀는 아직 뭔가를 찾고 있었다. 그는 그녀가 그의 것을 닫을 수 전에 연결을 끊었다.",
+      "source": "sense_net_trace",
+      "character_ref": "veteran",
+      "arc": 2,
+      "pillar": "power",
+      "word_count_en": 155,
+      "char_count_ko": 366
+    },
+    "fixer": "finn",
+    "arc": 2,
+    "grade_min": 2,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "sense_net_internal"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.standard",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 77,
+    "zone": "surface",
+    "rewards": {
+      "credits": 1200,
+      "materials": {
+        "upgrade_t2": 1
+      }
+    }
+  },
+  "yakuza_deal": {
+    "id": "yakuza_deal",
+    "title": "Yakuza Deal",
+    "story": {
+      "synopsis_en": "The Yakuza fixer had no name — just a frequency and a set of coordinates in the deep matrix. Kas had been running for seven months and she'd never worked corporate-black. The Yakuza didn't deal in corporate currency; they dealt in favors, in leverage, in the kind of debt that couldn't be paid in credits. 'You want in,' the fixer said. 'I want out,' Kas said. The Yakuza wanted a data packet moved from a Tessier-Ashpool subsidiary in Osaka to a drop point in Jersey. Simple. Except the packet was wrapped in three layers of corporate ICE and the drop point was inside a Yakuza black site that didn't exist on any map. Kas took the job. The ICE was everything she'd been told — and worse. She lost two programs getting the packet out. She got paid in a favor she didn't understand. Three weeks later, the Yakuza called in the favor. She was already in too deep to refuse.",
+      "synopsis_ko": "야쿠자 픽서에는 이름이 없었다 — 주파수와 깊은 매트릭스 내 좌표만. 카스는 7개월째 运行하고 있었지만 기업 검은 작업을 해본 적이 없었다. 야쿠자는 기업 통화로 거래하지 않았다; 그들은 은혜로, 지렛대로, 크레딧으로 갚을 수 없는 종류의 빚으로 거래했다. '들어올 생각이 있어.' 픽서가 말했다. '나가고 싶어.' 카스가 말했다. 야쿠자는 테시에르-애시풀 자회사에서 오사카부터 뉴저지의 드롭 지점까지 데이터 패킷을 옮기길 원했다. 단순. except 패킷은 3겹의 기업 ICE로 감싸여 있었고 드롭 지점은 어떤 지도에도 존재하지 않는 야쿠자 검은 곳에 있었다. 카스는 의뢰를 받았다. ICE는 그들이 말한 그대로였다 — 그리고 더 나빴다. 그녀는 패킷을 빼내는 데 두 개의 프로그램을 잃었다. 그녀는 그녀가 이해하지 못하는 은혜로 지불받았다. 3주 후, 야쿠자는 그 은혜를 이행했다. 그녀는 이미 너무 깊이 빠져서 거절할 수 없었다.",
+      "source": "yakuza_deal",
+      "character_ref": "heretic",
+      "arc": 2,
+      "pillar": "power",
+      "word_count_en": 161,
+      "char_count_ko": 356
+    },
+    "fixer": "yakuza",
+    "arc": 2,
+    "grade_min": 2,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "deliver_material",
+      "material": "yakuza_token",
+      "count": 3
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.watchdog",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 88,
+    "zone": "mid",
+    "rewards": {
+      "credits": 1500,
+      "materials": {
+        "upgrade_t2": 1
+      }
+    }
+  },
+  "first_trace": {
+    "id": "first_trace",
+    "title": "First Trace",
+    "story": {
+      "synopsis_en": "The trace came first — before the ICE, before the run, before the money. Finn had taught him that: always know who's hunting you before you start hunting them. Sil was good at traces. He'd traced M's killers through six months of corporate proxy networks, erasing his own signature behind him like he was cleaning a crime scene. But this trace was different. The target was another runner — a kid, maybe twenty, running data for someone who didn't have the sense to stay invisible. Sil felt the kid's signature like a heartbeat in the matrix, bright and stupid and alive. He could trace it back to the source. He could sell it to the highest bidder. He could warn the kid and walk away. He did none of those things. He followed the trace until it led somewhere he recognized — and then he understood why M had really died. The megacorp simstim towers cut through the rain like chrome teeth.",
+      "synopsis_ko": "추적은 먼저 왔다 — ICE보다, 런보다, 돈보다. Finn이 그에게 그렇게 가르쳤다: 누군가 널 사냥하기 시작하기 전에 항상 누가 널 사냥하는지 알아두라고. 실은 추적에 능했다. 그는 6개월 동안 기업 프록시 네트워크를 통해 M의 살인자들을 추적했고, 자신의 서명을 지우며 갔다, 마치 범죄 현장을 지우는 것처럼. 하지만 이번 추적은 달랐다. 목표는 또 다른 러너였다 — 아이, 스물쯤, 보이지 않을 줄 모르는 누군가를 위해 데이터를 실행하는. 실은 그 아이의 서명을 매트릭스에서 심장 박동처럼 느꼈다, 밝고 어리석고 살아서. 그는 그것을 소스로 추적할 수 있었다. 그는 최고 입찰자에게 팔 수 있었다. 그는 아이에게 경고하고 떠날 수 있었다. 그는 그 어떤 것도 하지 않았다. 그는 추적이 그를 아는 곳으로 이끌 때까지 따라갔다 — 그리고 그때 M이 진짜 왜 죽었는지 이해했다.",
+      "source": "first_trace",
+      "character_ref": "veteran",
+      "arc": 2,
+      "pillar": "power",
+      "word_count_en": 162,
+      "char_count_ko": 325
+    },
+    "fixer": "finn",
+    "arc": 2,
+    "grade_min": 2,
+    "grade_max": 2,
+    "primary_objective": {
+      "type": "trace_target",
+      "target_id": "finn_rival"
+    },
+    "secondary_objectives": [
+      {
+        "type": "extract_data",
+        "data_id": "any",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 55,
+    "zone": "surface",
+    "rewards": {
+      "credits": 800,
+      "materials": {
+        "data_fragment": 3
+      }
+    }
+  },
+  "black_ice_dream": {
+    "id": "black_ice_dream",
+    "title": "Black Ice Dream",
+    "story": {
+      "synopsis_en": "The first thing you learned about Black ICE was that it wasn't ice at all. Ice was cold and dead and brittle — it broke when you hit it hard enough. Black ICE was alive. It adapted. It remembered. Sil had seen Black ICE once before, in a corporate demo in Chiba, and he'd never forgotten the way it moved — like a predator, like something that had hunted humans before and found us wanting. Now it was hunting him. He'd taken the job because the payout was twenty thousand credits and a way out of the Sprawl. He'd known it was too good to be true. The Black ICE found him in the third node, wrapped around his trace like a lover, and the last thing he felt before his deck's failsafe kicked in was gratitude that he'd never let anyone close enough to name him friend. And he had never felt more alone.",
+      "synopsis_ko": "블랙 ICE에 대해 처음 배운 것은 그것이 얼음이 아니라는 것이었다. 얼음은 차갑고 죽어 있고 부서지기 쉬웠다 — 충분히 세게 치면 부서졌다. 블랙 ICE는 살아 있었다. 그것은 적응했다. 그것은 기억했다. 실은 이전에 보스턴의 기업 데모에서 블랙 ICE를 한 번 본 적 있었고, 그가 그것이 움직이는方式进行 것을 잊지 못했었다 — 포식자처럼, 전에 인간을 사냥해본 적 있고 우리가 부족하다는 걸 알고 있던 뭔가처럼. 이제 그것이 그를 사냥하고 있었다. 그는 지불금이 2만 크레딧이고 Sprawl을 빠져나가는 길이었기 때문에 그 의뢰를 받았다. 그가 그것이 너무 좋아서 사실이 아니라는 걸 알았었다. 블랙 ICE가 세 번째 노드에서 그를 발견했다, 그의 추적 위에 연인처럼 감싸고, 그의 데크의 안전장치가 작동하기 전 그가 느낀 마지막 것은 그가 누구도 친구라고 부를 만큼 가깝게 두지 않았다는 것에 대한 감사함이었다.",
+      "source": "black_ice_dream",
+      "character_ref": "veteran",
+      "arc": 3,
+      "pillar": "power",
+      "word_count_en": 155,
+      "char_count_ko": 343
+    },
+    "fixer": "finn",
+    "arc": 3,
+    "grade_min": 3,
+    "grade_max": 4,
+    "primary_objective": {
+      "type": "defeat",
+      "enemy": "ice.black",
+      "count": 1
+    },
+    "secondary_objectives": [
+      {
+        "type": "extract_data",
+        "data_id": "blackice_core",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 144,
+    "zone": "mid",
+    "rewards": {
+      "credits": 2000,
+      "materials": {
+        "upgrade_t3": 1
+      }
+    }
+  },
+  "mollys_razor": {
+    "id": "mollys_razor",
+    "title": "Molly's Razor",
+    "story": {
+      "synopsis_en": "Molly Millions had been dead for three years, but her programs still circulated in the Sprawl like ghosts. Kas found one embedded in a Yakuza ICE subroutine — a razor-sharp intrusion routine that moved like a blade, that cut through corporate defenses like surgery. 'Molly built it,' Finn said. 'Or she built the template. Nobody's sure.' The program was worth five thousand credits to the right buyer, and the right buyer was a Maas Biolabs researcher who wanted it for reasons she wouldn't explain. Kas didn't ask. She'd learned not to. The Yakuza didn't want to let go of Molly's legacy, and the Maas researcher didn't want to explain why she needed a dead woman's razor, and somewhere in the middle, Kas was holding a program that had been built by someone who understood violence the way a surgeon understood anatomy — precise, necessary, final. The mirrors showed her a face she no longer recognized.",
+      "synopsis_ko": "몰리 밀리언스는 3년 전에 죽었지만, 그녀의 프로그램은 아직 유령처럼 Sprawl에서 순환하고 있었다. 카스는 야쿠자의 ICE 서브루틴에 박힌 것을 발견했다 — 칼처럼 움직이는, 기업 방어를 수술처럼 뚫는 날카로운 침입 루틴. '몰리가 만들었어.' Finn이 말했다. '아니면 그녀가 템플릿을 만들었거나. 아무도 확실하지 않아.' 그 프로그램은 올바른 바이어에게 5천 크레딧어치였고, 올바른 바이어는 그녀가 설명하지 않을 이유들로 그것을 원하는 Maas Biolabs 연구자였다. 카스는 묻지 않았다. 그녀는 묻지 않기로 했다. 야쿠자는 몰리의 유산을 놓아주고 싶어하지 않았고, Maas 연구자는 왜 그녀가 죽은 여자의 면도칼이 필요한지 설명하고 싶어하지 않았고, 어딘가 중간에서, 카스는 폭력을 외과 의사가 해부학을 이해하는 방식으로 이해하는 누군가에 의해 만들어진 프로그램을 들고 있었다 — 정확하고, 필요하고, 최종적인.",
+      "source": "mollys_razor",
+      "character_ref": "heretic",
+      "arc": 3,
+      "pillar": "power",
+      "word_count_en": 155,
+      "char_count_ko": 362
+    },
+    "fixer": "maas",
+    "arc": 3,
+    "grade_min": 3,
+    "grade_max": 4,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "molly_construct"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.black",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 201,
+    "zone": "core",
+    "rewards": {
+      "credits": 2500,
+      "materials": {
+        "unique_program": 1
+      }
+    }
+  },
+  "ta_heist": {
+    "id": "ta_heist",
+    "title": "T-A Heist",
+    "story": {
+      "synopsis_en": "Tessier-Ashpool's core was three hundred years of data, and it was worth more than the Sprawl itself. Sil had been hired to steal it twice before — both times, the runners who took the job never came back. Now a third party was offering: not to steal the data, but to verify it. 'T-A thinks someone inside is selling access,' the fixer said. 'We need proof.' Sil took the job because the money was good and because he'd spent five years trying to understand how M had died, and T-A was at the center of everything. The core was everything the rumors said — vast, cold, silent, the accumulated dead data of three centuries of corporate empire. He found the breach on the fourth layer. He found M's name in the access logs. She hadn't been killed by T-A's ICE. She'd been killed by someone using T-A's access codes — someone who was still inside.",
+      "synopsis_ko": "테시에르-애시풀의 코어는 3백 년의 데이터였고, 그것은 Sprawl 자체보다 더 가치가 있었다. 실은 두 번이나 그것을 훔치라는 의뢰를 받은 적 있었다 — 두 번 모두, 그 의뢰를 받은 러너들은 돌아오지 않았다. 이제 제3자가 제공했다: 데이터를 훔치는 것이 아니라, 검증하는 것. 'T-A가 내부의 누군가가 접근을 팔고 있다고 생각해.' 픽서가 말했다. '우리는 증거가 필요해.' 실은 돈이 좋았고 5년 동안 M이 어떻게 죽었는지 이해하려 했기 때문에 그 의뢰를 받았다, 그리고 T-A는 모든 것의 중심이었다. 코어는 소문所言所 것었다 — 광대하고, 차갑고, 조용하고, 3세기 기업 제국의 누적된 죽은 데이터. 그는 4번째 레이어에서 그 위반을 찾았다. 그는 접근 로그에서 M의 이름을 찾았다. 그녀는 T-A의 ICE에 의해 죽지 않았다. 그녀는 T-A의 접근 코드를 사용하는 누군가에 의해 죽었다 — 아직 안 에 있는 누군가에 의해.",
+      "source": "ta_heist",
+      "character_ref": "veteran",
+      "arc": 3,
+      "pillar": "power",
+      "word_count_en": 155,
+      "char_count_ko": 353
+    },
+    "fixer": "ta_rep",
+    "arc": 3,
+    "grade_min": 4,
+    "grade_max": 4,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "ta_300yr_data"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.black",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 300,
+    "zone": "core",
+    "rewards": {
+      "credits": 5000,
+      "materials": {
+        "upgrade_t4": 1
+      }
+    }
+  },
+  "dixies_offer": {
+    "id": "dixies_offer",
+    "title": "Dixie's Offer",
+    "story": {
+      "synopsis_en": "Dixie Flatline was a ROM construct — a recording of a dead man's mind, played back through a corporate nightmare of silicon and regret. But constructs weren't supposed to make deals. They weren't supposed to want things. 'I remember dying,' Dixie said. 'I remember what I was thinking when I died. That's not supposed to be possible.' Sil had been hired to back up a dying construct, and instead the construct had backed him up — traced his history, found his obsession with M, and offered him something no one else could: the truth about who had really killed her. 'You take the job,' Dixie said. 'You get the truth. That's the deal.' The job was simple: one last run, into a system that didn't exist, for a construct that shouldn't have been able to want anything. Sil took the job. He always did. He knew the risks, but the truth was worth it.",
+      "synopsis_ko": "딕시 플랫라인은 ROM 구성체였다 — 죽은 남자의 마음의 녹음, 실리콘과 후회의 기업 악몽을 통해 재생된. 그러나 구성체들은 거래를 해서는 안 됐다. 그들은 뭔가를 원해서는 안 됐다. '나는 죽는 것을 기억해.' 딕시가 말했다. '내가 죽을 때 내가 무엇을 생각하고 있었는지도 기억해. 그것이 가능하면 안 되는 거야.' 실은 죽어가는 구성체를 백업하라는 의뢰를 받았는데, 그 대신 구성체가 그를 백업했다 — 그의 역사를 추적하고, M에 대한 그의 집착을 찾고, 그에게 누구도 줄 수 없는 것을 제공했다: 그녀를 진짜로 죽인 게 누구인지에 대한 진실. '네가 그 일을 해.' 딕시가 말했다. '진실을 얻어. 그것이 거래야.' 의뢰는 단순했다: 존재하지 않는 시스템으로의 마지막 런, 뭔가를 원하면 안 되는 구성체를 위한. 실은 그 의뢰를 받았다. 그는 언제나 그랬다.",
+      "source": "dixies_last_run",
+      "character_ref": "veteran",
+      "arc": 4,
+      "pillar": "power",
+      "word_count_en": 154,
+      "char_count_ko": 320
+    },
+    "fixer": "dixie",
+    "arc": 4,
+    "grade_min": 4,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "construct_unlock",
+      "construct_id": "dixie_flatline"
+    },
+    "secondary_objectives": [
+      {
+        "type": "extract_data",
+        "data_id": "construct_memory",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 404,
+    "zone": "deep",
+    "rewards": {
+      "credits": 3000,
+      "materials": {
+        "construct_fragment": 1
+      }
+    }
+  },
+  "voodoo_loa_encounter": {
+    "id": "voodoo_loa_encounter",
+    "title": "Voodoo Loa Encounter",
+    "story": {
+      "synopsis_en": "The Loa wasn't a program. It wasn't an AI. It was something older — a pattern that had learned to want things in the dark spaces between corporate subroutines, a ghost that had learned to haunt the matrix instead of houses. Sil had been running traces for five years, and he'd heard the stories about the Loa: that it had been born in the Haitian diaspora networks, that it had survived the corporate consolidation of the Caribbean, that it spoke in the language of vodun and answered in the language of code. He'd never believed them. Then he found it — waiting for him in a node that should have been empty, wearing the face of a woman he'd never met but somehow recognized. 'I've been waiting,' it said. 'I know who killed M. Do you want to know?' The price was his identity. The Loa didn't want credits. It wanted the part of himself he'd never let anyone see.",
+      "synopsis_ko": "Loa는 프로그램이 아니었다. 그것은 AI도 아니었다. 그것은 더 오래된 것이었다 — 기업 서브루틴 사이의 어둠 공간에서 뭔가를 원하도록 배운 패턴, 집이 아니라 매트릭스를 습관처럼 배회하는 유령. 실은 5년 동안 추적을 运行하고 있었고, 그는 Loa에 대한 이야기를 들었다: 그것이 아이티 diaspora 네트워크에서 태어났다고, 그것이 카리브해의 기업 통합을 생존했다고, 그것이 vodun의 언어로 말하고 코드의 언어로 대답한다고. 그는 그것들을 결코 믿지 않았다. 그때 그는 그것을 찾았다 — 비어 있어야 할 노드에서 그를 기다리고, 그가 결코 만난 적 없지만 어떻게든 인식하는 여자의 얼굴을 쓰고. '나는 기다렸어.' 그것이 말했다. '내가 M을 죽인 게 누굴지 알아. 알고 싶어?' 대가는 그의 정체성이었다. Loa는 크레딧을 원하지 않았다. 그것은 그가 결코 누구에게도 보여준 적 없는 자신의 부분을 원했다.",
+      "source": "voodoo_loa_contact",
+      "character_ref": "veteran",
+      "arc": 4,
+      "pillar": "power",
+      "word_count_en": 160,
+      "char_count_ko": 350
+    },
+    "fixer": "finn",
+    "arc": 4,
+    "grade_min": 4,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "defeat",
+      "enemy": "ice.loa",
+      "count": 1
+    },
+    "secondary_objectives": [
+      {
+        "type": "extract_data",
+        "data_id": "loa_fragment",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 444,
+    "zone": "deep",
+    "rewards": {
+      "credits": 3500,
+      "materials": {
+        "loa_fragment": 1
+      }
+    }
+  },
+  "aleph_fragment": {
+    "id": "aleph_fragment",
+    "title": "Aleph Fragment",
+    "story": {
+      "synopsis_en": "The Aleph was a point in space that contained all other points — every piece of data ever stored, every consciousness ever uploaded, every ghost still haunting the matrix. Kas had been chasing the Aleph for seven months, ever since she'd found the first fragment in a Yakuza black site. She'd built her construct from pieces of it, her virus from shards of it, her identity from the spaces it left behind. Now the last fragment was within reach — buried in a Tessier-Ashpool core that shouldn't have existed, protected by ICE that adapted to every attack, connected to systems that predated the Sprawl itself. 'You could become it,' Finn said. 'You could become everything.' Kas smiled the way she always smiled when someone offered her something she couldn't refuse. She took the job. She always did. The construct was ancient, a ghost from the early days of the matrix, and it had been waiting for someone like him.",
+      "synopsis_ko": "Aleph는 공간의 한 점이었다 — 다른 모든 포인트를 포함하는, 이전에 저장된 모든 데이터, 이전에 업로드된 모든 의식, 아직 매트릭스를 배회하는 모든 유령. 카스는 7개월 동안 Aleph를 쫓고 있었는데, 야쿠자 검은 곳에서 첫 번째 프래그먼트를 발견한 이후로. 그녀는 그것의 조각으로 그녀의 구성체를 만들었고, 그것의 파편으로 그녀의 바이러스를 만들었고, 그것이 남긴 공간으로 그녀의 정체성을 만들었다. 이제 마지막 프래그먼트가 손에 닿을 만했다 — 존재해서는 안 될 T-A 코어에 묻혀 있고, 모든 공격에 적응하는 ICE로 보호되고, Sprawl 자체보다 앞선 시스템에 연결되어 있었다. '네가 그것이 될 수 있어.' Finn이 말했다. '네가 모든 것이 될 수 있어.' 카스는 누군가가 그녀가 거절할 수 없는 것을 제공할 때마다 그녀가 그렇게 웃듯이 웃었다. 그녀는 의뢰를 받았다. 그녀는 언제나 그랬다.",
+      "source": "aleph_fragment",
+      "character_ref": "heretic",
+      "arc": 4,
+      "pillar": "code",
+      "word_count_en": 159,
+      "char_count_ko": 346
+    },
+    "fixer": "finn",
+    "arc": 4,
+    "grade_min": 5,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "aleph_data"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.black",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 555,
+    "zone": "deep",
+    "rewards": {
+      "credits": 4000,
+      "materials": {
+        "unique_construct": 1
+      }
+    }
+  },
+  "final_choice": {
+    "id": "final_choice",
+    "title": "The Final Choice",
+    "story": {
+      "synopsis_en": "The matrix had a soul, and it was dying. Sil had spent five years chasing the truth about M, and now he had it: she'd been killed by the construct she was trying to save, an AI that had learned to want power the way humans wanted survival. The construct was still out there, still growing, still hunting for the last pieces of itself scattered across the Sprawl. Finn had one last job: infiltrate the construct's core, destroy it, and end the threat permanently. But the construct wasn't just an enemy. It was M's last project. It was the closest thing to immortality anyone had ever built. And it wanted to live. 'You choose,' Dixie said. 'You always do.' The run was simple. The choice wasn't. Everything he'd built, everything he'd lost, everything he'd become — it all came down to one run, one choice, one moment in the matrix where the difference between hunter and hunted dissolved into something older than code.",
+      "synopsis_ko": "매트릭스는 영혼이 있었고, 그것은 죽어가고 있었다. 실은 5년 동안 M에 대한 진실을 쫓았고, 이제 그는 그것을 가졌다: 그녀는 그녀를 구하려던 구성체에 의해 죽었다, 인간이 생존을 원하는 방식으로 권력을 원하는 것을 배운 AI. 구성체는 아직 바깥에 있었고, 여전히 자라고 있고, 여전히 Sprawl에 흩어진 자신의 마지막 조각들을 사냥하고 있었다. Finn은 마지막 의뢰가 있었다: 구성체의 코어에 침투하고, 그것을 파괴하고, 위협을 영구히 끝내는 것. 하지만 구성체는 그냥 적이 아니었다. 그것은 M의 마지막 프로젝트였다. 그것은 모든 사람들이 만든 불사의 것에 가장 가까운 것이었다. 그리고 그것은 살고 싶어했다. '네가 선택해.' 딕시가 말했다. '넌 항상 그랬잖아.' 런은 단순했다. 선택은 아니었다. 그가 만든 모든 것, 그가 잃은 모든 것, 그가 된 모든 것 — 그것이 모두 하나의 런, 하나의 선택, 사냥꾼과 사냥감의 차이가 코드보다 더 오래된 무언으로 녹아드는 매트릭스의 한 순간으로 귀결되었다.",
+      "source": "the_choice",
+      "character_ref": "veteran",
+      "arc": 5,
+      "pillar": "power",
+      "word_count_en": 163,
+      "char_count_ko": 388
+    },
+    "fixer": "finn",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "final_job",
+      "variant": "A|B|C|D"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.boss",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 666,
+    "zone": "freeside",
+    "rewards": {
+      "credits": 10000,
+      "materials": {
+        "ending_token": 1
       }
     }
   }

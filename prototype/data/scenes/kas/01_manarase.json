@@ -1,0 +1,49 @@
+{
+  "id": "scene_kas_intro",
+  "character": "heretic",
+  "order": 1,
+  "title_en": "MANARASE MIDNIGHT",
+  "title_ko": "매나리사 자정",
+  "background_id": "bg_manarase",
+  "portrait_left": "art:kumiko_taxi",
+  "portrait_right": null,
+  "dialogue": [
+    {
+      "speaker": "narrator",
+      "speaker_ko": "내레이터",
+      "portrait": null,
+      "text_en": "Manarase. Midnight. Shibuya, address 11, the small café that nobody who is not a Tessier-Ashpool cousin has ever heard of, the small room above the café where the family meets when the orbital colonies become too small for the conversations they need to have. Kumiko Yanaka was in a taxi when the taxi stopped. The driver was asleep. The door opened of its own accord, the way doors open in the Sprawl when something older than the building wants a particular person to step out into the rain.",
+      "text_ko": "매나리사. 자정. 시부야, 11번지. 테시에-애스풀 친척이 아닌 사람은 들어본 적도 없는 작은 카페, 그리고 궤도 식민지가 그들이 해야 할 대화들에 너무 좁아질 때 가족이 만나는 카페 위 작은 방. 쿠미코 야나카가 택시에 타고 있었을 때 택시가 멈추었다. 운전자는 잠들어 있었다. 문이 스스로 열렸다. 건물보다 오래된 무언가가 특정한 사람에게 비 속으로 나오기를 원할 때, 스프롤에서 문이 열리는 방식으로.",
+      "duration_ms": 22000,
+      "sound": "shibuya_traffic"
+    },
+    {
+      "speaker": "kumiko",
+      "speaker_ko": "쿠미코",
+      "portrait": "art:kumiko_taxi",
+      "text_en": "Manarase. The word means nothing to a woman who has spent her life in orbit. The word is the name her father used in the small hours of the night when the family's recordings were off and the only listener was a daughter who had not yet learned that listening was a kind of inheritance. The word is the name of a place she has never been. The place is here. The place has always been here.",
+      "text_ko": "매나리사. 그 단어는 궤도에서 평생을 보낸 여자에게는 아무 의미도 없다. 그 단어는 가족의 녹음이 꺼지고, 유일한 청자가 아직 듣는 것이 유산의 한 종류임을 배우지 못한 딸이었을 뿐인 한밤중에 그녀의 아버지가 사용하던 이름이다. 그 단어는 그녀가 가본 적 없는 장소의 이름이다. 장소는 여기에 있다. 장소는 늘 여기에 있었다.",
+      "duration_ms": 20000,
+      "sound": null
+    },
+    {
+      "speaker": "narrator",
+      "speaker_ko": "내레이터",
+      "portrait": null,
+      "text_en": "She got out of the taxi. Here is Manarase. Here is midnight, the hour that Tessier-Ashpool has used for three hundred years to sign the orders that the daylight hours are not allowed to remember. Here is address 11. Here is the Yanaka industry, the family within the family that the orbital cousins speak of in the same breath they use for old sins. Three hundred years of data. The wheel turns. The wheel has always turned.",
+      "text_ko": "그녀는 택시에서 내렸다. 여기가 매나리사다. 여기가 자정이다. 3백 년 동안 테시에-애스풀이 낮 시간에는 기억해서는 안 되는 명령을 서명하기 위해 사용해 온 시간. 여기가 11번지다. 여기가 야나카 산업이다. 궤도 친척들이 오래된 죄를 말할 때와 같은 호흡으로 언급하는, 가족 안의 가족. 3백 년의 데이터. 바퀴는 돌아간다. 바퀴는 늘 돌아갔다.",
+      "duration_ms": 22000,
+      "sound": "shibuya_traffic"
+    },
+    {
+      "speaker": "kumiko",
+      "speaker_ko": "쿠미코",
+      "portrait": "art:kumiko_decl",
+      "text_en": "I killed my father. Or I let him be killed. The distinction is one the family's lawyers will spend years drawing, and it is a distinction that the loa do not recognize. Tessier-Ashpool made him. Tessier-Ashpool unmade him. The wheel used him as a spoke, and the wheel will use me as a spoke too, unless I do what no Yanaka has ever done. I am here to break the wheel. The loa have shown me the place where the break begins.",
+      "text_ko": "나는 아버지를 죽였다. 아니, 죽이게 했다. 그 구별은 가족의 변호사들이 수년간 두고두고 그릴 구별이며, 로아가 알아보지 못하는 구별이다. 테시에-애스풀이 그를 만들었다. 테시에-애스풀이 그를 해체했다. 바퀴가 그를 살로 사용했고, 바퀴는 나도 살로 사용할 것이다. 내가 어떤 야나카도 한 적 없는 일을 하지 않는 한. 나는 바퀴를 부수러 왔다. 로아가 나에게 부서짐이 시작되는 자리를 보여주었다.",
+      "duration_ms": 24000,
+      "sound": "loa_drum"
+    }
+  ],
+  "next_scene": "scene_kas_sally"
+}

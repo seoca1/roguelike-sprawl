@@ -406,8 +406,8 @@ class TestDeathInput:
     def _make_event(self, sym: KeySym) -> KeyDown:
         return KeyDown(sym=sym, scancode=Scancode.UP, mod=Modifier.NONE)
 
-    def test_enter_jacks_out(self) -> None:
-        """ENTER on death screen triggers jack out."""
+    def test_enter_advances_to_death_summary(self) -> None:
+        """ENTER on death screen advances to DEATH_SUMMARY (ADR-0040)."""
         state = _make_test_state()
         state.is_dead = True
         state.screen = ScreenKind.DEATH
@@ -416,10 +416,10 @@ class TestDeathInput:
         result = death_screen.handle_death_input(event, state)
 
         assert result is True
-        assert state.screen is ScreenKind.HUB
+        assert state.screen is ScreenKind.DEATH_SUMMARY
 
-    def test_space_jacks_out(self) -> None:
-        """SPACE on death screen triggers jack out."""
+    def test_space_advances_to_death_summary(self) -> None:
+        """SPACE on death screen advances to DEATH_SUMMARY (ADR-0040)."""
         state = _make_test_state()
         state.is_dead = True
         state.screen = ScreenKind.DEATH
@@ -427,7 +427,7 @@ class TestDeathInput:
         event = self._make_event(KeySym.SPACE)
         death_screen.handle_death_input(event, state)
 
-        assert state.screen is ScreenKind.HUB
+        assert state.screen is ScreenKind.DEATH_SUMMARY
 
     def test_q_quits(self) -> None:
         """Q on death screen returns False (quit game)."""

@@ -19,7 +19,7 @@ from pathlib import Path
 
 CHARACTER_DATA = {
     "case": {
-        "json": "data/story/chapters/case.json",
+        "json": "data/story/chapters/case_expanded.json",
         "output": "output/stories/case.html",
         "character_label": "Case",
         "character_subtitle": "Console Cowboy",

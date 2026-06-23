@@ -203,24 +203,127 @@ def draw_footer(
     region: Region,
     text: str,
     status_messages: list[str] | None = None,
+    *,
+    use_styled: bool = True,
 ) -> None:
     """Render the FOOTER line with optional status messages.
 
-    If status_messages provided, show most recent message.
+    If ``use_styled`` is True (default), parse ``status_messages`` via
+    :class:`StatusMessage.from_legacy` to extract icon + color, and render
+    the most recent message with appropriate styling. Warning/Error messages
+    get a background highlight.
+
+    Otherwise fall back to plain gray text rendering.
     """
     if status_messages and len(status_messages) > 0:
-        # Show most recent message (truncate if needed)
-        last_msg = status_messages[-1]
-        max_msg_len = region.w - len(text) - 6
-        if len(last_msg) > max_msg_len:
-            last_msg = last_msg[: max_msg_len - 3] + "..."
-        full_text = f"{text}  |  {last_msg}"
-    else:
-        full_text = text
+        if use_styled:
+            from .status_message import StatusMessage
 
-    console.print(
-        x=2,
-        y=region.y,
-        string=full_text[: region.w - 4],
-        fg=(96, 96, 96),
-    )
+            typed: list[StatusMessage] = []
+            for s in status_messages:
+                if isinstance(s, StatusMessage):
+                    typed.append(s)
+                else:
+                    typed.append(StatusMessage.from_legacy(s))
+            last_msg = typed[-1]
+            max_msg_len = region.w - len(text) - 6
+            prefix = last_msg.prefix
+            if len(prefix) > max_msg_len:
+                prefix = prefix[: max_msg_len - 1] + "…"
+            console.print(x=2, y=region.y, string=text, fg=(180, 180, 180))
+            div_x = 2 + len(text) + 1
+            if div_x < region.w - 1:
+                console.print(x=div_x, y=region.y, string="│", fg=(80, 80, 80))
+            msg_x = div_x + 2
+            if last_msg.bg is not None:
+                for i in range(len(prefix)):
+                    if msg_x + i >= region.w:
+                        break
+                    console.print(
+                        x=msg_x + i,
+                        y=region.y,
+                        string=prefix[i],
+                        fg=last_msg.fg,
+                        bg=last_msg.bg,
+                    )
+            else:
+                console.print(x=msg_x, y=region.y, string=prefix, fg=last_msg.fg)
+        else:
+            legacy_last = status_messages[-1]
+            max_msg_len = region.w - len(text) - 6
+            if len(legacy_last) > max_msg_len:
+                legacy_last = legacy_last[: max_msg_len - 3] + "..."
+            full_text = f"{text}  |  {legacy_last}"
+            console.print(
+                x=2,
+                y=region.y,
+                string=full_text[: region.w - 4],
+                fg=(160, 160, 160),
+            )
+    else:
+        console.print(x=2, y=region.y, string=text, fg=(180, 180, 180))
+
+
+def draw_message_log(
+    console: tcod.console.Console,
+    region: Region,
+    status_messages: list[str] | None,
+    *,
+    max_lines: int | None = None,
+    show_empty: bool = False,
+) -> None:
+    """Render a multi-line message log in the given region.
+
+    Most recent messages at the bottom (newest-last).
+    Each message gets an icon and color via :class:`StatusMessage`.
+
+    Args:
+        console: tcod console.
+        region: Region to render in.
+        status_messages: Legacy `>>> text` strings or StatusMessage instances.
+        max_lines: Cap on number of messages shown (default: region height).
+        show_empty: If True, show "[no messages]" placeholder when empty.
+    """
+    from .status_message import StatusMessage
+
+    # Clear the region first
+    for y in range(region.y, region.y2 + 1):
+        for x in range(region.x, region.w):
+            console.print(x=x, y=y, string=" ")
+
+    if not status_messages:
+        if show_empty:
+            msg = "[no messages]"
+            x = region.x + (region.w - len(msg)) // 2
+            console.print(x=x, y=region.y + region.h // 2, string=msg, fg=(96, 96, 96))
+        return
+
+    # Convert to typed messages
+    typed: list[StatusMessage] = []
+    for s in status_messages:
+        if isinstance(s, StatusMessage):
+            typed.append(s)
+        else:
+            typed.append(StatusMessage.from_legacy(s))
+
+    # Cap to most recent
+    n_lines = max_lines if max_lines is not None else region.h
+    typed = typed[-n_lines:]
+
+    # Render newest at bottom; pad with blanks at top if fewer than max_lines
+    start_y = region.y2 - len(typed) + 1
+    for i, sm in enumerate(typed):
+        y = start_y + i
+        if y < region.y:
+            continue
+        prefix = sm.prefix
+        if len(prefix) > region.w - 2:
+            prefix = prefix[: region.w - 3] + "…"
+        if sm.bg is not None:
+            for j, ch in enumerate(prefix):
+                xx = region.x + 1 + j
+                if xx >= region.x + region.w:
+                    break
+                console.print(x=xx, y=y, string=ch, fg=sm.fg, bg=sm.bg)
+        else:
+            console.print(x=region.x + 1, y=y, string=prefix, fg=sm.fg)

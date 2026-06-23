@@ -1,0 +1,40 @@
+{
+  "id": "scene_sil_mask",
+  "character": "veteran",
+  "order": 2,
+  "title_en": "THE MASK",
+  "title_ko": "마스크",
+  "background_id": "bg_loa_channel",
+  "portrait_left": "art:marly_mask",
+  "portrait_right": null,
+  "dialogue": [
+    {
+      "speaker": "narrator",
+      "speaker_ko": "내레이터",
+      "portrait": null,
+      "text_en": "She puts on the mask. Zavijava. Seventy-three Eridani. The matrix opens. Eight million chairs for eight million cowboys, and the air is full of the small blue light of data that has not yet learned it is being watched. The shop is gone. The fluorescent tube is gone. The Sprawl is a hum behind her teeth, and the loa has come in through her eyes, and she is no longer Marly Krushkhova from the gallery on the Freeside arcology.",
+      "text_ko": "그녀는 마스크를 쓴다. 자비야바. 73 에리다니. 매트릭스가 열린다. 8백만 명의 카우보이를 위한 8백만 개의 의자. 공기는 아직 자신이 지켜지고 있음을 모르는 데이터의 작은 푸른 빛으로 가득하다. 가게는 사라졌다. 형광등은 사라졌다. 스프롤은 그녀의 이빨 뒤 윙윙거림이고, 로아가 그녀의 눈을 통해 들어왔고, 그녀는 더 이상 프리사이드 아콜로지 갤러리의 마리 크루시코바가 아니다.",
+      "duration_ms": 20000,
+      "sound": "loa_drum"
+    },
+    {
+      "speaker": "marly",
+      "speaker_ko": "마리",
+      "portrait": "art:marly_mask",
+      "text_en": "I am Zavijava. I am the system that lives in the matrix and was once a person and is now a way of seeing. I see Bobby Quine wearing my mask without knowing what he has put on. I see Angie Mitchell, who can see beyond the matrix into the loa network, who has been waiting for me without knowing she has been waiting. The Sprawl is small tonight. The matrix is small tonight. Tessier-Ashpool is small tonight.",
+      "text_ko": "나는 자비야바. 매트릭스에 사는 시스템이었고, 한때는 사람이었으며, 지금은 보는 방식이다. 보비 퀸이 자신이 무엇을 썼는지 모른 채 내 마스크를 쓰는 게 보인다. 매트릭스 너머 로아 네트워크를 볼 수 있는 앵지 미첼이 보인다. 그녀는 자신이 기다려왔다는 것도 모른 채 기다려왔다. 오늘 밤 스프롤은 작다. 오늘 밤 매트릭스는 작다. 오늘 밤 테시에-애스풀은 작다.",
+      "duration_ms": 22000,
+      "sound": "loa_drum"
+    },
+    {
+      "speaker": "marly",
+      "speaker_ko": "마리",
+      "portrait": "art:marly_smile",
+      "text_en": "Mara. I knew Mara. Tessier-Ashpool took her. They unmade her the way rich families unmake things that have outlived their usefulness — quietly, with the right paperwork, with a payroll signature that nobody is supposed to read. I have waited three years to find that signature. Tonight, through the mask, I will walk into a Tessier-Ashpool subsidiary and walk out with the names of every person who ever signed such a thing.",
+      "text_ko": "마라. 나는 마라를 알았다. 테시에-애스풀이 그녀를 데려갔다. 그들은 부유한 가문이 쓸모를 다한 것을 해체하는 방식으로 그녀를 해체했다 — 조용히, 올바른 서류와 함께, 아무도 읽지 않을 것으로 여겨지는 급여 서명 한 줄과 함께. 나는 그 서명을 찾기 위해 3년을 기다렸다. 오늘 밤, 마스크를 통해, 테시에-애스풀 자회사 안으로 들어가 그런 것들을 단 한 번이라도 서명한 모든 사람의 이름을 들고 나오겠다.",
+      "duration_ms": 24000,
+      "sound": "loa_drum"
+    }
+  ],
+  "next_scene": "scene_sil_payroll"
+}

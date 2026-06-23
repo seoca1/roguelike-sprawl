@@ -269,6 +269,27 @@ def _draw_player_stats(
         bar = "[" + "=" * filled + " " * (bar_width - filled) + "]"
         console.print(x=x, y=y, string=bar, fg=hp_color)
         y += 1
+    else:
+        # HP outside combat (from AppState)
+        hp = state.player_hp if state.player_hp > 0 else 100  # Default to 100 if not set
+        max_hp = state.player_max_hp if state.player_max_hp > 0 else 100
+        hp_pct = (hp / max_hp * 100) if max_hp > 0 else 100
+        hp_color = _get_hp_color(hp_pct)
+
+        console.print(
+            x=x,
+            y=y,
+            string=f"HP:    {hp}/{max_hp}",
+            fg=hp_color,
+        )
+        y += 1
+
+        # HP bar (outside combat)
+        bar_width = max_width - 4
+        filled = int((hp / max_hp) * bar_width) if max_hp > 0 else 0
+        bar = "[" + "=" * filled + " " * (bar_width - filled) + "]"
+        console.print(x=x, y=y, string=bar, fg=hp_color)
+        y += 1
 
     return y
 

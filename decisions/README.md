@@ -34,6 +34,18 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | 0019 | Combat Aftermath & Immersive Subtitles (전투 후일담 & 한글 자막) | **Accepted** | 2026-06-18 | P1 |
 | 0020 | Fog of War + Exploration (안개 / 탐험 메카닉) | **Accepted** | 2026-06-18 | P1 |
 | 0030 | GitHub Utilization Plan (GitHub 활용 계획) | **Draft** | 2026-06-18 | P2 |
+| 0031 | Original Scenario Integration (단편 → 챕터 → 초반 플레이 통합) | **Accepted** | 2026-06-20 | P1 |
+| 0032 | Graphic Novel Auto-Play Mode + Main Menu 확장 (5 옵션) | **Accepted** | 2026-06-20 | P1 |
+| 0040 | Death & Restart Cycle (자키 사이클 + Hall of Dead) | **Accepted** | 2026-06-20 | P1 |
+| 0041 | Graphic Novel Content Expansion (씬 dialogue 4× 확장) | **Accepted** | 2026-06-20 | P1 |
+| 0042 | Chapter Title Cards / Scene Transitions (로마 숫자 + fade) | **Accepted** | 2026-06-20 | P2 |
+| 0043 | Sound Cue Integration (15개 cue → file 매핑) | **Accepted** | 2026-06-20 | P2 |
+| 0044 | Graphic Novel Save/Restore (이어서 읽기) | **Accepted** | 2026-06-20 | P2 |
+| 0046 | Graphic Novel Ending B (대안 결말) | **Accepted** | 2026-06-21 | P1 |
+| 0047 | Text Visibility (Typed Status Messages) | **Accepted** | 2026-06-21 | P2 |
+| 0048 | GN Ending Menu + Save Migration 1.1.0 | **Accepted** | 2026-06-21 | P2 |
+| 0049 | Graphic Novel Ending C (3rd ending) + Save 1.2.0 | **Accepted** | 2026-06-21 | P2 |
+| 0050 | Boss ICE System (Wintermute + T-A Prime 3-phase) | **Accepted** | 2026-06-21 | P1 |
 
 ## 우선순위 정의
 
@@ -83,6 +95,17 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | Combat Animation | Normal 240ms gray vs Skill 600ms color, 깁슨 톤 글리치 |
 | Aftermath | 전투 후일담 4 importance + 소설 인물 7명 반응 + 한글 자막 |
 | Exploration | Light Fog of War (현재+인접), 미니맵, breadcrumb |
+| Scenario (0031) | 단편 → 챕터 → 초반 플레이 통합 (12 씬 dialogue, 4 캐릭터 × 3-4 씬) |
+| Graphic Novel (0032) | 메인메뉴 5 옵션 + 12 씬 자동플레이 + Save Progress 카드 |
+| Death Cycle (0040) | DEATH/DEATH_SUMMARY/HALL_OF_DEAD + restart_with_new_jockey (3 옵션) |
+| Novel Layout (0041-0042) | 30줄 페이지 + chapter card I-XII + fade transition |
+| Audio (0043) | 15개 scene cue → file 매핑 (theme/movement 카테고리) |
+| GN Save (0044) | GNProgress atomic save + CONTINUE READING 메뉴 + version 1.0.0 |
+| Ending B (0046) | 6 씬 추가 (Case/Sil/Kas × 2) + SceneData.ending 필드 + `--ending {A,B}` CLI |
+| Text Visibility (0047) | MessageKind 8종 + 아이콘/색상/bg 하이라이트 + GN prose cream color |
+| GN Ending Menu (0048) | GRAPHIC_NOVEL_ENDING_MENU 화면 + GNProgress.ending + Save 1.0.0→1.1.0 마이그레이션 |
+| Ending C (0049) | 6 신규 씬 (Disappear/Erase/Burn) + 메뉴 4옵션 + Save 1.1.0→1.2.0 + 9 결말 조합 |
+| Boss ICE (0050) | Wintermute + T-A Prime 보스 3-phase 시스템 + phase transition cinematics |
 
 ## 결정 절차 (참고용)
 

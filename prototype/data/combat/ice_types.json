@@ -1,37 +1,844 @@
 {
   "standard": {
-    "name": "ICE — Standard",
+    "name": "ICE \u2014 Standard",
     "portrait": "ice.standard",
-    "hp": 80,
-    "base_damage": 3,
-    "tier": 1
+    "hp_base": 80,
+    "hp_per_grade": 15,
+    "dmg_base": 3,
+    "dmg_per_grade": 1,
+    "tier": 1,
+    "defense": 2,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.7,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.2,
+        "quantity": 1
+      }
+    ]
   },
   "watchdog": {
-    "name": "ICE — Watchdog",
+    "name": "ICE \u2014 Watchdog",
     "portrait": "ice.standard",
-    "hp": 50,
-    "base_damage": 2,
-    "tier": 1
+    "hp_base": 50,
+    "hp_per_grade": 10,
+    "dmg_base": 2,
+    "dmg_per_grade": 1,
+    "tier": 1,
+    "defense": 1,
+    "speed": 6,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
+  },
+  "spider": {
+    "name": "ICE \u2014 Spider",
+    "portrait": "ice.standard",
+    "hp_base": 40,
+    "hp_per_grade": 8,
+    "dmg_base": 4,
+    "dmg_per_grade": 1,
+    "tier": 1,
+    "defense": 0,
+    "speed": 8,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.6,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.4,
+        "quantity": 1
+      }
+    ]
+  },
+  "wisp": {
+    "name": "ICE \u2014 Wisp",
+    "portrait": "ice.standard",
+    "hp_base": 35,
+    "hp_per_grade": 5,
+    "dmg_base": 2,
+    "dmg_per_grade": 0,
+    "tier": 1,
+    "defense": 0,
+    "speed": 10,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "raven": {
+    "name": "ICE \u2014 Raven",
+    "portrait": "ice.standard",
+    "hp_base": 60,
+    "hp_per_grade": 12,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 2,
+    "defense": 2,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.15,
+        "quantity": 1
+      }
+    ]
   },
   "black": {
-    "name": "ICE — Black",
+    "name": "ICE \u2014 Black",
     "portrait": "ice.black",
-    "hp": 200,
-    "base_damage": 8,
-    "tier": 3
+    "hp_base": 200,
+    "hp_per_grade": 40,
+    "dmg_base": 8,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 5,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 3
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.6,
+        "quantity": 2
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
   },
   "goliath": {
-    "name": "ICE — Goliath (heavy)",
+    "name": "ICE \u2014 Goliath",
     "portrait": "ice.standard",
-    "hp": 150,
-    "base_damage": 5,
-    "tier": 3
+    "hp_base": 150,
+    "hp_per_grade": 30,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 8,
+    "speed": 3,
+    "skills": [],
+    "resistance": 0.1,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 4
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "construct_shard",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
   },
-  "construct": {
-    "name": "Construct — Dixie",
+  "dixie": {
+    "name": "Construct \u2014 Dixie",
     "portrait": "construct.dixie",
-    "hp": 300,
-    "base_damage": 6,
-    "tier": 4
+    "hp_base": 300,
+    "hp_per_grade": 60,
+    "dmg_base": 6,
+    "dmg_per_grade": 3,
+    "tier": 4,
+    "defense": 10,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "construct_shard",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "ice_construct",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "rom_echo",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_wisp_t1": {
+    "name": "ICE \u2014 Wisp (ice_wisp_t1)",
+    "portrait": "ice.standard",
+    "hp_base": 35,
+    "hp_per_grade": 5,
+    "dmg_base": 2,
+    "dmg_per_grade": 0,
+    "tier": 1,
+    "defense": 0,
+    "speed": 10,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.5,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "wisp"
+  },
+  "ice_watchdog": {
+    "name": "ICE \u2014 Watchdog (ice_watchdog)",
+    "portrait": "ice.standard",
+    "hp_base": 50,
+    "hp_per_grade": 10,
+    "dmg_base": 2,
+    "dmg_per_grade": 1,
+    "tier": 1,
+    "defense": 1,
+    "speed": 6,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "watchdog"
+  },
+  "ice_worm": {
+    "name": "ICE \u2014 Spider (ice_worm)",
+    "portrait": "ice.standard",
+    "hp_base": 40,
+    "hp_per_grade": 8,
+    "dmg_base": 4,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 0,
+    "speed": 8,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.6,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.4,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "spider"
+  },
+  "ice_unknown": {
+    "name": "ICE \u2014 Standard (ice_unknown)",
+    "portrait": "ice.standard",
+    "hp_base": 80,
+    "hp_per_grade": 15,
+    "dmg_base": 3,
+    "dmg_per_grade": 1,
+    "tier": 1,
+    "defense": 2,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.7,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.2,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "standard"
+  },
+  "loa_entity": {
+    "name": "ICE \u2014 Raven (loa_entity)",
+    "portrait": "ice.standard",
+    "hp_base": 60,
+    "hp_per_grade": 12,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 2,
+    "defense": 2,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.15,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "raven"
+  },
+  "loa_priest": {
+    "name": "ICE \u2014 Raven (loa_priest)",
+    "portrait": "ice.standard",
+    "hp_base": 60,
+    "hp_per_grade": 12,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 2,
+    "defense": 2,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.15,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "raven"
+  },
+  "loa_betrayer": {
+    "name": "ICE \u2014 Black (loa_betrayer)",
+    "portrait": "ice.black",
+    "hp_base": 200,
+    "hp_per_grade": 40,
+    "dmg_base": 8,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 5,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 3
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.6,
+        "quantity": 2
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "black"
+  },
+  "loa_disguised": {
+    "name": "ICE \u2014 Standard (loa_disguised)",
+    "portrait": "ice.standard",
+    "hp_base": 80,
+    "hp_per_grade": 15,
+    "dmg_base": 3,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 2,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.7,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.2,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "standard"
+  },
+  "romantics_ice": {
+    "name": "ICE \u2014 Raven (romantics_ice)",
+    "portrait": "ice.standard",
+    "hp_base": 60,
+    "hp_per_grade": 12,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 2,
+    "defense": 2,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.15,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "raven"
+  },
+  "romantics_ice_elite": {
+    "name": "ICE \u2014 Black (romantics_ice_elite)",
+    "portrait": "ice.black",
+    "hp_base": 200,
+    "hp_per_grade": 40,
+    "dmg_base": 8,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 5,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 3
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.6,
+        "quantity": 2
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "black"
+  },
+  "oua_entity": {
+    "name": "ICE \u2014 Goliath (oua_entity)",
+    "portrait": "ice.standard",
+    "hp_base": 150,
+    "hp_per_grade": 30,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 8,
+    "speed": 3,
+    "skills": [],
+    "resistance": 0.1,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 4
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "construct_shard",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "goliath"
+  },
+  "prime_loa": {
+    "name": "Construct \u2014 Dixie (prime_loa)",
+    "portrait": "construct.dixie",
+    "hp_base": 300,
+    "hp_per_grade": 60,
+    "dmg_base": 6,
+    "dmg_per_grade": 3,
+    "tier": 4,
+    "defense": 10,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "construct_shard",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "ice_construct",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "rom_echo",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "dixie"
+  },
+  "ta_security_ice": {
+    "name": "ICE \u2014 Watchdog (ta_security_ice)",
+    "portrait": "ice.standard",
+    "hp_base": 50,
+    "hp_per_grade": 10,
+    "dmg_base": 2,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 1,
+    "speed": 6,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "watchdog"
+  },
+  "blank_entity": {
+    "name": "Construct \u2014 Dixie (blank_entity)",
+    "portrait": "construct.dixie",
+    "hp_base": 300,
+    "hp_per_grade": 60,
+    "dmg_base": 6,
+    "dmg_per_grade": 3,
+    "tier": 4,
+    "defense": 10,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "construct_shard",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "ice_construct",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "rom_echo",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "dixie"
+  },
+  "ice_harrow_3": {
+    "name": "ICE \u2014 Raven (ice_harrow_3)",
+    "portrait": "ice.standard",
+    "hp_base": 60,
+    "hp_per_grade": 12,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 2,
+    "defense": 2,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.15,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "raven"
+  },
+  "ice_feedback_loop": {
+    "name": "ICE \u2014 Spider (ice_feedback_loop)",
+    "portrait": "ice.standard",
+    "hp_base": 40,
+    "hp_per_grade": 8,
+    "dmg_base": 4,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 0,
+    "speed": 8,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.6,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.4,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "spider"
+  },
+  "ice_shadow_variant": {
+    "name": "ICE \u2014 Standard (ice_shadow_variant)",
+    "portrait": "ice.standard",
+    "hp_base": 80,
+    "hp_per_grade": 15,
+    "dmg_base": 3,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 2,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.7,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.2,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "standard"
+  },
+  "ice_burned_cowboy": {
+    "name": "ICE \u2014 Black (ice_burned_cowboy)",
+    "portrait": "ice.black",
+    "hp_base": 200,
+    "hp_per_grade": 40,
+    "dmg_base": 8,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 5,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 3
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.6,
+        "quantity": 2
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "black"
+  },
+  "ice_weapon_construct": {
+    "name": "ICE \u2014 Goliath (ice_weapon_construct)",
+    "portrait": "ice.standard",
+    "hp_base": 150,
+    "hp_per_grade": 30,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 8,
+    "speed": 3,
+    "skills": [],
+    "resistance": 0.1,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 4
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "construct_shard",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "goliath"
+  },
+  "ice_wheel_children": {
+    "name": "ICE \u2014 Raven (ice_wheel_children)",
+    "portrait": "ice.standard",
+    "hp_base": 60,
+    "hp_per_grade": 12,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 2,
+    "defense": 2,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "combat_module",
+        "chance": 0.15,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "raven"
+  },
+  "ice_wheel_guardians": {
+    "name": "Construct \u2014 Dixie (ice_wheel_guardians)",
+    "portrait": "construct.dixie",
+    "hp_base": 300,
+    "hp_per_grade": 60,
+    "dmg_base": 6,
+    "dmg_per_grade": 3,
+    "tier": 4,
+    "defense": 10,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "construct_shard",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "ice_construct",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "rom_echo",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ],
+    "is_alias": true,
+    "base_type": "dixie"
   }
 }

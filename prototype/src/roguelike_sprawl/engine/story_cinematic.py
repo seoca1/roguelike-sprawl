@@ -33,6 +33,7 @@ from ..audio import (
 )
 from ..i18n import Translator
 from .cinematic_art import AsciiArt, resolve_line_art
+from .graphic_novel_view import wrap_text_for_novel
 from .input_utils import is_confirm_key
 from .layout import (
     RegionId,
@@ -170,7 +171,7 @@ def render_cinematic(
     )
 
     # Main area split: art on left, text on right
-    art_w = 24
+    art_w = 16
     text_x = main_r.x + art_w + 2
     text_w = main_r.w - art_w - 4
 
@@ -231,13 +232,21 @@ def render_cinematic(
                 cinematic_state.glitch_active,
             )
 
-        console.print(
-            x=text_x + 2,
-            y=y,
-            string=text_en[: text_w - 2],
-            fg=(255, 255, 255),
+        # Word-wrap text to available width
+        wrapped_en = wrap_text_for_novel(
+            text_en,
+            width=text_w - 2,
+            left_margin=0,
+            right_margin=0,
         )
-        y += 1
+        for line_text in wrapped_en:
+            console.print(
+                x=text_x + 2,
+                y=y,
+                string=line_text,
+                fg=(255, 255, 255),
+            )
+            y += 1
 
         # Korean subtitle (optional)
         if cinematic_state.show_korean:
@@ -255,13 +264,21 @@ def render_cinematic(
             from .font_loader import is_korean_capable
 
             if is_korean_capable() and text_ko:
-                # Render actual Korean text
-                console.print(
-                    x=text_x + 2,
-                    y=y,
-                    string=text_ko[: text_w - 2],
-                    fg=(255, 220, 100),
+                # Render actual Korean text with word-wrap
+                wrapped_ko = wrap_text_for_novel(
+                    text_ko,
+                    width=text_w - 2,
+                    left_margin=0,
+                    right_margin=0,
                 )
+                for ko_line in wrapped_ko:
+                    console.print(
+                        x=text_x + 2,
+                        y=y,
+                        string=ko_line,
+                        fg=(255, 220, 100),
+                    )
+                    y += 1
             elif text_ko:
                 # Fallback: show character count placeholder
                 console.print(
@@ -270,7 +287,7 @@ def render_cinematic(
                     string=f"[KO: {len(text_ko)} chars]",
                     fg=(180, 180, 100),
                 )
-            y += 1
+                y += 1
 
         y += 1  # Spacing between lines
 
@@ -584,6 +601,14 @@ def stop_scene_theme(cinematic_state: CinematicState) -> None:
 # ============================================================================
 # Canonical Story Scenes (Neuromancer opening + The Finn briefing)
 # ============================================================================
+# DEPRECATED: These scenes are for demo scripts only.
+# They are NOT part of the actual game narrative flow.
+# - Gibson text is in: data/story/chapters/{case,sil,kas}.json (NEW RUN chapter)
+#   and data/scenes/{character}/*.json (GN scenes)
+# - Finn briefing is in: CHARACTER_SELECT_EVENT (original_story.py)
+#   which is shown in CHARACTER_SELECT screen before gameplay.
+# Demo scripts that use these: full_demo.py, prologue.py, visual_demo.py, etc.
+# ============================================================================
 
 PROLOGUE_SCENE = StoryScene(
     id="prologue_sprawl",
@@ -648,6 +673,9 @@ PROLOGUE_SCENE = StoryScene(
     ),
     next_scene="briefing_finn_first_jack",
 )
+
+# DEPRECATED: BRIEFING_FINN_SCENE duplicates CHARACTER_SELECT_EVENT (original_story.py).
+# It is kept for demo scripts only. The actual game Finn briefing is in CHARACTER_SELECT.
 
 
 BRIEFING_FINN_SCENE = StoryScene(

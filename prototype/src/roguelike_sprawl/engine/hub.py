@@ -164,6 +164,22 @@ def _draw_avatar_panel(
     console.print(x=x, y=y + 1, string=f"PPL: {ppl}", fg=(0, 255, 0))
     console.print(x=x, y=y + 2, string=f"Grade: {state.player_grade}-up", fg=(200, 200, 200))
 
+    # HP bar
+    hp = state.player_hp if state.player_hp > 0 else 100
+    max_hp = state.player_max_hp if state.player_max_hp > 0 else 100
+    hp_pct = (hp / max_hp * 100) if max_hp > 0 else 100
+    if hp_pct > 60:
+        hp_color = (0, 255, 0)
+    elif hp_pct > 30:
+        hp_color = (255, 200, 0)
+    else:
+        hp_color = (255, 50, 50)
+    bar_width = 8
+    filled = int((hp / max_hp) * bar_width) if max_hp > 0 else 0
+    bar = "[" + "=" * filled + " " * (bar_width - filled) + "]"
+    console.print(x=x, y=y + 3, string=f"HP: {bar}", fg=hp_color)
+    console.print(x=x + 9, y=y + 3, string=f"{hp}/{max_hp}", fg=hp_color)
+
 
 def _draw_materials_panel(
     console: tcod.console.Console,

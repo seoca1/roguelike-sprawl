@@ -1,0 +1,16 @@
+{
+  "version": "1.2.0",
+  "saved_at": "2026-06-22T12:48:28.659931+00:00",
+  "slot_id": 2,
+  "progress": {
+    "mode": "novice",
+    "scene_index": 0,
+    "dialogue_index": 1,
+    "elapsed_in_dialogue_ms": 0.0,
+    "character_id": "novice",
+    "chain_length": 4,
+    "saved_at": "2026-06-22T12:48:28.659642+00:00",
+    "ending": "A",
+    "session_id": "8fd6605aa947"
+  }
+}

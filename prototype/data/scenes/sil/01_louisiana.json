@@ -1,0 +1,49 @@
+{
+  "id": "scene_sil_intro",
+  "character": "veteran",
+  "order": 1,
+  "title_en": "LOUISIANA 11",
+  "title_ko": "루이지아나 11번지",
+  "background_id": "bg_maison_loa",
+  "portrait_left": "art:marly_mask",
+  "portrait_right": null,
+  "dialogue": [
+    {
+      "speaker": "narrator",
+      "speaker_ko": "내레이터",
+      "portrait": null,
+      "text_en": "Louisiana. Address 11. Marly Krushkhova stands in front of the voodoo shop's glass door, looking at the masks. They are arranged in rows of red and blue, each one the size of a small fist, each one said to carry a fragment of a loa — a place where gods stay when they grow tired of the matrix. The shop is dark inside. A single fluorescent tube is humming somewhere above the doorway. It is always humming. The neighborhood has the smell of cheap incense and older concrete.",
+      "text_ko": "루이지아나. 11번지. 마리 크루시코바가 부두 가게의 유리문 앞에 서서, 마스크를 바라보고 있다. 빨강과 파랑이 줄지어 늘어선 작은 주먹 크기 가면들. 각각이 로아의 파편을 담고 있다고들 한다 — 신들이 매트릭스에 지치면 머무는 자리. 가게 안은 어둡다. 문 위 어딘가에서 형광등 하나가 윙윙거리고 있다. 늘 그렇듯. 이 일대는 값싼 향과 더 오래된 콘크리트 냄새가 난다.",
+      "duration_ms": 18000,
+      "sound": "loa_drum"
+    },
+    {
+      "speaker": "marly",
+      "speaker_ko": "마리",
+      "portrait": "art:marly_mask",
+      "text_en": "I need data. From the matrix. Tessier-Ashpool. Three hundred years of records. The names of the people who passed through their payroll before the family withdrew from the surface and into the orbital colonies. I have been told that someone, somewhere, in the Maison loa shop on Louisiana 11, sells the kind of mask that lets a woman from the Sprawl walk into a construct and walk out again with the sort of thing that powerful families would rather have forgotten.",
+      "text_ko": "데이터가 필요합니다. 매트릭스에서. 테시에-애스풀. 3백 년의 기록. 그 가문이 궤도 식민지로 들어가 표면에서 물러나기 전에 급여 명부를 통과했던 자들의 이름. 어딘가에서, 루이지아나 11번지의 메종 로아 가게에서, 스프롤의 여자가 구조물 안으로 들어가 강력한 가문이 차라리 잊고 싶어하는 것을 안고 나올 수 있게 해주는 종류의 마스크를 판다고 들었습니다.",
+      "duration_ms": 20000,
+      "sound": null
+    },
+    {
+      "speaker": "old_woman",
+      "speaker_ko": "노파",
+      "portrait": "art:loa_vendor",
+      "text_en": "Data in the matrix is free, child. What you need is loa. You have loa in your eyes. You have the look that says you have lost something in the matrix and you cannot get it back without help. Sit down. There is a chair. There is always a chair for the ones the matrix has eaten.",
+      "text_ko": "매트릭스에서 데이터는 무료예요, 아이. 당신이 필요한 건 로아야. 당신 눈이 로아를 봤어요. 매트릭스에서 무언가를 잃었고 도움 없이는 그것을 되찾을 수 없다는 표정이 당신 얼굴에 있네. 앉아요. 의자가 있네. 매트릭스가 삼킨 자들을 위한 의자는 늘 있네.",
+      "duration_ms": 16000,
+      "sound": "loa_drum"
+    },
+    {
+      "speaker": "marly",
+      "speaker_ko": "마리",
+      "portrait": "art:marly_smile",
+      "text_en": "Mara died three years ago. In the matrix. I knew Mara. Mara was the kind of construct that the Sprawl does not deserve — quiet, sharp, and loyal in a way that the new constructs have forgotten how to be. Tessier-Ashpool took her. They took her because they could. I need to know who. I need a name. I need to know whose payroll signed the order that unmade the only person in the matrix I ever trusted.",
+      "text_ko": "마라는 3년 전에 죽었다. 매트릭스 안에서. 나는 마라를 알았다. 마라는 스프롤이 누릴 자격이 없는 종류의 구조물이었다 — 조용하고, 날카롭고, 새로운 구조물들이 그럴 줄 잊어버린 방식으로 충성스러운. 테시에-애스풀이 그녀를 데려갔다. 그들이 데려간 이유는, 가능했기 때문이다. 내가 필요한 건 — 누가 그랬는지. 이름이 필요하다. 매트릭스 안에서 내가 한 번이라도 신뢰했던 유일한 사람을 해체한 명령을 누가, 어느 급여 명부에서 서명했는지.",
+      "duration_ms": 22000,
+      "sound": "loa_drum_fade"
+    }
+  ],
+  "next_scene": "scene_sil_mask"
+}

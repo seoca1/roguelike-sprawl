@@ -1,5 +1,13 @@
 # Roguelike Sprawl - 단계별 계획 (Roadmap)
 
+## 변경 이력 (Recent)
+
+- **2026-06-21**: ADR-0041~0044 모두 Accepted. 12 씬 dialogue 4× 확장 (4188→16862 chars), 30줄 페이지 + 챕터 카드 I-XII + fade transition, 15개 scene cue 연결, 그래픽 노블 이어서 읽기. **2257 tests pass**.
+- **2026-06-20**: ADR-0031 Original Scenario Integration (Accepted). 단편 3편 v2.0 소설 레벨 재작성. chapter_view.py 신규 + ScreenKind 확장. 1843 tests pass.
+- **2026-06-20**: ADR-0032 Graphic Novel Auto-Play Mode (Accepted). 12 씬 자동재생 + 메인메뉴 5 옵션.
+- **2026-06-20**: ADR-0040 Death & Restart Cycle (Accepted). DEATH/DEATH_SUMMARY/HALL_OF_DEAD + 새 자키.
+- **2026-06-19**: Combat HUD/Combo/Bosses/VFX + Save/Load + 30+ Settings + 28 Achievements + 10 Dashboards. 1814 tests pass.
+
 ## 전체 흐름
 
 ```
@@ -251,17 +259,31 @@ Phase 7: 알파 빌드
 
 ## 현재 위치
 
-**현재 Phase**: Phase 4 완료 → **Phase 5 진행 중 (1/5~10 세션)**
+**현재 Phase**: Phase 4 완료 → **Phase 5 진행 중 (~6/5~10 세션)**
 **완료된 세션**:
-- [x] 매트릭스 진입 + 노드 그래프 (2026-06-18) — 80 tests, all checks green
-- [x] Combat Simulator (developer/QA tool) (2026-06-18) — 97 tests, all checks green
-- [x] Grade Progression (5단계 검증) (2026-06-18) — 110 tests, all checks green
-- [x] Fog of War + Exploration (ADR-0020) (2026-06-18) — 124 tests, all checks green
+- [x] 매트릭스 진입 + 노드 그래프 (2026-06-18) — 80 tests
+- [x] Combat Simulator (developer/QA tool) (2026-06-18) — 97 tests
+- [x] Grade Progression (5단계 검증) (2026-06-18) — 110 tests
+- [x] Fog of War + Exploration (ADR-0020) (2026-06-18) — 124 tests
 - [x] Quick Demo 스크립트 (`scripts/play.py`) (2026-06-18)
+- [x] Combat HUD/Combo/Bosses/VFX + Save/Load + 30+ Settings + 28 Achievements (2026-06-19) — 1814 tests
+- [x] ADR-0031 Original Scenario Integration (2026-06-20) — 1843 tests
+- [x] ADR-0032 Graphic Novel Mode (2026-06-20) — 2081 tests
+- [x] ADR-0040 Death & Restart Cycle (2026-06-20) — 2081 tests
+- [x] ADR-0041~0044 Graphic Novel Polish (2026-06-21) — **2257 tests** (씬 확장 4×, 챕터 카드, 사운드 큐, 이어서 읽기)
 
-**차순 작업**:
-1. **전투 (RT-MS)** — `design/systems/combat.md` 작성 + ICE 진입 시 자동 공격 + 메뉴 스킬
-2. **Action menu** — 노드 진입 시 행동 선택
-3. **의뢰 완료 / 보상** — 데이터 추출 성공 시 미션 종료 + Hub 복귀
-4. **죽음/재시작** — HP 0 → flatline 화면 → 새 자키
+**Phase 5 핵심 시스템 완료**:
+- [x] 전투 (RT-MS) — ICE 진입 시 자동 공격 + 메뉴 스킬 + 5-Layer VFX
+- [x] Action menu — scan/extract/engage/communicate
+- [x] 의뢰 완료 / 보상 — Data Salvage (HEAL 20%) + 미션 종료 + Hub 복귀
+- [x] 죽음/재시작 — flatline → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키
+- [x] 오리지널 시나리오 통합 — 단편 → 챕터 → 초반 플레이 (12 씬)
+- [x] 그래픽 노블 자동플레이 — 메인메뉴 5 옵션 + 12 씬 자동재생 + Save Progress
+- [x] 사이드 콘텐츠 — 30+ 설정, 28 업적, 10 대시보드
+
+**차순 작업** (Phase 6 → 콘텐츠 확장):
+1. **추가 캐릭터 / 미션** — 4번째 자키, 신규 미션 타입
+2. **추가 ICE 타입** — boss 클래스 다양화
+3. **추가 시나리오** — 단편 4편, 엔딩 B 확장
+4. **한글 자막 자동 동기화 도구** — script_en.json → script_ko.json
 5. Phase 6: Mid / Core / TA zone 콘텐츠 보강

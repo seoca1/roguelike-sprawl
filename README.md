@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/seoca1/roguelike-sprawl/actions/workflows/ci.yml/badge.svg)](https://github.com/seoca1/roguelike-sprawl/actions)
 [![Pages](https://github.com/seoca1/roguelike-sprawl/actions/workflows/pages.yml/badge.svg)](https://seoca1.github.io/roguelike-sprawl/)
-[![Tests](https://img.shields.io/badge/tests-578%20passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-2257%20passing-brightgreen)]()
 [![Lint](https://img.shields.io/badge/lint-ruff-blue)]()
 [![Typecheck](https://img.shields.io/badge/typecheck-mypy%20strict-blue)]()
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()
@@ -45,3 +45,35 @@
 - LLM Wiki 패턴: `raw/` → `wiki/` (원본 → 정리)
 - 결정 사항은 `decisions/`에 ADR 형식으로 기록 (결정 후 immutable)
 - 디자인 변경 시 `testcases/`도 동기화
+
+## 최근 작업 (2026-06-21)
+
+Phase 5 (Vertical Slice) 완료. 핵심 시스템 + 콘텐츠 통합 + 그래픽 노블 모드:
+
+- **전투 (RT-MS)** — 5 ICE 타입 (Standard/Watchdog/Black/Goliath/Construct), 5-Layer VFX, 5-Stage Combo
+- **자키 사이클** — Death → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키 (3 옵션)
+- **오리지널 시나리오** — 단편 3편 소설 레벨 (12 씬, 38 dialogues, 16,862 chars)
+- **그래픽 노블** — 메인메뉴 5 옵션 + 자동재생 + 30줄 소설 페이지 + 챕터 카드 I-XII + fade
+- **사운드** — 15개 scene cue → file 매핑 (theme/movement 카테고리)
+- **이어서 읽기** — GNProgress atomic save + CONTINUE READING 메뉴
+
+상세: [`ROADMAP.md`](./ROADMAP.md), [`decisions/`](./decisions/), [`log.md`](./log.md).
+
+## 핵심 데모 명령
+
+```bash
+cd prototype
+make test      # 2257 tests
+make all       # format + lint + typecheck + test
+
+# 그래픽 노블 자동재생
+uv run python scripts/graphic_novel.py --mode novice --lang ko
+
+# 전투 시뮬레이터
+uv run python scripts/combat_simulator.py --ppl 24 --enemy standard
+uv run python scripts/combat_grades.py  # 5등급 비교
+uv run python scripts/death_in_action_demo.py  # Combat → Death 5-Phase
+
+# 풀 게임 자동플레이
+uv run python scripts/play.py --duration 30
+```

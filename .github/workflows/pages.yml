@@ -47,6 +47,7 @@ jobs:
           cp dashboard/graphic-novel.html _pages/graphic-novel.html
           cp dashboard/favicon.svg _pages/favicon.svg
           cp -r dashboard/stories/ _pages/stories/
+          cp -r dashboard/data/ _pages/data/
           cp -r design/ _pages/design/
           cp -r Fiction/derivative/ _pages/Fiction/derivative/ 2>/dev/null || true
           cp .nojekyll _pages/.nojekyll 2>/dev/null || touch _pages/.nojekyll

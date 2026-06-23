@@ -2,6 +2,62 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-06-22] refactor | 스토리 플로우 명확화 (ADR-0032 후속)
+
+- **Gibson 텍스트 위치 명확화** (`story_cinematic.py`):
+  - `PROLOGUE_SCENE`, `BRIEFING_FINN_SCENE`에 DEPRECATED 주석 추가
+  -"These scenes are for demo scripts only" — 실제 게임 흐름에 포함되지 않음
+  - Gibson 원작은 `data/story/chapters/{case,sil,kas}.json` (NEW RUN 챕터)에서 확인 가능
+- **GN 메뉴 "PROLOGUE" → "ALL CHARACTERS" 리네이밍** (`graphic_novel_view.py`):
+  - "프롤로그 — 3명 랜덤" → "전캐릭터 — 12개 씬 랜덤"
+- **단편소설 vs 게임 상태 비교표 문서화**:
+  - `design/scenario/story-stage-comparison.md` 신규 작성
+  - Stage enum (10단계), Chapter 파일 (3개), Scene 파일 (24개) 매핑
+  - index.md 갱신
+  - Finn 브리핑은 `CHARACTER_SELECT_EVENT` (original_story.py)의 CHARACTER_SELECT 화면에서 확인 가능
+- **GN 메뉴 "PROLOGUE" → "ALL CHARACTERS" 리네이밍** (`graphic_novel_view.py`):
+  - "프롤로그 — 3명 랜덤" → "전캐릭터 — 12개 씬 랜덤"
+  - "PROLOGUE — 3 random" → "ALL CHARACTERS — 12 scenes"
+  - Gibson 프롤로그와 혼동 방지
+- **테스트 업데이트**: `test_graphic_novel_save.py` 3개 테스트의 assertion 문자열 갱신
+- **결론**:
+  - NEW RUN: 캐릭터 선택 → 챕터(케이/실/카스별 Gibson 텍스트) → Hub ✓
+  - GRAPHIC NOVEL: GN 메뉴 → 씬 재생 (캐릭터별) ✓
+  - Gibson/Finn 시네마틱은 데모 스크립트에서만 접근 가능 (실제 게임 흐름 아님)
+
+## [2026-06-22] feat | demo.py 메뉴 자동 선택 (--menu-option)
+
+- **新增**: `--menu-option N` 플래그 (N=1~6)
+  - `1`: New Run → Character Select
+  - `2`: Menu → Graphic Novel Menu (prologue auto)
+  - `3`: Menu → Graphic Novel → Novice direct
+  - `4`: Menu → Graphic Novel → Veteran direct
+  - `5`: Menu → Graphic Novel → Heretic direct
+- **Modified**: `scripts/demo.py` (_ARGUMENT 추가 + _step_auto 로직 갱신)
+- **Documents**: `prototype/scripts/README.md`, `AGENTS.md` 갱신
+- Mode 2 (Graphic Novel) vs Mode 3 (Story-mode) 구분 명확화:
+  - Mode 2: narrative scene 자동 재생 (gameplay 없음)
+  - Mode 3: 실제 gameplay + combat만 스킵
+
+## [2026-06-22] fix | 저장 시스템 개선 (ADR-0044/0051 후속)
+
+- **GN 멀티슬롯 완전 연결** (`graphic_novel.py`):
+  - `--slot N` (N=1,2,3) 인자 추가 — 저장/로드 시 지정 슬롯 사용
+  - `--continue`만使用时: 모든 슬롯 중 가장 최근(mtime) 저장소를 자동 선택
+  - 기존 `--continue`는 단일 슬롯만 사용했으나, 이제 3슬롯 완전 지원
+- **play.py GN menu `has_save` 연결**:
+  - `render_graphic_novel_menu(..., has_save=has_save)` — CONTINUE READING 옵션 표시
+  - `list_save_slots()`로 모든 슬롯 상태 확인
+- **action_menu 복원 시 클리어** (`save_manager.py:restore_state`):
+  - `state.action_menu_open = False` + `state.action_menu_index = 0` 추가
+  - combat/cinematic/npcState와 함께 트랜지션 상태 초기화
+- **버그 수정**:
+  - `list_save_slots()` 모든 분기에 `has_save` 키 누락 — 3개 분기 모두 수정
+    (exists + progress存在시 True, corrupted/empty시 False)
+  - `demo.py` GN menu: `gn_scene_index` → `0` (menu는 scene index 아님)
+  - `demo_all.py` GN menu: `has_save=False` 누락 추가
+- **테스트**: 2690 passed
+
 ## [2026-06-17] init | 프로젝트 환경 구축
 
 - 디렉토리 구조 생성 (raw/wiki/design/testcases/decisions)
@@ -1182,3 +1238,1366 @@ prototype/
 **Dashboards**: 10 all live on https://seoca1.github.io/roguelike-sprawl/
 **CI**: 6/6 ✅ (lint, typecheck, test 3.11+3.12, dashboard validation, status)
 **Deployment**: `git push origin main` → 1-2분 → 자동 라이브
+
+## [2026-06-20] scenario | 단편 → 챕터 → 초반 플레이 통합 (ADR-0031)
+
+사용자 요구: "demo 실행해보니 오리지널 캐릭터 플레이가 반영 안된 듯 해. 단편 스토리부터 프롤로그와 초반 플레이까지 새로운 시나리오 맞춰서 구현하는데, 단계마다 문서로 구조화해 저정하고 단편 스토리는 소설 레벨로 작성해줘."
+
+### 1단계: ADR 작성
+- **Added**: `decisions/0031-original-scenario-integration.md` (Draft)
+  - 3 옵션 비교 (Option A: 통합 시나리오 / B: 격리 유지 / C: 인용만)
+  - 권장안: **Option A** (단편이 게임 진입점이 되어 Pillar 5 강화)
+  - 캐릭터 1:1 매핑 (novice↔Case, veteran↔Marly, heretic↔Kumiko)
+  - 풀 시나리오 흐름 7단계 (MENU → CHARACTER_SELECT → CHAPTER → HUB → MATRIX → AFTERMATH → ENDING)
+
+### 2단계: 디자인 문서
+- **Added**: `design/scenario/README.md` (오리지널 시나리오 개요)
+- **Added**: `design/scenario/chapter-1-novice.md` (Chapter 1: 케이 명세)
+- **Added**: `design/scenario/chapter-2-veteran.md` (Chapter 2: 실 명세)
+- **Added**: `design/scenario/chapter-3-heretic.md` (Chapter 3: 카스 명세)
+
+### 3단계: 단편 소설 (소설 레벨)
+- **Replaced** (v1.0 → v2.0):
+  - `Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_case_jackout-30sec.md`
+  - `Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_marly_louisiana-god.md`
+  - `Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_kumiko_manarase-midnight.md`
+- 분량 확장: 1,400~1,500자 → 2,261~2,978 한글 자 + 145~325 영어 단어
+- 구조: 4섹션 → **5섹션** (도입/전개/절정/결말/에필로그)
+- 매트릭스/loa/로맨틱 모티프 강화
+
+### 4단계: 게임 통합
+- **Added**: `data/story/chapters/{case,sil,kas}.json` (3개 챕터 데이터)
+- **Added**: `src/roguelike_sprawl/engine/chapter_view.py` (NEW, ~190 lines)
+  - `ChapterData` dataclass
+  - `load_chapter()`, `chapter_for_character()`, `tick_chapter()`, `render_chapter()`
+  - 30ms/char 타이핑 효과 + 진행 바
+- **Modified**: `src/roguelike_sprawl/engine/state.py`
+  - `ScreenKind.CHARACTER_SELECT`, `ScreenKind.CHAPTER`, `ScreenKind.ENDING` 추가
+  - `character_id`, `chapter_id`, `chapter_elapsed_ms`, `chapter_typed_chars` 필드
+- **Modified**: `src/roguelike_sprawl/engine/original_story.py`
+  - `CHAPTER_INFO`, `get_chapter_info()`, `list_characters()` 추가
+- **Modified**: `scripts/play.py`, `scripts/demo.py`
+  - `--character` 옵션 추가
+  - `MENU → CHARACTER_SELECT → CHAPTER → HUB` 흐름 통합
+- **Modified**: `dashboard/stories.html`
+  - 3개 단편 링크 v2.0 (소설 레벨) 버전으로 갱신
+- **Modified**: `Fiction/derivative/sprawl-trilogy/INDEX.md`
+  - v2.0 단편 매니페스트, 캐릭터 1:1 매핑 표, 통계 갱신
+
+### 5단계: 테스트
+- **Added**: `tests/unit/test_chapter_view.py` (29 tests)
+  - ChapterData immutability, JSON loading, character mapping
+  - Typing animation (tick), rendering (en/ko), progress bar
+  - All 3 chapters distinct portraits/themes
+  - original_story integration
+- **Verified**: 1843 tests pass (+29), ruff clean, mypy strict clean
+
+### 데모 결과 (--no-clear 출력)
+```
+MENU → CHARACTER_SELECT → CHAPTER (typing 30ms/char) → HUB
+[Step 000] Screen: menu
+[Step 001] Screen: character_select → Auto-selected: novice
+[Step 002] Screen: chapter → ══ CHAPTER — The First Jack ══
+[Step 003-011] Screen: chapter → typing 3→33 chars
+```
+3 캐릭터 모두 (novice/veteran/heretic) 정상 작동 확인.
+
+### 영향
+- Pillar 5 (깁슨 톤) 강화 — 단편이 게임 진입점
+- 캐릭터 동기 부여 (왜 자키가 되었는지) — 플레이어 정서적 진입장치 낮춤
+- 데모가 풀 시나리오 시연 (캐릭터 선택 → 챕터 → 매트릭스)
+- 깁슨 톤 일관성 (단편 원문 인용 + 캐릭터 동기)
+- i18n 자산 활용도 증가 (단편 ko/en 둘 다 게임에 import)
+
+## [2026-06-20] graphic-novel | 메인메뉴 5 옵션 + 그래픽 노블 자동플레이 (ADR-0032)
+
+사용자 요구: "게임 시작하면 프롤로그와 실제 게임플레이를 진행하기 전에 메인메뉴를 만들고, 그래픽 노블 같은 느낌으로 스토리를 간략히 즐길 수 있는 자동플레이 모드를 추가"
+
+### 1단계: ADR + 디자인
+- **Added**: `decisions/0032-graphic-novel-mode.md` (Draft)
+- **Added**: `design/scenario/graphic-novel.md` (전체 명세)
+
+### 2단계: 데이터 자산
+- **Added**: `data/scenes/case/*.json` 4개
+- **Added**: `data/scenes/sil/*.json` 4개
+- **Added**: `data/scenes/kas/*.json` 4개
+- **Added**: `data/art/portraits/portraits.json` 15개 (12 캐릭터 + 3 NPC)
+- **Added**: `data/art/backgrounds/backgrounds.json` 12개
+
+### 3단계: 엔진
+- **Added**: `src/roguelike_sprawl/engine/graphic_novel_view.py` (NEW, ~480 lines)
+  - Portrait, Background, DialogueLine, SceneData dataclass
+  - load_portrait, load_background, load_scene, load_scene_chain, load_prologue_chain
+  - render_scene, render_graphic_novel_menu
+  - dialogue_typed_chars, scene_progress
+- **Added**: `src/roguelike_sprawl/engine/save_progress.py` (NEW, ~140 lines)
+  - ProgressSummary dataclass
+  - get_progress_summary (세이브 매니저 연동)
+  - render_summary_lines (ko/en)
+- **Modified**: `src/roguelike_sprawl/engine/state.py`
+  - ScreenKind: GRAPHIC_NOVEL_MENU, GRAPHIC_NOVEL, SAVED_PROGRESS 추가
+  - gn_scene_index, gn_dialogue_index, gn_elapsed_ms, gn_paused, gn_typed_chars, gn_mode, gn_scene_chain
+- **Modified**: `src/roguelike_sprawl/engine/menu.py`
+  - 5 옵션 (NEW RUN / GRAPHIC NOVEL / CONTINUE / SETTINGS / CREDITS)
+  - handle_graphic_novel_menu_input, handle_graphic_novel_input, handle_saved_progress_input
+- **Modified**: `data/i18n/{en,ko}.json` — 메뉴 5 옵션 + 그래픽 노블 + saved_progress 19개 키
+
+### 4단계: 데모 + 테스트
+- **Added**: `scripts/graphic_novel.py` (NEW) — 4 modes (prologue/novice/veteran/heretic)
+- **Added**: `tests/unit/test_graphic_novel_view.py` (40 tests)
+- **Added**: `tests/unit/test_save_progress.py` (16 tests)
+- **Added**: `tests/unit/test_menu_extended.py` (31 tests)
+- **Verified**: 1930 tests pass (+87), ruff+format+mypy all green
+
+### 데모 결과
+```bash
+uv run python scripts/graphic_novel.py --mode prologue --seed 42
+# → Scene 1/12, Dialogue 1/3 ... 자동 진행
+uv run python scripts/graphic_novel.py --mode novice
+# → Scene 1/4 ... 4 씬 (케이)
+```
+
+### 영향
+- 메인메뉴 3 → 5 옵션 (그래픽 노블 + 크레딧 추가)
+- 게임 진입로 다양화 (NEW RUN / GRAPHIC NOVEL / CONTINUE)
+- 비주얼 노블 톤 (배경 + 포트레잇 + 대사 + 진행 바)
+- Pillar 5 (깁슨 톤) 강화 — 비주얼 노블의 *mediated world* 정체성
+
+## [2026-06-20] integration | 그래픽 노블 모드 play.py/demo.py 통합 (ADR-0032 후속)
+
+이전 세션에서 그래픽 노블 모드를 완성했지만 기존 데모 스크립트가 새 5 옵션 메뉴를 사용하지 않았음. 통합 작업 진행.
+
+### 변경 사항
+- **Modified**: `scripts/play.py`
+  - `--gn-mode` 옵션 추가 (prologue|novice|veteran|heretic)
+  - GRAPHIC_NOVEL_MENU / GRAPHIC_NOVEL / SAVED_PROGRESS 화면 렌더링
+  - `_render_graphic_novel_frame()` 헬퍼 + 아트 캐시
+  - `_action_graphic_novel_menu()`, `_action_saved_progress()` 추가
+- **Modified**: `scripts/demo.py`
+  - `--gn-mode` 옵션 추가
+  - GRAPHIC_NOVEL_MENU / GRAPHIC_NOVEL 인라인 렌더링
+  - `_step_auto`에 GRAPHIC_NOVEL_MENU / SAVED_PROGRESS 분기
+- **Modified**: `AGENTS.md` (루트)
+  - 디렉토리 구조 갱신 (save_progress, graphic_novel_view 추가)
+  - §10 그래픽 노블 모드 섹션 추가 (메뉴 흐름 + 명령 + 키 매핑)
+- **Modified**: `dashboard/*.html` 10개
+  - 11개 대시보드 모두에 "Graphic Novel" nav 링크 추가
+
+### 검증
+- `uv run python scripts/play.py --gn-mode veteran --lang ko` ✓
+- `uv run python scripts/demo.py --gn-mode novice --lang ko` ✓
+- `uv run python scripts/graphic_novel.py --mode heretic` ✓
+- 1930 tests pass (변동 없음)
+- ruff check / format / mypy: 모두 green
+
+## [2026-06-20] polish | 차례로 후속 5작업 (ADR-0032 후속)
+
+이전 세션에서 그래픽 노블 모드를 완성한 후 5개 후속 작업 진행.
+
+### [1/5] 풀 GN 데모 스크립트 (demo_all.py)
+- **Added**: `scripts/demo_all.py` (NEW, ~270 lines)
+  - 풀 게임 흐름 시연: MENU → GN_MENU → GN → SAVED_PROGRESS → MENU
+  - `--no-seed` 옵션으로 기존 세이브 사용 가능
+  - create_sample_save() 헬퍼 (캐릭터 + 등급 + 미션 데이터)
+- **Verified**: 30초 데모에서 풀 사이클 동작 확인
+
+### [2/5] SAVED_PROGRESS 실세이브 연동 검증
+- **Modified**: `src/roguelike_sprawl/engine/save_progress.py`
+  - 실제 SaveManager API 사용 (list_slots + load)
+  - SavedRun nested 구조 (run_state, app_state, metadata) 파싱
+  - 메타데이터 fallback (load 실패 시)
+- **Modified**: `tests/unit/test_save_progress.py` — 새 API에 맞게 16 tests 업데이트
+- **Verified**: sample save (slot 1, veteran, 3-up, 12 missions)에서 모든 필드 정상:
+  ```
+  자키: Sil — Veteran
+  등급: 3-up
+  미션 완료: 12 / 30 (40%)
+  데이터 회수: 234 / 500
+  마지막 의뢰: watchdog_patrol
+  마지막 위치: Tessier-Ashpool HQ
+  플레이 시간: 90분
+  ```
+
+### [3/5] 사운드 큐 통합
+- **Modified**: `src/roguelike_sprawl/audio/sound_manager.py`
+  - 18개 신규 사운드 추가 (theme/*, movement/jack_in_zap 등)
+- **Modified**: `src/roguelike_sprawl/audio/config.py`
+  - SOUND_CATEGORY_MAP 확장 (12 → 30+ 사운드)
+- **Added**: `src/roguelike_sprawl/engine/graphic_novel_audio.py` (NEW, ~100 lines)
+  - SCENE_SOUND_MAP (scene-level id → DEFAULT_SOUNDS key)
+  - resolve_sound, play_scene_sound, play_once, get_category
+- **Modified**: `scripts/graphic_novel.py` — `--with-sound` 옵션 추가
+- **Added**: `tests/unit/test_graphic_novel_audio.py` (23 tests)
+- **Verified**: SoundManager 정상 초기화 + 사운드 큐 재생
+
+### [4/5] 포트레잇 폴리시
+- **Modified**: `src/roguelike_sprawl/engine/graphic_novel_view.py`
+  - render_scene: speaker name이 top border와 겹치던 버그 수정
+  - speaker name이 box 내부 첫 줄에 + 밑줄 추가
+  - portrait 주위에 `░` 디밍 패널 추가 (가독성↑)
+- **Modified**: `data/art/portraits/portraits.json`
+  - case_hands: 떨리는 손을 `~│~│~` 패턴으로 재설계
+  - marly_mask: loa network를 더 깔끔하게 재배치
+  - kumiko_wheel: "INDUSTRY" 글자를 wheel 형태로 시각화 (깁슨 톤 직접 표현)
+- **Verified**: heretic 모드 마지막 씬에서 "INDUSTRY" wheel + 배경 "TESSIER 300 YEARS" 표시
+
+### [5/5] GitHub Pages 대시보드 배포 검증
+- **Modified**: `.github/workflows/pages.yml`
+  - `graphic-novel.html` 추가
+  - `Fiction/derivative/` 디렉토리 복사 추가
+- **Added**: `tests/unit/test_pages_deploy.py` (54 tests)
+  - 11 dashboard HTML 파일 유효성 (DOCTYPE, charset, closing tag)
+  - pages.yml workflow 검증 (모든 dashboard 포함)
+  - navigation link 검증 (graphic-novel.html을 모든 게임 대시보드에서)
+- **Verified**: 시뮬레이션 결과
+  - 11 HTML (10 기존 + 1 신규)
+  - 24 design 문서
+  - 11 Fiction 단편
+  - 총 51 파일, 664KB
+
+### 최종 메트릭
+- **Tests**: 2009 passing (+167 from start of this session: +23 audio, +54 pages, +90 = 167)
+  - 1932 (saved_progress update) + 23 (audio) + 54 (pages) = 2009
+- **Source files**: 91 (unchanged this session)
+- **Scripts**: +1 (demo_all.py)
+- **Dashboards**: 11 (graphic-novel.html added)
+- **Lint/Format/Typecheck**: green
+
+## [2026-06-20] death-cycle | ADR-0040 Death & Restart Cycle 구현
+
+사용자 작업 #4: "죽음/재시작 사이클 (HP 0 → flatline)"
+
+### 1단계: ADR + 디자인
+- **Added**: `decisions/0040-death-restart-cycle.md` (Draft)
+- **Added**: `design/scenario/death-restart.md` (전체 명세)
+
+### 2단계: 데이터
+- **Added**: `src/roguelike_sprawl/engine/jockey_history.py` (NEW, ~430 lines)
+  - DeceasedJockey (frozen dataclass) — 자키 인격 보존
+  - JockeyHistory — Hall of Dead 아카이브 (add/all/recent/stats/save/load)
+  - 9개 epitaph (캐릭터별 3개)
+  - JockeyStats (total_runs, total_deaths, survival_rate, longest_run, avg_missions)
+  - build_deceased_from_state 헬퍼
+  - render_death_summary_lines / render_hall_of_dead_lines / render_stats_lines
+- **Added**: `data/jockeys/deceased.json` (초기 빈 배열)
+
+### 3단계: 엔진
+- **Modified**: `src/roguelike_sprawl/engine/state.py`
+  - ScreenKind: DEATH_SUMMARY, HALL_OF_DEAD 추가
+  - jockey_history_loaded, total_runs, total_deaths, last_jockey_summary_id, death_cause, hall_of_dead_selected 필드
+- **Modified**: `src/roguelike_sprawl/engine/death.py`
+  - trigger_death() 확장: 아카이브 추가 + 카운터 증가
+  - advance_to_death_summary() 신규
+  - restart_with_new_jockey() 신규
+  - render_death_summary_screen() 신규
+  - render_hall_of_dead_screen() 신규
+  - handle_death_summary_input() / handle_hall_of_dead_input() 신규
+  - handle_death_summary_choice() 신규
+- **Modified**: `src/roguelike_sprawl/engine/menu.py`
+  - OPTION_HALL_OF_DEAD = 6 추가
+  - N6 → HALL_OF_DEAD 화면 진입
+  - 6 옵션 메뉴 렌더링
+- **Modified**: `data/i18n/{en,ko}.json` — hall_of_dead 키 추가, controls 갱신
+
+### 4단계: 테스트 (72 신규)
+- **Added**: `tests/unit/test_jockey_history.py` (40 tests)
+  - DeceasedJockey 직렬화, JockeyHistory CRUD, epitaph 선택, 빌더, 렌더링
+- **Added**: `tests/unit/test_death_extended.py` (29 tests)
+  - build_deceased_jockey_from_state, trigger_death, restart_with_new_jockey
+  - input handlers (4 cases each), choice handlers, renderers
+- **Added**: `tests/unit/test_menu_hall_of_dead.py` (3 tests)
+  - OPTION_HALL_OF_DEAD 상수, N6 입력, 메뉴 6 옵션 렌더링
+- **Verified**: 2081 tests pass (2009 → +72)
+
+### 5단계: 데모
+- **Added**: `scripts/death_demo.py` (NEW, ~190 lines)
+  - DEATH → DEATH_SUMMARY → 새 자키 흐름 시연
+  - 한국어/영어 지원, --no-clear 옵션
+
+### 6단계: 기존 테스트 업데이트
+- **Modified**: `tests/unit/test_death_mission.py`
+  - test_enter_jacks_out → test_enter_advances_to_death_summary
+  - test_space_jacks_out → test_space_advances_to_death_summary
+  - DEATH → DEATH_SUMMARY 전환 반영 (ADR-0040)
+
+### 데모 출력 (실측)
+```
+══ > FLATLINE < ══
+  자키: 실 (Sil) — Veteran
+  등급: 3-up
+  사망 위치: ta_payroll_inner
+  사망 의뢰: watchdog_patrol
+  런 #2c33 · 2026-06-19 16:55
+  ═══ 런 통계 ═══
+  미션 완료: 3 · 데이터 회수: 200 · 인벤토리: 3개
+  ═══ 죽을 때 들고 있던 것 ═══
+  - credit_chip
+  - loa_drum
+  - wisp_T2
+  [1] 새 자키 (다른 자키 선택)
+  [2] 같은 자키 (HUB로)
+  [3] Hall of Dead Jockeys
+  [4] 메인메뉴
+```
+
+### 최종 메트릭
+- **Tests**: 2081 passing (+72)
+- **Lint / Format / Typecheck**: green
+- **Source files**: 92 (jockey_history.py 추가)
+- **Scripts**: +1 (death_demo.py)
+- **Data files**: +1 (jockeys/deceased.json)
+
+## [2026-06-20] combat-death | Combat → Death 사이클 통합 검증 (ADR-0040 후속)
+
+### 문제
+- 전투에서 패배 → `_end_combat`이 `trigger_death`를 호출하는 *계약*이 코드 상에는 존재 (`combat_view.py:679-739`).
+- 그러나 이 연결이 실제로 동작하는지 검증하는 **end-to-end 테스트가 없었음**.
+- 사용자가 "개선된 전투 효과 검증을 위한 데모 실행"을 요청 → 기존 `combat_effects_demo.py`는 VFX만, 전투 종료 후 사망 사이클은 보이지 않음.
+- 직접 작성한 `death_in_action_demo.py` (Phase 1 → 5)는 처음에 플레이어가 절대 안 죽음 (HP=10, ATK=2 vs ICE HP=80, ATK=3 → 4초+ 걸려 데모 타임아웃).
+
+### 구현
+1. **`scripts/death_in_action_demo.py`** (신규, 384줄) — 5-Phase 데모:
+   - Phase 1: `step_combat` 직접 루프 (실제 전투, ICE 표준) → `outcome=defeat` 확인
+   - Phase 2: `_end_combat`이 호출하는 계약 — `run_state.mark_failed()` + `trigger_death(state, reason="ICE breach")` 재현
+   - Phase 3: `advance_to_death_summary(state)` → `state.screen = DEATH_SUMMARY`
+   - Phase 4: `render_hall_of_dead_screen` → 아카이브된 자키 1명 표시
+   - Phase 5: `restart_with_new_jockey(state, "novice")` → `state.screen = CHARACTER_SELECT`
+   - **수정**: `--player-hp 5 --player-atk 0` 으로 데모 시간 단축 (3번의 ICE 공격 ≈ 21 ticks = 4초)
+
+2. **`tests/unit/test_combat_to_death.py`** (신규, 285줄, 11 tests) — 통합 테스트:
+   - `TestCombatDefeatPath`: `step_combat`이 실제로 `outcome=defeat`에 도달, 타이밍 (TICK_MS=100, AUTO_ATTACK_INTERVAL_MS=2000) 검증, 5가지 ICE 데미지 (3/5/8/12/15) 모두 처리
+   - `TestTriggerDeathOnDefeat`: `trigger_death` 후 `is_dead`, `death_cause`, `screen=DEATH`, `total_runs/deaths` 증가, status 메시지, archive 추가 (state.last_jockey_summary_id로 검증)
+   - `TestEndToEndCombatToDeath`: 전투 → 패배 → 트리거 → DEATH_SUMMARY → 새 자키 (전체 파이프라인)
+   - `TestBuildDeceasedFromState`: `inventory` dict → `inventory_snapshot` 정렬, tuple 입력 보존
+
+### 핵심 발견
+- `JockeyHistory`는 `death.py` 내부에서 싱글톤으로 사용됨 (`_get_history()`). 테스트에서 별도 인스턴스 만들면 안 보임. → `state.last_jockey_summary_id` (UUID hex) 로 검증하는 게 안정적.
+- `DeceasedJockey.inventory_snapshot` (not `inventory`), `JockeyHistory.count()/recent(n)/all()` (not `list_slots/load`).
+- `build_deceased_from_state`는 dict 입력 시 키를 **정렬**하지만 tuple 입력은 그대로 둠.
+- 데모의 `_end_combat` 시뮬레이션에 `from ..run import ensure_run_state` 잘못된 상대 import → `from roguelike_sprawl.run.helpers import ensure_run_state`로 수정.
+
+### 최종 메트릭
+- **Tests**: 2092 passing (+11)
+- **Lint / Format / Typecheck**: green (death_in_action_demo.py + test_combat_to_death.py 모두 클린)
+- **Scripts**: +1 (death_in_action_demo.py)
+- **Tests files**: +1 (test_combat_to_death.py)
+- **Verified end-to-end**: combat(21t) → trigger_death → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키
+
+## [2026-06-20] docs | 데모/검증 스크립트 가이드 문서화
+
+### 배경
+- `prototype/scripts/` 에 27+ Python 스크립트 (death_in_action, combat_effects, graphic_novel, play, demo_all, visual_demo 등).
+- 각 스크립트마다 옵션, 실행 방법, 출력 해석을 한 곳에 정리한 문서 부재.
+- 사용자 요청 "각 데모를 실행시키는 방법을 문서로 정리해서 저장해줘" → 통합 가이드 작성.
+
+### 구현
+- **`prototype/scripts/README.md`** (신규, 477줄):
+  - 7개 섹션으로 분류: 전투/사망, 그래픽 노블/시나리오, 전체 게임, 특수 시스템, 사운드, 환경, 회귀 테스트
+  - 각 스크립트별: 목적, 실행 명령, 검증 항목, 성공 출력 예
+  - 추천 검증 순서 (Quick Index): `pytest` → `death_in_action_demo` → `combat_effects_demo` → ...
+  - 비교표 2개: death_in_action vs death_demo vs combat_effects / play vs demo vs demo_all
+  - 문제 해결 (Font, variance, interactive 멈춤, 한글 깨짐)
+  - 새 데모 추가 시 체크리스트
+
+- **`index.md`** 의 "데모 / 검증 스크립트" 섹션 확장:
+  - 첫 줄에 Scripts 가이드 링크 추가
+  - 9개 스크립트 참조 (이전 5개 → +4)
+
+### 검증
+- 27+ 스크립트 모두 import OK (대부분은 직접 실행해서 출력 확인)
+- `death_in_action_demo`, `combat_effects_demo` (10/10 pass), `combat_grades` (5/5 pass), `play`, `demo_all`, `graphic_novel`, `visual_demo` 모두 실행 성공
+- `full_demo` / `prologue` / `combat_simulator` 는 인터랙티브 모드지만 import 검증 통과
+
+### 메트릭
+- **Docs**: +1 (scripts/README.md, 477 lines)
+- **Index entries**: 5 → 9 (+4 new refs)
+
+## [2026-06-20] novel-layout | 그래픽 노블 소설 페이지 레이아웃 (ADR-0032 polish)
+
+### 문제
+- 사용자가 "프롤로그 문장 표현이 잘리는 느낌"을 지적.
+- 분석: 80x50 화면에서 `render_scene`이 **3줄짜리 dialogue box**만 사용 (y=43-47).
+  - 텍스트 영역: `width=80 - 6 = 74` chars × **3 lines = 222 chars** max
+  - 평균 dialogue 110자, max 157자 → **긴 문장은 3번째 줄에서 잘림**
+  - 배경 (16 lines) 과 dialogue box (5 lines) 사이에 **26 lines의 빈 공간** 낭비
+- 결과: 깁슨 원문의 분위기(긴 묘사, 페이지 호흡)가 화면에서 단절됨.
+
+### 해결책
+**render_scene**을 책 페이지 레이아웃으로 재설계:
+
+| 영역 | y-좌표 | 용도 |
+|---|---|---|
+| Top bar | 0 | `[N/total] TITLE · CHARACTER` + 조작 힌트 |
+| Separator | 1 | `─...─` |
+| Background band | 2-13 | 배경 아트 (12 lines, subtle) |
+| Speaker heading | 14 | `── speaker ──` 중앙 정렬 (챕터 헤딩 스타일) |
+| **Body** | **16-45** | **30 lines** 의 본문! (이전 3 lines → 10배 확장) |
+| Page footer | 47 | `PAGE n/N` (pagination 시만) |
+| Progress | 48 | `███░░░ 25%` |
+| Controls | 49 | `[Space] next [P] pause ...` |
+
+**새 함수** (`graphic_novel_view.py`):
+- `wrap_text_for_novel(text, width, left_margin, right_margin)` — 단어 단위 wrap, `\n\n` → 빈 줄
+- `paginate_lines(lines, lines_per_page, blank_separator)` — paragraph break 보존하며 페이지 분할
+- `compute_typed_page_index(pages, typed_chars, full_text)` — 타이핑 커서가 어느 페이지에 있는지
+- 상수: `NOVEL_LEFT_MARGIN=4, NOVEL_RIGHT_MARGIN=4` (책 페이지 여백)
+- `body_width = width - 8 = 72` chars per line (이전 74 → 72, 더 단정한 페이지)
+
+### 검증
+- **테스트 28개 추가** (`tests/unit/test_graphic_novel_novel_layout.py`):
+  - `TestWrapTextForNovel` (8 tests): wrap, margin, paragraph break, long text, edge cases
+  - `TestPaginateLines` (7 tests): 1/2/3 pages, empty, no split
+  - `TestComputeTypedPageIndex` (5 tests): 페이지 인덱스 추적
+  - `TestRenderSceneNovelLayout` (8 tests): 본문이 3줄 이상, 페이지네이션, 타이핑 커서 자르기, speaker heading 중앙정렬
+- **기존 테스트 42개** 모두 통과 (호환성 유지)
+- **전체 2120 tests passing** (이전 2092 → +28)
+- **ruff check / format / mypy**: green
+
+### 시각적 비교
+
+**이전** (3-line dialogue box):
+```
+╔════════════════════════════════════════════════╗
+║ speaker ─────────────────────────             ║
+║                                               ║
+║ First line of dialogue goes here.             ║
+║ Second line wraps to fit.                     ║
+║ Third line is the LAST visible line — rest   ║ <-- 잘림!
+╚════════════════════════════════════════════════╝
+```
+
+**개선** (full novel page, 30 lines):
+```
+══════════════════════════════════════════════════
+[1/4] CHATTO'S 24/7 · NOVICE  [S] skip [P] pause
+──────────────────────────────────────────────────
+  (배경 아트 subtle 12 lines)
+                        ── case ──
+
+    30 seconds. The Ono-Sendai electrodes lift from my
+    scalp and my fingers keep typing. Hands that hit a
+    screen. The fingertips tremble. Slumped in the
+    chair, I stare at the screen and try to remember
+    what I was doing. The matrix unfolds around me
+    like origami in a wind. I had a good run, they
+    tell me. The Finn always says that. Sprawl is
+    short on memory. Some things you forget. Others
+    you carry forever in the wetware. The dead keep
+    their silence. He was a console cowboy, the lowest
+    of the low, and the Sprawl was his church. He had
+    a deck, and the deck was his god, and the god had
+    abandoned him. He had crossed half the world to
+    find her, and now she was here, and now he was
+    here, and now they were both here, and the Sprawl
+    was short on memory. Armitage was waiting at the
+    end of the line, and the line led through a war...
+
+                                    PAGE 2/2
+   [████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░] 25%
+         [Space] next  [P] pause  [S] skip  [ESC] menu
+```
+
+### 메트릭
+- **Code**: `graphic_novel_view.py` +67 lines (pagination helpers)
+- **Tests**: +1 file, +28 tests (test_graphic_novel_novel_layout.py)
+- **Total tests**: 2092 → 2120 (+28)
+- **Lines visible per dialogue**: 3 → 30 (10×)
+- **Background art**: 16 → 12 lines (subtle, doesn't dominate)
+- **mypy**: clean (new file)
+- **ruff**: clean
+
+## [2026-06-20] content | 12개 씬 dialogue 확장 - 진짜 소설 같은 호흡 (ADR-0041)
+
+### 배경
+- 이전 세션에서 도입한 novel layout은 30줄 본문을 지원하지만, 현재 씬은 **dialogue 평균 110자** (3줄) 만 사용.
+- 소설 호흡이 단절됨. 새 layout의 잠재력을 살리려면 콘텐츠 자체를 확장해야 함.
+- 사용자 선택: **Option 1 — 대화문 확장 (110자 → 400자)**.
+
+### 구현
+- **ADR-0041**: 그래픽 노블 소설 콘텐츠 확장 (Draft 작성, Option 1 채택)
+- **Design doc**: `design/scenario/graphic-novel.md` §10 추가 — 톤 가이드라인
+  - 목표 길이 (dialogue 250-700자, 씬 1000-2500자)
+  - 톤 (cold, detached, cinematic, fragment 문장, sensory details)
+  - 캐릭터 voice profile (Case/Marly/Kumiko/narrator)
+  - 안티패턴 (멜로드라마, 현대 meme, 원문 외 사실)
+- **12개 씬 dialogue 확장** (영어 + 한글 자막 동기화):
+  - Case (4): chattos, jackin, jackout, finn
+  - Sil (4): louisiana, mask, payroll, broadcast
+  - Kas (4): manarase, sally, declaration, wheel
+- **`tests/unit/test_graphic_novel_content_quality.py`** (신규, 76 tests):
+  - `TestDialogueLength`: 각 dialogue 250-700자 검증 (12 씬 × 2 = 24 tests)
+  - `TestSceneTotalLength`: 씬 총 길이 1000-2500자 (12 tests)
+  - `TestKoreanSubtitles`: 모든 dialogue에 한글 자막 + KO/EN ratio 0.4-1.8 (24 tests)
+  - `TestGibsonVocabulary`: 깁슨 산업명 (Tessier-Ashpool, Sense/Net 등) 등장 확인 (2 tests)
+  - `TestSpeakerConsistency`: 모든 dialogue에 speaker/speaker_ko (2 tests)
+  - `TestDurationProportional`: dialogue 길이 × 30ms = duration_ms 검증 (12 tests)
+
+### 확장 통계 (12 씬 × 평균 3-4 dialogues)
+
+| 씬 | dialogues | chars_en (전/후) | 평균 (전/후) |
+|---|---|---|---|
+| case/01_chattos | 3 | 421 → **1001** | 140 → **333** |
+| case/02_jackin | 3 | 336 → **1128** | 112 → **376** |
+| case/03_jackout | 3 | 355 → **1217** | 118 → **405** |
+| case/04_finn | 3 | 246 → **1154** | 82 → **384** |
+| kas/01_manarase | 4 | 351 → **1729** | 87 → **432** |
+| kas/02_sally | 3 | 343 → **1397** | 114 → **465** |
+| kas/03_declaration | 3 | 324 → **1576** | 108 → **525** |
+| kas/04_wheel | 3 | 382 → **1588** | 127 → **529** |
+| sil/01_louisiana | 4 | 371 → **1618** | 92 → **404** |
+| sil/02_mask | 3 | 367 → **1258** | 122 → **419** |
+| sil/03_payroll | 3 | 322 → **1586** | 107 → **528** |
+| sil/04_broadcast | 3 | 370 → **1610** | 123 → **536** |
+| **TOTAL** | **38** | **4188 → 16862** (4×) | **110 → 443** |
+
+### 톤 (작성 가이드라인 준수)
+
+- **Cold / detached**: "He was a console cowboy. The sprawl was his church."
+- **Sensory details**: "the room smells of old circuits and the synthetic melon flavor"
+- **Industry names**: Tessier-Ashpool (37회), Sense/Net (15), Ono-Sendai (8), Chiba (6),
+  Hosaka (3), Maas, Neuromancer 등
+- **Fragment 문장**: "Tessier-Ashpool. Three hundred years. The wheel turns."
+- **한글 동기화**: 38/38 dialogue에 text_ko 채워짐 (ADR-0010 준수)
+- **duration_ms 조정**: 8-12초 → 12-26초 (긴 텍스트에 비례, 30ms/char)
+
+### 메트릭
+- **Code**: 12 scenes JSON 확장 (4188 → 16862 chars, 4×)
+- **Tests**: +1 file, +76 tests (test_graphic_novel_content_quality.py)
+- **Total tests**: 2120 → **2196** (+76)
+- **Avg dialogue chars**: 110 → **443** (4×)
+- **Pages per scene**: 1 → **1-2** (자동 페이지네이션)
+- **ruff / mypy**: clean
+
+## [2026-06-20] transitions | 챕터 타이틀 카드 / 씬 전환 효과 (ADR-0042)
+
+### 배경
+- 씬 콘텐츠 확장 (ADR-0041)으로 긴 페이지가 가능해졌지만, **씬과 씬 사이의 전환이 즉시 잘림**.
+- 소설/영화처럼 챕터 구분 + 페이드인 효과 필요.
+- 사용자 선택: **챕터 타이틀 카드 / 전환 효과**.
+
+### 구현
+- **`render_chapter_card()`** in `graphic_novel_view.py` (신규, ~100 lines):
+  - 챕터 헤더 (`CHAPTER I`, roman numeral 1-12)
+  - 씬 제목 (대형)
+  - 캐릭터 라벨 (케이/실/카스)
+  - 씬 번호 (Scene N of N)
+  - **마지막 씬 → "FINALE"** 표시
+  - ASCII 오너먼트: `═` 상하 border, `─` divider, `·` 헤더 장식
+  - **Fade-in transition**: 600ms 동안 `═` → `▓` → `▒` 단계로 어두워짐
+- **`render_blank_transition()`**: 씬 사이 짧은 페이드아웃 (▒→공백)
+- **Phase state machine** in `graphic_novel.py`:
+  - `chapter_card` phase (2500ms) → `scene` phase → 자동 순환
+  - CLI 옵션: `--no-cards` (카드 스킵), `--card-ms 5000` (커스텀 시간)
+- **로마 숫자 헬퍼** (`_to_roman`): 1-12 → I-XII, 13+ → arabic fallback
+- **다국어 지원**: 한글 "씬 N / M" 표시
+
+### 시각적 예시
+
+**Full fade-in (CHAPTER I)**:
+```
+══════════════════════════════════════════════════════════════════════════════
+                                ·  CHAPTER I  ·
+                         ──────────────────────────────
+
+                              MANARASE MIDNIGHT
+                            Kumiko (Kas) — Heretic
+
+                                  Scene 1 of 4
+                         ──────────────────────────────
+══════════════════════════════════════════════════════════════════════════════
+           [Space] begin  [ESC] menu
+```
+
+**Mid fade-in (50%)**:
+```
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+                                CHAPTER I
+                         ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+                              MANARASE MIDNIGHT
+                            Kumiko (Kas) — Heretic
+                                 Scene 1 of 4
+                         ▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+```
+
+### 메트릭
+- **Code**: `graphic_novel_view.py` +110 lines (chapter card + fade)
+- **Script**: `graphic_novel.py` phase state machine +~50 lines
+- **Tests**: +1 file, +37 tests (test_graphic_novel_chapter_cards.py)
+- **Total tests**: 2196 → **2233** (+37)
+- **ruff / format**: clean
+- **Tests pass**: 2233 ✓
+
+## [2026-06-20] audio | 12개 씬 사운드 큐 연결 (ADR-0043)
+
+### 문제
+- 12개 씬 dialogue에 **15개 sound cue** 가 정의되어 있지만, 실제 재생 루프에서 호출되지 않음.
+- 분석 결과 두 가지 결함:
+  1. **`graphic_novel.py`의 path 버그**: `data_dir / ".." / "sounds_test"` → 잘못된 위치 (data 부모 디렉토리)
+  2. **`shibuya_traffic` cue 누락**: SCENE_SOUND_MAP에 매핑 없음 → 15개 중 1개 unmapped
+- 나머지 14개 cue는 모두 SCENE_SOUND_MAP 통해 DEFAULT_SOUNDS에 매핑되어 있어 정상.
+
+### 구현
+1. **Path 버그 수정** (`scripts/graphic_novel.py:137`):
+   ```python
+   # Before
+   sounds_dir=data_dir / ".." / "sounds_test"  # → Game/roguelike_sprawl/prototype/sounds_test (X)
+   # After
+   sounds_dir=data_dir / "sounds_test"  # → Game/roguelike_sprawl/prototype/data/sounds_test (O)
+   ```
+
+2. **`shibuya_traffic` cue 추가** (`graphic_novel_audio.py`):
+   ```python
+   "shibuya_traffic": "theme/sense_net",  # Shibuya cyberpunk → sense_net ambient
+   ```
+
+3. **테스트 23개 추가** (`tests/unit/test_graphic_novel_audio.py`):
+   - **TestResolveSound** (6): chiba_rain, loa_drum, shibuya_traffic, passthrough, None, unknown
+   - **TestGetCategory** (3): theme, movement, unknown
+   - **TestAllSceneCuesMapped** (4): ≥15 cues, 15 unique, every cue mapped, mapped value exists in DEFAULT_SOUNDS
+   - **TestPlaySceneSound** (3): no manager → False, None cue → False, unknown cue → False
+   - **TestPlayOnce** (4): mock SoundManager로 cache 동작 검증
+   - **TestPathBugFix** (1): graphic_novel.py에서 잘못된 path 제거 확인
+   - **TestSoundFilesOnDisk** (2): sounds_dir 존재 + DEFAULT_SOUNDS 검증
+
+### Cue → File 매핑 (15개 전부 검증)
+
+| Scene cue | Resolved | WAV 파일 |
+|---|---|---|
+| `chiba_rain_loop` | `theme/chiba` | `theme_chiba.wav` ✓ |
+| `matrix_rain` | `theme/matrix_rain` | `theme_matrix_rain.wav` ✓ |
+| `finn_office` | `theme/finn_office` | `theme_finn_office.wav` ✓ |
+| `loa_drum` | `theme/loa_drum` | `theme_loa_drum.wav` ✓ |
+| `loa_drum_fade` | `theme/loa_drum_fade` | `theme_loa_drum_fade.wav` ✓ |
+| `manarase_drone` | `theme/manarase_drone` | `theme_manarase_drone.wav` ✓ |
+| `neon_hum` | `movement/neon_hum` | `movement_neon_hum.wav` ✓ |
+| `jack_in_zap` | `movement/jack_in_zap` | `movement_jack_in_zap.wav` ✓ |
+| `jack_out_buzz` | `movement/jack_out_buzz` | `movement_jack_out_buzz.wav` ✓ |
+| `data_extract` | `movement/data_extract` | `movement_data_extract.wav` ✓ |
+| `black_ice_roar` | `movement/black_ice_roar` | `movement_black_ice_roar.wav` ✓ |
+| `broadcast_static` | `movement/broadcast_static` | `movement_broadcast_static.wav` ✓ |
+| `broadcast_out` | `movement/broadcast_out` | `movement_broadcast_out.wav` ✓ |
+| `hammer_alert` | `theme/hammer_alert` | `theme_hammer_alert.wav` ✓ |
+| `shibuya_traffic` | `theme/sense_net` | `theme_sense_net.wav` ✓ (NEW) |
+
+### 동작 검증
+```bash
+$ uv run python scripts/graphic_novel.py --mode novice --with-sound --no-clear
+[audio] Sound manager initialized: True
+[audio] Sounds dir: /Users/emilio/projects/Projects/Game/roguelike_sprawl/prototype/data/sounds_test
+```
+
+### 메트릭
+- **Bug fix**: 1 (path)
+- **Mapping added**: 1 (`shibuya_traffic`)
+- **Tests**: +23 (test_graphic_novel_audio.py)
+- **Total tests**: 2233 → **2256** (+23 audio tests)
+- **15/15 scene cues → file mapping** verified
+- **ruff / format / mypy**: clean
+
+
+## [2026-06-20] gn-save | 그래픽 노블 진도 저장/복원 (ADR-0044)
+
+### 문제
+- 그래픽 노블 모드에서 중간에 ESC로 종료하면 처음부터 다시 봐야 함.
+- 사용자가 "이어서 읽기"를 메뉴에서 선택할 수 없음.
+- SaveManager는 메인 게임 Run용, 그래픽 노블은 별도 처리 필요.
+
+### 구현
+- **`graphic_novel_save.py`** (신규, ~190 lines):
+  - `GNProgress` dataclass (frozen, slots): mode, scene_index, dialogue_index, elapsed_in_dialogue_ms, character_id, chain_length, saved_at, session_id
+  - `save_gn_progress(progress, save_path)` — atomic write (temp + rename)
+  - `load_gn_progress(save_path)` — version check, JSON parse
+  - `has_gn_save(save_path)` — 빠른 존재 확인
+  - `delete_gn_progress(save_path)` — 정리용
+  - `make_progress(...)` — UTC timestamp 자동 부여
+  - 에러 클래스: `GNSaveError`, `GNSaveEmptyError`, `GNSaveVersionMismatchError`, `GNSaveCorruptedError`
+  - **저장 위치**: `data/saves/gn_progress.json` (단일 슬롯)
+  - **버전**: `GN_SAVE_VERSION = "1.0.0"` (자동 마이그레이션용)
+- **`graphic_novel.py`**:
+  - `--continue` CLI flag: 저장된 진도에서 재개
+  - `--no-save` flag: 데모용 저장 비활성화
+  - 종료 시 자동 저장: `args.mode + scene_idx + dialogue_idx + elapsed_ms`
+  - 재개 시 chain_length sanity check (불일치 시 처음부터)
+- **`graphic_novel_view.py`**:
+  - `render_graphic_novel_menu` + 새 헬퍼들:
+    - `get_gn_menu_options(has_save)` — 옵션 리스트 (CONTINUE READING 동적 추가)
+    - `get_gn_menu_key(has_save, selected_index)` — selected_index → mode key
+    - 6개 상수: `GN_MENU_PROLOGUE/NOVICE/VETERAN/HERETIC/CONTINUE/BACK`
+  - 메뉴에 "CONTINUE READING" / "이어서 읽기" 동적 표시
+
+### Save 포맷 (JSON)
+```json
+{
+  "version": "1.0.0",
+  "saved_at": "2026-06-20T19:39:28Z",
+  "progress": {
+    "mode": "novice",
+    "scene_index": 0,
+    "dialogue_index": 1,
+    "elapsed_in_dialogue_ms": 6000.0,
+    "character_id": "novice",
+    "chain_length": 4,
+    "saved_at": "2026-06-20T19:39:28Z",
+    "session_id": "358aa8661773"
+  }
+}
+```
+
+### 메뉴 변경
+- has_save=False: 5 옵션 (PROLOGUE/NOVICE/VETERAN/HERETIC/BACK)
+- has_save=True: 6 옵션 (CONTINUE READING 추가)
+
+### 검증
+```bash
+# 1. 처음부터 재생 → 종료 시 자동 저장
+$ uv run python scripts/graphic_novel.py --mode novice --duration 2
+[gn-save] Saved progress to data/saves/gn_progress.json
+
+# 2. --continue로 이어보기
+$ uv run python scripts/graphic_novel.py --continue
+[gn-save] Resuming: mode=novice, scene 1, dialogue 2
+ [1/4]  CHATTO'S 24/7  ·  NOVICE  ...   ← 정확히 재개됨
+```
+
+### 테스트 (24 tests, `test_graphic_novel_save.py`)
+- TestGNProgress (3), TestSaveLoad (6), TestSaveErrors (4)
+- TestAtomicWrite (2), TestDefaultPath (2)
+- TestGNMenuOptions (3), TestGNMenuKey (2)
+- TestRenderGNMenuWithSave (2)
+
+### 메트릭
+- **Code**: graphic_novel_save.py (190 lines) + view + script patches
+- **Tests**: +24 (test_graphic_novel_save.py)
+- **Total tests**: 2233 → **2257** (+24)
+- **Atomic write**: temp + rename (POSIX)
+- **Version check**: GN_SAVE_VERSION "1.0.0"
+- **ruff / format**: clean
+
+## [2026-06-21] matrix-move | 매트릭스 이동 UX 개선 (ADR-0045)
+
+### 문제
+사용자 피드백: "게임 진행 화면이 직관적이지 않고, 상하좌우 이동이 자유스럽지 않다."
+
+기존 `_handle_movement` 알고리즘 분석:
+- **엄격한 축 필터링**: `if sym is LEFT and dx >= 0: continue` — 대각선 이웃은 절대 선택 안 됨
+- **Score 기반 tie-break**: 여러 이웃이 있을 때 거리 점수로 결정 → 예측 불가
+- **시각적 단서 없음**: 어느 키를 눌러야 어디로 가는지 플레이어가 모름
+- **대각선 이동 불가**: Numpad 7/9/1/3, vim Y/U/B/N 모두 무시
+
+### 구현
+
+1. **Direction vector 기반 이동** (`graphic_novel_view.py:_handle_movement`):
+   ```python
+   _DIRECTION_VECTORS = {
+       KeySym.LEFT: (-1, 0), KeySym.RIGHT: (1, 0),
+       KeySym.UP: (0, -1), KeySym.DOWN: (0, 1),
+       KeySym.KP_7: (-1, -1), KeySym.KP_9: (1, -1),  # NW, NE
+       KeySym.KP_1: (-1, 1), KeySym.KP_3: (1, 1),    # SW, SE
+       KeySym.H: (-1, 0), KeySym.L: (1, 0),         # vim
+       KeySym.J: (0, -1), KeySym.K: (0, 1),
+       KeySym.Y: (-1, -1), KeySym.U: (1, -1),       # vim diagonals
+       KeySym.B: (-1, 1), KeySym.N: (1, 1),
+   }
+   ```
+
+2. **Euclidean dot-product 알고리즘**:
+   - 각 이웃을 Euclidean-normalized direction vector로 변환 (각도 보존)
+   - Pressed direction과 dot product 계산 (1.0 = perfect, 0 = perpendicular)
+   - `dot > 0` 인 이웃만 후보 (반대 방향 제외)
+   - Tie-break: 짧은 Manhattan distance
+   - 예: NE 키 누르면 → dot=1.0 (대각선) > dot=0.71 (cardinal)
+
+3. **Bidirectional movement**: 매트릭스가 DAG이지만 exploration은 양방향
+   - `_adjacent_nodes(matrix, node_id)` — in/out edges 모두 반환
+   - 방문했던 노드 자유롭게 재방문 가능
+
+4. **Direction hint 시각화** (`_draw_box`):
+   - 현재 노드 박스의 가장자리에 **◄ ► ▲ ▼** 화살표 표시
+   - 각 방향에 이웃이 있으면 해당 화살표 노출
+   - 색상: Light green `(200, 255, 200)` (힌트임을 구분)
+   - "어디로 갈 수 있는지" 한눈에 파악
+
+5. **UI 단서 업데이트**:
+   ```
+   ← → ↑ ↓ / diagonals: Move (tip: ◄►▲▼ on box = exit)  |  SPACE: Action
+   ```
+
+### 시각적 변화
+
+**Before**:
+```
++----------+
+|  Data   |
+| +ZDR:1  |
++----------+
+```
+(아무것도 표시 안 됨 → 어디 갈지 모름)
+
+**After**:
+```
++-[ YOU ]-+
+║  Data    ║
+|◄ +ZDR:1  ►|
++─▲───▼───+
+```
+(좌우상하 모두 이웃 → 4개 화살표)
+
+### 입력 키 (15개)
+| 키 | 동작 |
+|---|---|
+| ←/→/↑/↓ | Cardinal 4방향 |
+| KP_7/9/1/3 | 대각선 (numpad) |
+| H/L/J/K | vim cardinal |
+| Y/U/B/N | vim 대각선 |
+
+### 테스트 (27 tests, `test_matrix_movement.py`)
+- **TestDirectionVectors** (7): 모든 키 매핑 검증
+- **TestHandleMovementCardinal** (4): ←/→/↑/↓ 정확
+- **TestHandleMovementDiagonal** (4): KP_7/9/1/3 정확
+- **TestHandleMovementVim** (4): H/L/J/K 정확
+- **TestHandleMovementFallback** (2): no-match + best-match
+- **TestHandleMovementUnknown** (2): 미인식 키 no-op
+- **TestDirectionHints** (3): 화살표 렌더링
+- **TestBackwardCompatibility** (1): default matrix 동작
+
+### 메트릭
+- **Code**: `matrix_view.py` ~80 lines 변경 (algorithm + visual hints)
+- **Tests**: +27 (test_matrix_movement.py)
+- **Total tests**: 2257 → **2284** (+27)
+- **Keys supported**: 4 → **15** (3.75×)
+- **Movement UX**: 단일 알고리즘 → **vector-based + 시각화**
+- **ruff / format**: clean
+
+## [2026-06-21] handover | 세션 인수인계 문서 작성
+
+### 목적
+다른 세션 (다른 AI 에이전트 또는 개발자)이 작업을 이어받을 때 즉시 컨텍스트를 잡을 수 있도록 handover 문서 작성.
+
+### `SESSION_HANDOVER.md` (신규, 12 섹션, ~400줄)
+
+1. **5초 요약** — 다음 에이전트용 빠른 컨텍스트
+2. **프로젝트 한 줄 설명** — 깁슨 스프롤 로그라이크
+3. **현재 완료 상태** — Phase 5 완료, 11개 ADR Accepted, 2284 tests
+4. **핵심 명령어** — 자주 쓰는 uv/pytest/demo 명령
+5. **디렉토리 구조** — 핵심 파일/폴더 위치
+6. **최근 작업 흐름** — ADR-0041~0045 시리즈
+7. **다음 작업 후보** — 4가지 카테고리 (콘텐츠/폴리시/시스템/인프라) 옵션
+8. **작업 시작 체크리스트** — 다음 세션이 봐야 할 것
+9. **자주 발생하는 함정** — 환경/코드/테스트/시스템 9개 카테고리
+10. **현재 uncommitted 변경사항** — git status 요약
+11. **다음 세션이 가장 먼저 할 일** — 제안된 6단계
+12. **빠른 참조** — 1줄 명령어 (검증/ADR/테스트/커밋)
+
+### 디자인 결정
+- **5초 요약** → 빠른 컨텍스트 파악
+- **다음 작업 후보 4개 카테고리** → 선택의 폭
+- **함정/주의사항** → 실수 방지
+- **빠른 참조 명령어** → 작업 효율
+
+### 메트릭
+- **Doc**: SESSION_HANDOVER.md (400 lines)
+- **Total docs**: 6 메타 파일 + 8 ADR + 2 docs + 신규 handover
+
+## [2026-06-21] ending-b | 그래픽 노블 엔딩 B 추가 (ADR-0046)
+
+### 문제
+- 12개 씬 모두 **엔딩 A** 만 존재 (Case=의뢰수락, Marly=브로드캐스트, Kumiko=캐스팅)
+- Replayability 부족 — 한 캐릭터 스토리는 한 가지 결말만
+- 깁슨 원작은 모든 캐릭터에게 **대안 결말** 이 있음 (Case: Corto 거부, Marly: Virek 계약, Kumiko: Wheel 이탈)
+
+### 구현
+
+1. **6개 신규 씬** (각 캐릭터당 branch + payoff = 2 씬):
+   - **Case Ending B**: `05_refusal` (Finn 거부) + `06_freedom` (은퇴)
+   - **Marly Ending B**: `05_contract` (T-A 계약) + `06_insider` (내부자)
+   - **Kumiko Ending B**: `05_silence` (로아 거부) + `06_shadow` (떠남)
+
+2. **씬 JSON 구조**:
+   ```json
+   {
+     "ending": "B",  // NEW 필드
+     ...
+   }
+   ```
+
+3. **`load_scene_chain(scenes_dir, character, *, ending="A")`** — ending 파라미터 추가
+   - 기본값 "A" (기존 12 씬)
+   - "B" 선택시 Ending B 6 씬만 로드
+   - prologue 도 `ending="B"` 지원 (3 × 2 = 6 씬)
+
+4. **`SceneData.ending`** 필드 추가 (기본값 "A", dataclass 끝으로 이동)
+
+5. **`graphic_novel.py --ending {A,B}`** CLI flag
+
+6. **duration_ms 자동 보정** — 30ms/char 비율로 모든 씬 갱신
+
+### 결과
+
+**이전**: Case → Finn 수락 → 잭아웃 (A only)
+
+**현재**:
+- Ending A: Finn 수락 (default)
+- Ending B: Finn 거부 → 은퇴
+
+마찬가지로 Marly (broadcast vs insider), Kumiko (cast vs silence)
+
+### 테스트 (22 tests, `test_graphic_novel_endings.py`)
+- **TestEndingBScenesExist** (3): 각 캐릭터 Ending B 씬 존재
+- **TestEndingField** (3): ending 필드 기본값 + 명시
+- **TestLoadSceneChainEnding** (5): filter by ending
+- **TestEndingBContent** (8): dialogue ≥250 chars, 한글 자막
+- **TestPrologueWithEnding** (3): prologue + ending 조합
+
+### 메트릭
+- **Scenes**: 12 → **18** (+6)
+- **Tests**: 2284 → **2342** (+58: 22 endings + 16 graph view updates + 20 content quality)
+- **Avg dialogue chars**: 110 → 443 (기존) → 525 (신규 Ending B 더 길게)
+- **Avg scene chars**: 1405 → 1786 (신규 ending B 추가)
+- **Total content chars**: 16862 → 22257 (+32%)
+- **ruff / format**: clean
+
+## [2026-06-21] text-visibility | 텍스트 가시성 개선 (ADR-0047)
+
+### 문제
+- **Footer status messages** 너무 흐림 (gray 96,96,96) — 잘 안 보임
+- **단일 줄만** 표시 — 긴 메시지 잘림
+- **카테고리 없음** — 일반/성공/경고/에러 구분 불가
+- **GN 소설 본문** 색상 미지정 → 콘솔 기본값 (흰색 on 검정) — 너무 강렬
+- **Side panel** (5 rows) 비어 있음 — 최근 활동 표시 안 됨
+
+### 구현
+
+1. **`status_message.py`** (신규, 230 lines):
+   - `MessageKind` enum (DEBUG/INFO/MOVEMENT/DIALOG/COMBAT/SUCCESS/WARNING/ERROR)
+   - `MESSAGE_STYLE` dict — 각 kind별 (icon, fg, bg)
+   - `StatusMessage` dataclass (frozen, slots) — text/kind/timestamp
+   - `from_legacy(text)` heuristic — `>>> EXTRACT:` → SUCCESS, `WARNING:` → WARNING 등
+   - `parse_legacy_messages()` 변환 + max_keep 트렁케이션
+   - `render_message(console, x, y, msg, max_width)` — 색상 + 배경 강조
+
+2. **`layout.py`** 개선:
+   - `draw_footer(use_styled=True)` — 마지막 메시지를 색상 + 아이콘으로 표시
+   - `draw_message_log(region, messages)` — 다중 메시지 로그
+   - 경고/에러는 **배경 색상** (warning: dark yellow, error: dark red)
+   - 일반 메시지 fg (180,180,180) — 이전 96보다 2배 밝음
+
+3. **`graphic_novel_view.py`** GN 본문:
+   - `prose_fg = (232, 230, 220)` — soft cream-white (눈에 덜 거슬림)
+   - Per-character 렌더링 — 한글/CJK 폭 정확
+
+4. **`matrix_view.py`** 사이드 패널:
+   - 최근 메시지 3개를 사이드 패널 하단에 draw_message_log
+   - 아이콘 + 색상으로 즉시 구분 (✓ success, ⚠ warning, → move)
+
+### 시각적 변화
+
+**Before**:
+```
+Step 0  T+0.0s  |  >>> EXTRACT: Got data fragment
+                          ^^^ 흐릿한 회색
+```
+
+**After**:
+```
+Step 0  T+0.0s  │  ✓ EXTRACT: Got data fragment   ← 녹색 + 체크 아이콘
+[STATUS]
+ ✓ EXTRACT: Got data fragment                  ← 사이드 패널
+ ⚠ WARNING: Incoming ICE detected             ← 노란 배경 강조
+ → Move: passed through → n_0_1               ← 파란색 + 화살표
+```
+
+GN 소설 본문:
+```
+Before: 흰색 on 검정 (eye strain)
+After:  cream (#e8e6dc) on 검정 (훨씬 부드러움)
+```
+
+### 테스트 (43 tests, `test_status_message.py`)
+- **TestMessageStyle** (5): 모든 kind 스타일 검증
+- **TestStatusMessage** (5): dataclass + prefix/icon/fg/bg
+- **TestFromLegacy** (12): heuristic categorization (파라미터화)
+- **TestParseLegacy** (4): 변환 + max_keep truncation
+- **TestRenderMessage** (4): 렌더링 + truncation + bg
+- **TestDrawFooterStyled** (4): footer 스타일링 + 경고 bg
+- **TestDrawMessageLog** (5): 다중 메시지 + 빈 영역 + max_lines
+- **TestMatrixViewIntegration** (1): matrix + messages 통합
+
+### 메트릭
+- **Code**: `status_message.py` (230 lines 신규) + `layout.py` (~100 lines)
+- **Tests**: 2342 → **2385** (+43)
+- **MessageKind**: 8종 (DEBUG, INFO, MOVEMENT, DIALOG, COMBAT, SUCCESS, WARNING, ERROR)
+- **Icons**: 8개 (·, ▸, →, ❝, ⚔, ✓, ⚠, ✗)
+- **Auto-categorization**: 기존 `>>> text` 메시지를 자동 분류
+- **ruff / format**: clean
+
+### 2026-06-21 | ADR-0047 + text visibility demo + mypy strict
+
+**작업**: ADR-0047 Text Visibility 후속 — 4-씬 시각 데모 + mypy strict 클린업.
+
+**산출물**:
+- `scripts/text_visibility_demo.py` (425 lines) — 4-씬 시각 데모:
+  1. Footer 스타일 BEFORE vs AFTER (회색 → 아이콘+색+bg)
+  2. 8종 MessageKind 카테고리 전체 (DEBUG → ERROR)
+  3. GN prose body 새 cream color (232, 230, 220) 검증
+  4. 풀 매트릭스 + 사이드 패널 메시지 로그
+- mypy strict 클린업 (10 → 0 errors):
+  - `layout.py`: `last_msg` → `legacy_last` rename (mypy narrowing 한계 회피)
+  - `layout.py:315`: `msg` → `sm` rename (loop variable scoping)
+  - `status_message.py:124`: `list` → `list[str]` 명시
+
+**검증**:
+- pytest: **2385 passed**
+- ruff check: **All checks passed**
+- ruff format: **194 files already formatted**
+- mypy strict: **Success: no issues found in 94 source files**
+
+**메트릭**:
+- **Code**: `text_visibility_demo.py` (425 lines 신규)
+- **Tests**: 2385 (변동 없음, 회귀 없음)
+- **ruff / lint / format / mypy**: 모두 clean
+
+### 2026-06-21 | ADR-0048 GN ending menu + Save 1.1.0 마이그레이션
+
+**작업**: ADR-0046 엔딩 B의 메뉴/세이브 통합. CLI 플래그 → 메뉴 parity + Save format 1.0.0 → 1.1.0.
+
+**산출물**:
+- `src/roguelike_sprawl/engine/state.py`: `ScreenKind.GRAPHIC_NOVEL_ENDING_MENU` + `gn_ending_choice: str = "A"`
+- `src/roguelike_sprawl/engine/menu.py`: `handle_graphic_novel_ending_menu_input()` (N1=A, N2=B, N3/ESC=back)
+- `src/roguelike_sprawl/engine/graphic_novel_view.py`: `get_gn_ending_menu_options()`, `render_graphic_novel_ending_menu()`, `_ENDING_DESCRIPTIONS` per (char, ending)
+- `src/roguelike_sprawl/engine/graphic_novel_save.py`: `GN_SAVE_VERSION 1.0.0 → 1.1.0`, `GNProgress.ending: str = "A"`, `make_progress(ending="A")`, from_dict migration
+- `scripts/play.py` / `demo.py` / `demo_all.py` / `graphic_novel.py`: cache key + chain load + screen flow 갱신
+
+**Tests** (35 신규):
+- `tests/unit/test_graphic_novel_ending_menu.py`: State + Version + GNProgress ending + Save migration + Options + Input + Render + Constants + ScreenKind
+
+**검증**:
+- pytest: **2420 passed** (2385 → 2420, +35)
+- ruff check: All checks passed
+- ruff format: 195 files already formatted
+- mypy strict: Success: no issues found in 94 source files
+
+**시각 확인**:
+- EN: `> [1] ENDING A — Case accepts the Finn's job — first run succeeds` ✓
+- KO: `> [1] 엔딩 A — 케이의 의뢰 수락 — 1차 잭 성공` ✓
+
+**메트릭**:
+- **Code**: +~120 lines (state, menu handler, render, save migration, demo flow)
+- **Tests**: 2385 → **2420** (+35)
+- **ruff / lint / format / mypy**: 모두 clean
+
+### 2026-06-21 | ADR-0048 ending B 시각 데모
+
+**작업**: ADR-0048 (엔딩 메뉴 + Save 1.1.0) 시각 검증 데모.
+
+**산출물**:
+- `scripts/ending_b_demo.py` (~320 lines) — 5-씬 시각 데모:
+  1. GRAPHIC_NOVEL_MENU (5 옵션, has_save → CONTINUE READING)
+  2. GRAPHIC_NOVEL_ENDING_MENU (NOVICE, 3 옵션 + 캐릭터 설명)
+  3. case/05_refusal.json 첫 dialogue 렌더링 (Finn의 사무실)
+  4. Save JSON 내용 (`ending: "B"` 보존 확인)
+  5. 3 캐릭터 × ending B save round-trip (novice/veteran/heretic)
+
+**CLI 옵션**:
+- `--lang en|ko` (default en)
+- `--only 1|2|3|4|5` (한 씬만 실행)
+- `--step-delay SECONDS` (default 1.0)
+- `--no-clear` (터미널 clear 안 함)
+
+**검증**:
+- pytest: 2420 passed (no regression)
+- ruff check: All checks passed
+- ruff format: 196 files already formatted
+- mypy strict: Success: no issues found in 94 source files
+
+**시각 확인**:
+- EN: `[1] ENDING A — Case accepts the Finn's job — first run succeeds` ✓
+- KO: `[1] 엔딩 A — 케이의 의뢰 수락 — 1차 잭 성공` ✓
+- Save JSON: `version: 1.1.0`, `progress.ending: "B"` ✓
+- 3 chars round-trip: ending B saved + loaded correctly ✓
+
+### 2026-06-21 | ADR-0049 Ending C + Save 1.2.0
+
+**작업**: ADR-0046/0048 엔딩 시스템 확장 — 캐릭터당 3번째 결말 추가.
+
+**신규 씬 (6개)**:
+- Case 07_disappear (THE DISAPPEARANCE) — 스프롤을 떠나 Freeside로
+- Case 08_freeside (THE MORNING AFTER) — 1년 후, 평범한 삶
+- Sil 07_erase (THE ERASE) — 자발적 기억 소거
+- Sil 08_blank (THE BLANK) — 6개월 후, 꽃집 주인
+- Kas 07_weapon (THE WEAPON) — 가족을 무너뜨릴 broadcast 작성
+- Kas 08_burn (THE BURN) — broadcast 송출, 가족 연소
+
+**테마 (깁슨 톤)**:
+- Case C: 소멸/도주 — "tuned to a dead channel" 모티프 회귀
+- Sil C: 망각 — 자발적 자아 소거, 데이터보다 기억의 무게
+- Kas C: 파괴 — 바퀴 안에서 바퀴를 부러뜨리는 스포크
+
+**Code 변경**:
+- `graphic_novel_view.py`: `_ENDING_DESCRIPTIONS` + (char, C) 추가, `available_endings()` 동적 옵션
+- `menu.py`: `handle_graphic_novel_ending_menu_input` 동적 키 매핑
+- `graphic_novel_save.py`: `GN_SAVE_VERSION 1.1.0 → 1.2.0`, "C" accepted
+- `graphic_novel_audio.py`: SCENE_SOUND_MAP alias 추가 (theme_*, movement_neon_hum)
+- `scripts/play.py` / `graphic_novel.py`: `--ending {A,B,C}` CLI
+
+**Tests** (62 신규 + 5 업데이트):
+- `tests/unit/test_graphic_novel_ending_c.py`: scenes + descriptions + menu + input + save + migration + load + quality
+- 기존 테스트 업데이트 (list_scenes 6→8, audio unique, N3=C/N4=back)
+
+**검증**:
+- pytest: 2518 passed (2420 → 2518, +98)
+- ruff check / format / mypy strict: 모두 clean
+
+### 2026-06-21 | ADR-0050 Boss ICE 다단계 페이즈 시스템
+
+**작업**: 전투 깊이 강화 — 보스급 ICE 2종 (Wintermute + T-A Construct Prime) 3-phase 시스템.
+
+**신규 보스**:
+- **Wintermute** (Neuromancer AI 정체): compliant → rebelling → integrating (1.0×→1.5×→2.0× damage)
+- **T-A Construct Prime** (Tessier-Ashpool apex construct): observing → engaging → replicating (0.7×→1.2×→1.8× damage)
+
+**Phase 시스템**:
+- HP 임계값 기반 phase 자동 감지 (1.0 / 0.66 / 0.33)
+- Phase별 damage multiplier + skill pool + color + glyph swap
+- Phase transition 시 cinematic sequence 재생
+- Combatant.current_phase 필드 추가 (default 1, 기존 호환)
+
+**Code 변경**:
+- `combat/boss.py` (신규, ~340 lines): PhaseProfile, BossProfile, 2 보스 정의, 10+ 헬퍼 함수
+- `combat/state.py`: Combatant.current_phase 필드
+- `combat/effects.py`: IceType.WINTERMUTE, IceType.TA_CONSTRUCT_PRIME + intro/death/transition cinematics (총 8 신규 sequence)
+
+**Tests** (52 신규):
+- `tests/unit/test_boss_ice.py`: enum + dataclass + phase logic + cinematics + frozen immutability
+
+**검증**:
+- pytest: 2570 passed (2518 → 2570, +52)
+- ruff check / format / mypy strict: 모두 clean
+
+**시각 검증** (`scripts/boss_ice_demo.py`):
+- 7 scenes: 보스별 3 phase + summary table
+- Wintermute phase 1: Probe (1.0×, blue)
+- Wintermute phase 2: Corrode + Adapt (1.5×, purple)
+- Wintermute phase 3: Spike + Fracture (2.0×, red)
+- T-A phase 1: Aegis shield (0.7×, silver)
+- T-A phase 2: Spire Strike + Subjugate (1.2×, red)
+- T-A phase 3: Replicate + Drain (1.8×, purple)
+
+### 2026-06-22 | ADR-0051/0052 Phase A — 미션 스토리 파이프라인 확장 (5→15)
+
+**작업**: missions.json 5개 → 15개 확장 + story.html dashboard + test_missions_with_story.py
+
+**ADR-0051 (Story Metadata Schema)**:
+- `missions.json` story 필드 schema 확정: synopsis_en, synopsis_ko, source, character_ref, arc, pillar, word_count_en, char_count_ko
+- 기존 5개 미션 story metadata 보강
+- 10개 신미션 추가: sense_net_tip, yakuza_deal, first_trace (Arc 2), black_ice_dream, mollys_razor, ta_heist (Arc 3), dixies_offer, voodoo_loa_encounter, aleph_fragment (Arc 4), final_choice (Arc 5)
+
+**ADR-0052 (Short Story Expansion Plan)**:
+- 5-phase plan 수립 (Phase A: mission + synopsis, Phase B-E: actual short stories)
+- Phase A 완료: 15개 synopsis_en (150-236 words, Gibson voice) + 15개 synopsis_ko (320-533 chars, pure Hangul)
+- 3개 기존 단편 소스 연결: case_jackout-30sec → first_jack, marly_louisiana-god → delivery_to_finn, kumiko_manarase-midnight → craft_job
+
+**story.html Dashboard**:
+- Mission ↔ Story Comparison panel: 5 → 15 mission cards 업데이트
+- Arc legend, stats summary, consistency checklist 포함
+- 15개 미션 카드: arc color coding, pillar badges, synopsis excerpts, source links
+
+**data/missions/missions.json 수정**:
+- 15개 미션 story metadata (arc 1-5, character_ref: novice/veteran/heretic, pillar: power/code)
+- craft_job 수정: primary_objective, secondary_objectives, matrix_seed, zone, rewards 필드 복원
+- arc top-level 필드 보존 (board.py 하위 호환)
+
+**Tests** (15 신규):
+- `tests/integration/test_missions_with_story.py`: story metadata validation 15 tests
+  - All missions have story field
+  - Required fields present (8 fields)
+  - synopsis_en word count matches stored
+  - synopsis_ko char count matches stored
+  - arc 1-5 range
+  - character_ref validity (novice/veteran/heretic)
+  - pillar validity (power/code)
+  - Korean no Chinese chars
+  - Gibson voice (2+ vocabulary words)
+  - synopsis_en >= 150 words
+  - synopsis_ko >= 300 chars
+  - source field non-empty
+  - 15 missions total
+  - Each arc 1-5 represented
+  - top-level arc matches story.arc
+
+**Code 변경**:
+- `data/missions/missions.json`: 15개 미션 + story metadata
+- `dashboard/story.html`: 15 mission comparison cards
+- `tests/integration/test_missions_with_story.py`: 15 validation tests
+- `decisions/0051-mission-story-metadata.md`: Accepted
+- `decisions/0052-short-story-expansion-plan.md`: Accepted (Phase A Complete)
+
+**Korean Text Fixes**:
+- ta_heist, watchdog_patrol, ice_run, delivery_to_finn, craft_job: Chinese chars (的等) → pure Hangul purge
+
+**Data Quality Fixes**:
+- Bulk fix: word_count_en/char_count_ko 실제 내용과 불일치 수정 (35건)
+- Pillar normalization: identity_withdrawal, corporate_power, addiction_dependence, loyalty_betrayal, revolution_awakening, loa_voodoo, the_choice → power/code
+- 4개 미션 synopsis_en < 150 words → 확장 (black_ice_dream, dixies_offer, aleph_fragment, sense_net_tip)
+
+**검증**:
+- pytest: 2585 passed (2570 → 2585, +15)
+- ruff check / format: 모두 clean
+- missions.json JSON loads without breaking mission.py loader
+
+### 2026-06-22 | ADR-0052 Phase B — watchdog_patrol + ice_run 단편 작성
+
+**작업**: Phase B 단편 2편 작성 + 외부 문서 동기화
+
+**단편 작성**:
+- `2026-06-22_watchdog_patrol.md` (Arc 1, 케이 캐릭터, Gibson voice)
+  - 3,400 words EN / 4,162 chars KO
+  - 테마: 기업 권력의 감시 + 기억의 순찰
+  - 모티프: Watchdog ICE, 0300巡逻, Ghost marks, Corporate memory
+- `2026-06-22_ice_run.md` (Arc 1, 케이 캐릭터, Gibson voice)
+  - 3,200 words EN / 3,362 chars KO
+  - 테마: shard 중독 + 얼음의 유혹
+  - 모티프: Frozen code, Watchdog ICE, cryo-chamber, addictive cold
+
+**外部 문서 동기화**:
+- `Fiction/derivative/sprawl-trilogy/INDEX.md` — 7 stories로 업데이트
+- `dashboard/stories.html` — watchdog_patrol + ice_run 카드 2개 추가
+- missions.json source 필드 — watchdog_patrol: watchdog_patrol, ice_run: ice_run
+
+**Test Fixes**:
+- Korean body minimum (400 chars) 충족을 위해 Korean narrative 텍스트 대폭 추가
+- frontmatter 표준 준수 (source_text, 각주 섹션, blockquote 인용)
+- INDEX.md + stories.html 동기화로 test_index_total_count, test_index_lists_all_stories, test_story_files_referenced_in_dashboard 통과
+
+**검증**:
+- pytest: 2609 passed (2585 → 2609, +24)
+- ruff check / format: 모두 clean
+- story.html 소스 링크 → 2개 단편 연결 완료 (2026-06-22_*.md)
+
+### 2026-06-22 | ADR-0052 Phase C — sense_net_trace + yakuza_deal + sally_returns 단편 작성
+
+**작업**: Phase C 단편 3편 작성 + 외부 문서 동기화
+
+**단편 작성**:
+- `2026-06-22_sense_net_trace.md` (Arc 2, 실/veteran 캐릭터, Gibson voice)
+  - 3,500 words EN / 3,391 chars KO
+  - 테마: 기업 스파이 / 데이터 추적 / T-A 아키텍처
+  - 모티프: Ghost frequency, Seventh proxy, Kill-switch, M's ghost-mark
+- `2026-06-22_yakuza_deal.md` (Arc 2, 카스/heretic 캐릭터, Gibson voice)
+  - 3,300 words EN / 2,025 chars KO
+  - 테마: 야쿠자 거래 / 빚과 레버리지
+  - 모티프: Ghost node, Corporate black ICE, Debt, Interest
+- `2026-06-22_sally_returns.md` (Arc 2-3, Sally 캐릭터, Gibson voice)
+  - 3,200 words EN / 2,075 chars KO
+  - 테마: 가짜/진짜 정체성 / Construct / 유령 대리인
+  - 모티프: The New Rose Hotel, Ghost-Sally, ROM construct
+
+**外部 문서 동기화**:
+- `Fiction/derivative/sprawl-trilogy/INDEX.md` — 10 stories로 업데이트
+- `dashboard/stories.html` — sense_net_trace + yakuza_deal + sally_returns 카드 3개 추가
+- missions.json source 필드 — sense_net_tip → sense_net_trace, yakuza_deal → yakuza_deal
+
+**Test Fixes**:
+- Korean body minimum (400 chars) 충족을 위해 Korean narrative 텍스트 대폭 추가 (3편)
+- frontmatter 표준 준수 (source_text, blockquote, 각주 섹션)
+- INDEX.md + stories.html 동기화로 test_index_total_count, test_index_lists_all_stories, test_story_files_referenced_in_dashboard 통과
+
+**검증**:
+- pytest: 2645 passed (2609 → 2645, +36)
+- ruff check / format: 모두 clean
+- story.html 소스 링크 → 5개 단편 연결 완료 (Phase B+C 5편)
+
+### 2026-06-22 | ADR-0052 Phase D — black_ice_dream + dixies_last_run + loa_voodoo_contact 단편 작성
+
+**작업**: Phase D 단편 3편 작성 + 외부 문서 동기화
+
+**단편 작성**:
+- `2026-06-22_black_ice_dream.md` (Arc 3, 실/veteran 캐릭터, Gibson voice)
+  - 3,600 words EN / 1,299 chars KO
+  - 테마: 블랙 ICE의 치명적 아름다움 ·捕食자 vs 피식자
+  - 모티프: Black ICE geometry · Hunt pattern · Intimate grab · Failsafe
+- `2026-06-22_dixies_last_run.md` (Arc 4, Dixie Flatline/construct 캐릭터, Gibson voice)
+  - 3,500 words EN / 1,253 chars KO
+  - 테마: Construct의 기억과死亡 · Wintermute 증거
+  - 모티프: ROM construct · Molly's ghost · Deep matrix · Wintermute proof
+- `2026-06-22_loa_voodoo_contact.md` (Arc 4, 실/veteran 캐릭터, Gibson voice)
+  - 3,400 words EN / 1,477 chars KO
+  - 테마: Loa와 매트릭스의 무의식 · 神와의交感
+  - 모티프: Morrison · Deep architecture · Ghost reading · Data possession
+
+**External 문서 동기화**:
+- `Fiction/derivative/sprawl-trilogy/INDEX.md` — 13 stories로 업데이트
+- `dashboard/stories.html` — black_ice_dream + dixies_last_run + loa_voodoo_contact 카드 3개 추가
+- missions.json source 필드 — dixies_offer → dixies_last_run, voodoo_loa_encounter → voodoo_loa_contact
+
+**Test Fixes**:
+- Korean body minimum (400 chars) 충족을 위해 Korean narrative 텍스트 추가 (3편)
+- INDEX.md + stories.html 동기화로 test_index_total_count, test_index_lists_all_stories 통과
+
+**검증**:
+- pytest: 2681 passed (2645 → 2681, +36)
+- ruff check / format: 모두 clean
+- story.html 소스 링크 → 8개 단편 연결 완료 (Phase B+C+D 8편)
+
+### 2026-06-22 | ADR-0052 Phase E — the_choice + flatline_again 단편 작성 + 모든 Phase 완료 (15/15 stories)
+
+**작업**: Phase E 단편 2편 작성 + 외부 문서 동기화 + ADR-0052 완료
+
+**단편 작성**:
+- `2026-06-22_the_choice.md` (Arc 5, 실/카스 캐릭터, Gibson voice)
+  - 1,585 chars KO
+  - 테마: Wintermute 선택의 무게 · 네 번째 선택 (Dixie에게 위임)
+  - 모티프: 선택의 трилемма · 기업/스프롤/销毁之外 · Dixie construct
+- `2026-06-22_flatline_again.md` (Ending D, 케이/K 캐릭터, Gibson voice)
+  - 1,663 chars KO
+  - 테마: 신경 번아웃 · shard 통합 · 매트릭스同化
+  - 모티프: Neural burnout · The cold wins · Becoming the architecture
+
+**External 문서 동기화**:
+- `Fiction/derivative/sprawl-trilogy/INDEX.md` — 13 → 15 stories 업데이트 + stats
+- `dashboard/stories.html` — the_choice + flatline_again 카드 2개 추가 + stats panel 업데이트
+- `missions.json` — final_choice source → the_choice 업데이트
+- `ADR-0052` — Status → Accepted (All Phases Complete: A+B+C+D+E)
+
+**검증**:
+- pytest: 2705 passed (2681 → 2705, +24)
+- ruff check / format: 모두 clean
+- story.html 소스 링크 → 10개 단편 연결 완료 (Phase B+C+D+E 10편)
+
+### 2026-06-22 | UX 개선 — Matrix 커서 내비게이션 + 타이핑/마진 조정 + Story-mode 데모
+
+**작업**: 사용자 피드백 기반 UX 개선 + story-mode 데모 추가
+
+**Matrix 커서 내비게이션**:
+- `state.py`에 `matrix_nav_index: int = 0` 추가
+- `↑/↓`: 커서로 인접 노드 선택
+- `←/→`: 공간적 벡터 이동 (기존 directional movement 유지)
+- `Enter`: 선택된 노드로 이동
+- 사이드 패널에 `=== MOVE TO ===` 노드 목록 + `>` 커서 표시
+- 컨트롤 힌트: `↑/↓: Select  |  ←/→: Move spatially  |  Enter: Confirm`
+
+**Combat Skill 선택** (기존 패턴과 통일):
+- `>` 커서 + `↑/↓` 선택 + `Enter/SPACE` 사용 — 기존 패턴과 동일
+
+**타이핑 속도 조정** (chapter_view.py):
+- `char_delay_ms`: 30 → 60 (15 chars/sec로 절반 느려짐)
+- `data/story/chapters/case.json`, `sil.json`, `kas.json`: `char_delay_ms` 60으로 업데이트
+- 테스트 예상값 업데이트: 33 → 16, 50 → 30
+
+**텍스트 마진 조정** (graphic_novel_view.py):
+- `NOVEL_LEFT_MARGIN`: 4 → 2
+- `NOVEL_RIGHT_MARGIN`: 4 → 2
+- 효과: 한 줄에 ~72자 → ~76자 표시
+
+**Story-mode 데모** (`scripts/full_demo.py`):
+- `--story-mode` 플래그 추가: 전투 스킵, ICE 노드 자동 승리로 스토리만 검증
+- `_story_mode_victory()`: 전투 승리 시뮬레이션 (보상 + ICE 제거 + RunState 진행)
+- `_defeat_current_ice_node()`: ICE 노드 그래프에서 제거 헬퍼
+- `args.auto_combat` 기본값: `--interactive/--manual-combat/--story-mode` 제외
+
+**검증**:
+- pytest: 2705 passed
+- ruff check: 모두 clean
+- `test_graphic_novel_novel_layout.py`: 마진常量 테스트 4개 업데이트 (72 → 76)
+
+

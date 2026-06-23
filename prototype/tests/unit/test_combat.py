@@ -187,7 +187,7 @@ def test_ice_registry_loads(data_dir: Path) -> None:
     assert "black" in reg
     standard = reg.get("standard")
     assert standard is not None
-    assert int(standard["hp"]) == 80
+    assert int(standard["hp_base"]) == 80
 
 
 def test_build_ice_enemy(data_dir: Path) -> None:
@@ -196,6 +196,16 @@ def test_build_ice_enemy(data_dir: Path) -> None:
     assert e.name == "ICE — Standard"
     assert e.hp == 80
     assert e.team == "enemy"
+
+
+def test_build_ice_enemy_scaled(data_dir: Path) -> None:
+    ice = IceRegistry.load(data_dir / "combat" / "ice_types.json")
+    e_g1 = build_ice_enemy("standard", ice, player_grade=1)
+    assert e_g1.hp == 80
+    e_g3 = build_ice_enemy("standard", ice, player_grade=3)
+    assert e_g3.hp == 80 + (15 * 2)
+    e_g5 = build_ice_enemy("standard", ice, player_grade=5)
+    assert e_g5.hp == 80 + (15 * 4)
 
 
 def test_log_capped_at_6() -> None:
@@ -210,13 +220,13 @@ def test_log_capped_at_6() -> None:
 
 def test_construct_data_shape(data_dir: Path) -> None:
     ice = IceRegistry.load(data_dir / "combat" / "ice_types.json")
-    for ice_id in ("standard", "watchdog", "black", "goliath", "construct"):
+    for ice_id in ("standard", "watchdog", "black", "goliath", "dixie"):
         data = ice.get(ice_id)
         assert data is not None
-        assert "hp" in data
-        assert "base_damage" in data
-        assert int(data["hp"]) > 0
-        assert int(data["base_damage"]) >= 0
+        assert "hp_base" in data
+        assert "dmg_base" in data
+        assert int(data["hp_base"]) > 0
+        assert int(data["dmg_base"]) >= 0
 
 
 def test_ap_regen() -> None:

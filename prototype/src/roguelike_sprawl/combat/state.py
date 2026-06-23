@@ -117,6 +117,8 @@ class Combatant:
     equip_damage_bonus_pct: int = 0
     equip_crit_bonus_pct: int = 0
     equip_grants_skill_id: str | None = None
+    # Boss ICE multi-phase (ADR-0050) — default 1 for non-bosses
+    current_phase: int = 1
 
     def is_alive(self) -> bool:
         return self.hp > 0

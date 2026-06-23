@@ -54,7 +54,9 @@ from .helpers import (
 )
 from .state import (
     MISSION_FLOWS,
+    ChapterState,
     ObjectiveKind,
+    Phase,
     RunState,
     Stage,
     StageInfo,
@@ -66,6 +68,8 @@ from .state import (
 __all__ = [
     # Enums
     "Stage",
+    "Phase",
+    "ChapterState",
     "ObjectiveKind",
     "StageEventKind",
     # Data classes

@@ -221,6 +221,7 @@
   <span class="current">⏱ Stages</span>
   <span class="sep">|</span>
   <a href="stories.html">📚 Short Stories</a>
+  <a href="graphic-novel.html">Graphic Novel</a>
   <span class="sep">|</span>
   <a href="sound.html">🔊 Sound</a>
   <span class="sep">|</span>
@@ -289,6 +290,22 @@
   <div id="hubDescription"></div>
   <pre id="hubAscii"></pre>
 </div>
+
+<!-- Chapter Flow -->
+<h2>📖 Chapter Flow (챕터 흐름 — 케이 Ch1 순차 매핑)</h2>
+<p style="color:#8a9aa8;font-size:13px;margin-bottom:16px;">
+  단편소설 episodes → game phases → combats → cutscenes 순차 매핑.
+  출처: <code>data/story/arcs/chapter_flow.json</code>
+</p>
+<div class="cf-controls">
+  <button class="cf-char-btn active" data-cf-char="case">케이 (Case)</button>
+  <button class="cf-char-btn" data-cf-char="sil">실 (Sil)</button>
+  <button class="cf-char-btn" data-cf-char="kas">카스 (Kas)</button>
+  <span style="color:#2a3540">|</span>
+  <button class="cf-lang-btn active" data-cf-lang="ko">한글</button>
+  <button class="cf-lang-btn" data-cf-lang="en">English</button>
+</div>
+<div id="chapterFlowContent"></div>
 
 <div class="footer">
   Roguelike Sprawl — Stage & Progression Dashboard<br>
@@ -586,6 +603,150 @@
           </div>`;
       });
   })();
+
+// Chapter Flow Section (loads from chapter_flow.json)
+(function() {
+  const cfState = { data: null, char: 'case', lang: 'ko' };
+  const cfSrc = '../data/story/arcs/chapter_flow.json';
+
+  function renderChapterFlow() {
+    if (!cfState.data) return;
+    const charData = cfState.data[cfState.char];
+    if (!charData) return;
+
+    const totalPhases = charData.chapters.reduce((sum, c) => sum + c.phases.length, 0);
+    const playableChs = charData.chapters.filter(c => c.is_playable).length;
+    const totalCombats = charData.chapters.reduce((sum, c) =>
+      sum + c.phases.filter(p => p.combat).length, 0);
+
+    let html = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+      <div class="stat-cell">
+        <div style="color:#6a7888;font-size:11px;">Chapters</div>
+        <div style="color:#ffaa55;font-size:24px;font-weight:700;">${charData.chapters.length}</div>
+      </div>
+      <div class="stat-cell">
+        <div style="color:#6a7888;font-size:11px;">Playable</div>
+        <div style="color:#66ffcc;font-size:24px;font-weight:700;">${playableChs}</div>
+      </div>
+      <div class="stat-cell">
+        <div style="color:#6a7888;font-size:11px;">Combats</div>
+        <div style="color:#ff6699;font-size:24px;font-weight:700;">${totalCombats}</div>
+      </div>
+    </div>`;
+
+    for (const ch of charData.chapters) {
+      const playableCls = ch.is_playable ? 'playable-badge' : 'locked-badge';
+      const playableTxt = ch.is_playable ? 'PLAYABLE' : 'LOCKED';
+      const title = cfState.lang === 'ko' ? ch.title_ko : ch.title_en;
+
+      html += `<div class="ch-card">
+        <div class="ch-card-header">
+          <span class="ch-num">Ch${ch.chapter_number}</span>
+          <span class="ch-title">${title}</span>
+          <span class="${playableCls}">${playableTxt}</span>
+        </div>
+        <div class="ch-phases">`;
+
+      for (const ph of ch.phases) {
+        const phTitle = cfState.lang === 'ko' ? ph.title_ko : ph.title_en;
+        const hasCombat = !!ph.combat;
+        const combatTag = hasCombat
+          ? `<span class="combat-tag">${ph.combat.enemy_type} (D${ph.combat.difficulty})</span>`
+          : '';
+        const gainTag = ph.gain
+          ? `<span class="gain-tag">+${typeof ph.gain === 'object' ? ph.gain.money || ph.gain.data : ph.gain}</span>`
+          : '';
+
+        html += `<div class="ch-phase-row">
+          <span class="ch-phase-num ${hasCombat ? 'has-combat' : ''}">${ph.phase_index}</span>
+          <span class="ch-phase-title">${phTitle}</span>
+          ${combatTag}
+          ${gainTag}
+        </div>`;
+      }
+
+      html += `</div></div>`;
+    }
+
+    document.getElementById('chapterFlowContent').innerHTML = html;
+  }
+
+  function setupChapterFlowControls() {
+    document.querySelectorAll('.cf-char-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cf-char-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        cfState.char = btn.dataset.cfChar;
+        renderChapterFlow();
+      });
+    });
+    document.querySelectorAll('.cf-lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cf-lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        cfState.lang = btn.dataset.cfLang;
+        renderChapterFlow();
+      });
+    });
+  }
+
+  fetch(cfSrc)
+    .then(r => r.json())
+    .then(data => {
+      cfState.data = data;
+      renderChapterFlow();
+    })
+    .catch(err => {
+      document.getElementById('chapterFlowContent').innerHTML =
+        `<div style="color:#ff8888;padding:16px;">
+          ⚠ 챕터 흐름 로드 실패: <code>${cfSrc}</code><br>
+          <small style="color:#6a7888">${err.message}</small>
+        </div>`;
+    });
+
+  // Setup after DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupChapterFlowControls);
+  } else {
+    setupChapterFlowControls();
+  }
+})();
 </script>
+
+<style>
+  .cf-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .cf-char-btn, .cf-lang-btn {
+    background: #1a2530; border: 1px solid #2a3540; color: #c5d4e3;
+    padding: 6px 12px; cursor: pointer; font-size: 12px; border-radius: 4px;
+  }
+  .cf-char-btn.active, .cf-lang-btn.active {
+    background: #66ffcc22; border-color: #66ffcc; color: #66ffcc;
+  }
+  .stat-cell { background: #131a23; border: 1px solid #2a3540; border-radius: 6px; padding: 12px; text-align: center; }
+  .ch-card { background: #131a23; border: 1px solid #2a3540; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+  .ch-card-header {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: #1a2530; border-bottom: 1px solid #2a3540;
+  }
+  .ch-num { color: #ffaa55; font-weight: 700; font-size: 14px; }
+  .ch-title { color: #c5d4e3; font-size: 13px; flex: 1; }
+  .playable-badge { background: #66ffcc22; color: #66ffcc; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+  .locked-badge { background: #2a354022; color: #6a7888; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+  .ch-phases { padding: 8px 0; }
+  .ch-phase-row {
+    display: flex; align-items: center; gap: 10px; padding: 6px 14px;
+    border-bottom: 1px dashed #1a2530; font-size: 12px;
+  }
+  .ch-phase-row:last-child { border-bottom: none; }
+  .ch-phase-num {
+    width: 24px; height: 24px; border-radius: 50%; background: #1a2530;
+    color: #6a7888; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+  }
+  .ch-phase-num.has-combat { background: #ffaa5522; color: #ffaa55; }
+  .ch-phase-title { color: #c5d4e3; flex: 1; }
+  .combat-tag { background: #ff669922; color: #ff6699; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+  .gain-tag { background: #66ffcc22; color: #66ffcc; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+</style>
 </body>
 </html>

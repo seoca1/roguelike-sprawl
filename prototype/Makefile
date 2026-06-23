@@ -44,6 +44,34 @@ play-en: ## Interactive playthrough, English-only
 text-demo: ## Text-only demo (no graphics, for verification)
 	uv run python scripts/text_demo.py --fast
 
+# --- Graphic Novel (GUI window) ---
+# Requires display/window environment. Launches actual game window.
+gn: ## Graphic Novel — GUI window (case/novice)
+	uv run python scripts/play.py --gn-mode novice
+
+gn-veteran: ## Graphic Novel — GUI window (sil/veteran)
+	uv run python scripts/play.py --gn-mode veteran
+
+gn-heretic: ## Graphic Novel — GUI window (kas/heretic)
+	uv run python scripts/play.py --gn-mode heretic
+
+gn-all: ## Graphic Novel — GUI window (all 12 scenes shuffled)
+	uv run python scripts/play.py --gn-mode prologue
+
+# --- Graphic Novel (text/headless) ---
+# No window required. Terminal output only.
+gn-text: ## Graphic Novel — text mode (case/novice)
+	uv run python scripts/graphic_novel.py --mode novice --speed 50
+
+gn-text-veteran: ## Graphic Novel — text mode (sil/veteran)
+	uv run python scripts/graphic_novel.py --mode veteran --speed 50
+
+gn-text-heretic: ## Graphic Novel — text mode (kas/heretic)
+	uv run python scripts/graphic_novel.py --mode heretic --speed 50
+
+gn-text-all: ## Graphic Novel — text mode (all 12 scenes)
+	uv run python scripts/graphic_novel.py --mode prologue --seed 42 --speed 50
+
 test-tcod: ## Test tcod font rendering
 	uv run python scripts/test_tcod.py
 

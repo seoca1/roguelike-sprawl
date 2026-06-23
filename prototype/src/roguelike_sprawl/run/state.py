@@ -58,10 +58,12 @@ from enum import StrEnum
 
 
 class Stage(StrEnum):
-    """Ordered stages of a single Run.
+    """Ordered stages of a single Run (aliased as Phase).
 
     Default first_jack mission flow:
       PENDING → MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → JACK_OUT → REWARD → COMPLETE
+
+    Phase is the new canonical name; Stage is kept for backward compatibility.
     """
 
     PENDING = "pending"  # Run not started (Hub: waiting for mission accept)
@@ -76,8 +78,35 @@ class Stage(StrEnum):
     FAILED = "failed"  # Player flatlined
 
 
+Phase = Stage
+
+
+class ChapterState(StrEnum):
+    """High-level story progression across a character Arc.
+
+    Each Chapter may contain multiple Phases. The Arc starts at PROLOGUE,
+    then cycles through IN_CHAPTER_N states. After the final chapter,
+    the player reaches an ENDING.
+    """
+
+    PROLOGUE = "prologue"  # Character intro (cinematic text, no gameplay)
+    IN_CHAPTER_1 = "in_chapter_1"
+    CHAPTER_1_COMPLETE = "chapter_1_complete"
+    IN_CHAPTER_2 = "in_chapter_2"
+    CHAPTER_2_COMPLETE = "chapter_2_complete"
+    IN_CHAPTER_3 = "in_chapter_3"
+    CHAPTER_3_COMPLETE = "chapter_3_complete"
+    IN_CHAPTER_4 = "in_chapter_4"
+    CHAPTER_4_COMPLETE = "chapter_4_complete"
+    IN_CHAPTER_5 = "in_chapter_5"
+    CHAPTER_5_COMPLETE = "chapter_5_complete"
+    ENDING_A = "ending_a"
+    ENDING_B = "ending_b"
+    ENDING_C = "ending_c"
+
+
 class ObjectiveKind(StrEnum):
-    """What kind of in-game action satisfies a Stage.
+    """What kind of in-game action satisfies a Phase.
 
     Used to find the right node in the matrix and detect completion.
     """
@@ -361,6 +390,8 @@ class RunState:
     last_visited_node: str | None = None
     mission_id: str = "first_jack"
     started_at_ms: int = 0
+    chapter_state: ChapterState = ChapterState.PROLOGUE
+    current_phase_index: int = 0
 
     # --- Lifecycle ---
 
@@ -373,6 +404,8 @@ class RunState:
         self.last_visited_node = None
         self.mission_id = mission_id
         self.started_at_ms = 0
+        self.chapter_state = ChapterState.PROLOGUE
+        self.current_phase_index = 0
 
     def is_complete(self) -> bool:
         """Run is finished (success or failure)."""
@@ -493,6 +526,111 @@ class RunState:
     def mark_visited(self, node_id: str) -> None:
         """Record that the player visited a node (for path context)."""
         self.last_visited_node = node_id
+
+    # --- Chapter transitions ---
+
+    def start_chapter_1(self) -> None:
+        """Transition from PROLOGUE to IN_CHAPTER_1."""
+        self.chapter_state = ChapterState.IN_CHAPTER_1
+        self.current_stage = Stage.PENDING
+        self.reset_phase()
+
+    def complete_chapter_1(self) -> None:
+        """Mark Chapter 1 complete."""
+        self.chapter_state = ChapterState.CHAPTER_1_COMPLETE
+
+    def start_chapter_2(self) -> None:
+        """Transition from CHAPTER_1_COMPLETE to IN_CHAPTER_2."""
+        self.chapter_state = ChapterState.IN_CHAPTER_2
+        self.current_stage = Stage.PENDING
+        self.reset_phase()
+
+    def start_chapter_3(self) -> None:
+        """Transition from CHAPTER_2_COMPLETE to IN_CHAPTER_3."""
+        self.chapter_state = ChapterState.IN_CHAPTER_3
+        self.current_stage = Stage.PENDING
+        self.reset_phase()
+
+    def start_chapter_4(self) -> None:
+        """Transition from CHAPTER_3_COMPLETE to IN_CHAPTER_4."""
+        self.chapter_state = ChapterState.IN_CHAPTER_4
+        self.current_stage = Stage.PENDING
+        self.reset_phase()
+
+    def start_chapter_5(self) -> None:
+        """Transition from CHAPTER_4_COMPLETE to IN_CHAPTER_5."""
+        self.chapter_state = ChapterState.IN_CHAPTER_5
+        self.current_stage = Stage.PENDING
+        self.reset_phase()
+
+    def is_chapter_complete(self) -> bool:
+        """Check if current chapter is complete (chapter end phase)."""
+        return self.current_stage is Stage.COMPLETE
+
+    def is_in_chapter_1(self) -> bool:
+        """Player is currently in Chapter 1."""
+        return self.chapter_state is ChapterState.IN_CHAPTER_1
+
+    def is_in_chapter_2(self) -> bool:
+        """Player is currently in Chapter 2."""
+        return self.chapter_state is ChapterState.IN_CHAPTER_2
+
+    def is_in_chapter_3(self) -> bool:
+        """Player is currently in Chapter 3."""
+        return self.chapter_state is ChapterState.IN_CHAPTER_3
+
+    def is_in_chapter_4(self) -> bool:
+        """Player is currently in Chapter 4."""
+        return self.chapter_state is ChapterState.IN_CHAPTER_4
+
+    def is_in_chapter_5(self) -> bool:
+        """Player is currently in Chapter 5."""
+        return self.chapter_state is ChapterState.IN_CHAPTER_5
+
+    def complete_chapter_2(self) -> None:
+        """Mark Chapter 2 complete and advance to Chapter 3."""
+        self.chapter_state = ChapterState.CHAPTER_2_COMPLETE
+
+    def complete_chapter_3(self) -> None:
+        """Mark Chapter 3 complete and advance to Chapter 4."""
+        self.chapter_state = ChapterState.CHAPTER_3_COMPLETE
+
+    def complete_chapter_4(self) -> None:
+        """Mark Chapter 4 complete and advance to Chapter 5."""
+        self.chapter_state = ChapterState.CHAPTER_4_COMPLETE
+
+    def complete_chapter_5(self) -> None:
+        """Mark Chapter 5 complete."""
+        self.chapter_state = ChapterState.CHAPTER_5_COMPLETE
+
+    def is_at_prologue(self) -> bool:
+        """Player is currently in the Prologue."""
+        return self.chapter_state is ChapterState.PROLOGUE
+
+    def is_at_ending(self) -> bool:
+        """Player has reached an ending."""
+        return self.chapter_state in (
+            ChapterState.ENDING_A,
+            ChapterState.ENDING_B,
+            ChapterState.ENDING_C,
+        )
+
+    def advance_phase(self) -> int:
+        """Advance to the next phase. Returns the new phase index."""
+        self.current_phase_index += 1
+        return self.current_phase_index
+
+    def reset_phase(self) -> None:
+        """Reset phase index to 0 (for new chapter)."""
+        self.current_phase_index = 0
+
+    def get_phase_index(self) -> int:
+        """Get the current phase index (0-based)."""
+        return self.current_phase_index
+
+    def set_phase_index(self, index: int) -> None:
+        """Set the phase index (used when loading saves)."""
+        self.current_phase_index = index
 
 
 # --- Factory ---

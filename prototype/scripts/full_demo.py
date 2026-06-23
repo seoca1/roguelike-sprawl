@@ -77,10 +77,15 @@ def main() -> int:
         action="store_true",
         help="Manual combat (player uses skills)",
     )
+    parser.add_argument(
+        "--story-mode",
+        action="store_true",
+        help="Story-only mode: skip combat, auto-resolve ICE encounters as victories",
+    )
     args = parser.parse_args()
 
-    # Default: --auto-combat ON unless --interactive or --manual-combat
-    if not args.interactive and not args.manual_combat:
+    # Default: --auto-combat ON unless --interactive or --manual-combat or --story-mode
+    if not args.interactive and not args.manual_combat and not args.story_mode:
         args.auto_combat = True
 
     # Setup tcod with TTF (Korean-capable) or bitmap font
@@ -280,9 +285,15 @@ def main() -> int:
                                     run_state.objective_kind() is ObjectiveKind.ICE
                                     and not combat_started
                                 ):
-                                    state.action_menu_open = True
-                                    combat_started = True
-                                    print(f"\n=== ICE detected: {current_node.label} ===")
+                                    if args.story_mode:
+                                        # Story-mode: auto-resolve as victory
+                                        _story_mode_victory(state)
+                                        print(f"\n=== ICE defeated (story-mode): {current_node.label} ===")
+                                        combat_started = True
+                                    else:
+                                        state.action_menu_open = True
+                                        combat_started = True
+                                        print(f"\n=== ICE detected: {current_node.label} ===")
 
                             # Move toward target using cyberspace movement
                             at_stop = target_id is not None and state.current_node_id == target_id
@@ -407,6 +418,68 @@ def _advance_demo_stage(
         # Unknown scene → return to hub
         state.screen = ScreenKind.HUB
         state.cinematic_state = None
+
+
+def _story_mode_victory(state: AppState) -> None:
+    """Auto-resolve combat as victory (for story-mode demo).
+
+    Mimics the post-combat victory flow without entering combat screen:
+    - Awards ICE Shard + credits
+    - Marks ICE node as defeated
+    - Advances RunState if on DEFEAT_ICE stage
+    """
+    # Award rewards
+    if not hasattr(state, "inventory") or state.inventory is None:
+        state.inventory = {}
+    state.inventory["ice_shard"] = state.inventory.get("ice_shard", 0) + 1
+    state.status_messages.append(">>> VICTORY! (story-mode) Gained: 1x ICE Shard")
+    state.credits = getattr(state, "credits", 0) + 50
+    state.status_messages.append(">>> Gained: 50 credits")
+
+    # Progress mission objective (defeat)
+    from roguelike_sprawl.engine.mission_completion import update_mission_progress
+    update_mission_progress(state, "defeat", 1)
+
+    # Advance RunState: if we're on the DEFEAT_ICE stage, this
+    # victory satisfies the objective.
+    from roguelike_sprawl.run import Stage, check_combat_victory, ensure_run_state
+    run_state = ensure_run_state(state)
+    if check_combat_victory(run_state):
+        run_state.mark_advance()
+        state.status_messages.append(f">>> Stage complete: {run_state.current_info().title}")
+        if run_state.current_stage is Stage.JACK_OUT:
+            # Jack out after ICE defeat
+            from roguelike_sprawl.engine.jack_out_view import enter_jack_out
+            enter_jack_out(state)
+            _defeat_current_ice_node(state)
+            return
+
+    # Mark current ICE node as defeated - removed from dungeon
+    _defeat_current_ice_node(state)
+    state.screen = ScreenKind.MATRIX
+    state.message = "ICE defeated! (story-mode)"
+
+
+def _defeat_current_ice_node(state: AppState) -> None:
+    """Mark the current ICE node as defeated and remove from graph."""
+    if state.matrix is None or state.current_node_id is None:
+        return
+    defeated_id = state.current_node_id
+    state.defeated_nodes.add(defeated_id)
+    state.status_messages.append(f">>> ICE [{defeated_id}] destroyed")
+    # Remove node from graph
+    from roguelike_sprawl.matrix.graph import MatrixGraph
+    state.matrix = MatrixGraph(
+        nodes=tuple(n for n in state.matrix.nodes if n.id != defeated_id),
+        edges=tuple(e for e in state.matrix.edges if e.src != defeated_id and e.dst != defeated_id),
+        entry_id=state.matrix.entry_id,
+    )
+    if state.matrix is not None and len(state.matrix.nodes) > 0:
+        neighbors = list(state.matrix.neighbors(defeated_id))
+        if neighbors:
+            state.current_node_id = neighbors[0].id
+        else:
+            state.current_node_id = state.matrix.entry_id
 
 
 def _start_matrix(state: AppState) -> None:

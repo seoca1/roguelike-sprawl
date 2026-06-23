@@ -1,10 +1,16 @@
-"""Death and restart system (Pillar 3: The Flatline).
+"""Death and restart system (Pillar 3: The Flatline, ADR-0040).
 
 When a player's HP hits 0 in combat (or other circumstances), they
 "flatline" — a story moment, not just a game over. The death screen
 shows the iconic X head (avatar flatline state) and offers:
 - [ENTER] Jack out (return to hub, lose inventory, restart mission)
 - [Q] Quit game
+
+ADR-0040 extends this with:
+- DEATH_SUMMARY screen: jockey's final report + Sprawl's epitaph
+- 3 restart options: new jockey / same jockey / Hall of Dead
+- Hall of Dead Jockeys archive (persistent across runs)
+- Runner statistics (total_runs, total_deaths, longest_run)
 
 Death is not a hard reset — the player's grade, story progress, and
 unlocked missions persist. Only the current run is lost.
@@ -15,12 +21,108 @@ from __future__ import annotations
 import tcod.console
 
 from ..audio import sound_manager as _sm_module
+from .jockey_history import (
+    DeceasedJockey,
+    JockeyHistory,
+    build_deceased_from_state,
+    render_death_summary_lines,
+    render_hall_of_dead_lines,
+)
 from .settings_ui import get_volume
 from .state import AppState, ScreenKind
 
 
+def _get_history() -> JockeyHistory:
+    """Get the singleton JockeyHistory instance."""
+    return JockeyHistory()
+
+
+def _char_label(character_id: str) -> str:
+    """Return the human-readable character label."""
+    labels = {
+        "novice": "케이 (K) — Novice",
+        "veteran": "실 (Sil) — Veteran",
+        "heretic": "카스 (Kas) — Heretic",
+    }
+    return labels.get(character_id, character_id)
+
+
+def _inventory_snapshot(state: AppState) -> tuple[str, ...]:
+    """Get the current inventory as a sorted tuple of item ids."""
+    inv = state.inventory or {}
+    if isinstance(inv, dict):
+        return tuple(sorted(inv.keys()))
+    return tuple(sorted(inv))
+
+
+def _mission_count(state: AppState) -> int:
+    """Count missions completed in this run (approx from state)."""
+    if state.completed_missions:
+        return len(state.completed_missions)
+    return state.mission_progress.get("extract_data", 0) + state.mission_progress.get("defeat", 0)
+
+
+def _playtime_minutes(state: AppState) -> int:
+    """Estimate playtime in minutes from demo_elapsed_s."""
+    return max(0, int(state.demo_elapsed_s / 60))
+
+
+def _data_recovered(state: AppState) -> int:
+    """Estimate data recovered from mission progress."""
+    return int(state.mission_progress.get("extract_data", 0) * 100)
+
+
+def build_deceased_jockey_from_state(
+    state: AppState,
+    *,
+    timestamp_ms: int | None = None,
+    seed: int | None = None,
+) -> DeceasedJockey:
+    """Build a DeceasedJockey from the current AppState (ADR-0040).
+
+    Args:
+        state: The current app state at time of death.
+        timestamp_ms: Optional timestamp (defaults to now).
+        seed: Optional seed for epitaph selection.
+
+    Returns:
+        The DeceasedJockey record to be archived.
+    """
+    char_id = getattr(state, "character_id", "novice")
+    name = _char_label(char_id)
+    grade = int(getattr(state, "player_grade", 1))
+
+    died_at_node = ""
+    if state.current_node_id:
+        died_at_node = state.current_node_id
+    elif state.matrix and getattr(state.matrix, "entry_id", None):
+        died_at_node = state.matrix.entry_id
+
+    died_at_mission = ""
+    if state.current_mission is not None:
+        died_at_mission = getattr(state.current_mission, "id", "") or getattr(
+            state.current_mission, "title", ""
+        )
+    elif state.run_state is not None:
+        died_at_mission = state.run_state.mission_id
+
+    return build_deceased_from_state(
+        name=name,
+        character_id=char_id,
+        grade=grade,
+        died_at_node=died_at_node,
+        died_at_mission=died_at_mission,
+        inventory=_inventory_snapshot(state),
+        missions_completed=_mission_count(state),
+        data_recovered=_data_recovered(state),
+        playtime_minutes=_playtime_minutes(state),
+        timestamp_ms=timestamp_ms,
+        seed=seed,
+    )
+
+
 def trigger_death(state: AppState, reason: str = "Combat") -> None:
-    """Trigger player death (flatline).
+    """Trigger player death (flatline) — ADR-0040 extended.
 
     Args:
         state: App state.
@@ -28,6 +130,7 @@ def trigger_death(state: AppState, reason: str = "Combat") -> None:
     """
     state.is_dead = True
     state.death_reason = reason
+    state.death_cause = reason
     state.screen = ScreenKind.DEATH
     state.status_messages.append(f">>> FLATLINE: {reason}")
     state.status_messages.append(">>> Press ENTER to jack out")
@@ -38,6 +141,21 @@ def trigger_death(state: AppState, reason: str = "Combat") -> None:
     except Exception:
         pass
 
+    # Build a DeceasedJockey from current state and add to archive (ADR-0040)
+    try:
+        jockey = build_deceased_jockey_from_state(state)
+        history = _get_history()
+        history.add(jockey)
+        state.last_jockey_summary_id = jockey.jockey_id
+        # Bump counters
+        state.total_runs += 1
+        state.total_deaths += 1
+        state.jockey_history_loaded = True
+        state.status_messages.append(f">>> Jockey archived: {jockey.name}")
+        state.status_messages.append(f'>>> "{jockey.epitaph}"')
+    except Exception as e:  # pragma: no cover - defensive
+        state.status_messages.append(f">>> Archive failed: {e}")
+
     # Auto-save on death (player can choose to reload and try again)
     try:
         from .save_manager import SaveManager
@@ -47,6 +165,14 @@ def trigger_death(state: AppState, reason: str = "Combat") -> None:
         state.status_messages.append(">>> Auto-saved death state to slot 3")
     except Exception:
         pass
+
+
+def advance_to_death_summary(state: AppState) -> None:
+    """Transition from DEATH to DEATH_SUMMARY screen (ADR-0040).
+
+    Should be called after the DEATH screen has been shown briefly.
+    """
+    state.screen = ScreenKind.DEATH_SUMMARY
 
 
 def jack_out_to_hub(state: AppState) -> None:
@@ -89,6 +215,56 @@ def jack_out_to_hub(state: AppState) -> None:
     state.screen = ScreenKind.HUB
     state.status_messages.append(">>> Jacked out. Returning to hub...")
     state.status_messages.append(">>> Inventory lost. Grade preserved.")
+
+
+def restart_with_new_jockey(state: AppState, new_character_id: str) -> None:
+    """Restart with a different jockey (ADR-0040).
+
+    Args:
+        state: App state.
+        new_character_id: "novice" | "veteran" | "heretic" (must differ from current).
+    """
+    if new_character_id == state.character_id:
+        # Same character — use jack_out_to_hub
+        jack_out_to_hub(state)
+        return
+
+    # Reset character
+    state.character_id = new_character_id
+    state.player_grade = 1  # New jockey starts at grade 1
+    state.player_hp = state.player_max_hp if state.player_max_hp > 0 else 100
+    state.player_ppl = 0
+    state.inventory = {}
+    state.equipment_loadout = None
+    state.completed_missions = set()
+    state.mission_progress = {}
+
+    # Clear matrix
+    state.matrix = None
+    state.current_node_id = None
+    state.exploration = None
+    state.combat_state = None
+    state.action_menu_open = False
+
+    # Clear chapter/graphic novel state
+    state.chapter_id = f"chapter_{new_character_id}"
+    state.chapter_progress = 0.0
+    state.chapter_elapsed_ms = 0.0
+    state.chapter_typed_chars = 0
+
+    # Reset run state to PENDING (new run)
+    if state.run_state is not None:
+        state.run_state.reset(mission_id="first_jack")
+
+    # Player is alive
+    state.is_dead = False
+    state.death_reason = ""
+    state.death_cause = ""
+
+    # Go to character select first
+    state.screen = ScreenKind.CHARACTER_SELECT
+    state.status_messages.append(f">>> New jockey: {_char_label(new_character_id)}")
+    state.status_messages.append(">>> Sprawl has a fresh face. Pick your poison.")
 
 
 def render_death_screen(
@@ -168,7 +344,7 @@ def render_death_screen(
     )
 
     # Options
-    option1 = "[ENTER] Jack Out — Return to Hub"
+    option1 = "[ENTER] Continue — See Summary"
     option2 = "[Q] Quit Game"
     console.print(
         x=(SCREEN_WIDTH - len(option1)) // 2,
@@ -193,11 +369,108 @@ def render_death_screen(
     )
 
 
+def render_death_summary_screen(
+    console: tcod.console.Console,
+    state: AppState,
+    width: int = 80,
+    height: int = 30,
+) -> None:
+    """Render the DEATH_SUMMARY screen (ADR-0040).
+
+    Shows the deceased jockey's final report + Sprawl's epitaph +
+    3 restart options.
+    """
+    console.clear()
+
+    # Find the most recent jockey
+    history = _get_history()
+    recent = history.recent(1)
+    jockey: DeceasedJockey | None = recent[0] if recent else None
+
+    # Top bar
+    console.print(0, 0, "═" * width)
+    title = "FLATLINE" if not jockey else "> FLATLINE <"
+    console.print((width - len(title)) // 2, 0, f" {title} ")
+    console.print(0, 1, "─" * width)
+
+    if jockey is None:
+        # Fallback if no jockey found
+        console.print(2, 3, "(Jockey archive not available)")
+        console.print(0, height - 4, "─" * width)
+        opts = [
+            "[1] HUB",
+            "[2] 메인메뉴" if state.character_id == "novice" else "[2] Main menu",
+        ]
+        for i, opt in enumerate(opts):
+            console.print(2, height - 3 + i, opt)
+        return
+
+    # Render summary lines (default Korean; en/ko toggle via state)
+    summary_lines = render_death_summary_lines(jockey, lang="ko")
+    y = 3
+    for line in summary_lines:
+        if y >= height - 8:
+            break
+        console.print(2, y, line)
+        y += 1
+
+    # Bottom options
+    console.print(0, height - 8, "─" * width)
+    opts = [
+        "[1] 새 자키 (다른 자키 선택)",
+        "[2] 같은 자키 (HUB로)",
+        "[3] Hall of Dead Jockeys",
+        "[4] 메인메뉴",
+    ]
+    for i, opt in enumerate(opts):
+        console.print(2, height - 7 + i, opt)
+
+
+def render_hall_of_dead_screen(
+    console: tcod.console.Console,
+    state: AppState,
+    width: int = 80,
+    height: int = 30,
+) -> None:
+    """Render the HALL_OF_DEAD screen (ADR-0040).
+
+    Shows the archive of deceased jockeys.
+    """
+    from roguelike_sprawl.i18n import Translator  # noqa: F401
+
+    console.clear()
+    history = _get_history()
+    selected = state.hall_of_dead_selected
+
+    # Top bar
+    console.print(0, 0, "═" * width)
+    console.print(0, 1, "─" * width)
+
+    lines = render_hall_of_dead_lines(history, selected=selected, lang="ko")
+    y = 2
+    for line in lines:
+        if y >= height - 3:
+            break
+        console.print(2, y, line)
+        y += 1
+
+    # Footer
+    console.print(0, height - 3, "─" * width)
+    console.print(
+        2,
+        height - 2,
+        "[↑/↓] navigate   [ENTER] detail   [ESC] back",
+    )
+
+
 def handle_death_input(
     event: tcod.event.Event,
     state: AppState,
 ) -> bool:
-    """Handle input on the death screen. Returns False to quit."""
+    """Handle input on the death screen. Returns False to quit.
+
+    ADR-0040: ENTER advances to DEATH_SUMMARY.
+    """
     import tcod.event
 
     if not isinstance(event, tcod.event.KeyDown):
@@ -207,7 +480,8 @@ def handle_death_input(
         return False
 
     if event.sym in (tcod.event.KeySym.RETURN, tcod.event.KeySym.SPACE, tcod.event.KeySym.KP_ENTER):
-        jack_out_to_hub(state)
+        # Advance to DEATH_SUMMARY
+        advance_to_death_summary(state)
         return True
 
     if event.sym is tcod.event.KeySym.M:
@@ -250,3 +524,90 @@ def handle_death_input(
         return True
 
     return True
+
+
+def handle_death_summary_input(
+    event: tcod.event.Event,
+    state: AppState,
+) -> str:
+    """Handle input on DEATH_SUMMARY screen.
+
+    Returns:
+        "" if no action, otherwise one of:
+        - "new_jockey" (player pressed 1)
+        - "same_jockey" (player pressed 2)
+        - "hall_of_dead" (player pressed 3)
+        - "menu" (player pressed 4)
+    """
+    import tcod.event
+
+    if not isinstance(event, tcod.event.KeyDown):
+        return ""
+
+    if event.sym is tcod.event.KeySym.N1:
+        return "new_jockey"
+    if event.sym is tcod.event.KeySym.N2:
+        return "same_jockey"
+    if event.sym is tcod.event.KeySym.N3:
+        return "hall_of_dead"
+    if event.sym in (tcod.event.KeySym.N4, tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+        return "menu"
+    return ""
+
+
+def handle_hall_of_dead_input(
+    event: tcod.event.Event,
+    state: AppState,
+) -> str:
+    """Handle input on HALL_OF_DEAD screen.
+
+    Returns:
+        "" if no action, otherwise:
+        - "up" / "down" / "back" (navigation)
+    """
+    import tcod.event
+
+    if not isinstance(event, tcod.event.KeyDown):
+        return ""
+
+    if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+        return "back"
+    if event.sym in (tcod.event.KeySym.UP, tcod.event.KeySym.K):
+        return "up"
+    if event.sym in (tcod.event.KeySym.DOWN, tcod.event.KeySym.J):
+        return "down"
+    if event.sym in (tcod.event.KeySym.RETURN, tcod.event.KeySym.SPACE):
+        return "detail"
+    return ""
+
+
+def handle_death_summary_choice(
+    state: AppState,
+    choice: str,
+) -> None:
+    """Apply the player's choice from DEATH_SUMMARY.
+
+    Args:
+        state: App state.
+        choice: "new_jockey" | "same_jockey" | "hall_of_dead" | "menu"
+    """
+    if choice == "new_jockey":
+        # Pick a different character (any of the 3, not the current one)
+        available = [c for c in ("novice", "veteran", "heretic") if c != state.character_id]
+        if available:
+            # Default to first non-current
+            new_char = available[0]
+            restart_with_new_jockey(state, new_char)
+        else:
+            # All 3 same (shouldn't happen) — fall back to HUB
+            jack_out_to_hub(state)
+    elif choice == "same_jockey":
+        jack_out_to_hub(state)
+    elif choice == "hall_of_dead":
+        state.screen = ScreenKind.HALL_OF_DEAD
+        state.hall_of_dead_selected = 0
+    elif choice == "menu":
+        state.screen = ScreenKind.MENU
+        state.is_dead = False
+        state.death_reason = ""
+        state.death_cause = ""

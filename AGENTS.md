@@ -117,20 +117,40 @@ prototype/
 │       ├── i18n/           # 번역 (translator)
 │       ├── portraits/      # ASCII Portraits (manager)
 │       ├── data/           # 데이터 로더
-│       ├── matrix/         # (Phase 5) 사이버스페이스
-│       ├── combat/         # (Phase 5) RT-MS 전투
-│       ├── programs/       # (Phase 5) 프로그램
-│       └── jobs/           # (Phase 5) 의뢰
+│       ├── matrix/         # 사이버스페이스 (노드 그래프)
+│       ├── combat/         # RT-MS 전투
+│       ├── programs/       # 프로그램
+│       ├── jobs/           # 의뢰
+│       ├── save_progress.py  # 세이브 진도 조회 (ADR-0032)
+│       ├── graphic_novel_view.py  # 그래픽 노블 자동플레이 (ADR-0032, 0041-0044)
+│       ├── graphic_novel_audio.py  # 씬 사운드 큐 (ADR-0043)
+│       ├── graphic_novel_save.py   # GN 이어서 읽기 (ADR-0044)
+│       └── jockey_history.py       # Hall of Dead 자키 아카이브 (ADR-0040)
 ├── tests/
 │   ├── conftest.py
-│   └── unit/               # 단위 테스트
+│   └── unit/               # 단위 테스트 (2257 tests)
 ├── data/
 │   ├── i18n/               # en.json, ko.json
 │   ├── portraits/          # portraits.json
 │   ├── programs/           # programs.json
+│   ├── scenes/             # 그래픽 노블 씬 (3 캐릭터 × 4 씬, ADR-0032 + ADR-0041 4× 확장)
+│   ├── art/                # ASCII 아트 (portraits.json, backgrounds.json)
+│   ├── saves/              # GNProgress save 파일 (ADR-0044)
+│   ├── sounds_test/        # 46개 자동 생성 WAV (ADR-0043)
 │   └── fonts/              # libtcod terminal font
 ├── scripts/
-│   └── download_font.py    # 폰트 다운로드
+│   ├── download_font.py    # 폰트 다운로드
+│   ├── play.py             # 풀 게임 데모 (--gn-mode로 그래픽 노블 진입)
+│   ├── demo.py             # 사이클 데모
+│   ├── demo_all.py         # 풀 게임 + 그래픽 노블 통합
+│   ├── graphic_novel.py    # 그래픽 노블 단독 (--continue, --no-cards, --card-ms)
+│   ├── combat_simulator.py # 단일 전투 검증
+│   ├── combat_grades.py    # 5등급 진행 비교
+│   ├── combat_effects_demo.py  # 5-Layer VFX 10-씬
+│   ├── death_demo.py       # Death cycle 단독
+│   ├── death_in_action_demo.py  # Combat → Death 5-Phase 풀사이클
+│   ├── full_demo.py        # Prologue → Briefing → Matrix → Combat
+│   └── scripts/README.md   # 모든 데모 실행 가이드
 └── .github/workflows/
     └── ci.yml              # GitHub Actions CI
 ```
@@ -174,10 +194,16 @@ uv run python scripts/play.py --no-clear
 uv run python scripts/play.py --lang ko
 ```
 
-추가 도구:
-- `scripts/combat_simulator.py` — 단일 전투 검증
-- `scripts/combat_grades.py` — 5등급 진행 비교
-- `scripts/demo.py` — 2분 전체 플레이
+추가 도구 (전체 가이드: `scripts/README.md`):
+- `scripts/combat_simulator.py` — 단일 전투 검증 (PPL/ZDR/enemy/strategy 옵션)
+- `scripts/combat_grades.py` — 5등급 전투 진행 비교 (테이블 출력)
+- `scripts/combat_effects_demo.py` — 5-Layer VFX 10-씬 검증
+- `scripts/death_demo.py` — Death 사이클 단독 (DEATH_SUMMARY/HALL_OF_DEAD)
+- `scripts/death_in_action_demo.py` — Combat → Death 5-Phase 풀사이클
+- `scripts/graphic_novel.py` — 그래픽 노블 자동재생 (`--continue` 이어서 읽기)
+- `scripts/demo.py` — 2분 전체 플레이 (HUB + Matrix 사이클)
+- `scripts/demo_all.py` — 풀 게임 + 그래픽 노블 통합
+- `scripts/visual_demo.py` — 8개 시스템 한 번에 시각 검증
 
 ### 코드 변경 시 워크플로우
 1. 관련 `design/systems/*.md` 와 `testcases/*.md` 확인
@@ -222,3 +248,59 @@ uv run python scripts/play.py --lang ko
 - [ ] `log.md` 에 이번 세션 작업이 기록되었는가
 - [ ] 영향 받는 `design/`/`testcases/`/`decisions/`가 동기화되었는가
 - [ ] raw에서 읽은 자료는 모두 인용되었는가
+
+## 10. 그래픽 노블 모드 (ADR-0032)
+
+게임 시작 시 메인메뉴(5 옵션)에서 진입 가능한 비주얼 노블 자동플레이.
+
+### 메인메뉴 옵션 (5)
+1. **NEW RUN** — 자키 선택부터 일반 게임플레이
+2. **GRAPHIC NOVEL** — 스토리 자동재생 (그래픽 노블 모드 진입)
+3. **CONTINUE** — 마지막 세이브 로드 (없으면 비활성)
+4. **SETTINGS**
+5. **CREDITS**
+
+### 그래픽 노블 모드 옵션 (5)
+1. **PROLOGUE** — 3명 캐릭터 × 4 씬 = 12 씬 자동재생 (랜덤 셔플)
+2. **케이 (K) — Novice** — 4 씬
+3. **실 (Sil) — Veteran** — 4 씬
+4. **카스 (Kas) — Heretic** — 4 씬
+5. **BACK** — 메인메뉴
+
+### 화면 흐름
+```
+MENU → GRAPHIC_NOVEL_MENU → GRAPHIC_NOVEL → SAVED_PROGRESS → MENU
+```
+
+### 주요 명령
+```bash
+# 데모
+uv run python scripts/graphic_novel.py --mode prologue --seed 42
+uv run python scripts/graphic_novel.py --mode veteran --lang ko
+uv run python scripts/play.py --gn-mode novice
+uv run python scripts/demo.py --gn-mode prologue
+uv run python scripts/demo.py --menu-option 2 --duration 30   # Mode 2: Graphic Novel 자동 재생
+
+# 데이터
+data/scenes/{case,sil,kas}/      # 12 씬 JSON (3 캐릭터 × 4 씬)
+data/art/portraits/portraits.json  # 15 ASCII 포트레잇 (10×14)
+data/art/backgrounds/backgrounds.json  # 12 ASCII 배경 (40×16)
+
+# 디자인
+design/scenario/graphic-novel.md  # 전체 명세
+decisions/0032-graphic-novel-mode.md  # 결정 문서
+
+# 테스트
+tests/unit/test_graphic_novel_view.py  # 40 tests
+tests/unit/test_save_progress.py        # 16 tests
+tests/unit/test_menu_extended.py        # 31 tests
+```
+
+### 키 매핑 (재생 중)
+| 키 | 동작 |
+| --- | --- |
+| (자동) | duration_ms 후 다음 대사/씬 |
+| `Space` / `→` | 현재 대사 즉시 완료 |
+| `S` | 현재 씬 스킵 |
+| `P` | 일시정지/재개 |
+| `Esc` / `Q` | 그래픽 노블 종료 → SAVED_PROGRESS |

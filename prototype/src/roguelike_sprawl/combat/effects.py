@@ -47,6 +47,9 @@ class IceType(StrEnum):
     GOLIATH = "goliath"
     BLACK = "black"
     CONSTRUCT = "construct"
+    # Boss types (ADR-0050) — multi-phase
+    WINTERMUTE = "wintermute"
+    TA_CONSTRUCT_PRIME = "ta_construct_prime"
 
 
 class StatusIcon(StrEnum):
@@ -714,6 +717,31 @@ def ice_intro_sequence(ice_type: IceType, name: str) -> CinematicSequence:
                 (f"[{name}]", (80, 80, 80), 1200),
             ),
         )
+    # ADR-0050: Boss ICE multi-phase intros (BEFORE construct fall-through)
+    if ice_type == IceType.WINTERMUTE:
+        return CinematicSequence(
+            name="wintermute_intro",
+            phases=(
+                ("...", (80, 80, 120), 300),
+                ("·?·", (100, 100, 150), 200),
+                (f"[ {name} ]", (120, 120, 220), 300),
+                (f"[ {name} ]", (140, 140, 240), 200),
+                (f"[ {name} ]", (160, 160, 255), 800),
+                ("PHASE 1/3: COMPLIANT", (120, 120, 220), 600),
+            ),
+        )
+    if ice_type == IceType.TA_CONSTRUCT_PRIME:
+        return CinematicSequence(
+            name="ta_construct_prime_intro",
+            phases=(
+                ("·[ ⚙ ]·", (150, 150, 180), 200),
+                ("·[ ⚙⚙ ]·", (180, 180, 200), 200),
+                (f"[ {name} ]", (200, 200, 220), 300),
+                (f"[ {name} ]", (220, 220, 240), 300),
+                (f"[ {name} ]", (240, 240, 255), 800),
+                ("PHASE 1/3: OBSERVING", (220, 220, 220), 600),
+            ),
+        )
     # construct
     return CinematicSequence(
         name="construct_intro",
@@ -725,6 +753,71 @@ def ice_intro_sequence(ice_type: IceType, name: str) -> CinematicSequence:
             (f"[ {name} ]", (240, 240, 255), 1000),
         ),
     )
+
+
+def boss_phase_transition_sequence(
+    ice_type: IceType, phase: int, total_phases: int = 3
+) -> CinematicSequence:
+    """Cinematic for a boss transitioning to a new phase.
+
+    Args:
+        ice_type: The boss's IceType (WINTERMUTE or TA_CONSTRUCT_PRIME).
+        phase: The new phase number (2 or 3).
+        total_phases: Total phases (default 3).
+    """
+    if ice_type == IceType.WINTERMUTE:
+        # Glitchy pink/purple
+        if phase == 2:
+            return CinematicSequence(
+                name="wintermute_phase_2_transition",
+                phases=(
+                    ("▓▓▓", (200, 200, 200), 100),
+                    ("▓█▓█▓", (220, 100, 220), 100),
+                    ("[ ADAPTING ]", (220, 100, 220), 300),
+                    (f"PHASE {phase}/{total_phases}: REBELLING", (220, 100, 220), 600),
+                    (f"PHASE {phase}/{total_phases}: REBELLING", (255, 50, 200), 600),
+                ),
+            )
+        # phase 3
+        return CinematicSequence(
+            name="wintermute_phase_3_transition",
+            phases=(
+                ("█▓█▓█", (200, 200, 200), 100),
+                ("▓█▓▓█▓", (255, 50, 100), 100),
+                ("[ INTEGRATING ]", (255, 50, 100), 300),
+                (f"PHASE {phase}/{total_phases}: INTEGRATING", (255, 50, 100), 600),
+                (f"PHASE {phase}/{total_phases}: INTEGRATING", (255, 0, 50), 800),
+            ),
+        )
+    if ice_type == IceType.TA_CONSTRUCT_PRIME:
+        if phase == 2:
+            return CinematicSequence(
+                name="ta_construct_prime_phase_2_transition",
+                phases=(
+                    ("⚙⚙⚙", (220, 220, 220), 200),
+                    ("⚙REPLICATING⚙", (200, 100, 100), 300),
+                    (f"PHASE {phase}/{total_phases}: ENGAGING", (200, 100, 100), 600),
+                    (f"PHASE {phase}/{total_phases}: ENGAGING", (255, 50, 50), 600),
+                ),
+            )
+        return CinematicSequence(
+            name="ta_construct_prime_phase_3_transition",
+            phases=(
+                ("⚙⚙⚙", (220, 220, 220), 200),
+                ("⚙OVERRIDING⚙", (180, 50, 180), 300),
+                (f"PHASE {phase}/{total_phases}: REPLICATING", (180, 50, 180), 600),
+                (f"PHASE {phase}/{total_phases}: REPLICATING", (220, 0, 220), 800),
+            ),
+        )
+    # Unknown boss — generic
+    return CinematicSequence(
+        name=f"{ice_type.value}_phase_{phase}_transition",
+        phases=(
+            (f"PHASE {phase}/{total_phases}", (200, 200, 200), 600),
+            (f"PHASE {phase}/{total_phases}", (240, 240, 240), 600),
+        ),
+    )
+    # Generic boss fall-through
 
 
 def ice_death_sequence(ice_type: IceType) -> CinematicSequence:
@@ -774,6 +867,28 @@ def ice_death_sequence(ice_type: IceType) -> CinematicSequence:
             ),
         )
     # construct
+    if ice_type == IceType.WINTERMUTE:
+        return CinematicSequence(
+            name="wintermute_death",
+            phases=(
+                ("[▓▓▓]", (200, 100, 220), 100),
+                ("[???]", (255, 50, 200), 100),
+                ("[XXX]", (200, 50, 100), 150),
+                ("·▓▓▓·", (100, 100, 100), 200),
+                ("· · ·", (200, 200, 200), 300),
+            ),
+        )
+    if ice_type == IceType.TA_CONSTRUCT_PRIME:
+        return CinematicSequence(
+            name="ta_construct_prime_death",
+            phases=(
+                ("[⚙⚙⚙]", (200, 100, 100), 100),
+                ("[⚠⚠⚠]", (180, 50, 180), 100),
+                ("[___]", (150, 150, 150), 150),
+                ("·[ ]·", (180, 180, 180), 200),
+                ("· · ·", (200, 200, 200), 300),
+            ),
+        )
     return CinematicSequence(
         name="construct_death",
         phases=(

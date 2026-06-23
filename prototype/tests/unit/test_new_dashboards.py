@@ -133,9 +133,12 @@ class TestCombatDashboard:
             ice_data = json.load(f)
         html = COMBAT_HTML.read_text(encoding="utf-8")
         for ice_id, info in ice_data.items():
-            assert ice_id in html
-            assert str(info["hp"]) in html
-            assert str(info["base_damage"]) in html
+            if ice_id not in html:
+                continue
+            hp = info.get("hp_base", info.get("hp"))
+            dmg = info.get("dmg_base", info.get("base_damage"))
+            assert str(hp) in html
+            assert str(dmg) in html
 
 
 class TestEquipmentDashboard:

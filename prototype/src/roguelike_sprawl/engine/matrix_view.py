@@ -49,6 +49,7 @@ from .layout import (
     draw_controls,
     draw_dividers,
     draw_footer,
+    draw_message_log,
     draw_side,
     draw_title,
     make_shell,
@@ -97,8 +98,23 @@ def _draw_box(
     zdr: int,
     status: Status,
     is_current: bool,
+    direction_hints: dict[str, str] | None = None,
 ) -> None:
-    """Draw one full-visibility node box."""
+    """Draw one full-visibility node box.
+
+    Args:
+        console: tcod console.
+        main: Main region.
+        col: Column in main region.
+        row: Row in main region.
+        label: Node label.
+        zdr: Zone Difficulty Rating.
+        status: Status.
+        is_current: Whether this is the player's current node.
+        direction_hints: For current node — map of direction code to glyph shown
+            on the box edge. Direction codes: "L", "R", "U", "D".
+            E.g. {"L": "←", "U": "↑"} for neighbors on the left and up.
+    """
     # Current node: bright cyan/yellow, double border effect
     # Other nodes: normal gray
     if is_current:
@@ -135,7 +151,7 @@ def _draw_box(
         fg=fg_box,
     )
 
-    # Draw horizontal borders
+    # Draw horizontal borders (with directional hint chars if applicable)
     for c in range(abs_x + 1, abs_x + BOX_WIDTH - 1):
         console.print(x=c, y=abs_y, string=border_chars["horiz"], fg=fg_box)
         console.print(x=c, y=abs_y + BOX_HEIGHT - 1, string=border_chars["horiz"], fg=fg_box)
@@ -192,6 +208,29 @@ def _draw_box(
                 string=you_here,
                 fg=(255, 255, 0),
             )
+
+    # Direction hints — overlay arrow glyphs on the border edges where a
+    # neighboring node exists. This lets the player see at a glance which
+    # arrow keys will move them somewhere.
+    if is_current and direction_hints:
+        hint_color = (200, 255, 200)  # Light green for hints
+        cx = abs_x + BOX_WIDTH // 2  # center x
+        cy = abs_y + BOX_HEIGHT // 2  # center y
+        for code, glyph in direction_hints.items():
+            if code == "L":
+                # Left edge midpoint
+                console.print(x=abs_x, y=cy, string=glyph, fg=hint_color, bg=bg_label)
+            elif code == "R":
+                console.print(
+                    x=abs_x + BOX_WIDTH - 1, y=cy, string=glyph, fg=hint_color, bg=bg_label
+                )
+            elif code == "U":
+                # Top edge midpoint
+                console.print(x=cx, y=abs_y, string=glyph, fg=hint_color, bg=bg_label)
+            elif code == "D":
+                console.print(
+                    x=cx, y=abs_y + BOX_HEIGHT - 1, string=glyph, fg=hint_color, bg=bg_label
+                )
 
 
 def _draw_box_fog(
@@ -394,6 +433,26 @@ def render_matrix(
             continue
         _draw_edge_line(console, main_r, sp, dp)
 
+    # Compute direction hints for the current node (ADR-0045)
+    direction_hints: dict[str, str] = {}
+    if state.current_node_id:
+        cx, cy = layouts.get(state.current_node_id, (0, 0))
+        for nbr in matrix.neighbors(state.current_node_id):
+            np = layouts.get(nbr.id)
+            if np is None:
+                continue
+            nx, ny = np
+            dx, dy = nx - cx, ny - cy
+            # Only cardinal hints for clarity
+            if dx < 0 and abs(dx) >= abs(dy):
+                direction_hints.setdefault("L", "◄")
+            elif dx > 0 and abs(dx) >= abs(dy):
+                direction_hints.setdefault("R", "►")
+            elif dy < 0 and abs(dy) > abs(dx):
+                direction_hints.setdefault("U", "▲")
+            elif dy > 0 and abs(dy) > abs(dx):
+                direction_hints.setdefault("D", "▼")
+
     # Nodes
     for node in matrix.nodes:
         pos = layouts.get(node.id)
@@ -416,32 +475,43 @@ def render_matrix(
             node_zdr(node),
             node_status(node, ppl),
             is_current=(node.id == state.current_node_id),
+            direction_hints=direction_hints if node.id == state.current_node_id else None,
         )
 
-    # Side: Current node status + minimap
+    # Side: Current node status + node selection list
     if zone is not None:
+        # Show adjacent node selection list (cursor-based navigation)
+        neighbors = _adjacent_nodes_list(matrix, state.current_node_id) if matrix and state.current_node_id else []
+        state.matrix_nav_index = max(0, min(state.matrix_nav_index, len(neighbors) - 1)) if neighbors else 0
+
         side_lines = [
             "=== CURRENT NODE ===",
             f"Name: {zone.label}",
             f"Type: {_short_kind(zone.kind)}",
             f"ZDR: {node_zdr(zone)} | Status: {st.value.upper()}",
             "",
-            "=== WHAT TO DO ===",
         ]
 
-        # Context-specific instructions
-        if zone.kind is NodeKind.DATA:
-            side_lines.append("→ SPACE: Extract data")
-        elif zone.kind is NodeKind.ICE:
-            side_lines.append("→ SPACE: Engage ICE")
-        elif zone.kind is NodeKind.EXIT:
-            side_lines.append("→ SPACE: Jack out")
+        # Node selection list with cursor
+        if neighbors:
+            side_lines.append("=== MOVE TO ===")
+            for i, n in enumerate(neighbors):
+                cursor = ">" if i == state.matrix_nav_index else " "
+                side_lines.append(f"{cursor} {n.label} ({_short_kind(n.kind)})")
+            side_lines.extend([
+                "",
+                "[↑↓] Select  [Enter] Move",
+                "[SPACE] Action menu",
+            ])
         else:
-            side_lines.append("→ SPACE: Scan node")
+            side_lines.extend([
+                "=== WHAT TO DO ===",
+                "",
+                "[SPACE] Action menu",
+            ])
 
         side_lines.extend(
             [
-                "→ Arrow keys: Move",
                 "→ ESC: Leave matrix",
                 "",
                 f"Visited: {len(expl.discovered) if expl else 0} nodes",
@@ -453,7 +523,29 @@ def render_matrix(
         _draw_minimap(console, matrix, expl, side_r)
         _draw_breadcrumb(console, matrix, expl, side_r)
 
-    # Controls (updated to use SPACE instead of ENTER)
+    # ADR-0047: show recent typed status messages as a multi-line log
+    # using the SIDE area when matrix view is the primary focus.
+    # We use a separate small log overlay at the bottom-right area.
+    # (Already used draw_side above for status panel; add a recent-activity
+    # log overlay in the area between main and controls when zone is set.)
+    if zone is not None and state.status_messages:
+        # Render recent 3 messages in a thin overlay strip just above controls
+        # Use the bottom 3 rows of the side panel for the message log.
+        log_region = Region(
+            RegionId.SIDE,
+            x=side_r.x,
+            y=side_r.y2 - 2,
+            w=side_r.w,
+            h=3,
+        )
+        draw_message_log(
+            console,
+            log_region,
+            state.status_messages[-3:],
+            max_lines=3,
+        )
+
+    # Controls (cursor-based navigation: ↑/↓ to select, Enter to move)
     if zone is not None:
         action_hint = "SPACE: Action menu"
         if zone.kind is NodeKind.DATA:
@@ -467,7 +559,7 @@ def render_matrix(
             console,
             ctrl_r,
             lines=[
-                f"← → ↑ ↓: Move to adjacent nodes  |  {action_hint}",
+                f"↑/↓: Select  |  ←/→: Move spatially  |  Enter: Confirm  |  {action_hint}",
                 "ESC: Leave matrix  |  Q: Quit",
             ],
         )
@@ -545,27 +637,176 @@ def handle_matrix_input(
         state.status_messages.append(">>> Quitting game...")
         return False
     if is_confirm_key(event.sym):
-        # Open action menu (ENTER or SPACE)
+        # If cursor navigation has been used, confirm node selection
+        matrix = state.matrix
+        if matrix is not None and state.current_node_id is not None:
+            neighbors = _adjacent_nodes_list(matrix, state.current_node_id)
+            if neighbors and state.matrix_nav_index < len(neighbors):
+                target = neighbors[state.matrix_nav_index]
+                state.status_messages.append(f">>> Moved to {target.label} ({_short_kind(target.kind)})")
+                state.current_node_id = target.id
+                if state.exploration is not None:
+                    state.exploration.visit(target.id)
+                state.matrix_nav_index = 0  # Reset cursor
+                return True
+        # Otherwise open action menu (ENTER or SPACE)
         if state.matrix and state.current_node_id:
             node = state.matrix.get(state.current_node_id)
             if node:
                 state.status_messages.append(f">>> Action menu opened for {node.label}")
         state.action_menu_open = True
         return True
-    if event.sym in (
-        KeySym.UP,
-        KeySym.DOWN,
-        KeySym.LEFT,
-        KeySym.RIGHT,
-    ):
+    # LEFT/RIGHT: spatial movement (vector-based, finds neighbor in that direction)
+    if event.sym in (KeySym.LEFT, KeySym.RIGHT, KeySym.KP_4, KeySym.KP_6, KeySym.H, KeySym.L):
         _handle_movement(state, event.sym)
+        return True
+    # UP/DOWN: cursor-based node selection
+    if event.sym in _NAVIGATION_KEYS:
+        _handle_cursor_navigation(state, event.sym)
+        return True
     return True
 
 
-def _handle_movement(state: AppState, sym: KeySym) -> None:
+# Cursor navigation keys (↑/↓ to select adjacent node, Enter to move)
+_NAVIGATION_KEYS: set[KeySym] = {
+    KeySym.UP,
+    KeySym.DOWN,
+    KeySym.KP_8,  # N (alias for UP)
+    KeySym.KP_2,  # S (alias for DOWN)
+    KeySym.J,     # vim: down (↑ in conventional terms, but used as ↓ here)
+    KeySym.K,     # vim: up (↓ in conventional terms, but used as ↑ here)
+}
+
+
+# Direction unit vectors for movement (ADR-0045)
+_DIRECTION_VECTORS: dict[KeySym, tuple[int, int]] = {
+    KeySym.LEFT: (-1, 0),
+    KeySym.RIGHT: (1, 0),
+    KeySym.UP: (0, -1),
+    KeySym.DOWN: (0, 1),
+    # Diagonals (numpad-style)
+    KeySym.KP_7: (-1, -1),  # NW
+    KeySym.KP_9: (1, -1),  # NE
+    KeySym.KP_1: (-1, 1),  # SW
+    KeySym.KP_3: (1, 1),  # SE
+    KeySym.KP_8: (0, -1),  # N (alias for UP)
+    KeySym.KP_2: (0, 1),  # S (alias for DOWN)
+    KeySym.KP_4: (-1, 0),  # W (alias for LEFT)
+    KeySym.KP_6: (1, 0),  # E (alias for RIGHT)
+    # Vim-style diagonals
+    KeySym.H: (-1, 0),
+    KeySym.L: (1, 0),
+    KeySym.K: (0, 1),
+    KeySym.J: (0, -1),
+    KeySym.Y: (-1, -1),
+    KeySym.U: (1, -1),
+    KeySym.B: (-1, 1),
+    KeySym.N: (1, 1),
+}
+
+_DIRECTION_LABELS: dict[KeySym, str] = {
+    KeySym.LEFT: "← LEFT",
+    KeySym.RIGHT: "→ RIGHT",
+    KeySym.UP: "↑ UP",
+    KeySym.DOWN: "↓ DOWN",
+    KeySym.KP_7: "↖ NW",
+    KeySym.KP_9: "↗ NE",
+    KeySym.KP_1: "↙ SW",
+    KeySym.KP_3: "↘ SE",
+    KeySym.KP_8: "↑ N",
+    KeySym.KP_2: "↓ S",
+    KeySym.KP_4: "← W",
+    KeySym.KP_6: "→ E",
+    KeySym.H: "← H",
+    KeySym.L: "→ L",
+    KeySym.K: "↓ K",
+    KeySym.J: "↑ J",
+    KeySym.Y: "↖ Y",
+    KeySym.U: "↗ U",
+    KeySym.B: "↙ B",
+    KeySym.N: "↘ N",
+}
+
+
+def _adjacent_nodes(matrix: MatrixGraph, node_id: str) -> set[str]:
+    """Return node ids connected to ``node_id`` (in or out edges)."""
+    out: set[str] = set()
+    for e in matrix.edges:
+        if e.src == node_id:
+            out.add(e.dst)
+        elif e.dst == node_id:
+            out.add(e.src)
+    return out
+
+
+def _adjacent_nodes_list(matrix: MatrixGraph, node_id: str) -> list[Node]:
+    """Return list of adjacent nodes for cursor selection."""
+    adj_ids = _adjacent_nodes(matrix, node_id)
+    return [n for n in matrix.nodes if n.id in adj_ids]
+
+
+def _handle_cursor_navigation(state: AppState, sym: KeySym) -> None:
+    """Handle cursor-based node selection (↑/↓ to select, Enter to move).
+
+    Unifies matrix navigation with combat skill selection UX.
+    """
     matrix = state.matrix
     if matrix is None or state.current_node_id is None:
         return
+
+    neighbors = _adjacent_nodes_list(matrix, state.current_node_id)
+    if not neighbors:
+        state.status_messages.append(">>> No adjacent nodes")
+        return
+
+    # Clamp cursor to valid range
+    state.matrix_nav_index = max(0, min(state.matrix_nav_index, len(neighbors) - 1))
+
+    # Handle key press
+    if sym in (KeySym.UP, KeySym.KP_8, KeySym.K):
+        # Move cursor up (previous node)
+        if state.matrix_nav_index > 0:
+            state.matrix_nav_index -= 1
+        else:
+            state.matrix_nav_index = len(neighbors) - 1  # Wrap to last
+        selected = neighbors[state.matrix_nav_index]
+        state.status_messages.append(f">>> [{state.matrix_nav_index + 1}/{len(neighbors)}] {selected.label}")
+    elif sym in (KeySym.DOWN, KeySym.KP_2, KeySym.J):
+        # Move cursor down (next node)
+        if state.matrix_nav_index < len(neighbors) - 1:
+            state.matrix_nav_index += 1
+        else:
+            state.matrix_nav_index = 0  # Wrap to first
+        selected = neighbors[state.matrix_nav_index]
+        state.status_messages.append(f">>> [{state.matrix_nav_index + 1}/{len(neighbors)}] {selected.label}")
+
+
+
+def _handle_movement(state: AppState, sym: KeySym) -> None:
+    """Move to the neighbor that best matches the pressed direction (ADR-0045).
+
+    Algorithm:
+        1. For each adjacent neighbor (in/out edges), compute the unit
+           direction vector using Euclidean normalization.
+        2. Score by dot product with the pressed direction (higher = better).
+        3. Tie-break by total Manhattan distance (closer = better).
+        4. Move to the best-scoring neighbor if score > 0.
+
+    This naturally handles:
+        - Cardinal directions (← → ↑ ↓)
+        - Diagonal directions (numpad 7/9/1/3, vim Y/U/B/N)
+        - Best-match fallback (when no neighbor is exactly in that direction,
+          the closest diagonal neighbor wins)
+
+    The matrix is a DAG, but for *exploration* movement we treat edges as
+    bidirectional — players should be able to backtrack through visited nodes.
+    """
+    matrix = state.matrix
+    if matrix is None or state.current_node_id is None:
+        return
+    if sym not in _DIRECTION_VECTORS:
+        return
+
     layouts = _last_layout.get(matrix)
     if layouts is None:
         return
@@ -573,36 +814,43 @@ def _handle_movement(state: AppState, sym: KeySym) -> None:
     if current_pos is None:
         return
     cx, cy = current_pos
-    nbrs = matrix.neighbors(state.current_node_id)
-    target: Node | None = None
-    best_score: tuple[int, int] = (1_000_000, 1_000_000)
-    for n in nbrs:
+    press_dx, press_dy = _DIRECTION_VECTORS[sym]
+
+    # Get all adjacent node ids (in or out edges — movement is bidirectional)
+    adjacent_ids = _adjacent_nodes(matrix, state.current_node_id)
+
+    best: tuple[float, int, Node] | None = None
+    for n in matrix:
+        if n.id not in adjacent_ids:
+            continue
+        if n.id == state.current_node_id:
+            continue
         pos = layouts.get(n.id)
         if pos is None:
             continue
         nx, ny = pos
-        dx, dy = nx - cx, ny - cy
-        if sym is KeySym.LEFT and dx >= 0:
+        dx, ny_dy = nx - cx, ny - cy
+        # Euclidean-normalize neighbor direction so diagonals preserve angle.
+        mag_sq = dx * dx + ny_dy * ny_dy
+        if mag_sq == 0:
             continue
-        if sym is KeySym.RIGHT and dx <= 0:
+        mag = mag_sq**0.5
+        ndx, ndy = dx / mag, ny_dy / mag
+        # Dot product with pressed direction (1.0 = perfect, 0 = perpendicular).
+        dot = ndx * press_dx + ndy * press_dy
+        if dot <= 0:
             continue
-        if sym is KeySym.UP and dy >= 0:
-            continue
-        if sym is KeySym.DOWN and dy <= 0:
-            continue
-        primary = abs(dx) if sym in (KeySym.LEFT, KeySym.RIGHT) else abs(dy)
-        secondary = abs(dy) if sym in (KeySym.LEFT, KeySym.RIGHT) else abs(dx)
-        score = (primary, secondary)
-        if score < best_score:
-            best_score = score
-            target = n
-    if target is not None:
-        direction = {
-            KeySym.UP: "↑ UP",
-            KeySym.DOWN: "↓ DOWN",
-            KeySym.LEFT: "← LEFT",
-            KeySym.RIGHT: "→ RIGHT",
-        }.get(sym, "?")
+        # Score: prefer high dot, then short Manhattan distance
+        dist = abs(dx) + abs(ny_dy)
+        if best is None or (dot, -dist) > (best[0], -best[1]):
+            best = (dot, dist, n)
+        elif dot == best[0] and dist == best[1]:
+            if n.id < best[2].id:
+                best = (dot, dist, n)
+
+    if best is not None:
+        _, _, target = best
+        direction = _DIRECTION_LABELS.get(sym, "?")
         state.status_messages.append(
             f">>> Moved {direction} to {target.label} ({_short_kind(target.kind)})"
         )
@@ -610,12 +858,7 @@ def _handle_movement(state: AppState, sym: KeySym) -> None:
         if state.exploration is not None:
             state.exploration.visit(target.id)
     else:
-        direction = {
-            KeySym.UP: "↑ UP",
-            KeySym.DOWN: "↓ DOWN",
-            KeySym.LEFT: "← LEFT",
-            KeySym.RIGHT: "→ RIGHT",
-        }.get(sym, "?")
+        direction = _DIRECTION_LABELS.get(sym, "?")
         state.status_messages.append(f">>> No node in direction {direction}")
 
 

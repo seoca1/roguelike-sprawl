@@ -1,8 +1,8 @@
-"""Auto-progressing headless demo (ADR-0005, design/systems/hacking.md).
+"""Auto-progressing headless demo (ADR-0005, ADR-0031).
 
 Runs the game state machine without a tcod window, rendering each
 frame to plain text on stdout. The state advances automatically:
-Menu -> Hub -> Matrix (navigate) -> Jack out -> Hub -> ...
+Menu -> Character Select -> Chapter -> Hub -> Matrix (navigate) -> Jack out -> Hub -> ...
 
 Usage:
     python scripts/demo.py                  # 120s demo, 1.0s per step
@@ -10,6 +10,7 @@ Usage:
     python scripts/demo.py --step-delay 0.5
     python scripts/demo.py --no-clear      # don't clear the screen between frames
     python scripts/demo.py --lang ko       # Korean translation
+    python scripts/demo.py --character X   # novice | veteran | heretic
 
 Frames are dumped to stdout. With --no-clear, every frame is appended
 so the terminal scrolls through the whole playthrough.
@@ -27,12 +28,21 @@ import tcod.console
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from roguelike_sprawl.engine import hub, matrix_view, menu
+from roguelike_sprawl.engine.chapter_view import chapter_for_character, tick_chapter
+from roguelike_sprawl.engine.graphic_novel_view import (
+    Background,
+    Portrait,
+    SceneData,
+)
 from roguelike_sprawl.engine.state import AppState, ScreenKind
 from roguelike_sprawl.i18n import Translator
 from roguelike_sprawl.matrix import MatrixGenerator
 from roguelike_sprawl.matrix.ppl import calculate_ppl
 from roguelike_sprawl.matrix.zdr import node_status, node_zdr
-from roguelike_sprawl.missions import JobBoard
+from roguelike_sprawl.missions import JobBoard, Mission
+
+# Graphic novel art cache
+_demo_gn_cache: dict[str, Background | Portrait | list[SceneData] | None] = {}
 
 
 def render_to_text(console: tcod.console.Console) -> str:
@@ -54,10 +64,137 @@ def render_frame(
     console: tcod.console.Console,
     state: AppState,
     t: Translator,
+    data_dir: Path | None = None,
 ) -> None:
     """Render the current screen onto ``console`` (in place)."""
     if state.screen is ScreenKind.MENU:
         menu.render_menu(console, t, state)
+    elif state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
+        from roguelike_sprawl.engine import graphic_novel_view
+
+        graphic_novel_view.render_graphic_novel_menu(
+            console, t, selected_index=0, has_save=False
+        )
+    elif state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
+        from roguelike_sprawl.engine import graphic_novel_view
+
+        graphic_novel_view.render_graphic_novel_ending_menu(
+            console, t, character=state.gn_mode, selected_index=0
+        )
+    elif state.screen is ScreenKind.GRAPHIC_NOVEL and data_dir is not None:
+        # Inline graphic novel frame renderer (mirrors play.py).
+        from roguelike_sprawl.engine.graphic_novel_view import (
+            dialogue_typed_chars,
+            load_background,
+            load_portrait,
+            load_prologue_chain,
+            load_scene_chain,
+            render_scene,
+        )
+
+        cache_key = f"chain:{state.gn_mode}:{state.gn_ending_choice}"
+        cached = _demo_gn_cache.get(cache_key)
+        if not isinstance(cached, list):
+            ending = state.gn_ending_choice or "A"
+            if state.gn_mode == "prologue":
+                chain_data = load_prologue_chain(data_dir / "scenes", seed=42, ending=ending)
+            else:
+                chain_data = load_scene_chain(data_dir / "scenes", state.gn_mode, ending=ending)
+            _demo_gn_cache[cache_key] = list(chain_data)
+        chain: list[SceneData] = list(_demo_gn_cache[cache_key])  # type: ignore[arg-type]
+        if state.gn_scene_index >= len(chain):
+            state.screen = ScreenKind.SAVED_PROGRESS
+            console.clear()
+        else:
+            scene = chain[state.gn_scene_index]
+            if not scene.dialogue:
+                state.gn_scene_index += 1
+                state.gn_elapsed_ms = 0.0
+            else:
+                dialogue = scene.dialogue[state.gn_dialogue_index]
+                text = dialogue.text_ko if t.lang == "ko" else dialogue.text_en
+                typed = dialogue_typed_chars(dialogue.duration_ms, state.gn_elapsed_ms, len(text))
+                art_dir = data_dir / "art"
+                bg: Background | None = None
+                p_l: Portrait | None = None
+                p_r: Portrait | None = None
+                bg_key = f"bg:{scene.background_id}"
+                if bg_key not in _demo_gn_cache:
+                    try:
+                        _demo_gn_cache[bg_key] = load_background(art_dir, scene.background_id)
+                    except (KeyError, FileNotFoundError):
+                        _demo_gn_cache[bg_key] = None
+                bg_val = _demo_gn_cache[bg_key]
+                if isinstance(bg_val, Background):
+                    bg = bg_val
+                for p_id, slot in (
+                    (scene.portrait_left, "p_l"),
+                    (scene.portrait_right, "p_r"),
+                ):
+                    if p_id:
+                        pkey = f"portrait:{p_id}"
+                        if pkey not in _demo_gn_cache:
+                            try:
+                                _demo_gn_cache[pkey] = load_portrait(art_dir, p_id)
+                            except (KeyError, FileNotFoundError):
+                                _demo_gn_cache[pkey] = None
+                        val = _demo_gn_cache[pkey]
+                        if isinstance(val, Portrait):
+                            if slot == "p_l":
+                                p_l = val
+                            else:
+                                p_r = val
+                render_scene(
+                    console,
+                    scene,
+                    dialogue,
+                    bg,
+                    p_l,
+                    p_r,
+                    t,
+                    typed,
+                    state.gn_scene_index,
+                    len(chain),
+                    paused=state.gn_paused,
+                )
+                state.gn_elapsed_ms += 100 * 10
+                if state.gn_elapsed_ms >= dialogue.duration_ms:
+                    state.gn_dialogue_index += 1
+                    state.gn_elapsed_ms = 0.0
+                    if state.gn_dialogue_index >= len(scene.dialogue):
+                        state.gn_scene_index += 1
+                        state.gn_dialogue_index = 0
+                        if state.gn_scene_index >= len(chain):
+                            state.screen = ScreenKind.SAVED_PROGRESS
+    elif state.screen is ScreenKind.SAVED_PROGRESS:
+        from roguelike_sprawl.engine import save_progress as sp
+
+        console.clear()
+        summary = sp.get_progress_summary(save_dir=data_dir / "saves" if data_dir else None)
+        lines = sp.render_summary_lines(summary, t_lang=t.lang)
+        console.print(2, 2, "═══ SAVED PROGRESS ═══")
+        for i, line in enumerate(lines):
+            console.print(2, 4 + i, line)
+        console.print(2, 16, "  [1] 다른 캐릭터  [2] 게임 계속  [3] 메인메뉴")
+    elif state.screen is ScreenKind.CHARACTER_SELECT:
+        console.clear()
+        console.print(2, 2, "═══ CHARACTER SELECT (auto-pilot) ═══")
+        console.print(2, 4, "> The Finn: I need a jockey. Sense/Net, first run.")
+        console.print(2, 6, "  1. 케이 (K) — Novice       'I just need the money.'")
+        console.print(2, 7, "  2. 실 (Sil) — Veteran     'I know the risks.'")
+        console.print(2, 8, "  3. 카스 (Kas) — Heretic    'I'm here to burn it all down.'")
+        console.print(2, 11, f"  → Auto-selected: {state.character_id}")
+    elif state.screen is ScreenKind.CHAPTER and data_dir is not None:
+        from roguelike_sprawl.engine import chapter_view
+
+        chapter = chapter_for_character(state.character_id, data_dir)
+        state.chapter_elapsed_ms += 100  # ~10fps tick
+        state.chapter_typed_chars = tick_chapter(
+            chapter, state.chapter_elapsed_ms, state.chapter_typed_chars
+        )
+        chapter_view.render_chapter(
+            console, chapter, t, state.chapter_typed_chars, state.chapter_elapsed_ms
+        )
     elif state.screen is ScreenKind.HUB:
         hub.render_hub(console, t, state)
     elif state.screen is ScreenKind.MATRIX and state.matrix is not None:
@@ -88,14 +225,68 @@ def print_frame(
 
 def _step_auto(
     state: AppState,
-    missions: list,
+    missions: list[Mission],
     visited: set[str],
     mission_idx: list[int],
 ) -> str:
     """Advance the state by one auto-step. Returns narration."""
     if state.screen is ScreenKind.MENU:
-        state.screen = ScreenKind.HUB
-        return "Auto: New Run. Jacked in to the Hub."
+        menu_option = getattr(state, "_demo_menu_option", None)
+        if menu_option is not None:
+            state.menu_selection_index = menu_option - 1
+            if menu_option == 2:
+                state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
+                return "Auto: Menu → Graphic Novel Menu."
+        state.screen = ScreenKind.CHARACTER_SELECT
+        return "Auto: New Run. → Character Select."
+
+    if state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
+        # ADR-0048: For character modes, hop through ending menu; prologue skips
+        menu_option = getattr(state, "_demo_menu_option", None)
+        if menu_option is not None and menu_option >= 3:
+            gn_map = {3: "novice", 4: "veteran", 5: "heretic"}
+            state.gn_mode = gn_map.get(menu_option, "prologue")
+        if state.gn_mode in ("novice", "veteran", "heretic"):
+            state.gn_ending_choice = "A"
+            state.screen = ScreenKind.GRAPHIC_NOVEL_ENDING_MENU
+            return f"Auto: Graphic Novel → choose ending for {state.gn_mode}."
+        # prologue
+        state.gn_ending_choice = "A"
+        state.gn_scene_index = 0
+        state.gn_dialogue_index = 0
+        state.gn_elapsed_ms = 0.0
+        state.gn_paused = False
+        state.screen = ScreenKind.GRAPHIC_NOVEL
+        return f"Auto: Graphic Novel [{state.gn_mode}] → playing."
+
+    if state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
+        # ADR-0048: Auto-pick ending A
+        state.gn_ending_choice = "A"
+        state.gn_scene_index = 0
+        state.gn_dialogue_index = 0
+        state.gn_elapsed_ms = 0.0
+        state.gn_paused = False
+        state.screen = ScreenKind.GRAPHIC_NOVEL
+        return f"Auto: Graphic Novel [{state.gn_mode} ending A] → playing."
+
+    if state.screen is ScreenKind.SAVED_PROGRESS:
+        state.screen = ScreenKind.MENU
+        return "Auto: Saved progress → menu."
+
+    if state.screen is ScreenKind.CHARACTER_SELECT:
+        # Auto-pick already-set character_id, advance to chapter.
+        state.chapter_id = f"chapter_{state.character_id}"
+        state.chapter_elapsed_ms = 0.0
+        state.chapter_typed_chars = 0
+        state.screen = ScreenKind.CHAPTER
+        return f"Auto: selected {state.character_id}. → Chapter."
+
+    if state.screen is ScreenKind.CHAPTER:
+        # Auto-skip chapter after 2s of display
+        if state.chapter_elapsed_ms > 2000:
+            state.screen = ScreenKind.HUB
+            return "Auto: Chapter done. → Hub."
+        return f"Auto: chapter typing... ({state.chapter_typed_chars} chars)"
 
     if state.screen is ScreenKind.HUB:
         if not missions:
@@ -150,6 +341,25 @@ def main() -> int:
     parser.add_argument(
         "--missions", type=int, default=2, help="How many missions to cycle through."
     )
+    parser.add_argument(
+        "--character",
+        default="novice",
+        choices=["novice", "veteran", "heretic"],
+        help="Auto-selected character (default novice)",
+    )
+    parser.add_argument(
+        "--gn-mode",
+        default=None,
+        choices=["prologue", "novice", "veteran", "heretic"],
+        help="If set, run graphic novel mode instead of normal flow",
+    )
+    parser.add_argument(
+        "--menu-option",
+        type=int,
+        default=None,
+        choices=[1, 2, 3, 4, 5, 6],
+        help="Auto-select menu option (1=new run, 2=graphic novel, 3=continue, etc.)",
+    )
     args = parser.parse_args()
 
     project_root = Path(__file__).parent.parent
@@ -157,7 +367,14 @@ def main() -> int:
     t = Translator(args.lang, data_dir=data_dir / "i18n")
 
     state = AppState()
+    state.character_id = args.character
     state.job_board = JobBoard.load(data_dir / "missions" / "missions.json")
+    # If --gn-mode is set, jump straight to GRAPHIC_NOVEL_MENU
+    if args.gn_mode is not None:
+        state.gn_mode = args.gn_mode
+        state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
+    if args.menu_option is not None:
+        state._demo_menu_option = args.menu_option
     console = tcod.console.Console(80, 50, order="F")
 
     available = list(state.job_board.available_for(state.player_grade))
@@ -171,7 +388,7 @@ def main() -> int:
     start = time.monotonic()
     step = 0
     narration = "Auto-demo. The world goes gray."
-    render_frame(console, state, t)
+    render_frame(console, state, t, data_dir)
     print_frame(console, state, step, 0.0, narration, clear=not args.no_clear)
     step += 1
     time.sleep(args.step_delay)
@@ -179,7 +396,7 @@ def main() -> int:
     while time.monotonic() - start < args.duration:
         elapsed = time.monotonic() - start
         narration = _step_auto(state, missions, visited, mission_idx)
-        render_frame(console, state, t)
+        render_frame(console, state, t, data_dir)
         print_frame(console, state, step, elapsed, narration, clear=not args.no_clear)
         step += 1
         time.sleep(args.step_delay)

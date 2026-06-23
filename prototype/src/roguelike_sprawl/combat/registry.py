@@ -311,13 +311,47 @@ def build_default_player(
     )
 
 
+def get_scaled_ice_stats(
+    data: dict[str, int | str | float],
+    player_grade: int,
+) -> tuple[int, int]:
+    """Calculate scaled HP/DMG based on player grade.
+
+    HP = hp_base + (hp_per_grade * max(0, player_grade - ice_tier))
+    DMG = dmg_base + (dmg_per_grade * max(0, player_grade - ice_tier))
+    Minimum scale factor: 0.7 (70%) when player is under-tier
+    """
+    hp_base = int(data.get("hp_base", data.get("hp", 80)))
+    hp_per_grade = int(data.get("hp_per_grade", 0))
+    dmg_base = int(data.get("dmg_base", data.get("base_damage", 3)))
+    dmg_per_grade = int(data.get("dmg_per_grade", 0))
+    ice_tier = int(data.get("tier", 1))
+
+    grade_diff = player_grade - ice_tier
+
+    if grade_diff >= 0:
+        hp = hp_base + (hp_per_grade * grade_diff)
+        dmg = dmg_base + (dmg_per_grade * grade_diff)
+    else:
+        scale = 1.0 + (grade_diff * 0.15)
+        scale = max(0.7, scale)
+        hp = int(hp_base * scale)
+        dmg = int(dmg_base * scale)
+
+    return hp, dmg
+
+
 def build_ice_enemy(
     ice_id: str,
     registry: IceRegistry,
     *,
     portraits: PortraitManager | None = None,
+    player_grade: int | None = None,
 ) -> Combatant:
-    """Build an ICE enemy from the registry."""
+    """Build an ICE enemy from the registry.
+
+    If player_grade is provided, stats are scaled according to the difficulty formula.
+    """
     data = registry.get(ice_id)
     if data is None:
         raise KeyError(f"Unknown ICE: {ice_id!r}")
@@ -330,16 +364,23 @@ def build_ice_enemy(
         col_raw = p.get("color", color)
         if isinstance(col_raw, tuple) and len(col_raw) == 3:
             color = (int(col_raw[0]), int(col_raw[1]), int(col_raw[2]))
+
+    if player_grade is not None:
+        hp, dmg = get_scaled_ice_stats(data, player_grade)
+    else:
+        hp = int(data.get("hp_base", data.get("hp", 80)))
+        dmg = int(data.get("dmg_base", data.get("base_damage", 3)))
+
     return Combatant(
         id=ice_id,
         name=str(data.get("name", ice_id)),
         portrait=portrait,
         color=color,
-        hp=int(data.get("hp", 80)),
-        max_hp=int(data.get("hp", 80)),
+        hp=hp,
+        max_hp=hp,
         ap=0,
         max_ap=0,
-        auto_attack_damage=int(data.get("base_damage", 3)),
+        auto_attack_damage=dmg,
         skills=(),
         team="enemy",
     )
