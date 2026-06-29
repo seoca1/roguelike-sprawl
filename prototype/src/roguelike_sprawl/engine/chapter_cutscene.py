@@ -230,9 +230,7 @@ def get_chapter(arc: ArcData, chapter_number: int) -> ChapterData | None:
     return None
 
 
-def get_cutscene(
-    scenes_dir: Path, cutscene_ref: CutsceneRef
-) -> SceneData:
+def get_cutscene(scenes_dir: Path, cutscene_ref: CutsceneRef) -> SceneData:
     """Resolve a cutscene scene_id to actual SceneData (reuses GN scene)."""
     return load_scene(scenes_dir, cutscene_ref.scene_id)
 

@@ -481,8 +481,14 @@ def render_matrix(
     # Side: Current node status + node selection list
     if zone is not None:
         # Show adjacent node selection list (cursor-based navigation)
-        neighbors = _adjacent_nodes_list(matrix, state.current_node_id) if matrix and state.current_node_id else []
-        state.matrix_nav_index = max(0, min(state.matrix_nav_index, len(neighbors) - 1)) if neighbors else 0
+        neighbors = (
+            _adjacent_nodes_list(matrix, state.current_node_id)
+            if matrix and state.current_node_id
+            else []
+        )
+        state.matrix_nav_index = (
+            max(0, min(state.matrix_nav_index, len(neighbors) - 1)) if neighbors else 0
+        )
 
         side_lines = [
             "=== CURRENT NODE ===",
@@ -498,17 +504,21 @@ def render_matrix(
             for i, n in enumerate(neighbors):
                 cursor = ">" if i == state.matrix_nav_index else " "
                 side_lines.append(f"{cursor} {n.label} ({_short_kind(n.kind)})")
-            side_lines.extend([
-                "",
-                "[↑↓] Select  [Enter] Move",
-                "[SPACE] Action menu",
-            ])
+            side_lines.extend(
+                [
+                    "",
+                    "[↑↓] Select  [Enter] Move",
+                    "[SPACE] Action menu",
+                ]
+            )
         else:
-            side_lines.extend([
-                "=== WHAT TO DO ===",
-                "",
-                "[SPACE] Action menu",
-            ])
+            side_lines.extend(
+                [
+                    "=== WHAT TO DO ===",
+                    "",
+                    "[SPACE] Action menu",
+                ]
+            )
 
         side_lines.extend(
             [
@@ -643,7 +653,9 @@ def handle_matrix_input(
             neighbors = _adjacent_nodes_list(matrix, state.current_node_id)
             if neighbors and state.matrix_nav_index < len(neighbors):
                 target = neighbors[state.matrix_nav_index]
-                state.status_messages.append(f">>> Moved to {target.label} ({_short_kind(target.kind)})")
+                state.status_messages.append(
+                    f">>> Moved to {target.label} ({_short_kind(target.kind)})"
+                )
                 state.current_node_id = target.id
                 if state.exploration is not None:
                     state.exploration.visit(target.id)
@@ -673,8 +685,8 @@ _NAVIGATION_KEYS: set[KeySym] = {
     KeySym.DOWN,
     KeySym.KP_8,  # N (alias for UP)
     KeySym.KP_2,  # S (alias for DOWN)
-    KeySym.J,     # vim: down (↑ in conventional terms, but used as ↓ here)
-    KeySym.K,     # vim: up (↓ in conventional terms, but used as ↑ here)
+    KeySym.J,  # vim: down (↑ in conventional terms, but used as ↓ here)
+    KeySym.K,  # vim: up (↓ in conventional terms, but used as ↑ here)
 }
 
 
@@ -770,7 +782,9 @@ def _handle_cursor_navigation(state: AppState, sym: KeySym) -> None:
         else:
             state.matrix_nav_index = len(neighbors) - 1  # Wrap to last
         selected = neighbors[state.matrix_nav_index]
-        state.status_messages.append(f">>> [{state.matrix_nav_index + 1}/{len(neighbors)}] {selected.label}")
+        state.status_messages.append(
+            f">>> [{state.matrix_nav_index + 1}/{len(neighbors)}] {selected.label}"
+        )
     elif sym in (KeySym.DOWN, KeySym.KP_2, KeySym.J):
         # Move cursor down (next node)
         if state.matrix_nav_index < len(neighbors) - 1:
@@ -778,8 +792,9 @@ def _handle_cursor_navigation(state: AppState, sym: KeySym) -> None:
         else:
             state.matrix_nav_index = 0  # Wrap to first
         selected = neighbors[state.matrix_nav_index]
-        state.status_messages.append(f">>> [{state.matrix_nav_index + 1}/{len(neighbors)}] {selected.label}")
-
+        state.status_messages.append(
+            f">>> [{state.matrix_nav_index + 1}/{len(neighbors)}] {selected.label}"
+        )
 
 
 def _handle_movement(state: AppState, sym: KeySym) -> None:
