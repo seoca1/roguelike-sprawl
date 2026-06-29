@@ -38,8 +38,9 @@
 2. `decisions/README.md` — 미해결 결정 사항 확인
 3. `wiki/world/sprawl_universe.md` — 세계관 컨셉 참조
 4. `design/pillars.md` → `design/GDD.md` — 현재 게임 디자인 확인
+5. `design/CHARACTER_PATHS.md` — 캐릭터별 진행 경로 (3인 × 15미션)
 
-## 컨벤션
+## 주요 문서
 
 - 모든 문서는 마크다운, Git으로 버전 관리
 - LLM Wiki 패턴: `raw/` → `wiki/` (원본 → 정리)

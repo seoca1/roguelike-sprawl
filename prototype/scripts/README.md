@@ -428,6 +428,49 @@ uv run python scripts/full_demo.py --manual-combat
 uv run python scripts/full_demo_sound.py --no-sound --volume 0
 ```
 
+### `demo_full_flow.py` ⭐ 전체 게임 이벤트 종합 데모 (2026-06-25)
+**모든 주요 화면과 상태 전이를 보여주는 종합 데모.** 플레이어 입력 없이 엔딩까지 도달.
+
+```bash
+cd prototype/
+
+# 기본 (모든 이벤트, combat 스킵)
+uv run python scripts/demo_full_flow.py
+
+# 실제 combat 포함 (더 느림)
+uv run python scripts/demo_full_flow.py --skip-combat
+
+# 애니메이션 스킵
+uv run python scripts/demo_full_flow.py --skip-animation
+
+# 특정 캐릭터
+uv run python scripts/demo_full_flow.py --character veteran
+
+# 한글
+uv run python scripts/demo_full_flow.py --lang ko
+```
+
+**보이는 화면 (15개)**:
+1. MENU (5 options)
+2. CHARACTER_SELECT (Finn's briefing)
+3. HUB (mission board, NPC)
+4. MATRIX (node exploration)
+5. NPC_DIALOGUE (Dixie Flatline)
+6. DATA_EXTRACT (data node)
+7. COMBAT (RT-MS battle) -- `--skip-combat`으로 스킵 가능
+8. JACK_OUT (disconnection)
+9. REWARD (mission complete)
+10. DEBRIEF (post-mission narrative)
+11. COMPLETE (return to Hub)
+12. DEATH (flatline screen)
+13. HALL_OF_DEAD (archived jockeys)
+14. SAVE/LOAD (browser)
+15. CREDITS
+
+**Stage transitions 검증**:
+- PENDING → MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → JACK_OUT → REWARD → DEBRIEF → COMPLETE
+- DEFEAT_ICE → FAILED → DEATH_RESTART
+
 ### `headless_sound_demo.py`
 **헤드리스 사운드 데모** (오디오 + 텍스트). 단계별 실행 가능.
 
@@ -575,10 +618,61 @@ uv run python scripts/test_tcod.py
 
 ---
 
-## 7. 회귀 테스트 (자동)
+## 7. 스토리 & 스테이지 검증
+
+### `validate_stories.py` ⭐ 스토리 contamination 검사
+**English/Korean mixed language, Chinese contamination, Gibberish detection.**
 
 ```bash
-# 전체 2092 unit tests
+# 전체 스토리 검증 (37 stories)
+cd "/Users/emilio/projects/Projects/Game/roguelike_sprawl"
+uv run python scripts/validate_stories.py /Users/emilio/projects/Projects/Fiction/derivative/sprawl-trilogy/short-stories
+
+# 특정 스토리만
+uv run python scripts/validate_stories.py /Users/emilio/projects/Projects/Fiction/derivative/sprawl-trilogy/short-stories --story first_trace
+```
+
+**검증 결과**: ✅ PASS: 29, ❌ FAIL: 0, ⚠️ WARN: 8 (formatting만)
+
+### `validate_stage_structure.py` ⭐ 스테이지 구조 검증
+**Stage, Transition, Mission, Death Flow, Hub Loop 검증.**
+
+```bash
+# 스테이지 구조 검증 (9 stages, 8 transitions, 15 missions)
+cd "/Users/emilio/projects/Projects/Game/roguelike_sprawl"
+uv run python scripts/validate_stage_structure.py
+```
+
+**검증 결과**: ✅ All validations passed (9 stages, 8 transitions, 15 missions)
+
+### `markdown_to_story_html.py` — Markdown → HTML 변환
+**Gibson 톤 단편소설 Markdown을 game/story HTML로 변환.**
+
+```bash
+# 전체 (30개 HTML 재생성)
+uv run python scripts/markdown_to_story_html.py --lang both
+```
+
+### Story-Mission 매핑 검증
+```bash
+# Story ↔ Mission ↔ Arc 정합성 확인
+python3 -c "
+import json
+ss = json.load(open('design/systems/stage_structure.json'))
+import os
+html_bases = set(f.replace('_en.html','').replace('_ko.html','') for f in os.listdir('dashboard/stories/short-stories') if f.endswith('.html'))
+for m in ss['missions']:
+    mid = m['id']
+    print(f'{mid}: story={\"Y\" if mid in html_bases else \"N\"}')
+"
+```
+
+---
+
+## 9. 회귀 테스트 (자동)
+
+```bash
+# 전체 unit tests
 uv run pytest
 
 # 특정 파일만
@@ -587,12 +681,16 @@ uv run pytest tests/unit/test_death_extended.py -v
 uv run pytest tests/unit/test_combat_effects.py -v
 
 # Lint + Format + Typecheck
-uv run ruff check .
-uv run ruff format --check .
-uv run mypy src tests
+uv run ruff check src tests
+uv run ruff format src tests
+uv run mypy src/ --ignore-missing-imports
 
 # 또는 Makefile로 한 번에
-make all  # format + lint + typecheck + test
+make lint    # ruff check --fix
+make format  # ruff format
+make typecheck  # mypy
+make test    # pytest
+make all     # format + lint + typecheck + test
 ```
 
 ---
@@ -646,14 +744,40 @@ uv run python scripts/death_in_action_demo.py --lang ko
 
 ## 스토리 구조 참고
 
+### 캐릭터별 진행 경로
+참고: `design/CHARACTER_PATHS.md` — 3캐릭터 × 15미션 완전 경로 문서
+
+| 캐릭터 | ID | Grade | 미션 수 | 동기 |
+|--------|----|----|--------|------|
+| 케이 (K) | `novice` | 1 | 4개 | 빚 갚기 |
+| 실 (Sil) | `veteran` | 2-3 | 4개 | 복수 |
+| 카스 (Kas) | `heretic` | 3-5 | 5개 | 시스템 폭로 |
+
 ### 단편소설 vs 게임 상태
-참고: `design/scenario/story-stage-comparison.md`
 
 | 구분 | 위치 | 개수 |
 |------|------|------|
-| **Stage (게임)** | `src/run/state.py:Stage` | 10개 |
+| **Stage (게임)** | `src/run/state.py:Stage` | 9개 |
+| **Mission (임무)** | `design/systems/stage_structure.json` | 15개 |
 | **Chapter (단편)** | `data/story/chapters/` | 3개 (케이/실/카스) |
-| **Scene (GN)** | `data/scenes/{case,sil,kas}/` | 24개 (8×3) |
+| **Scene (GN)** | `data/scenes/{case,sil,kas}/` | 12개 (4×3) |
+
+### Stage Flow (9 stages)
+```
+PENDING → MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → JACK_OUT → REWARD → COMPLETE
+                 ↓                      ↓
+              (DEATH)              FAILED → DEATH_RESTART → PENDING
+```
+
+### Arc & Grade 분포
+
+| Arc | Grade 범위 | 미션 수 |
+|-----|-----------|--------|
+| 1 | 1-2 | 4개 |
+| 2 | 1-5 | 4개 |
+| 3 | 3-4 | 3개 |
+| 4 | 4-5 | 3개 |
+| 5 | 5 | 1개 |
 
 ### Gibson 텍스트 위치
 - **챕터 파일** (`case.json`, `sil.json`, `kas.json`) — NEW RUN에서 확인

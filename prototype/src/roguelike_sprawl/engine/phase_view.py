@@ -153,7 +153,11 @@ def render_arc_phase(
     beat_bar_width = width - 4
     beat_filled = int(beat_bar_width * (typed_chars / max(len(text), 1)))
     beat_bar = "█" * beat_filled + "░" * (beat_bar_width - beat_filled)
-    console.print(2, height - 4, f"Beat {beat_index + 1}/{len(phase.beats)}: [{beat_bar}] {int(beat_progress * 100):3d}%")
+    console.print(
+        2,
+        height - 4,
+        f"Beat {beat_index + 1}/{len(phase.beats)}: [{beat_bar}] {int(beat_progress * 100):3d}%",
+    )
 
     num_beats = len(phase.beats)
     phase_progress = (beat_index + beat_progress) / max(num_beats, 1)

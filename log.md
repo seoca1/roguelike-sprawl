@@ -2600,4 +2600,114 @@ After:  cream (#e8e6dc) on 검정 (훨씬 부드러움)
 - ruff check: 모두 clean
 - `test_graphic_novel_novel_layout.py`: 마진常量 테스트 4개 업데이트 (72 → 76)
 
+## [2026-06-25] refactor | Unit test format 지원 + mypy fix + CHARACTER_PATHS 문서화
+
+**작업 개요**: Story YAML 포맷 변화 대응 + mypy 에러 수정 + 캐릭터 경로 문서화
+
+### test_short_stories.py 수정 (새 YAML 포맷 지원)
+
+**문제**: Stories가 새로운 nested YAML 포맷 사용 (`status: {en: "final", ko: "pending"}`)
+- 기존 테스트: `status == "final"` 만 허용
+- 새 stories: `status`가 dict/list/empty list等情况
+
+**수정 내용** (`prototype/tests/unit/test_short_stories.py`):
+```python
+# REQUIRED_FRONTMATTER 타입 완화
+REQUIRED_FRONTMATTER: dict[str, type | tuple[type, ...]] = {
+    "title": (str, dict),
+    "original_title": (str, dict),
+    ...
+    "status": (str, dict, list),  # nested format 허용
+    "version": (str, dict, list),  # nested format 허용
+    "word_count_ko": (str, int, type(None)),  # Optional
+    "word_count": (str, int, type(None)),  # Optional (word_count_ko와 상호 대체)
+}
+
+# word_count/word_count_ko 상호 대체
+required = set(REQUIRED_FRONTMATTER)
+if "word_count" in fm or "word_count_ko" in fm:
+    required = required - {"word_count", "word_count_ko"}
+```
+
+**mypy 에러 수정** (`src/roguelike_sprawl/combat/registry.py:315`):
+```python
+# Before: def get_scaled_ice_stats(data: dict[str, int | str | float], ...)
+# After:  def get_scaled_ice_stats(data: dict[str, int | str], ...)
+```
+
+**lint 수정**:
+- `import re` 제거 (미사용)
+- `dict[str, object]` 타입 어노테이션 추가
+- `_load_frontmatter` 반환 타입 명시
+
+### CHARACTER_PATHS.md 생성
+
+**파일**: `design/CHARACTER_PATHS.md` (390줄)
+
+**내용**:
+1. 3캐릭터 Overview (K/Sil/Kas)
+2. 각 캐릭터별 경로 플로우 + 엔딩 A/B
+3. 플레이 가능 미션 (Grade별)
+4. 공통 시스템 (Grade, 보상 공식)
+5. 미션 맵 (Arc별 의존성)
+6. Stage Structure 참조
+
+### README.md 업데이트
+
+**추가 내용**:
+- CHARACTER_PATHS.md 참조 추가 (Section 4번)
+
+### scripts/README.md 업데이트
+
+**스토리 구조 참고 섹션 확장**:
+- 캐릭터별 Grade/미션 수/동기 테이블
+- Stage 수 10→9개로 수정
+- Mission 수 추가 (15개)
+- Arc & Grade 분포 테이블
+
+**회귀 테스트 섹션 업데이트**:
+- 테스트 수 2092→2970로 갱신
+- make lint/typecheck/test/all 개별 명령 추가
+
+### 최종 검증 결과
+
+| Check | Result |
+|-------|--------|
+| pytest | ✅ 2970 passed |
+| mypy src/ | ✅ No errors |
+| ruff src/ tests/ | ✅ All passed |
+| validate_stage_structure | ✅ PASS (9 stages, 15 missions) |
+| validate_event_dialogues | ✅ PASS (7 NPC name WARN) |
+| validate_stories | ✅ 29 PASS, 0 FAIL, 8 WARN |
+
+### 생성/수정된 파일
+
+| 파일 | 작업 |
+|------|------|
+| `prototype/tests/unit/test_short_stories.py` | 수정 |
+| `prototype/src/roguelike_sprawl/combat/registry.py` | 수정 |
+| `design/CHARACTER_PATHS.md` | 신규 |
+| `README.md` | 수정 |
+| `prototype/scripts/README.md` | 수정 |
+| `prototype/scripts/demo_full_flow.py` | 신규 |
+
+### `demo_full_flow.py` 생성 (2026-06-25)
+
+**모든 게임 이벤트를 보여주는 종합 데모 스크립트.**
+
+```bash
+uv run python scripts/demo_full_flow.py
+uv run python scripts/demo_full_flow.py --skip-combat
+uv run python scripts/demo_full_flow.py --character veteran --lang ko
+```
+
+**보이는 화면 (15개)**:
+- MENU, CHARACTER_SELECT, HUB, MATRIX, NPC_DIALOGUE
+- DATA_EXTRACT, COMBAT, JACK_OUT, REWARD, DEBRIEF
+- COMPLETE, DEATH, HALL_OF_DEAD, SAVE/LOAD, CREDITS
+
+**Stage transitions 검증**:
+- PENDING → MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → JACK_OUT → REWARD → DEBRIEF → COMPLETE
+- DEFEAT_ICE → FAILED → DEATH_RESTART
+
 

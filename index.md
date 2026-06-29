@@ -2,7 +2,7 @@
 
 위키/디자인/결정/테스트 페이지 카탈로그. LLM Wiki 표준 패턴.
 
-**현재 상태**: Phase 5 (Vertical Slice) 완료. **2257 tests pass**. 핵심 시스템 + 그래픽 노블 + 이어서 읽기.
+**현재 상태**: Phase 5 (Vertical Slice) 완료. **2970 tests pass**. 핵심 시스템 + 그래픽 노블 + 이어서 읽기.
 
 ## 메타
 - [README](README.md) - 프로젝트 개요
@@ -24,6 +24,7 @@
 ## 디자인 (Design)
 - [Pillars](design/pillars.md) - 디자인 기둥
 - [Core Loop](design/core_loop.md) - 핵심 게임 루프
+- [Character Paths](design/CHARACTER_PATHS.md) - **3캐릭터 × 15미션 진행 경로 (2026-06-25 신규)**
 - [GDD](design/GDD.md) - Game Design Document
 - [Glossary](design/glossary.md) - 게임 용어
 - [Story Skeleton](design/story_skeleton.md) - **주요 줄기 뼈대 (5 arcs + 4+ endings)**

@@ -1,7 +1,7 @@
 # Session Handover — 다른 세션에서 이어서 진행하기
 
-> 작성일: 2026-06-21
-> 작성 시점 상태: Phase 5 완료, 2284 tests pass, 11개 ADR Accepted
+> 작성일: 2026-06-25
+> 작성 시점 상태: Phase 5 완료, 2970 tests pass, CHARACTER_PATHS 문서화 완료
 > 대상: 다음 세션의 AI 에이전트 또는 개발자
 
 ---
@@ -10,12 +10,13 @@
 
 이 프로젝트는 깁슨 스프롤 로그라이크 게임 (Python 3.11+ / tcod / uv).
 **현재 상태: 모든 핵심 시스템 + 그래픽 노블 + 이어서 읽기 + 매트릭스 이동 UX 완성.**
-**2284 tests pass, ruff/format/mypy 모두 green.**
+**2970 tests pass, ruff/format/mypy 모두 green.**
 
 방향 잡기:
-1. `docs/REMOTE_DEV_SETUP.md` 먼저 읽기 (환경 구축)
-2. `log.md` 마지막 10개 섹션 (최근 작업 흐름)
-3. 이 문서의 "다음 작업 후보" 섹션 → 작업 선택 → "이어서 진행"
+1. `design/CHARACTER_PATHS.md` 읽기 (3캐릭터 × 15미션 경로)
+2. `log.md` 마지막 섹션 (최근 작업 흐름)
+3. `prototype/scripts/README.md` (데모 가이드)
+4. 작업 선택 후 "이어서 진행"
 
 ---
 
@@ -299,25 +300,17 @@ print(s.matrix, s.current_node_id)
 ## 11. 빠른 참조 — 1줄 명령어
 
 ```bash
+cd prototype/
+
 # 전체 검증
-uv run pytest && uv run ruff check . && uv run ruff format --check .
+uv run pytest && uv run ruff check src tests && uv run mypy src/ --ignore-missing-imports
 
-# 새 ADR 작성 (예: 0046)
-$EDITOR decisions/0046-new-feature.md
+# 캐릭터 경로 문서
+cat design/CHARACTER_PATHS.md
 
-# 새 테스트 파일
-$EDITOR tests/unit/test_X.py
-uv run pytest tests/unit/test_X.py -v
-
-# 작업 종료 시 log 갱신
-cat >> log.md << 'EOF'
-## [$(date +%Y-%m-%d)] short-id | 제목
-- 작업 내용
-- ADR 링크
-EOF
-
-# 커밋
-git add -A && git commit -m "feat(scope): 짧은 설명 (ADR-XXXX)" && git push origin main
+# 데모 실행
+uv run python scripts/demo.py --duration 10
+uv run python scripts/play.py --duration 5
 ```
 
 ---
@@ -327,8 +320,9 @@ git add -A && git commit -m "feat(scope): 짧은 설명 (ADR-XXXX)" && git push 
 - **GitHub**: `seoca1/roguelike-sprawl` (Pages: https://seoca1.github.io/roguelike-sprawl/)
 - **로컬 경로**: `~/projects/Projects/Game/roguelike_sprawl/`
 - **Python**: 3.11+ (uv로 관리)
-- **테스트**: 2284 passing
+- **테스트**: 2970 passing
 - **마지막 ADR**: 0045 (matrix movement UX)
+- **신규 문서**: `design/CHARACTER_PATHS.md` (390줄, 3캐릭터 × 15미션 경로)
 
 ---
 

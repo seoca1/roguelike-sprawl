@@ -312,7 +312,7 @@ def build_default_player(
 
 
 def get_scaled_ice_stats(
-    data: dict[str, int | str | float],
+    data: dict[str, int | str],
     player_grade: int,
 ) -> tuple[int, int]:
     """Calculate scaled HP/DMG based on player grade.
