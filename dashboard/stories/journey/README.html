@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Character Journey Index — Roguelike Sprawl</title>
+<style>
+  body { font-family: Georgia, serif; background: #06090f; color: #c5d4e3; padding: 24px; max-width: 920px; margin: 0 auto; line-height: 1.8; }
+  h1, h2, h3 { font-family: 'JetBrains Mono', monospace; }
+  h1 { font-size: 28px; color: #ffaa55; margin-bottom: 16px; }
+  h2 { font-size: 20px; color: #66ffcc; margin: 24px 0 12px; border-bottom: 1px solid #1a2530; padding-bottom: 4px; }
+  h3 { font-size: 16px; color: #ffaa55; margin: 16px 0 8px; }
+  table { border-collapse: collapse; margin: 12px 0; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  td { border: 1px solid #1a2530; padding: 6px; }
+  td:first-child { color: #ffaa55; font-weight: 600; }
+  strong { color: #ffaa55; }
+  code { background: #1a2530; padding: 2px 4px; border-radius: 3px; font-family: monospace; color: #00ccff; font-size: 12px; }
+  blockquote { border-left: 3px solid #66ffcc; padding: 8px 12px; margin: 12px 0; color: #8a98a8; font-style: italic; }
+  pre { background: #0d141d; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 11px; line-height: 1.4; }
+  hr { border: none; border-top: 1px solid #1a2530; margin: 24px 0; }
+  .top-nav { background: #06090f; border-bottom: 1px solid #1a2530; padding: 8px 24px; margin: -24px -24px 24px -24px; font-family: 'JetBrains Mono', monospace; }
+  .top-nav a { color: #66ffcc; text-decoration: none; margin-right: 16px; font-size: 13px; }
+  .footer { text-align: center; color: #6a7888; font-size: 12px; margin-top: 48px; padding: 24px; border-top: 1px solid #1a2530; font-family: 'JetBrains Mono', monospace; }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="../../stories.html">← Stories</a> |
+  <a href="novice.html">Novice</a> |
+  <a href="veteran.html">Veteran</a> |
+  <a href="heretic.html">Heretic</a>
+</nav>
+<h1>Character Journeys</h1>
+<blockquote>게임 진행 데모 스토리 — 챕터별 미션, 전투, 아이템, 엔딩 분기</blockquote>
+<p>></p>
+<blockquote>**이 문서는 게임의 실제 미션/아크/챕터/엔딩 데이터를 기반으로 자동 생성되었습니다.**</blockquote>
+<blockquote>**파생 소설(Fiction wiki 단편)과는 별개입니다.**</blockquote>
+<p>---</p>
+<h2>캐릭터 선택</h2>
+<p>---</p>
+<h2>구조 검증 요약</h2>
+<h3>1. 미션 시스템 ✅</h3>
+<li><strong>29/29 미션 매핑</strong> (15 → 18 → 29)</li>
+<li>모든 미션이 미션 시스템에 등록됨</li>
+<li>캐릭터별 character_ref 일관성 ✓</li>
+<h3>2. 아크 구조 ✅</h3>
+<li><strong>5 챕터 × 5 phase = 25 phase</strong> per 캐릭터</li>
+<li>챕터 ID 매핑 (ch_case_01~05, ch_sil_01~05, ch_kas_01~05)</li>
+<h3>3. 챕터 스크린 ✅</h3>
+<li>각 챕터당 단편 본문 발췌 (12초 타이핑)</li>
+<li>novice: <code>case_jackout-30sec</code></li>
+<li>veteran: <code>marly_louisiana-god</code></li>
+<li>heretic: <code>kumiko_manarase-midnight</code></li>
+<h3>4. 엔딩 시스템 ✅</h3>
+<h3>5. 보상 시스템 ✅</h3>
+<h3>6. 픽서 분포 ✅</h3>
+<li><strong>novice</strong>: Finn 100% (10/10) — 단일 픽서, 단순 의뢰 체계</li>
+<li><strong>veteran</strong>: Finn 6, Dixie 1, MaaS 1, ta_rep 1, Sally 1, Kumiko 1 — 다양한 의뢰 네트워크</li>
+<li><strong>heretic</strong>: Finn 3, Sally 3, Kumiko 1, Yakuza 1 — 카오틱 의뢰 체계</li>
+<h3>7. 적(ICE) 분포 ✅</h3>
+<li><strong>novice</strong>: ICE.standard → ICE.watchdog → Black ICE (점진적 난이도 상승)</li>
+<li><strong>veteran</strong>: ICE.corporate → ICE.construct → ICE.wintermute (loa-매개 변형)</li>
+<li><strong>heretic</strong>: ICE.craft → ICE.ai_whisper → ICE.neuromancer (AI/loa 변형)</li>
+<h3>8. 챕터-미션 매핑 ✅</h3>
+<p>---</p>
+<h2>게임 진행 흐름 (시각화)</h2>
+<p><code>`</code></p>
+<p>┌─────────────────────────────────────────────────────────────┐</p>
+<p>│                  CHARACTER SELECT (The Finn)                  │</p>
+<p>│       "I need a jockey. Sense/Net, first run..."            │</p>
+<p>└─────┬─────────────────┬─────────────────┬───────────────────┘</p>
+<p>│                 │                 │</p>
+<p>┌──▼──┐          ┌──▼──┐          ┌──▼──┐</p>
+<p>│  K  │          │ Sil │          │ Kas │</p>
+<p>│ Nov │          │ Vet │          │ Her │</p>
+<p>└──┬──┘          └──┬──┘          └──┬──┘</p>
+<p>│                 │                 │</p>
+<p>[CHAPTER]        [CHAPTER]        [CHAPTER]</p>
+<p>30 Seconds       Louisiana 11    Manarase</p>
+<p>(Case 1인칭)      (Marly 3인칭)    (Kumiko 3인칭)</p>
+<p>│                 │                 │</p>
+<p>┌──▼──────────┐    ┌──▼──────────┐    ┌──▼──────────┐</p>
+<p>│ arc_case    │    │ arc_sil     │    │ arc_kas     │</p>
+<p>│ 5 chapters  │    │ 5 chapters  │    │ 5 chapters  │</p>
+<p>│ 10 missions │    │ 11 missions │    │ 8 missions  │</p>
+<p>│ 25 phases   │    │ 25 phases   │    │ 25 phases   │</p>
+<p>└──────┬──────┘    └──────┬──────┘    └──────┬──────┘</p>
+<p>│                │                │</p>
+<p>┌──▼──┐          ┌──▼──┐          ┌──▼──┐</p>
+<p>│ A  │          │ A  │          │ A  │</p>
+<p>│ 탈출 │          │ 폭로 │          │선언│</p>
+<p>└─────┘          └─────┘          └─────┘</p>
+<p>┌──▼──┐          ┌──▼──┐          ┌──▼──┐</p>
+<p>│ B  │          │ B  │          │ B  │</p>
+<p>│사망 │          │사업 │          │흡수│</p>
+<p>└─────┘          └─────┘          └─────┘</p>
+<p><code>`</code></p>
+<p>---</p>
+<h2>캐릭터별 비교</h2>
+<p>---</p>
+<h2>챕터 메타 정보 (전 챕터 통합)</h2>
+<h3>Novice (chapter_novice)</h3>
+<li><strong>이름</strong>: The First Jack</li>
+<li><strong>부제</strong>: Thirty Seconds After Jack-Out</li>
+<li><strong>포트레잇</strong>: art:case</li>
+<li><strong>테마</strong>: matrix_rain</li>
+<li><strong>duration_ms</strong>: 12000 (12초 타이핑)</li>
+<li><strong>다음 화면</strong>: HUB</li>
+<h3>Veteran (chapter_veteran)</h3>
+<li><strong>이름</strong>: The Old Score</li>
+<li><strong>부제</strong>: The Louisiana God</li>
+<li><strong>포트레잇</strong>: art:marly</li>
+<li><strong>테마</strong>: cyberspace</li>
+<li><strong>duration_ms</strong>: 12000</li>
+<li><strong>다음 화면</strong>: HUB</li>
+<h3>Heretic (chapter_heretic)</h3>
+<li><strong>이름</strong>: The Declaration</li>
+<li><strong>부제</strong>: Manarase at Midnight</li>
+<li><strong>포트레잇</strong>: art:kumiko</li>
+<li><strong>테마</strong>: sense_net</li>
+<li><strong>duration_ms</strong>: 12000</li>
+<li><strong>다음 화면</strong>: HUB</li>
+<p>---</p>
+<h2>아이템 시스템 (인벤토리 흐름)</h2>
+<p><code>`</code></p>
+<p>Novice:                              Veteran:                              Heretic:</p>
+<p>─────────                            ─────────                             ─────────</p>
+<p>Tier 1 (Arc 1-2):                  Tier 1-2 (Arc 1-2):                   Tier 1-2 (Arc 2):</p>
+<p>data_fragment × 12                  data_fragment × 5                     data_fragment × 0</p>
+<p>ice_shard × 2                       upgrade_t1 × 1                       memory_chip × 1</p>
+<p>upgrade_t2 × 1                        upgrade_t2 × 2</p>
+<p>Tier 3 (Arc 3-4):                                                                          ↓</p>
+<p>rom_fragment × 1                  Tier 3-4 (Arc 3-4):                   Tier 3 (Arc 3):</p>
+<p>loa_fragment × 1                   construct_fragment × 1                  construct_fragment × 2</p>
+<p>upgrade_t3 × 1                     unique_program × 1</p>
+<p>upgrade_t4 × 1</p>
+<p>Tier 5 (Arc 5):                    Tier 5 (Arc 5):</p>
+<p>ending_token × 1                   data_fragment × 5                    Tier 4-5 (Arc 4-5):</p>
+<p>unique_construct × 1</p>
+<p>data_fragment × 13</p>
+<p>Final Grade 5                       Final Grade 5</p>
+<p>27,500cr                            20,100cr</p>
+<p>T4 Hammer                           T4 + unique_construct</p>
+<p><code>`</code></p>
+<p>---</p>
+<h2>데이터 출처</h2>
+<p><code>`</code></p>
+<p>Game/roguelike_sprawl/prototype/</p>
+<p>├── data/</p>
+<p>│   ├── missions/missions.json           (29 미션, source: 검증 헬퍼 통과)</p>
+<p>│   ├── story/</p>
+<p>│   │   ├── chapters/{case,sil,kas}.json (CHAPTER 화면 데이터)</p>
+<p>│   │   ├── arcs/{case,sil,kas}_arc.json (5 챕터 × 5 phase = 25 phase)</p>
+<p>│   │   └── prologues/{case,sil,kas}.json (프롤로그 NPC 이벤트)</p>
+<p>│   ├── programs/programs.json           (9개 프로그램/스킬)</p>
+<p>│   ├── jockeys/deceased.json            (Hall of Dead — 사망 자키 기록)</p>
+<p>│   └── i18n/{en,ko}.json                (UI 번역, 69 키)</p>
+<p>└── src/roguelike_sprawl/</p>
+<p>└── engine/</p>
+<p>├── chapter_view.py              (CHAPTER 화면 렌더링)</p>
+<p>└── original_story.py            (캐릭터 선택 + 엔딩 + 씬 테마)</p>
+<p><code>`</code></p>
+<p>---</p>
+<p><em>Generated: 2026-06-30. 자동 검증: <code>verify_story_links.py</code> (29/29 OK), <code>test_story_resolver.py</code> (15/15 PASS)</em></p>
+<div class="footer">
+  Roguelike Sprawl — Character Journey Index<br>
+  Generated: 2026-06-30
+</div>
+</body>
+</html>
