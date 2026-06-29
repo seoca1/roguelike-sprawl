@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{'en': 'Tutorial: Maze', 'ko': '튜토리얼: 미로'} — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .story-body h2 {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin: 2.5rem 0 1rem;
+        }
+        .story-body blockquote {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        .story-body hr { border: none; border-top: 1px solid #e0ddd8; margin: 2rem 0; }
+        .story-body ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .story-body li { margin-bottom: 0.5rem; }
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+
+        .story-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e0ddd8; text-align: center; }
+        .story-footer p { font-size: 0.85rem; color: var(--meta-color); font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        .lang-indicator a { color: inherit; text-decoration: none; }
+        .lang-indicator a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) { html { font-size: 16px; } .container { padding: 2rem 1.5rem 6rem; } .story-title { font-size: 1.75rem; } }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">EN · <a href="tutorial_maze_ko.html">KO</a></div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Unknown</div>
+            <h1 class="story-title">{'en': 'Tutorial: Maze', 'ko': '튜토리얼: 미로'}</h1>
+            <p class="story-subtitle"></p>
+            <div class="story-meta"><span>0 words</span><span>Sprawl Trilogy</span></div>
+        </header>
+        <article class="story-body">
+<p>The first thing you learn about jacking in is that the matrix is bigger than it looks.</p>
+<p>You see it differently than meatspace. The Sprawl's data corridors stretch out before you like a city seen from a helicopter at night—all neon and geometry, humming with the electromagnetic pulse of a thousand corporate secrets. Your deck translates it into something your wetware can process, but it still feels like drowning in light.</p>
+<p>"Ready?" The Finn's voice cuts through the static. He's watching from his office in the Sprawl Hole, his CRT flickering behind him. "This is your first run. Don't get fancy."</p>
+<p>You nod, though he can't see you. The trodes at your temples pulse with the familiar cold bite of the jack. The deck hums against your spine—that particular frequency that means you're about to cross over.</p>
+<p>Then the city shifts.</p>
+<p>You're in the matrix now. The entry node resolves around you: a simple router, glowing faint blue. From here, the data streams branch in every direction. Corporate servers pulse like distant towers. ICE barriers shimmer at the edges of your vision. Somewhere out there, the target waits.</p>
+<p>"Path's simple," The Finn says. "Follow the green nodes. Avoid the red. The maze will try to confuse you, but the data always flows toward the corps. Find the path, grab the payload, jack out."</p>
+<p>You move.</p>
+<p>The first router is easy. The second, a little trickier. You start to see what he means about the maze—the data corridors twist back on themselves, dead-ends everywhere you look. The matrix is a labyrinth designed by paranoid sysops who trust nothing and no one.</p>
+<p>You find a green node. It pulses in invitation. You move toward it.</p>
+<p>A firewall. You recognize the shimmer of a standard ICE barrier before your deck flags it. Not lethal, not yet, but enough to scramble your vision if you push through unprepared. You pull back.</p>
+<p>The Finn's voice: "The maze has teeth. Watch where you step."</p>
+<p>You learn. The next path opens up, and you follow it. Green nodes lead to other green nodes, and slowly the shape of the maze becomes clear. It's not random—there are patterns in the chaos. The corps build their security in layers, and the maze is designed to slow you down, not stop you.</p>
+<p>Time to move.</p>
+<p>The third router is deeper in. The data glows brighter here, more urgent. The target pulses somewhere ahead, but so does the ICE. You can feel the heat of corporate security on the back of your neck.</p>
+<p>Then—a path. Straight through.</p>
+<p>You take it.</p>
+<p>The target resolves: a data node, pulsing with the soft glow of unprocessed information. You reach out with your deck's probe, feeling the connection form. The data slides into your memory like water.</p>
+<p>"Got it," you say.</p>
+<p>"Good." The Finn sounds almost impressed. "Now get out before they notice."</p>
+<p>You jack out.</p>
+<p>The Sprawl Hole materializes around you—cramped, smelly, real. The Finn is watching you with that expression he always has, like he's calculating how much you're worth.</p>
+<p>"Not bad," he says. "For a rookie."</p>
+<p>You pocket the credits and try not to look too pleased. There will be other runs. Other mazes. But this one was yours.</p>
+        </article>
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Derivative Fiction</p>
+            <p>Based on William Gibson's Sprawl Trilogy</p>
+        </footer>
+    </div>
+</body>
+</html>

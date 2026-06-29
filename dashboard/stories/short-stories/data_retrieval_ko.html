@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{'en': 'Data Retrieval', 'ko': '데이터 회수'} — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .story-body h2 {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin: 2.5rem 0 1rem;
+        }
+        .story-body blockquote {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        .story-body hr { border: none; border-top: 1px solid #e0ddd8; margin: 2rem 0; }
+        .story-body ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .story-body li { margin-bottom: 0.5rem; }
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+
+        .story-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e0ddd8; text-align: center; }
+        .story-footer p { font-size: 0.85rem; color: var(--meta-color); font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        .lang-indicator a { color: inherit; text-decoration: none; }
+        .lang-indicator a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) { html { font-size: 16px; } .container { padding: 2rem 1.5rem 6rem; } .story-title { font-size: 1.75rem; } }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">KO · <a href="data_retrieval_en.html">EN</a></div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Unknown</div>
+            <h1 class="story-title">{'en': 'Data Retrieval', 'ko': '데이터 회수'}</h1>
+            <p class="story-subtitle"></p>
+            <div class="story-meta"><span>0 words</span><span>Sprawl Trilogy</span></div>
+        </header>
+        <article class="story-body">
+<p>그 작업은 간단했다: 중급 기업 서버에서 데이터 파일을 추출. ICE도 없고, 가드도 없고, 표준 기업 방화벽과 마감일만 있다. 핀이 20분이 걸릴 거라고 했다. 당신은 15분에 끝낼 수 있을 것 같았다.</p>
+<p>당신은 스프롤 홀에서 잭인했다, 관자놀이로 퍼지는 트로드의 익숙한 차가움과 함께. 매트릭스가 당신 주위로 펼쳐진다, 데이터 스트림과 기업 아키텍처의 미로. 목표는 Hosaka 자회사—대기업은 아니지만, 숨길 무언가는 충분히 있다.</p>
+<p>"패킷 준비됐어," 핀이 말한다. "기업 방화벽, 중급 보안. 그들이 알아채기 전에 들어갔다 나와야 해."</p>
+<p>"그럴 거야," 당신이 말한다.</p>
+<p>"욕심부리지 마."</p>
+<p>진입 노드는 간단한 라우터다, 어떤 런에서든 천 번은 보는 종류. 당신은 빠르게 그것을 통과하고, 목표를 향해 데이터 스트림을 따라 이동한다. 서버 아키텍처는 표준 Hosaka—깨끗한 선, 효율적인 보안, 화려함은 없다. 자신의 것이 침입 불가능하다고 생각하는 곳.</p>
+<p>당신은 기업 깊숙한 곳의 데이터 노드를 찾는다. 세 층의 암호화 아래 숨겨져 있지만, 당신의 덱이 금방 처리한다. 당신은 프로브로 손을 뻗어, 연결이 형성되는 것을 느낀다.</p>
+<p>데이터가 전송된다.</p>
+<p>하지만 뭔가 잘못되었다.</p>
+<p>파일이 예상보다 크다. 당신이 기대한 작은 데이터 패킷 대신, 이것은 전체 데이터베이스—직원 기록, 재무 보고서, 급여 정보처럼 보이는 무언가. 기업 비밀, 사람들이 해고될 수 있는 종류. 또는 더 나쁜 것.</p>
+<p>"핀," 당신이 말한다. "이거 맞는 파일이 아닙니다."</p>
+<p>다른 쪽의 침묵. 그러다가: "메타데이터 확인해."</p>
+<p>당신이 확인한다. 파일에는 당신이 인식하는 기업 코드가 태그되어 있다—Tessier-Ashpool. 들어본 적 없는 자회사, 하지만 그 이름은 스프롤 곳곳에 있다. 당신이 서핑하는 데이터 스트림의 절반 뒤에 있는 초기업.</p>
+<p>"T-A네," 당신이 말한다. "T-A가 Hosaka 급여 명세서를 가지고 있을리가."</p>
+<p>"그게 네가 왜 신경 쓰지?" 핀의 목소리가 달라졌다. 더硬い. "돈은 받았어. 하고 끝내."</p>
+<p>당신 주위의 데이터 스트림이 움직이기 시작하고 있다. 기업 보안이 깨어나는 것을 느낄 수 있다, 침입을 감지하고. 당신은 안에 있는 시간이 너무 길었다.</p>
+<p>"잭 아웃해," 핀이 말한다. "지금."</p>
+<p>당신이 한다.</p>
+<p>스프롤 홀이 당신 주위로 실체화된다. 핀이 보고 있다, 그가 항상 하는 그 표정으로, 당신이 얼마나 값어치가 있는지 계산하는 것처럼. 데이터는 이미 사라졌다, 당신이 모르는 위치로 전송되었다.</p>
+<p>"뭐였어?" 당신이 묻는다.</p>
+<p>"무슨mean?"</p>
+<p>"T-A. 그 파일 안에 뭐가 있는지 알았을 거잖아."</p>
+<p>핀은 대답하지 않는다. 그는 그냥 또 마시고 눈을 돌린다. 한참이 지나고 나서, 당신은 그가 않을 것임을 깨닫는다.</p>
+<p>" 좀 쉬어," 그가 마침내 말한다. "내일은 긴 하루가 될 거야."</p>
+<p>당신은 간다.</p>
+<p>하지만 데이터는 당신과 함께 있다, 브랜드처럼 기억을 타오르게. 기업 비밀. 급여 명세서. 당신이 아직 이해하지 못하는 방식으로 Hosaka와 Tessier-Ashpool을 연결하는 실.</p>
+<p>스프롤은 그런 실로 가득하다. 하나를 잡아당기면, 무엇을 찾게 될지 알 수 없다.</p>
+<p>당신은 담요를 두르고 잠을려고 한다.</p>
+<p>데이터가 꿈속에서도 당신을 따라다닌다.</p>
+        </article>
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Derivative Fiction</p>
+            <p>Based on William Gibson's Sprawl Trilogy</p>
+        </footer>
+    </div>
+</body>
+</html>
