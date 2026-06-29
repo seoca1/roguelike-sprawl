@@ -22,6 +22,7 @@ classifiers = [
 ]
 dependencies = [
     "tcod>=16.0",
+    "pyyaml",
 ]
 
 [project.optional-dependencies]
