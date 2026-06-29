@@ -248,7 +248,7 @@
 </head>
 <body>
 <nav class="top-nav">
-  <a href="../../Game/dashboard/index.html">🌐 Hub</a>
+  <a href="./index.html">🌐 Hub</a>
   <span class="sep">|</span>
   <a href="index.html">◀ Roguelike</a>
   <span class="sep">|</span>
@@ -323,6 +323,15 @@
 .mission-story-card .ms-source { font-size: 11px; color: #6a7888; margin-top: 8px; }
 .mission-story-card .ms-source a { color: #00ccff; text-decoration: none; }
 .mission-story-card .ms-source a:hover { text-decoration: underline; }
+.arc-section-header { grid-column: 1 / -1; background: linear-gradient(90deg, #131a23, #0a0e14); border: 1px solid #2a3540; border-radius: 8px; padding: 16px 20px; margin: 8px 0; display: flex; align-items: center; gap: 12px; }
+.arc-section-header .arc-icon { font-size: 28px; }
+.arc-section-header .arc-title { font-size: 18px; font-weight: 600; }
+.arc-section-header .arc-subtitle { color: #6a7888; font-size: 13px; }
+.arc-section-header.arc-1 { border-left: 4px solid #66ffcc; }
+.arc-section-header.arc-2 { border-left: 4px solid #00ccff; }
+.arc-section-header.arc-3 { border-left: 4px solid #ffaa55; }
+.arc-section-header.arc-4 { border-left: 4px solid #ff5577; }
+.arc-section-header.arc-5 { border-left: 4px solid #ff00ff; }
 .ms-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }
 .ms-stat { background: #0d1420; border: 1px solid #1a2530; border-radius: 6px; padding: 14px; text-align: center; }
 .ms-stat .ms-stat-num { font-size: 28px; font-weight: 700; color: #ffaa55; }
@@ -345,29 +354,29 @@
 
 <div class="ms-stats">
   <div class="ms-stat">
-    <div class="ms-stat-num">15</div>
+    <div class="ms-stat-num">26</div>
     <div class="ms-stat-label">Missions Total</div>
     <div class="ms-stat-sub">Arc 1–5</div>
   </div>
   <div class="ms-stat">
-    <div class="ms-stat-num">10</div>
+    <div class="ms-stat-num">26</div>
     <div class="ms-stat-label">w/ Synopsis</div>
     <div class="ms-stat-sub">Gibson voice</div>
   </div>
   <div class="ms-stat">
-    <div class="ms-stat-num">3</div>
+    <div class="ms-stat-num">26</div>
     <div class="ms-stat-label">Stories Linked</div>
-    <div class="ms-stat-sub">of 5 existing</div>
+    <div class="ms-stat-sub">of 26 missions</div>
   </div>
   <div class="ms-stat">
-    <div class="ms-stat-num">3/15</div>
+    <div class="ms-stat-num">26/26</div>
     <div class="ms-stat-label">Stories Written</div>
     <div class="ms-stat-sub">source linked</div>
   </div>
   <div class="ms-stat">
-    <div class="ms-stat-num">10</div>
+    <div class="ms-stat-num">0</div>
     <div class="ms-stat-label">Stories TBD</div>
-    <div class="ms-stat-sub">short story plan</div>
+    <div class="ms-stat-sub">all complete</div>
   </div>
 </div>
 
@@ -496,7 +505,7 @@
       <span class="ms-check ok">✓ Word Count (220)</span>
       <span class="ms-check ok">✓ Gibson Voice</span>
     </div>
-    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_kumiko_manarase-midnight.md">kumiko_manarase-midnight</a></div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_kumiko_manarase-midnight.md">kumiko_manarase-midnight</a></div>
   </div>
   <!-- delivery_to_finn -->
   <div class="mission-story-card">
@@ -538,7 +547,7 @@
       <span class="ms-check ok">✓ Word Count (194)</span>
       <span class="ms-check ok">✓ Gibson Voice</span>
     </div>
-    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_marly_louisiana-god.md">marly_louisiana-god</a></div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_marly_louisiana-god.md">marly_louisiana-god</a></div>
   </div>
   <!-- dixies_offer -->
   <div class="mission-story-card">
@@ -664,7 +673,7 @@
       <span class="ms-check ok">✓ Word Count (188)</span>
       <span class="ms-check ok">✓ Gibson Voice</span>
     </div>
-    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-20_case_jackout-30sec.md">case_jackout-30sec</a></div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_case_jackout-30sec.md">case_jackout-30sec</a></div>
   </div>
   <!-- first_trace -->
   <div class="mission-story-card">
@@ -1002,6 +1011,468 @@
     </div>
     <div class="ms-source">Source: <a href="#">yakuza_deal — <em style="color:#ffaa55">단편 미작성</em></a></div>
   </div>
+  <!-- tutorial_maze -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">tutorial_maze · Tutorial: Maze</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #66ffcc;">1 ARC</span>
+        <span class="ms-pillar">tutorial</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">1-1</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">tutorial_maze</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">559 EN · ~1,200 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"A new jockey's first time navigating the matrix. The maze-like structure of corporate firewalls feels endless, but somewhere in the depths, a data node pulses with opportunity. The Finn's voice crackles through the deck: 'Don't get lost, rookie.'"</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"새 자키의 첫 매트릭스 항해. 기업 방화벽의 미로 같은 구조가 끝없이 느껴진다. 하지만 어딘가에서 데이터 노드가 기회를 품고 박동한다. 핀의 목소리가 데크를 타고传来: '길 잃지 마, 루키.'"</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 1 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (559)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_tutorial_maze.md">tutorial_maze</a> ✅</div>
+  </div>
+  <!-- first_contact -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">first_contact · First Contact</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #66ffcc;">1 ARC</span>
+        <span class="ms-pillar">identity_matrix</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">1-1</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">first_contact</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">463 EN · ~1,100 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"A new jockey meets Dixie Flatline for the first time. The construct is everything they said and more—a dead man walking through cyberspace, his memories preserved in corporate ice. 'You got potential,' Dixie says. 'Don't waste it.'"</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"새 자키가 Dixie Flatline을 처음 만난다. 구성체는传言대로였지만 그 이상이었다—기업 ICE에保存된 기억 속을 걷는 죽은 남자. '자네 솜씨군,' Dixie가 말했다. '허비하지 마.'"</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 1 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (463)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_first_contact.md">first_contact</a> ✅</div>
+  </div>
+  <!-- data_retrieval -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">data_retrieval · Data Retrieval</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #66ffcc;">1 ARC</span>
+        <span class="ms-pillar">corporate_conspiracy</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">1-2</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">data_retrieval</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">547 EN · ~1,300 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"A simple data retrieval job goes sideways when the target turns out to be corporate payroll—a secret that could bring down a mid-level Tessier-Ashpool subsidiary. The Finn knew all along. He always does."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"단순한 데이터 회수 작업이 목표가 기업 급여 명세서임직 밝혀지며 틀어진다—중간 수준 T-A 자회사를 물거품으로 만들 수 있는 비밀. 핀은 처음부터 알고 있었다. 언제나 그렇듯."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 1 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (547)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_data_retrieval.md">data_retrieval</a> ✅</div>
+  </div>
+  <!-- mollys_market -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">mollys_market · Molly's Market</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #00ccff;">2 ARC</span>
+        <span class="ms-pillar">sprawl_culture</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">2-2</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">mollys_market</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">497 EN · ~1,400 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"A chance encounter with Molly Millions in a Chiba market. She's looking for someone who can run data, and she's willing to pay. The Finn always said she was dangerous—but dangerous people pay better."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"치바 마켓에서 Molly Millions과 뜻밖의 만남. 데이터 런이 가능한 자를 찾고 있으며 대가를 지불할 의향이 있다. 핀은 그녀가 위험하다고 했지만—위험한 사람들이 더 많이 준다."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 2 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (497)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_mollys_market.md">mollys_market</a> ✅</div>
+  </div>
+  <!-- zion_express -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">zion_express · Zion Express</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #00ccff;">2 ARC</span>
+        <span class="ms-pillar">escape_freedom</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">2-3</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">zion_express</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">772 EN · ~1,500 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"A courier run to the Zion orbital station. The data has to get through before the corps intercept it—because in zero gravity, secrets travel faster than light. The Rastafarians who run the station are neutral, but their silence has a price."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"자이온 우주 스테이션으로 긴급 배송. 기업에게 잡히기 전에 데이터를 넘겨야 한다—무중력에서는 비밀이 빛보다 빠르게 움직이니까. 스테이션을 운영하는 라스타프라도들은 중립적이지만, 그들의 침묵에는 대가가 있다."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 2 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (772)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_zion_express.md">zion_express</a> ✅</div>
+  </div>
+  <!-- vegas_stakeout -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">vegas_stakeout · Vegas Stakeout</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #00ccff;">2 ARC</span>
+        <span class="ms-pillar">surveillance_privacy</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">실 (Sil)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">2-3</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">vegas_stakeout</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">630 EN · ~1,300 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"A stakeout in the Sprawl's entertainment district for a cheating casino operator. The Finn's client wants evidence, not blood—and sometimes the hardest runs are the ones where you can't shoot your way out."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"사기 도박업자를 찾아 스프롤의 유흥가에서 증거 수집. 핀의 의뢰인은 피보다는 증거를 원한다—때로는 총으로 해결할 수 없는 런이 가장 어렵다."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 2 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (630)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_vegas_stakeout.md">vegas_stakeout</a> ✅</div>
+  </div>
+  <!-- winter_infiltrate -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">winter_infiltrate · Winter Infiltrate</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ffaa55;">3 ARC</span>
+        <span class="ms-pillar">ai_consciousness</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">3-4</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">winter_infiltrate</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">521 EN · ~1,500 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"A corporate infiltration goes deeper than expected when the target reveals itself as something far more than a simple data file. Wintermute is looking for something—and it's using Case to find it."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"기업 침투가 목표가 단순한 데이터 파일이 아닌 훨씬 더 큰 무언가로 드러나며 깊어진다. 윈터뮌트는 무언가를 찾고 있고—케이를 이용해 그것을 찾아낸다."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 3 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (521)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_winter_infiltrate.md">winter_infiltrate</a> ✅</div>
+  </div>
+  <!-- neuromancer_whisper -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">neuromancer_whisper · Neuromancer Whisper</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ffaa55;">3 ARC</span>
+        <span class="ms-pillar">ai_consciousness</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">3-4</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">neuromancer_whisper</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">510 EN · ~1,400 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"A ghost in the machine speaks with Case's voice, but it's not Dixie. It's something older, something that remembers the matrix before the corps built their walls. The neuromancer is calling—and it knows his name."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"기계 속 유령이 케이의 목소리로 말하지만 디아가 아니다. 더 오래된 것이다, 기업들이 벽을 쌓기 전의 매트릭스를 기억하는 무언가. 뉴로맨서가 호출한다—그리고 그의 이름을 안다."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 3 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (510)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_neuromancer_whisper.md">neuromancer_whisper</a> ✅</div>
+  </div>
+  <!-- matrix_revelation -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">matrix_revelation · Matrix Revelation</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ff5577;">4 ARC</span>
+        <span class="ms-pillar">ai_consciousness</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">카스 (Kas)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">4-5</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">matrix_revelation</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">581 EN · ~1,600 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The matrix is not what it seems. In the deepest layers, where the AI constructs play, Case discovers that the entire cyberspace infrastructure is built on a foundation of stolen consciousness. The corps didn't create the matrix—they just learned how to use it."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"매트리ックス는 보이는 것이 아니다. AI 구성체가 놀고 있는 가장 깊은 층에서, 케이스는 전체 사이버스페이스 인프라가 도둑맞은 의식의 토대 위에 지어졌다는 것을 발견한다. 기업들이 매트리ックス를 만든 것이 아니다—그냥 사용하는 법을 배웠을 뿐이다."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 4 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (581)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_matrix_revelation.md">matrix_revelation</a> ✅</div>
+  </div>
+  <!-- dixies_choice -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">dixies_choice · Dixie's Choice</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ff5577;">4 ARC</span>
+        <span class="ms-pillar">identity_matrix</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">4-5</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">dixies_choice</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">568 EN · ~1,400 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"Dixie Flatline has been a construct for longer than he can remember. But now Wintermute is offering him a way out—not just to die, but to become something new. The question is whether the man he used to be would have wanted this."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"Dixie Flatline은 기억할 수 있는 것보다 더 오래 구성체로 살아왔다. 하지만 이제 윈터뮌트가 탈출법을 제안하고 있다—죽는 것이 아니라 새로운 것이 되는 것. 질문은 단 하나, 과거의 그가 이것을 원했을까 하는 것이다."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 4 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (568)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_dixies_choice.md">dixies_choice</a> ✅</div>
+  </div>
+  <!-- neuromancer_merger -->
+  <div class="mission-story-card">
+    <div class="ms-header">
+      <span class="ms-title">neuromancer_merger · Neuromancer Merger</span>
+      <span>
+        <span class="ms-arc" style="border-left: 3px solid #ff00ff;">5 ARC</span>
+        <span class="ms-pillar">ai_consciousness</span>
+      </span>
+    </div>
+    <div class="ms-meta">
+      <div class="ms-meta-item">
+        <div class="label">Character</div>
+        <div class="value">케이 (K)</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Grade</div>
+        <div class="value">5-5</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Source</div>
+        <div class="value" style="font-size:11px;">neuromancer_merger</div>
+      </div>
+      <div class="ms-meta-item">
+        <div class="label">Words / Chars</div>
+        <div class="value">612 EN · ~1,600 KO</div>
+      </div>
+    </div>
+    <div class="ms-synopsis">
+      <div class="syn-label">Synopsis (English — Gibson voice)</div>
+      <div class="ms-synopsis-en">"The final run. Wintermute and Neuromancer are ready to merge, and Case is the only one who can make it happen. But the corps are coming, and if they reach the AI first, everything is lost. The matrix itself hangs in the balance."</div>
+      <div class="syn-label">시놉시스 (한글)</div>
+      <div class="ms-synopsis-ko">"마지막 런. 윈터뮌트와 뉴로맨서가 합병할 준비가 됐고, 케이만이 그것을 실현시킬 수 있다. 하지만 기업이赶来하고 있고, 그들이 AI에 먼저 도달하면 모든 것이 끝난다. 매트리ックス 자체가 벨런스에 걸려 있다."</div>
+    </div>
+    <div class="ms-checklist">
+      <span class="ms-check ok">✓ Character Match</span>
+      <span class="ms-check ok">✓ Arc 5 Match</span>
+      <span class="ms-check ok">✓ Source Linked</span>
+      <span class="ms-check ok">✓ Word Count (612)</span>
+      <span class="ms-check ok">✓ Gibson Voice</span>
+    </div>
+    <div class="ms-source">Source: <a href="../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_neuromancer_merger.md">neuromancer_merger</a> ✅</div>
+  </div>
 </div>
 
 <div style="background:#0d1420;border:1px solid #2a3540;border-radius:6px;padding:16px;margin-bottom:24px;">
@@ -1009,7 +1480,7 @@
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;">
     <div style="display:flex;align-items:center;gap:8px;">
       <span style="color:#66ffcc;font-size:16px;">✓</span>
-      <span style="color:#c5d4e3;font-size:12px;">미션 15개 모두 story 필드 보유</span>
+      <span style="color:#c5d4e3;font-size:12px;">미션 26개 모두 story 필드 보유</span>
     </div>
     <div style="display:flex;align-items:center;gap:8px;">
       <span style="color:#66ffcc;font-size:16px;">✓</span>
@@ -1362,8 +1833,8 @@
   <li><a class="docs-link" href="../design/story/characters.md">design/story/characters.md</a> — 오리지널 주인공 3인</li>
   <li><a class="docs-link" href="../design/story/prologue.md">design/story/prologue.md</a> — 프로로그 줄거리 (1-2페이지)</li>
   <li><a class="docs-link" href="https://github.com/anomalyco/opencode">AGENTS.md</a> — AI 작업 규약</li>
-  <li><a class="docs-link" href="../Fiction/wiki/works/neuromancer.md">Fiction wiki / Neuromancer</a> — 깁슨 원전 참고</li>
-  <li><a class="docs-link" href="../Fiction/wiki/works/count-zero.md">Fiction wiki / Count Zero</a> — Maelcum, Loa</li>
+  <li><a class="docs-link" href="../../../Fiction/wiki/works/neuromancer.md">Fiction wiki / Neuromancer</a> — 깁슨 원전 참고</li>
+  <li><a class="docs-link" href="../../../Fiction/wiki/works/count-zero.md">Fiction wiki / Count Zero</a> — Maelcum, Loa</li>
 </ul>
 
 <!-- ASCII art -->
@@ -1678,7 +2149,7 @@
   에피소드·전투·컷신·깨달음 순차 매핑. 출처: <code>data/story/arcs/chapter_flow.json</code> · 동적 로딩
 </p>
 
-<div class="chapter-flow-viewer" data-flow-src="../data/story/arcs/chapter_flow.json">
+<div class="chapter-flow-viewer" data-flow-src="./data/story/arcs/chapter_flow.json">
   <div class="flow-controls">
     <div class="flow-char-tabs" id="flowCharTabs">
       <button class="flow-char-btn active" data-char="case">케이 (Case)</button>

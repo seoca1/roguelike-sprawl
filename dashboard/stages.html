@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="10개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 3개 미션 흐름.">
+<meta name="description" content="9개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 15개 미션 (5 arcs).">
 <meta name="keywords" content="roguelike, cyberpunk, gibson, sprawl, neuromancer, python, tcod, ascii, stage, progression, mission, flow">
 <meta name="author" content="emilio">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="canonical" href="https://seoca1.github.io/roguelike-sprawl/stages.html">
 <meta property="og:title" content="Stage & Progression — Roguelike Sprawl">
-<meta property="og:description" content="10개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 3개 미션 흐름.">
+<meta property="og:description" content="9개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 15개 미션 (5 arcs).">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://seoca1.github.io/roguelike-sprawl/stages.html">
 <meta property="og:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Roguelike Sprawl">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Stage & Progression — Roguelike Sprawl">
-<meta name="twitter:description" content="10개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 3개 미션 흐름.">
+<meta name="twitter:description" content="9개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 15개 미션 (5 arcs).">
 <meta name="twitter:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
 <meta name="theme-color" content="#0a0e14">
 <title>Roguelike Sprawl — Stage & Progression Dashboard</title>
@@ -212,7 +212,7 @@
 </head>
 <body>
 <nav class="top-nav">
-  <a href="../../Game/dashboard/index.html">🌐 Hub</a>
+  <a href="./index.html">🌐 Hub</a>
   <span class="sep">|</span>
   <a href="index.html">◀ Roguelike</a>
   <span class="sep">|</span>
@@ -234,7 +234,7 @@
 
 <h1>⏱ ROGUELIKE SPRAWL — Stage & Progression Dashboard</h1>
 <div class="subtitle">
-  Single Run = Prologue → Mission → Completion. 6 stages, 5 transitions, 3 missions (Arc 1).
+  Single Run = Prologue → Mission → Completion. 9 stages, 8 transitions, 15 missions (5 arcs). Reward formula: Arc×800 + (grade-1)×300.
   <br>
   출처: <code>design/systems/stage_structure.json</code> · <code>src/run/state.py</code>
 </div>
@@ -275,7 +275,7 @@
 </table>
 
 <!-- Missions -->
-<h2>🎯 Arc 1 Missions (Arc 1 미션)</h2>
+<h2>🎯 All Missions (15 missions, 5 arcs)</h2>
 <div class="mission-grid" id="missionGrid"></div>
 
 <!-- Death Flow -->
@@ -337,14 +337,17 @@
 
     function renderMissionTabs() {
       const missions = state.data.missions || [];
+      // Arc color mapping
+      const arcColors = { 1: '#66ffcc', 2: '#00ccff', 3: '#ffaa55', 4: '#ff6699', 5: '#ffffff' };
       const html = missions.map(m => {
         const title = state.lang === 'en' ? m.title_en
           : state.lang === 'ko' ? m.title_ko
           : `${m.title_en} / ${m.title_ko}`;
         const isActive = m.id === state.missionId;
-        return `<button class="mission-tab ${isActive ? 'active' : ''}" data-mission="${m.id}">
-          <div class="mission-name">${title}</div>
-          <div class="mission-stages">${m.stages.length} stages</div>
+        const arcColor = arcColors[m.arc] || '#66ffcc';
+        return `<button class="mission-tab ${isActive ? 'active' : ''}" data-mission="${m.id}" style="border-left: 3px solid ${arcColor};">
+          <div class="mission-name" style="color: ${arcColor};">${title}</div>
+          <div class="mission-stages">Arc ${m.arc} · ${m.stages.length} stages</div>
         </button>`;
       }).join('');
       document.getElementById('missionTabs').innerHTML = html;
@@ -493,7 +496,9 @@
     }
 
     function renderMissions() {
+      const arcColors = { 1: '#66ffcc', 2: '#00ccff', 3: '#ffaa55', 4: '#ff6699', 5: '#ffffff' };
       const html = state.data.missions.map(m => {
+        const arcColor = arcColors[m.arc] || '#66ffcc';
         const title = state.lang === 'en' ? m.title_en
           : state.lang === 'ko' ? m.title_ko
           : `${m.title_en} / ${m.title_ko}`;
@@ -515,8 +520,8 @@
             rewards.push(`<span class="material">+${v} ${k}</span>`);
           });
         }
-        return `<div class="mission-card">
-          <h3>${title}</h3>
+        return `<div class="mission-card" style="border-left: 3px solid ${arcColor};">
+          <h3 style="color: ${arcColor};">${title}</h3>
           <div style="color: #6a7888; font-size: 12px;">fixer: ${m.fixer} · arc ${m.arc} · grade ${m.grade_min}-${m.grade_max}</div>
           <div class="mission-stage-flow">${stagesHtml}</div>
           <ul class="objectives">
