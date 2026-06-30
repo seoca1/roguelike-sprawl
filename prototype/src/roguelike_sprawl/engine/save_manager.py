@@ -61,6 +61,7 @@ from __future__ import annotations
 import json
 import os
 import platform
+import sys
 import tempfile
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
@@ -239,6 +240,23 @@ def _default_save_dir() -> Path:
     return Path(base) / "roguelike_sprawl" / "saves"
 
 
+def _log_save_warning(message: str) -> None:
+    """Log a save-system warning without raising.
+
+    Used by graceful-degradation paths so a recoverable problem
+    (e.g. matrix schema evolution) is visible during debugging but
+    doesn't crash the save flow.
+    """
+    try:
+        from .logger import get_logger
+
+        get_logger().warning(message, context="save_manager")
+    except Exception:
+        # Logger itself may be unavailable — fall back to stderr.
+        sys.stderr.write(f"[save_manager] WARN: {message}\n")
+        sys.stderr.flush()
+
+
 def _atomic_write(path: Path, data: str) -> None:
     """Write data to path atomically (write to temp + rename)."""
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -247,10 +265,15 @@ def _atomic_write(path: Path, data: str) -> None:
         with os.fdopen(fd, "w", encoding="utf-8") as f:
             f.write(data)
         os.replace(tmp_path, path)
-    except Exception:
-        # Clean up temp file on error
+    except OSError:
+        # Disk full / permission denied / parent dir disappeared —
+        # all transient filesystem issues. Clean up the temp file
+        # and re-raise as-is so the caller sees the real cause.
         if os.path.exists(tmp_path):
-            os.unlink(tmp_path)
+            try:
+                os.unlink(tmp_path)
+            except OSError:
+                pass  # Best effort — temp cleanup is not the bug
         raise
 
 
@@ -395,12 +418,16 @@ class SaveManager:
             }
 
         # App state — only the fields needed to resume a Run
-        # Include matrix graph if present (for complete state restoration)
+        # Include matrix graph if present (for complete state restoration).
+        # If serialization fails (e.g. newer field the saver doesn't know
+        # about), fall back to no-matrix save rather than crashing — the
+        # player will re-jack-in on restore.
         matrix_dict: dict[str, object] | None = None
         if state.matrix is not None:
             try:
                 matrix_dict = state.matrix.to_dict()
-            except Exception:
+            except (AttributeError, KeyError, TypeError, ValueError) as exc:
+                _log_save_warning(f"matrix serialization failed: {exc}")
                 matrix_dict = None
 
         app_state_dict: dict[str, Any] = {
@@ -414,6 +441,8 @@ class SaveManager:
             "selected_server_index": state.selected_server_index,
             "current_mission_id": state.current_mission.id if state.current_mission else None,
             "matrix": matrix_dict,
+            # Phase 6+: faction reputation persists across runs.
+            "reputation": state.reputation.to_dict(),
         }
 
         # Metadata for display
@@ -468,7 +497,9 @@ class SaveManager:
             return SavedRun.from_dict(data)
         except SaveVersionMismatchError:
             raise
-        except Exception as e:
+        except (KeyError, TypeError, ValueError, AttributeError) as e:
+            # Schema mismatch / dataclass evolution / type drift — all
+            # mean the save is structurally broken. Treat as corrupted.
             raise SaveCorruptedError(f"Slot {slot} data is invalid: {e}") from e
 
     def restore_state(self, slot: int, state: AppState) -> None:
@@ -517,6 +548,18 @@ class SaveManager:
         state.mission_progress = dict(app_data.get("mission_progress", {}))
         state.in_server_browser = app_data.get("in_server_browser", True)
         state.selected_server_index = int(app_data.get("selected_server_index", 0))
+
+        # Restore faction reputation (Phase 6+). Missing/legacy saves
+        # simply leave the default (empty) reputation state.
+        rep_data = app_data.get("reputation")
+        if isinstance(rep_data, dict):
+            from ..run.reputation import ReputationState
+
+            try:
+                state.reputation = ReputationState.from_dict(rep_data)
+            except (KeyError, TypeError, ValueError) as exc:
+                _log_save_warning(f"reputation restore failed: {exc}")
+                state.reputation = ReputationState()
         # Restore player_grade from metadata (persistent across runs)
         if saved.metadata.get("player_grade") is not None:
             state.player_grade = int(saved.metadata["player_grade"])
@@ -532,7 +575,8 @@ class SaveManager:
 
                 state.matrix = MatrixGraph.from_dict(matrix_data)
                 matrix_restored = True
-            except Exception as e:
+            except (KeyError, TypeError, ValueError, AttributeError) as e:
+                # Matrix schema evolved; treat as missing rather than crash.
                 state.status_messages.append(
                     f">>> Warning: matrix restore failed ({e}), re-jack-in required"
                 )
@@ -546,7 +590,9 @@ class SaveManager:
                 from ..matrix.graph import compute_layout
 
                 state.cyberspace_layouts = dict(compute_layout(state.matrix))
-            except Exception:
+            except (KeyError, TypeError, ValueError, ImportError):
+                # Layout computation can fail for unusual graph shapes
+                # but the matrix itself is valid — degrade gracefully.
                 state.cyberspace_layouts = None
         else:
             state.cyberspace_layouts = None
@@ -568,7 +614,8 @@ class SaveManager:
             try:
                 board = JobBoard.load(_engine_config.DATA_DIR / "missions" / "missions.json")
                 state.current_mission = board.get(app_data["current_mission_id"])
-            except Exception:
+            except (OSError, json.JSONDecodeError, KeyError, ValueError):
+                # Mission JSON missing or unparseable — fall back to no mission.
                 state.current_mission = None
 
         # Set screen based on saved stage
