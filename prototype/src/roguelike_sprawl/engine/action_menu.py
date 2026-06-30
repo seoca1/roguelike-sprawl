@@ -147,9 +147,9 @@ def _get_actions(node: Node) -> list[tuple[str, str, str]]:
 
 def _is_action_disabled(action_id: str, node: Node, state: AppState) -> bool:
     """Check if an action is currently disabled (locked/unavailable)."""
-    # Phase 6+ actions are locked
-    if action_id in ("hack", "communicate", "access"):
-        return True
+    # Phase 6+ actions now have lightweight stubs that emit a status
+    # message and (for hack/access) grant small rewards. They are no
+    # longer locked — see _execute_action for the implementation.
 
     # EXTRACT requires node not already extracted
     if action_id == "extract":
@@ -290,10 +290,32 @@ def _execute_action(
         # Router pass-through (no-op)
         state.message = f"Passed through {node.label}."
         state.status_messages.append(f">>> MOVE: Passed through {node.label}")
-    elif action_id in ("hack", "communicate", "access"):
-        # Phase 6+ features
-        state.message = f"Action '{action_id}' not yet implemented (Phase 6+)."
-        state.status_messages.append(f">>> {action_id.upper()}: Locked (Phase 6+)")
+    elif action_id == "hack":
+        # Phase 6 stub: SYSTEM node — emit a flavour message that hints
+        # at deeper interaction without a full minigame. Keeps the
+        # action visible (un-locked) so the player can experiment.
+        state.message = f"Probing {node.label}..."
+        state.status_messages.append(f">>> HACK: Probing {node.label} — system probes partial")
+        # Light reward: a small data fragment chance.
+        if not hasattr(state, "inventory") or state.inventory is None:
+            state.inventory = {}
+        state.inventory["data_fragment"] = state.inventory.get("data_fragment", 0) + 1
+        state.status_messages.append(">>> Gained: 1x Data Fragment (probe)")
+    elif action_id == "communicate":
+        # Phase 6 stub: CONSTRUCT node — open an NPC-style dialog echo
+        # so the player gets a narrative beat without a full exchange.
+        state.message = f"Construct '{node.label}' acknowledges you."
+        state.status_messages.append(f">>> COMMUNICATE: {node.label} — construct listens")
+    elif action_id == "access":
+        # Phase 6 stub: CORE node — peek at the next objective.
+        state.message = f"Core '{node.label}' exposes a route forward."
+        state.status_messages.append(f">>> ACCESS: {node.label} — core reveals a route")
+        # Reveal one unvisited node hint to the player.
+        if state.matrix is not None:
+            unvisited = [n for n in state.matrix.nodes if n.id not in state.extracted_nodes]
+            if unvisited:
+                hint = unvisited[0]
+                state.context_hint = f"Next target: {hint.label} ({hint.id})"
     else:
         state.message = f"Unknown action: {action_id}"
         state.status_messages.append(f">>> ERROR: Unknown action {action_id}")
