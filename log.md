@@ -3074,3 +3074,35 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 | `play.html` | `play_game.json` 3 / 5 / 15 / 2 | ✓ |
 | `cyberspace.html` | `worlds.json` 2 / 4 / 6 / `NodeKind` 8 / `ZoneDepth` 4 | ✓ |
 | `index.html` | `pytest` 3456 / `prologue_data.json` / `event_dialogues.json` | ✓ |
+
+---
+
+## [2026-06-30] feat | novel.html 카탈로그 30 entries 인덱스 자동 빌드 + --list-missions 진입점
+
+- **`tools/build_dashboard.py` `load_novel_stats()` 확장**:
+  - `catalog_entries_list: [{stem, title_en, title_ko}, ...]` 자동 빌드 (30 entries).
+  - 각 entry 의 title 은 first markdown heading (`# Title`) 에서 추출 — fallback 으로 stem 변경 (`.replace("_", " ").title()`).
+  - `is_ko` 정확한 정규화 (filename endswith `.ko.md` 검사 후 suffix strip).
+- **`dashboard/novel.html`** — 카탈로그 인덱스 자동 빌드:
+  - `<div id="catalog-index">` 추가 + `fetch(data/novel_stats.json)` 가 `catalog_entries_list` 순회 + 30 cards 자동 빌드.
+  - 각 card = stem (cyan) + en title + ko title (있는 경우 italic).
+- **`prototype/scripts/play.py --list-missions`**:
+  - 모든 미션 ID 출력 (예: `black_ice_dream / craft_job / first_jack / ...` = 16 entries).
+  - 0 종료. `--bsp-mission` 의 target list.
+- **검증** (로컬):
+  - `play.py --list-missions` → 16 missions 출력.
+  - `play.py --bsp-mission first_jack --bsp-seed 7` → BSP 6 rooms 정상.
+  - `play.py --phase-1-5` → 6 데모 모두 PASS (rc=0).
+- **(in-flight: 위 4-5 commit 묶음)**
+
+### 7 dashboard 진실성 + 카탈로그 인덱스 (최종)
+
+| 페이지 | 자동 sync |
+|---|---|
+| `combat.html` | ✓ 5 stat 카드 + 부제목 + ICE 29 entries 인덱스 |
+| `novel.html` | ✓ 6 stat 카드 + 30 entries 카탈로그 인덱스 (NEW) |
+| `stories.html` | ✓ 5 stat 카드 + en/ko 분할 |
+| `stages.html` | ✓ 헤더 3 정수 + 미션 카드 동적 |
+| `play.html` | ✓ 헤더 4 정수 (3/5/15/2) |
+| `cyberspace.html` | ✓ 5 stat 카드 + footer 3 정수 |
+| `index.html` | ✓ Project Status 5 stat 카드 (3456 tests / 25 lines / 5 NPCs / 9 stages / 29 missions) |

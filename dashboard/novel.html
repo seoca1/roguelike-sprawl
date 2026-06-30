@@ -296,6 +296,20 @@ $Fiction/derivative/sprawl-trilogy/short-stories/
   <tr><th>합계</th><th class="num">39</th></tr>
 </table>
 
+<!-- Catalog entries index (auto-built from novel_stats.json) -->
+<h2>📚 Catalog Entries (<span data-stat="catalog-entries-value">30</span> stories)</h2>
+<div class="panel">
+  <p style="font-size: 13px;">
+    <code>Fiction/derivative/sprawl-trilogy/short-stories/</code> 의 30 stems 자동 빌드
+    (각 entry: stem + 영어/한글 제목 + 한글 페어 유무). 자동 생성:
+  </p>
+  <div id="catalog-index" style="
+       display: grid;
+       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+       gap: 6px;
+       margin-top: 12px;"></div>
+</div>
+
 <h2>🔗 관련 문서</h2>
 <ul style="margin-left: 20px; line-height: 1.8;">
   <li><a href="stories.html">Short Stories Dashboard</a> — 30개 단편 직접 보기</li>
@@ -328,6 +342,21 @@ fetch('data/novel_stats.json').then(r => r.ok ? r.json() : null)
     set('code-lines', `~${stats.code_lines_approx}`);
     set('layers', stats.layers);
     set('hook-kinds', stats.hook_kinds);
+    // Build the catalog entries index from novel_stats.catalog_entries_list.
+    const idx = document.getElementById('catalog-index');
+    if (idx && Array.isArray(stats.catalog_entries_list)) {
+      idx.innerHTML = '';
+      stats.catalog_entries_list.forEach(e => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background:#0a0e14;border:1px solid #2a3540;' +
+                             'border-radius:4px;padding:8px 10px;font-size:11px;';
+        const ko = e.title_ko ? `<div style="color:#8a9aa8;font-style:italic;margin-top:4px;">${e.title_ko}</div>` : '';
+        card.innerHTML = `<div style="color:#66ffcc;font-weight:600;">${e.stem}</div>` +
+                         `<div style="color:#c5d4e3;margin-top:2px;">${e.title_en}</div>` +
+                         ko;
+        idx.appendChild(card);
+      });
+    }
   })
   .catch(() => { /* keep static fallback */ });
 </script>

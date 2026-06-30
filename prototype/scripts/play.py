@@ -29,6 +29,9 @@ Options:
                       layout in detail.
     --bsp-seed N      RNG seed for --bsp-mission (default 2026).
     --bsp-grade N     Mission grade 1-5 (default 2).
+    --list-missions   Print every mission id in data/missions/missions.json,
+                      one per line, then exit.  Use as a target-list
+                      for --bsp-mission <id>.
     --show-controls   Print controls hint at start
 """
 
@@ -860,6 +863,23 @@ def _run_bsp_mission(mission_id: str, *, seed: int = 2026,
     return res.returncode
 
 
+def _list_missions() -> int:
+    """Print every mission id available via data/missions/missions.json.
+
+    Imported lazily so the GUI playthrough is unaffected when the
+    --list-missions flag is absent.
+    """
+    from roguelike_sprawl.missions import JobBoard
+
+    p = Path(__file__).resolve().parents[1] / "data" / "missions" / "missions.json"
+    board = JobBoard.load(p)
+    ids = sorted(board._missions.keys())
+    print(f"Available missions ({len(ids)}):")
+    for mid in ids:
+        print(f"  {mid}")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--duration", type=float, default=30.0)
@@ -907,7 +927,14 @@ def main() -> int:
     parser.add_argument(
         "--bsp-grade",
         type=int, default=2,
-        help="Mission grade 1-5 forwarded to play_arc_bsp.py (default 2).",
+        help="Mission grade 1-5 (default 2).",
+    )
+    parser.add_argument(
+        "--list-missions",
+        action="store_true",
+        help=("Print all available mission ids from data/missions/"
+              "missions.json, one per line.  Useful as a target-list "
+              "for --bsp-mission <id>."),
     )
     parser.add_argument("--show-controls", action="store_true")
     args = parser.parse_args()
@@ -921,6 +948,10 @@ def main() -> int:
         return _run_bsp_mission(args.bsp_mission,
                                 seed=args.bsp_seed,
                                 grade=args.bsp_grade)
+
+    # List-missions mode: print ids and exit before any GUI setup.
+    if args.list_missions:
+        return _list_missions()
 
     state, t, story_reg = _setup(args)
     # Apply character selection to state so CHARACTER_SELECT → CHAPTER

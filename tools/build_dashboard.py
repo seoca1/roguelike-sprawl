@@ -123,14 +123,46 @@ def load_novel_stats(repo: Path) -> dict[str, object]:
                 break
     if short_stories.exists():
         md_files = list(short_stories.glob("*.md"))
-        out["short_stories_en"] = sum(1 for f in md_files if ".ko." not in f.name)
-        out["short_stories_ko"] = sum(1 for f in md_files if ".ko." in f.name)
+        out["short_stories_en"] = sum(1 for f in md_files if f.name.endswith(".ko.md"))
+        out["short_stories_ko"] = sum(1 for f in md_files if f.name.endswith(".ko.md"))
+        # That counted incorrectly; redo with simpler logic:
+        out["short_stories_en"] = sum(1 for f in md_files if not f.name.endswith(".ko.md"))
+        out["short_stories_ko"] = sum(1 for f in md_files if f.name.endswith(".ko.md"))
         stems = set()
+        per_stem_titles: dict[str, dict[str, str]] = {}
         for f in md_files:
-            s = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", f.name)
-            s = re.sub(r"\.ko\.md$|\.md$", "", s)
-            stems.add(s)
+            name = f.name
+            is_ko = name.endswith(".ko.md")
+            # strip the date prefix + suffix to leave just the stem.
+            stem = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", name)
+            if is_ko:
+                stem = stem[:-len(".ko.md")]
+            else:
+                stem = stem[:-len(".md")]
+            stems.add(stem)
+            # Best-effort title — first markdown heading or filename stem.
+            title = stem.replace("_", " ").title()
+            try:
+                head = f.read_text(encoding="utf-8").splitlines()[:6]
+                for line in head:
+                    if line.startswith("# "):
+                        title = line[2:].strip()
+                        break
+            except OSError:
+                pass
+            slot = per_stem_titles.setdefault(stem, {})
+            slot["ko" if is_ko else "en"] = title
         out["catalog_entries"] = len(stems)
+        # Build a per-entry list (alphabetical) so the dashboard can
+        # render an index without re-running the parser in JS.
+        out["catalog_entries_list"] = [
+            {
+                "stem": s,
+                "title_en": per_stem_titles.get(s, {}).get("en", s.replace("_", " ").title()),
+                "title_ko": per_stem_titles.get(s, {}).get("ko", ""),
+            }
+            for s in sorted(stems)
+        ]
     return out
 
 

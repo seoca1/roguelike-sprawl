@@ -415,6 +415,10 @@ uv run python scripts/play.py --phase-1-5
 uv run python scripts/play.py --bsp-mission first_jack
 uv run python scripts/play.py --bsp-mission black_ice_dream --bsp-seed 42
 uv run python scripts/play.py --bsp-mission bogus  # 사용 가능한 ID 16개 출력, rc=1
+
+# ─── 미션 ID 목록 확인 ───
+uv run python scripts/play.py --list-missions
+# 16 개 미션 출력 (예: black_ice_dream / craft_job / first_jack / ...)
 ```
 
 ### `demo.py`
