@@ -313,5 +313,47 @@ def on_skill_attack(console: Console, program: Program, x: int, y: int) -> None:
 - `decisions/0018-combat-animation.md` — ADR
 - `decisions/0003-combat-system.md` — RT-MS
 - `decisions/0011-ascii-portraits.md` — Portraits
+- `decisions/0060-dungeon-exploration-redesign.md` — Dungeon (Phase 1-2)
+- `decisions/0061-novel-integration-architecture.md` — Novel (Phase 5)
 - `design/systems/combat.md` — 전투 시스템
+- `design/systems/exploration.md` — Dungeon/BSP
 - `testcases/systems/animations.md` — TC-ANIM 시나리오
+
+---
+
+## Phase 1.5 확장 (ADR-0060) — Cinematic VFX 4종
+
+전투 시각 효과 시스템 (`combat/effects.py`) 은 Phase 1.5 에서
+**4 종 시네마틱 스포너** 를 추가했습니다. 모두 첫 번째 위치 인자가
+`CombatEffects` 컨테이너.
+
+```python
+from roguelike_sprawl.combat.effects import CombatEffects
+from roguelike_sprawl.combat.effects import (
+    spawn_jackin_glitch, spawn_room_flash,
+    spawn_data_acquired, spawn_jackout_whiteout,
+)
+
+fx = CombatEffects()
+
+spawn_jackin_glitch(fx)     # JAC-IN — 글리치 + 슬로모션
+spawn_room_flash(fx)        # ICE 처치 — 단색 짧은 플래시
+spawn_data_acquired(fx)     # DATA 픽업 — 파티클 + 시네마틱
+spawn_jackout_whiteout(fx)  # JAC-OUT — 백색 폭발 + 시네마틱
+```
+
+| Spawner | 트리거 | 레이어 | 효과 |
+|---|---|---|---|
+| `spawn_jackin_glitch` | JAC-IN / 미션 시작 | JACKING | 글리치 글리프 burst + 16ms 슬로모션 |
+| `spawn_room_flash` | ICE 처치 / 룸 클리어 | FX | 단색 짧은 플래시 (~80ms) |
+| `spawn_data_acquired` | DATA 노드 픽업 | DATA | 파티클 + `>> DATA FRAGMENT RECOVERED` 시네마틱 |
+| `spawn_jackout_whiteout` | JAC-OUT / EXIT 도달 | JACKING | 백색 폭발 + `>> JACKING OUT...` 시네마틱 |
+
+`CombatEffects` 는 5-Layer 구조 (hit / skill / ICE / status / cinematic)
+를 가지며, 각 spawner 가 적절한 레이어에 기록합니다.
+`has_active_effects()` 로 활성 여부 확인.
+
+**관련 데모**:
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py
+```
