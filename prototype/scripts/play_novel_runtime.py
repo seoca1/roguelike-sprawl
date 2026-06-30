@@ -55,10 +55,24 @@ def main() -> int:
     kinds = [k.value for k in HookKind]
     print(f"[1] HookKind registry           : {len(kinds)} kinds → {kinds}")
 
-    catalog = NovelCatalog.load(ROOT.parent)
+    # Catalog uses SHORT_STORIES_DIR = Fiction/derivative/sprawl-trilogy/short-stories
+    # so we walk up to whichever ancestor contains that path.  In this workspace
+    # the canonical location is `/Users/emilio/projects/Projects/Fiction/...`,
+    # so parents[4] is correct — but we probe from [2]..[6] defensively so
+    # the demo runs regardless of where it's invoked from.
+    catalog_root = None
+    for depth in range(2, 8):
+        candidate = ROOT.parents[depth]
+        if (candidate / "Fiction" / "derivative" / "sprawl-trilogy" /
+                "short-stories").exists():
+            catalog_root = candidate
+            break
+    if catalog_root is None:
+        catalog_root = ROOT.parents[4]  # best-effort fallback
+    catalog = NovelCatalog.load(catalog_root)
     print(f"[2] NovelCatalog auto-discover  : {len(catalog)} entries")
 
-    runtime = load_novel_runtime(ROOT.parent)
+    runtime = load_novel_runtime(catalog_root)
     print(f"[3] NovelRuntime wired          : "
           f"catalog={len(runtime.catalog)} "
           f"manifest={len(runtime.manifest) if hasattr(runtime.manifest, '__len__') else '?'}")
@@ -72,8 +86,8 @@ def main() -> int:
         break
 
     if first_stem:
-        report = dispatch_for_state(runtime, state, stem=first_stem,
-                                     mission_id="play_novel_demo")
+        report = dispatch_for_state(runtime, first_stem, state,
+                                    mission_id="play_novel_demo")
         kind = getattr(report, "kind", "?")
         print(f"[4] dispatch('{first_stem}')     : kind={kind}")
     else:
