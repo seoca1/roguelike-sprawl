@@ -23,8 +23,12 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import StrEnum
+from typing import TYPE_CHECKING
 
 import tcod.console
+
+if TYPE_CHECKING:
+    from .state import StatusMessageList
 
 # Screen dimensions
 SCREEN_WIDTH = 80
@@ -202,7 +206,7 @@ def draw_footer(
     console: tcod.console.Console,
     region: Region,
     text: str,
-    status_messages: list[str] | None = None,
+    status_messages: "list[str] | StatusMessageList | None" = None,
     *,
     use_styled: bool = True,
 ) -> None:
@@ -267,7 +271,7 @@ def draw_footer(
 def draw_message_log(
     console: tcod.console.Console,
     region: Region,
-    status_messages: list[str] | None,
+    status_messages: "list[str] | StatusMessageList | None",
     *,
     max_lines: int | None = None,
     show_empty: bool = False,

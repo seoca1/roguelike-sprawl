@@ -406,3 +406,67 @@ class TestMatrixViewIntegration:
         tr = Translator("en", data_dir=Path("data/i18n"))
         # Should not raise
         render_matrix(console, tr, state, _last_layout[m])
+
+
+class TestStatusMessageListCap:
+    """StatusMessageList auto-truncates to STATUS_MESSAGES_MAX (P2 #17).
+
+    Prevents unbounded growth across long sessions — the AppState
+    default_factory was a plain ``list`` and 100+ call sites across
+    the codebase append to it without bound.
+    """
+
+    def test_default_state_is_empty(self) -> None:
+        from roguelike_sprawl.engine.state import STATUS_MESSAGES_MAX, AppState
+
+        state = AppState()
+        assert len(state.status_messages) == 0
+        assert STATUS_MESSAGES_MAX > 0
+
+    def test_append_under_cap_keeps_all(self) -> None:
+        from roguelike_sprawl.engine.state import STATUS_MESSAGES_MAX, StatusMessageList
+
+        msgs = StatusMessageList()
+        for i in range(STATUS_MESSAGES_MAX - 1):
+            msgs.append(f"msg {i}")
+        assert len(msgs) == STATUS_MESSAGES_MAX - 1
+
+    def test_append_at_cap_drops_oldest(self) -> None:
+        from roguelike_sprawl.engine.state import (
+            STATUS_MESSAGES_MAX,
+            StatusMessageList,
+        )
+
+        msgs = StatusMessageList()
+        for i in range(STATUS_MESSAGES_MAX + 50):
+            msgs.append(f"msg {i}")
+        assert len(msgs) == STATUS_MESSAGES_MAX
+        # Oldest entries dropped, newest retained
+        assert msgs[0] == "msg 50"
+        assert msgs[-1] == f"msg {STATUS_MESSAGES_MAX + 49}"
+
+    def test_extend_truncates(self) -> None:
+        from roguelike_sprawl.engine.state import (
+            STATUS_MESSAGES_MAX,
+            StatusMessageList,
+        )
+
+        msgs = StatusMessageList(["a", "b"])
+        msgs.extend([f"x{i}" for i in range(STATUS_MESSAGES_MAX)])
+        assert len(msgs) == STATUS_MESSAGES_MAX
+        # The first two ("a", "b") should be dropped
+        assert msgs[0] == "x0"
+
+    def test_appstate_long_session_stays_bounded(self) -> None:
+        """Regression: long run doesn't accumulate messages unbounded."""
+        from roguelike_sprawl.engine.state import (
+            STATUS_MESSAGES_MAX,
+            AppState,
+        )
+
+        state = AppState()
+        for i in range(STATUS_MESSAGES_MAX * 3):
+            state.status_messages.append(f">>> action {i}")
+        assert len(state.status_messages) == STATUS_MESSAGES_MAX
+        # Newest entry preserved
+        assert state.status_messages[-1] == f">>> action {STATUS_MESSAGES_MAX * 3 - 1}"

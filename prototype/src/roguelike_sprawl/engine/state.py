@@ -6,6 +6,8 @@ implemented as functions over the state.
 
 from __future__ import annotations
 
+from collections import UserList
+from collections.abc import Iterable, MutableSequence
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import TYPE_CHECKING
@@ -16,6 +18,52 @@ from ..matrix.exploration import ExplorationState
 from ..matrix.graph import MatrixGraph
 from ..matrix.ppl import Loadout, Program
 from ..missions import JobBoard, Mission
+
+# Maximum number of status messages retained in AppState.status_messages.
+# When the cap is exceeded, the oldest messages are dropped first.
+# Prevents unbounded memory growth across long sessions (P2 #17).
+STATUS_MESSAGES_MAX = 100
+
+
+class StatusMessageList(UserList[str]):
+    """List subclass that auto-truncates to ``STATUS_MESSAGES_MAX`` entries.
+
+    Behaves like a normal ``list[str]`` for reads, indexing, iteration,
+    and ``len()``. Writes via ``append``, ``extend``, ``insert``, and
+    ``__setitem__`` enforce the cap by dropping the oldest entries first.
+    """
+
+    def __init__(self, iterable: Iterable[str] | None = None) -> None:
+        super().__init__()
+        if iterable:
+            self.data = list(iterable)
+        self._enforce_cap()
+
+    def _enforce_cap(self) -> None:
+        if len(self.data) > STATUS_MESSAGES_MAX:
+            self.data = self.data[-STATUS_MESSAGES_MAX:]
+
+    def append(self, item: str) -> None:
+        self.data.append(item)
+        self._enforce_cap()
+
+    def extend(self, items: Iterable[str]) -> None:
+        self.data.extend(items)
+        self._enforce_cap()
+
+    def insert(self, i: int, item: str) -> None:
+        self.data.insert(i, item)
+        self._enforce_cap()
+
+    def __setitem__(self, i: "int | slice", value: "str | Iterable[str]") -> None:  # type: ignore[override]
+        self.data[i] = value  # type: ignore[index,assignment]
+        self._enforce_cap()
+
+    def __iadd__(self, other: Iterable[str]) -> "StatusMessageList":
+        self.data.extend(other)
+        self._enforce_cap()
+        return self
+
 
 if TYPE_CHECKING:
     from ..audio import SoundConfig
@@ -140,8 +188,9 @@ class AppState:
     player_max_hp: int = 0
     demo_step: int = 0
     demo_elapsed_s: float = 0.0
-    # Status messages (shown in footer or side panel)
-    status_messages: list[str] = field(default_factory=list)
+    # Status messages (shown in footer or side panel).
+    # Bounded ring: oldest dropped when STATUS_MESSAGES_MAX exceeded.
+    status_messages: StatusMessageList = field(default_factory=StatusMessageList)
     # Current context hint (what to do now)
     context_hint: str = ""
     # Player credits (wallet)
