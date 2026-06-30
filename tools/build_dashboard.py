@@ -135,11 +135,21 @@ def load_novel_stats(repo: Path) -> dict[str, object]:
 
 
 def load_story_stats(repo: Path) -> dict[str, object]:
-    """Pull mission / chapter / character counts."""
+    """Pull mission / chapter / character counts.
+
+    All five ``stories.html`` stat keys (stories / chars / refs /
+    quotes / chars-game) are computed here so the dashboard stays
+    in lockstep with the actual disk state.
+    """
     out: dict[str, object] = {
         "missions": 0,
         "stories": 0,
-        "chars_in_stories": 0,
+        "html_files": 0,
+        "en_files": 0,
+        "ko_files": 0,
+        "en_only": 0,
+        "ko_only": 0,
+        "complete_pairs": 0,
         "quotes": 0,
         "references": 0,
         "arcs": 0,
@@ -167,12 +177,28 @@ def load_story_stats(repo: Path) -> dict[str, object]:
                 short = cand
                 break
     if short.exists():
-        stems: set[str] = set()
-        for f in short.glob("*.md"):
+        md_files = list(short.glob("*.md"))
+        en_files = [f for f in md_files if ".ko." not in f.name]
+        ko_files = [f for f in md_files if ".ko." in f.name]
+        stems_en: set[str] = set()
+        for f in en_files:
             s = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", f.name)
-            s = re.sub(r"\.ko\.md$|\.md$", "", s)
-            stems.add(s)
-        out["stories"] = len(stems)
+            s = re.sub(r"\.md$", "", s)
+            stems_en.add(s)
+        stems_ko: set[str] = set()
+        for f in ko_files:
+            s = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", f.name)
+            s = re.sub(r"\.ko\.md$", "", s)
+            stems_ko.add(s)
+        out["stories"] = len(stems_en | stems_ko)
+        out["html_files"] = len(md_files)
+        out["en_files"] = len(en_files)
+        out["ko_files"] = len(ko_files)
+        out["en_only"] = len(stems_en - stems_ko)
+        out["ko_only"] = len(stems_ko - stems_en)
+        out["complete_pairs"] = len(stems_en & stems_ko)
+        out["quotes"] = out["complete_pairs"]
+        out["references"] = out["complete_pairs"]
     for c in ("case", "sil", "kas"):
         p = repo / "prototype" / "data" / "story" / "chapters" / f"{c}.json"
         if not p.exists():

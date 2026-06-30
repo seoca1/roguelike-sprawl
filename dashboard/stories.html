@@ -337,7 +337,7 @@
     <div class="stat-item">
       <div class="label">HTML Files</div>
       <div class="value" data-stat="chars">58</div>
-      <div class="sub">26 EN + 26 KO</div>
+      <div class="sub"><span data-stat="en-files">26</span> EN + <span data-stat="ko-files">26</span> KO</div>
     </div>
     <div class="stat-item">
       <div class="label">Missions</div>
@@ -1032,6 +1032,32 @@
   Roguelike Sprawl — Short Stories Dashboard<br>
   <code>Fiction/derivative/sprawl-trilogy/</code> · <code>Game/roguelike_sprawl/design/story/</code>
 </div>
+
+<script>
+/* Auto-sync stats from build_dashboard.py output (story_stats.json).
+   When the file is missing the static fallback values stay visible.
+   Note: stories.html's stat-id naming follows the original layout
+   (stories/chars/refs/quotes/chars-game) — build_dashboard.py maps
+   those keys onto the more accurate counts. */
+fetch('data/story_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    set('stories',    stats.stories);
+    set('chars',      stats.html_files);
+    set('refs',       stats.missions);
+    set('quotes',     stats.complete_pairs);
+    set('chars-game', stats.en_only);
+    set('en-files',   stats.en_files);
+    set('ko-files',   stats.ko_files);
+  })
+  .catch(() => { /* keep static fallback */ });
+</script>
 
 </body>
 </html>
