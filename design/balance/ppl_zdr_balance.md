@@ -22,6 +22,17 @@ PPL = deck_tier * 3 + sum(prog_tier * 2) + wetware_tier + construct_tier * 3
 | 3 (숙련) | T3 | Wisp T3, Goliath T3 (×2) | T3 | — | **24** |
 | 4 (베테랑) | T4 | Wisp T4, Goliath T4, Wardrone T4 (×3) | T4 | — | **40** |
 | 5 (전설) | T5 | Kraken T5, Goliath T5, Wisp T5, Wardrone T5 (×4) | T5 | Dixie T5 | **75** |
+| 6 (마스터, Arc 5 finale) | T6 | Master programs (T6) (×4) | T6 | Dixie T6 | **120+** |
+
+### Grade 6 (Master) — Arc 5 Finale
+
+T6 장비 3종이 `equipment/equipment.py` 에 추가됨:
+
+- `deck_master` (T6) — Wintermute/Neuromancer Merged, program_power=150
+- `bodysuit_master` (T6) — Full-Body Cyborg Conversion, hp_bonus=120 + 한 번 부활
+- `trodes_zion` (T6) — Zion Direct-Neural Link, ap_regen +100%
+
+Loadout tier 검증: `0..6` 까지 허용. `MAX_TIER = 6` 상수.
 
 PPL 성장 곡선: 8 → 16 → 24 → 40 → 75 (2배, 1.5배, 1.67배, 1.88배)
 → 가속 성장 — 메타 진행의 *성장감* 극대화.
