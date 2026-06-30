@@ -3106,3 +3106,53 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 | `play.html` | ✓ 헤더 4 정수 (3/5/15/2) |
 | `cyberspace.html` | ✓ 5 stat 카드 + footer 3 정수 |
 | `index.html` | ✓ Project Status 5 stat 카드 (3456 tests / 25 lines / 5 NPCs / 9 stages / 29 missions) |
+
+---
+
+## [2026-07-01] fix | unblock 13 missions + combat placeholder + missing ICE
+
+탐색 에이전트가 21개 이슈 발견 (P0 ×3, P1 ×7, P2 ×11). 핵심 6개 수정:
+
+**P0 #1 — ZoneDepth enum 확장 (missions 차단 해제)**
+- `DEEP` (Loa/construct), `FREESIDE` (궤도 식민지) 추가
+- `zdr.py` 베이스 ZDR: DEEP=8, FREESIDE=30
+- Mission 검증: grade_max 5→6, reward_tier 5→6 (Arc 5 finale 지원)
+- 효과: 16/29 → **29/29 missions 로딩**
+
+**P0 #2 — combat_view.start_combat 의 ICE hardcoded placeholder 제거**
+- 이전: `ice_kind = "standard"` (모든 노드가 Standard ICE 만 스폰)
+- 이후: `ice_node.ice.value` 사용 (Black/Watchdog 등 실제 노드 ICE 분기)
+- IceKind.NONE 인 경우만 방어적 fallback
+
+**P0 #3 — ice_types.json 9개 누락 엔트리 추가**
+- construct, boss, revelation, neuromancer (T5 보스), ai_whisper,
+  surveillance, wintermute (T4 보스), zion_defense, loa
+- 각각 hp/dmg/tier/resistance/loot_table 보강
+
+**P1 #4 — craft_job 미션에 grade_min=1, grade_max=5 명시**
+- 이전: 둘 다 None → 항상 grade 1로만 노출 (다른 grade에서 안 보임)
+- 이후: 모든 grade 1-5 에서 등장
+
+**P1 #5 — 보상 밸런스 outliers 수정**
+- ta_heist: 5000 → 3500 (grade 4 미션 평균치)
+- final_choice: 10000 → 5500 (Arc 5 finale 정상 범위)
+
+**P1 #8 — audio/theme.py silent exception handlers 로깅화**
+- 5개 `except: pass` → `engine.logger.warning()` (lazy import + stderr fallback)
+- 향후 디버깅 시 stderr 에 `[theme] WARN: ...` 출력
+
+**회귀 테스트 +6** (3254 → 3260):
+- test_job_board_loads_all_29_missions
+- test_job_board_mission_zones_all_valid
+- test_zone_depth_has_deep_and_freeside
+- test_job_board_available_for_filters_by_grade (g6 케이스)
+- test_start_combat_uses_node_ice_kind (Black/Watchdog 분기)
+- test_all_mission_ice_ids_resolve (29 미션의 모든 ice.<X>)
+
+**커밋 4개**:
+- `f6b46e0` fix(missions): unblock 13/29 missions + craft_job grade range
+- `8ba4f7d` fix(combat): use node.ice for enemy + add 9 missing ICE entries
+- `2a2b5f3` fix(audio): log theme.py silent exception handlers
+- `2adc0d9` chore(dashboard): regenerate stats JSON with new ICE + ZoneDepth entries
+
+**검증**: pytest 3260 pass / ruff check green / ruff format clean / mypy strict green
