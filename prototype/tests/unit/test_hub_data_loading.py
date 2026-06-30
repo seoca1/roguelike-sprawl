@@ -97,3 +97,38 @@ class TestMaterialInventoryLookup:
         )
         assert have_ice == 7
         assert have_data == 3
+
+
+class TestMaterialGauge:
+    """P2 #18 — gauge preserves ratio and never loses overflow info."""
+
+    def test_empty_when_zero(self) -> None:
+        assert hub._material_gauge(0, 4, width=5) == "░░░░░"
+
+    def test_full_when_ready(self) -> None:
+        # Ready (have == need) — full bar, no overflow marker.
+        assert hub._material_gauge(4, 4, width=5) == "▓▓▓▓▓"
+
+    def test_overflow_marks_excess(self) -> None:
+        # have > need → full bar + overflow marker.
+        assert hub._material_gauge(7, 3, width=5) == "▓▓▓▓▓+"
+
+    def test_proportional_partial(self) -> None:
+        # 3/7 ≈ 43% → 2 chars filled (round-half-to-even gives 2).
+        result = hub._material_gauge(3, 7, width=5)
+        assert len(result) == 5
+        assert "▓" in result
+        assert "░" in result
+        filled = result.count("▓")
+        assert 1 <= filled <= 3
+
+    def test_degenerate_zero_need(self) -> None:
+        # need <= 0 → full bar (ready by default).
+        assert hub._material_gauge(0, 0, width=5) == "▓▓▓▓▓"
+        assert hub._material_gauge(3, 0, width=5) == "▓▓▓▓▓"
+
+    def test_width_respected(self) -> None:
+        for have, need in [(0, 1), (1, 5), (5, 1), (10, 3), (0, 100)]:
+            result = hub._material_gauge(have, need, width=7)
+            assert len(result) in (7, 8), f"got {result!r}"
+            assert result.endswith("+") or len(result) == 7

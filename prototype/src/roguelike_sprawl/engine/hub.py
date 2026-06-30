@@ -268,14 +268,39 @@ _MATERIAL_NAME_TO_INV: dict[str, str] = {
 
 
 def _material_gauge(have: int, need: int, width: int = 5) -> str:
-    """Generate a graphical gauge: ▓▓▓░░."""
-    filled = min(have, need)
-    empty = need - filled
-    # Clamp to width
-    if filled + empty > width:
-        ratio = width / (filled + empty)
-        filled = int(filled * ratio)
-        empty = width - filled
+    """Generate a proportional gauge that preserves ratio information.
+
+    Renders as ``▓▓▓░░`` blocks filling the full ``width`` based on
+    the ``have/need`` ratio. The fill always reflects the actual
+    fraction (e.g. 7/3 → 5/0 with a ``+`` overflow marker) instead
+    of the older implementation that silently dropped overflow.
+
+    Args:
+        have: Current stock.
+        need: Target stock.
+        width: Bar width in characters (default 5).
+
+    Returns:
+        A string of length ``width`` (plus optional suffix) showing
+        the fill ratio. Examples::
+
+            _material_gauge(0, 4) == "░░░░░"
+            _material_gauge(2, 4) == "██░░░"   # 50% of width
+            _material_gauge(4, 4) == "█████"   # 100% (ready)
+            _material_gauge(7, 3) == "█████+"  # overflow marker
+            _material_gauge(3, 7) == "██░░░"   # 3/7 ≈ 43%
+    """
+    if need <= 0:
+        # Degenerate: zero need target → show as ready.
+        return "▓" * width
+    if have >= need:
+        # Ready (or over-stocked).
+        bar = "▓" * width
+        return bar + "+" if have > need else bar
+    # Proportional fill: width chars showing have/need ratio.
+    filled = round(width * have / need)
+    filled = max(0, min(width, filled))
+    empty = width - filled
     return "▓" * filled + "░" * empty
 
 

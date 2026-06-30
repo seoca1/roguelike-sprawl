@@ -206,7 +206,7 @@ def draw_footer(
     console: tcod.console.Console,
     region: Region,
     text: str,
-    status_messages: "list[str] | StatusMessageList | None" = None,
+    status_messages: list[str] | StatusMessageList | None = None,
     *,
     use_styled: bool = True,
 ) -> None:
@@ -271,7 +271,7 @@ def draw_footer(
 def draw_message_log(
     console: tcod.console.Console,
     region: Region,
-    status_messages: "list[str] | StatusMessageList | None",
+    status_messages: list[str] | StatusMessageList | None,
     *,
     max_lines: int | None = None,
     show_empty: bool = False,

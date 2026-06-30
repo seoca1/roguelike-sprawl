@@ -7,7 +7,7 @@ implemented as functions over the state.
 from __future__ import annotations
 
 from collections import UserList
-from collections.abc import Iterable, MutableSequence
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from enum import StrEnum
 from typing import TYPE_CHECKING
@@ -55,11 +55,11 @@ class StatusMessageList(UserList[str]):
         self.data.insert(i, item)
         self._enforce_cap()
 
-    def __setitem__(self, i: "int | slice", value: "str | Iterable[str]") -> None:  # type: ignore[override]
+    def __setitem__(self, i: int | slice, value: str | Iterable[str]) -> None:  # type: ignore[override]
         self.data[i] = value  # type: ignore[index,assignment]
         self._enforce_cap()
 
-    def __iadd__(self, other: Iterable[str]) -> "StatusMessageList":
+    def __iadd__(self, other: Iterable[str]) -> StatusMessageList:
         self.data.extend(other)
         self._enforce_cap()
         return self
