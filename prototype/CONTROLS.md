@@ -34,6 +34,7 @@ Quick reference for all game controls.
 | Key | Action |
 |-----|--------|
 | **← → ↑ ↓** | Move between nodes |
+| **D** | Toggle **Dungeon Mode** (Phase 1) — 2-D BSP 그리드 보기 |
 | **ENTER** or **SPACE** | Open action menu at current node |
 | **Q** | Quit to menu |
 
@@ -134,7 +135,23 @@ Expert players can use **1-9 number keys** for quick access without navigation.
 - Use **number keys** for faster skill/action selection
 - **S** key for quick SCAN in Matrix
 - **E** key for quick EXTRACT/ENGAGE
+- **D** key for quick **Dungeon Mode** toggle (Phase 1)
 - Muscle memory: 1=Attack, 2=Power skill, 3=Utility, 4=Defense
+
+### Novel Hooks (Phase 5 — ADR-0061)
+
+소설 통합 레이어는 자동 트리거되며 별도 키가 없습니다. 6종 `HookKind`
+(`narrative` / `excerpt` / `event` / `combat` / `item` / `cinematic`) 가
+상태 천이 시 자동 dispatch 됩니다. 등록/확장은 Python API 만 사용:
+
+```python
+from roguelike_sprawl.novel.hooks import register_hook_action, HookKind
+
+def my_action(ctx, app_state):
+    ...
+
+register_hook_action(HookKind.COMBAT, my_action)
+```
 
 ---
 

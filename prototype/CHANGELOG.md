@@ -2,6 +2,70 @@
 
 All notable changes to this project will be documented in this file.
 
+## [Unreleased] - 2026-06-30
+
+### Added - Phase 1-5 Gameplay Expansion (ADR-0060, ADR-0061)
+
+#### **Phase 1 — Dungeon Mode**
+- `engine/state.py: AppState.dungeon_mode: bool = False` flag.
+- `engine/app.py` — `D` key toggles dungeon mode in the matrix screen.
+- `engine/dungeon_view.py: render_dungeon_matrix()` — 2-D grid renderer
+  using `_get_room_position()` for layout.
+- 8 unit tests (`tests/unit/test_dungeon_view.py`).
+
+#### **Phase 1.5 — Combat VFX Overlay**
+- 4 cinematic spawners in `combat/effects.py`:
+  - `spawn_jackin_glitch()` — JAC-IN glitch burst + slow-mo.
+  - `spawn_room_flash()` — short color flash on ICE clear.
+  - `spawn_data_acquired()` — DATA fragment pickup VFX + cinematic.
+  - `spawn_jackout_whiteout()` — JAC-OUT whiteout burst.
+- Each takes a `CombatEffects` container (first positional arg).
+- 12 unit tests (`tests/unit/test_combat_vfx.py`).
+
+#### **Phase 2 — Procedural BSP Dungeon**
+- `matrix/dungeon_generator.py: ProceduralDungeonGenerator` —
+  BSP partition + Kruskal MST + character dead-end branching.
+- Configurable `min_leaf_size` / `room_padding`.
+- 23 unit tests (`tests/unit/test_procedural_dungeon.py`).
+
+#### **Phase 3 — Mission → Room Mapping**
+- `matrix/mission_mapper.py: missions_to_rooms()` — list[RoomType].
+- `matrix/mission_mapper.py: mission_to_graph()` — MatrixGraph + BSP.
+- Bridges `data/missions/missions.json` (16 missions) to dungeon shape.
+- 31 unit tests (`tests/unit/test_mission_mapper.py`).
+
+#### **Phase 4 — ECS Dungeon Integration**
+- `ecs/room_entity.py: node_to_entity()` / `room_to_entity()`.
+- `ecs/dungeon_system.py: DungeonSystem` —
+  populate / on_enter / on_exit / defeat / cleared / visited.
+- 22 unit tests (`tests/unit/test_dungeon_ecs.py`).
+
+#### **Phase 5 — Novel Integration (ADR-0061)**
+- New `novel/` subpackage: `NovelCatalog` / `NovelManifest` /
+  `NovelDispatcher` / `NovelRuntime` / `load_novel_runtime()`.
+- 6 `HookKind`s: `narrative`, `excerpt`, `event`, `combat`,
+  `item`, `cinematic`. Extensible via `register_hook_action()`.
+- 39 unit tests (`tests/unit/test_novel.py`).
+
+### Added - Operator Demos
+
+- 5 headless demos in `prototype/scripts/` to exercise Phase 1-5
+  without opening a window:
+  - `play_dungeon_mode.py`  (Phase 1)
+  - `play_vfx_overlay.py`   (Phase 1.5)
+  - `play_mission_mapping.py` (Phase 3)
+  - `play_ecs_dungeon.py`   (Phase 4)
+  - `play_novel_runtime.py` (Phase 5)
+
+### Docs - Phase 1-5
+
+- ADR-0060 (`Dungeon Exploration Redesign`) — Accepted.
+- ADR-0061 (`Novel Integration Architecture`) — Accepted.
+- `docs/DUNGEON_*.md` (3 files) — design + verification checklist.
+- `dashboard/dungeon.html` + `dashboard/novel.html` — ADR landing pages.
+- `dashboard/play.html` + `data/play_game.json` — interactive demo.
+- `dashboard/README.md` — page ↔ data-source map.
+
 ## [Phase 5.1] - 2026-06-18
 
 ### Added - UX Improvements

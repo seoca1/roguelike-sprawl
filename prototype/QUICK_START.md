@@ -92,6 +92,33 @@ Copy-paste this checklist:
 
 ---
 
+## 🆕 Phase 1-5 Quick Look (D 키 · BSP · 미션매핑 · ECS · Novel)
+
+Phase 1-5 (ADR-0060, ADR-0061) 가 추가한 핵심 게임플레이를 **창 없이** 빠르게 검증:
+
+```bash
+cd Game/roguelike_sprawl/prototype
+
+# Phase 1 — Dungeon Mode toggle (D 키) + BSP 절차적 미로
+PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py
+
+# Phase 1.5 — VFX 4종 (jackin_glitch / room_flash / data_acquired / jackout_whiteout)
+PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py
+
+# Phase 3 — 16 미션 → 룸 시퀀스 매핑
+PYTHONPATH=src .venv/bin/python scripts/play_mission_mapping.py
+
+# Phase 4 — ECS DungeonSystem (populate / on_enter / defeat)
+PYTHONPATH=src .venv/bin/python scripts/play_ecs_dungeon.py
+
+# Phase 5 — Novel runtime (catalog / manifest / dispatcher)
+PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py
+```
+
+전부 0 종료 + 한 줄 요약. 자세한 설명: `scripts/README.md` 섹션 6.
+
+---
+
 ## 🎯 What to Do in Combat
 
 Once combat starts, try these:

@@ -120,6 +120,45 @@ New Run과 동일하지만 ICE 전투가 자동으로 승리
 | 5 | `make play` | 인터랙티브 플레이 |
 | 6 | `uv run python scripts/death_in_action_demo.py` | 전투 → 사망 → 재시작 end-to-end |
 | 7 | `uv run python scripts/combat_effects_demo.py --no-color` | 5-Layer VFX 10-씬 |
+| 8 | `PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py` | **Phase 1 — Dungeon Mode (BSP)** |
+| 9 | `PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py` | **Phase 1.5 — 4 VFX spawners** |
+| 10 | `PYTHONPATH=src .venv/bin/python scripts/play_mission_mapping.py` | **Phase 3 — Mission → Room** |
+| 11 | `PYTHONPATH=src .venv/bin/python scripts/play_ecs_dungeon.py` | **Phase 4 — ECS Dungeon** |
+| 12 | `PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py` | **Phase 5 — Novel Runtime** |
+
+---
+
+## 6. Phase 1-5 신규 데모 (Dungeon · VFX · 미션매핑 · ECS · Novel)
+
+Phase 1-5 (ADR-0060, ADR-0061) introduced new gameplay subsystems but
+the existing `scripts/` predated all five phases.  These five demos
+were added on 2026-06-30 to give every phase a runnable entry point.
+All are headless (no tcod window required) and exit 0 with a one-line
+summary so they are safe to wire into CI smoke tests.
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py
+PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py
+PYTHONPATH=src .venv/bin/python scripts/play_mission_mapping.py
+PYTHONPATH=src .venv/bin/python scripts/play_ecs_dungeon.py
+PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py
+```
+
+| Demo | Phase | 무엇을 확인하나 |
+|---|---|---|
+| `play_dungeon_mode.py` | 1 (ADR-0060) | `AppState.dungeon_mode` 토글, BSP 그래프 attach, `_get_room_position()` 그리드 레이아웃 |
+| `play_vfx_overlay.py` | 1.5 | `CombatEffects` + 4 spawners (jackin_glitch / room_flash / data_acquired / jackout_whiteout) |
+| `play_mission_mapping.py` | 3 | `JobBoard` + `missions_to_rooms()` + `mission_to_graph()` (16 미션 통합 검증) |
+| `play_ecs_dungeon.py` | 4 | `DungeonSystem.populate()` + `on_enter` / `on_exit` / `defeat` 전체 호출 |
+| `play_novel_runtime.py` | 5 (ADR-0061) | `HookKind` 6종 등록 + `load_novel_runtime()` + `dispatch_for_state()` |
+
+### 시그니처 노트
+
+- `render_dungeon_matrix(console, translator, state, prog_registry, ice_registry)`
+  은 5 인자 모두 필요하므로 헤드리스 데모는 `dungeon_view._get_room_position()`
+  을 직접 호출 (renderer 와 같은 코드 경로).
+- 4 VFX spawner 모두 첫 번째 위치 인자가 `CombatEffects` 컨테이너
+  (keyword 인자 없음).
 
 ### Make 명령 요약 (창 필요 여부)
 

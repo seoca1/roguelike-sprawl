@@ -135,6 +135,20 @@ make briefing        # Finn 브리핑 장면
 - NPC 초상화 (ASCII portraits)
 - Space로 타이핑 스킵, ESC로 장면 종료
 
+### 3-3. Phase 1-5 신규 데모 (Dungeon · VFX · 미션매핑 · ECS · Novel)
+
+**Phase 1-5 (ADR-0060, ADR-0061)** 가 추가한 핵심 게임플레이를 헤드리스로 검증 (창 불필요):
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py     # Phase 1 — dungeon_mode + BSP
+PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py      # Phase 1.5 — 4 VFX spawners
+PYTHONPATH=src .venv/bin/python scripts/play_mission_mapping.py  # Phase 3 — Mission→Room
+PYTHONPATH=src .venv/bin/python scripts/play_ecs_dungeon.py      # Phase 4 — ECS DungeonSystem
+PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py    # Phase 5 — Novel runtime
+```
+
+전부 0 종료 + 한 줄 요약 출력. 자세한 가이드: `scripts/README.md` 섹션 6.
+
 ### 4. 테스트 실행
 
 ```bash

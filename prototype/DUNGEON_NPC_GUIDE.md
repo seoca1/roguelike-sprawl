@@ -12,6 +12,19 @@ Complete walkthrough of the new dungeon-style exploration and NPC dialogue syste
 - Visual corridors between rooms
 - Color-coded room types
 
+### **Phase 1-5 Expansion (ADR-0060, ADR-0061)**
+
+| Phase | 추가 기능 | 위치 |
+|---|---|---|
+| Phase 1 | `AppState.dungeon_mode` 토글 + `D` 키 | `engine/state.py`, `engine/app.py` |
+| Phase 1.5 | 4 VFX spawner (jackin_glitch / room_flash / data_acquired / jackout_whiteout) | `combat/effects.py` |
+| Phase 2 | **ProceduralDungeonGenerator** (BSP) | `matrix/dungeon_generator.py` |
+| Phase 3 | Mission → Room 매핑 (16 미션) | `matrix/mission_mapper.py` |
+| Phase 4 | ECS `DungeonSystem` (populate / on_enter / defeat) | `ecs/dungeon_system.py` |
+| Phase 5 | Novel 통합 (catalog / manifest / dispatcher + 6 HookKind) | `novel/` |
+
+자세한 검증 절차: `scripts/README.md` 섹션 6.
+
 ### **NPC Encounters**
 - Dialogue trees with player choices
 - Info gathering, item rewards, combat
@@ -22,6 +35,42 @@ Complete walkthrough of the new dungeon-style exploration and NPC dialogue syste
 - Victory rewards (materials, credits)
 - Inventory system
 - Continue exploring after combat
+
+---
+
+## 🆕 Phase 2 — BSP 절차적 미로 (ProceduralDungeonGenerator)
+
+매 런마다 다른 BSP(Binary Space Partitioning) 트리로 미로 생성.
+같은 시드 + 같은 캐릭터 등급 = 같은 레이아웃 (재현 가능).
+
+```python
+from roguelike_sprawl.matrix.dungeon_generator import ProceduralDungeonGenerator
+from roguelike_sprawl.engine.state import AppState
+from roguelike_sprawl.engine import dungeon_view
+
+gen = ProceduralDungeonGenerator(min_leaf_size=2, room_padding=1)
+graph = gen.generate(seed=42, mission_grade=1, character_ref="veteran")
+
+state = AppState()
+state.dungeon_mode = True
+state.matrix = graph
+state.current_node_id = graph.nodes[0].id  # 진입점
+# grid = dungeon_view.render_dungeon_matrix(console, t, state)
+# ↑ 콘솔 렌더링은 tcod.Console 필요 — play.py GUI 데모에서 실행
+```
+
+| 파라미터 | 기본값 | 효과 |
+|---|---|---|
+| `min_leaf_size` | `2` | 작을수록 방이 많아짐 (재귀 깊어짐) |
+| `room_padding` | `1` | 복도 통과용 보더 (작을수록 빽빽) |
+| `seed` | (필수) | RNG 시드 |
+| `mission_grade` | `1` | 1-5, 그리드 크기 결정 |
+| `character_ref` | `"veteran"` | dead-end 분기 / ICE·NPC 밀도 |
+
+검증:
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py
+```
 
 ---
 
