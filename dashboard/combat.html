@@ -280,6 +280,16 @@
   </table>
 </div>
 
+<!-- ICE Type Index (auto-built from combat_stats.json) -->
+<h2>📚 ICE Type Index (<span data-stat="ice-total">29</span> entries)</h2>
+<div class="section">
+  <p style="color: #8a9aa8; font-size: 13px;">
+    <code>prototype/data/combat/ice_types.json</code> 의 29 entries 목록
+    (5 grade + 24 specific). 자동 빌드:
+  </p>
+  <div id="ice-index" class="effect-grid" style="grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));"></div>
+</div>
+
 <!-- Skill Effects -->
 <h2>✨ Skill Effects (<span data-stat="effects-count">14</span>)</h2>
 <div class="section">
@@ -1207,6 +1217,19 @@ fetch('data/combat_stats.json').then(r => r.ok ? r.json() : null)
     // Sub-heading cells (in case the page has multi-count sections).
     set('ice-total', stats.ice_types_total);
     set('effects-count', stats.skill_effects_total);
+    // Build ICE entries index (29 ICE entries from combat/ice_types.json).
+    const index = document.getElementById('ice-index');
+    if (index && Array.isArray(stats.ice_grades_list)) {
+      index.innerHTML = '';
+      stats.ice_grades_list.forEach(name => {
+        const card = document.createElement('div');
+        card.className = 'effect-card';
+        card.style.padding = '6px 10px';
+        card.innerHTML = `<div class="name" style="font-size:11px;">${name}</div>` +
+                         `<div class="id" style="font-size:10px;color:#66ffcc;">ice_type</div>`;
+        index.appendChild(card);
+      });
+    }
   })
   .catch(() => { /* keep static fallback */ });
 </script>
