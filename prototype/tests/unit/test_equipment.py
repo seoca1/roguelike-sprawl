@@ -128,20 +128,23 @@ class TestEquipmentDataclass:
 class TestEquipmentRegistry:
     """Lookup registry for equipment by id."""
 
-    def test_default_registry_has_15_items(self) -> None:
+    def test_default_registry_has_18_items(self) -> None:
+        # 15 base items + 3 master tier (T6): master deck, master
+        # bodysuit, Zion trodes.
         reg = EquipmentRegistry.load_default()
-        assert len(reg.all()) == 15
+        assert len(reg.all()) == 18
 
     def test_default_registry_includes_all_tiers(self) -> None:
         reg = EquipmentRegistry.load_default()
         tiers = {e.tier for e in reg.all()}
-        # All 6 tiers should be represented.
+        # All 7 tiers (T0..T6) should be represented.
         assert EquipTier.T0_BASELINE in tiers
         assert EquipTier.T1_STREET in tiers
         assert EquipTier.T2_COMMERCIAL in tiers
         assert EquipTier.T3_MILITECH in tiers
         assert EquipTier.T4_CORPORATE in tiers
         assert EquipTier.T5_EXPERIMENTAL in tiers
+        assert EquipTier.T6_MASTER in tiers
 
     def test_get_known_item(self) -> None:
         reg = EquipmentRegistry.load_default()
@@ -172,9 +175,11 @@ class TestEquipmentRegistry:
     def test_all_returns_copy(self) -> None:
         """reg.all() returns a new list — mutations don't affect registry."""
         reg = EquipmentRegistry.load_default()
+        expected = len(reg.all())
         lst = reg.all()
         lst.clear()
-        assert len(reg.all()) == 15
+        # Mutating the returned list must NOT shrink the registry.
+        assert len(reg.all()) == expected
 
 
 # ============================================================================
@@ -282,6 +287,10 @@ class TestDefaultEquipmentCoverage:
     @pytest.fixture
     def registry(self) -> EquipmentRegistry:
         return EquipmentRegistry.load_default()
+
+    def test_default_registry_has_18_items(self, registry: EquipmentRegistry) -> None:
+        # 15 base + 3 master tier (T6)
+        assert len(registry.all()) == 18
 
     def test_all_default_equipment_have_unique_ids(self, registry: EquipmentRegistry) -> None:
         ids = [e.id for e in registry.all()]

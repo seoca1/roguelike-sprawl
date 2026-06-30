@@ -56,6 +56,7 @@ class EquipTier(StrEnum):
     T3_MILITECH = "T3"  # 군사
     T4_CORPORATE = "T4"  # 기업
     T5_EXPERIMENTAL = "T5"  # 실험
+    T6_MASTER = "T6"  # 마스터 (Arc 5 finale 전용)
 
 
 @dataclass(frozen=True, slots=True)
@@ -291,6 +292,68 @@ GHOST_DECK = Equipment(
     required_materials={"biosoft_agent": 5, "rom_echo": 3, "ice_construct": 5},
 )
 
+# === Tier 6 (Master) — Arc 5 finale only ===
+MASTER_DECK = Equipment(
+    id="deck_master",
+    name="Wintermute / Neuromancer (Merged)",
+    slot=EquipSlot.DECK,
+    category=EquipCategory.DAEMON,
+    tier=EquipTier.T6_MASTER,
+    stats=EquipStats(
+        program_power=150,
+        defense=25,
+        crit_bonus_pct=40,
+        ap_regen_bonus_pct=75,
+        grants_skill_id="omniscient",
+        extra_effect="Sees through all ICE. Love is the algorithm.",
+    ),
+    description="The merged AI given physical form. Only the greatest jockey can hold it.",
+    ascii_glyph="[*]",
+    ascii_color=(255, 255, 255),
+    upgrade_slots=0,  # Already at peak
+    required_materials={},
+)
+
+MASTER_BODY = Equipment(
+    id="bodysuit_master",
+    name="Full-Body Cyborg Conversion",
+    slot=EquipSlot.BODYSUIT,
+    category=EquipCategory.NANOWARE,
+    tier=EquipTier.T6_MASTER,
+    stats=EquipStats(
+        defense=40,
+        hp_bonus=120,
+        shield_bonus=30,
+        ice_resistance=50,
+        ap_bonus=4,
+        extra_effect="Immune to flatline (one revive per run)",
+    ),
+    description="More machine than human. Most jockeys don't survive the operation.",
+    ascii_glyph="[#]",
+    ascii_color=(255, 200, 100),
+    upgrade_slots=0,
+    required_materials={},
+)
+
+ZION_TRODES = Equipment(
+    id="trodes_zion",
+    name="Zion Direct-Neural Link",
+    slot=EquipSlot.TRODES,
+    category=EquipCategory.WETWARE,
+    tier=EquipTier.T6_MASTER,
+    stats=EquipStats(
+        ap_bonus=5,
+        ap_regen_bonus_pct=100,
+        program_power=40,
+        extra_effect="Connects to Zion mainframe for support",
+    ),
+    description="Maelcum's handiwork. Tunes the deck into your spinal cord directly.",
+    ascii_glyph="[Z]",
+    ascii_color=(100, 255, 100),
+    upgrade_slots=0,
+    required_materials={},
+)
+
 # === Creative (custom) ===
 NANO_HIVE = Equipment(
     id="implant_nanohive",
@@ -368,6 +431,10 @@ class EquipmentRegistry:
             "head_kereznikov": KEREZNIKOV,
             # Tier 5
             "deck_ghost": GHOST_DECK,
+            # Tier 6 (master)
+            "deck_master": MASTER_DECK,
+            "bodysuit_master": MASTER_BODY,
+            "trodes_zion": ZION_TRODES,
         }
         return cls(default_equipment)
 
