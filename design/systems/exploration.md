@@ -214,5 +214,61 @@ def render_matrix(console, t, state, layouts, exploration=None):
 - `decisions/0003-combat-system.md` — Probe program
 - `decisions/0011-ascii-portraits.md` — 박스 렌더링
 - `decisions/0012-difficulty-rating.md` — ZDR/PPL
+- `decisions/0060-dungeon-exploration-redesign.md` — Dungeon Mode (Phase 1-2)
+- `decisions/0061-novel-integration-architecture.md` — Novel hooks (Phase 5)
 - `design/systems/hacking.md` — 매트릭스
 - `testcases/systems/exploration.md` — TC-EXP 시나리오
+
+---
+
+## Phase 1-2 확장 (ADR-0060)
+
+Phase 1-2 (ADR-0060) 는 매트릭스 탐험에 두 가지 큰 변경을 도입했습니다.
+
+### Phase 1 — Dungeon Mode (D 키)
+
+`engine/state.py: AppState.dungeon_mode: bool = False` 플래그 도입.
+**`D` 키** 로 매트릭스 화면에서 2-D BSP 그리드 보기로 토글.
+`engine/app.py` 의 키 핸들러 + `engine/dungeon_view.py` 의
+`render_dungeon_matrix()` 가 상태를 읽어 그리드를 그립니다.
+
+토글 시 status panel 의 `WHERE` 행이 변경:
+
+```
+Screen: MATRIX              ← 기존 평면 그래프
+Screen: MATRIX (DUNGEON MODE)  ← 토글 후
+```
+
+### Phase 2 — ProceduralDungeonGenerator (BSP)
+
+`matrix/dungeon_generator.py: ProceduralDungeonGenerator` 가
+**BSP (Binary Space Partitioning)** 트리로 매 런마다 다른 미로를
+생성합니다:
+
+| 파라미터 | 기본값 | 효과 |
+|---|---|---|
+| `min_leaf_size` | `2` | 재귀 깊이 (작을수록 방이 많음) |
+| `room_padding` | `1` | 복도 통과용 보더 |
+| `seed` | (필수) | RNG 시드 |
+| `mission_grade` | `1` | 1-5, 그리드 크기 결정 |
+| `character_ref` | `"veteran"` | dead-end 분기 + ICE/NPC 밀도 |
+
+같은 `(seed, grade, ref)` = 동일 레이아웃 (재현 가능).
+
+```python
+from roguelike_sprawl.matrix.dungeon_generator import ProceduralDungeonGenerator
+
+gen = ProceduralDungeonGenerator(min_leaf_size=2, room_padding=1)
+graph = gen.generate(seed=42, mission_grade=1, character_ref="veteran")
+# 6-12 노드 + Kruskal MST 연결
+```
+
+생성된 그래프는 `state.matrix` 에 attach 되어 `dungeon_view.render_dungeon_matrix()`
+가 그리드 좌표 `_get_room_position()` 으로 위치를 결정합니다.
+
+**관련 데모**:
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py
+```
+
+자세한 검증 절차: `docs/DUNGEON_*.md` (3개) + `decisions/0060-dungeon-exploration-redesign.md`.
