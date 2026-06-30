@@ -10,6 +10,8 @@ Uses unified screen shell (engine.layout).
 
 from __future__ import annotations
 
+import json
+
 import tcod.console
 import tcod.event
 from tcod.event import KeyDown, KeySym
@@ -18,6 +20,7 @@ from ..i18n import Translator
 from ..matrix.ppl import calculate_ppl
 from ..matrix.zdr import calculate_status, calculate_zdr, status_color
 from ..missions import Mission
+from . import config as _engine_config
 from .layout import (
     Region,
     RegionId,
@@ -181,6 +184,43 @@ def _draw_avatar_panel(
     console.print(x=x + 9, y=y + 3, string=f"{hp}/{max_hp}", fg=hp_color)
 
 
+def _load_materials_data() -> list[tuple[str, int, int]]:
+    """Load material display data from JSON, falling back to placeholder.
+
+    Returns list of (name, have, need) tuples. The ``have`` value is
+    always 0 (placeholder) since the real inventory is in
+    ``state.inventory``; only the ``need`` target is data-driven.
+    """
+    path = _engine_config.DATA_DIR / "crafting" / "materials.json"
+    if not path.exists():
+        return _PLACEHOLDER_MATERIALS
+    try:
+        with path.open(encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return _PLACEHOLDER_MATERIALS
+    items = data.get("materials", []) if isinstance(data, dict) else []
+    result: list[tuple[str, int, int]] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        name = str(item.get("name", ""))
+        need = int(item.get("need", 1))
+        if name:
+            result.append((name, 0, need))
+    return result or _PLACEHOLDER_MATERIALS
+
+
+# Fallback when data/crafting/materials.json is missing or malformed.
+_PLACEHOLDER_MATERIALS: list[tuple[str, int, int]] = [
+    ("ICE Shard", 0, 5),
+    ("Data Fragment", 0, 4),
+    ("ROM Echo", 0, 3),
+    ("Wetware Chip", 0, 2),
+    ("Biosoft Agent", 0, 1),
+]
+
+
 def _draw_materials_panel(
     console: tcod.console.Console,
     main: Region,
@@ -189,22 +229,23 @@ def _draw_materials_panel(
     width: int,
     state: AppState,
 ) -> None:
-    """Draw the Materials panel (ADR-0015, ADR-0017)."""
+    """Draw the Materials panel (ADR-0015, ADR-0017).
+
+    Material targets load from ``data/crafting/materials.json`` (with
+    a hardcoded fallback). Real ``have`` counts come from
+    ``state.inventory`` so the player sees their actual stock.
+    """
     x = main.x + x_offset + 2
     y = main.y + y_offset
     console.print(x=x, y=y, string="[Materials]", fg=(180, 180, 180))
     y += 1
-    # Placeholder materials (Phase 5: static)
-    materials = [
-        ("ICE Shard", 3, 5),
-        ("Data Fragment", 2, 4),
-        ("ROM Echo", 1, 3),
-        ("Wetware Chip", 0, 2),
-        ("Biosoft Agent", 0, 1),
-    ]
-    for name, have, need in materials:
+    inventory = getattr(state, "inventory", None) or {}
+    for name, _placeholder_have, need in _load_materials_data():
         if y >= main.y + y_offset + 7:
             break
+        # Best-effort lookup by display name → inventory key map.
+        inv_key = _MATERIAL_NAME_TO_INV.get(name, name.lower().replace(" ", "_"))
+        have = int(inventory.get(inv_key, 0)) if isinstance(inventory, dict) else 0
         gauge = _material_gauge(have, need, width=5)
         console.print(
             x=x,
@@ -213,6 +254,17 @@ def _draw_materials_panel(
             fg=(160, 160, 160),
         )
         y += 1
+
+
+# Display name → inventory key map (data files use friendly names but
+# inventory may use snake_case ids). Extend as needed.
+_MATERIAL_NAME_TO_INV: dict[str, str] = {
+    "ICE Shard": "ice_shard",
+    "Data Fragment": "data_fragment",
+    "ROM Echo": "rom_echo",
+    "Wetware Chip": "wetware_chip",
+    "Biosoft Agent": "biosoft_agent",
+}
 
 
 def _material_gauge(have: int, need: int, width: int = 5) -> str:
@@ -225,6 +277,39 @@ def _material_gauge(have: int, need: int, width: int = 5) -> str:
         filled = int(filled * ratio)
         empty = width - filled
     return "▓" * filled + "░" * empty
+
+
+def _load_recipes_data() -> list[tuple[str, str, bool]]:
+    """Load recipe display data from JSON, falling back to placeholder."""
+    path = _engine_config.DATA_DIR / "crafting" / "recipes.json"
+    if not path.exists():
+        return _PLACEHOLDER_RECIPES
+    try:
+        with path.open(encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        return _PLACEHOLDER_RECIPES
+    items = data.get("recipes", []) if isinstance(data, dict) else []
+    result: list[tuple[str, str, bool]] = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        name = str(item.get("name", ""))
+        glyph = str(item.get("glyph", "···"))
+        ready = bool(item.get("ready", False))
+        if name:
+            result.append((name, glyph, ready))
+    return result or _PLACEHOLDER_RECIPES
+
+
+# Fallback when data/crafting/recipes.json is missing or malformed.
+_PLACEHOLDER_RECIPES: list[tuple[str, str, bool]] = [
+    ("T1 Program", "·W·", True),
+    ("T2 Program", ":H:", False),
+    ("T3 Program", "|G|", False),
+    ("T4 Program", "▓W▓", False),
+    ("T5 Kraken", "★K★", False),
+]
 
 
 def _draw_recipes_panel(
@@ -240,15 +325,7 @@ def _draw_recipes_panel(
     y = main.y + y_offset
     console.print(x=x, y=y, string="[Recipes]", fg=(180, 180, 180))
     y += 1
-    # Placeholder recipes (Phase 5: static)
-    recipes = [
-        ("T1 Program", "·W·", True),
-        ("T2 Program", ":H:", False),
-        ("T3 Program", "|G|", False),
-        ("T4 Program", "▓W▓", False),
-        ("T5 Kraken", "★K★", False),
-    ]
-    for name, glyph, ready in recipes:
+    for name, glyph, ready in _load_recipes_data():
         if y >= main.y + y_offset + 7:
             break
         status_str = "READY ✓" if ready else "need materials"

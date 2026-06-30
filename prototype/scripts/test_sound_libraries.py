@@ -69,8 +69,13 @@ def test_bell() -> dict:
     }
 
 
-def test_python_lib(lib_name: str) -> dict:
-    """Test if a Python library is available."""
+def test_python_lib(lib_name: str = "wave") -> dict:
+    """Test if a Python library is available.
+
+    Default arg makes the test self-contained when pytest collects it
+    without a fixture. (The intended caller is the CLI runner, not
+    pytest parametrize.)
+    """
     result = {
         "name": lib_name,
         "available": False,
