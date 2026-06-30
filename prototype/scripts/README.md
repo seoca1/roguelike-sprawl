@@ -21,6 +21,11 @@ cd "/Users/emilio/projects/Projects/Game/roguelike_sprawl/prototype"
 | **전투 시스템 작동 확인** | `uv run python scripts/combat_effects_demo.py` | ❌ |
 | **전투 → 사망 → 부활 사이클** | `make death-demo` | ❌ |
 | **단위 테스트 실행** | `uv run pytest` | ❌ |
+| **🆕 Phase 1 — Dungeon Mode + BSP 미로** | `PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py` | ❌ |
+| **🆕 Phase 1.5 — VFX 4 spawner 검증** | `PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py` | ❌ |
+| **🆕 Phase 3 — Mission→Room 매핑 (16 미션)** | `PYTHONPATH=src .venv/bin/python scripts/play_mission_mapping.py` | ❌ |
+| **🆕 Phase 4 — ECS DungeonSystem** | `PYTHONPATH=src .venv/bin/python scripts/play_ecs_dungeon.py` | ❌ |
+| **🆕 Phase 5 — Novel runtime (ADR-0061)** | `PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py` | ❌ |
 
 ### ⚡ 가장 빠른 시작 (30초)
 
