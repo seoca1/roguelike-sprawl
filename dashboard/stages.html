@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="9개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29개 미션 (5 arcs).">
+<meta name="description" content="9 stages (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29 missions (Arc 1~5 difficulty grades). 3 character arcs (Novice / Veteran / Heretic).">
 <meta name="keywords" content="roguelike, cyberpunk, gibson, sprawl, neuromancer, python, tcod, ascii, stage, progression, mission, flow">
 <meta name="author" content="emilio">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="canonical" href="https://seoca1.github.io/roguelike-sprawl/stages.html">
 <meta property="og:title" content="Stage & Progression — Roguelike Sprawl">
-<meta property="og:description" content="9개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29개 미션 (5 arcs).">
+<meta property="og:description" content="9 stages (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29 missions (Arc 1~5 difficulty grades). 3 character arcs (Novice / Veteran / Heretic).">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://seoca1.github.io/roguelike-sprawl/stages.html">
 <meta property="og:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Roguelike Sprawl">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Stage & Progression — Roguelike Sprawl">
-<meta name="twitter:description" content="9개 스테이지 (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29개 미션 (5 arcs).">
+<meta name="twitter:description" content="9 stages (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29 missions (Arc 1~5 difficulty grades). 3 character arcs (Novice / Veteran / Heretic).">
 <meta name="twitter:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
 <meta name="theme-color" content="#0a0e14">
 <title>Roguelike Sprawl — Stage & Progression Dashboard</title>
@@ -237,10 +237,12 @@
   Single Run = Prologue → Mission → Completion.
   <span data-stat="stages">9</span> stages,
   <span data-stat="transitions">8</span> transitions,
-  <span data-stat="missions">29</span> missions (5 arcs).
-  Reward formula: Arc×800 + (grade-1)×300.
+  <span data-stat="missions">29</span> missions
+  (<span data-arc-grades>Arc 1~5 difficulty grades</span>;
+  <span data-character-arcs>3 character arcs: Novice / Veteran / Heretic</span>).
+  Reward formula: <code>Arc×800 + (grade−1)×300</code>.
   <br>
-  출처: <code>design/systems/stage_structure.json</code> · <code>prototype/src/run/state.py</code>
+  출처: <code>design/systems/stage_structure.json</code> · <code>prototype/data/missions/missions.json</code> · <code>prototype/src/run/state.py</code> (Stage enum)
 </div>
 
 <div class="lang-toggle">
@@ -279,7 +281,7 @@
 </table>
 
 <!-- Missions -->
-<h2>🎯 All Missions (29 missions, 5 arcs)</h2>
+<h2>🎯 All Missions (29 missions across Arc 1~5 difficulty grades)</h2>
 <div class="mission-grid" id="missionGrid"></div>
 
 <!-- Death Flow -->

@@ -1508,37 +1508,43 @@
 <!-- Characters -->
 <h2>🎭 오리지널 주인공 3인</h2>
 <div class="character-grid">
-  <div class="character-card">
+  <div class="character-card" data-arc="novice">
     <div class="name">케이 (K)</div>
     <div class="role">Novice · 초짜</div>
     <div class="quote">"I just wanted to pay off my debt. I didn't ask for this."</div>
-    <div class="stat"><span class="label">나이</span><span class="value">22</span></div>
-    <div class="stat"><span class="label">데크</span><span class="value">Ono-Sendai T1</span></div>
-    <div class="stat"><span class="label">무기</span><span class="value">Wisp T1</span></div>
+    <div class="stat"><span class="label">나이</span><span class="value" data-stat="case-age">22</span></div>
+    <div class="stat"><span class="label">데크</span><span class="value" data-stat="case-deck">Ono-Sendai T1</span></div>
+    <div class="stat"><span class="label">무기</span><span class="value" data-stat="case-weapon">Wisp T1</span></div>
+    <div class="stat"><span class="label">출신</span><span class="value" data-stat="case-origin">Chiba City 외곽</span></div>
+    <div class="stat"><span class="label">직업</span><span class="value" data-stat="case-job">신참 콘솔 카우보이</span></div>
     <div class="stat"><span class="label">동기</span><span class="value">빚 (생존)</span></div>
     <div class="stat"><span class="label">연관 인물</span><span class="value">Finn, Dixie</span></div>
     <div class="stat"><span class="label">엔딩 A</span><span class="value">케이 살아남음</span></div>
     <div class="stat"><span class="label">엔딩 B</span><span class="value">케이 flatline</span></div>
   </div>
-  <div class="character-card">
+  <div class="character-card" data-arc="veteran">
     <div class="name">실 (Sil)</div>
     <div class="role">Veteran · 베테랑</div>
     <div class="quote">"I've done this for fifteen years. I know when a job is too good."</div>
-    <div class="stat"><span class="label">나이</span><span class="value">38</span></div>
-    <div class="stat"><span class="label">데크</span><span class="value">Hosaka T3</span></div>
-    <div class="stat"><span class="label">무기</span><span class="value">Hammer T2 + Probe T2</span></div>
+    <div class="stat"><span class="label">나이</span><span class="value" data-stat="sil-age">38</span></div>
+    <div class="stat"><span class="label">데크</span><span class="value" data-stat="sil-deck">Hosaka T3</span></div>
+    <div class="stat"><span class="label">무기</span><span class="value" data-stat="sil-weapon">Hammer T2 + Probe T2</span></div>
+    <div class="stat"><span class="label">출신</span><span class="value" data-stat="sil-origin">Freeside → Sprawl</span></div>
+    <div class="stat"><span class="label">직업</span><span class="value" data-stat="sil-job">베테랑 자키 15년</span></div>
     <div class="stat"><span class="label">동기</span><span class="value">복수</span></div>
     <div class="stat"><span class="label">연관 인물</span><span class="value">Finn, Armitage</span></div>
     <div class="stat"><span class="label">엔딩 A</span><span class="value">실 복수 성공</span></div>
     <div class="stat"><span class="label">엔딩 B</span><span class="value">실 flatline</span></div>
   </div>
-  <div class="character-card">
+  <div class="character-card" data-arc="heretic">
     <div class="name">카스 (Kas)</div>
     <div class="role">Heretic · 이단자</div>
     <div class="quote">"The system is the virus. I'm the cure."</div>
-    <div class="stat"><span class="label">나이</span><span class="value">28</span></div>
-    <div class="stat"><span class="label">데크</span><span class="value">MaaS Bio T2</span></div>
-    <div class="stat"><span class="label">무기</span><span class="value">Viral T2 (커스텀)</span></div>
+    <div class="stat"><span class="label">나이</span><span class="value" data-stat="kas-age">28</span></div>
+    <div class="stat"><span class="label">데크</span><span class="value" data-stat="kas-deck">MaaS Bio T2</span></div>
+    <div class="stat"><span class="label">무기</span><span class="value" data-stat="kas-weapon">Viral T2 (커스텀, ICE 감염형)</span></div>
+    <div class="stat"><span class="label">출신</span><span class="value" data-stat="kas-origin">Sprawl Loa/Vodou</span></div>
+    <div class="stat"><span class="label">직업</span><span class="value" data-stat="kas-job">반체제 해커 / 테크노맨서</span></div>
     <div class="stat"><span class="label">동기</span><span class="value">시스템 폭로</span></div>
     <div class="stat"><span class="label">연관 인물</span><span class="value">Maelcum, Loa</span></div>
     <div class="stat"><span class="label">엔딩 A</span><span class="value">카스 Sprawl 변화</span></div>
@@ -2347,6 +2353,43 @@
         </div>`;
     });
 })();
+</script>
+
+<!--
+  Character-card auto-sync (ADR-0066 §design/story/characters.md).
+  Pulls age / deck / weapon / origin / job per character so the
+  three `오리지널 주인공` cards stay in lockstep with the canonical
+  design markdown.  Static fallback values (22/38/28 etc.) remain
+  visible when the JSON is missing or offline.
+-->
+<script>
+fetch('data/character_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const arcMap = {
+      "novice":  "case",
+      "veteran": "sil",
+      "heretic": "kas",
+    };
+    for (const c of (stats.characters || [])) {
+      const prefix = arcMap[c.arc] || c.arc;
+      const attr = c.attributes || {};
+      const set = (key, val) => {
+        const el = document.querySelector(`[data-stat="${prefix}-${key}"]`);
+        if (el && val !== undefined && val !== null) {
+          el.textContent = String(val);
+        }
+      };
+      // canonical attributes spelled differently across the source
+      // md —  try every reasonable alias.
+      set("age",    attr["나이"] ?? attr["age"]);
+      set("deck",   attr["데크"] ?? attr["deck"]);
+      set("weapon", attr["주_무기"] ?? attr["무기"] ?? attr["weapon"]);
+      set("origin", attr["출신"] ?? attr["origin"]);
+      set("job",    attr["직업"] ?? attr["job"]);
+    }
+  })
+  .catch(() => { /* keep static fallback */ });
 </script>
 
 </body>

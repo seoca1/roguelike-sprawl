@@ -241,6 +241,64 @@ def load_story_stats(repo: Path) -> dict[str, object]:
     return out
 
 
+def load_character_stats(repo: Path) -> dict[str, object]:
+    """Pull canonical character data from design/story/characters.md.
+
+    Source markdown uses a table format::
+
+        ## 1. 케이 (Case) — Novice / 초짜
+        | **나이** | 22 |
+        | **데크** | Ono-Sendai Cyberspace 7 (T1) |
+        ...
+
+    We regex the section heading + every subsequent '| **<key>** | <val> |'
+    row until the next '## ' / end-of-file.  Falls back to the
+    original case.md / sil.md / kas.md if those exist.
+    """
+    out: dict[str, object] = {
+        "characters": [],
+        "source": "",
+        "_generated_at": "",
+    }
+    md_path = repo / "design" / "story" / "characters.md"
+    if not md_path.exists():
+        return out
+    out["source"] = str(md_path.relative_to(repo))
+    text = md_path.read_text(encoding="utf-8")
+    # Split on '## N. <name> ...' headings; each becomes a character
+    # entry if the section header contains 'Novice' / 'Veteran' / 'Heretic'.
+    section_re = re.compile(
+        r"^##\s+\d+\.\s+([^\n]+?)\s*\(([^)]+)\)\s*[—-]\s*(Novice|Veteran|Heretic)",
+        re.M,
+    )
+    matches = list(section_re.finditer(text))
+    arc_to_key = {"Novice": "novice", "Veteran": "veteran", "Heretic": "heretic"}
+    for i, m in enumerate(matches):
+        start = m.end()
+        end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
+        body = text[start:end]
+        entry: dict[str, object] = {
+            "name_ko": m.group(1).strip(),
+            "name_en": m.group(2).strip(),
+            "arc": arc_to_key[m.group(3)],
+            "arc_label": m.group(3),
+            "attributes": {},
+        }
+        # Pull known attributes via '| **<key>** | <val> |' rows.
+        for line in body.splitlines():
+            row = re.match(
+                r"\s*\|\s*\*\*(?P<k>[^*]+)\*\*\s*\|\s*(?P<v>[^|]+?)\s*\|\s*$",
+                line,
+            )
+            if not row:
+                continue
+            key = row.group("k").strip().lower().replace(" ", "_")
+            val = row.group("v").strip().strip("*")
+            entry["attributes"][key] = val  # type: ignore[index]
+        out["characters"].append(entry)  # type: ignore[attr-defined]
+    return out
+
+
 def load_index_stats(repo: Path) -> dict[str, object]:
     """Top-level sidebar / Project Status cards on dashboard/index.html."""
     out: dict[str, object] = {
@@ -434,6 +492,7 @@ TARGETS = {
     "cyberspace_stats.json": load_cyberspace_stats,
     "journey_stats.json": load_journey_stats,
     "index_stats.json": load_index_stats,
+    "character_stats.json": load_character_stats,
 }
 
 
