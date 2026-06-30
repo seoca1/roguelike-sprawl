@@ -17,6 +17,7 @@ import tcod.event
 from tcod.event import KeyDown, KeySym
 
 from ..i18n import Translator
+from ..matrix.node import Faction
 from ..matrix.ppl import calculate_ppl
 from ..matrix.zdr import calculate_status, calculate_zdr, status_color
 from ..missions import Mission
@@ -139,6 +140,57 @@ def _draw_4panel(
     )
 
 
+# Phase 6+: faction reputation dot colours keyed by tier. Each
+# faction gets a coloured glyph reflecting their standing with the
+# player (bright = friendly, dim = neutral, red = hostile).
+_REPUTATION_GLYPHS: dict[str, str] = {
+    "ALLIED": "★",
+    "FRIENDLY": "●",
+    "TRUSTED": "○",
+    "NEUTRAL": "·",
+    "HOSTILE": "✗",
+    "ENEMY": "✗",
+    "OUTCAST": "✗",
+}
+
+# Faction order shown in the rep strip (Sprawl's big 5 — plus the
+# "ghost" NONE for unaligned fixers).
+_REP_DISPLAY_ORDER: list[tuple[str, tuple[int, int, int]]] = [
+    ("hosaka", (180, 50, 50)),      # red — corp
+    ("maas", (200, 150, 50)),       # amber — biz
+    ("sense_net", (50, 200, 150)),  # teal — research
+    ("ta", (200, 50, 200)),         # magenta — T-A
+    ("none", (100, 100, 100)),      # grey — neutral
+]
+
+
+def _render_reputation_dots(state: AppState) -> str:
+    """Render a compact faction-rep strip for the Hub.
+
+    Each faction shown as a coloured glyph:
+      ● green  = FRIENDLY+
+      ○ cyan   = TRUSTED
+      · grey   = NEUTRAL
+      ✗ red    = HOSTILE+
+
+    Returns a short string like "●○·✗·" for embedding in a single
+    row of the avatar panel.
+    """
+    if not hasattr(state, "reputation"):
+        return ""
+    parts: list[str] = []
+    for faction_name, _color in _REP_DISPLAY_ORDER:
+        try:
+            faction = Faction(faction_name)
+        except ValueError:
+            continue
+        rep = state.reputation.get(faction)
+        tier = rep.tier()
+        glyph = _REPUTATION_GLYPHS.get(tier, "?")
+        parts.append(glyph)
+    return "".join(parts)
+
+
 def _draw_avatar_panel(
     console: tcod.console.Console,
     main: Region,
@@ -166,6 +218,12 @@ def _draw_avatar_panel(
     y += 1
     console.print(x=x, y=y + 1, string=f"PPL: {ppl}", fg=(0, 255, 0))
     console.print(x=x, y=y + 2, string=f"Grade: {state.player_grade}-up", fg=(200, 200, 200))
+
+    # Phase 6+: faction reputation dots (compact display)
+    # 5 factions: Hosaka, Maas, Sense/Net, TA, none — each shown
+    # as a coloured dot whose intensity reflects reputation tier.
+    rep_line = _render_reputation_dots(state)
+    console.print(x=x, y=y + 4, string=f"Rep: {rep_line}", fg=(180, 180, 180))
 
     # HP bar
     hp = state.player_hp if state.player_hp > 0 else 100

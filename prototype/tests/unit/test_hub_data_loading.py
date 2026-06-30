@@ -190,3 +190,58 @@ class TestHubDataCaching:
         # Only 1 file open for the materials JSON after first load.
         material_opens = [c for c in calls if "materials" in c]
         assert len(material_opens) == 0, f"unexpected re-reads: {material_opens}"
+
+
+class TestReputationDots:
+    """Hub panel shows faction reputation as compact glyph strip."""
+
+    def test_neutral_default(self) -> None:
+        from roguelike_sprawl.engine.state import AppState
+
+        state = AppState()
+        line = hub._render_reputation_dots(state)
+        # 5 factions × neutral tier → 5 · glyphs.
+        assert line == "·····"
+
+    def test_allied_faction_shows_star(self) -> None:
+        from roguelike_sprawl.engine.state import AppState
+        from roguelike_sprawl.matrix.node import Faction
+
+        state = AppState()
+        # Bypass clamp by setting score directly
+        state.reputation.get(Faction.HOSAKA).score = 100
+        line = hub._render_reputation_dots(state)
+        # Hosaka is the first faction → ★ first
+        assert line.startswith("★")
+
+    def test_hostile_faction_shows_x(self) -> None:
+        from roguelike_sprawl.engine.state import AppState
+        from roguelike_sprawl.matrix.node import Faction
+
+        state = AppState()
+        state.reputation.get(Faction.MAAS).score = -100  # OUTCAST
+        line = hub._render_reputation_dots(state)
+        # Maas is the second faction → ✗ second (after Hosaka neutral)
+        parts = list(line)
+        assert parts[1] == "✗"
+
+    def test_mixed_tiers_render_correctly(self) -> None:
+        from roguelike_sprawl.engine.state import AppState
+        from roguelike_sprawl.matrix.node import Faction
+
+        state = AppState()
+        # Hosaka → TRUSTED (20), Maas → HOSTILE (-25), Sense/Net neutral
+        state.reputation.adjust(Faction.HOSAKA, 20)
+        state.reputation.adjust(Faction.MAAS, -25)
+        line = hub._render_reputation_dots(state)
+        parts = list(line)
+        assert parts[0] == "○"  # Hosaka TRUSTED
+        assert parts[1] == "✗"  # Maas HOSTILE
+        assert parts[2] == "·"  # Sense/Net NEUTRAL
+
+    def test_length_is_5_factions(self) -> None:
+        from roguelike_sprawl.engine.state import AppState
+
+        state = AppState()
+        line = hub._render_reputation_dots(state)
+        assert len(line) == 5
