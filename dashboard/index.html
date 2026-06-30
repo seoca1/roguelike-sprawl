@@ -511,6 +511,15 @@
       totalStages = stgData.stages.length;
       totalMissions = stgData.missions.length;
     } catch (e) { /* ignore */ }
+    let totalTests = null;
+    try {
+      const idxStats = await fetch('data/index_stats.json').then(r => r.json());
+      if (idxStats && typeof idxStats.tests_total === 'number') {
+        totalTests = idxStats.tests_total;
+      }
+    } catch (e) { /* keep null */ }
+    document.getElementById('stat-tests').textContent =
+      totalTests !== null ? totalTests : '—';
     document.getElementById('stat-lines').textContent = totalLines;
     document.getElementById('stat-npcs').textContent = totalNpcs;
     document.getElementById('stat-stages').textContent = totalStages;

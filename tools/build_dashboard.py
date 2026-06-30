@@ -209,6 +209,85 @@ def load_story_stats(repo: Path) -> dict[str, object]:
     return out
 
 
+def load_index_stats(repo: Path) -> dict[str, object]:
+    """Top-level sidebar / Project Status cards on dashboard/index.html."""
+    out: dict[str, object] = {
+        "tests_total": 0,
+        "tests_passing": True,
+        "story_lines_total": 0,
+        "npcs_unique": 0,
+        "stages_per_run": 9,
+        "transitions": 8,
+        "missions": 0,
+        "_generated_at": "",
+    }
+    # Use pytest --collect-only when available for an accurate count.
+    tests_dir = repo / "prototype" / "tests"
+    if tests_dir.exists():
+        # Cheap, fast, cross-platform: spawn the prototype venv's pytest.
+        import subprocess
+        venv_py = repo / "prototype" / ".venv" / "bin" / "python"
+        if not venv_py.exists():
+            venv_py = repo / "prototype" / ".venv" / "Scripts" / "python.exe"  # type: ignore[assignment]  # noqa
+        if venv_py.exists():
+            try:
+                res = subprocess.run(
+                    [str(venv_py), "-m", "pytest", str(tests_dir),
+                     "--collect-only", "-q"],
+                    check=False, capture_output=True, text=True,
+                    timeout=60,
+                )
+                m = re.search(r"(\d+)\s+tests?\s+collected", res.stdout)
+                if m:
+                    out["tests_total"] = int(m.group(1))
+                    out["tests_passing"] = "passed" in res.stdout.lower()
+            except (OSError, subprocess.SubprocessError):
+                pass
+    if out["tests_total"] == 0 and tests_dir.exists():
+        # Fallback: count def test_* across all test files (less accurate
+        # but never zero).
+        for f in tests_dir.rglob("test_*.py"):
+            src = f.read_text(encoding="utf-8")
+            out["tests_total"] += len(re.findall(r"^\s*def test_\w+", src, re.M))
+
+    pro = repo / "design" / "story" / "prologue_data.json"
+    if pro.exists():
+        try:
+            d = json.loads(pro.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            d = {}
+        if isinstance(d, dict):
+            for sc in d.get("scenes", []):
+                if isinstance(sc, dict):
+                    out["story_lines_total"] += len(sc.get("lines", []) or [])
+            for ends in (d.get("endings") or {}).values():
+                if isinstance(ends, list):
+                    for e in ends:
+                        if isinstance(e, dict):
+                            out["story_lines_total"] += len(e.get("lines", []) or [])
+
+    evt = repo / "design" / "story" / "event_dialogues.json"
+    if evt.exists():
+        try:
+            d = json.loads(evt.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            d = {}
+        if isinstance(d, dict) and isinstance(d.get("npcs"), dict):
+            out["npcs_unique"] = len(d["npcs"])
+
+    stg = repo / "design" / "systems" / "stage_structure.json"
+    if stg.exists():
+        try:
+            d = json.loads(stg.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            d = {}
+        if isinstance(d, dict):
+            out["stages_per_run"] = len(d.get("stages", []) or [])
+            out["transitions"] = len(d.get("transitions", []) or [])
+            out["missions"] = len(d.get("missions", []) or [])
+    return out
+
+
 def load_cyberspace_stats(repo: Path) -> dict[str, object]:
     """Walk worlds.json + matrix/node.py to keep cyberspace cards honest."""
     out: dict[str, object] = {
@@ -293,6 +372,7 @@ TARGETS = {
     "story_stats.json": load_story_stats,
     "cyberspace_stats.json": load_cyberspace_stats,
     "journey_stats.json": load_journey_stats,
+    "index_stats.json": load_index_stats,
 }
 
 

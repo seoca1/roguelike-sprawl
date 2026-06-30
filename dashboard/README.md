@@ -23,7 +23,8 @@ prototype/.venv/bin/python tools/build_dashboard.py
 | `story_stats.json`      | `prototype/data/missions/missions.json` (29), `story/chapters/*.json` | `stories.html` / `stages.html` |
 | `cyberspace_stats.json` | `prototype/data/cyberspace/worlds.json` (2 worlds / 4 sectors / 6 servers), `matrix/node.py:NodeKind` (8) + `ZoneDepth` (4) | `cyberspace.html` (5 카드) |
 | `journey_stats.json`    | hardcoded (novice/veteran/heretic credits) | `journey/*.html` |
-| `data_index.json`       | 위 5 파일의 인덱스 | (참조용) |
+| `index_stats.json`      | `pytest --collect-only` (tests_total), `prologue_data.json` (lines), `event_dialogues.json` (npcs), `stage_structure.json` (stages/missions) | `index.html` (Project Status 패널) |
+| `data_index.json`       | 위 6 파일의 인덱스 | (참조용) |
 
 각 페이지는 fallback 으로 정적 HTML 값을 가지고 있어,
 빌드 스크립트 없이도 모든 페이지가 정상 표시됩니다.
