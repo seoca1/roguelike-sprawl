@@ -330,6 +330,63 @@ class Mission:
 - `decisions/0013-story-events.md` — Events
 - `decisions/0015-crafting-system.md` — Crafting
 - `decisions/0016-jockey-avatar.md` — Avatar
+- `decisions/0060-dungeon-exploration-redesign.md` — Dungeon (Phase 1-2)
+- `decisions/0061-novel-integration-architecture.md` — Novel (Phase 5)
 - `design/systems/crafting.md` — Crafting 상세
 - `design/systems/avatar.md` — Avatar 상세
 - `testcases/systems/mission-material.md` — TC-MISMAT 시나리오
+
+---
+
+## Phase 3 확장 (ADR-0060) — Mission → Room 매핑
+
+Phase 3 (ADR-0060 의 Phase 3 부분) 는 `data/missions/missions.json` 의
+각 미션을 **RoomType 시퀀스** 로 변환합니다.
+
+### 함수
+
+```python
+from roguelike_sprawl.matrix.mission_mapper import (
+    missions_to_rooms, mission_to_graph,
+)
+from roguelike_sprawl.missions import JobBoard
+
+board = JobBoard.load("data/missions/missions.json")
+missions = tuple(board._missions.values())  # 16 entries (canonical)
+
+# 개별 미션 → RoomType 리스트 (5..9 entries)
+rooms = missions_to_rooms(missions[0], character_ref="veteran")
+# → [ENTRY, NPC, DATA, ICE, ROUTER, EXIT] 같은 시퀀스
+
+# 개별 미션 → MatrixGraph (BSP 와 통합)
+graph = mission_to_graph(missions[0], character_ref="veteran")
+# → 6-12 노드 + Kruskal MST
+```
+
+### 캐릭터별 편향
+
+`character_ref` 는 NPC / ICE / ROUTER 의 추가 분배를 결정:
+
+| `character_ref` | NPC | ICE | ROUTER |
+|---|---|---|---|
+| `"novice"` | +2 | +0 | +2 |
+| `"veteran"` | +1 | +1 | +1 |
+| `"heretic"` | +0 | +2 | +0 |
+
+### Arc 타겟
+
+`mission.arc` (1-3) 별 시퀀스 길이:
+
+| Arc | 최소 | 최대 |
+|---|---|---|
+| 1 (novice) | 5 | 6 |
+| 2 (veteran) | 6 | 7 |
+| 3 (heretic) | 7 | 9 |
+
+키워드 추출 (objective 텍스트) → `DATA` / `ICE` / `NPC` 룸 우선 배치,
+부족분은 `ROUTER` 로 패딩.
+
+**관련 데모**:
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_mission_mapping.py
+```
