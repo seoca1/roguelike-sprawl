@@ -5,7 +5,8 @@
     "type": "defense",
     "ap_cost": 2,
     "shield": 1,
-    "description": "Defense program. Adds shield."
+    "description": "Defense program. Adds shield.",
+    "role": "guard"
   },
   "strike": {
     "name": "Strike",
@@ -13,7 +14,8 @@
     "type": "attack",
     "ap_cost": 1,
     "damage": 6,
-    "description": "Basic attack. Cheap, weak, reliable."
+    "description": "Basic attack. Cheap, weak, reliable.",
+    "role": "strike"
   },
   "shield": {
     "name": "Shield",
@@ -21,14 +23,16 @@
     "type": "defense",
     "ap_cost": 1,
     "shield": 1,
-    "description": "One-time shield block."
+    "description": "One-time shield block.",
+    "role": "guard"
   },
   "probe": {
     "name": "Probe",
     "tier": 1,
     "type": "detect",
     "ap_cost": 1,
-    "description": "Reveal enemy weakness."
+    "description": "Reveal enemy weakness.",
+    "role": "utility"
   },
   "hammer": {
     "name": "Hammer",
@@ -36,7 +40,8 @@
     "type": "attack",
     "ap_cost": 2,
     "damage": 12,
-    "description": "Medium attack. Faster than Goliath."
+    "description": "Medium attack. Faster than Goliath.",
+    "role": "burst"
   },
   "virus": {
     "name": "Virus",
@@ -44,7 +49,8 @@
     "type": "attack",
     "ap_cost": 2,
     "damage": 8,
-    "description": "Damage over time. Weaker per tick but stacks."
+    "description": "Damage over time. Weaker per tick but stacks.",
+    "role": "strike"
   },
   "goliath": {
     "name": "Goliath",
@@ -52,7 +58,8 @@
     "type": "attack",
     "ap_cost": 3,
     "damage": 25,
-    "description": "Heavy attack. Slow but powerful."
+    "description": "Heavy attack. Slow but powerful.",
+    "role": "burst"
   },
   "wardrone": {
     "name": "Wardrone",
@@ -60,7 +67,8 @@
     "type": "defense",
     "ap_cost": 2,
     "shield": 2,
-    "description": "Auto-counter defense. +2 shield + retaliation."
+    "description": "Auto-counter defense. +2 shield + retaliation.",
+    "role": "guard"
   },
   "kraken": {
     "name": "Kraken",
@@ -68,6 +76,7 @@
     "type": "attack",
     "ap_cost": 4,
     "damage": 50,
-    "description": "Strongest attack. The legend."
+    "description": "Strongest attack. The legend.",
+    "role": "burst"
   }
 }
