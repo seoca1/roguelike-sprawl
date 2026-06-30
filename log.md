@@ -2,6 +2,20 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-06-30] feat | Phase 5 데모 카탈로그 30 entries — 부모 디렉토리 워크스루 + dispatch 시그니처
+
+- **`prototype/scripts/play_novel_runtime.py` 진단 + 수정**:
+  - `NovelCatalog.SHORT_STORIES_DIR` 는 `Fiction/derivative/sprawl-trilogy/short-stories` 즉 *workspace root* 기준 (`/Users/emilio/projects/Projects/Fiction/...`).
+  - 데모가 `Path(__file__).resolve().parents[4]` 사용 — 단순 추측. **0 entries** 보고.
+  - 수정: `parents[2..7]` 탐색 후 가장 먼저 `Fiction/derivative/sprawl-trilogy/short-stories` 가 존재하는 조상 채택.
+  - **결과**: 30 entries 자동 발견, `aleph_fragment` 디스패치 통과.
+- **`dispatch_for_state` 시그니처 수정**:
+  - 시그니처 = `(runtime, stem, app_state, *, language=None, ...)`.
+  - 기존: `dispatch_for_state(runtime, state, stem=...)` — `state` 가 두 번째 위치로 들어가 `stem=` 충돌.
+  - 수정: positional 순서 교체.
+- **검증**: 5/5 신규 데모 모두 통과 (Phase 1 / 1.5 / 3 / 4 / 5 OK).
+- **커밋 57cd424**.
+
 ## [2026-06-30] feat | Phase 1-5 운영 진입점 + 가이드/디자인 동기화
 
 - **신규 운영 데모 5종** (`prototype/scripts/play_*.py`):
@@ -2944,3 +2958,12 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - DEFEAT_ICE → FAILED → DEATH_RESTART
 
 
+
+---
+
+## [2026-06-30] follow | 후속 노트 — 미해결 디자인 후속
+
+- 캐릭터별 stats 동기화 — `combat.html` 의 "5 ICE Types" / "14 Skills" 는 디자인 의도 (5 등급 + 14 effects = 시각 콘텐츠). 29 ICE entries / 28 effects functions 와 다르지만 의도적으로 디자인 값 유지.
+- `prototype/scripts/play.py` 의 Phase 1-5 통합 — 큰 후속. 별도 작업.
+- `dashboard/novel.html` 카탈로그 카운트 — 30 entries 로 동기화 가치.
+- `prototype/play_arc_*` 의 BSP 미로 통합 — 큰 후속.
