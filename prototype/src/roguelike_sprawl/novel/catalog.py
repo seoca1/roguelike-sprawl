@@ -95,9 +95,7 @@ class NovelCatalog:
 
     # ----- discovery ----------------------------------------------------
 
-    SHORT_STORIES_DIR = Path(
-        "Fiction/derivative/sprawl-trilogy/short-stories"
-    )
+    SHORT_STORIES_DIR = Path("Fiction/derivative/sprawl-trilogy/short-stories")
 
     @classmethod
     def load(cls, repo_root: Path) -> NovelCatalog:

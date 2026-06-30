@@ -32,7 +32,9 @@ from roguelike_sprawl.matrix.dungeon_generator import (  # noqa: E402
 # ============================================================================
 
 
-def _hash_graph(graph: MatrixGraph) -> tuple[tuple[tuple[str, str, str], ...], tuple[tuple[str, str], ...]]:
+def _hash_graph(
+    graph: MatrixGraph,
+) -> tuple[tuple[tuple[str, str, str], ...], tuple[tuple[str, str], ...]]:
     """Stable hash of a graph (sorted nodes + sorted edges)."""
     node_sig = tuple(sorted((n.id, n.kind.value, n.ice.value) for n in graph.nodes))
     edge_sig = tuple(sorted((e.src, e.dst) for e in graph.edges))
@@ -74,7 +76,9 @@ class TestReproducibility:
         a = g.generate(seed=42, mission_grade=3, character_ref="novice", mission_id="m1")
         b = g.generate(seed=42, mission_grade=3, character_ref="heretic", mission_id="m1")
         # Edges may differ because dead-end branches differ by char.
-        assert (len(a.edges), len(a.nodes)) != (len(b.edges), len(b.nodes)) or _hash_graph(a) != _hash_graph(b)
+        assert (len(a.edges), len(a.nodes)) != (len(b.edges), len(b.nodes)) or _hash_graph(
+            a
+        ) != _hash_graph(b)
 
     def test_different_seed_different_graph(self) -> None:
         g = ProceduralDungeonGenerator()
@@ -121,7 +125,9 @@ class TestGradeScaling:
             for grade in range(1, 6)
         ]
         for prev, nxt in zip(counts, counts[1:]):
-            assert nxt >= prev, f"grade {counts.index(prev)+1} ({prev}) > grade {counts.index(nxt)+1} ({nxt})"
+            assert nxt >= prev, (
+                f"grade {counts.index(prev) + 1} ({prev}) > grade {counts.index(nxt) + 1} ({nxt})"
+            )
 
 
 # ============================================================================
@@ -226,9 +232,7 @@ class TestEdgeCases:
     def test_unknown_mission_id_none_safe(self) -> None:
         """Passing mission_id=None should not raise."""
         g = ProceduralDungeonGenerator()
-        graph = g.generate(
-            seed=42, mission_grade=3, character_ref="veteran", mission_id=None
-        )
+        graph = g.generate(seed=42, mission_grade=3, character_ref="veteran", mission_id=None)
         assert len(graph.nodes) >= 2
 
 

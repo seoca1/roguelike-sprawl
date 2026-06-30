@@ -66,6 +66,7 @@ def _reset_registry():
     """
     reset_hook_registry()
     from roguelike_sprawl.novel.hooks import register_default_actions
+
     register_default_actions()
     yield
     reset_hook_registry()
@@ -178,11 +179,7 @@ class TestFrontmatterParser:
 
         path = REPO_ROOT / "_tmp_fm.md"
         path.write_text(
-            '---\n'
-            'title:\n'
-            '  en: "English Title"\n'
-            '  ko: "한국어 제목"\n'
-            '---\nbody\n',
+            '---\ntitle:\n  en: "English Title"\n  ko: "한국어 제목"\n---\nbody\n',
             encoding="utf-8",
         )
         try:
@@ -196,11 +193,7 @@ class TestFrontmatterParser:
 
         path = REPO_ROOT / "_tmp_fm.md"
         path.write_text(
-            '---\n'
-            'wiki_references:\n'
-            '  - "[[A]]"\n'
-            '  - "[[B]]"\n'
-            '---\nbody\n',
+            '---\nwiki_references:\n  - "[[A]]"\n  - "[[B]]"\n---\nbody\n',
             encoding="utf-8",
         )
         try:
@@ -448,9 +441,7 @@ class TestIntegrator:
     def test_load_dry_run(self) -> None:
         runtime = load_novel_runtime(REPO_ROOT, dry_run=True)
         state = FakeAppState()
-        report = runtime.dispatcher.dispatch(
-            "case_jackout-30sec", app_state=state
-        )
+        report = runtime.dispatcher.dispatch("case_jackout-30sec", app_state=state)
         assert report.dry_run
         # No state mutation under dry-run.
         assert state.status_messages == []
@@ -478,9 +469,7 @@ class TestExtensibility:
         register_hook_action(HookKind.CINEMATIC, custom)
         cat = NovelCatalog.load(REPO_ROOT)
         manifest = NovelManifest()
-        manifest.set(
-            ManifestEntry(stem="case_jackout-30sec", primary=HookKind.CINEMATIC)
-        )
+        manifest.set(ManifestEntry(stem="case_jackout-30sec", primary=HookKind.CINEMATIC))
         runtime = NovelRuntime(cat, manifest, NovelDispatcher(cat, manifest))
         runtime.dispatcher.dispatch("case_jackout-30sec")
         assert seen == ["fired"]

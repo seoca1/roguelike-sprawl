@@ -226,11 +226,7 @@ class NovelManifest:
 
     def for_mission(self, mission_id: str) -> list[ManifestEntry]:
         """Return entries that explicitly bind to ``mission_id``."""
-        return [
-            e
-            for e in self.entries.values()
-            if e.mission_id == mission_id
-        ]
+        return [e for e in self.entries.values() if e.mission_id == mission_id]
 
 
 class TextProvider:

@@ -80,8 +80,11 @@ def _make_graph() -> MatrixGraph:
 class TestNodeToEntity:
     def test_creates_entity_with_components(self) -> None:
         node = Node(
-            id="r1", label="Vault", kind=NodeKind.DATA,
-            zone=ZoneDepth.SURFACE, ice=IceKind.NONE,
+            id="r1",
+            label="Vault",
+            kind=NodeKind.DATA,
+            zone=ZoneDepth.SURFACE,
+            ice=IceKind.NONE,
         )
         entity = node_to_entity(node, x=2, y=3, w=4, h=5)
         assert isinstance(entity, Entity)
@@ -109,8 +112,11 @@ class TestNodeToEntity:
         for node_kind, expected_room in cases:
             ice = IceKind.STANDARD if node_kind is NodeKind.ICE else IceKind.NONE
             node = Node(
-                id="x", label="x", kind=node_kind,
-                zone=ZoneDepth.SURFACE, ice=ice,
+                id="x",
+                label="x",
+                kind=node_kind,
+                zone=ZoneDepth.SURFACE,
+                ice=ice,
             )
             entity = node_to_entity(node)
             assert entity.get(COMP_ROOM_TYPE) is expected_room, (
@@ -119,8 +125,11 @@ class TestNodeToEntity:
 
     def test_ice_kind_propagates(self) -> None:
         node = Node(
-            id="r1", label="Hostile", kind=NodeKind.ICE,
-            zone=ZoneDepth.MID, ice=IceKind.BLACK,
+            id="r1",
+            label="Hostile",
+            kind=NodeKind.ICE,
+            zone=ZoneDepth.MID,
+            ice=IceKind.BLACK,
         )
         entity = node_to_entity(node)
         assert entity.get(COMP_ICE_KIND) is IceKind.BLACK
@@ -359,9 +368,7 @@ class TestMissionToECSIntegration:
         entry_entity = world.get(graph.entry_id)
         assert entry_entity is not None
         assert entry_entity.get(COMP_KIND) is NodeKind.ENTRY
-        exit_count = sum(
-            1 for e in world.find(COMP_KIND) if e.get(COMP_KIND) is NodeKind.EXIT
-        )
+        exit_count = sum(1 for e in world.find(COMP_KIND) if e.get(COMP_KIND) is NodeKind.EXIT)
         assert exit_count == 1
 
     def test_clear_data_room_via_system(self) -> None:
@@ -385,9 +392,7 @@ class TestMissionToECSIntegration:
         system = DungeonSystem(world, mission_id=m.id)
         system.populate(graph)
 
-        data_rooms = [
-            e for e in world.find(COMP_KIND) if e.get(COMP_KIND) is NodeKind.DATA
-        ]
+        data_rooms = [e for e in world.find(COMP_KIND) if e.get(COMP_KIND) is NodeKind.DATA]
         assert len(data_rooms) >= 1
 
         # Clear the first data room.

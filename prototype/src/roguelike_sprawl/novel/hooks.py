@@ -31,12 +31,12 @@ class HookKind(StrEnum):
     looks up the action by string at dispatch time.
     """
 
-    NARRATIVE = "narrative"          # show on chapter screen
-    EXCERPT = "excerpt"              # show inline on dungeon/cyberscape
-    EVENT = "event"                  # trigger an EventState cutscene
-    COMBAT = "combat"                # drive combat_state.ice_kind
-    ITEM = "item"                    # add inventory / data fragment
-    CINEMATIC = "cinematic"          # play a graphic-novel scene
+    NARRATIVE = "narrative"  # show on chapter screen
+    EXCERPT = "excerpt"  # show inline on dungeon/cyberscape
+    EVENT = "event"  # trigger an EventState cutscene
+    COMBAT = "combat"  # drive combat_state.ice_kind
+    ITEM = "item"  # add inventory / data fragment
+    CINEMATIC = "cinematic"  # play a graphic-novel scene
 
 
 @dataclass(slots=True)
@@ -79,9 +79,7 @@ class HookResult:
 HookAction = Callable[[HookContext, Any], HookResult]
 
 
-_HOOK_REGISTRY: dict[HookKind, list[HookAction]] = {
-    kind: [] for kind in HookKind
-}
+_HOOK_REGISTRY: dict[HookKind, list[HookAction]] = {kind: [] for kind in HookKind}
 
 
 def register_hook_action(kind: HookKind, action: HookAction) -> None:

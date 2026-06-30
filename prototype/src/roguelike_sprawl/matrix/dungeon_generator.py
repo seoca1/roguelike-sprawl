@@ -56,10 +56,10 @@ class Room:
 # Grid size (cols x rows) for each mission grade (1-5).
 # Smaller for novice, larger for higher grades.
 _GRID_BY_GRADE: dict[int, tuple[int, int]] = {
-    1: (7, 5),    # 10-12 rooms
-    2: (9, 6),    # 14-18 rooms
-    3: (11, 7),   # 19-24 rooms
-    4: (13, 8),   # 25-30 rooms
+    1: (7, 5),  # 10-12 rooms
+    2: (9, 6),  # 14-18 rooms
+    3: (11, 7),  # 19-24 rooms
+    4: (13, 8),  # 25-30 rooms
     5: (15, 10),  # 35-42 rooms
 }
 
@@ -425,7 +425,9 @@ class ProceduralDungeonGenerator:
     # Room placement
     # --------------------------------------------------------------------
 
-    def _place_rooms(self, rng: random.Random, node: _BspNode, counter: list[int] | None = None) -> int:
+    def _place_rooms(
+        self, rng: random.Random, node: _BspNode, counter: list[int] | None = None
+    ) -> int:
         """Place one room inside each leaf.  Returns next room counter."""
         if counter is None:
             counter = [0]
@@ -526,6 +528,7 @@ class ProceduralDungeonGenerator:
                 if len(edges) >= len(leaves) - 1:
                     break
         return edges
+
     # Dead-end branches (character variation)
     # --------------------------------------------------------------------
 
@@ -594,8 +597,9 @@ class ProceduralDungeonGenerator:
         entry_center = entry_leaf.center()
         exit_leaf = max(
             leaves,
-            key=lambda n: abs(n.center()[0] - entry_center[0])
-            + abs(n.center()[1] - entry_center[1]),
+            key=lambda n: (
+                abs(n.center()[0] - entry_center[0]) + abs(n.center()[1] - entry_center[1])
+            ),
         )
 
         rooms: list[Room] = []

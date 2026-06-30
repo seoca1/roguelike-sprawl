@@ -92,7 +92,9 @@ class TestKeywords:
         assert RoomType.DATA in rooms
 
     def test_ice_keyword(self) -> None:
-        rooms = missions_to_rooms(_mission(arc=1, title="Defeat ICE patrol", objective="ICE breach"))
+        rooms = missions_to_rooms(
+            _mission(arc=1, title="Defeat ICE patrol", objective="ICE breach")
+        )
         assert RoomType.ICE in rooms
 
     def test_construct_keyword(self) -> None:
@@ -115,9 +117,7 @@ class TestKeywords:
 
     def test_no_keywords(self) -> None:
         # Use a primary_type that no keyword rule matches.
-        rooms = missions_to_rooms(
-            _mission(arc=2, title="???", primary_type="navigate")
-        )
+        rooms = missions_to_rooms(_mission(arc=2, title="???", primary_type="navigate"))
         # With no keywords, the result is just entry + routers + exit.
         assert rooms[0] is RoomType.ENTRY
         assert rooms[-1] is RoomType.EXIT
@@ -142,35 +142,31 @@ class TestKeywords:
 
 class TestArcScaling:
     def test_arc_1_short(self) -> None:
-        rooms = missions_to_rooms(
-            _mission(arc=1, title="tutorial level", objective="")
-        )
+        rooms = missions_to_rooms(_mission(arc=1, title="tutorial level", objective=""))
         # Arc 1 target is 3-4 middle rooms → 5-6 total.
         assert 5 <= len(rooms) <= 6
 
     def test_arc_3_medium(self) -> None:
-        rooms = missions_to_rooms(
-            _mission(arc=3, title="midgame", objective="")
-        )
+        rooms = missions_to_rooms(_mission(arc=3, title="midgame", objective=""))
         # Arc 3 target is 5-6 middle rooms → 7-8 total.
         assert 7 <= len(rooms) <= 8
 
     def test_arc_5_long(self) -> None:
-        rooms = missions_to_rooms(
-            _mission(arc=5, title="climax", objective="")
-        )
+        rooms = missions_to_rooms(_mission(arc=5, title="climax", objective=""))
         # Arc 5 target is 7-8 middle rooms → 9-10 total.
         assert 9 <= len(rooms) <= 10
 
     def test_arc_clamped_high(self) -> None:
         # Test the helper directly (Mission rejects invalid arcs at construction)
         from roguelike_sprawl.matrix.mission_mapper import _arc_target
+
         clamped = _arc_target(7)
         normal = _arc_target(5)
         assert clamped == normal
 
     def test_arc_clamped_low(self) -> None:
         from roguelike_sprawl.matrix.mission_mapper import _arc_target
+
         clamped = _arc_target(0)
         normal = _arc_target(1)
         assert clamped == normal
@@ -190,12 +186,8 @@ class TestCharacterBias:
         novice_rooms = missions_to_rooms(empty, character_ref="novice")
         heretic_rooms = missions_to_rooms(empty, character_ref="heretic")
         # Compare extras based on NPC/ICE counts (heretic has 2+2=4 of these).
-        novice_combat = sum(
-            1 for r in novice_rooms if r in (RoomType.NPC, RoomType.ICE)
-        )
-        heretic_combat = sum(
-            1 for r in heretic_rooms if r in (RoomType.NPC, RoomType.ICE)
-        )
+        novice_combat = sum(1 for r in novice_rooms if r in (RoomType.NPC, RoomType.ICE))
+        heretic_combat = sum(1 for r in heretic_rooms if r in (RoomType.NPC, RoomType.ICE))
         assert heretic_combat > novice_combat
 
     def test_heretic_more_ice_than_novice(self) -> None:
@@ -248,8 +240,6 @@ class TestRealMissions:
 # ============================================================================
 
 
-
-
 # ============================================================================
 # Bridge: mission_to_graph
 # ============================================================================
@@ -280,6 +270,7 @@ class TestBridgeToGraph:
         assert entry is not None
         # Map RoomType -> NodeKind for comparison.
         from roguelike_sprawl.matrix.node import NodeKind
+
         assert entry.kind is NodeKind.ENTRY
 
     def test_exit_node_exists(self) -> None:
@@ -329,21 +320,25 @@ class TestBridgeToGraph:
                 RoomType.CORE: "core",
                 RoomType.EXIT: "exit",
             }[target]
-            assert kind.value == expected_kind, (
-                f"node {i}: outline={target}, node={kind.value}"
-            )
+            assert kind.value == expected_kind, f"node {i}: outline={target}, node={kind.value}"
 
     def test_seeds_use_mission_matrix_seed_when_none(self) -> None:
         from roguelike_sprawl.matrix.mission_mapper import mission_to_graph
 
         # Same mission_id + same matrix_seed ⇒ same graph.
         m1 = _mission(
-            arc=3, title="x", objective="",
-            matrix_seed=99, mission_id="same_seed_test",
+            arc=3,
+            title="x",
+            objective="",
+            matrix_seed=99,
+            mission_id="same_seed_test",
         )
         m2 = _mission(
-            arc=3, title="x", objective="",
-            matrix_seed=99, mission_id="same_seed_test",
+            arc=3,
+            title="x",
+            objective="",
+            matrix_seed=99,
+            mission_id="same_seed_test",
         )
 
         g1 = mission_to_graph(m1, character_ref="veteran")
@@ -357,8 +352,11 @@ class TestBridgeToGraph:
         from roguelike_sprawl.matrix.mission_mapper import mission_to_graph
 
         m = _mission(
-            arc=3, title="x", objective="",
-            matrix_seed=99, mission_id="explicit_seed_test",
+            arc=3,
+            title="x",
+            objective="",
+            matrix_seed=99,
+            mission_id="explicit_seed_test",
         )
 
         # Use distinct explicit seeds.
@@ -369,7 +367,6 @@ class TestBridgeToGraph:
         edges_b = {(e.src, e.dst) for e in g_b.edges}
         # Different seeds must give different graphs.
         assert edges_a != edges_b
-
 
 
 class TestTextExtraction:

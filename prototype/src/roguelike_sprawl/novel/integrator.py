@@ -49,7 +49,9 @@ def load_novel_runtime(
     """
     catalog = NovelCatalog.load(repo_root)
     manifest = NovelManifest.from_catalog(catalog)
-    overrides = NovelManifest.from_json(manifest_overrides) if manifest_overrides else NovelManifest()
+    overrides = (
+        NovelManifest.from_json(manifest_overrides) if manifest_overrides else NovelManifest()
+    )
     manifest.entries.update(overrides.entries)
     dispatcher = NovelDispatcher(catalog, manifest, dry_run=dry_run)
     return NovelRuntime(

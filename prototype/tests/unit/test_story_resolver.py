@@ -8,8 +8,6 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import pytest
-
 # 테스트 파일: prototype/tests/unit/test_xxx.py
 # resolve 후 parents: 0=unit, 1=tests, 2=prototype, 3=roguelike_sprawl, 4=Game, 5=Projects
 ROOT_PROJECT = Path(__file__).resolve().parents[5]
@@ -17,7 +15,7 @@ ROOT_PROTOTYPE = ROOT_PROJECT / "Game" / "roguelike_sprawl" / "prototype"
 
 sys.path.insert(0, str(ROOT_PROTOTYPE / "src"))
 
-from roguelike_sprawl.data.story_resolver import (  # type: ignore[import-not-found]
+from roguelike_sprawl.data.story_resolver import (  # type: ignore[import-not-found]  # noqa: E402
     CANONICAL_DATES,
     list_available_stems,
     resolve_ko_translation,

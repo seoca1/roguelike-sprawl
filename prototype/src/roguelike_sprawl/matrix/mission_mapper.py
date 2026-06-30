@@ -183,9 +183,6 @@ def missions_to_rooms(
     return [RoomType.ENTRY, *middle, RoomType.EXIT]
 
 
-
-
-
 def mission_to_graph(
     mission: MissionLike,
     character_ref: str = "veteran",
@@ -226,9 +223,7 @@ def mission_to_graph(
         character_ref=character_ref,
         mission_id=getattr(mission, "id", None),
     )
-    return proc_generator.decorate_with_outline(
-        graph, outline, character_ref=character_ref
-    )
+    return proc_generator.decorate_with_outline(graph, outline, character_ref=character_ref)
 
 
 __all__ = [
