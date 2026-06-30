@@ -38,8 +38,26 @@ def test_translator_format_kwargs() -> None:
 def test_translator_format_missing_kwarg() -> None:
     t = Translator("en", data_dir=Path("/nonexistent"))
     t._data = {"app": {"phase": "Phase: {phase}"}}  # type: ignore[attr-defined]
-    # Missing kwarg: should fall back to template
-    assert t("app.phase") == "Phase: {phase}"
+    # Missing kwarg: should render placeholder as <name> marker so the
+    # UI never shows raw {name} syntax (P2 #14).
+    assert t("app.phase") == "Phase: <phase>"
+
+
+def test_translator_format_partial_kwargs() -> None:
+    """Multiple placeholders; only some kwargs supplied → unsupplied
+    become ``<name>``, supplied render normally."""
+    t = Translator("en", data_dir=Path("/nonexistent"))
+    t._data = {"app": {"greeting": "Hello {name}, you have {count} items"}}  # type: ignore[attr-defined]
+    assert t("app.greeting", name="Case") == "Hello Case, you have <count> items"
+    assert t("app.greeting", count=3) == "Hello <name>, you have 3 items"
+    assert t("app.greeting", name="Case", count=3) == "Hello Case, you have 3 items"
+
+
+def test_translator_format_no_kwargs() -> None:
+    """Template with placeholders but no kwargs → markers."""
+    t = Translator("en", data_dir=Path("/nonexistent"))
+    t._data = {"app": {"x": "Value: {x}"}}  # type: ignore[attr-defined]
+    assert t("app.x") == "Value: <x>"
 
 
 def test_translator_has() -> None:

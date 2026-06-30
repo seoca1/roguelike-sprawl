@@ -7,8 +7,48 @@ Display mode: Off (English only, default) / Subtitle / Replace.
 from __future__ import annotations
 
 import json
+import string
 from pathlib import Path
 from typing import Any
+
+
+def _format_template(template: str, kwargs: dict[str, Any]) -> str:
+    """Format ``template`` with ``kwargs``; missing fields render as ``<name>``.
+
+    Unlike ``str.format()``, this never raises — instead unfilled
+    placeholders are surfaced as ``<name>`` so the player sees an
+    obvious marker rather than a raw ``{name}`` substring. This makes
+    missing-translation bugs visible at runtime instead of leaking into
+    UI text.
+    """
+    formatter = string.Formatter()
+    parts: list[str] = []
+    for literal_text, field_name, format_spec, conversion in formatter.parse(template):
+        parts.append(literal_text)
+        if field_name is None:
+            continue
+        # Field reference (e.g. "0" for positional, "name" for kwarg,
+        # "obj.attr" for dotted lookup).
+        if field_name.isdigit():
+            # Positional argument — we don't support positional args here.
+            parts.append(f"<{field_name}>")
+            continue
+        if field_name in kwargs:
+            value = kwargs[field_name]
+        else:
+            parts.append(f"<{field_name}>")
+            continue
+        # Apply format spec / conversion if present
+        try:
+            if conversion:
+                value = formatter.convert_field(value, conversion)
+            if format_spec:
+                value = format(value, format_spec)
+        except (ValueError, TypeError):
+            parts.append(f"<{field_name}>")
+            continue
+        parts.append(str(value))
+    return "".join(parts)
 
 
 class Translator:
@@ -36,7 +76,9 @@ class Translator:
     def t(self, key: str, **kwargs: Any) -> str:
         """Translate a dotted key with optional format arguments.
 
-        Falls back to the key itself if not found.
+        Falls back to the key itself if not found. Missing format
+        arguments render as ``<name>`` (P2 #14) rather than raising
+        or leaking raw ``{name}`` placeholders into UI text.
         """
         value: Any = self._data
         for part in key.split("."):
@@ -45,11 +87,11 @@ class Translator:
             value = value[part]
         if not isinstance(value, str):
             return key
-        if kwargs:
-            try:
-                return value.format(**kwargs)
-            except (KeyError, IndexError, ValueError):
-                return value
+        # Always run through _format_template so unfilled placeholders
+        # become ``<name>`` markers (visible at runtime) instead of
+        # leaking raw ``{name}`` syntax into UI text.
+        if "{" in value or "}" in value:
+            return _format_template(value, kwargs)
         return value
 
     def set_locale(self, lang: str, data_dir: Path | None = None) -> None:
