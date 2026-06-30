@@ -807,9 +807,7 @@ def _apply_combat_reputation(state: AppState, ice_type: object) -> None:
     deltas = COMBAT_REPUTATION[node_faction]
     for faction, delta in deltas.items():
         state.reputation.adjust(faction, delta, source=f"combat:{type_name}")
-    affected = ", ".join(
-        f"{f.value} {d:+d}" for f, d in deltas.items()
-    )
+    affected = ", ".join(f"{f.value} {d:+d}" for f, d in deltas.items())
     state.status_messages.append(f">>> Rep shifted: {affected}")
 
 
