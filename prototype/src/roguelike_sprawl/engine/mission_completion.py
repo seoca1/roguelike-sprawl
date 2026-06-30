@@ -6,6 +6,7 @@ data, defeated ICE), the mission is marked complete:
 2. Mission is added to ``completed_missions`` set.
 3. Current mission is cleared.
 4. The next mission (if any) for the player's grade becomes available.
+5. (Phase 6+) Faction reputation is adjusted based on the fixer.
 
 This is the game's primary progression loop: do mission → get reward →
 unlock next mission → repeat.
@@ -13,7 +14,59 @@ unlock next mission → repeat.
 
 from __future__ import annotations
 
+from ..matrix.node import Faction
+from ..run.reputation import MAX_DELTA_PER_EVENT
 from .state import AppState
+
+# Faction rep deltas for mission completion, keyed by fixer.
+# Positive values = mission went well for the faction; negative values
+# = mission went against their interests (e.g. you destroyed Sense/Net
+# servers while working for Hosaka).
+FIXER_REPUTATION: dict[str, dict[str, int]] = {
+    "finn": {"hosaka": +5, "sense_net": +5},  # Jack-it-up fixer (neutral)
+    "dixie": {"ta": -3, "hosaka": +3},  # Construct - works against T-A
+    "kumiko": {"maas": +8},  # Maas-affiliated Count Zero character
+    "maas": {"maas": +10, "hosaka": -3},  # Direct Maas work, against Hosaka
+    "sally": {"sense_net": +10, "maas": -3},  # Sense/Net ally
+    "ta_rep": {"ta": +10, "sense_net": -3},  # Tessier-Ashpool work
+    "yakuza": {},  # No faction in enum — neutral for rep
+}
+
+
+def fixer_to_factions(fixer: str) -> list[Faction]:
+    """Map a fixer ID to the factions whose reputation they affect.
+
+    Returns the list of Faction enum values for the given fixer, or
+    an empty list for unknown fixers (e.g. yakuza).
+    """
+    deltas = FIXER_REPUTATION.get(fixer, {})
+    factions: list[Faction] = []
+    for name in deltas:
+        try:
+            factions.append(Faction(name))
+        except ValueError:
+            continue
+    return factions
+
+
+def _apply_fixer_reputation(state: AppState, fixer: str, source: str) -> None:
+    """Apply reputation deltas for a fixer's mission completion.
+
+    Writes to ``state.status_messages`` so the player sees the effect.
+    """
+    deltas = FIXER_REPUTATION.get(fixer)
+    if not deltas:
+        return
+    for faction_name, delta in deltas.items():
+        # Clamp to MAX_DELTA_PER_EVENT (defensive — already clamped by adjust)
+        clamped = max(-MAX_DELTA_PER_EVENT, min(MAX_DELTA_PER_EVENT, delta))
+        try:
+            faction = Faction(faction_name)
+        except ValueError:
+            continue
+        state.reputation.adjust(faction, clamped, source=source)
+        tier = state.reputation.get(faction).tier()
+        state.status_messages.append(f">>> Rep {faction.value}: {clamped:+d} ({tier})")
 
 
 def check_mission_completion(state: AppState) -> bool:
@@ -67,6 +120,13 @@ def complete_mission(state: AppState, mission: object) -> None:
 
     # Mark complete
     state.completed_missions.add(mission.id)
+
+    # Phase 6+: adjust faction reputation based on the fixer who
+    # gave us the job. Finn work → balance; Maas work → Maas+ /
+    # Hosaka-; Sense/Net work → Sense/Net+ / Maas-; etc.
+    if hasattr(state, "reputation") and mission.fixer:
+        _apply_fixer_reputation(state, mission.fixer, source=f"mission:{mission.id}")
+
     state.current_mission = None
 
     # Reset progress for next mission
