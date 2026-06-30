@@ -133,6 +133,7 @@ STARTER_DECK = Equipment(
     description="A battered Ono-Sendai 7 cyberdeck. The jack plate is worn smooth.",
     ascii_glyph="[D]",
     ascii_color=(100, 100, 150),
+    set_id="ono_sendai",
 )
 
 STARTER_HEADWARE = Equipment(
@@ -160,6 +161,7 @@ STREET_DECK = Equipment(
     ascii_color=(200, 100, 0),
     upgrade_slots=2,
     required_materials={"ice_shard": 1, "data_fragment": 2},
+    set_id="ono_sendai",
 )
 
 MILITECH_EYES = Equipment(
@@ -174,6 +176,7 @@ MILITECH_EYES = Equipment(
     ascii_color=(255, 50, 50),
     upgrade_slots=1,
     required_materials={"data_fragment": 2, "wetware_chip": 1},
+    set_id="militech",
 )
 
 CHROME_GLOVES = Equipment(
@@ -188,6 +191,7 @@ CHROME_GLOVES = Equipment(
     ascii_color=(180, 180, 200),
     upgrade_slots=1,
     required_materials={"combat_module": 1},
+    set_id="militech",
 )
 
 # === Tier 2 (Commercial) ===
@@ -203,6 +207,7 @@ CORPORATE_DECK = Equipment(
     ascii_color=(200, 0, 100),
     upgrade_slots=3,
     required_materials={"ice_shard": 3, "wetware_data": 1},
+    set_id="ono_sendai",
 )
 
 SUBDERMAL = Equipment(
@@ -232,6 +237,7 @@ MILITECH_DECK = Equipment(
     ascii_color=(0, 200, 0),
     upgrade_slots=3,
     required_materials={"ice_construct": 1, "combat_module": 2},
+    set_id="militech",
 )
 
 TACTICAL_BODY = Equipment(
@@ -261,6 +267,7 @@ ARASAKA_DECK = Equipment(
     ascii_color=(255, 0, 0),
     upgrade_slots=4,
     required_materials={"ice_construct": 3, "biosoft_agent": 2},
+    set_id="arasaka",
 )
 
 KEREZNIKOV = Equipment(
@@ -275,6 +282,7 @@ KEREZNIKOV = Equipment(
     ascii_color=(200, 0, 0),
     upgrade_slots=2,
     required_materials={"biosoft_agent": 2, "rom_echo": 1},
+    set_id="arasaka",
 )
 
 # === Tier 5 (Experimental) ===
@@ -396,6 +404,84 @@ BOOTS_GHOST = Equipment(
 
 
 # ============================================================================
+# Set Bonus Definitions
+# ============================================================================
+#
+# A set bonus is awarded when the player equips ≥2 or ≥3 pieces from the
+# same set_id. The Equipment dataclass already carries ``set_id``; this
+# table maps each set_id → threshold → bonus stats.
+#
+# Design:
+#   ono_sendai : deck-focused (program_power) — 2/3 piece thresholds
+#   militech   : offense-focused (attack_bonus, crit_bonus_pct)
+#   arasaka    : defense + skill (defense, ice_resistance, grants_skill)
+#
+# T6 master gear does NOT contribute to legacy set bonuses — master
+# gear is a tier above and has its own implicit set ("master").
+
+SET_BONUSES: dict[str, dict[int, EquipStats]] = {
+    "ono_sendai": {
+        2: EquipStats(
+            program_power=10,
+            crit_bonus_pct=5,
+            extra_effect="Ono-Sendai resonance (2pc): deck runs cooler",
+        ),
+        3: EquipStats(
+            program_power=25,
+            ap_regen_bonus_pct=10,
+            extra_effect="Ono-Sendai sync (3pc): jack in 1 turn faster",
+        ),
+    },
+    "militech": {
+        2: EquipStats(
+            attack_bonus=5,
+            crit_bonus_pct=10,
+            extra_effect="Militech targeting (2pc): +hit chance",
+        ),
+        3: EquipStats(
+            attack_bonus=15,
+            crit_bonus_pct=25,
+            shield_bonus=2,
+            extra_effect="Militech apex (3pc): +25% crit, +shield regen",
+        ),
+    },
+    "arasaka": {
+        2: EquipStats(
+            defense=8,
+            ice_resistance=15,
+            extra_effect="Arasaka wards (2pc): corporate-grade shields",
+        ),
+        3: EquipStats(
+            defense=20,
+            hp_bonus=30,
+            ice_resistance=30,
+            extra_effect=("Arasaka Onikiri (3pc): +30 hp, ICE deals 30% less damage"),
+        ),
+    },
+}
+
+
+def get_set_bonus(set_id: str | None, pieces_equipped: int) -> EquipStats | None:
+    """Return the highest applicable set bonus for ``pieces_equipped`` items.
+
+    Walks SET_BONUSES[set_id] thresholds in descending order and returns
+    the first bonus whose threshold is ≤ ``pieces_equipped``.
+
+    Returns None if the set_id has no bonuses, the item is not part of
+    any set, or no threshold is met.
+    """
+    if not set_id:
+        return None
+    thresholds = SET_BONUSES.get(set_id, {})
+    if not thresholds:
+        return None
+    for threshold in sorted(thresholds.keys(), reverse=True):
+        if pieces_equipped >= threshold:
+            return thresholds[threshold]
+    return None
+
+
+# ============================================================================
 # Registry
 # ============================================================================
 
@@ -488,11 +574,41 @@ class EquipmentLoadout:
         """Check if all slots are filled."""
         return len(self.equipment) == len(EquipSlot)
 
+    def set_counts(self) -> dict[str, int]:
+        """Count equipped items per set_id (excludes None / no-set items).
+
+        Returns:
+            Mapping set_id → number of equipped items in that set.
+            Items without a set_id are not counted (they're generic).
+        """
+        counts: dict[str, int] = {}
+        for equipment in self.equipment.values():
+            if equipment.set_id is None:
+                continue
+            counts[equipment.set_id] = counts.get(equipment.set_id, 0) + 1
+        return counts
+
+    def set_bonuses(self) -> list[EquipStats]:
+        """Return all active set bonuses (one EquipStats per qualifying set).
+
+        Walks each set's count and applies the highest applicable
+        threshold bonus via :func:`get_set_bonus`. Items without a
+        set_id contribute nothing.
+        """
+        bonuses: list[EquipStats] = []
+        for set_id, count in self.set_counts().items():
+            bonus = get_set_bonus(set_id, count)
+            if bonus is not None:
+                bonuses.append(bonus)
+        return bonuses
+
     def total_stats(self) -> EquipStats:
-        """Aggregate all stats from equipped items."""
+        """Aggregate all stats from equipped items + active set bonuses."""
         total = EquipStats()
         for equipment in self.equipment.values():
             total = _add_stats(total, equipment.stats)
+        for bonus in self.set_bonuses():
+            total = _add_stats(total, bonus)
         return total
 
 

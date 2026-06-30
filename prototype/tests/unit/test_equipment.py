@@ -11,8 +11,16 @@ from __future__ import annotations
 import pytest
 
 from roguelike_sprawl.equipment.equipment import (
+    ARASAKA_DECK,
+    CHROME_GLOVES,
+    CORPORATE_DECK,
+    KEREZNIKOV,
+    MASTER_DECK,
+    MILITECH_DECK,
+    MILITECH_EYES,
     STARTER_DECK,
     STARTER_HEADWARE,
+    STREET_DECK,
     EquipCategory,
     Equipment,
     EquipmentLoadout,
@@ -20,6 +28,7 @@ from roguelike_sprawl.equipment.equipment import (
     EquipSlot,
     EquipStats,
     EquipTier,
+    get_set_bonus,
 )
 
 # ============================================================================
@@ -266,9 +275,11 @@ class TestEquipmentLoadout:
         loadout.equip(MILITECH_EYES)  # attack_bonus=3, crit_bonus_pct=10
         loadout.equip(CHROME_GLOVES)  # attack_bonus=5, program_power=3
         total = loadout.total_stats()
-        assert total.attack_bonus == 8  # 3 + 5
-        assert total.crit_bonus_pct == 10
-        assert total.program_power == 3  # gloves only
+        # 3 + 5 (items) + 5 (Militech 2pc set bonus) = 13 attack
+        assert total.attack_bonus == 13
+        # 10 (eyes) + 10 (set) = 20 crit
+        assert total.crit_bonus_pct == 20
+        assert total.program_power == 3  # gloves only, no set bonus
 
     def test_total_stats_empty_loadout_is_zero(self) -> None:
         loadout = EquipmentLoadout()
@@ -404,3 +415,117 @@ class TestStatAggregation:
         combined = _add_stats(a, b)
         # Empty effect is filtered — no trailing comma
         assert combined.extra_effect == "Heals"
+
+
+class TestSetBonuses:
+    """Set bonus system — 2pc / 3pc thresholds for equipped gear sharing a set_id."""
+
+    def test_no_set_no_bonus(self) -> None:
+        """Item without set_id → no bonus."""
+        assert get_set_bonus(None, 5) is None
+        assert get_set_bonus("", 5) is None
+
+    def test_unknown_set_no_bonus(self) -> None:
+        """Unknown set_id → no bonus (no crash)."""
+        assert get_set_bonus("unknown_set", 5) is None
+
+    def test_ono_sendai_2pc_threshold(self) -> None:
+        """Ono-Sendai 2pc: program_power=10, crit_bonus_pct=5."""
+        bonus = get_set_bonus("ono_sendai", 2)
+        assert bonus is not None
+        assert bonus.program_power == 10
+        assert bonus.crit_bonus_pct == 5
+
+    def test_ono_sendai_3pc_threshold(self) -> None:
+        """Ono-Sendai 3pc: program_power=25 + ap_regen."""
+        bonus = get_set_bonus("ono_sendai", 3)
+        assert bonus is not None
+        assert bonus.program_power == 25
+        assert bonus.ap_regen_bonus_pct == 10
+
+    def test_ono_sendai_below_threshold(self) -> None:
+        """1pc Ono-Sendai → no bonus (threshold is 2)."""
+        assert get_set_bonus("ono_sendai", 1) is None
+
+    def test_militech_3pc_apex(self) -> None:
+        """Militech 3pc: attack_bonus=15, crit_bonus_pct=25, shield_bonus=2."""
+        bonus = get_set_bonus("militech", 3)
+        assert bonus is not None
+        assert bonus.attack_bonus == 15
+        assert bonus.crit_bonus_pct == 25
+        assert bonus.shield_bonus == 2
+
+    def test_arasaka_3pc_full_bonus(self) -> None:
+        """Arasaka 3pc: defense=20, hp_bonus=30, ice_resistance=30."""
+        bonus = get_set_bonus("arasaka", 3)
+        assert bonus is not None
+        assert bonus.defense == 20
+        assert bonus.hp_bonus == 30
+        assert bonus.ice_resistance == 30
+
+    def test_higher_count_returns_highest_threshold(self) -> None:
+        """4pc → returns the 3pc bonus (highest applicable threshold)."""
+        bonus_3pc = get_set_bonus("ono_sendai", 3)
+        bonus_4pc = get_set_bonus("ono_sendai", 4)
+        assert bonus_4pc == bonus_3pc
+
+    def test_loadout_set_counts(self) -> None:
+        """Loadout counts items per set_id, excluding no-set items."""
+        loadout = EquipmentLoadout()
+        # Equip 3 Ono-Sendai pieces (deck × 2 + 1 more)
+        loadout.equip(STARTER_DECK)  # T0 ono_sendai
+        loadout.equip(STREET_DECK)  # T1 ono_sendai (replaces in DECK slot)
+        # Now DECK slot has STREET_DECK only (ono_sendai count=1).
+        # Add Militech eyes + gloves for a separate set.
+        from roguelike_sprawl.equipment.equipment import CHROME_GLOVES, MILITECH_EYES
+
+        loadout.equip(MILITECH_EYES)  # militech
+        loadout.equip(CHROME_GLOVES)  # militech
+        # And STARTER_HEADWARE which has no set_id.
+        loadout.equip(STARTER_HEADWARE)
+
+        counts = loadout.set_counts()
+        assert counts.get("ono_sendai") == 1  # only STREET_DECK
+        assert counts.get("militech") == 2  # eyes + gloves
+        assert "starter_headware" not in counts  # no set_id
+
+    def test_loadout_set_bonuses_aggregates_active(self) -> None:
+        """Loadout with 2 Militech items → 1 active set bonus."""
+        loadout = EquipmentLoadout()
+        loadout.equip(MILITECH_EYES)
+        loadout.equip(CHROME_GLOVES)
+
+        bonuses = loadout.set_bonuses()
+        assert len(bonuses) == 1
+        # The bonus is the 2pc Militech: attack_bonus=5, crit_bonus_pct=10.
+        assert bonuses[0].attack_bonus == 5
+        assert bonuses[0].crit_bonus_pct == 10
+
+    def test_total_stats_includes_set_bonus(self) -> None:
+        """total_stats() = equipment stats + set bonuses."""
+        # Militech 2pc: attack_bonus=5, crit_bonus_pct=10
+        # MILITECH_EYES: attack_bonus=3, crit_bonus_pct=10
+        # CHROME_GLOVES: attack_bonus=5, program_power=3
+        loadout = EquipmentLoadout()
+        loadout.equip(MILITECH_EYES)
+        loadout.equip(CHROME_GLOVES)
+        total = loadout.total_stats()
+        # 3 + 5 + 5 (set) = 13 attack
+        assert total.attack_bonus == 13
+        # 10 + 10 (set) = 20 crit
+        assert total.crit_bonus_pct == 20
+        # 3 (only gloves, no set bonus)
+        assert total.program_power == 3
+
+    def test_set_id_assigned_to_expected_equipment(self) -> None:
+        """Regression: set_id is correctly assigned on default items."""
+        assert STARTER_DECK.set_id == "ono_sendai"
+        assert STREET_DECK.set_id == "ono_sendai"
+        assert CORPORATE_DECK.set_id == "ono_sendai"
+        assert MILITECH_EYES.set_id == "militech"
+        assert MILITECH_DECK.set_id == "militech"
+        assert ARASAKA_DECK.set_id == "arasaka"
+        assert KEREZNIKOV.set_id == "arasaka"
+        # T6 master gear has no set (legacy sets are T0..T4).
+
+        assert MASTER_DECK.set_id is None
