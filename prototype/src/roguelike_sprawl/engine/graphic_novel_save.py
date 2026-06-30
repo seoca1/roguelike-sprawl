@@ -205,6 +205,71 @@ def save_gn_progress(
     return path
 
 
+# GN migration chain. Same pattern as save_manager._SAVE_MIGRATIONS:
+# list of (source_version, target_version, transform) tuples. Transforms
+# take a parsed save dict and return the upgraded dict. The chain is
+# walked in order until the dict reaches GN_SAVE_VERSION.
+#
+# History:
+#   <legacy>  → 1.0.0   inject version key
+#   1.0.0     → 1.1.0   add `ending` field (ADR-0048)
+#   1.1.0     → 1.2.0   ending now supports A/B/C (ADR-0049)
+_GN_SAVE_MIGRATIONS: list[tuple[str, str, Any]] = [
+    (
+        "<legacy>",
+        "1.0.0",
+        lambda data: {**data, "version": "1.0.0"},
+    ),
+    (
+        "1.0.0",
+        "1.1.0",
+        lambda data: {
+            **data,
+            "version": "1.1.0",
+            "progress": {
+                **data.get("progress", {}),
+                "ending": data.get("progress", {}).get("ending", "A"),
+            },
+        },
+    ),
+    (
+        "1.1.0",
+        "1.2.0",
+        # ending letters stay compatible (A/B/C); just bump version.
+        lambda data: {**data, "version": "1.2.0"},
+    ),
+]
+
+
+def _migrate_gn_data(data: dict[str, Any]) -> dict[str, Any]:
+    """Apply GN version migrations until data reaches GN_SAVE_VERSION.
+
+    Walks ``_GN_SAVE_MIGRATIONS`` from the data's current version to
+    ``GN_SAVE_VERSION``. If a version in the chain is missing,
+    raises GNSaveVersionMismatchError (cannot auto-upgrade across gaps).
+    """
+    current = data.get("version", "<legacy>")
+    target = GN_SAVE_VERSION
+
+    if current == target:
+        return data
+
+    while current != target:
+        next_step = next(
+            (m for m in _GN_SAVE_MIGRATIONS if m[0] == current),
+            None,
+        )
+        if next_step is None:
+            raise GNSaveVersionMismatchError(
+                f"No migration path from GN save version {current!r} to {target!r}"
+            )
+        _, successor, transform = next_step
+        data = transform(data)
+        current = successor
+
+    return data
+
+
 def load_gn_progress(save_path: Path | None = None) -> GNProgress:
     """Load GN progress from disk.
 
@@ -216,7 +281,8 @@ def load_gn_progress(save_path: Path | None = None) -> GNProgress:
 
     Raises:
         GNSaveEmptyError: If no save exists at the path.
-        GNSaveVersionMismatchError: If save version doesn't match.
+        GNSaveVersionMismatchError: If save version doesn't match
+            and no migration path exists.
         GNSaveCorruptedError: If save file can't be parsed.
     """
     path = save_path or _default_save_path()
@@ -229,11 +295,12 @@ def load_gn_progress(save_path: Path | None = None) -> GNProgress:
     except json.JSONDecodeError as e:
         raise GNSaveCorruptedError(f"Save file is not valid JSON: {e}") from e
 
-    version = raw.get("version")
+    migrated = _migrate_gn_data(raw)
+    version = migrated.get("version")
     if version != GN_SAVE_VERSION:
         raise GNSaveVersionMismatchError(f"Save version {version!r} != current {GN_SAVE_VERSION!r}")
 
-    progress_data = raw.get("progress", {})
+    progress_data = migrated.get("progress", {})
     if not isinstance(progress_data, dict):
         raise GNSaveCorruptedError("Save progress is not a dict")
 

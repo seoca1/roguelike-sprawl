@@ -452,3 +452,61 @@ class TestDefaultSaveDir:
 
             path = _default_save_dir()
             assert ".local" in str(path) or "share" in str(path)
+
+
+class TestSaveMigration:
+    """Save format migrations auto-upgrade older versions on load."""
+
+    def test_legacy_save_without_version_loads(self, save_dir: Path) -> None:
+        """Pre-0.1.0 saves had no version key; auto-upgrade."""
+        manager = SaveManager(save_dir=save_dir)
+        # Write a "legacy" save (no version field, missing common fields)
+        legacy_data = {
+            "saved_at": "2026-05-01T10:00:00Z",
+            "elapsed_seconds": 100,
+            "run_state": {"current_stage": "meet_npc", "mission_id": "first_jack"},
+            "app_state": {"inventory": {"data_fragment": 1}, "credits": 250},
+            "metadata": {},
+        }
+        (save_dir / "slot_1.json").write_text(json.dumps(legacy_data), encoding="utf-8")
+
+        loaded = manager.load(1)
+        assert loaded.version == SAVE_FORMAT_VERSION
+        assert loaded.app_state["credits"] == 250
+        assert loaded.app_state["inventory"]["data_fragment"] == 1
+
+    def test_legacy_via_restore_state(self, save_dir: Path) -> None:
+        """restore_state() works on legacy saves too."""
+        manager = SaveManager(save_dir=save_dir)
+        legacy_data = {
+            "saved_at": "2026-05-01T10:00:00Z",
+            "elapsed_seconds": 50,
+            "run_state": {"current_stage": "meet_npc", "mission_id": "first_jack"},
+            "app_state": {"inventory": {}, "credits": 100},
+            "metadata": {"player_grade": 2},
+        }
+        (save_dir / "slot_1.json").write_text(json.dumps(legacy_data), encoding="utf-8")
+
+        state = AppState()
+        manager.restore_state(1, state)
+        assert state.credits == 100
+        assert state.player_grade == 2
+
+    def test_unknown_version_still_raises(self, save_dir: Path) -> None:
+        """Version with no migration path → SaveVersionMismatchError."""
+        from roguelike_sprawl.engine.save_manager import (
+            _migrate_save_data,
+        )
+
+        # Synthesise a future version that's not in the migration chain.
+        future = {"version": "99.0.0", "app_state": {}}
+        with pytest.raises(SaveVersionMismatchError, match="No migration path"):
+            _migrate_save_data(future)
+
+    def test_current_version_passes_through_unchanged(self, save_dir: Path) -> None:
+        """Current version bypasses migration (no-op roundtrip)."""
+        from roguelike_sprawl.engine.save_manager import _migrate_save_data
+
+        data = {"version": SAVE_FORMAT_VERSION, "saved_at": "x"}
+        out = _migrate_save_data(data)
+        assert out is data or out == data

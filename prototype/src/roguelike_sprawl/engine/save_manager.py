@@ -79,6 +79,51 @@ MAX_SLOTS = 5
 DEFAULT_SLOT = 1
 
 
+# Migration chain: list of (source_version, target_version, transform) tuples.
+# Transforms take a parsed save dict and return the upgraded dict. The
+# chain is walked in order until the dict reaches SAVE_FORMAT_VERSION.
+#
+# Pre-0.1.0 saves lacked a version field entirely; the legacy chain
+# normalises them to 0.1.0 by injecting the version key.
+_SAVE_MIGRATIONS: list[tuple[str, str, Any]] = [
+    (
+        "<legacy>",
+        SAVE_FORMAT_VERSION,
+        lambda data: {**data, "version": SAVE_FORMAT_VERSION},
+    ),
+]
+
+
+def _migrate_save_data(data: dict[str, Any]) -> dict[str, Any]:
+    """Apply version migrations until data reaches SAVE_FORMAT_VERSION.
+
+    Walks ``_SAVE_MIGRATIONS`` from the data's current version to
+    ``SAVE_FORMAT_VERSION``. If a version in the chain is missing,
+    raises SaveVersionMismatchError (cannot auto-upgrade across gaps).
+    """
+    current = data.get("version", "<legacy>")
+    target = SAVE_FORMAT_VERSION
+
+    if current == target:
+        return data
+
+    while current != target:
+        # Find a migration from `current` to its successor.
+        next_step = next(
+            (m for m in _SAVE_MIGRATIONS if m[0] == current),
+            None,
+        )
+        if next_step is None:
+            raise SaveVersionMismatchError(
+                f"No migration path from save version {current!r} to {target!r}"
+            )
+        _, successor, transform = next_step
+        data = transform(data)
+        current = successor
+
+    return data
+
+
 class SaveError(Exception):
     """Base class for save/load errors."""
 
@@ -154,20 +199,21 @@ class SavedRun:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> SavedRun:
-        """Deserialize from JSON dict. Validates version."""
-        version = data.get("version")
+        """Deserialize from JSON dict. Auto-migrates older versions."""
+        migrated = _migrate_save_data(data)
+        version = migrated.get("version")
         if version != SAVE_FORMAT_VERSION:
             raise SaveVersionMismatchError(
                 f"Save version {version!r} != current {SAVE_FORMAT_VERSION!r}"
             )
         return cls(
             version=version,
-            saved_at=data.get("saved_at", ""),
-            elapsed_seconds=data.get("elapsed_seconds", 0),
-            run_state=data.get("run_state", {}),
-            mission=data.get("mission"),
-            app_state=data.get("app_state", {}),
-            metadata=data.get("metadata", {}),
+            saved_at=migrated.get("saved_at", ""),
+            elapsed_seconds=migrated.get("elapsed_seconds", 0),
+            run_state=migrated.get("run_state", {}),
+            mission=migrated.get("mission"),
+            app_state=migrated.get("app_state", {}),
+            metadata=migrated.get("metadata", {}),
         )
 
 
