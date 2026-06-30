@@ -62,6 +62,15 @@ def _filter_by_arc(missions, arc: str) -> list:
     return [m for m in missions if prefix in m.id.lower()]
 
 
+def _guess_arc(mission) -> str:
+    """Best-effort arc inference for --mission single-run mode."""
+    mid = mission.id.lower()
+    for arc, (prefix, _) in ARC_PREFIXES.items():
+        if prefix in mid:
+            return arc
+    return "veteran"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -72,6 +81,12 @@ def main() -> int:
     parser.add_argument(
         "--missions", type=int, default=5,
         help="Max missions to walk (default 5).",
+    )
+    parser.add_argument(
+        "--mission",
+        default=None,
+        help=("Run a single mission by id (e.g. 'first_jack'). "
+              "Bypasses --arc / --missions."),
     )
     parser.add_argument(
         "--seed", type=int, default=2026,
@@ -90,10 +105,20 @@ def main() -> int:
     board = JobBoard.load(ROOT / "data" / "missions" / "missions.json")
     all_missions = tuple(board._missions.values())
 
-    arc_missions = _filter_by_arc(all_missions, args.arc)
-    if not arc_missions:
-        arc_missions = list(all_missions)
-    arc_missions = arc_missions[: args.missions]
+    if args.mission is not None:
+        hit = next((m for m in all_missions if m.id == args.mission), None)
+        if hit is None:
+            print(f"[ERR] no mission with id={args.mission!r}.  Available:")
+            for m in all_missions:
+                print(f"      {m.id}")
+            return 1
+        arc_missions = [hit]
+        args.arc = _guess_arc(hit)
+    else:
+        arc_missions = _filter_by_arc(all_missions, args.arc)
+        if not arc_missions:
+            arc_missions = list(all_missions)
+        arc_missions = arc_missions[: args.missions]
 
     print(f"[1] arc={args.arc} (prefix={ARC_PREFIXES[args.arc][0]})")
     print(f"    picked {len(arc_missions)} / {len(all_missions)} missions")

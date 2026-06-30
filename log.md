@@ -3048,3 +3048,29 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 | ICE Types | 5 grade / 29 total | 29 entries | `combat/ice_types.json` |
 
 모두 dashboard 표시 정수와 일치. 6 dashboard 페이지 (`combat` / `novel` / `stories` / `stages` / `play` / `cyberspace`) 의 자동 fetch 통합 완료.
+
+---
+
+## [2026-06-30] feat | index.html stat-tests 자동 fetch + play_arc_bsp.py --mission 옵션
+
+- **`dashboard/data/index_stats.json`** (6번째 stats JSON):
+  - `load_index_stats()` — `pytest --collect-only` 정확한 tests 카운트 + `prologue_data.json` (story_lines) + `event_dialogues.json` (npcs) + `stage_structure.json` (stages/transitions/missions).
+  - 첫 빌드: 3456 tests / 25 story_lines / 5 unique NPCs / 9 stages / 8 transitions / 29 missions.
+- **`dashboard/index.html`** — 기존 `loadStats()` 에 `data/index_stats.json` fetch 추가. `stat-tests` cell 자동 갱신.
+- **`dashboard/README.md`** — 6번째 행 추가 (index_stats.json + index.html 매핑).
+- **`prototype/scripts/play_arc_bsp.py`** — `--mission <id>` 옵션 추가:
+  - 미션 ID 단독 진입 (예: `play_arc_bsp.py --mission first_jack`).
+  - 잘못된 ID 시 사용 가능한 미션 id 16개 출력.
+- **커밋 2건**: `de94b28` (index_stats + stat-tests), (in-flight: --mission 옵션 + log.md).
+
+### 6 dashboard 진실성 매트릭스 (최종)
+
+| 페이지 | 데이터 소스 | 자동 sync |
+|---|---|---|
+| `combat.html` | `ice_types.json` 29 / `effects.py` 14 / `programs.json` 9 | ✓ |
+| `novel.html` | `Fiction/.../short-stories/` 30 / `HookKind` 6 | ✓ |
+| `stories.html` | `missions.json` 29 / `short-stories/` 65 md / 30 pairs | ✓ |
+| `stages.html` | `missions.json` 29 / `stage_structure.json` 9 stages | ✓ |
+| `play.html` | `play_game.json` 3 / 5 / 15 / 2 | ✓ |
+| `cyberspace.html` | `worlds.json` 2 / 4 / 6 / `NodeKind` 8 / `ZoneDepth` 4 | ✓ |
+| `index.html` | `pytest` 3456 / `prologue_data.json` / `event_dialogues.json` | ✓ |

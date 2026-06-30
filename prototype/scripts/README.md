@@ -156,7 +156,7 @@ PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py
 | `play_mission_mapping.py` | 3 | `JobBoard` + `missions_to_rooms()` + `mission_to_graph()` (16 미션 통합 검증) |
 | `play_ecs_dungeon.py` | 4 | `DungeonSystem.populate()` + `on_enter` / `on_exit` / `defeat` 전체 호출 |
 | `play_novel_runtime.py` | 5 (ADR-0061) | `HookKind` 6종 등록 + `load_novel_runtime()` + `dispatch_for_state()` |
-| `play_arc_bsp.py` | 1+2+3 | 챕터 → 미션 → BSP 미로 → ECS 통합 (ADR-0060 Phase 1-3 end-to-end). 캐릭터 arc (`novice` / `veteran` / `heretic`) 별 미션 필터링. |
+| `play_arc_bsp.py` | 1+2+3 | 챕터 → 미션 → BSP 미로 → ECS 통합 (ADR-0060 Phase 1-3 end-to-end). 캐릭터 arc (`novice` / `veteran` / `heretic`) 별 미션 필터링. `--mission <id>` 단일 미션 BSP 단독 데모 가능. |
 
 ### 시그니처 노트
 
