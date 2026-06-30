@@ -209,6 +209,65 @@ def load_story_stats(repo: Path) -> dict[str, object]:
     return out
 
 
+def load_cyberspace_stats(repo: Path) -> dict[str, object]:
+    """Walk worlds.json + matrix/node.py to keep cyberspace cards honest."""
+    out: dict[str, object] = {
+        "worlds": 0,
+        "sectors": 0,
+        "servers": 0,
+        "node_kinds": 0,
+        "zone_depths": 0,
+        "world_names": [],
+        "_generated_at": "",
+    }
+    p = repo / "prototype" / "data" / "cyberspace" / "worlds.json"
+    if p.exists():
+        try:
+            d = json.loads(p.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            d = {}
+        if isinstance(d, dict):
+            worlds = d.get("worlds", {})
+            if isinstance(worlds, dict):
+                out["worlds"] = len(worlds)
+                out["world_names"] = [
+                    w.get("name", k) for k, w in worlds.items()
+                    if isinstance(w, dict)
+                ]
+                out["sectors"] = sum(
+                    len(w.get("sectors", {}))
+                    for w in worlds.values()
+                    if isinstance(w, dict)
+                )
+                out["servers"] = sum(
+                    len(s.get("servers", []))
+                    for w in worlds.values()
+                    if isinstance(w, dict)
+                    for s in w.get("sectors", {}).values()
+                    if isinstance(s, dict)
+                )
+    nk = repo / "prototype" / "src" / "roguelike_sprawl" / "matrix" / "node.py"
+    if nk.exists():
+        src = nk.read_text(encoding="utf-8")
+        out["node_kinds"] = len(
+            re.findall(r"^\s+([A-Z_]+)\s*=\s*\"[a-z_]+\"\s*$",
+                       src, re.M)
+        )
+        for cls_name in ("class NodeKind", "class ZoneDepth"):
+            m = re.search(
+                rf"{cls_name}\(StrEnum\):.*?(?=\n\nclass |\Z)",
+                src, re.S,
+            )
+            if m:
+                count = len(re.findall(r"^\s+([A-Z_]+)\s*=\s*\"[a-z_]+\"",
+                                       m.group(0), re.M))
+                if cls_name == "class NodeKind":
+                    out["node_kinds"] = count
+                else:
+                    out["zone_depths"] = count
+    return out
+
+
 def load_journey_stats(repo: Path) -> dict[str, object]:
     """Per-character journey totals (novice / veteran / heretic)."""
     out: dict[str, object] = {
@@ -232,6 +291,7 @@ TARGETS = {
     "combat_stats.json": load_combat_stats,
     "novel_stats.json": load_novel_stats,
     "story_stats.json": load_story_stats,
+    "cyberspace_stats.json": load_cyberspace_stats,
     "journey_stats.json": load_journey_stats,
 }
 

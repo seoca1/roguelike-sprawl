@@ -8,7 +8,7 @@
 ## 🤖 자동 동기화 (build_dashboard.py)
 
 `../tools/build_dashboard.py` 가 게임 데이터를 읽어
-`dashboard/data/{combat,novel,story,journey}_stats.json` 를 생성.
+`dashboard/data/{combat,novel,story,cyberspace,journey}_stats.json` 를 생성.
 대시보드 페이지는 런타임에 이 JSON 을 `fetch()` 해서
 `data-stat="..."` 셀을 자동 갱신합니다.
 
@@ -18,11 +18,12 @@ prototype/.venv/bin/python tools/build_dashboard.py
 
 | Stat JSON | 데이터 소스 | 사용하는 페이지 |
 |---|---|---|
-| `combat_stats.json`  | `prototype/data/combat/ice_types.json` (29 ICE), `effects.py:18 animations`, `programs.json` | `combat.html` (5 카드) |
-| `novel_stats.json`   | `Fiction/.../short-stories/*.md` (30 stems), `novel/hooks.py:HookKind` | `novel.html` (5 카드) |
-| `story_stats.json`   | `prototype/data/missions/missions.json` (29), `story/chapters/*.json` | `stories.html` |
-| `journey_stats.json` | hardcoded (novice/veteran/heretic credits) | `journey/*.html` |
-| `data_index.json`    | 위 4 파일의 인덱스 | (참조용) |
+| `combat_stats.json`     | `prototype/data/combat/ice_types.json` (29 ICE), `effects.py:15 animations`, `programs.json` | `combat.html` (5 카드) |
+| `novel_stats.json`      | `Fiction/.../short-stories/*.md` (30 stems), `novel/hooks.py:HookKind` | `novel.html` (6 카드) |
+| `story_stats.json`      | `prototype/data/missions/missions.json` (29), `story/chapters/*.json` | `stories.html` / `stages.html` |
+| `cyberspace_stats.json` | `prototype/data/cyberspace/worlds.json` (2 worlds / 4 sectors / 6 servers), `matrix/node.py:NodeKind` (8) + `ZoneDepth` (4) | `cyberspace.html` (5 카드) |
+| `journey_stats.json`    | hardcoded (novice/veteran/heretic credits) | `journey/*.html` |
+| `data_index.json`       | 위 5 파일의 인덱스 | (참조용) |
 
 각 페이지는 fallback 으로 정적 HTML 값을 가지고 있어,
 빌드 스크립트 없이도 모든 페이지가 정상 표시됩니다.

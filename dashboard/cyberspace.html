@@ -164,9 +164,13 @@
 
 <h1>🌐 Cyberspace Dashboard</h1>
 <div class="subtitle">
-  World → Sector → Server 계층 · 2 worlds · 4 sectors · 6 servers · 8 node types
+  World → Sector → Server 계층 ·
+  <span data-stat="worlds">2</span> worlds ·
+  <span data-stat="sectors">4</span> sectors ·
+  <span data-stat="servers">6</span> servers ·
+  <span data-stat="nodes">8</span> node types
   <br>
-  <code>data/cyberspace/worlds.json</code> · <code>src/roguelike_sprawl/matrix/</code>
+  출처: <code>data/cyberspace/worlds.json</code> · <code>prototype/src/roguelike_sprawl/matrix/</code>
 </div>
 
 <!-- Stats -->
@@ -399,8 +403,35 @@ World 2 (Night City)
 
 <div class="footer">
   Roguelike Sprawl — Cyberspace Dashboard<br>
-  <code>data/cyberspace/worlds.json</code> · <code>src/roguelike_sprawl/matrix/</code> · 2 worlds · 4 sectors · 6 servers
+  <code>data/cyberspace/worlds.json</code> · <code>src/roguelike_sprawl/matrix/</code> ·
+  <span data-stat="worlds-f">2</span> worlds ·
+  <span data-stat="sectors-f">4</span> sectors ·
+  <span data-stat="servers-f">6</span> servers
 </div>
+
+<script>
+/* Auto-sync stats from build_dashboard.py output (cyberspace_stats.json).
+   When the file is missing the static fallback values stay visible. */
+fetch('data/cyberspace_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    set('worlds',    stats.worlds);
+    set('sectors',   stats.sectors);
+    set('servers',   stats.servers);
+    set('nodes',     stats.node_kinds);
+    set('zones',     stats.zone_depths);
+    set('worlds-f',  stats.worlds);
+    set('sectors-f', stats.sectors);
+    set('servers-f', stats.servers);
+  })
+  .catch(() => { /* keep static fallback */ });
+</script>
 
 </body>
 </html>

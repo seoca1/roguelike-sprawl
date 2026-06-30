@@ -4,9 +4,10 @@
     "combat_stats.json": "dashboard/data/combat_stats.json",
     "novel_stats.json": "dashboard/data/novel_stats.json",
     "story_stats.json": "dashboard/data/story_stats.json",
+    "cyberspace_stats.json": "dashboard/data/cyberspace_stats.json",
     "journey_stats.json": "dashboard/data/journey_stats.json"
   },
   "errors": [],
   "index_path": "dashboard/data/data_index.json",
-  "_generated_at": "2026-06-30T10:45:42"
+  "_generated_at": "2026-06-30T10:59:42"
 }
