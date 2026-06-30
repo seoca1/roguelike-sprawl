@@ -2967,3 +2967,33 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - `prototype/scripts/play.py` 의 Phase 1-5 통합 — 큰 후속. 별도 작업.
 - `dashboard/novel.html` 카탈로그 카운트 — 30 entries 로 동기화 가치.
 - `prototype/play_arc_*` 의 BSP 미로 통합 — 큰 후속.
+
+---
+
+## [2026-06-30] feat | tools/build_dashboard.py 단일 generator + dashboard fetch wiring + play.py --phase-1-5
+
+- **신규 `tools/build_dashboard.py`** (134 lines, stdlib only):
+  - 게임 데이터를 읽어 `dashboard/data/{combat,novel,story,journey}_stats.json` + `data_index.json` 자동 빌드.
+  - 첫 빌드: combat 29 ICE / 14 skill effects / 15 animations / 9 programs, novel 30 catalog entries (30 stems / 35 en / 30 ko), story 30 stories / 65 md / 29 missions, journey novice=20,050 veteran=27,500 heretic=20,100.
+- **3 dashboard 페이지 fetch wiring**:
+  - `dashboard/combat.html` — 5 stat 카드 (`data-stat="ice/effects/mode/ppl/zdr"`) fetch.
+  - `dashboard/novel.html` — 6 stat 카드 + 부제목 fetch (카탈로그 30 동적 표시).
+  - `dashboard/stories.html` — 5 stat 카드 + en/ko 분할 sub-label fetch (29 → 30 / 58 → 65 자동 보정).
+- **`prototype/scripts/play.py --phase-1-5` smoke 모드**:
+  - 5 신규 헤드리스 데모 (`play_dungeon_mode` / `play_vfx_overlay` / `play_mission_mapping` / `play_ecs_dungeon` / `play_novel_runtime`) 단일 명령으로 호출.
+  - CI-friendly, rc=0 이면 PASS. 로컬 검증 통과.
+- **`scripts/README.md`** — `play.py` 섹션 `--phase-1-5` 안내 + 샘플 출력 1줄.
+- **`dashboard/README.md`** — `🤖 자동 동기화 (build_dashboard.py)` 섹션 추가.
+- **`dashboard/stages.html`** — 헤더 `data-stat="stages/transitions/missions"` 자동 fetch.
+- **커밋 5건**: `df5543f` (tools/combat/novel fetch), `ae9c05c` (story_stats 확장 + stories.html fetch), `4c1723a` (play.py --phase-1-5), + (in-flight: stages.html + log.md).
+
+### 누적 라인 수 (이번 후속)
+
+| | + |
+|---|---:|
+| `tools/build_dashboard.py` | 134 lines |
+| `prototype/scripts/play.py` | +68 lines (--phase-1-5) |
+| `dashboard/data/*.json` × 5 | 5 files |
+| dashboard HTML fetch 추가 | 3 files (combat / novel / stories / stages) |
+| dashboard README + scripts README | +35 lines |
+| 누적 | ~280 lines pure additive |

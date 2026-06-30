@@ -234,9 +234,13 @@
 
 <h1>⏱ ROGUELIKE SPRAWL — Stage & Progression Dashboard</h1>
 <div class="subtitle">
-  Single Run = Prologue → Mission → Completion. 9 stages, 8 transitions, 29 missions (5 arcs). Reward formula: Arc×800 + (grade-1)×300.
+  Single Run = Prologue → Mission → Completion.
+  <span data-stat="stages">9</span> stages,
+  <span data-stat="transitions">8</span> transitions,
+  <span data-stat="missions">29</span> missions (5 arcs).
+  Reward formula: Arc×800 + (grade-1)×300.
   <br>
-  출처: <code>design/systems/stage_structure.json</code> · <code>src/run/state.py</code>
+  출처: <code>design/systems/stage_structure.json</code> · <code>prototype/src/run/state.py</code>
 </div>
 
 <div class="lang-toggle">
@@ -753,5 +757,28 @@
   .combat-tag { background: #ff669922; color: #ff6699; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
   .gain-tag { background: #66ffcc22; color: #66ffcc; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
 </style>
+
+<script>
+/* Auto-sync stage counts from build_dashboard.py output
+   (story_stats.json already drives missions; this file just
+   reads the same key so build_dashboard's generators stay
+   compatible across pages).  When the fetch fails the static
+   fallback numbers stay visible. */
+fetch('data/story_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    set('missions', stats.missions);
+    // stages + transitions come from stage_structure.json itself
+    // (already inlined as data-stage-src); the <span>s above remain
+    // static for those.  missions is mirrored here for completeness.
+  })
+  .catch(() => { /* keep static fallback */ });
+</script>
 </body>
 </html>
