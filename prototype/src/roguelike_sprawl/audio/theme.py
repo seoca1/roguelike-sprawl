@@ -27,6 +27,24 @@ from .sound_manager import (
     get_sound_manager,
 )
 
+
+def _log_warning(message: str, context: str = "") -> None:
+    """Log a theme-subsystem warning without importing engine at module load.
+
+    Engine imports can create circular dependencies (audio → engine → audio),
+    so we lazily import the global logger.
+    """
+    try:
+        from ..engine.logger import get_logger
+
+        get_logger().warning(message, context)
+    except Exception:
+        # Last-resort fallback: stderr (logger itself may be unavailable
+        # during interpreter shutdown or test setup).
+        sys.stderr.write(f"[theme] WARN: {message} ({context})\n")
+        sys.stderr.flush()
+
+
 # Theme name → file path (relative to sounds_dir)
 THEMES: dict[str, str] = {
     "matrix_rain": "matrix_rain_theme.wav",
@@ -115,8 +133,11 @@ class ThemePlayer:
         if self._process is not None:
             try:
                 self._process.terminate()  # type: ignore[attr-defined]
-            except Exception:
-                pass
+            except Exception as e:
+                _log_warning(
+                    "Failed to terminate theme subprocess",
+                    f"{type(e).__name__}: {e}",
+                )
             self._process = None
 
     def set_volume(self, volume: float) -> None:
@@ -181,10 +202,18 @@ class ThemePlayer:
                     if self._process is not None:
                         try:
                             self._process.terminate()
-                        except Exception:
-                            pass
+                        except Exception as e:
+                            _log_warning(
+                                "Failed to terminate theme subprocess on stop",
+                                f"{type(e).__name__}: {e}",
+                            )
                     break
-            except Exception:
+            except Exception as e:
+                # Don't silently kill the loop — log so debug is possible.
+                _log_warning(
+                    "Theme loop iteration failed",
+                    f"{type(e).__name__}: {e}",
+                )
                 break
 
         self._current_theme = None
