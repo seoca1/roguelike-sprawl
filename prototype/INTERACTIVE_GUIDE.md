@@ -129,6 +129,52 @@ Entry → Cor1 → Side1
 
 ---
 
+## 🆕 Phase 1-5 — Interactive Adventure 확장
+
+Phase 1-5 (ADR-0060, ADR-0061) 가 추가한 인터랙티브 요소:
+
+| Phase | 추가된 인터랙션 | 키 / 트리거 |
+|---|---|---|
+| 1 | `Dungeon Mode` 토글 — 2-D BSP 그리드로 미로 보기 | `D` |
+| 1.5 | VFX 4종 (jackin_glitch / room_flash / data_acquired / jackout_whiteout) | 자동 트리거 (상태 천이) |
+| 2 | 절차적 BSP 미로 — 시드별 다른 레이아웃 | 자동 생성 |
+| 3 | 미션 → 룸 시퀀스 자동 매핑 | 데이터 시 (GameStart) |
+| 4 | ECS `DungeonSystem` (populate / on_enter / on_exit / defeat) | 룸 진입 시 |
+| 5 | Novel 자동 dispatch — 6종 `HookKind` | 상태 천이 시 자동 |
+
+### 소설 (Novel) Hook — Phase 5
+
+소설 단편(`Fiction/derivative/sprawl-trilogy/short-stories/`)은
+`novel/` 서브패키지의 dispatcher 가 자동 노출합니다. 게임플레이
+중 발생:
+
+```
+NARRATIVE  — 챕터/씬 진입 시          (narrative_yield)
+EXCERPT    — 미션 브리핑/엔딩 시       (excerpt_yield)
+EVENT      — 스토리 이벤트 발생 시    (event_yield)
+COMBAT     — ICE 격파 후              (after_combat)
+ITEM       — 아이템 획득 시           (after_item)
+CINEMATIC  — 시네마틱 트리거 시       (cinematic_yield)
+```
+
+확장 가능 — `register_hook_action(kind, fn)` 으로 새 hook 등록:
+
+```python
+from roguelike_sprawl.novel.hooks import register_hook_action, HookKind
+
+def my_action(ctx, app_state):
+    ...
+
+register_hook_action(HookKind.COMBAT, my_action)
+```
+
+검증:
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py
+```
+
+---
+
 ## ⚔️ Combat - Real Strategy
 
 ### When you reach ICE, the action menu opens:

@@ -115,6 +115,40 @@ Shows your **most recent action** - confirms where you moved.
 
 ---
 
+## 🆕 Phase 1-5 — Visual Layer 추가
+
+Phase 1-5 (ADR-0060, ADR-0061) 가 추가한 시각 레이어 (전부 ASCII):
+
+| Phase | 시각 효과 | 트리거 |
+|---|---|---|
+| 1 | **2-D BSP 그리드** (방 + 복도 + 룸 타입 색상) | `D` 토글 |
+| 1.5 | **Jack-in glitch** (글리치 burst + 슬로모) | JAC-IN |
+| 1.5 | **Room flash** (단색 짧은 플래시) | ICE 처치 |
+| 1.5 | **Data acquired** (파티클 + 시네마틱 텍스트) | DATA 픽업 |
+| 1.5 | **Jack-out whiteout** (백색 폭발 + 시네마틱) | JAC-OUT |
+| 2 | **BSP 미로** (시드별 다른 레이아웃) | 매 런 |
+| 5 | **Novel Hook dispatch** (자동 트리거 시 텍스트 표시) | 상태 천이 |
+
+### VFX 4종 (Phase 1.5)
+
+```
+[jackin_glitch]   ─ 글리치 글리프 burst + 슬로모션 16ms
+                    트리거: 미션 시작 / JAC-IN
+[room_flash]      ─ 단색 짧은 플래시 (~80ms)
+                    트리거: ICE 처치 / 방 클리어
+[data_acquired]   ─ 파티클 + '>> DATA FRAGMENT RECOVERED' 시네마틱
+                    트리거: DATA 노드 픽업
+[jackout_whiteout] ─ 백색 폭발 + '>> JACKING OUT...' 시네마틱
+                    트리거: EXIT 도달 / JAC-OUT
+```
+
+검증:
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py
+```
+
+---
+
 ## 🎨 Node Appearance Comparison
 
 ### Side-by-Side

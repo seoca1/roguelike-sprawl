@@ -386,6 +386,24 @@ make demo
 
 ---
 
+## 🆕 Phase 1-5 신규 데모 (Dungeon · VFX · 미션매핑 · ECS · Novel)
+
+기존 데모(`make demo`) 와 별개로, Phase 1-5 가 추가한 핵심 게임플레이를
+**헤드리스** (창 불필요) 로 빠르게 검증하는 5종:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py     # Phase 1
+PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py      # Phase 1.5
+PYTHONPATH=src .venv/bin/python scripts/play_mission_mapping.py  # Phase 3
+PYTHONPATH=src .venv/bin/python scripts/play_ecs_dungeon.py      # Phase 4
+PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py    # Phase 5
+```
+
+각 데모는 5초 안에 끝나고 한 줄 요약을 출력합니다. 자세한 가이드:
+`scripts/README.md` 의 "## 6. Phase 1-5 신규 데모" 섹션.
+
+---
+
 ## 📝 Feedback
 
 After playing, consider:

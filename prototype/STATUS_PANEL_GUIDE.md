@@ -283,6 +283,37 @@ Story advancing...
 
 ---
 
+## 🆕 Phase 1-5 — Status Panel 확장
+
+Phase 1-5 (ADR-0060, ADR-0061) 가 추가한 status panel 항목:
+
+| Phase | 항목 | 표시 위치 |
+|---|---|---|
+| 1 | `dungeon_mode: True/False` | 상태 헤더 (Matrix/Dungeon 토글) |
+| 1.5 | VFX 활성 카운터 (`fx.has_active_effects()`) | Matrix / Combat footer |
+| 2 | `mission_grade` + `character_ref` | 미션 시작 시 status |
+| 3 | `(rooms, edges)` — 매핑된 미션 형태 | 미션 카드 hover |
+| 4 | ECS `cleared_rooms` / `visited_rooms` 카운트 | Matrix HUD |
+| 5 | `current_novel_stem` — dispatch 중인 단편 | Cinematic overlay |
+
+### Dungeon Mode 표시
+
+`D` 키로 토글 시 status panel 에 다음이 표시:
+
+```
+WHERE
+Screen: MATRIX (DUNGEON MODE)
+Layout: BSP seed=42 grade=1 ref=veteran
+```
+
+검증 (BSP 미로 + ECS 통합):
+```bash
+PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py
+PYTHONPATH=src .venv/bin/python scripts/play_ecs_dungeon.py
+```
+
+---
+
 ## 💡 Reading Tips
 
 ### HP/AP in Combat
