@@ -229,6 +229,69 @@ def test_construct_data_shape(data_dir: Path) -> None:
         assert int(data["dmg_base"]) >= 0
 
 
+def test_start_combat_uses_node_ice_kind(data_dir: Path) -> None:
+    """Regression: combat_view.start_combat must use ice_node.ice to pick
+    the enemy, not hardcoded 'standard'. Pre-fix: every node spawned the
+    same Standard ICE regardless of node.ice value.
+    """
+    from roguelike_sprawl.engine import combat_view
+    from roguelike_sprawl.engine.state import AppState
+    from roguelike_sprawl.matrix.node import IceKind, Node, NodeKind, ZoneDepth
+
+    ice_reg = IceRegistry.load(data_dir / "combat" / "ice_types.json")
+    prog_reg = ProgramRegistry.load(data_dir / "programs" / "programs.json")
+
+    # Black ICE node → should spawn black enemy, not standard
+    black_node = Node(
+        id="ice_black_test",
+        kind=NodeKind.ICE,
+        label="Black ICE",
+        zone=ZoneDepth.CORE,
+        ice=IceKind.BLACK,
+    )
+    state = AppState()
+    cs = combat_view.start_combat(state, black_node, prog_reg, ice_reg)
+    assert "Black" in cs.enemy.name, f"Expected Black ICE, got {cs.enemy.name!r}"
+
+    # Watchdog node → should spawn watchdog enemy
+    watchdog_node = Node(
+        id="ice_watchdog_test",
+        kind=NodeKind.ICE,
+        label="Watchdog",
+        zone=ZoneDepth.MID,
+        ice=IceKind.WATCHDOG,
+    )
+    state2 = AppState()
+    cs2 = combat_view.start_combat(state2, watchdog_node, prog_reg, ice_reg)
+    assert "Watchdog" in cs2.enemy.name, f"Expected Watchdog ICE, got {cs2.enemy.name!r}"
+
+
+def test_all_mission_ice_ids_resolve(data_dir: Path) -> None:
+    """Regression: every ``ice.<X>`` referenced by a mission must exist
+    in the ICE registry. Pre-fix: 10 references (construct, boss,
+    revelation, neuromancer, ai_whisper, surveillance, wintermute,
+    zion_defense) silently failed at runtime — added in this session.
+    """
+    import json
+
+    ice_reg = IceRegistry.load(data_dir / "combat" / "ice_types.json")
+    with (data_dir / "missions" / "missions.json").open(encoding="utf-8") as f:
+        missions = json.load(f)
+
+    missing: list[str] = []
+    for mid, m in missions.items():
+        for obj in [m.get("primary_objective", {})] + m.get("secondary_objectives", []):
+            enemy = obj.get("enemy", "")
+            if enemy.startswith("ice."):
+                ice_id = enemy[len("ice.") :]
+                if ice_reg.get(ice_id) is None:
+                    missing.append(f"{mid}: {enemy} (resolved {ice_id!r})")
+
+    assert not missing, "Mission ICE references missing from registry:\n" + "\n".join(
+        f"  {m}" for m in missing
+    )
+
+
 def test_ap_regen() -> None:
     p = build_default_player(max_hp=100, max_ap=6, programs=ProgramRegistry({}))
     p.ap = 0

@@ -840,5 +840,245 @@
     ],
     "is_alias": true,
     "base_type": "dixie"
+  },
+  "construct": {
+    "name": "Construct — Generic",
+    "portrait": "construct.dixie",
+    "hp_base": 90,
+    "hp_per_grade": 18,
+    "dmg_base": 4,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 3,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.1,
+    "loot_table": [
+      {
+        "item": "construct_shard",
+        "chance": 0.6,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
+  },
+  "boss": {
+    "name": "ICE — Boss Tier",
+    "portrait": "ice.boss",
+    "hp_base": 280,
+    "hp_per_grade": 50,
+    "dmg_base": 12,
+    "dmg_per_grade": 3,
+    "tier": 4,
+    "defense": 8,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "combat_module",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "construct_shard",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 1.0,
+        "quantity": 3
+      }
+    ]
+  },
+  "revelation": {
+    "name": "ICE — Revelation",
+    "portrait": "ice.black",
+    "hp_base": 160,
+    "hp_per_grade": 30,
+    "dmg_base": 7,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 4,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.8,
+        "quantity": 2
+      }
+    ]
+  },
+  "neuromancer": {
+    "name": "ICE — Neuromancer",
+    "portrait": "ice.boss",
+    "hp_base": 320,
+    "hp_per_grade": 60,
+    "dmg_base": 14,
+    "dmg_per_grade": 3,
+    "tier": 5,
+    "defense": 9,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.35,
+    "loot_table": [
+      {
+        "item": "combat_module",
+        "chance": 1.0,
+        "quantity": 3
+      },
+      {
+        "item": "construct_shard",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 1.0,
+        "quantity": 5
+      }
+    ]
+  },
+  "ai_whisper": {
+    "name": "ICE — AI Whisper",
+    "portrait": "ice.black",
+    "hp_base": 130,
+    "hp_per_grade": 25,
+    "dmg_base": 6,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 4,
+    "speed": 6,
+    "skills": [],
+    "resistance": 0.25,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.6,
+        "quantity": 2
+      }
+    ]
+  },
+  "surveillance": {
+    "name": "ICE — Surveillance",
+    "portrait": "ice.watchdog",
+    "hp_base": 70,
+    "hp_per_grade": 14,
+    "dmg_base": 3,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 3,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.1,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.9,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.4,
+        "quantity": 1
+      }
+    ]
+  },
+  "wintermute": {
+    "name": "ICE — Wintermute",
+    "portrait": "ice.boss",
+    "hp_base": 260,
+    "hp_per_grade": 50,
+    "dmg_base": 11,
+    "dmg_per_grade": 3,
+    "tier": 4,
+    "defense": 8,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "combat_module",
+        "chance": 1.0,
+        "quantity": 2
+      },
+      {
+        "item": "construct_shard",
+        "chance": 0.8,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 1.0,
+        "quantity": 3
+      }
+    ]
+  },
+  "zion_defense": {
+    "name": "ICE — Zion Defense",
+    "portrait": "ice.black",
+    "hp_base": 180,
+    "hp_per_grade": 35,
+    "dmg_base": 8,
+    "dmg_per_grade": 2,
+    "tier": 4,
+    "defense": 6,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.25,
+    "loot_table": [
+      {
+        "item": "combat_module",
+        "chance": 0.9,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.9,
+        "quantity": 3
+      }
+    ]
+  },
+  "loa": {
+    "name": "ICE — Loa Entity",
+    "portrait": "ice.loa",
+    "hp_base": 100,
+    "hp_per_grade": 22,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 3,
+    "speed": 6,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.9,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.5,
+        "quantity": 1
+      }
+    ]
   }
 }

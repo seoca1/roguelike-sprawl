@@ -902,14 +902,22 @@ def start_combat(
         equip_grants_skill_id=equip_grants_skill_id,
     )
 
-    # Build enemy combatant
-    # ice_node.kind should be ICE, but we'll use a default if not
-    ice_kind = "standard"  # Placeholder: extract from ice_node
-    enemy = build_ice_enemy(ice_kind, ice_registry)
+    # Build enemy combatant from the actual ICE on this node.
+    # IceKind.NONE → defensive fallback to "standard".
+    from ..matrix.node import IceKind
+
+    ice_kind_value = ice_node.ice.value if ice_node.ice is not IceKind.NONE else "standard"
+    ice_kind_id = ice_kind_value  # ice_types.json keys match IceKind values
+    try:
+        enemy = build_ice_enemy(ice_kind_id, ice_registry)
+    except KeyError:
+        # Unknown ICE id (data gap) — fall back to standard rather than crash.
+        enemy = build_ice_enemy("standard", ice_registry)
+        ice_kind_id = "standard"
     state.combat_effects.clear()
     # Map ice_kind string to IceType enum
     try:
-        ice_type = IceType(ice_kind)
+        ice_type = IceType(ice_kind_id)
     except ValueError:
         ice_type = IceType.STANDARD
     spawn_ice_intro(state.combat_effects, ice_type, enemy.name)
