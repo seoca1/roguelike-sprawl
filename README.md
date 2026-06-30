@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/seoca1/roguelike-sprawl/actions/workflows/ci.yml/badge.svg)](https://github.com/seoca1/roguelike-sprawl/actions)
 [![Pages](https://github.com/seoca1/roguelike-sprawl/actions/workflows/pages.yml/badge.svg)](https://seoca1.github.io/roguelike-sprawl/)
-[![Tests](https://img.shields.io/badge/tests-2257%20passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-3254%20passing-brightgreen)]()
 [![Lint](https://img.shields.io/badge/lint-ruff-blue)]()
 [![Typecheck](https://img.shields.io/badge/typecheck-mypy%20strict-blue)]()
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()

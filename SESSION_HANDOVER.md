@@ -1,7 +1,7 @@
 # Session Handover — 다른 세션에서 이어서 진행하기
 
-> 작성일: 2026-06-25
-> 작성 시점 상태: Phase 5 완료, 2970 tests pass, CHARACTER_PATHS 문서화 완료
+> 작성일: 2026-06-30
+> 작성 시점 상태: Phase 5 완료 + Phase 6 진입, 3254 tests pass, ADR-0060/0061 Accepted
 > 대상: 다음 세션의 AI 에이전트 또는 개발자
 
 ---
@@ -9,8 +9,8 @@
 ## 0. 5초 요약 (다음 에이전트용)
 
 이 프로젝트는 깁슨 스프롤 로그라이크 게임 (Python 3.11+ / tcod / uv).
-**현재 상태: 모든 핵심 시스템 + 그래픽 노블 + 이어서 읽기 + 매트릭스 이동 UX 완성.**
-**2970 tests pass, ruff/format/mypy 모두 green.**
+**현재 상태: 모든 핵심 시스템 + 그래픽 노블 + 이어서 읽기 + 매트릭스 이동 UX + BSP 던전 + Novel Hook Dispatch 완성.**
+**3254 tests pass, ruff/format/mypy 모두 green.**
 
 방향 잡기:
 1. `design/CHARACTER_PATHS.md` 읽기 (3캐릭터 × 15미션 경로)
@@ -28,7 +28,7 @@
 
 ---
 
-## 2. 현재 완료 상태 (2026-06-21)
+## 2. 현재 완료 상태 (2026-06-30)
 
 ### Phase 5 (Vertical Slice) — 완료
 
@@ -43,17 +43,21 @@
 | Death & Restart Cycle | ✅ | 0040 | `engine/death.py`, `engine/jockey_history.py` |
 | 오리지널 시나리오 (단편 → 챕터) | ✅ | 0031 | `engine/chapter_view.py` |
 | 그래픽 노블 모드 (12 씬, 5 옵션) | ✅ | 0032 | `engine/graphic_novel_view.py` |
-| **그래픽 노블 소설 페이지** (30줄, chapter cards, fade) | ✅ | 0041, 0042 | `graphic_novel_view.py` |
-| **사운드 큐 연결** (15 cue → file) | ✅ | 0043 | `engine/graphic_novel_audio.py` |
-| **GN 이어서 읽기** (CONTINUE READING) | ✅ | 0044 | `engine/graphic_novel_save.py` |
-| **매트릭스 이동 UX** (15 키, 시각 힌트) | ✅ | 0045 | `engine/matrix_view.py` |
+| 그래픽 노블 소설 페이지 (30줄, chapter cards, fade) | ✅ | 0041, 0042 | `graphic_novel_view.py` |
+| 사운드 큐 연결 (15 cue → file) | ✅ | 0043 | `engine/graphic_novel_audio.py` |
+| GN 이어서 읽기 (CONTINUE READING) | ✅ | 0044 | `engine/graphic_novel_save.py` |
+| 매트릭스 이동 UX (15 키, 시각 힌트) | ✅ | 0045 | `engine/matrix_view.py` |
+| Boss ICE (Wintermute + T-A Prime 3-phase) | ✅ | 0050 | `combat/bosses.py` |
+| Graphic Novel Ending B / C / 메뉴 | ✅ | 0046, 0048, 0049 | `engine/graphic_novel_view.py` |
+| **Dungeon BSP + NetHack + VFX Overlay** | ✅ | 0060 | `matrix/dungeon_generator.py`, `engine/dungeon_view.py` |
+| **Novel Hook Dispatch (4-layer)** | ✅ | 0061 | `novel/{catalog,manifest,hooks,dispatcher}.py` |
 | 30+ 설정, 28 업적, 10 대시보드 | ✅ | — | `dashboard/*.html` |
 | SaveManager (5 슬롯) | ✅ | — | `engine/save_manager.py` |
 
 ### 테스트 통계
-- **2284 tests passing** (이전 2081 → +203 across 11 ADRs)
+- **3254 tests passing** (이전 2284 → +970 across ADR-0046~0061)
 - **ruff check / format / mypy strict**: 모두 green
-- **테스트 분포**: 80+ unit test files
+- **테스트 분포**: 82+ unit test files
 
 ---
 
@@ -320,8 +324,8 @@ uv run python scripts/play.py --duration 5
 - **GitHub**: `seoca1/roguelike-sprawl` (Pages: https://seoca1.github.io/roguelike-sprawl/)
 - **로컬 경로**: `~/projects/Projects/Game/roguelike_sprawl/`
 - **Python**: 3.11+ (uv로 관리)
-- **테스트**: 2970 passing
-- **마지막 ADR**: 0045 (matrix movement UX)
+- **테스트**: 3254 passing
+- **마지막 ADR**: 0061 (novel hook dispatch)
 - **신규 문서**: `design/CHARACTER_PATHS.md` (390줄, 3캐릭터 × 15미션 경로)
 
 ---

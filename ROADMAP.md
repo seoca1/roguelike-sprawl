@@ -2,6 +2,7 @@
 
 ## 변경 이력 (Recent)
 
+- **2026-06-30**: ADR-0060 (Dungeon BSP + NetHack + VFX Overlay) + ADR-0061 (Novel Hook Dispatch) Accepted. ADR-0046~0052, 0060, 0061 추가. 미션 29개, 단편 65개 (en/ko), Novel Catalog 4-layer 자동 디스패치. **3254 tests pass**.
 - **2026-06-21**: ADR-0041~0044 모두 Accepted. 12 씬 dialogue 4× 확장 (4188→16862 chars), 30줄 페이지 + 챕터 카드 I-XII + fade transition, 15개 scene cue 연결, 그래픽 노블 이어서 읽기. **2257 tests pass**.
 - **2026-06-20**: ADR-0031 Original Scenario Integration (Accepted). 단편 3편 v2.0 소설 레벨 재작성. chapter_view.py 신규 + ScreenKind 확장. 1843 tests pass.
 - **2026-06-20**: ADR-0032 Graphic Novel Auto-Play Mode (Accepted). 12 씬 자동재생 + 메인메뉴 5 옵션.

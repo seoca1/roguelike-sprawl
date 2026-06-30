@@ -200,10 +200,11 @@ prototype/
 
 ## Phase 상태
 
-이 프로젝트는 **Phase 4 (개발 환경 구축)** 완료. Phase 5 (프로토타입)에서 실제 게임 로직 구현.
+이 프로젝트는 **Phase 5 (Vertical Slice)** 완료. Phase 6 (콘텐츠 확장)에서 반복 보강.
 
-- **Phase 4 (현재)**: 빈 프로젝트, 빌드/테스트/린트/CI 가능, hello-world 실행
-- **Phase 5**: 매트릭스, 전투 (RT-MS), 의뢰 시스템 구현
+- **Phase 4 (완료)**: 빈 프로젝트, 빌드/테스트/린트/CI 가능, hello-world 실행
+- **Phase 5 (완료)**: 매트릭스, 전투 (RT-MS), 의뢰 시스템, BSP 던전, Novel Hook Dispatch
+- **Phase 6 (진입)**: 콘텐츠 확장, 추가 미션/ICE/엔딩/단편
 
 ## 게임 디자인
 
