@@ -608,3 +608,82 @@ class TestCheckNpcTalkComplete:
         for stage in (Stage.EXTRACT_DATA, Stage.DEFEAT_ICE, Stage.COMPLETE):
             rs = RunState(current_stage=stage)
             assert check_npc_talk_complete(rs) is False
+
+
+class TestDeathRestartCycle:
+    """P2 #13 — Death → FAILED → DEATH_RESTART → new run is non-blocking.
+
+    Regression: the transition used to leave ``current_stage`` stuck
+    at DEATH_RESTART and never return to MEET_NPC for a fresh run.
+    """
+
+    def test_mark_failed_from_in_progress_stage(self) -> None:
+        """Player in MEET_NPC, dies → stage becomes FAILED."""
+        rs = RunState(current_stage=Stage.MEET_NPC)
+        rs.mark_failed()
+        assert rs.current_stage is Stage.FAILED
+        assert Stage.MEET_NPC in rs.completed_stages
+        assert rs.is_complete() is True
+        assert rs.pending_advance is True
+
+    def test_mark_death_restart_from_failed(self) -> None:
+        """FAILED → DEATH_RESTART after death screen."""
+        rs = RunState(current_stage=Stage.FAILED)
+        rs.mark_death_restart()
+        assert rs.current_stage is Stage.DEATH_RESTART
+        assert rs.is_complete() is True
+
+    def test_mark_death_restart_noop_when_not_failed(self) -> None:
+        """If not FAILED, mark_death_restart is a no-op."""
+        rs = RunState(current_stage=Stage.MEET_NPC)
+        rs.mark_death_restart()
+        assert rs.current_stage is Stage.MEET_NPC
+
+    def test_reset_returns_to_meet_npc(self) -> None:
+        """reset() moves from any stage back to MEET_NPC for a fresh run."""
+        rs = RunState(current_stage=Stage.DEATH_RESTART, mission_id="zion_express")
+        rs.completed_stages = (Stage.MEET_NPC, Stage.EXTRACT_DATA, Stage.DEFEAT_ICE)
+        rs.reset(mission_id="first_jack")
+        assert rs.current_stage is Stage.MEET_NPC
+        assert rs.completed_stages == ()
+        assert rs.mission_id == "first_jack"
+        assert rs.pending_advance is False
+
+    def test_full_death_cycle_meet_to_restart(self) -> None:
+        """Full cycle: MEET_NPC → mark_failed → DEATH_RESTART → reset.
+
+        Regression for P2 #13: ensures the player can re-enter a fresh
+        run after a death without manually bypassing the stage machine.
+        """
+        # Start a normal run
+        rs = RunState(current_stage=Stage.MEET_NPC, mission_id="first_jack")
+
+        # Mid-run, player dies
+        rs.mark_failed()
+        assert rs.current_stage is Stage.FAILED
+
+        # Death summary screen → "Restart" option
+        rs.mark_death_restart()
+        assert rs.current_stage is Stage.DEATH_RESTART
+
+        # Player picks restart → reset to MEET_NPC
+        rs.reset(mission_id="black_ice_dream")
+        assert rs.current_stage is Stage.MEET_NPC
+        assert rs.mission_id == "black_ice_dream"
+        assert rs.completed_stages == ()
+        assert rs.is_complete() is False
+        assert rs.is_in_progress() is True
+
+    def test_death_info_terminal_flag(self) -> None:
+        """DEATH_RESTART counts as a terminal state (is_complete)."""
+
+        info = DEFAULT_FLOW[Stage.DEATH_RESTART]
+        assert info.next_stage == Stage.PENDING
+        assert info.stage is Stage.DEATH_RESTART
+
+    def test_mark_advance_blocked_at_death_restart(self) -> None:
+        """mark_advance is a no-op at terminal stages (no double-advance)."""
+        rs = RunState(current_stage=Stage.DEATH_RESTART)
+        rs.mark_advance()
+        # Should stay at DEATH_RESTART, not advance to PENDING.
+        assert rs.current_stage is Stage.DEATH_RESTART
