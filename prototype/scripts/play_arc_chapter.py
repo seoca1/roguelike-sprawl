@@ -30,10 +30,10 @@ from roguelike_sprawl.i18n import Translator
 
 BEAT_TYPE_COLORS = {
     "interior_monologue": "\033[33m",  # Yellow
-    "action": "\033[32m",               # Green
-    "dialogue": "\033[36m",             # Cyan
-    "combat": "\033[31m",               # Red
-    "default": "\033[0m",               # Reset
+    "action": "\033[32m",  # Green
+    "dialogue": "\033[36m",  # Cyan
+    "combat": "\033[31m",  # Red
+    "default": "\033[0m",  # Reset
 }
 COLOR_RESET = "\033[0m"
 
@@ -57,7 +57,9 @@ def render_beat_console(
     # Header
     color = BEAT_TYPE_COLORS.get(beat_type, BEAT_TYPE_COLORS["default"])
     print(f"{color}═" * 70)
-    print(f"║ CHAPTER {phase_num}/{total_phases} — PHASE: {beat.phase_id if hasattr(beat, 'phase_id') else 'N/A'}")
+    print(
+        f"║ CHAPTER {phase_num}/{total_phases} — PHASE: {beat.phase_id if hasattr(beat, 'phase_id') else 'N/A'}"
+    )
     print(f"║ Beat {beat_num}/{total_beats} [{beat_type}]")
     print(f"{COLOR_RESET}{color}═" * 70 + COLOR_RESET)
 
@@ -114,7 +116,9 @@ def play_phase(
         while typed_chars < len(text):
             elapsed = (time.time() - start_time) * 1000
             typed_chars = tick_beat(text, elapsed, typed_chars, char_delay_ms)
-            render_beat_console(beat, typed_chars, is_ko, phase_num, total_phases, i, len(phase.beats))
+            render_beat_console(
+                beat, typed_chars, is_ko, phase_num, total_phases, i, len(phase.beats)
+            )
             time.sleep(0.05)
 
         # Final display (full text)
@@ -183,25 +187,29 @@ def play_arc(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Play through arc chapter with phases and beats")
     parser.add_argument(
-        "--character", "-c",
+        "--character",
+        "-c",
         choices=["case", "sil", "kas"],
         default="case",
         help="Character arc to play",
     )
     parser.add_argument(
-        "--chapter", "-ch",
+        "--chapter",
+        "-ch",
         type=int,
         default=0,
         help="Specific chapter to play (1-5, 0=all)",
     )
     parser.add_argument(
-        "--lang", "-l",
+        "--lang",
+        "-l",
         choices=["en", "ko"],
         default="en",
         help="Language",
     )
     parser.add_argument(
-        "--char-delay", "-d",
+        "--char-delay",
+        "-d",
         type=float,
         default=25,
         help="Typing delay in ms (default 25)",

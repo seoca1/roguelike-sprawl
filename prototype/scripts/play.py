@@ -201,9 +201,7 @@ def _render_current(
         cs_state = state.chapter_cutscene_state
         dt_ms = int(elapsed * 1000) - int((elapsed - 0.4) * 1000)
         cs_state.tick(dt_ms)
-        render_cutscene_frame(
-            console, cs_state, None, None, None, t, 0, 1
-        )
+        render_cutscene_frame(console, cs_state, None, None, None, t, 0, 1)
     elif state.screen is ScreenKind.HUB:
         hub.render_hub(console, t, state)
     elif state.screen is ScreenKind.MATRIX and state.matrix is not None:
@@ -693,9 +691,7 @@ def _action_hub(state: AppState) -> str:
         return "No missions for this grade."
     m = missions[0]
     state.current_mission = m
-    state.matrix = MatrixGenerator().generate(
-        seed=m.matrix_seed, mission_grade=state.player_grade
-    )
+    state.matrix = MatrixGenerator().generate(seed=m.matrix_seed, mission_grade=state.player_grade)
     state.current_node_id = state.matrix.entry_id
     state.exploration = ExplorationState(current=state.matrix.entry_id)
     state.screen = ScreenKind.MATRIX
@@ -719,7 +715,9 @@ def _action_matrix(state: AppState) -> str:
 
         if 1 not in chapter_cutscenes_seen:
             arc = get_arc_for_character(scenes_dir.parent, state.character_id)
-            chapter_num = _get_current_chapter(state.run_state.chapter_state if state.run_state else None)
+            chapter_num = _get_current_chapter(
+                state.run_state.chapter_state if state.run_state else None
+            )
             chapter = get_chapter(arc, chapter_num)
             if chapter and chapter.cutscene_mid and chapter.is_playable:
                 scene_id = chapter.cutscene_mid.scene_id

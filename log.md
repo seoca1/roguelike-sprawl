@@ -2,6 +2,209 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-06-30] doc | ADR-0060 Dungeon Exploration Redesign 작성 + bridge
+
+- **ADR-0060** (`decisions/0060-dungeon-exploration-redesign.md`) 작성/Accepted:
+  - 옵션 B-Nethack 채택. 이전 옵션 B+ 폐기 노트.
+  - Phase 1+1.5+2+3 모두 결과 기록 (74 tests, ~700 lines).
+  - 깁슨 톤 단어 표. 데이터 영향 없음.
+  - `decisions/README.md` 인덱스 갱신 (0052, 0060 추가).
+- **Bridge (`mission_to_graph`)**:
+  - `ProceduralDungeonGenerator.decorate_with_outline(graph, outline, char)` 신규.
+  - `matrix/mission_mapper.mission_to_graph(mission, char, seed)` 신규.
+  - 미션 → RoomType outline → BSP 그래프 결합.
+- **테스트**: `test_mission_mapper.py` 에 Bridge 6개 추가 → **74 PASS total**.
+- **검증**: ruff PASS, mypy PASS.
+- **다음**: Phase 4 (ECS) 또는 commit & push (사용자 요청 시).
+
+## [2026-06-30] feat | Dungeon 옵션 B-Nethack — Phase 2+3 구현 및 대시보드 반영
+
+- **Phase 2 (절차적 BSP 미로)** ✓ DONE:
+  - `ProceduralDungeonGenerator` (`matrix/dungeon_generator.py`): BSP partition + Kruskal MST spanning tree + dead-end branches.
+  - 시드 기반 재현성 (mission_id offset).
+  - Grade 1-5 → 노드 수 (6, 10, 15, 22, 30).
+  - 캐릭터 분기 (novice 0.10 / veteran 0.25 / heretic 0.40 dead-end).
+  - 단위 테스트 23 PASS (`test_procedural_dungeon.py`).
+- **Phase 3 (미션 → 룸 매핑)** ✓ DONE:
+  - `missions_to_rooms(mission, character_ref)` (`matrix/mission_mapper.py`).
+  - 키워드 룰 (data / ice / construct / molly / dixie / black ice / loa / ...) + Arc별 target 분포 + 캐릭터 bias.
+  - 29 미션 모두 검증 (`test_all_29_missions_produce_valid_sequences`).
+  - 단위 테스트 25 PASS (`test_mission_mapper.py`).
+- **대시보드 갱신**:
+  - `dashboard/dungeon.html` 신규 (ADR-0060 Dashboard).
+  - `dashboard/index.html`: 사이드바 카드 추가 (Dungeon NEW), roadmap row 추가.
+- **검증**:
+  - pytest 신규 68 PASS (mapper 25 + procedural 23 + dungeon view 8 + combat vfx 12).
+  - ruff + mypy PASS (우리 변경 파일).
+- **로드맵**:
+  - Phase 1 (dungeon_view 활성화) ✓
+  - Phase 1.5 (VFX 오버레이) ✓
+  - **Phase 2 (절차적 BSP 미로) ✓**
+  - **Phase 3 (미션 → 룸 매핑) ✓**
+  - Phase 4 (ECS 통합) — 선택
+  - Phase 5 (단편 연동) — 선택
+
+## [2026-06-30] fix | 소설 HTML 제목 오타 2건 수정
+
+- **dashboards의 단편 HTML 제목 오타 발견** (사용자 보고):
+  1. `dashboard/stories/short-stories/zion_express_en.html`
+     - `<title>` 와 `<h1>` 안에 "자ION 익스프레스" 명백 오타
+     - **수정**: "자ION" → "자이온" (영문 페이지에 한글 번역 + 오타). KO 버전은 이미 올바름.
+  2. `dashboard/stories/short-stories/ice_run_ko.html`
+     - `<title>` 와 `<h1>` 안에 "얼음 달콤" 부적절 (Ice Run = "달리기" / "추적"이어야 함)
+     - **수정**: "얼음 달콤" → "얼음 달리기" (Ice Run 자연스러운 한국어 번역).
+- **확인 완료 (오류 없음)**:
+  - 챕터 HTML (case/sil/kas _{en,ko}.html) — 챕터 JSON title/subtitle 일치.
+  - Journey 챕터 제목 — 이전 세션 heretic Ch 2 수정 적용.
+  - story_read.html chapter 인덱스 — 일치.
+  - kas_arc.json ch_kas_02 — 일치.
+- **Untitled / dict-form 제목** (12 + 8 단편):
+  - 자동 생성 스크립트 (`generate_story_html.py`) 결과로 의도적 placeholder 또는 dict-형 frontmatter 미처리.
+  - 본편 content 가 비어있을 가능성 있음 → 단편 직접 점검 시 추가 결정 필요.
+  - 사용자가 의도한 디자인 / 자동 생성 디자인 — 변경하지 않음.
+- **테스트**: 변경 없음 (HTML 정적 파일).
+
+## [2026-06-30] feat | Phase 4 ECS 통합 + 소설 타이틀 오류 수정
+
+- **Phase 4 (ECS 통합)** ✓ DONE:
+  - `ecs/room_entity.py`: `node_to_entity(node, ...)`, `room_to_entity(...)` 신규.
+  - 컴포넌트 정의: kind/room_type/x/y/w/h/label/cleared/visited/faction/ice_kind/zone.
+  - `ecs/dungeon_system.py`: `DungeonSystem` — populate/on_enter/on_exit/defeat + 훅 시스템.
+  - `attach_dungeon_to_state(world, graph, mission_id)` 헬퍼.
+  - 단위 테스트 22 PASS (`test_dungeon_ecs.py`).
+- **소설 검증 + 타이틀 오류 발견** (사용자 보고):
+  - 다중 검증: frontmatter, 챕터 JSON, Journey 챕터 제목, 미션 매핑.
+  - 미션-단편 매핑: `verify_story_links.py` 통과 (29 missions OK).
+  - **타이틀 오류 발견**: heretic Journey `Chapter 2: The Silence` (Arc 2)
+    - 챕터 JSON subtitle (`kas.json`) = "Manarase at Midnight" / "매나리사의 자정"
+    - Journey 컨셉 (Kumiko 야나카 / 매나리사 11번지)과 부조화.
+  - **수정 (3곳 동기화)**:
+    - `dashboard/stories/journey/heretic.md` — Ch2 "The Silence" → "Manarase at Midnight"
+    - `dashboard/stories/journey/heretic.html` — 동일
+    - `dashboard/story_read.html` — Chapter 카드 인덱스 동일
+    - `dashboard/data/story/arcs/kas_arc.json` — ch_kas_02 title_en/ko 동일
+- **검증**: pytest `test_story_resolver.py` 15 PASS. JSON 구조 OK.
+- **누적**: Phase 1+1.5+2+3+4 + ADR-0060 + bridge + 소설 타이틀 수정.
+  - 단위 테스트 96 PASS (Dungeon + VFX + procedural + mapper + bridge + ECS).
+  - **총 단위 테스트 111 PASS** (이전 96 + ECS 22 - 7 중복).
+
+## [2026-06-30] feat | Play 확장 + Dashboard dead-end 정리
+
+- **play.html 확장** (Option 3, 현재 시연 강화):
+  - **15 챕터**: 캐릭터 카드 → 5 챕터 카드 (Ch1~Ch5, locked → unlocked → completed 상태).
+    - novice: The First Run / Molly's Deal / Straylight Run / The Flatline / Neuromancer
+    - veteran: The Old Score / The Voodoo God / The Insider / The Contract / The Blank
+    - heretic: The Declaration / Manarase at Midnight / The Shadow / The Weapon / The Burn
+  - **15 미션**: 캐릭터별 Arc 1~5 = 5개. ICE 등급·보상 배지 표시.
+  - **단편 발췌 링크**: 미션 카드 클릭 시 → 페이지에 "RELATED SHORT STORY" 박스. EN/KO target=_blank.
+  - **엔딩 후 단편 발췌 페이지로**: "READ THE CODA" 박스 + "BROWSE" 인덱스.
+  - **ASCII 미니 아트**: 챕터별 고유 (The Burn = 불꽃, Neuromancer = 둥근 눈).
+  - **진행률 바**: 챕터 5개 세그먼트. 완료 시 시안색 + 글로우.
+  - 검증: `node --check` PASS, 11 state 함수 정의 확인, JSON 정합성 5/15/3/15/2.
+- **play_game.json 갱신** (`dashboard/data/play_game.json`):
+  - 3 캐릭터 / **15 챕터** / **15 미션** / 2 엔딩.
+  - **novel HTML 링크** 15/15 (모든 미션 EN+KO 매핑 확인). HTML 경로: `stories/short-stories/<stem>_<lang>.html`.
+- **Dashboard dead-end 재검증** (사용자 요청):
+  - top-level 16 페이지 인벤토리 + 사이드바 도달성 + 자체 nav 검색.
+  - **발견** (이전 사이클): `achievements.html`, `settings.html`, `story_read.html` 가 사이드바 없음.
+  - **수정**:
+    - `index.html` 사이드바 카드 3개 추가: Story Reader (15 챕터), Achievements (27 업적), Settings (오디오/디스플레이).
+    - 3 페이지에 `class="nav"` 헤더 추가 → Dashboard Home 링크.
+  - **footer quick-links** 7/7 모두 파일 존재 ✓.
+  - **sub-page 단편 HTML 58개**: stories.html 통해 도달. (refs=0 인 6개 단편 = Untitled placeholder, 의도된 디자인.)
+- **누적 단위 테스트**: 135 PASS (변동 없음).
+- **결과**: 의미 없는 페이지 없음. 모든 페이지 도달 가능.
+
+## [2026-06-30] feat | 웹 실행 가능성 검토 + 인터랙티브 챕터 데모 (Play Beta)
+
+- **검토 결과** (사용자 요청에 따른 분석):
+  - 게임 엔진: tcod 21.2.1 (libtcod C extension). WebAssembly/Pyodide 직접 실행 불가.
+  - Python 백엔드 + WebSocket: 가능하지만 상시 비용.
+  - JS/Rust 재구현: 큰 프로젝트.
+  - **결론**: 현재 dashboard 의 정적 시연이 가장 현실적.
+- **Option A 구현: 인터랙티브 챕터 데모** (`dashboard/play.html` + `dashboard/data/play_game.json`):
+  - **JS state machine** (단일 HTML 페이지, vanilla JS):
+    - `startBoot` → `renderCharSelect` → `renderChapter` → `renderMissionSelect`
+      → `renderMissionChoice` (탐색/공격/분석 3 경로) → `renderEndingChoice` → `renderEnding`
+  - **3 캐릭터**: Case (novice, Wisp T1) / Sil (veteran, Hammer T2) / Kas (heretic, Viral Deck)
+  - **5 미션**: First Jack / Data Retrieval / Louisiana God / Wintermute / Aleph Fragment
+  - **2 챕터**: The First Jack (novice) / The Declaration (heretic) — ASCII 매트릭스 표시
+  - **2 엔딩**: Wintermute (alone-with-the-sky) / The Burn (burn-it-down)
+  - **시뮬레이션**: 미션당 3 path (probe/attack/stealth) — Wisp STEALTH 성공, Black ICE ATTACK 실패.
+  - **runs/cr** 상태: 화면에 credits / runs 카운터 표시. 노드 → 엔딩 카드 → replay.
+  - **Node 문법 검증**: `node --check` 통과, 괄호/괄호 균형, 모든 state 함수 정의 확인.
+  - **JSON 정합성**: 모든 미션이 valid character 에 매핑.
+- **사이드바 카드 추가** (`dashboard/index.html`): Play (Beta) — 5 미션 / 3 캐릭터 / 2 챕터 / 2 엔딩
+- **데이터 영향 없음**: 게임 코드, 미션 JSON, 챕터 JSON 무변경. play_game.json 은 단순 스냅샷.
+- **누적 단위 테스트**: 135 PASS (변동 없음).
+- **다음**: commit & push (사용자 요청 시). 또는 추가로 진짜 게임플레이 통합 (백엔드 호스팅).
+
+## [2026-06-30] feat | Phase 5: 소설 연동 + ADR-0061 (확장 가능 구조)
+
+- **확장 가능한 4-layer 소설 연동** (ADR-0061):
+  - `novel/catalog.py` — 단편 자동 스캔 + frontmatter 파싱 (en/ko 페어)
+  - `novel/hooks.py` — `HookKind` enum (6종: NARRATIVE/EXCERPT/EVENT/COMBAT/ITEM/CINEMATIC) + default 액션 + 레지스트리
+  - `novel/manifest.py` — `NovelManifest` (단편→hook 매핑 + JSON round-trip + `infer_default_hook` 키워드 추론)
+  - `novel/dispatcher.py` + `integrator.py` — `NovelDispatcher`, `NovelRuntime`, `load_novel_runtime`
+- **NovelFormat enum** (4종 정의): SHORT_STORY / EPISODE / NOVELETTE / SERIAL
+  - 새 단편: 파일만 떨어뜨리면 카탈로그 자동 발견
+  - 새 중편/에피소드: 매니페스트 entry 추가만
+  - 새 Hook 종류: `HookKind` enum + `register_hook_action()` 한 줄
+- **단위 테스트 39 PASS** (`tests/unit/test_novel.py`):
+  - catalog (10), hooks (3), manifest (6), dispatcher (4), text_provider (2),
+    integrator (4), extension (1), frontmatter 파서 (3), filename (3),
+    infer_default_hook (5), kwarg dispatch (5)
+- **검증**: ruff PASS, mypy PASS
+- **데이터 영향 없음**: 단편 MD / 미션 JSON / 챕터 JSON / 단편 frontmatter 모두 무변경.
+- **ADR-0061 작성/Accepted** (`decisions/0061-novel-integration-architecture.md`):
+  - 5가지 옵션 비교, Hook 기반 디스패치 채택.
+  - 소설 → 게임 반영 설계도 (ASCII 다이어그램).
+  - 4가지 확장 시나리오 (단편/중편/에피소드/새 Hook 종류) 예시.
+  - 깁슨 톤 유지, 영향 받는 항목, 관련 결정.
+- **다음**: commit & push (사용자 요청 시). 또는 후속 작업 (예: dashboard `novel.html` 카드, AppState 통합 코드, novel 디스패처 호출 위치).
+
+## [2026-06-30] feat | Dungeon 옵션 B-Nethack 채택 및 Phase 1+1.5 구현
+
+- **옵션 B+ 폐기, 옵션 B-Nethack 채택** (사용자 결정):
+  - NetHack 클래식 맵 (벽/통로/룸)
+  - 사이버스페이스 분위기는 이펙트 레이어로 (맵 글리프 X)
+  - 맵 = 게임플레이 UI (탐색/획득/전투/레벨업)
+- **코드 변경** (~140 줄):
+  - `engine/state.py`: `dungeon_mode: bool = False` 필드 추가
+  - `engine/app.py`: 키 `D` 토글 + `_maybe_spawn_jackin_glitch` 헬퍼 + dungeon_view 분기
+  - `combat/effects.py`: VFX 4종 신규 (`spawn_jackin_glitch`, `spawn_room_flash`, `spawn_data_acquired`, `spawn_jackout_whiteout`) + `__all__` 갱신
+  - `engine/dungeon_view.py`: 변경 없음 (이미 NetHack 스타일에 부합)
+- **테스트** (20 PASS):
+  - `tests/unit/test_dungeon_view.py` 8개: dungeon_mode 기본값, 키 D 토글, Shift+D 미토글, status 메시지, 4방향 이동, 렌더링 스모크
+  - `tests/unit/test_combat_vfx.py` 12개: VFX 4종 검증 (particles, cinematic, shake, flash), 풀 사이클 시뮬레이션
+- **검증**: ruff PASS (우리 변경 파일), mypy PASS (우리 변경 파일), pytest 20 PASS
+- **문서 갱신**:
+  - `DUNGEON_OPTION_B_PLUS.md` → `DUNGEON_OPTION_B_NETHACK.md` (이름 변경 + 폐기 노트)
+  - `DUNGEON_EXPLORATION_REVIEW.md` (옵션 B+ → 옵션 B-Nethack, Phase 1+1.5 완료)
+  - `DUNGEON_VERIFICATION_CHECKLIST.md` (Phase 1.5 VFX 오버레이)
+- **폐기된 추상화** (옵션 B+):
+  - `NodeState` 4단계 enum, `#` 영구 루트, `←/→/↔` 백트래킹 표기, `PathEdge` 자료구조, `VisitType` enum
+- **로드맵**: Phase 1+1.5 완료 / Phase 2 (절차적 BSP 미로) 다음
+
+## [2026-06-30] design | Dungeon 옵션 B+ 채택 (사용자 제안 통합)
+
+- **사용자 제안 채택 (옵션 B+)**:
+  - 동서남북 4방향 카드 단위 미로 탐색
+  - `#` 영구 루트 표시
+  - 백트래킹 명시화 (되돌아가기)
+  - 다음 영역 진입 트리거
+- **결정 사항**:
+  - 토글 키: `D` (matrix ↔ dungeon 모드 전환)
+  - Corridor glyph: 현재(─/#/→/←/↔) 그대로 + 색상으로만 보조 구분
+  - 한글 라벨/애니메이션 X (단일 글리프 + 색상)
+  - **구현 보류, 문서만 갱신** (다음 세션 작업)
+- **산출물**:
+  - `docs/DUNGEON_OPTION_B_PLUS.md` 신규 (상세 설계)
+  - `docs/DUNGEON_EXPLORATION_REVIEW.md` 갱신 (옵션 B+ 권장안, Phase 1.5 추가)
+  - `docs/DUNGEON_VERIFICATION_CHECKLIST.md` 갱신 (Phase 1.5 추가, 키 D 반영)
+- **로드맵 갱신**: Phase 0 → 1 (활성화, 키 D) → **1.5 (옵션 B+ 통합, NEW)** → 2 (절차적) → 3 (미션 매핑) → 4 (ECS) → 5 (단편 연동)
+- **영향**: 미션/단편/챕터 JSON 무변경, 게임 데이터 영향 없음
+
 ## [2026-06-22] refactor | 스토리 플로우 명확화 (ADR-0032 후속)
 
 - **Gibson 텍스트 위치 명확화** (`story_cinematic.py`):

@@ -46,6 +46,9 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | 0048 | GN Ending Menu + Save Migration 1.1.0 | **Accepted** | 2026-06-21 | P2 |
 | 0049 | Graphic Novel Ending C (3rd ending) + Save 1.2.0 | **Accepted** | 2026-06-21 | P2 |
 | 0050 | Boss ICE System (Wintermute + T-A Prime 3-phase) | **Accepted** | 2026-06-21 | P1 |
+| 0052 | Short Story Expansion Plan (단편 3편 보강) | **Accepted** | 2026-06-22 | P2 |
+| 0060 | Dungeon Exploration Redesign (NetHack + VFX) | **Accepted** | 2026-06-30 | P2 |
+| 0061 | Novel Integration Architecture (Hook 디스패치) | **Accepted** | 2026-06-30 | P2 |
 
 ## 우선순위 정의
 

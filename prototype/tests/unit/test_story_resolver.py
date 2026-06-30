@@ -97,11 +97,7 @@ class TestValidateMissionSources:
 
     def test_valid_mission(self) -> None:
         """정상 미션 → OK."""
-        missions = {
-            "first_jack": {
-                "story": {"source": "case_jackout-30sec"}
-            }
-        }
+        missions = {"first_jack": {"story": {"source": "case_jackout-30sec"}}}
         report = validate_mission_sources(missions, ROOT_PROJECT)
         assert len(report) == 1
         assert report[0]["issues"] == []
@@ -110,11 +106,7 @@ class TestValidateMissionSources:
 
     def test_missing_story(self) -> None:
         """완전히 존재하지 않는 단편 → EN_NOT_FOUND, KO_NOT_FOUND."""
-        missions = {
-            "totally_nonexistent": {
-                "story": {"source": "totally_nonexistent_story_xyz"}
-            }
-        }
+        missions = {"totally_nonexistent": {"story": {"source": "totally_nonexistent_story_xyz"}}}
         report = validate_mission_sources(missions, ROOT_PROJECT)
         assert report[0]["issues"] == ["EN_NOT_FOUND", "KO_NOT_FOUND"]
 
@@ -140,6 +132,7 @@ class TestValidateMissionSources:
             / "missions.json"
         )
         import json
+
         with missions_file.open(encoding="utf-8") as f:
             missions = json.load(f)
         report = validate_mission_sources(missions, ROOT_PROJECT)

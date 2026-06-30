@@ -50,7 +50,9 @@ def verify_story_data() -> dict:
         ko_chars = sum(sum(len(b.get("text_ko", "")) for b in e.get("beats", [])) for e in episodes)
 
         # Verify Ch5 endings exist
-        ch5_eps = [e for e in episodes if 21 <= int(e.get("episode_id", "ep_0").split("_")[1]) <= 25]
+        ch5_eps = [
+            e for e in episodes if 21 <= int(e.get("episode_id", "ep_0").split("_")[1]) <= 25
+        ]
         has_ending = len(ch5_eps) == 5
 
         results["stories"][char] = {
@@ -63,8 +65,12 @@ def verify_story_data() -> dict:
         }
 
         status_icon = "✅" if len(episodes) == 25 and total_beats > 0 else "❌"
-        print(f"  {status_icon} {char.upper()}: {len(episodes)} eps, {total_beats} beats, {total_combats} combats")
-        print(f"      EN {en_chars:,} / KO {ko_chars:,} chars | Ch5 endings: {'YES' if has_ending else 'NO'}")
+        print(
+            f"  {status_icon} {char.upper()}: {len(episodes)} eps, {total_beats} beats, {total_combats} combats"
+        )
+        print(
+            f"      EN {en_chars:,} / KO {ko_chars:,} chars | Ch5 endings: {'YES' if has_ending else 'NO'}"
+        )
 
     return results
 
@@ -85,9 +91,7 @@ def verify_chapter_flow() -> dict:
         chapters = data.get("chapters", [])
         total_phases = sum(len(ch.get("phases", [])) for ch in chapters)
         total_story_beats = sum(
-            len(ph.get("story_beats", []))
-            for ch in chapters
-            for ph in ch.get("phases", [])
+            len(ph.get("story_beats", [])) for ch in chapters for ph in ch.get("phases", [])
         )
 
         # Verify phases have story_beats references
@@ -103,7 +107,9 @@ def verify_chapter_flow() -> dict:
         }
 
         status_icon = "✅" if len(chapters) == 5 and total_phases > 0 else "❌"
-        print(f"  {status_icon} {char.upper()}: {len(chapters)} ch, {total_phases} phases, {total_story_beats} story_beats")
+        print(
+            f"  {status_icon} {char.upper()}: {len(chapters)} ch, {total_phases} phases, {total_story_beats} story_beats"
+        )
         print(f"      phases without beats: {phases_without_beats}")
 
     return results
@@ -138,7 +144,9 @@ def verify_arc_data() -> dict:
         }
 
         status_icon = "✅" if beats_implemented else "⚠️"
-        print(f"  {status_icon} {char.upper()}: {len(chapters)} ch, {total_phases} phases, {total_beats} beats")
+        print(
+            f"  {status_icon} {char.upper()}: {len(chapters)} ch, {total_phases} phases, {total_beats} beats"
+        )
         print(f"      beats implemented: {'YES' if beats_implemented else 'NO (needs mapping)'}")
 
     if all(r["beats_implemented"] for r in results["characters"].values()):
@@ -257,11 +265,11 @@ def main():
     # Run verification steps
     steps = []
 
-    steps.append(verify_story_data())       # Step 1
-    steps.append(verify_chapter_flow())     # Step 2
-    steps.append(verify_arc_data())         # Step 3
-    steps.append(verify_html_output())      # Step 4
-    steps.append(verify_combat_system())    # Step 5
+    steps.append(verify_story_data())  # Step 1
+    steps.append(verify_chapter_flow())  # Step 2
+    steps.append(verify_arc_data())  # Step 3
+    steps.append(verify_html_output())  # Step 4
+    steps.append(verify_combat_system())  # Step 5
 
     # Generate summary
     summary = generate_summary(steps)

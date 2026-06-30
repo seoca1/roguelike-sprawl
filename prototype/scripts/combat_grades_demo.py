@@ -120,8 +120,8 @@ def _get_scaled_stats_raw(data: dict, player_grade: int) -> tuple[int, int]:
 def calculate_power_ratio(player_ppl: float, enemy_power: float) -> float:
     """Calculate PPL vs Enemy Power ratio."""
     if enemy_power == 0:
-        return float('inf')
-    return player_ppl / (enemy_power ** 0.5)
+        return float("inf")
+    return player_ppl / (enemy_power**0.5)
 
 
 def get_difficulty_label(ratio: float) -> str:
@@ -188,11 +188,13 @@ def simulate_combat(
     }
 
 
-def run_scenario(scenario_id: str, scenario: dict, ice_reg: IceRegistry, verbose: bool = False) -> None:
+def run_scenario(
+    scenario_id: str, scenario: dict, ice_reg: IceRegistry, verbose: bool = False
+) -> None:
     """Run a single scenario and display results."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f"Scenario {scenario_id}: {scenario['name']}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     grade = scenario["grade"]
     loadout = scenario["loadout"]
@@ -221,7 +223,9 @@ def run_scenario(scenario_id: str, scenario: dict, ice_reg: IceRegistry, verbose
     if difficulty == scenario["expected_difficulty"]:
         print(f"  ✓ Difficulty matches expected!")
     else:
-        print(f"  ⚠ Difficulty mismatch (expected {scenario['expected_difficulty']}, got {difficulty})")
+        print(
+            f"  ⚠ Difficulty mismatch (expected {scenario['expected_difficulty']}, got {difficulty})"
+        )
 
     if verbose:
         print(f"\n  Running combat simulation...")
@@ -230,9 +234,9 @@ def run_scenario(scenario_id: str, scenario: dict, ice_reg: IceRegistry, verbose
         print(f"    Steps: {result['steps']}")
         print(f"    Outcome: {result['outcome']}")
         print(f"    Player HP: {result['player_hp_remaining']}/{scenario['grade'] * 20 + 80}")
-        if result['player_died']:
+        if result["player_died"]:
             print(f"    ⚠ Player died!")
-        elif result['timeout']:
+        elif result["timeout"]:
             print(f"    ⚠ Combat timed out!")
 
 
@@ -257,7 +261,7 @@ def main() -> None:
         else:
             print(f"Unknown scenario: {sid}")
 
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print("Summary")
     print("=" * 60)
     print("\nGrade/PPL vs Enemy Power Recommendations:")

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ADR-0061 Novel Integration: 소설→게임 hook 디스패치 (NARRATIVE/EXCERPT/EVENT/COMBAT/ITEM/CINEMATIC). 4-layer 확장 가능 구조.">
+<title>Novel Integration Dashboard — Roguelike Sprawl</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://seoca1.github.io/roguelike-sprawl/novel.html">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    background: #0a0e14; color: #c5d4e3; line-height: 1.6;
+    padding: 24px; max-width: 1100px; margin: 0 auto; min-height: 100vh;
+  }
+  h1, h2, h3 { color: #66ffcc; font-weight: 600; }
+  h1 { font-size: 28px; margin-bottom: 8px; text-shadow: 0 0 12px #66ffcc44; }
+  h2 { font-size: 20px; margin: 24px 0 12px; border-bottom: 1px solid #2a3540; padding-bottom: 8px; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #ffaa55; }
+  a { color: #66ffcc; }
+  a:hover { color: #00ccff; }
+
+  .nav { margin-bottom: 24px; font-size: 12px; }
+  .nav a { color: #6a7888; text-decoration: none; }
+  .nav a:hover { color: #66ffcc; }
+  .subtitle { color: #6a7888; font-size: 13px; margin-bottom: 24px; }
+
+  .panel {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 8px;
+    padding: 20px; margin-bottom: 16px;
+  }
+
+  .arch {
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 4px;
+    padding: 16px; margin: 12px 0; font-size: 12px; line-height: 1.4;
+    overflow-x: auto; color: #c5d4e3; white-space: pre;
+  }
+  .arch .file { color: #ffd700; }
+  .arch .arrow { color: #ffaa55; }
+  .arch .hook { color: #66ffcc; }
+  .arch .layer { color: #ff6699; font-weight: 700; }
+
+  .grid-2 {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+  }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #2a3540; }
+  th { color: #ffaa55; font-weight: 600; }
+  td { color: #c5d4e3; }
+  td.code { font-family: 'JetBrains Mono', monospace; color: #ffd700; }
+  td.desc { font-size: 11px; color: #8a9aa8; }
+
+  .badge {
+    display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .badge.done { background: #66ffcc22; color: #66ffcc; }
+  .badge.active { background: #ffaa5522; color: #ffaa55; }
+
+  .hook-kinds {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0;
+  }
+  .hook-card {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 4px;
+    padding: 10px; font-size: 11px;
+  }
+  .hook-card .name { color: #66ffcc; font-weight: 600; font-size: 12px; }
+  .hook-card .desc { color: #8a9aa8; margin-top: 4px; line-height: 1.4; }
+  .hook-card .target { color: #ffaa55; margin-top: 4px; font-size: 10px; }
+
+  code {
+    background: #1a232c; padding: 2px 6px; border-radius: 3px;
+    font-size: 11px; color: #ffd700;
+  }
+
+  pre.example {
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 4px;
+    padding: 12px; margin: 8px 0; font-size: 11px;
+    overflow-x: auto; color: #c5d4e3; line-height: 1.5;
+  }
+  pre.example .com { color: #6a7888; }
+  pre.example .kw { color: #ffaa55; }
+  pre.example .str { color: #66ffcc; }
+</style>
+</head>
+<body>
+
+<div class="nav"><a href="index.html">← Dashboard Home</a></div>
+
+<h1>📖 Novel Integration Dashboard</h1>
+<div class="subtitle">ADR-0061 · 소설 → 게임 Hook 디스패치 · 4-Layer 확장 가능 구조</div>
+
+<!-- Status -->
+<div class="panel">
+  <div class="grid-2" style="margin-bottom: 12px;">
+    <div>
+      <h3 style="margin:0;">Phase 5 (소설 연동) ✓ DONE</h3>
+      <div style="font-size: 12px; color: #8a9aa8; margin-top: 4px;">
+        Hook 기반 디스패치. 65+ 단편 → 게임 6종 hook 자동 분류.
+      </div>
+    </div>
+    <div style="text-align: right;">
+      <span class="badge done">Phase 5 DONE</span>
+      &nbsp;
+      <span class="badge done">ADR-0061 Accepted</span>
+    </div>
+  </div>
+  <div class="grid-2" style="font-size: 12px; color: #6a7888;">
+    <div>Tests: <strong style="color:#66ffcc;">39 PASS</strong></div>
+    <div>Code: <strong style="color:#66ffcc;">~900 lines</strong></div>
+    <div>Layers: <strong style="color:#66ffcc;">4</strong> (catalog/hooks/manifest/dispatcher)</div>
+    <div>HookKind: <strong style="color:#66ffcc;">6</strong> (NARRATIVE/EXCERPT/EVENT/COMBAT/ITEM/CINEMATIC)</div>
+  </div>
+</div>
+
+<!-- Architecture Diagram -->
+<h2>🏛 아키텍처 (Hook Dispatch Pipeline)</h2>
+
+<pre class="arch"><span class="layer">┌──────────────────────────────────────────────────────────┐</span>
+<span class="layer">│</span>  <span class="file">Fiction/derivative/sprawl-trilogy/short-stories/</span>      <span class="layer">│</span>
+<span class="layer">│</span>      2026-06-23_case_jackout-30sec.md                          <span class="layer">│</span>
+<span class="layer">│</span>      2026-06-23_case_jackout-30sec.ko.md                       <span class="layer">│</span>
+<span class="layer">└──────────────────────────────────┬───────────────────────┘</span>
+                                   <span class="arrow">▼ 자동 스캔 (frontmatter 파싱)</span>
+<span class="layer">┌──────────────────────────────────────────────────────────┐</span>
+<span class="layer">│</span>  <span class="file">catalog.py</span> · NovelCatalog                                 <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• date prefix 제거 → stem 정규화</span>                        <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• frontmatter</span> 파싱 (title/author/tags/sources)          <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• en / ko</span> 페어 매칭                                  <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• NovelEntry</span> list 반환                                <span class="layer">│</span>
+<span class="layer">└──────────────────────────────────┬───────────────────────┘</span>
+                                   <span class="arrow">▼ from_catalog() / from_json()</span>
+<span class="layer">┌──────────────────────────────────────────────────────────┐</span>
+<span class="layer">│</span>  <span class="file">manifest.py</span> · NovelManifest                           <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• infer_default_hook()</span> — 키워드 기반 자동 분류       <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• ManifestEntry</span>: primary + secondary hooks              <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• JSON round-trip</span> — 편집자가 직접 오버라이드        <span class="layer">│</span>
+<span class="layer">└──────────────────────────────────┬───────────────────────┘</span>
+                                   <span class="arrow">▼ resolve(stem)</span>
+<span class="layer">┌──────────────────────────────────────────────────────────┐</span>
+<span class="layer">│</span>  <span class="file">dispatcher.py</span> · NovelDispatcher                        <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• dispatch(stem, language, app_state)</span>                <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• HookContext</span> 생성 → 등록된 action 실행               <span class="layer">│</span>
+<span class="layer">│</span>   <span class="kw">• DispatchReport</span> 반환 (dry-run 지원)                  <span class="layer">│</span>
+<span class="layer">└──────────────────────────────────┬───────────────────────┘</span>
+                                   <span class="arrow">▼ HookContext</span>
+<span class="layer">┌──────────────────────────────────────────────────────────┐</span>
+<span class="layer">│</span>  <span class="file">hooks.py</span> · HookKind / HookAction 레지스트리          <span class="layer">│</span>
+<span class="layer">│</span>   ┌──────────────────────────────────────────────────┐    <span class="layer">│</span>
+<span class="layer">│</span>   │ <span class="hook">NARRATIVE</span>  → 단편 excerpt 표시                │    <span class="layer">│</span>
+<span class="layer">│</span>   │ <span class="hook">EXCERPT</span>    → 인라인 단편 발췌 표시            │    <span class="layer">│</span>
+<span class="layer">│</span>   │ <span class="hook">EVENT</span>      → EventState 트리거              │    <span class="layer">│</span>
+<span class="layer">│</span>   │ <span class="hook">COMBAT</span>     → ICE 종류 시드                 │    <span class="layer">│</span>
+<span class="layer">│</span>   │ <span class="hook">ITEM</span>       → 인벤토리 추가                  │    <span class="layer">│</span>
+<span class="layer">│</span>   │ <span class="hook">CINEMATIC</span> → 그래픽 노블 큐                 │    <span class="layer">│</span>
+<span class="layer">│</span>   └──────────────────────────────────────────────────┘    <span class="layer">│</span>
+<span class="layer">└──────────────────────────────────┬───────────────────────┘</span>
+                                   <span class="arrow">▼ AppState 속성 갱신</span>
+                  ┌──────────────────────────────────────┐
+                  │       <span class="file">AppState</span> · Engine              │
+                  │   • status_messages                    │
+                  │   • inventory                           │
+                  │   • active_event                        │
+                  │   • context_hint                        │
+                  │   • language                            │
+                  └──────────────────────────────────────┘</pre>
+
+<!-- Hook Kinds -->
+<h2>🎣 6 HookKind — 소설이 게임에 미치는 영향</h2>
+
+<div class="hook-kinds">
+  <div class="hook-card">
+    <div class="name">NARRATIVE</div>
+    <div class="desc">단편의 첫 문단을 챕터 스크린에 표시. 12초 타이핑 효과.</div>
+    <div class="target">→ chapter_view</div>
+  </div>
+  <div class="hook-card">
+    <div class="name">EXCERPT</div>
+    <div class="desc">인라인 단편 발췌. 매트릭스 진입 시 또는 아이템 획득 시.</div>
+    <div class="target">→ matrix / dungeon</div>
+  </div>
+  <div class="hook-card">
+    <div class="name">EVENT</div>
+    <div class="desc">컷신/스토리 이벤트. 등장인물 등장, NPC 조우.</div>
+    <div class="target">→ event_state</div>
+  </div>
+  <div class="hook-card">
+    <div class="name">COMBAT</div>
+    <div class="desc">ICE 종류 시드 (STANDARD / BLACK). ice_kind 매개변수.</div>
+    <div class="target">→ combat_state</div>
+  </div>
+  <div class="hook-card">
+    <div class="name">ITEM</div>
+    <div class="desc">데이터 단편 / 인벤토리 추가. item_id 매개변수.</div>
+    <div class="target">→ inventory</div>
+  </div>
+  <div class="hook-card">
+    <div class="name">CINEMATIC</div>
+    <div class="desc">그래픽 노블 시네마틱. 자동재생.</div>
+    <div class="target">→ graphic_novel</div>
+  </div>
+</div>
+
+<!-- Keywords -->
+<h2>🔍 Infer Default Hook — 키워드 기반 자동 분류</h2>
+
+<p style="font-size: 13px;">
+  매니페스트에 entry 가 없어도 본문 키워드로 자동 분류. 10 키워드 룰.
+  매니페스트가 우선, 부재 시 키워드.
+</p>
+
+<table>
+  <tr><th>키워드</th><th>HookKind</th><th>ice_kind</th></tr>
+  <tr><td><code>black ice</code></td><td>COMBAT</td><td>BLACK</td></tr>
+  <tr><td><code>tessier-ashpool</code></td><td>COMBAT</td><td>BLACK</td></tr>
+  <tr><td><code>wolfgang</code></td><td>COMBAT</td><td>STANDARD</td></tr>
+  <tr><td><code>ice barrier</code></td><td>COMBAT</td><td>BLACK</td></tr>
+  <tr><td><code>ice patrol</code></td><td>COMBAT</td><td>STANDARD</td></tr>
+  <tr><td><code>data fragment</code></td><td>ITEM</td><td>—</td></tr>
+  <tr><td><code>rom construct</code></td><td>ITEM</td><td>—</td></tr>
+  <tr><td><code>extract data</code></td><td>ITEM</td><td>—</td></tr>
+  <tr><td><code>dixie flatline</code></td><td>EVENT</td><td>—</td></tr>
+  <tr><td><code>construct</code> / <code>molly</code></td><td>EVENT</td><td>—</td></tr>
+</table>
+
+<!-- Extension examples -->
+<h2>🔧 확장 가능성 (확인된 사용 예시)</h2>
+
+<h3>1. 새 단편 추가 (가장 단순)</h3>
+<pre class="example"><span class="com"># 파일만 떨어뜨리기</span>
+$Fiction/derivative/sprawl-trilogy/short-stories/2026-07-01_new_story.md
+$Fiction/derivative/sprawl-trilogy/short-stories/2026-07-01_new_story.ko.md
+
+<span class="com"># (선택) 매핑 오버라이드</span>
+<span class="kw">$</span>prototype/data/novel_overrides.json:
+{
+  "new_story": {
+    "primary": "combat",
+    "secondary": ["item"],
+    "ice_kind": "BLACK"
+  }
+}
+
+<span class="com"># 게임 코드 수정 없이 끝</span>
+runtime = load_novel_runtime(repo_root, manifest_overrides=overrides)
+runtime.dispatcher.dispatch("new_story")</pre>
+
+<h3>2. 새 Hook 종류 추가</h3>
+<pre class="example"><span class="kw"># novel/hooks.py 에 추가:</span>
+class HookKind(StrEnum):
+    <span class="com"># ... 기존 6종</span>
+    MUSIC = "music"  <span class="com"># 새 종류</span>
+
+<span class="kw"># 새 액션 등록 (한 줄)</span>
+def my_music_action(ctx, app_state):
+    <span class="com"># ... music 큐 추가 ...</span>
+    return HookResult(ok=True)
+
+register_hook_action(HookKind.MUSIC, my_music_action)</pre>
+
+<h3>3. 중편 / 에피소드 (포맷 확장)</h3>
+<pre class="example"><span class="com"># NovelFormat enum (이미 정의됨):</span>
+class NovelFormat(StrEnum):
+    SHORT_STORY = "short_story"
+    EPISODE = "episode"
+    NOVELETTE = "novelette"
+    SERIAL = "serial"
+
+<span class="com"># 추후 구현: 디렉토리 + episodes.json 인덱스</span>
+$Fiction/derivative/sprawl-trilogy/short-stories/
+    our_story.episodes.json
+    our_story_ep01.md
+    our_story_ep02.md
+    ...
+</pre>
+
+<!-- Test Coverage -->
+<h2>✅ 테스트 커버리지 (39 PASS)</h2>
+
+<table>
+  <tr><th>영역</th><th class="num">테스트 수</th></tr>
+  <tr><td>Catalog (자동 스캔 + 쿼리)</td><td class="num">10</td></tr>
+  <tr><td>Filename + Frontmatter 파서</td><td class="num">6</td></tr>
+  <tr><td>Hooks (액션 레지스트리)</td><td class="num">3</td></tr>
+  <tr><td>Infer default hook (키워드)</td><td class="num">5</td></tr>
+  <tr><td>Manifest (round-trip + 오버라이드)</td><td class="num">6</td></tr>
+  <tr><td>Dispatcher (dry-run + live)</td><td class="num">5</td></tr>
+  <tr><td>TextProvider</td><td class="num">2</td></tr>
+  <tr><td>Integrator (load + dispatch)</td><td class="num">4</td></tr>
+  <tr><td>Extension surface</td><td class="num">1</td></tr>
+  <tr><th>합계</th><th class="num">39</th></tr>
+</table>
+
+<h2>🔗 관련 문서</h2>
+<ul style="margin-left: 20px; line-height: 1.8;">
+  <li><a href="stories.html">Short Stories Dashboard</a> — 65개 단편 직접 보기</li>
+  <li><a href="../Game/roguelike_sprawl/decisions/0061-novel-integration-architecture.md">ADR-0061 Novel Integration Architecture</a> — 결정 문서</li>
+  <li><a href="../Game/roguelike_sprawl/decisions/0060-dungeon-exploration-redesign.md">ADR-0060 Dungeon Exploration</a> — 매트릭스 / 던전 후속</li>
+  <li><a href="../Game/roguelike_sprawl/decisions/README.md">ADR Index</a></li>
+</ul>
+
+<div style="margin: 24px 0; padding: 16px; border-left: 3px solid #ffaa55; background: #ffaa5511; border-radius: 0 4px 4px 0;">
+  <strong style="color: #ffaa55;">다음 단계</strong>: 게임 런타임 통합 (<code>engine/app.py</code>에서
+  <code>dispatch_for_state()</code> 호출 위치 정의). 챕터 화면 / 매트릭스 진입 / ICE 룸 진입 / Data 룸 획득 / 아이템 사용 시 hook 트리거.
+</div>
+
+</body>
+</html>

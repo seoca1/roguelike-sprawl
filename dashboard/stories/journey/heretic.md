@@ -54,7 +54,7 @@ CHAPTER 화면 12초 타이핑: 카스가 Kumiko의 시점에서 시작하지만
 
 ---
 
-## Chapter 2: The Silence (Arc 2)
+## Chapter 2: Manarase at Midnight (Arc 2)
 
 | 단계 | 이름 | 미션 |
 |:---:|---|---|

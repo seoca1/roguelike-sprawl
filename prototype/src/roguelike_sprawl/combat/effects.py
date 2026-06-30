@@ -1097,6 +1097,112 @@ def spawn_status_icon(combatant: object, status: StatusIcon) -> None:
         combatant.status_icons.append(status)  # type: ignore[attr-defined]
 
 
+# ----------------------------------------------------------------------------
+# Matrix / dungeon VFX (ADR-0060 Phase 1.5)
+#
+# These provide the cyberspace atmosphere that the simplified NetHack-style
+# map no longer carries. The map renders pure gameplay UI; cyberspace is
+# layered as effects.
+# ----------------------------------------------------------------------------
+
+
+def spawn_jackin_glitch(effects: CombatEffects) -> None:
+    """Spawn a one-shot 'jack-in' glitch VFX (Phase 1.5)."""
+    effects.particles.spawn_burst(
+        x=0.0,
+        y=0.0,
+        chars=("\u2593", "\u2592", "\u2591", "+", "\u00b7", "/", "\\"),
+        color=(120, 220, 220),
+        count=18,
+        speed=45.0,
+        life_ms=500,
+        spread=math.tau,
+    )
+    effects.particles.spawn_burst(
+        x=0.0,
+        y=0.0,
+        chars=("\u2592", "*", "+"),
+        color=(220, 100, 220),
+        count=8,
+        speed=30.0,
+        life_ms=300,
+        spread=math.tau,
+    )
+    effects.shake.trigger(intensity=80, duration_ms=180)
+    effects.hit_flash.trigger(color=(120, 220, 220), duration_ms=120)
+    effects.cinematic = CinematicSequence(
+        name="jackin",
+        phases=(
+            (">> JACKING IN...", (120, 220, 220), 180),
+            (">> SCANNING HOST...", (220, 180, 100), 180),
+            (">> CYBERSPACE LOADED", (180, 220, 120), 220),
+        ),
+    )
+
+
+def spawn_room_flash(
+    effects: CombatEffects,
+    color: tuple[int, int, int] = (180, 180, 100),
+) -> None:
+    """Spawn a short color flash on room transition (Phase 1.5)."""
+    effects.hit_flash.trigger(color=color, duration_ms=80)
+    effects.particles.spawn_burst(
+        x=1.0,
+        y=1.0,
+        chars=("\u00b7", "+", "\u00b7"),
+        color=color,
+        count=4,
+        speed=10.0,
+        life_ms=160,
+        spread=math.pi,
+    )
+
+
+def spawn_data_acquired(effects: CombatEffects, x: float = 0.0, y: float = 0.0) -> None:
+    """Spawn a 'data fragment recovered' VFX on DATA room pickup (Phase 1.5)."""
+    effects.particles.spawn_burst(
+        x=x,
+        y=y,
+        chars=("$", "\u00b7", "+", "\u00b7"),
+        color=(255, 215, 0),
+        count=14,
+        speed=40.0,
+        life_ms=500,
+        spread=math.tau,
+    )
+    effects.hit_flash.trigger(color=(255, 215, 0), duration_ms=120)
+    effects.cinematic = CinematicSequence(
+        name="data_acquired",
+        phases=(
+            (">> DATA FRAGMENT RECOVERED", (255, 215, 0), 280),
+            ("+ CREDITS + REPUTATION", (220, 220, 180), 200),
+        ),
+    )
+
+
+def spawn_jackout_whiteout(effects: CombatEffects) -> None:
+    """Spawn a 'jack-out' whiteout VFX on EXIT room (Phase 1.5)."""
+    effects.hit_flash.trigger(color=(255, 255, 255), duration_ms=260)
+    effects.particles.spawn_burst(
+        x=0.0,
+        y=0.0,
+        chars=("\u00b7", "+", "\u00b7"),
+        color=(220, 220, 220),
+        count=10,
+        speed=20.0,
+        life_ms=400,
+        spread=math.tau,
+    )
+    effects.cinematic = CinematicSequence(
+        name="jackout",
+        phases=(
+            (">> JACKING OUT...", (220, 220, 220), 220),
+            (">> CONNECTION SEVERED", (180, 180, 220), 220),
+            (">> MATRIX CLOSED", (140, 140, 180), 200),
+        ),
+    )
+
+
 __all__ = [
     "Animation",
     "AnimationFrame",
@@ -1127,9 +1233,13 @@ __all__ = [
     "regen_animation",
     "shield_animation",
     "spawn_critical",
+    "spawn_data_acquired",
     "spawn_hit_effects",
     "spawn_ice_death",
     "spawn_ice_intro",
+    "spawn_jackin_glitch",
+    "spawn_jackout_whiteout",
+    "spawn_room_flash",
     "spawn_status_icon",
     "stun_animation",
     "buff_animation",

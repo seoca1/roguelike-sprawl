@@ -288,7 +288,9 @@ def main() -> int:
                                     if args.story_mode:
                                         # Story-mode: auto-resolve as victory
                                         _story_mode_victory(state)
-                                        print(f"\n=== ICE defeated (story-mode): {current_node.label} ===")
+                                        print(
+                                            f"\n=== ICE defeated (story-mode): {current_node.label} ==="
+                                        )
                                         combat_started = True
                                     else:
                                         state.action_menu_open = True
@@ -438,11 +440,13 @@ def _story_mode_victory(state: AppState) -> None:
 
     # Progress mission objective (defeat)
     from roguelike_sprawl.engine.mission_completion import update_mission_progress
+
     update_mission_progress(state, "defeat", 1)
 
     # Advance RunState: if we're on the DEFEAT_ICE stage, this
     # victory satisfies the objective.
     from roguelike_sprawl.run import Stage, check_combat_victory, ensure_run_state
+
     run_state = ensure_run_state(state)
     if check_combat_victory(run_state):
         run_state.mark_advance()
@@ -450,6 +454,7 @@ def _story_mode_victory(state: AppState) -> None:
         if run_state.current_stage is Stage.JACK_OUT:
             # Jack out after ICE defeat
             from roguelike_sprawl.engine.jack_out_view import enter_jack_out
+
             enter_jack_out(state)
             _defeat_current_ice_node(state)
             return
@@ -469,6 +474,7 @@ def _defeat_current_ice_node(state: AppState) -> None:
     state.status_messages.append(f">>> ICE [{defeated_id}] destroyed")
     # Remove node from graph
     from roguelike_sprawl.matrix.graph import MatrixGraph
+
     state.matrix = MatrixGraph(
         nodes=tuple(n for n in state.matrix.nodes if n.id != defeated_id),
         edges=tuple(e for e in state.matrix.edges if e.src != defeated_id and e.dst != defeated_id),

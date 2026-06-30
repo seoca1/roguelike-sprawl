@@ -170,7 +170,9 @@ def render_gn_menu(
     selected: int,
 ) -> None:
     """Render GRAPHIC_NOVEL_MENU."""
-    graphic_novel_view.render_graphic_novel_menu(console, t, selected_index=selected, has_save=False)
+    graphic_novel_view.render_graphic_novel_menu(
+        console, t, selected_index=selected, has_save=False
+    )
 
 
 def render_gn_frame(

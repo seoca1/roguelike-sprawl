@@ -16,7 +16,7 @@ from ..combat.registry import IceRegistry, ProgramRegistry
 from ..i18n import Translator
 from ..missions import JobBoard
 from ..portraits import PortraitManager
-from . import combat_view, config, matrix_view, story_cinematic
+from . import combat_view, config, dungeon_view, matrix_view, story_cinematic
 from . import hub as hub_screen
 from . import menu as menu_screen
 from .state import AppState, ScreenKind
@@ -76,6 +76,22 @@ def main() -> int:
         return 0
 
 
+def _maybe_spawn_jackin_glitch(state: AppState) -> None:
+    """Spawn a one-shot jack-in glitch VFX when toggling into dungeon mode.
+
+    ADR-0060 Phase 1.5: this provides the cyberspace atmosphere that the
+    map no longer carries. Without 3D cyberspace glyphs, the visual
+    transition is the only \"cyberspace\" hint at the map level.
+    """
+    try:
+        from ..combat.effects import spawn_jackin_glitch
+
+        spawn_jackin_glitch(state.combat_effects)
+    except ImportError:
+        # Combat effects not loaded yet; fall back to a status hint only.
+        state.status_messages.append(">>> Jacking into the matrix...")
+
+
 def _render(
     console: tcod.console.Console,
     t: Translator,
@@ -91,11 +107,15 @@ def _render(
     elif state.screen is ScreenKind.HUB:
         hub_screen.render_hub(console, t, state)
     elif state.screen is ScreenKind.MATRIX:
-        if state.matrix is not None:
-            layout = matrix_view.get_layout(state.matrix)
+        if state.dungeon_mode:
+            # ADR-0060 Phase 1: NetHack-style 2D room grid
+            dungeon_view.render_dungeon_matrix(console, t, state, prog_registry, ice_registry)
         else:
-            layout = {}
-        matrix_view.render_matrix(console, t, state, layout, prog_registry, ice_registry)
+            if state.matrix is not None:
+                layout = matrix_view.get_layout(state.matrix)
+            else:
+                layout = {}
+            matrix_view.render_matrix(console, t, state, layout, prog_registry, ice_registry)
     elif state.screen is ScreenKind.COMBAT:
         if state.combat_state is not None:
             combat_view.render_combat(console, t, state, state.combat_state)
@@ -217,6 +237,26 @@ def _handle_input(
     if state.screen is ScreenKind.HUB:
         return hub_screen.handle_hub_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.MATRIX:
+        # ADR-0060 Phase 1: `D` key toggles NetHack-style dungeon view
+        # (dungeon_view) vs abstract node graph (matrix_view).
+        if (
+            isinstance(event, tcod.event.KeyDown)
+            and event.sym is tcod.event.KeySym.D
+            and not (event.mod & tcod.event.Modifier.SHIFT)
+        ):
+            state.dungeon_mode = not state.dungeon_mode
+            label = "DUNGEON (NetHack)" if state.dungeon_mode else "MATRIX (graph)"
+            state.status_messages.append(f">>> View mode: {label}")
+            if state.dungeon_mode:
+                _maybe_spawn_jackin_glitch(state)
+            return True
+        if state.dungeon_mode:
+            return dungeon_view.handle_dungeon_input(
+                event,  # type: ignore[arg-type]
+                state,
+                prog_registry,
+                ice_registry,
+            )
         return matrix_view.handle_matrix_input(event, state, prog_registry, ice_registry)  # type: ignore[arg-type]
     if state.screen is ScreenKind.COMBAT:
         if state.combat_state is not None:

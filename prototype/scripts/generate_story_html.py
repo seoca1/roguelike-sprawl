@@ -305,7 +305,9 @@ def main() -> int:
             output_path = output_dir / f"{char}_{lang}.html"
             output_path.write_text(html, encoding="utf-8")
             excerpt_len = len(data.get(f"excerpt_{lang}", ""))
-            print(f"Generated: {output_path} ({html.count(chr(10))} lines, ~{excerpt_len} chars story)")
+            print(
+                f"Generated: {output_path} ({html.count(chr(10))} lines, ~{excerpt_len} chars story)"
+            )
 
     print(f"\nOutput directory: {output_dir.absolute()}")
     return 0

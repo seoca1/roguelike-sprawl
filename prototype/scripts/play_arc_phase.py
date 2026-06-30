@@ -158,25 +158,29 @@ def run_demo(
 def main() -> None:
     parser = argparse.ArgumentParser(description="Arc Phase Demo with tcod rendering")
     parser.add_argument(
-        "--character", "-c",
+        "--character",
+        "-c",
         choices=["case", "sil", "kas"],
         default="case",
         help="Character arc",
     )
     parser.add_argument(
-        "--chapter", "-ch",
+        "--chapter",
+        "-ch",
         type=int,
         default=1,
         help="Chapter number (1-5)",
     )
     parser.add_argument(
-        "--lang", "-l",
+        "--lang",
+        "-l",
         choices=["en", "ko"],
         default="en",
         help="Language",
     )
     parser.add_argument(
-        "--char-delay", "-d",
+        "--char-delay",
+        "-d",
         type=float,
         default=30,
         help="Typing delay in ms (default 30)",

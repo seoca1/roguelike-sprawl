@@ -33,7 +33,13 @@ def main() -> int:
     parser.add_argument(
         "--missions",
         type=Path,
-        default=ROOT / "Game" / "roguelike_sprawl" / "prototype" / "data" / "missions" / "missions.json",
+        default=ROOT
+        / "Game"
+        / "roguelike_sprawl"
+        / "prototype"
+        / "data"
+        / "missions"
+        / "missions.json",
     )
     parser.add_argument("--json", action="store_true", help="JSON output")
     parser.add_argument("--missing-only", action="store_true", help="Only show issues")

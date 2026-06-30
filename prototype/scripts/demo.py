@@ -72,9 +72,7 @@ def render_frame(
     elif state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
         from roguelike_sprawl.engine import graphic_novel_view
 
-        graphic_novel_view.render_graphic_novel_menu(
-            console, t, selected_index=0, has_save=False
-        )
+        graphic_novel_view.render_graphic_novel_menu(console, t, selected_index=0, has_save=False)
     elif state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
         from roguelike_sprawl.engine import graphic_novel_view
 

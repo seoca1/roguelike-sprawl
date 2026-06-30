@@ -80,6 +80,10 @@ class AppState:
     current_node_id: str | None = None
     # Matrix node navigation cursor (↑/↓ to select adjacent node, Enter to move)
     matrix_nav_index: int = 0
+    # Dungeon view mode toggle (ADR-0060 Phase 1). When True, the MATRIX
+    # screen renders a NetHack-style 2D room grid (dungeon_view) instead
+    # of the abstract node graph (matrix_view). Toggle via `D` key.
+    dungeon_mode: bool = False
     hub_selected_index: int = 0
     message: str = ""
     # Fog of war / exploration state (ADR-0020). None until a matrix
