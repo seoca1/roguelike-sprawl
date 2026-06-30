@@ -2,6 +2,36 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-06-30] feat | Phase 1-5 운영 진입점 + 가이드/디자인 동기화
+
+- **신규 운영 데모 5종** (`prototype/scripts/play_*.py`):
+  - `play_dungeon_mode.py` — Phase 1 (D 키 dungeon_mode + BSP 미로 attach).
+  - `play_vfx_overlay.py` — Phase 1.5 (CombatEffects + 4 spawner 검증).
+  - `play_mission_mapping.py` — Phase 3 (16 미션 → RoomType + MatrixGraph).
+  - `play_ecs_dungeon.py` — Phase 4 (DungeonSystem populate / on_enter / defeat).
+  - `play_novel_runtime.py` — Phase 5 (HookKind 6종 + load_novel_runtime + dispatch).
+  - 모두 헤드리스 (창 불필요), 0 종료 + 한 줄 요약.
+- **가이드 10 종 갱신** (모두 Phase 1-5 섹션 추가):
+  - `prototype/CHANGELOG.md` `[Unreleased]` 항목.
+  - `prototype/README.md` `### 3-3. Phase 1-5 신규 데모` 섹션.
+  - `prototype/QUICK_START.md` `## 🆕 Phase 1-5 Quick Look` 섹션.
+  - `prototype/CONTROLS.md` Matrix 표 D 키 + `## Novel Hooks` 섹션.
+  - `prototype/DUNGEON_NPC_GUIDE.md` Phase 1-5 확장 표 + Phase 2 BSP 섹션.
+  - `prototype/INTERACTIVE_GUIDE.md` Phase 1-5 인터랙션 표 + Novel Hooks.
+  - `prototype/VISUAL_GUIDE.md` Phase 1-5 시각 레이어 표 + VFX 4종 legend.
+  - `prototype/STATUS_PANEL_GUIDE.md` Status Panel 확장 + Dungeon 표시.
+  - `prototype/DEMO_GUIDE.md` 5 신규 데모 안내.
+  - `prototype/scripts/README.md` 우선순위 8-12행 + `## 6. Phase 1-5 신규 데모` + 5분 표 5행.
+- **디자인 3 종 갱신**:
+  - `design/systems/exploration.md` Phase 1 (D 키) + Phase 2 (BSP) 섹션.
+  - `design/systems/missions.md` Phase 3 (Mission → Room) + 캐릭터 편향 표 + Arc 타겟 표.
+  - `design/systems/animations.md` Phase 1.5 (VFX 4종) + 5-Layer 구조 노트.
+- **커밋 6건** (`35ae90e`, `0d59c36`, `088a650`, `ca9d0ab`, `4541045`, `db3fa14`, `baccf2a`):
+  - 모두 pure additive — 기존 본문 보존, 데이터 영향 없음.
+- **시그니처 검증 노트**:
+  - `render_dungeon_matrix(console, translator, state, prog, ice)` 5 인자.
+  - 4 VFX spawner 모두 첫 위치 = `CombatEffects` 컨테이너.
+
 ## [2026-06-30] doc | ADR-0060 Dungeon Exploration Redesign 작성 + bridge
 
 - **ADR-0060** (`decisions/0060-dungeon-exploration-redesign.md`) 작성/Accepted:
