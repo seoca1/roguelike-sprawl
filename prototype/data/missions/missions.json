@@ -121,8 +121,8 @@
       "character_ref": "novice",
       "arc": 1,
       "pillar": "power",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 33,
+      "char_count_ko": 75
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -196,8 +196,8 @@
       "character_ref": "veteran",
       "arc": 4,
       "pillar": "people",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 30,
+      "char_count_ko": 63
     },
     "fixer": "finn",
     "grade_min": 4,
@@ -307,8 +307,8 @@
       "character_ref": "veteran",
       "arc": 2,
       "pillar": "purpose",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 33,
+      "char_count_ko": 67
     },
     "fixer": "finn",
     "grade_min": 2,
@@ -418,8 +418,8 @@
       "character_ref": "novice",
       "arc": 2,
       "pillar": "purpose",
-      "word_count_en": 162,
-      "char_count_ko": 412
+      "word_count_en": 118,
+      "char_count_ko": 258
     },
     "fixer": "finn",
     "grade_min": 2,
@@ -494,8 +494,8 @@
       "character_ref": "heretic",
       "arc": 4,
       "pillar": "purpose",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 39,
+      "char_count_ko": 73
     },
     "fixer": "sally",
     "grade_min": 4,
@@ -531,8 +531,8 @@
       "character_ref": "veteran",
       "arc": 2,
       "pillar": "people",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 41,
+      "char_count_ko": 61
     },
     "fixer": "finn",
     "grade_min": 2,
@@ -605,8 +605,8 @@
       "character_ref": "heretic",
       "arc": 5,
       "pillar": "purpose",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 33,
+      "char_count_ko": 69
     },
     "fixer": "kumiko",
     "grade_min": 5,
@@ -642,8 +642,8 @@
       "character_ref": "heretic",
       "arc": 3,
       "pillar": "purpose",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 30,
+      "char_count_ko": 68
     },
     "fixer": "sally",
     "grade_min": 3,
@@ -679,8 +679,8 @@
       "character_ref": "heretic",
       "arc": 3,
       "pillar": "people",
-      "word_count_en": 165,
-      "char_count_ko": 388
+      "word_count_en": 128,
+      "char_count_ko": 277
     },
     "fixer": "sally",
     "grade_min": 3,
@@ -715,8 +715,8 @@
       "character_ref": "heretic",
       "arc": 2,
       "pillar": "people",
-      "word_count_en": 161,
-      "char_count_ko": 380
+      "word_count_en": 124,
+      "char_count_ko": 243
     },
     "fixer": "finn",
     "grade_min": 2,
@@ -825,8 +825,8 @@
       "character_ref": "novice",
       "arc": 1,
       "pillar": "power",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 34,
+      "char_count_ko": 67
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -862,8 +862,8 @@
       "character_ref": "veteran",
       "arc": 3,
       "pillar": "purpose",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 34,
+      "char_count_ko": 68
     },
     "fixer": "finn",
     "grade_min": 3,
@@ -975,8 +975,8 @@
       "character_ref": "veteran",
       "arc": 4,
       "pillar": "power",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 34,
+      "char_count_ko": 56
     },
     "fixer": "sally",
     "grade_min": 4,
@@ -1050,8 +1050,8 @@
       "character_ref": "veteran",
       "arc": 5,
       "pillar": "purpose",
-      "word_count_en": 200,
-      "char_count_ko": 450
+      "word_count_en": 31,
+      "char_count_ko": 74
     },
     "fixer": "kumiko",
     "grade_min": 5,
