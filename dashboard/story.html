@@ -1554,6 +1554,22 @@
 
 <!-- Endings -->
 <h2>🎬 엔딩 (<span data-stat="endings-count">3</span>개 — ENDING_A / ENDING_B / ENDING_C, 캐릭터별 도달 분기)</h2>
+
+<!-- ChapterState enum cards (auto-built from run_stats.json) -->
+<h3 style="color:#ffaa55;font-size:14px;margin:24px 0 12px;">
+  🧬 ChapterState enum <span data-stat="endings-count">14</span> entries
+  (<code>state.py</code> · PROLOGUE + 5 챕터 × 2 + 3 ENDINGS)
+</h3>
+<div class="panel">
+  <p style="color:#8a9aa8;font-size:13px;margin-bottom:12px;">
+    <code>ChapterState</code> StrEnum — 챕터 진행과 엔딩 분기를 표현. 자동 빌드:
+  </p>
+  <div id="chapter-state-grid" style="
+       display: grid;
+       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+       gap: 8px;
+       margin-bottom: 8px;"></div>
+</div>
 <div class="endings">
   <div class="ending-card a">
     <h3>엔딩 A: Jockey Lives (성공)</h3>
@@ -2391,19 +2407,45 @@ fetch('data/character_stats.json').then(r => r.ok ? r.json() : null)
   })
   .catch(() => { /* keep static fallback */ });
 
-/* Endings count from run_stats.json: the ChapterState enum lists
-   ENDING_A / ENDING_B / ENDING_C (3 terminals); the old static
-   "엔딩 (2개)" quietly dropped C, so this fetch restores the
-   third card's count.  Falls back to 3 when the JSON is offline. */
+/* Endings count + ChapterState card build from run_stats.json:
+   the enum lists 14 entries (PROLOGUE + IN_CHAPTER_1..5 +
+   CHAPTER_1..5_COMPLETE + ENDING_A/B/C).  The 3 ENDING_* cards
+   are surfaced here so the section's wording and the underlying
+   enum stay in lockstep. */
 fetch('data/run_stats.json').then(r => r.ok ? r.json() : null)
   .then(stats => {
     if (!stats) return;
     const el = document.querySelector('[data-stat="endings-count"]');
-    if (!el) return;
-    // Count ENDING_* entries inside chapter_state_enum_names.
-    const names = stats.chapter_state_enum_names || [];
-    const endings = names.filter(n => /^ENDING_/.test(n)).length;
-    el.textContent = String(endings || names.length);
+    if (el) {
+      // Count ENDING_* entries inside chapter_state_enum_names.
+      const names = stats.chapter_state_enum_names || [];
+      const endings = names.filter(n => /^ENDING_/.test(n)).length;
+      el.textContent = String(endings || names.length);
+    }
+    // Auto-build the ChapterState cards grid (palette per kind).
+    const grid = document.getElementById('chapter-state-grid');
+    if (grid && Array.isArray(stats.chapter_state_enum_names)) {
+      grid.innerHTML = '';
+      const palette = (name) => {
+        if (/^PROLOGUE/.test(name))  return { c: '#66ffcc', t: 'Prologue' };
+        if (/^IN_CHAPTER/.test(name)) return { c: '#ffd700', t: 'In-Chapter' };
+        if (/^CHAPTER_/.test(name) && /_COMPLETE/.test(name))
+                                        return { c: '#ffaa55', t: 'Complete' };
+        if (/^ENDING_/.test(name))    return { c: '#ff6699', t: 'Ending' };
+        return { c: '#8a9aa8', t: '?' };
+      };
+      stats.chapter_state_enum_names.forEach((name, i) => {
+        const m = palette(name);
+        const card = document.createElement('div');
+        card.style.cssText =
+          `background:#131a23;border:1px solid #2a3540;border-radius:6px;` +
+          `padding:8px 10px;font-size:11px;border-left:3px solid ${m.c};`;
+        card.innerHTML =
+          `<div style="color:#8a9aa8;font-size:10px;">#${i} · ${m.t}</div>` +
+          `<div style="color:${m.c};font-weight:600;">${name}</div>`;
+        grid.appendChild(card);
+      });
+    }
   })
   .catch(() => { /* keep static fallback */ });
 </script>
