@@ -1,5 +1,5 @@
 {
-  "ice_types_total": 29,
+  "ice_types_total": 38,
   "ice_types_grades": 0,
   "ice_grades_list": [
     "standard",
@@ -30,7 +30,16 @@
     "ice_burned_cowboy",
     "ice_weapon_construct",
     "ice_wheel_children",
-    "ice_wheel_guardians"
+    "ice_wheel_guardians",
+    "construct",
+    "boss",
+    "revelation",
+    "neuromancer",
+    "ai_whisper",
+    "surveillance",
+    "wintermute",
+    "zion_defense",
+    "loa"
   ],
   "skill_effects_total": 14,
   "skill_effect_animations_total": 15,
@@ -38,5 +47,5 @@
   "combat_mode": "RT-MS",
   "ppl_version": "v1",
   "zdr_version": "v1",
-  "_generated_at": "2026-07-01T03:33:17"
+  "_generated_at": "2026-07-01T04:10:03"
 }
