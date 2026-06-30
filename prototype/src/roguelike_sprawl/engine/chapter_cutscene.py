@@ -218,7 +218,9 @@ def load_arc(arc_path: Path) -> ArcData:
 
 def get_arc_for_character(data_dir: Path, character: str) -> ArcData:
     """Load the Arc JSON for a given character."""
-    arc_file = f"{character}_arc.json"
+    char_to_arc = {"novice": "case", "veteran": "sil", "heretic": "kas"}
+    arc_id = char_to_arc.get(character, character)
+    arc_file = f"{arc_id}_arc.json"
     return load_arc(data_dir / "story" / "arcs" / arc_file)
 
 
