@@ -128,7 +128,12 @@
 
 <h1>▶ Play (Beta)</h1>
 <div class="subtitle">
-  인터랙티브 챕터 데모 — 3 캐릭터 × 5 챕터 × 15 미션 × 2 엔딩. (정적 HTML+JS; GitHub Pages 호환)
+  인터랙티브 챕터 데모 —
+  <span data-stat="characters">3</span> 캐릭터 ×
+  <span data-stat="chapters">5</span> 챕터 ×
+  <span data-stat="missions">15</span> 미션 ×
+  <span data-stat="endings">2</span> 엔딩.
+  (정적 HTML+JS; GitHub Pages 호환)
 </div>
 
 <div id="status" class="status-line">
@@ -614,6 +619,23 @@ function renderErr(msg) {
 
 // Entry
 window.addEventListener('DOMContentLoaded', loadData);
+
+/* Auto-sync header counts from data/play_game.json (which the rest of
+   the page already loads).  Mirrors DATA.characters / chapters /
+   missions / endings lengths, so the static '3 × 5 × 15 × 2'
+   subtitle stays in lockstep with the real data. */
+window.addEventListener('DOMContentLoaded', () => {
+  const set = (key, value) => {
+    const el = document.querySelector(`[data-stat="${key}"]`);
+    if (el && value !== undefined && value !== null) {
+      el.textContent = String(value);
+    }
+  };
+  set('characters', DATA.characters.length);
+  set('chapters',   DATA.chapters.length);
+  set('missions',   DATA.missions.length);
+  set('endings',    DATA.endings.length);
+});
 </script>
 
 </body>
