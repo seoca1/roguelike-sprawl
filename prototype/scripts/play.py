@@ -797,6 +797,7 @@ def _run_phase_1_5_smoke() -> int:
         "play_mission_mapping.py",
         "play_ecs_dungeon.py",
         "play_novel_runtime.py",
+        "play_arc_bsp.py",
     ]
     proto = Path(__file__).resolve().parent
     env = {**__import__("os").environ,

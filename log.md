@@ -3022,3 +3022,29 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 | Zone depths (ZoneDepth enum) | 4 |
 
 모두 `dashboard/cyberspace.html` 정적 카드와 매치.
+
+---
+
+## [2026-06-30] feat | dashboard 5번째 stats + ICE 인덱스 자동 빌드 + play_arc_bsp.py 통합
+
+- **`tools/build_dashboard.py` 5번째 stats**:
+  - `load_cyberspace_stats()` 추가: worlds.json walks worlds / sectors / servers + matrix/node.py regex 로 NodeKind 8 + ZoneDepth 4.
+  - `dashboard/data/cyberspace_stats.json` 자동 빌드 (5번째 JSON).
+- **`dashboard/cyberspace.html`** — 부제목 / 5 stat 카드 / footer 8 cells `<span data-stat="...">` 자동 fetch.
+- **`dashboard/combat.html`** — 부제목 자동 fetch (`ICE Types (5 grade / 29 total)` + `Skill Effects (14)`) + 29 ICE entries 인덱스 자동 빌드 (`ice-index` div).
+- **`prototype/scripts/play_arc_bsp.py`** (140 lines, 신규): 챕터 → 미션 → BSP 미로 → ECS 통합. novice/veteran/heretic arc 별 미션 필터, BSP + populate + on_enter + defeat.
+- **`play.py --phase-1-5`** — 6번째 demo `play_arc_bsp.py` 추가 (Phase 1+2+3 통합 검증).
+- **커밋 4건**: `1db5ffa` (cyberspace), `63d1820` (combat 부제목), `89df051` (combat ICE 인덱스), `f30e9bc` (play_arc_bsp.py).
+
+### 카운트 검증
+
+| Resource | Dashboard | Actual | Source |
+|---|---:|---:|---|
+| Worlds | 2 | 2 | `data/cyberspace/worlds.json` (chiba + night_city) |
+| Sectors | 4 | 4 | worlds.json (3 + 1 layout) |
+| Servers | 6 | 6 | sum(servers per sector) |
+| Node types | 8 | 8 | `NodeKind` enum (ENTRY/DATA/SYSTEM/ICE/CONSTRUCT/ROUTER/CORE/EXIT) |
+| Zone depths | 4 | 4 | `ZoneDepth` enum (SURFACE/MID/DEEP/CORE) |
+| ICE Types | 5 grade / 29 total | 29 entries | `combat/ice_types.json` |
+
+모두 dashboard 표시 정수와 일치. 6 dashboard 페이지 (`combat` / `novel` / `stories` / `stages` / `play` / `cyberspace`) 의 자동 fetch 통합 완료.
