@@ -17,6 +17,15 @@ from .graph import Edge, MatrixGraph
 from .node import Faction, IceKind, Node, NodeKind, ZoneDepth
 
 
+def _index_nodes_by_id(nodes: list[Node]) -> dict[str, int]:
+    """Build a node-id → index map. O(n) once, then O(1) lookups.
+
+    Replaces the previous ``for i, n in enumerate(nodes): if n.id == c``
+    pattern which was O(n) per lookup, making nested loops O(n²).
+    """
+    return {n.id: i for i, n in enumerate(nodes)}
+
+
 class DepthLevel(StrEnum):
     """Depth levels in cyberspace (cyberspace hierarchy)."""
 
@@ -136,20 +145,20 @@ class CyberspaceGenerator:
                 layouts=layouts,
             )
             # Ensure at least one ICE in deep level
+            # O(1) lookup via id-index (was O(n²) with enumerate).
+            nodes_by_id = _index_nodes_by_id(nodes)
             for c in children:
                 if c == "ice_1":  # First ICE generated
-                    # Force this to be ICE
-                    for i, n in enumerate(nodes):
-                        if n.id == c:
-                            nodes[i] = Node(
-                                id=c,
-                                kind=NodeKind.ICE,
-                                label="ICE Sentinel",
-                                zone=ZoneDepth.MID,
-                                ice=IceKind.STANDARD,
-                                faction=faction,
-                            )
-                            break
+                    if c in nodes_by_id:
+                        i = nodes_by_id[c]
+                        nodes[i] = Node(
+                            id=c,
+                            kind=NodeKind.ICE,
+                            label="ICE Sentinel",
+                            zone=ZoneDepth.MID,
+                            ice=IceKind.STANDARD,
+                            faction=faction,
+                        )
 
         # ===== Ensure exactly 1 main ICE for mission =====
         # Find or create one ICE at deep level
