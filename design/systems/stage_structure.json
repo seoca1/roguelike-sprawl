@@ -1021,6 +1021,84 @@
         }
       },
       "estimated_minutes": 12
+    },
+    {
+      "id": "flatline_call",
+      "title_en": "Flatline's Call",
+      "title_ko": "Flatline's Call",
+      "fixer": "finn",
+      "arc": 2,
+      "grade_min": 2,
+      "grade_max": 3,
+      "stages": [
+        "meet_npc",
+        "extract_data",
+        "defeat_ice",
+        "jack_out",
+        "reward",
+        "complete"
+      ],
+      "primary_objective_en": "Type: collect_material",
+      "primary_objective_ko": "유형: collect_material",
+      "secondary_objective_en": "",
+      "secondary_objective_ko": "",
+      "rewards": {
+        "credits": 1500,
+        "materials": {}
+      },
+      "estimated_minutes": 8
+    },
+    {
+      "id": "sally_returns_arc3",
+      "title_en": "Sally Returns",
+      "title_ko": "Sally Returns",
+      "fixer": "sally",
+      "arc": 3,
+      "grade_min": 3,
+      "grade_max": 4,
+      "stages": [
+        "meet_npc",
+        "extract_data",
+        "defeat_ice",
+        "jack_out",
+        "reward",
+        "complete"
+      ],
+      "primary_objective_en": "Type: extract_data",
+      "primary_objective_ko": "유형: extract_data",
+      "secondary_objective_en": "",
+      "secondary_objective_ko": "",
+      "rewards": {
+        "credits": 3000,
+        "materials": {}
+      },
+      "estimated_minutes": 8
+    },
+    {
+      "id": "sally_sandii_3am",
+      "title_en": "Rose Hotel, 3AM",
+      "title_ko": "Rose Hotel, 3AM",
+      "fixer": "finn",
+      "arc": 2,
+      "grade_min": 2,
+      "grade_max": 3,
+      "stages": [
+        "meet_npc",
+        "extract_data",
+        "defeat_ice",
+        "jack_out",
+        "reward",
+        "complete"
+      ],
+      "primary_objective_en": "Type: extract_data",
+      "primary_objective_ko": "유형: extract_data",
+      "secondary_objective_en": "",
+      "secondary_objective_ko": "",
+      "rewards": {
+        "credits": 1200,
+        "materials": {}
+      },
+      "estimated_minutes": 8
     }
   ],
   "stage_event_bus": {
