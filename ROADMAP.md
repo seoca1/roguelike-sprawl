@@ -2,6 +2,15 @@
 
 ## 변경 이력 (Recent)
 
+- **2026-07-01**: Phase 5 마무리 + Phase 6 기반 — **3442 tests pass** (+188)
+  - **P0 3개 해결**: ZoneDepth enum 확장 (13/29 미션 차단 해제), combat ICE hardcoded placeholder 제거, 9개 누락 ICE 엔트리 추가
+  - **P1 8개 해결**: save migration 자동화, status message cap (100), theme.py 예외 로깅화, action_menu HACK/COMMUNICATE/ACCESS 동작 구현, i18n format args `<name>` fallback, Hub data-driven materials/recipes, equipment.py 39 tests (이전 0), 보상 밸런스 outliers (ta_heist, final_choice)
+  - **P2 12개 해결**: Equipment Set Bonuses (3 세트 × 2pc/3pc), Hub JSON 캐싱, cyberspace generator O(n²)→O(n), DEATH_RESTART cycle tests, programs role 필드, i18n/combat/save exception narrowing, [XXX] false positive (의도된 글리치)
+  - **신규 시스템 2개**:
+    - **Faction Reputation** — 5 faction × 7 tier (AppState.reputation), 미션 완료 + ICE 처치 + Hub 시각 통합 hook, save/restore 영속화
+    - **Grade 6 Master Tier** — `MAX_TIER=6`, T6 장비 3종 (master deck/body, Zion trodes), 18 items로 확장
+  - **디자인 문서 7개 신규** (Phase 2 100% 완성): inventory, dialogue, procgen, i18n, story-archive, progression, balance/ppl_zdr
+  - 상세: [`IMPROVEMENTS.md`](./IMPROVEMENTS.md)
 - **2026-06-30**: ADR-0060 (Dungeon BSP + NetHack + VFX Overlay) + ADR-0061 (Novel Hook Dispatch) Accepted. ADR-0046~0052, 0060, 0061 추가. 미션 29개, 단편 65개 (en/ko), Novel Catalog 4-layer 자동 디스패치. **3254 tests pass**.
 - **2026-06-21**: ADR-0041~0044 모두 Accepted. 12 씬 dialogue 4× 확장 (4188→16862 chars), 30줄 페이지 + 챕터 카드 I-XII + fade transition, 15개 scene cue 연결, 그래픽 노블 이어서 읽기. **2257 tests pass**.
 - **2026-06-20**: ADR-0031 Original Scenario Integration (Accepted). 단편 3편 v2.0 소설 레벨 재작성. chapter_view.py 신규 + ScreenKind 확장. 1843 tests pass.
@@ -260,7 +269,10 @@ Phase 7: 알파 빌드
 
 ## 현재 위치
 
-**현재 Phase**: Phase 4 완료 → **Phase 5 진행 중 (~6/5~10 세션)**
+**현재 Phase**: **Phase 5 (Vertical Slice) 완료 + Phase 6 (Content) 진입**
+**누적 테스트**: 3442 pass + 35 skip + 15 xfail (2026-07-01)
+**상세 내역**: [`IMPROVEMENTS.md`](./IMPROVEMENTS.md) — 2026-07-01 사이클에서 P0 ×3, P1 ×8, P2 ×12 해결 + 신규 시스템 2개 (Faction Reputation, Grade 6 Master) + 디자인 문서 7개
+
 **완료된 세션**:
 - [x] 매트릭스 진입 + 노드 그래프 (2026-06-18) — 80 tests
 - [x] Combat Simulator (developer/QA tool) (2026-06-18) — 97 tests
@@ -271,20 +283,25 @@ Phase 7: 알파 빌드
 - [x] ADR-0031 Original Scenario Integration (2026-06-20) — 1843 tests
 - [x] ADR-0032 Graphic Novel Mode (2026-06-20) — 2081 tests
 - [x] ADR-0040 Death & Restart Cycle (2026-06-20) — 2081 tests
-- [x] ADR-0041~0044 Graphic Novel Polish (2026-06-21) — **2257 tests** (씬 확장 4×, 챕터 카드, 사운드 큐, 이어서 읽기)
+- [x] ADR-0041~0044 Graphic Novel Polish (2026-06-21) — 2257 tests
+- [x] ADR-0046~0052, 0060, 0061 (2026-06-21~30) — 3254 tests
+- [x] **P0/P1/P2 마무리 + 신규 시스템** (2026-07-01) — **3442 tests** (Faction Reputation, Grade 6, Set Bonuses, 디자인 7문서)
 
 **Phase 5 핵심 시스템 완료**:
 - [x] 전투 (RT-MS) — ICE 진입 시 자동 공격 + 메뉴 스킬 + 5-Layer VFX
-- [x] Action menu — scan/extract/engage/communicate
-- [x] 의뢰 완료 / 보상 — Data Salvage (HEAL 20%) + 미션 종료 + Hub 복귀
-- [x] 죽음/재시작 — flatline → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키
+- [x] Action menu — scan/extract/engage/communicate/**hack/access** (Phase 6+ unlock)
+- [x] 의뢰 완료 / 보상 — Data Salvage + faction reputation hook
+- [x] 죽음/재시작 — flatline → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키 (회귀 테스트 7개)
 - [x] 오리지널 시나리오 통합 — 단편 → 챕터 → 초반 플레이 (12 씬)
 - [x] 그래픽 노블 자동플레이 — 메인메뉴 5 옵션 + 12 씬 자동재생 + Save Progress
 - [x] 사이드 콘텐츠 — 30+ 설정, 28 업적, 10 대시보드
+- [x] **Faction Reputation** (2026-07-01) — 5 faction × 7 tier, 미션/전투/Hub 통합
+- [x] **Equipment Set Bonuses** (2026-07-01) — 3 세트 × 2pc/3pc 임계값
 
 **차순 작업** (Phase 6 → 콘텐츠 확장):
-1. **추가 캐릭터 / 미션** — 4번째 자키, 신규 미션 타입
-2. **추가 ICE 타입** — boss 클래스 다양화
-3. **추가 시나리오** — 단편 4편, 엔딩 B 확장
-4. **한글 자막 자동 동기화 도구** — script_en.json → script_ko.json
-5. Phase 6: Mid / Core / TA zone 콘텐츠 보강
+1. **NPC dialogue 가 faction rep 에 따라 다른 응답** (Dialogue.md "Persistent reputation")
+2. **Info Market faction 할인** — shop_price × (1 - rep/100)
+3. **Mission Board rep 잠금 해제** — board.available_for() 에 rep threshold
+4. **추가 캐릭터 / 미션** — 4번째 자키, 신규 미션 타입
+5. **추가 시나리오** — 단편 4편, 엔딩 B 확장
+6. Mid / Core / TA zone 콘텐츠 보강

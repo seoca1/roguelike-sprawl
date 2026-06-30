@@ -3156,3 +3156,63 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - `2adc0d9` chore(dashboard): regenerate stats JSON with new ICE + ZoneDepth entries
 
 **검증**: pytest 3260 pass / ruff check green / ruff format clean / mypy strict green
+
+---
+
+## [2026-07-01] docs | Phase 5 마무리 + Phase 6 기반 — 27 commits, +188 tests
+
+긴 사이클의 종합 정리. **P0 ×3, P1 ×8, P2 ×12 = 23개 이슈 해결**.
+누적 테스트 **3254 → 3442 (+188, +5.8%)**.
+
+### 핵심 결과
+
+**P0 차단 해제 (3개)**:
+- ZoneDepth enum 확장 (`DEEP`, `FREESIDE`) → 13/29 미션 차단 해제
+- combat_view의 `ice_kind="standard"` placeholder 제거 → `ice_node.ice.value`
+- 9개 누락 ICE 엔트리 추가 (construct/boss/neuromancer T5 등)
+
+**신규 시스템 2개**:
+- **Faction Reputation** (`run/reputation.py`) — 5 faction × 7 tier (ALLIED~OUTCAST),
+  미션 완료 + ICE 처치 + Hub 시각 통합 hook, save/restore 영속화,
+  ±25 클램프. `AppState.reputation` 필드. 39 tests.
+- **Equipment Set Bonuses** — `ono_sendai` / `militech` / `arasaka` 3 세트,
+  2pc/3pc 임계값 보너스. `EquipmentLoadout.set_bonuses()` 자동 합산. 11 tests.
+
+**Grade 6 Master Tier**:
+- `MAX_TIER=6`, `grade_for_loadout()` helper, T6 장비 3종 (MASTER_DECK/BODY/ZION_TRODES)
+- Arc 5 finale 미션 `neuromancer_merger`, `zion_express` (grade_max=6) 도달 가능
+
+**Phase 2 디자인 문서 7개 신규** (100% 완성):
+- inventory.md / dialogue.md / procgen.md / i18n.md / story-archive.md
+- progression.md / balance/ppl_zdr_balance.md
+
+**테스트 커버리지**:
+- equipment.py 0 → 39 tests (이전 가장 큰 untested 모듈 해소)
+- reputation 시스템 39 tests (clamp, tier, lazy, serialization, hooks)
+- mission_completion 20 tests (5 base + 9 reputation hooks + 3 mapper + 2 table integrity)
+
+**성능 개선**:
+- Hub materials/recipes JSON 파싱 캐싱 (P2 #17)
+- Cyberspace generator O(n²) → O(n) (ADR-0060 ICE enforcement)
+- Save Manager exception 9개 → 5개 specific + `_log_save_warning()` helper
+
+**구현 위치**:
+- `src/roguelike_sprawl/run/reputation.py` (신규, 218 lines)
+- `src/roguelike_sprawl/engine/mission_completion.py` (FIXER_REPUTATION + hook)
+- `src/roguelike_sprawl/engine/combat_view.py` (COMBAT_REPUTATION + hook)
+- `src/roguelike_sprawl/engine/hub.py` (`_render_reputation_dots()` Avatar 패널)
+- `src/roguelike_sprawl/equipment/equipment.py` (3 세트 + T6)
+- `src/roguelike_sprawl/engine/save_manager.py` (narrow exceptions)
+- `src/roguelike_sprawl/matrix/cyberspace_generator.py` (O(n²) fix)
+- `src/roguelike_sprawl/i18n/translator.py` (`<name>` fallback)
+- `src/roguelike_sprawl/audio/theme.py` (logger fallback)
+- `src/roguelike_sprawl/engine/action_menu.py` (HACK/COMMUNICATE/ACCESS stub)
+
+**다음 단계 (Phase 6 권장)**:
+1. NPC dialogue 가 faction rep 에 따라 다른 응답
+2. Info Market faction 할인 적용
+3. Mission Board rep 잠금 해제
+4. 4번째 자키 + 신규 미션 타입
+5. 단편 4편 + 엔딩 B 확장
+
+**상세**: [`IMPROVEMENTS.md`](./IMPROVEMENTS.md), [`ROADMAP.md`](./ROADMAP.md)
