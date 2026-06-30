@@ -235,7 +235,7 @@
 | 항목 | 값 |
 |---|---|
 | 총 완료 미션 | **10/10** |
-| 총 누적 credits | **20,050cr** |
+| 총 누적 credits | **<span data-stat="novice-credits">20,050</span>cr** |
 | 아이템 인벤토리 | data_fragment × 12, ice_shard × 12, rom_fragment × 1, loa_fragment × 1, upgrade_t3 × 1, ending_token × 1 |
 | 최종 등급 | 5 |
 | 핸드폰 등급 추정 | Wisp T1 → **T3 Hammer** |

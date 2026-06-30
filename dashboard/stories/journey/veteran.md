@@ -252,7 +252,7 @@ CHAPTER 화면 12초 타이핑: 실이 Marly의 시점에서 시작하지만 실
 | 항목 | 값 |
 |---|---|
 | 총 완료 미션 | **11/11** |
-| 총 누적 credits | **27,500cr** |
+| 총 누적 credits | **<span data-stat="veteran-credits">27,500</span>cr** |
 | 아이템 인벤토리 | data_fragment × 14, upgrade_t4 × 1, upgrade_t2 × 1, upgrade_t1 × 1, construct_fragment × 1, unique_program × 1 |
 | 최종 등급 | 5 |
 | 핸드폰 등급 추정 | Hammer T2 → **T4 Hammer** |

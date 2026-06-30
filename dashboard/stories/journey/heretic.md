@@ -231,7 +231,7 @@ CHAPTER 화면 12초 타이핑: 카스가 Kumiko의 시점에서 시작하지만
 | 항목 | 값 |
 |---|---|
 | 총 완료 미션 | **8/8** |
-| 총 누적 credits | **20,100cr** |
+| 총 누적 credits | **<span data-stat="heretic-credits">20,100</span>cr** |
 | 아이템 인벤토리 | data_fragment × 13, upgrade_t2 × 2, memory_chip × 1, construct_fragment × 2, unique_construct × 1 |
 | 최종 등급 | 5 |
 | 핸드폰 등급 추정 | Custom Viral Deck → **T4 (unique_construct 보유)** |

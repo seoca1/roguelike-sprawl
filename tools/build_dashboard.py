@@ -380,13 +380,42 @@ def load_cyberspace_stats(repo: Path) -> dict[str, object]:
 
 
 def load_journey_stats(repo: Path) -> dict[str, object]:
-    """Per-character journey totals (novice / veteran / heretic)."""
+    """Per-character journey totals (novice / veteran / heretic).
+
+    Pulls final credits / missions / grade / deck-progression from
+    the journey markdown files when present; otherwise falls back to
+    the original hand-crafted defaults (20,050 / 27,500 / 20,100 cr).
+    """
     out: dict[str, object] = {
-        "novice": {"credits": 20050, "missions": 0, "deaths": 0},
-        "veteran": {"credits": 27500, "missions": 0, "deaths": 0},
-        "heretic": {"credits": 20100, "missions": 0, "deaths": 0},
+        "novice": {"credits": 20050, "missions": 0, "deaths": 0,
+                   "final_grade": 0, "deck_progression": ""},
+        "veteran": {"credits": 27500, "missions": 0, "deaths": 0,
+                    "final_grade": 0, "deck_progression": ""},
+        "heretic": {"credits": 20100, "missions": 0, "deaths": 0,
+                    "final_grade": 0, "deck_progression": ""},
         "_generated_at": "",
     }
+    path = repo / "dashboard" / "stories" / "journey"
+    char_map = {"novice": "novice.md", "veteran": "veteran.md",
+                "heretic": "heretic.md"}
+    for char_key, filename in char_map.items():
+        p = path / filename
+        if not p.exists():
+            continue
+        src = p.read_text(encoding="utf-8")
+        slot = out[char_key]
+        m = re.search(r"총 누적 credits\s*\|\s*\*\*([0-9,]+)\*\*", src)
+        if m:
+            slot["credits"] = int(m.group(1).replace(",", ""))
+        m = re.search(r"총 완료 미션\s*\|\s*\*\*(\d+)/(\d+)\*\*", src)
+        if m:
+            slot["missions"] = int(m.group(2))
+        m = re.search(r"최종 등급\s*\|\s*\*?(\d+)\*?", src)
+        if m:
+            slot["final_grade"] = int(m.group(1))
+        m = re.search(r"핸드폰 등급 추정\s*\|\s*([^\n]+)", src)
+        if m:
+            slot["deck_progression"] = m.group(1).strip().strip("**").strip()
     return out
 
 

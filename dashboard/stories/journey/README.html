@@ -2,168 +2,248 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<title>Character Journey Index — Roguelike Sprawl</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Character Journeys Dashboard — 케이/실/카스 3 캐릭터 진행 데모. credits / mission / 엔딩 분기 자동 fetch.">
+<title>Character Journeys — Roguelike Sprawl</title>
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="canonical" href="https://seoca1.github.io/roguelike-sprawl/stories/journey/README.html">
 <style>
-  body { font-family: Georgia, serif; background: #06090f; color: #c5d4e3; padding: 24px; max-width: 920px; margin: 0 auto; line-height: 1.8; }
-  h1, h2, h3 { font-family: 'JetBrains Mono', monospace; }
-  h1 { font-size: 28px; color: #ffaa55; margin-bottom: 16px; }
-  h2 { font-size: 20px; color: #66ffcc; margin: 24px 0 12px; border-bottom: 1px solid #1a2530; padding-bottom: 4px; }
-  h3 { font-size: 16px; color: #ffaa55; margin: 16px 0 8px; }
-  table { border-collapse: collapse; margin: 12px 0; width: 100%; font-family: 'JetBrains Mono', monospace; font-size: 12px; }
-  td { border: 1px solid #1a2530; padding: 6px; }
-  td:first-child { color: #ffaa55; font-weight: 600; }
-  strong { color: #ffaa55; }
-  code { background: #1a2530; padding: 2px 4px; border-radius: 3px; font-family: monospace; color: #00ccff; font-size: 12px; }
-  blockquote { border-left: 3px solid #66ffcc; padding: 8px 12px; margin: 12px 0; color: #8a98a8; font-style: italic; }
-  pre { background: #0d141d; padding: 12px; border-radius: 4px; overflow-x: auto; font-size: 11px; line-height: 1.4; }
-  hr { border: none; border-top: 1px solid #1a2530; margin: 24px 0; }
-  .top-nav { background: #06090f; border-bottom: 1px solid #1a2530; padding: 8px 24px; margin: -24px -24px 24px -24px; font-family: 'JetBrains Mono', monospace; }
-  .top-nav a { color: #66ffcc; text-decoration: none; margin-right: 16px; font-size: 13px; }
-  .footer { text-align: center; color: #6a7888; font-size: 12px; margin-top: 48px; padding: 24px; border-top: 1px solid #1a2530; font-family: 'JetBrains Mono', monospace; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    background: #0a0e14; color: #c5d4e3; line-height: 1.6;
+    padding: 24px; max-width: 1000px; margin: 0 auto; min-height: 100vh;
+  }
+  h1, h2, h3 { color: #66ffcc; font-weight: 600; }
+  h1 { font-size: 28px; margin-bottom: 8px; text-shadow: 0 0 12px #66ffcc44; }
+  h2 { font-size: 20px; margin: 24px 0 12px; border-bottom: 1px solid #2a3540; padding-bottom: 8px; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #ffaa55; }
+  a { color: #66ffcc; }
+  a:hover { color: #00ccff; }
+  pre { background: #0a0e14; border: 1px solid #2a3540; border-radius: 4px;
+        padding: 12px; overflow-x: auto; font-size: 12px; margin: 8px 0; }
+  code { background: #1a232c; padding: 2px 6px; border-radius: 3px; font-size: 11px; color: #ffd700; }
+  blockquote { border-left: 3px solid #66ffcc22; padding: 8px 16px;
+               color: #8a9aa8; margin: 12px 0; font-style: italic; }
+  hr { border: none; border-top: 1px dashed #2a3540; margin: 24px 0; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 12px; }
+  th, td { padding: 6px 10px; text-align: left; border-bottom: 1px solid #1a232c; }
+  th { color: #ffaa55; font-weight: 600; text-align: left; }
+  td { color: #c5d4e3; }
+  td:nth-child(7), th:nth-child(7) { text-align: right; }
+  td:nth-child(6), th:nth-child(6) { text-align: right; }
+  .nav { margin-bottom: 24px; font-size: 12px; color: #6a7888; }
+  .nav a { color: #6a7888; text-decoration: none; }
+  .nav a:hover { color: #66ffcc; }
+  .footnote { margin-top: 32px; padding: 12px; font-size: 11px; color: #6a7888;
+              border-top: 1px solid #2a3540; }
+  .char-card {
+    display: inline-block; background: #131a23; border: 1px solid #2a3540;
+    border-radius: 6px; padding: 12px 16px; margin: 4px; min-width: 240px;
+  }
+  .char-card .name { color: #66ffcc; font-weight: 600; font-size: 14px; }
+  .char-card .arc  { color: #ffaa55; font-size: 11px; margin: 2px 0 6px; }
+  .char-card .credits { color: #ffd700; font-size: 16px; font-weight: 600;
+                        text-shadow: 0 0 6px #ffaa5544; }
+  .char-card .meta  { font-size: 10px; color: #6a7888; margin-top: 6px; }
 </style>
 </head>
 <body>
-<nav class="top-nav">
-  <a href="../../stories.html">← Stories</a> |
-  <a href="novice.html">Novice</a> |
-  <a href="veteran.html">Veteran</a> |
-  <a href="heretic.html">Heretic</a>
-</nav>
-<h1>Character Journeys</h1>
-<blockquote>게임 진행 데모 스토리 — 챕터별 미션, 전투, 아이템, 엔딩 분기</blockquote>
-<p>></p>
-<blockquote>**이 문서는 게임의 실제 미션/아크/챕터/엔딩 데이터를 기반으로 자동 생성되었습니다.**</blockquote>
-<blockquote>**파생 소설(Fiction wiki 단편)과는 별개입니다.**</blockquote>
-<p>---</p>
-<h2>캐릭터 선택</h2>
-<p>---</p>
-<h2>구조 검증 요약</h2>
-<h3>1. 미션 시스템 ✅</h3>
-<li><strong>29/29 미션 매핑</strong> (15 → 18 → 29)</li>
-<li>모든 미션이 미션 시스템에 등록됨</li>
-<li>캐릭터별 character_ref 일관성 ✓</li>
-<h3>2. 아크 구조 ✅</h3>
-<li><strong>5 챕터 × 5 phase = 25 phase</strong> per 캐릭터</li>
-<li>챕터 ID 매핑 (ch_case_01~05, ch_sil_01~05, ch_kas_01~05)</li>
-<h3>3. 챕터 스크린 ✅</h3>
-<li>각 챕터당 단편 본문 발췌 (12초 타이핑)</li>
-<li>novice: <code>case_jackout-30sec</code></li>
-<li>veteran: <code>marly_louisiana-god</code></li>
-<li>heretic: <code>kumiko_manarase-midnight</code></li>
-<h3>4. 엔딩 시스템 ✅</h3>
-<h3>5. 보상 시스템 ✅</h3>
-<h3>6. 픽서 분포 ✅</h3>
-<li><strong>novice</strong>: Finn 100% (10/10) — 단일 픽서, 단순 의뢰 체계</li>
-<li><strong>veteran</strong>: Finn 6, Dixie 1, MaaS 1, ta_rep 1, Sally 1, Kumiko 1 — 다양한 의뢰 네트워크</li>
-<li><strong>heretic</strong>: Finn 3, Sally 3, Kumiko 1, Yakuza 1 — 카오틱 의뢰 체계</li>
-<h3>7. 적(ICE) 분포 ✅</h3>
-<li><strong>novice</strong>: ICE.standard → ICE.watchdog → Black ICE (점진적 난이도 상승)</li>
-<li><strong>veteran</strong>: ICE.corporate → ICE.construct → ICE.wintermute (loa-매개 변형)</li>
-<li><strong>heretic</strong>: ICE.craft → ICE.ai_whisper → ICE.neuromancer (AI/loa 변형)</li>
-<h3>8. 챕터-미션 매핑 ✅</h3>
-<p>---</p>
-<h2>게임 진행 흐름 (시각화)</h2>
-<p><code>`</code></p>
-<p>┌─────────────────────────────────────────────────────────────┐</p>
-<p>│                  CHARACTER SELECT (The Finn)                  │</p>
-<p>│       "I need a jockey. Sense/Net, first run..."            │</p>
-<p>└─────┬─────────────────┬─────────────────┬───────────────────┘</p>
-<p>│                 │                 │</p>
-<p>┌──▼──┐          ┌──▼──┐          ┌──▼──┐</p>
-<p>│  K  │          │ Sil │          │ Kas │</p>
-<p>│ Nov │          │ Vet │          │ Her │</p>
-<p>└──┬──┘          └──┬──┘          └──┬──┘</p>
-<p>│                 │                 │</p>
-<p>[CHAPTER]        [CHAPTER]        [CHAPTER]</p>
-<p>30 Seconds       Louisiana 11    Manarase</p>
-<p>(Case 1인칭)      (Marly 3인칭)    (Kumiko 3인칭)</p>
-<p>│                 │                 │</p>
-<p>┌──▼──────────┐    ┌──▼──────────┐    ┌──▼──────────┐</p>
-<p>│ arc_case    │    │ arc_sil     │    │ arc_kas     │</p>
-<p>│ 5 chapters  │    │ 5 chapters  │    │ 5 chapters  │</p>
-<p>│ 10 missions │    │ 11 missions │    │ 8 missions  │</p>
-<p>│ 25 phases   │    │ 25 phases   │    │ 25 phases   │</p>
-<p>└──────┬──────┘    └──────┬──────┘    └──────┬──────┘</p>
-<p>│                │                │</p>
-<p>┌──▼──┐          ┌──▼──┐          ┌──▼──┐</p>
-<p>│ A  │          │ A  │          │ A  │</p>
-<p>│ 탈출 │          │ 폭로 │          │선언│</p>
-<p>└─────┘          └─────┘          └─────┘</p>
-<p>┌──▼──┐          ┌──▼──┐          ┌──▼──┐</p>
-<p>│ B  │          │ B  │          │ B  │</p>
-<p>│사망 │          │사업 │          │흡수│</p>
-<p>└─────┘          └─────┘          └─────┘</p>
-<p><code>`</code></p>
-<p>---</p>
-<h2>캐릭터별 비교</h2>
-<p>---</p>
-<h2>챕터 메타 정보 (전 챕터 통합)</h2>
-<h3>Novice (chapter_novice)</h3>
-<li><strong>이름</strong>: The First Jack</li>
-<li><strong>부제</strong>: Thirty Seconds After Jack-Out</li>
-<li><strong>포트레잇</strong>: art:case</li>
-<li><strong>테마</strong>: matrix_rain</li>
-<li><strong>duration_ms</strong>: 12000 (12초 타이핑)</li>
-<li><strong>다음 화면</strong>: HUB</li>
-<h3>Veteran (chapter_veteran)</h3>
-<li><strong>이름</strong>: The Old Score</li>
-<li><strong>부제</strong>: The Louisiana God</li>
-<li><strong>포트레잇</strong>: art:marly</li>
-<li><strong>테마</strong>: cyberspace</li>
-<li><strong>duration_ms</strong>: 12000</li>
-<li><strong>다음 화면</strong>: HUB</li>
-<h3>Heretic (chapter_heretic)</h3>
-<li><strong>이름</strong>: The Declaration</li>
-<li><strong>부제</strong>: Manarase at Midnight</li>
-<li><strong>포트레잇</strong>: art:kumiko</li>
-<li><strong>테마</strong>: sense_net</li>
-<li><strong>duration_ms</strong>: 12000</li>
-<li><strong>다음 화면</strong>: HUB</li>
-<p>---</p>
-<h2>아이템 시스템 (인벤토리 흐름)</h2>
-<p><code>`</code></p>
-<p>Novice:                              Veteran:                              Heretic:</p>
-<p>─────────                            ─────────                             ─────────</p>
-<p>Tier 1 (Arc 1-2):                  Tier 1-2 (Arc 1-2):                   Tier 1-2 (Arc 2):</p>
-<p>data_fragment × 12                  data_fragment × 5                     data_fragment × 0</p>
-<p>ice_shard × 2                       upgrade_t1 × 1                       memory_chip × 1</p>
-<p>upgrade_t2 × 1                        upgrade_t2 × 2</p>
-<p>Tier 3 (Arc 3-4):                                                                          ↓</p>
-<p>rom_fragment × 1                  Tier 3-4 (Arc 3-4):                   Tier 3 (Arc 3):</p>
-<p>loa_fragment × 1                   construct_fragment × 1                  construct_fragment × 2</p>
-<p>upgrade_t3 × 1                     unique_program × 1</p>
-<p>upgrade_t4 × 1</p>
-<p>Tier 5 (Arc 5):                    Tier 5 (Arc 5):</p>
-<p>ending_token × 1                   data_fragment × 5                    Tier 4-5 (Arc 4-5):</p>
-<p>unique_construct × 1</p>
-<p>data_fragment × 13</p>
-<p>Final Grade 5                       Final Grade 5</p>
-<p>27,500cr                            20,100cr</p>
-<p>T4 Hammer                           T4 + unique_construct</p>
-<p><code>`</code></p>
-<p>---</p>
-<h2>데이터 출처</h2>
-<p><code>`</code></p>
-<p>Game/roguelike_sprawl/prototype/</p>
-<p>├── data/</p>
-<p>│   ├── missions/missions.json           (29 미션, source: 검증 헬퍼 통과)</p>
-<p>│   ├── story/</p>
-<p>│   │   ├── chapters/{case,sil,kas}.json (CHAPTER 화면 데이터)</p>
-<p>│   │   ├── arcs/{case,sil,kas}_arc.json (5 챕터 × 5 phase = 25 phase)</p>
-<p>│   │   └── prologues/{case,sil,kas}.json (프롤로그 NPC 이벤트)</p>
-<p>│   ├── programs/programs.json           (9개 프로그램/스킬)</p>
-<p>│   ├── jockeys/deceased.json            (Hall of Dead — 사망 자키 기록)</p>
-<p>│   └── i18n/{en,ko}.json                (UI 번역, 69 키)</p>
-<p>└── src/roguelike_sprawl/</p>
-<p>└── engine/</p>
-<p>├── chapter_view.py              (CHAPTER 화면 렌더링)</p>
-<p>└── original_story.py            (캐릭터 선택 + 엔딩 + 씬 테마)</p>
-<p><code>`</code></p>
-<p>---</p>
-<p><em>Generated: 2026-06-30. 자동 검증: <code>verify_story_links.py</code> (29/29 OK), <code>test_story_resolver.py</code> (15/15 PASS)</em></p>
-<div class="footer">
-  Roguelike Sprawl — Character Journey Index<br>
-  Generated: 2026-06-30
+
+<div class="nav">
+  <a href="../../index.html">← Dashboard Home</a>
+  · <a href="./novice.md">novice.md</a>
+  · <a href="./veteran.md">veteran.md</a>
+  · <a href="./heretic.md">heretic.md</a>
 </div>
+
+<h1>📖 Character Journeys</h1>
+
+<blockquote>
+  게임 진행 데모 스토리 — 챕터별 미션, 전투, 아이템, 엔딩 분기<br>
+  <strong>이 문서는 게임의 실제 미션/아크/챕터/엔딩 데이터를 기반으로 자동 생성되었습니다.</strong><br>
+  파생 소설(Fiction wiki 단편)과는 별개입니다.
+</blockquote>
+
+<hr>
+
+<h2>🎭 캐릭터 선택 <span style="font-size:13px;color:#6a7888;">(자동 fetch)</span></h2>
+
+<div style="margin: 8px 0;">
+  <div class="char-card">
+    <div class="name">케이 (K) — Novice</div>
+    <div class="arc">case_jackout-30sec · Neuromancer</div>
+    <div class="credits"><span data-stat="novice-credits">20,050</span>cr</div>
+    <div class="meta">
+      <span data-stat="novice-grade">5</span> · missions <span data-stat="novice-missions">10</span>/10
+    </div>
+  </div>
+  <div class="char-card">
+    <div class="name">실 (Sil) — Veteran</div>
+    <div class="arc">marly_louisiana-god · Count Zero</div>
+    <div class="credits"><span data-stat="veteran-credits">27,500</span>cr</div>
+    <div class="meta">
+      <span data-stat="veteran-grade">5</span> · missions <span data-stat="veteran-missions">11</span>/11
+    </div>
+  </div>
+  <div class="char-card">
+    <div class="name">카스 (Kas) — Heretic</div>
+    <div class="arc">kumiko_manarase-midnight · Mona Lisa Overdrive</div>
+    <div class="credits"><span data-stat="heretic-credits">20,100</span>cr</div>
+    <div class="meta">
+      <span data-stat="heretic-grade">5</span> · missions <span data-stat="heretic-missions">8</span>/8
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<h2>🧭 항목별 동기 / 핸드폰 / 픽서 비교</h2>
+<table>
+  <tr><th>지표</th><th>Novice (K)</th><th>Veteran (Sil)</th><th>Heretic (Kas)</th></tr>
+  <tr><td>시작 동기</td><td>돈</td><td>복수</td><td>전복</td></tr>
+  <tr><td>시작 핸드폰</td><td>Wisp T1</td><td>Hammer T2</td><td>Custom Viral</td></tr>
+  <tr><td>시작 credits</td><td>0</td><td>0</td><td>0</td></tr>
+  <tr><td>최종 credits</td><td><strong data-stat="novice-credits-v">20,050</strong></td>
+      <td><strong data-stat="veteran-credits-v">27,500</strong></td>
+      <td><strong data-stat="heretic-credits-v">20,100</strong></td></tr>
+  <tr><td>최종 등급</td><td>5</td><td>5</td><td>5</td></tr>
+  <tr><td>최종 핸드폰 (추정)</td><td>T3 Hammer</td><td>T4 Hammer</td><td>T4 + unique_construct</td></tr>
+  <tr><td>픽서 다양성</td><td>1 (Finn)</td><td>6</td><td>4</td></tr>
+  <tr><td>원작</td><td>Neuromancer</td><td>Count Zero</td><td>Mona Lisa Overdrive</td></tr>
+  <tr><td>엔딩 A (긍정)</td><td>🏃 Burn and Run</td><td>📢 Whistleblower</td><td>🔥 Declaration</td></tr>
+  <tr><td>엔딩 B (비관)</td><td>💀 The Flatline</td><td>💼 Business</td><td>👑 Absorption</td></tr>
+</table>
+
+<hr>
+
+<h2>🗺 게임 진행 흐름</h2>
+
+<pre>
+┌─────────────────────────────────────────────────────────────┐
+│                  CHARACTER SELECT (The Finn)                  │
+│       "I need a jockey. Sense/Net, first run..."            │
+└─────┬─────────────────┬─────────────────┬───────────────────┘
+      │                 │                 │
+   ┌──▼──┐          ┌──▼──┐          ┌──▼──┐
+   │  K  │          │ Sil │          │ Kas │
+   │ Nov │          │ Vet │          │ Her │
+   └──┬──┘          └──┬──┘          └──┬──┘
+      │                 │                 │
+   [CHAPTER]        [CHAPTER]        [CHAPTER]
+   30 Seconds       Louisiana 11    Manarase
+   (Case 1인칭)      (Marly 3인칭)    (Kumiko 3인칭)
+      │                 │                 │
+   arc_case           arc_sil           arc_kas
+   10 missions        11 missions        8 missions
+   25 phases          25 phases         25 phases
+      │                 │                 │
+   [ HUB ↔ MATRIX → COMBAT → REWARD → DEBRIEF → ENDING ]
+</pre>
+
+<hr>
+
+<h2>📚 챕터 메타 정보</h2>
+
+<h3>Novice (chapter_novice)</h3>
+<ul style="margin-left: 20px;">
+  <li><strong>이름</strong>: The First Jack</li>
+  <li><strong>부제</strong>: Thirty Seconds After Jack-Out</li>
+  <li><strong>포트레잇</strong>: <code>art:case</code></li>
+  <li><strong>테마</strong>: matrix_rain</li>
+  <li><strong>duration_ms</strong>: 12000 (12초 타이핑)</li>
+  <li><strong>다음 화면</strong>: HUB</li>
+</ul>
+
+<h3>Veteran (chapter_veteran)</h3>
+<ul style="margin-left: 20px;">
+  <li><strong>이름</strong>: The Old Score</li>
+  <li><strong>부제</strong>: The Louisiana God</li>
+  <li><strong>포트레잇</strong>: <code>art:marly</code></li>
+  <li><strong>테마</strong>: cyberspace</li>
+  <li><strong>duration_ms</strong>: 12000</li>
+  <li><strong>다음 화면</strong>: HUB</li>
+</ul>
+
+<h3>Heretic (chapter_heretic)</h3>
+<ul style="margin-left: 20px;">
+  <li><strong>이름</strong>: The Declaration</li>
+  <li><strong>부제</strong>: Manarase at Midnight</li>
+  <li><strong>포트레잇</strong>: <code>art:kumiko</code></li>
+  <li><strong>테마</strong>: sense_net</li>
+  <li><strong>duration_ms</strong>: 12000</li>
+  <li><strong>다음 화면</strong>: HUB</li>
+</ul>
+
+<hr>
+
+<h2>🏆 엔딩 시스템</h2>
+<table>
+  <tr><th>캐릭터</th><th>엔딩 A (긍정)</th><th>엔딩 B (비관)</th></tr>
+  <tr><td>Novice</td><td>🏃 Burn and Run (탈출)</td><td>💀 The Flatline (사망)</td></tr>
+  <tr><td>Veteran</td><td>📢 Whistleblower (폭로)</td><td>💼 Business (사업)</td></tr>
+  <tr><td>Heretic</td><td>🔥 Declaration (선언)</td><td>👑 Absorption (흡수)</td></tr>
+</table>
+
+<hr>
+
+<h2>🎒 보상 시스템</h2>
+<table>
+  <tr><th>아이템</th><th>용도</th></tr>
+  <tr><td><code>data_fragment</code></td><td>데이터 추출 보상 (공통)</td></tr>
+  <tr><td><code>ice_shard</code></td><td>매트릭스 빙의 조각</td></tr>
+  <tr><td><code>rom_fragment</code></td><td>ROM construct 파편</td></tr>
+  <tr><td><code>loa_fragment</code></td><td>loa 매개체 파편</td></tr>
+  <tr><td><code>construct_fragment</code></td><td>construct 핵심</td></tr>
+  <tr><td><code>memory_chip</code></td><td>기억 저장</td></tr>
+  <tr><td><code>unique_construct</code> / <code>unique_program</code></td><td>희귀 아이템</td></tr>
+  <tr><td><code>upgrade_t1</code>~<code>t4</code></td><td>장비 업그레이드 (T1=초급, T4=최상급)</td></tr>
+  <tr><td><code>ending_token</code></td><td>엔딩 분기 결정</td></tr>
+</table>
+
+<hr>
+
+<h2>🔗 원본 마크다운</h2>
+<ul style="margin-left: 20px;">
+  <li><a href="./README.md"><code>README.md</code></a> — 이 페이지의 정적 마크다운 원본.</li>
+  <li><a href="./novice.md"><code>novice.md</code></a> · <a href="./veteran.md"><code>veteran.md</code></a> · <a href="./heretic.md"><code>heretic.md</code></a> — 캐릭터별 journey.</li>
+</ul>
+
+<div class="footnote">
+  <em>Generated: 2026-06-30. 자동 빌드:</em>
+  <code>tools/build_dashboard.py</code> → <code>dashboard/data/journey_stats.json</code>
+  <em>· 자동 fetch: <code>data/journey_stats.json</code> · 정수 카드 (credits / missions / grade) dynamic.</em>
+</div>
+
+<script>
+/* Auto-sync journey cards from build_dashboard.py output
+   (journey_stats.json).  When the JSON is missing the static
+   fallback values (20,050 / 27,500 / 20,100) stay visible. */
+fetch('../../data/journey_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    for (const arc of ['novice', 'veteran', 'heretic']) {
+      const slot = stats[arc] || {};
+      if (typeof slot.credits === 'number') {
+        set(`${arc}-credits`,     slot.credits);
+        set(`${arc}-credits-v`,   slot.credits);
+      }
+      if (typeof slot.missions === 'number') {
+        set(`${arc}-missions`,    slot.missions);
+      }
+      if (typeof slot.final_grade === 'number' && slot.final_grade > 0) {
+        set(`${arc}-grade`,       slot.final_grade);
+      }
+    }
+  })
+  .catch(() => { /* keep static fallback */ });
+</script>
+
 </body>
 </html>
