@@ -401,6 +401,13 @@ uv run python scripts/play.py --gn-mode prologue  # Prologue (12 씬 랜덤)
 
 # 이어서 읽기 (GN 저장소에서 복원)
 uv run python scripts/play.py --gn-mode novice --continue
+
+# ─── 🆕 Phase 1-5 smoke test (ADR-0060 / 0061) ───
+# 5개 headless 데모를 순차 실행 (GUI 창 불필요).
+uv run python scripts/play.py --phase-1-5
+#  → play_dungeon_mode / play_vfx_overlay / play_mission_mapping /
+#    play_ecs_dungeon / play_novel_runtime 호출
+#  → CI-friendly, rc=0 이면 PASS
 ```
 
 ### `demo.py`

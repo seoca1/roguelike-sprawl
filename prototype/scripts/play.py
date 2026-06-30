@@ -18,6 +18,12 @@ Options:
     --mission N       Which mission to play (1=first, default 1)
     --character C     Auto-pick character (novice|veteran|heretic, default novice)
     --gn-mode MODE    If set, play graphic novel mode (prologue|novice|veteran|heretic)
+    --phase-1-5       Run all five Phase 1-5 headless demos
+                      (play_dungeon_mode / play_vfx_overlay /
+                      play_mission_mapping / play_ecs_dungeon /
+                      play_novel_runtime) and exit.  Useful as a
+                      smoke test for the operator-point demos
+                      added with ADR-0060 / 0061.
     --show-controls   Print controls hint at start
 """
 
@@ -774,6 +780,58 @@ def _action_matrix(state: AppState) -> str:
     return ""
 
 
+def _run_phase_1_5_smoke() -> int:
+    """Run all five Phase 1-5 headless demos as a smoke test.
+
+    Each demo is invoked as a subprocess with the same Python
+    interpreter, src on PYTHONPATH, and exits 0 on success.  The
+    intended use is a CI-friendly smoke test that confirms the
+    operator-point demos (added alongside ADR-0060 / 0061) still
+    pass after a refactor.
+    """
+    import subprocess
+
+    scripts = [
+        "play_dungeon_mode.py",
+        "play_vfx_overlay.py",
+        "play_mission_mapping.py",
+        "play_ecs_dungeon.py",
+        "play_novel_runtime.py",
+    ]
+    proto = Path(__file__).resolve().parent
+    env = {**__import__("os").environ,
+           "PYTHONPATH": str(proto.parent / "src")}
+    rc = 0
+    print("=" * 64)
+    print("Phase 1-5 headless smoke test (ADR-0060 / ADR-0061)")
+    print("=" * 64)
+    for s in scripts:
+        cmd = [sys.executable, str(proto / s)]
+        print(f"\n--- {s} ---")
+        try:
+            res = subprocess.run(cmd, env=env, check=False,
+                                  capture_output=True, text=True)
+        except FileNotFoundError as exc:
+            print(f"  ERR: {exc}")
+            rc = 1
+            continue
+        # Surface only the final summary line to keep output short.
+        out_lines = res.stdout.splitlines()
+        tail = out_lines[-1] if out_lines else ""
+        print(tail)
+        if res.returncode != 0:
+            print(f"  rc={res.returncode}; stderr tail:")
+            for line in res.stderr.splitlines()[-3:]:
+                print(f"    {line}")
+            rc = res.returncode
+    print()
+    print("=" * 64)
+    print(f"phase-1-5 smoke {'PASS' if rc == 0 else 'FAIL'} "
+          f"(rc={rc})")
+    print("=" * 64)
+    return rc
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--duration", type=float, default=30.0)
@@ -800,8 +858,18 @@ def main() -> int:
         choices=["prologue", "novice", "veteran", "heretic"],
         help=("If set, play graphic novel mode after MENU. Otherwise defaults to NEW RUN flow."),
     )
+    parser.add_argument(
+        "--phase-1-5",
+        action="store_true",
+        help=("Run all five Phase 1-5 headless demos and exit.  Bypasses "
+              "the GUI playthrough."),
+    )
     parser.add_argument("--show-controls", action="store_true")
     args = parser.parse_args()
+
+    # Phase 1-5 smoke test mode: run each headless demo as a subprocess.
+    if args.phase_1_5:
+        return _run_phase_1_5_smoke()
 
     state, t, story_reg = _setup(args)
     # Apply character selection to state so CHARACTER_SELECT → CHAPTER
