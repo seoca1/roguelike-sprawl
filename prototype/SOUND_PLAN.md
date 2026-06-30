@@ -397,3 +397,26 @@ If Phase 1-3 work, move to Phase 4 (story/UI sounds) which has highest player vi
 4. **Voice acting**: NPC dialogue (The Finn, Dixie)
 5. **3D audio positioning**: Directional sounds in cyberspace
 6. **Pitch variation**: Random ±5% pitch for combat hits (no two sound identical)
+
+---
+
+## 🆕 Phase 1.5 — VFX 4종 사운드 큐
+
+`combat/effects.py` 의 4 종 시네마틱 스포너는 단독 VFX 만 트리거하지만,
+사운드 큐는 별도 hook 이 필요합니다 (`combat_view.py:on_jack_in` 등).
+
+| VFX | 사운드 큐 (제안) | Hook 위치 |
+|---|---|---|
+| `spawn_jackin_glitch` | `movement/jack_in` (기존) + `combat/modulation_slow` | cyberspace → combat 진입 시 |
+| `spawn_room_flash` | `combat/victory` (기존) | ICE 처치 후 |
+| `spawn_data_acquired` | `ui/item_get` (신규) | DATA 픽업 후 |
+| `spawn_jackout_whiteout` | `movement/jack_out` (신규) | JAC-OUT 시 |
+
+Phase 1.5 스포너는 단일 위치 인자 `CombatEffects` 만 받기 때문에,
+사운드 트리거는 `combat_view.py` 에서 VFX 호출 직후 직접 큐에 넣는
+방식이 권장됩니다. Phase 5 의 `NovelDispatcher.dispatch()` 도 동일한
+패턴 — `HookContext` 의 `app_state` 에 사운드 핸들 노출 시 동기화.
+
+**관련 ADR**:
+- `decisions/0060-dungeon-exploration-redesign.md` (Phase 1.5 VFX)
+- `decisions/0061-novel-integration-architecture.md` (Phase 5 dispatcher)
