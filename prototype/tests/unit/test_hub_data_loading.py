@@ -132,3 +132,61 @@ class TestMaterialGauge:
             result = hub._material_gauge(have, need, width=7)
             assert len(result) in (7, 8), f"got {result!r}"
             assert result.endswith("+") or len(result) == 7
+
+
+class TestHubDataCaching:
+    """Materials + recipes JSON is cached after first load (perf hot spot)."""
+
+    def setup_method(self) -> None:
+        # Clear module-level caches so each test starts fresh.
+        hub._MATERIALS_CACHE = None
+        hub._RECIPES_CACHE = None
+
+    def teardown_method(self) -> None:
+        # Restore caches to None so other tests don't carry stale state.
+        hub._MATERIALS_CACHE = None
+        hub._RECIPES_CACHE = None
+
+    def test_materials_cache_populated_after_first_load(self) -> None:
+        assert hub._MATERIALS_CACHE is None
+        hub._load_materials_data()
+        assert hub._MATERIALS_CACHE is not None
+
+    def test_materials_cache_reused_on_second_call(self) -> None:
+        first = hub._load_materials_data()
+        cached_id = id(first)
+        second = hub._load_materials_data()
+        # Same list object returned (cached) — proves no re-parse.
+        assert second is first
+        assert id(second) == cached_id
+
+    def test_materials_force_reload_bypasses_cache(self) -> None:
+        first = hub._load_materials_data()
+        second = hub._load_materials_data(force_reload=True)
+        # Should return a *new* list object (data may be the same content).
+        assert second is not first
+
+    def test_recipes_cache_reused_on_second_call(self) -> None:
+        first = hub._load_recipes_data()
+        second = hub._load_recipes_data()
+        assert second is first
+
+    def test_perf_no_repeated_io(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        """Repeated calls should NOT call open() after the first load."""
+        import builtins
+        from unittest.mock import MagicMock
+
+        real_open = builtins.open
+        calls: list[str] = []
+        mock_open = MagicMock(
+            side_effect=lambda p, *a, **kw: calls.append(str(p)) or real_open(p, *a, **kw)
+        )
+        monkeypatch.setattr("builtins.open", mock_open)
+
+        hub._load_materials_data()  # 1st call — reads
+        hub._load_materials_data()  # 2nd — cached, should NOT read
+        hub._load_materials_data()  # 3rd — cached
+
+        # Only 1 file open for the materials JSON after first load.
+        material_opens = [c for c in calls if "materials" in c]
+        assert len(material_opens) == 0, f"unexpected re-reads: {material_opens}"

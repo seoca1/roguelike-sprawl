@@ -184,31 +184,46 @@ def _draw_avatar_panel(
     console.print(x=x + 9, y=y + 3, string=f"{hp}/{max_hp}", fg=hp_color)
 
 
-def _load_materials_data() -> list[tuple[str, int, int]]:
+_MATERIALS_CACHE: list[tuple[str, int, int]] | None = None
+_RECIPES_CACHE: list[tuple[str, str, bool]] | None = None
+
+
+def _load_materials_data(*, force_reload: bool = False) -> list[tuple[str, int, int]]:
     """Load material display data from JSON, falling back to placeholder.
 
     Returns list of (name, have, need) tuples. The ``have`` value is
     always 0 (placeholder) since the real inventory is in
     ``state.inventory``; only the ``need`` target is data-driven.
+
+    The result is cached after first load to avoid re-parsing the
+    JSON on every render frame (this function used to be called per
+    frame and was a noticeable performance hot spot).
     """
+    global _MATERIALS_CACHE
+    if _MATERIALS_CACHE is not None and not force_reload:
+        return _MATERIALS_CACHE
     path = _engine_config.DATA_DIR / "crafting" / "materials.json"
-    if not path.exists():
-        return _PLACEHOLDER_MATERIALS
-    try:
-        with path.open(encoding="utf-8") as f:
-            data = json.load(f)
-    except (OSError, json.JSONDecodeError):
-        return _PLACEHOLDER_MATERIALS
-    items = data.get("materials", []) if isinstance(data, dict) else []
-    result: list[tuple[str, int, int]] = []
-    for item in items:
-        if not isinstance(item, dict):
-            continue
-        name = str(item.get("name", ""))
-        need = int(item.get("need", 1))
-        if name:
-            result.append((name, 0, need))
-    return result or _PLACEHOLDER_MATERIALS
+    result = _PLACEHOLDER_MATERIALS
+    if path.exists():
+        try:
+            with path.open(encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            data = None
+        if data is not None:
+            items = data.get("materials", []) if isinstance(data, dict) else []
+            parsed: list[tuple[str, int, int]] = []
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+                name = str(item.get("name", ""))
+                need = int(item.get("need", 1))
+                if name:
+                    parsed.append((name, 0, need))
+            if parsed:
+                result = parsed
+    _MATERIALS_CACHE = result
+    return result
 
 
 # Fallback when data/crafting/materials.json is missing or malformed.
@@ -304,27 +319,37 @@ def _material_gauge(have: int, need: int, width: int = 5) -> str:
     return "▓" * filled + "░" * empty
 
 
-def _load_recipes_data() -> list[tuple[str, str, bool]]:
-    """Load recipe display data from JSON, falling back to placeholder."""
+def _load_recipes_data(*, force_reload: bool = False) -> list[tuple[str, str, bool]]:
+    """Load recipe display data from JSON, falling back to placeholder.
+
+    Cached after first load to avoid re-parsing on every render frame.
+    """
+    global _RECIPES_CACHE
+    if _RECIPES_CACHE is not None and not force_reload:
+        return _RECIPES_CACHE
     path = _engine_config.DATA_DIR / "crafting" / "recipes.json"
-    if not path.exists():
-        return _PLACEHOLDER_RECIPES
-    try:
-        with path.open(encoding="utf-8") as f:
-            data = json.load(f)
-    except (OSError, json.JSONDecodeError):
-        return _PLACEHOLDER_RECIPES
-    items = data.get("recipes", []) if isinstance(data, dict) else []
-    result: list[tuple[str, str, bool]] = []
-    for item in items:
-        if not isinstance(item, dict):
-            continue
-        name = str(item.get("name", ""))
-        glyph = str(item.get("glyph", "···"))
-        ready = bool(item.get("ready", False))
-        if name:
-            result.append((name, glyph, ready))
-    return result or _PLACEHOLDER_RECIPES
+    result = _PLACEHOLDER_RECIPES
+    if path.exists():
+        try:
+            with path.open(encoding="utf-8") as f:
+                data = json.load(f)
+        except (OSError, json.JSONDecodeError):
+            data = None
+        if data is not None:
+            items = data.get("recipes", []) if isinstance(data, dict) else []
+            parsed: list[tuple[str, str, bool]] = []
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+                name = str(item.get("name", ""))
+                glyph = str(item.get("glyph", "···"))
+                ready = bool(item.get("ready", False))
+                if name:
+                    parsed.append((name, glyph, ready))
+            if parsed:
+                result = parsed
+    _RECIPES_CACHE = result
+    return result
 
 
 # Fallback when data/crafting/recipes.json is missing or malformed.
