@@ -18,6 +18,7 @@ from ..matrix.exploration import ExplorationState
 from ..matrix.graph import MatrixGraph
 from ..matrix.ppl import Loadout, Program
 from ..missions import JobBoard, Mission
+from ..run.reputation import ReputationState
 
 # Maximum number of status messages retained in AppState.status_messages.
 # When the cap is exceeded, the oldest messages are dropped first.
@@ -200,6 +201,9 @@ class AppState:
     mission_progress: dict[str, int] = field(default_factory=dict)
     # Completed mission IDs (so we don't re-offer them)
     completed_missions: set[str] = field(default_factory=set)
+    # Faction reputation (Phase 6+): persisted across runs in save.
+    # See run/reputation.py for tier system + event integration.
+    reputation: ReputationState = field(default_factory=ReputationState)
     # Player is dead (flatline); True until reset
     is_dead: bool = False
     # Death reason (e.g. "Combat", "ICE breach", "Jack-out failure")

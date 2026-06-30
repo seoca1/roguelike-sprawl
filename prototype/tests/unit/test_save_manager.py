@@ -237,6 +237,54 @@ class TestLoad:
 class TestRestoreState:
     """restore_state() modifies AppState in-place."""
 
+    def test_restores_reputation(self, save_dir: Path) -> None:
+        """Faction reputation persists across save/restore."""
+        from roguelike_sprawl.matrix.node import Faction
+
+        manager = SaveManager(save_dir=save_dir)
+        state = _make_state(credits=500)
+        # Build a reputation profile (within clamp range ±25)
+        state.reputation.adjust(Faction.HOSAKA, 20, source="mission:ta_heist")
+        state.reputation.adjust(Faction.MAAS, -25, source="combat:black_ice")
+        manager.save(1, state)
+
+        # Restore into fresh state — reputation must come back
+        new_state = AppState()
+        manager.restore_state(1, new_state)
+        assert new_state.reputation.get(Faction.HOSAKA).score == 20
+        assert new_state.reputation.get(Faction.MAAS).score == -25
+        assert new_state.reputation.get(Faction.HOSAKA).tier() == "TRUSTED"
+        assert new_state.reputation.get(Faction.MAAS).tier() == "HOSTILE"
+
+    def test_restores_reputation_missing_field(self, save_dir: Path) -> None:
+        """Legacy save without reputation field → empty state, no crash."""
+        from roguelike_sprawl.run.reputation import ReputationState
+
+        manager = SaveManager(save_dir=save_dir)
+        # Manually save with no reputation field (simulating old save)
+        path = save_dir / "slot_1.json"
+        legacy = {
+            "version": "0.1.0",
+            "saved_at": "2026-01-01T00:00:00Z",
+            "elapsed_seconds": 0,
+            "run_state": {"current_stage": "pending", "mission_id": "first_jack"},
+            "app_state": {
+                "inventory": {},
+                "credits": 0,
+                "defeated_nodes": [],
+                "extracted_nodes": [],
+                "mission_progress": {},
+            },
+            "metadata": {},
+        }
+        path.write_text(json.dumps(legacy), encoding="utf-8")
+
+        new_state = AppState()
+        manager.restore_state(1, new_state)
+        # Default empty reputation — no crash, no factions touched.
+        assert isinstance(new_state.reputation, ReputationState)
+        assert new_state.reputation.all_factions() == []
+
     def test_restores_run_state(self, save_dir: Path) -> None:
         manager = SaveManager(save_dir=save_dir)
         state = _make_state(stage=Stage.DEFEAT_ICE)
