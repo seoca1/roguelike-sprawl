@@ -183,7 +183,7 @@ class ReputationState:
                 continue
             raw_score = payload.get("score", 0)
             try:
-                score = int(raw_score)  # type: ignore[arg-type]
+                score = int(raw_score)
             except (TypeError, ValueError):
                 score = 0
             raw_history = payload.get("history", [])
