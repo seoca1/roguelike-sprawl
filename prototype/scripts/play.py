@@ -29,6 +29,10 @@ Options:
                       layout in detail.
     --bsp-seed N      RNG seed for --bsp-mission (default 2026).
     --bsp-grade N     Mission grade 1-5 (default 2).
+    --arc-bsp         Walk all three character arcs through
+                      play_arc_bsp.py (3 missions per arc) as a
+                      regression check, then exit.  Returns 0 iff
+                      every arc finished cleanly.
     --list-missions   Print every mission id in data/missions/missions.json,
                       one per line, then exit.  Use as a target-list
                       for --bsp-mission <id>.
@@ -880,6 +884,40 @@ def _list_missions() -> int:
     return 0
 
 
+def _run_arc_bsp_all() -> int:
+    """Walk all three character arcs via play_arc_bsp.py.
+
+    Spawns play_arc_bsp.py once per arc ('novice' / 'veteran' /
+    'heretic') and surfaces one tail-summary line per arc.
+    Returns 0 only if every arc finished cleanly.
+    """
+    import subprocess
+
+    proto = Path(__file__).resolve().parent
+    env = {**__import__("os").environ,
+           "PYTHONPATH": str(proto.parent / "src")}
+    arcs = ("novice", "veteran", "heretic")
+    rc = 0
+    print("=" * 64)
+    print(f"play.py --arc-bsp ({len(arcs)} arcs)")
+    print("=" * 64)
+    for arc in arcs:
+        cmd = [sys.executable, str(proto / "play_arc_bsp.py"),
+               "--arc", arc, "--missions", "3"]
+        res = subprocess.run(cmd, env=env, check=False,
+                              capture_output=True, text=True)
+        tail = res.stdout.splitlines()[-1] if res.stdout else ""
+        print(f"--- {arc:8s} rc={res.returncode} ---")
+        print(f"  {tail}")
+        if res.returncode != 0:
+            rc = res.returncode
+    print()
+    print("=" * 64)
+    print(f"arc-bsp smoke {'PASS' if rc == 0 else 'FAIL'} (rc={rc})")
+    print("=" * 64)
+    return rc
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--duration", type=float, default=30.0)
@@ -930,6 +968,15 @@ def main() -> int:
         help="Mission grade 1-5 (default 2).",
     )
     parser.add_argument(
+        "--arc-bsp",
+        action="store_true",
+        help=("Walk all three character arcs (novice / veteran / "
+              "heretic) through the BSP integration pipeline and "
+              "print one summary line per arc.  Useful as a "
+              "regression check whenever ProceduralDungeonGenerator "
+              "or mission_to_graph is touched."),
+    )
+    parser.add_argument(
         "--list-missions",
         action="store_true",
         help=("Print all available mission ids from data/missions/"
@@ -952,6 +999,11 @@ def main() -> int:
     # List-missions mode: print ids and exit before any GUI setup.
     if args.list_missions:
         return _list_missions()
+
+    # All-arcs BSP walk: run play_arc_bsp.py once per character arc
+    # and surface a one-line summary per arc.
+    if args.arc_bsp:
+        return _run_arc_bsp_all()
 
     state, t, story_reg = _setup(args)
     # Apply character selection to state so CHARACTER_SELECT → CHAPTER
