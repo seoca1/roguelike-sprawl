@@ -24,12 +24,21 @@ class NodeKind(StrEnum):
 
 
 class ZoneDepth(StrEnum):
-    """Matrix depth zones (ADR-0012). Base ZDR ranges."""
+    """Matrix depth zones (ADR-0012). Base ZDR ranges.
+
+    Original 4 tiers (SURFACE/MID/CORE/TA) cover the Sprawl. The DEEP
+    and FREESIDE tiers were added when missions expanded into Loa/
+    construct zones and orbital colonies (Freeside) — see ADR-0017,
+    missions ``voodoo_loa_encounter`` (DEEP) and ``final_choice``
+    (FREESIDE).
+    """
 
     SURFACE = "surface"  # 1-3
     MID = "mid"  # 4-8
+    DEEP = "deep"  # 6-10 (Loa / construct zones between MID and CORE)
     CORE = "core"  # 9-15
     TA = "ta"  # 20-30
+    FREESIDE = "freeside"  # 25-35 (orbital colonies, hardest)
 
 
 class IceKind(StrEnum):

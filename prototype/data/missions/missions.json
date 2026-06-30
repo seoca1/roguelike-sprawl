@@ -77,6 +77,8 @@
   "craft_job": {
     "id": "craft_job",
     "title": "Craft Job",
+    "grade_min": 1,
+    "grade_max": 5,
     "story": {
       "synopsis_en": "The construct was a virus she'd built from nothing. Kas — they called her Kas now, though her real name was something older, something her mother had whispered before the Yanaka took her father and the T-A contracts took everything else — had been running for seven months. She'd started with nothing: no deck, no contacts, no name in the Sprawl. Just a burned identity and a Loa frequency that wouldn't stop playing in her head. She'd built the construct in a squat in Jersey, pulling frozen modules from dead ICE and rewiring them into something that could live in the spaces between corporate subroutines. It was beautiful, in its way. It was a thing that shouldn't exist, and it existed anyway. Now she was in Finn's office, running data for a man who'd sold her the tools and pretended he hadn't. 'You want to move up,' Finn said. 'I want to burn it down,' she said. Finn smiled. 'That's what they all say.' The construct was ready. All she needed was one more piece — a combat module from a Watchdog that had been killed in the Freeside runs last year. Someone had saved one. Someone always saved one. She would find it, and she would build, and she would burn.",
       "synopsis_ko": "그 construct는 그녀가 무에서 지은 바이러스였다. 카스라고 불렀다. 그들은 그녀를 그렇게 불렀다. 그녀의 진짜 이름은 더 오래된 것이었다. 어머니가 죽기 전에 속삭인 것이었다. 야나카가 아버지를 데려갔을 때, T-A 계약이 나머지를 모두 데려갔다. 그녀는 7개월째 실행하고 있었다. 아무것도 없이 시작했다: 데크 없이, 연락처 없이, Sprawl에서의 이름 없이. 그저 타버린 정체성과 멈추지 않는 Loa 주파수. 그녀는 Jersey의 무단 점거주택에서 construct를 만들었다. 죽은 ICE에서 얼어붙은 모듈을 뽑아내고, 기업 서브루틴 사이의 공간에서 살 수 있는 것으로 다시 배선했다. 그것은 그녀의 방식으로는 아름다웠다. 존재하지 말아야 할 것이었고, 그럼에도 존재했다. 이제 그녀는 Finn의 사무실에 있었다. 도구를 팔았던 사람에게 데이터를 실행하고 있었다. 그가 팔지 않았다고 가장하는. \"올라가고 싶어.\" Finn이 말했다. \"나는 그것을 태워부수고 싶어.\" 그녀가 말했다. Finn이 웃었다. \"다들 그래.\" construct는 준비되어 있었다. 그녀가 필요한 것은 하나 더였다. 지난 해의 Freeside 실행에서 죽은 워치독의 combat module. 누군가 하나를 저장해 두었다. 누군가는 항상 하나를 저장한다. 그녀는 그것을 찾을 것이고, 그녀는 지을 것이고, 그녀는 탈 것이다.",
@@ -291,7 +293,7 @@
     "matrix_seed": 666,
     "zone": "freeside",
     "rewards": {
-      "credits": 10000,
+      "credits": 5500,
       "materials": {
         "ending_token": 1
       }
@@ -809,7 +811,7 @@
     "matrix_seed": 300,
     "zone": "core",
     "rewards": {
-      "credits": 5000,
+      "credits": 3500,
       "materials": {
         "upgrade_t4": 1
       }

@@ -62,10 +62,10 @@ class Mission:
             raise ValueError("Mission id must be non-empty")
         if not 1 <= self.arc <= 5:
             raise ValueError(f"arc must be 1..5, got {self.arc}")
-        if not 1 <= self.grade_min <= self.grade_max <= 5:
+        if not 1 <= self.grade_min <= self.grade_max <= 6:
             raise ValueError(f"invalid grade range {self.grade_min}..{self.grade_max}")
-        if not 1 <= self.reward_tier <= 5:
-            raise ValueError(f"reward_tier must be 1..5, got {self.reward_tier}")
+        if not 1 <= self.reward_tier <= 6:
+            raise ValueError(f"reward_tier must be 1..6, got {self.reward_tier}")
         if self.reward_credits < 0:
             raise ValueError("reward_credits must be >= 0")
 

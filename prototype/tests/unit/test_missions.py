@@ -66,13 +66,43 @@ def test_job_board_load_real_file(data_dir: Path) -> None:
     assert first.zone is ZoneDepth.SURFACE
 
 
+def test_job_board_loads_all_29_missions(data_dir: Path) -> None:
+    """Regression: every mission in missions.json must load successfully.
+
+    Pre-fix: 13/29 missions silently failed to load because ZoneDepth
+    enum didn't include DEEP / FREESIDE tiers. This test would have
+    caught it.
+    """
+    board = JobBoard.load(data_dir / "missions" / "missions.json")
+    assert len(board) == 29, f"Expected 29 missions, got {len(board)}"
+
+
+def test_job_board_mission_zones_all_valid(data_dir: Path) -> None:
+    """Regression: every mission's zone field must be a valid ZoneDepth."""
+    board = JobBoard.load(data_dir / "missions" / "missions.json")
+    valid_zones = {z.value for z in ZoneDepth}
+    for mission in board:
+        assert mission.zone.value in valid_zones, (
+            f"{mission.id}: zone {mission.zone.value!r} not in ZoneDepth"
+        )
+
+
+def test_zone_depth_has_deep_and_freeside() -> None:
+    """Regression: ZoneDepth must include the DEEP and FREESIDE tiers
+    introduced for Loa / construct zones and orbital colonies."""
+    assert ZoneDepth.DEEP.value == "deep"
+    assert ZoneDepth.FREESIDE.value == "freeside"
+
+
 def test_job_board_available_for_filters_by_grade(data_dir: Path) -> None:
     board = JobBoard.load(data_dir / "missions" / "missions.json")
     g1 = board.available_for(grade=1)
     assert all(m.grade_min <= 1 <= m.grade_max for m in g1)
     g5 = board.available_for(grade=5)
-    # No grade-5 mission defined yet
     assert all(m.grade_min <= 5 <= m.grade_max for m in g5)
+    # Arc 5 finales support grade_max=6 (master jockies)
+    g6 = board.available_for(grade=6)
+    assert all(m.grade_min <= 6 <= m.grade_max for m in g6)
 
 
 def test_job_board_add_and_get() -> None:

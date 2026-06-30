@@ -14,8 +14,10 @@ from .node import AlarmLevel, Faction, IceKind, Node, ZoneDepth
 _BASE_ZDR: dict[ZoneDepth, int] = {
     ZoneDepth.SURFACE: 1,
     ZoneDepth.MID: 5,
+    ZoneDepth.DEEP: 8,  # Loa / construct zones (between MID and CORE)
     ZoneDepth.CORE: 12,
     ZoneDepth.TA: 25,
+    ZoneDepth.FREESIDE: 30,  # Orbital colonies (hardest)
 }
 
 # --- ICE modifier (per ADR-0012) ---
