@@ -1186,5 +1186,27 @@ hud.step(dt_ms=50)  # 20 fps tick</code></pre>
 
 </div>
 
+<script>
+/* Auto-sync stats from build_dashboard.py output (combat_stats.json).
+   When the file is missing the static fallback values stay visible. */
+fetch('data/combat_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    // 5 design-grade categories + N specific ICE variants.
+    set('ice', `${stats.ice_types_total}`);
+    set('effects', `${stats.skill_effects_total}`);
+    set('mode', stats.combat_mode);
+    set('ppl', stats.ppl_version);
+    set('zdr', stats.zdr_version);
+  })
+  .catch(() => { /* keep static fallback */ });
+</script>
+
 </body>
 </html>
