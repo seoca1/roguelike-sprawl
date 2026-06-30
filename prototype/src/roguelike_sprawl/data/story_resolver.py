@@ -1,11 +1,16 @@
-"""단편 소설 stem → 파일 경로 정규화 (R1).
+"""소설 stem → 파일 경로 정규화 (R1).
 
-`missions.json`의 `story.source` 필드는 단편 stem (예: `case_jackout-30sec`)이고,
+`missions.json`의 `story.source` 필드는 소설 stem (예: `case_jackout-30sec`)이고,
 실제 파일은 날짜 prefix를 가진 형태 (예: `2026-06-23_case_jackout-30sec.md`)입니다.
 날짜 prefix는 v1 → v2 갱신 시 변경될 수 있으므로 코드에서 정규화합니다.
 
+소설은 다음 디렉토리 중 하나에 저장됨 (test_novels.py 검증):
+  - short-stories/  (단편,   derivative_type: short_story)
+  - novelettes/     (중단편, derivative_type: novelette)
+  - novellas/       (중편,   derivative_type: novella)
+
 규칙:
-- `2026-06-23_<stem>.md` (가장 최신 canonical) 우선
+- canonical 날짜 순으로 모든 소설 디렉토리 검색
 - 없으면 다른 날짜 prefix 시도
 - 한국어 번역 (`.ko.md`) 도 동일한 정규화
 """
@@ -13,20 +18,42 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional
-
 
 # 가장 최근 canonical 날짜 (v2.0 최종). 새 버전 출시 시 갱신.
 CANONICAL_DATES = ("2026-06-29", "2026-06-23", "2026-06-22", "2026-06-20", "2026-06-19")
 
+# 소설 디렉토리 목록 (derivative_type 순)
+NOVEL_DIR_NAMES: tuple[str, ...] = ("short-stories", "novelettes", "novellas")
+
+
+def _novel_dirs(repo_root: Path) -> list[Path]:
+    """모든 소설 디렉토리 경로 반환 (존재하는 것만)."""
+    sprawl = repo_root / "Fiction" / "derivative" / "sprawl-trilogy"
+    return [sprawl / name for name in NOVEL_DIR_NAMES if (sprawl / name).exists()]
+
 
 def _short_stories_dir(repo_root: Path) -> Path:
-    """단편 소설 디렉토리 경로. repo_root 기준."""
+    """단편 소설 디렉토리 경로. (legacy 호환용)"""
     return repo_root / "Fiction" / "derivative" / "sprawl-trilogy" / "short-stories"
 
 
-def resolve_story_path(stem: str, repo_root: Path) -> Optional[Path]:
-    """단편 stem → 영어 본편 파일 경로.
+def _search_in_dirs(stem: str, suffix: str, repo_root: Path) -> Path | None:
+    """모든 소설 디렉토리에서 canonical 날짜 순으로 검색."""
+    for date in CANONICAL_DATES:
+        for base in _novel_dirs(repo_root):
+            candidate = base / f"{date}_{stem}{suffix}"
+            if candidate.exists():
+                return candidate
+    # 어떤 날짜든 매칭
+    for base in _novel_dirs(repo_root):
+        matches = sorted(base.glob(f"*_{stem}{suffix}"), reverse=True)
+        if matches:
+            return matches[0]
+    return None
+
+
+def resolve_story_path(stem: str, repo_root: Path) -> Path | None:
+    """소설 stem → 영어 본편 파일 경로.
 
     Args:
         stem: 미션의 source 필드 (예: "case_jackout-30sec")
@@ -35,21 +62,11 @@ def resolve_story_path(stem: str, repo_root: Path) -> Optional[Path]:
     Returns:
         찾은 파일 경로. 없으면 None.
     """
-    base = _short_stories_dir(repo_root)
-    if not base.exists():
-        return None
-    # canonical 날짜 순으로 검색
-    for date in CANONICAL_DATES:
-        candidate = base / f"{date}_{stem}.md"
-        if candidate.exists():
-            return candidate
-    # 어떤 날짜든 매칭
-    matches = sorted(base.glob(f"*_{stem}.md"), reverse=True)
-    return matches[0] if matches else None
+    return _search_in_dirs(stem, ".md", repo_root)
 
 
-def resolve_ko_translation(stem: str, repo_root: Path) -> Optional[Path]:
-    """단편 stem → 한국어 번역 파일 경로.
+def resolve_ko_translation(stem: str, repo_root: Path) -> Path | None:
+    """소설 stem → 한국어 번역 파일 경로.
 
     Args:
         stem: 미션의 source 필드
@@ -58,37 +75,29 @@ def resolve_ko_translation(stem: str, repo_root: Path) -> Optional[Path]:
     Returns:
         한국어 번역 파일 경로. 없으면 None.
     """
-    base = _short_stories_dir(repo_root)
-    if not base.exists():
-        return None
-    for date in CANONICAL_DATES:
-        candidate = base / f"{date}_{stem}.ko.md"
-        if candidate.exists():
-            return candidate
-    matches = sorted(base.glob(f"*_{stem}.ko.md"), reverse=True)
-    return matches[0] if matches else None
+    return _search_in_dirs(stem, ".ko.md", repo_root)
 
 
 def list_available_stems(repo_root: Path) -> list[str]:
-    """사용 가능한 단편 stem 목록 (모든 날짜 통합, 중복 제거)."""
-    base = _short_stories_dir(repo_root)
-    if not base.exists():
-        return []
-    stems = set()
-    for f in base.glob("*.md"):
-        if f.name.endswith(".ko.md"):
-            continue
-        # 2026-06-23_case_jackout-30sec → ['2026-06-23', 'case_jackout-30sec']
-        # 최대 1번 split으로 [날짜, stem] 분리 (stem 내부에 하이픈 허용)
-        parts = f.stem.split("_", 1)
-        if len(parts) == 2 and parts[0].startswith("2026-"):
-            stems.add(parts[1])
-        else:
-            stems.add(f.stem)
+    """사용 가능한 소설 stem 목록 (모든 날짜/디렉토리 통합, 중복 제거)."""
+    stems: set[str] = set()
+    for base in _novel_dirs(repo_root):
+        for f in base.glob("*.md"):
+            if f.name.endswith(".ko.md"):
+                continue
+            # 2026-06-23_case_jackout-30sec → ['2026-06-23', 'case_jackout-30sec']
+            # 최대 1번 split으로 [날짜, stem] 분리 (stem 내부에 하이픈 허용)
+            parts = f.stem.split("_", 1)
+            if len(parts) == 2 and parts[0].startswith("2026-"):
+                stems.add(parts[1])
+            else:
+                stems.add(f.stem)
     return sorted(stems)
 
 
-def validate_mission_sources(missions: dict, repo_root: Path) -> list[dict]:
+def validate_mission_sources(
+    missions: dict[str, dict[str, object]], repo_root: Path
+) -> list[dict[str, object]]:
     """missions.json의 모든 source 필드 검증.
 
     Returns:
@@ -102,6 +111,8 @@ def validate_mission_sources(missions: dict, repo_root: Path) -> list[dict]:
     report = []
     for mid, m in missions.items():
         story = m.get("story", {})
+        if not isinstance(story, dict):
+            continue
         source = story.get("source", "")
         if not source:
             report.append(
