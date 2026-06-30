@@ -407,8 +407,14 @@ uv run python scripts/play.py --gn-mode novice --continue
 # 5개 headless 데모를 순차 실행 (GUI 창 불필요).
 uv run python scripts/play.py --phase-1-5
 #  → play_dungeon_mode / play_vfx_overlay / play_mission_mapping /
-#    play_ecs_dungeon / play_novel_runtime 호출
+#    play_ecs_dungeon / play_novel_runtime / play_arc_bsp 호출
 #  → CI-friendly, rc=0 이면 PASS
+
+# ─── 🆕 단일 미션 BSP (play_arc_bsp.py 통합) ───
+# 미션 ID 단독 진입. 미션 라벨 + BSP 그래프 + ECS 통합 단계 출력.
+uv run python scripts/play.py --bsp-mission first_jack
+uv run python scripts/play.py --bsp-mission black_ice_dream --bsp-seed 42
+uv run python scripts/play.py --bsp-mission bogus  # 사용 가능한 ID 16개 출력, rc=1
 ```
 
 ### `demo.py`

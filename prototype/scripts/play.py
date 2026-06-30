@@ -21,9 +21,14 @@ Options:
     --phase-1-5       Run all five Phase 1-5 headless demos
                       (play_dungeon_mode / play_vfx_overlay /
                       play_mission_mapping / play_ecs_dungeon /
-                      play_novel_runtime) and exit.  Useful as a
-                      smoke test for the operator-point demos
-                      added with ADR-0060 / 0061.
+                      play_novel_runtime / play_arc_bsp) and exit.
+                      Useful as a smoke test for the operator-point
+                      demos added with ADR-0060 / 0061.
+    --bsp-mission ID  Run a single BSP dungeon via play_arc_bsp.py
+                      --mission <id>.  Useful for inspecting one
+                      layout in detail.
+    --bsp-seed N      RNG seed for --bsp-mission (default 2026).
+    --bsp-grade N     Mission grade 1-5 (default 2).
     --show-controls   Print controls hint at start
 """
 
@@ -833,6 +838,28 @@ def _run_phase_1_5_smoke() -> int:
     return rc
 
 
+def _run_bsp_mission(mission_id: str, *, seed: int = 2026,
+                     grade: int = 2) -> int:
+    """Run a single BSP dungeon for the named mission via play_arc_bsp.py.
+
+    Falls back to --mission <id> in the demo script; surfaces its
+    full output verbatim.  Returns its exit code.
+    """
+    import subprocess
+
+    proto = Path(__file__).resolve().parent
+    cmd = [sys.executable, str(proto / "play_arc_bsp.py"),
+           "--mission", mission_id, "--seed", str(seed),
+           "--grade", str(grade)]
+    env = {**__import__("os").environ,
+           "PYTHONPATH": str(proto.parent / "src")}
+    print("=" * 64)
+    print(f"play.py --bsp-mission {mission_id} (seed={seed}, grade={grade})")
+    print("=" * 64)
+    res = subprocess.run(cmd, env=env, check=False)
+    return res.returncode
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--duration", type=float, default=30.0)
@@ -865,12 +892,35 @@ def main() -> int:
         help=("Run all five Phase 1-5 headless demos and exit.  Bypasses "
               "the GUI playthrough."),
     )
+    parser.add_argument(
+        "--bsp-mission",
+        default=None,
+        help=("Run the BSP dungeon for a single mission via "
+              "play_arc_bsp.py --mission <id>.  Bypasses the GUI "
+              "playthrough."),
+    )
+    parser.add_argument(
+        "--bsp-seed",
+        type=int, default=2026,
+        help="RNG seed forwarded to play_arc_bsp.py (default 2026).",
+    )
+    parser.add_argument(
+        "--bsp-grade",
+        type=int, default=2,
+        help="Mission grade 1-5 forwarded to play_arc_bsp.py (default 2).",
+    )
     parser.add_argument("--show-controls", action="store_true")
     args = parser.parse_args()
 
     # Phase 1-5 smoke test mode: run each headless demo as a subprocess.
     if args.phase_1_5:
         return _run_phase_1_5_smoke()
+
+    # Single-mission BSP mode: hand off to play_arc_bsp.py.
+    if args.bsp_mission is not None:
+        return _run_bsp_mission(args.bsp_mission,
+                                seed=args.bsp_seed,
+                                grade=args.bsp_grade)
 
     state, t, story_reg = _setup(args)
     # Apply character selection to state so CHARACTER_SELECT → CHAPTER
