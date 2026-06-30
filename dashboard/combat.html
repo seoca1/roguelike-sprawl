@@ -206,7 +206,7 @@
 </div>
 
 <!-- ICE Types -->
-<h2>👾 ICE Types (5)</h2>
+<h2>👾 ICE Types (5 grade / <span data-stat="ice-total">29</span> total)</h2>
 <div class="section">
   <p style="color: #8a9aa8; font-size: 13px;">ICE (Intrusion Countermeasures Electronics) — 사이버스페이스에서 자키를 막는 적.</p>
   <table class="ice-table">
@@ -281,7 +281,7 @@
 </div>
 
 <!-- Skill Effects -->
-<h2>✨ Skill Effects (14)</h2>
+<h2>✨ Skill Effects (<span data-stat="effects-count">14</span>)</h2>
 <div class="section">
   <p style="color: #8a9aa8; font-size: 13px;">스킬 효과는 RT-MS에서 사용 가능한 행동 유형.</p>
   <div class="effect-grid">
@@ -1204,6 +1204,9 @@ fetch('data/combat_stats.json').then(r => r.ok ? r.json() : null)
     set('mode', stats.combat_mode);
     set('ppl', stats.ppl_version);
     set('zdr', stats.zdr_version);
+    // Sub-heading cells (in case the page has multi-count sections).
+    set('ice-total', stats.ice_types_total);
+    set('effects-count', stats.skill_effects_total);
   })
   .catch(() => { /* keep static fallback */ });
 </script>

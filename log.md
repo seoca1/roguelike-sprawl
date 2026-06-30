@@ -2997,3 +2997,28 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 | dashboard HTML fetch 추가 | 3 files (combat / novel / stories / stages) |
 | dashboard README + scripts README | +35 lines |
 | 누적 | ~280 lines pure additive |
+
+---
+
+## [2026-06-30] feat | cyberspace.html 5번째 stats + combat.html 부제목 자동 fetch
+
+- **`tools/build_dashboard.py`** — `load_cyberspace_stats()` 추가:
+  - `prototype/data/cyberspace/worlds.json` walks worlds / sectors / servers.
+  - `prototype/src/roguelike_sprawl/matrix/node.py` regex 로 `NodeKind` 8 + `ZoneDepth` 4 카운트.
+  - `dashboard/data/cyberspace_stats.json` 자동 빌드 — `{worlds, sectors, servers, node_kinds, zone_depths, world_names}`.
+- **`dashboard/cyberspace.html`** — 부제목 / 5 stat 카드 / footer 모두 `<span data-stat="...">` 자동 fetch (8 cells). 정수 fallback 유지.
+- **`dashboard/combat.html`** — 헤더 부제목 fetch 추가: `ICE Types (5 grade / 29 total)` + `Skill Effects (14)` 동적.
+- **`dashboard/README.md`** — 자동 동기화 표 4 → 5 (cyberspace) 행.
+- **커밋 1db5ffa** + (in-flight: combat.html 부제목 + log.md).
+
+### 카운트 검증 (실제 게임 데이터)
+
+| Resource | Count |
+|---|---:|
+| Worlds (chiba / night_city) | 2 |
+| Sectors | 4 |
+| Servers | 6 |
+| Node types (NodeKind enum) | 8 |
+| Zone depths (ZoneDepth enum) | 4 |
+
+모두 `dashboard/cyberspace.html` 정적 카드와 매치.
