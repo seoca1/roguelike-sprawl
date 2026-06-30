@@ -403,6 +403,102 @@ class TestCheckMasteryEvent:
         assert "ppl_20" in unlocked_ids
         assert "ppl_30" in unlocked_ids
 
+    def test_matrix_master_ppl_zdr_combined(self) -> None:
+        """PPL + ZDR >= 60 (one fight) unlocks matrix_master."""
+        from roguelike_sprawl.achievements import (
+            ACH_MATRIX_MASTER,
+            check_mastery_event,
+            check_matrix_master,
+        )
+
+        # Insufficient: 25 + 25 = 50 < 60
+        assert check_matrix_master(AchievementState(), 25, 25) is None
+        # Exact: 30 + 30 = 60 → unlocks
+        ach = check_matrix_master(AchievementState(), 30, 30)
+        assert ach is not None
+        assert ach.id == ACH_MATRIX_MASTER.id
+        # Via the event-style API:
+        ach2 = check_mastery_event(AchievementState(), "ppl_zdr_combined", value=60)
+        assert any(a.id == "matrix_master" for a in ach2)
+
+    def test_true_hacker_unlocks_when_all_others_unlocked(self) -> None:
+        """Unlocking every other achievement triggers true_hacker."""
+        from roguelike_sprawl.achievements import (
+            ACH_TRUE_HACKER,
+            ALL_ACHIEVEMENTS,
+            check_true_hacker,
+        )
+
+        s = AchievementState()
+        # Initially not unlocked.
+        assert check_true_hacker(s) is None
+        # Unlock every other achievement.
+        for ach in ALL_ACHIEVEMENTS:
+            if ach.id == ACH_TRUE_HACKER.id:
+                continue  # skip self
+            s.unlock(ach.id)
+        # Now true_hacker should unlock.
+        ach = check_true_hacker(s)
+        assert ach is not None
+        assert ach.id == ACH_TRUE_HACKER.id
+
+    def test_true_hacker_not_triggered_via_event_when_not_all_unlocked(
+        self,
+    ) -> None:
+        """Event-style call must NOT unlock true_hacker prematurely."""
+        from roguelike_sprawl.achievements import (
+            ACH_MATRIX_MASTER,
+            ACH_TRUE_HACKER,
+            ALL_ACHIEVEMENTS,
+            check_mastery_event,
+        )
+
+        s = AchievementState()
+        # Unlock fewer than ALL_ACHIEVEMENTS - 1 (skip both
+        # true_hacker and matrix_master so the combined check still
+        # has matrix_master to potentially fire).
+        for ach in ALL_ACHIEVEMENTS[:20]:
+            if ach.id in (ACH_TRUE_HACKER.id, ACH_MATRIX_MASTER.id):
+                continue
+            s.unlock(ach.id)
+        # Fire the event — should unlock matrix_master (value 70 ≥ 60)
+        # but NOT true_hacker (insufficient unlocks).
+        unlocked = check_mastery_event(s, "ppl_zdr_combined", value=70)
+        unlocked_ids = {a.id for a in unlocked}
+        assert "matrix_master" in unlocked_ids
+        assert "true_hacker" not in unlocked_ids
+        assert not s.is_unlocked(ACH_TRUE_HACKER.id)
+
+    def test_zdr_cleared_tracks_max(self) -> None:
+        """Repeated zdr_cleared events keep the highest value."""
+        from roguelike_sprawl.achievements import check_mastery_event
+
+        s = AchievementState()
+        check_mastery_event(s, "zdr_cleared", value=10)
+        check_mastery_event(s, "zdr_cleared", value=25)
+        check_mastery_event(s, "zdr_cleared", value=15)  # should not decrease
+        assert s.get_progress("max_zdr_cleared") == 25
+
+    def test_combined_event_unlocks_true_hacker(self) -> None:
+        """When all others unlocked, ppl_zdr_combined event triggers true_hacker."""
+        from roguelike_sprawl.achievements import (
+            ACH_MATRIX_MASTER,
+            ACH_TRUE_HACKER,
+            ALL_ACHIEVEMENTS,
+            check_mastery_event,
+        )
+
+        s = AchievementState()
+        for ach in ALL_ACHIEVEMENTS:
+            if ach.id in (ACH_TRUE_HACKER.id, ACH_MATRIX_MASTER.id):
+                continue  # skip self + already-eligible
+            s.unlock(ach.id)
+        # Fire the event — it should unlock matrix_master AND true_hacker.
+        unlocked = check_mastery_event(s, "ppl_zdr_combined", value=70)
+        unlocked_ids = {a.id for a in unlocked}
+        assert "matrix_master" in unlocked_ids
+        assert "true_hacker" in unlocked_ids
+
 
 # ----------------------------------------------------------------------------
 # Display helpers

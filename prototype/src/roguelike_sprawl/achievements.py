@@ -794,6 +794,8 @@ def check_mastery_event(
 
     Events:
       - "ppl_reached": value=current PPL
+      - "zdr_cleared": value=highest ZDR the player has cleared
+      - "ppl_zdr_combined": value = max(PPL + ZDR) achieved in one fight
     """
     unlocked: list[Achievement] = []
 
@@ -811,7 +813,52 @@ def check_mastery_event(
             if ach:
                 unlocked.append(ach)
 
+    elif event == "zdr_cleared":
+        # MATRIX_MASTER: PPL 30 + ZDR 30 in the same fight.
+        # The caller is expected to fire BOTH ppl_reached AND zdr_cleared
+        # with the same values; we record the highest ZDR cleared and
+        # check it together with the highest PPL reached in check_meta.
+        prev = state.get_progress("max_zdr_cleared")
+        if value > prev:
+            state.set_progress("max_zdr_cleared", value)
+
+    elif event == "ppl_zdr_combined":
+        # Single combined check: PPL + ZDR ≥ 60 (i.e. 30 + 30).
+        if value >= 60:
+            ach = state.unlock("matrix_master", current_ms)
+            if ach:
+                unlocked.append(ach)
+        # Check true_hacker: player has unlocked every non-self achievement.
+        if state.get_total_unlocked() >= len(ALL_ACHIEVEMENTS) - 1:
+            ach = state.unlock("true_hacker", current_ms)
+            if ach:
+                unlocked.append(ach)
+
     return unlocked
+
+
+def check_true_hacker(state: AchievementState, current_ms: int = 0) -> Achievement | None:
+    """Manual check for the ``true_hacker`` meta-achievement.
+
+    Returns the unlocked achievement if the player has every other
+    achievement, else None. Useful to call after batch unlocks (e.g.
+    end-of-run reward screens).
+    """
+    if state.get_total_unlocked() >= len(ALL_ACHIEVEMENTS) - 1:
+        return state.unlock("true_hacker", current_ms)
+    return None
+
+
+def check_matrix_master(
+    state: AchievementState, ppl: int, zdr: int, current_ms: int = 0
+) -> Achievement | None:
+    """Manual check for ``matrix_master``: PPL + ZDR ≥ 60 (one fight).
+
+    Returns the unlocked achievement if conditions met, else None.
+    """
+    if ppl + zdr >= 60:
+        return state.unlock("matrix_master", current_ms)
+    return None
 
 
 # ----------------------------------------------------------------------------
@@ -882,6 +929,8 @@ __all__ = [
     "check_exploration_event",
     "check_mastery_event",
     "check_story_event",
+    "check_matrix_master",
+    "check_true_hacker",
     "get_achievement",
     "get_achievements_by_category",
     "get_achievements_summary",
