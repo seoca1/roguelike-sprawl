@@ -241,6 +241,71 @@ def load_story_stats(repo: Path) -> dict[str, object]:
     return out
 
 
+def load_run_stats(repo: Path) -> dict[str, object]:
+    """Walk prototype/src/run/state.py for Stage / ChapterState / Phase enums.
+
+    The Stage enum lists every in-game stage (10 entries: PENDING /
+    MEET_NPC / EXTRACT_DATA / DEFEAT_ICE / JACK_OUT / REWARD /
+    DEBRIEF / COMPLETE / DEATH_RESTART / FAILED), of which
+    stage_structure.json only enumerates 9 (DEBRIEF is marked
+    optional in the source).  Pulling the enum straight from
+    state.py keeps the dashboard honest when the implementation
+    grows new phases.
+    """
+    out: dict[str, object] = {
+        "stage_enum_count": 0,
+        "stage_enum_names": [],
+        "stage_optional": [],
+        "chapter_state_enum_count": 0,
+        "chapter_state_enum_names": [],
+        "objective_kind_enum_count": 0,
+        "objective_kind_enum_names": [],
+        "source": "",
+        "_generated_at": "",
+    }
+    p = repo / "prototype" / "src" / "roguelike_sprawl" / "run" / "state.py"
+    if not p.exists():
+        return out
+    out["source"] = str(p.relative_to(repo))
+    src = p.read_text(encoding="utf-8")
+
+    def _enum_block(name: str) -> list[str]:
+        m = re.search(
+            rf"^class\s+{name}\s*\(\s*StrEnum\s*\):.*?(?=^\nclass\s+\w+|\Z)",
+            src, re.M | re.S,
+        )
+        if not m:
+            return []
+        block = m.group(0)
+        return re.findall(r"^\s+([A-Z][A-Z0-9_]*)\s*=\s*\"[a-z0-9_]+\"",
+                           block, re.M)
+
+    out["stage_enum_names"] = _enum_block("Stage")
+    out["stage_enum_count"] = len(out["stage_enum_names"])  # type: ignore[assignment]
+    # Per docstring: DEBRIEF is optional.  Mark any literal that the
+    # docstring says is optional / conditional.
+    optional = []
+    for name in out["stage_enum_names"]:  # type: ignore[union-attr]
+        # Match 'Foo (optional)' or '(debatable)' / '(conditional)'.
+        m = re.search(
+            rf"^\s+{name}\s*=\s*\"[a-z_]+\"\s*#\s*(optional|conditional|debatable)",
+            src, re.M,
+        )
+        if m:
+            optional.append(name)
+    out["stage_optional"] = optional
+
+    out["chapter_state_enum_names"] = _enum_block("ChapterState")
+    out["chapter_state_enum_count"] = (
+        len(out["chapter_state_enum_names"])  # type: ignore[assignment]
+    )
+    out["objective_kind_enum_names"] = _enum_block("ObjectiveKind")
+    out["objective_kind_enum_count"] = (
+        len(out["objective_kind_enum_names"])  # type: ignore[assignment]
+    )
+    return out
+
+
 def load_character_stats(repo: Path) -> dict[str, object]:
     """Pull canonical character data from design/story/characters.md.
 
@@ -493,6 +558,7 @@ TARGETS = {
     "journey_stats.json": load_journey_stats,
     "index_stats.json": load_index_stats,
     "character_stats.json": load_character_stats,
+    "run_stats.json": load_run_stats,
 }
 
 

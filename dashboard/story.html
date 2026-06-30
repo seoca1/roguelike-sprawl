@@ -1553,7 +1553,7 @@
 </div>
 
 <!-- Endings -->
-<h2>🎬 엔딩 (2개)</h2>
+<h2>🎬 엔딩 (<span data-stat="endings-count">3</span>개 — ENDING_A / ENDING_B / ENDING_C, 캐릭터별 도달 분기)</h2>
 <div class="endings">
   <div class="ending-card a">
     <h3>엔딩 A: Jockey Lives (성공)</h3>
@@ -2388,6 +2388,22 @@ fetch('data/character_stats.json').then(r => r.ok ? r.json() : null)
       set("origin", attr["출신"] ?? attr["origin"]);
       set("job",    attr["직업"] ?? attr["job"]);
     }
+  })
+  .catch(() => { /* keep static fallback */ });
+
+/* Endings count from run_stats.json: the ChapterState enum lists
+   ENDING_A / ENDING_B / ENDING_C (3 terminals); the old static
+   "엔딩 (2개)" quietly dropped C, so this fetch restores the
+   third card's count.  Falls back to 3 when the JSON is offline. */
+fetch('data/run_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const el = document.querySelector('[data-stat="endings-count"]');
+    if (!el) return;
+    // Count ENDING_* entries inside chapter_state_enum_names.
+    const names = stats.chapter_state_enum_names || [];
+    const endings = names.filter(n => /^ENDING_/.test(n)).length;
+    el.textContent = String(endings || names.length);
   })
   .catch(() => { /* keep static fallback */ });
 </script>

@@ -235,14 +235,15 @@
 <h1>⏱ ROGUELIKE SPRAWL — Stage & Progression Dashboard</h1>
 <div class="subtitle">
   Single Run = Prologue → Mission → Completion.
-  <span data-stat="stages">9</span> stages,
-  <span data-stat="transitions">8</span> transitions,
-  <span data-stat="missions">29</span> missions
-  (<span data-arc-grades>Arc 1~5 difficulty grades</span>;
-  <span data-character-arcs>3 character arcs: Novice / Veteran / Heretic</span>).
+  <span data-stat="stages">9</span> stages
+  (<span data-stat="stage-enum">10</span> Stage enum entries · <code>DEBRIEF</code> optional)
+  · <span data-stat="transitions">8</span> transitions
+  · <span data-stat="missions">29</span> missions
+  (Arc 1~5 difficulty grades · 3 character arcs: Novice / Veteran / Heretic).
+  Chapter States: <span data-stat="chapter-states">14</span>.
   Reward formula: <code>Arc×800 + (grade−1)×300</code>.
   <br>
-  출처: <code>design/systems/stage_structure.json</code> · <code>prototype/data/missions/missions.json</code> · <code>prototype/src/run/state.py</code> (Stage enum)
+  출처: <code>design/systems/stage_structure.json</code> · <code>prototype/data/missions/missions.json</code> · <code>prototype/src/run/state.py</code> (Stage / ChapterState enums)
 </div>
 
 <div class="lang-toggle">
@@ -765,7 +766,9 @@
    (story_stats.json already drives missions; this file just
    reads the same key so build_dashboard's generators stay
    compatible across pages).  When the fetch fails the static
-   fallback numbers stay visible. */
+   fallback numbers stay visible.
+   run_stats.json adds the Stage enum + ChapterState enum
+   counts so the dashboard reflects the actual Python code. */
 fetch('data/story_stats.json').then(r => r.ok ? r.json() : null)
   .then(stats => {
     if (!stats) return;
@@ -779,6 +782,19 @@ fetch('data/story_stats.json').then(r => r.ok ? r.json() : null)
     // stages + transitions come from stage_structure.json itself
     // (already inlined as data-stage-src); the <span>s above remain
     // static for those.  missions is mirrored here for completeness.
+  })
+  .catch(() => { /* keep static fallback */ });
+fetch('data/run_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    set('stage-enum',     stats.stage_enum_count);
+    set('chapter-states', stats.chapter_state_enum_count);
   })
   .catch(() => { /* keep static fallback */ });
 </script>
