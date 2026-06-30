@@ -5,7 +5,9 @@
     "price": 100,
     "tier_level": 1,
     "available": true,
-    "examples": ["wisp", "shield", "probe"]
+    "faction": "hosaka",
+    "examples": ["wisp", "shield", "probe"],
+    "description": "Basic street-grade ICE breaker. Hosaka starter."
   },
   "t2_program": {
     "item_id": "t2_program",
@@ -13,7 +15,9 @@
     "price": 300,
     "tier_level": 2,
     "available": true,
-    "examples": ["hammer", "virus", "worm"]
+    "faction": "maas",
+    "examples": ["hammer", "virus", "worm"],
+    "description": "Mid-grade offensive tool. Maas custom firmware."
   },
   "t3_program": {
     "item_id": "t3_program",
@@ -21,7 +25,9 @@
     "price": 800,
     "tier_level": 3,
     "available": true,
-    "examples": ["goliath"]
+    "faction": "sense_net",
+    "examples": ["goliath"],
+    "description": "Heavy combat program. Sense/Net research-grade."
   },
   "t4_program": {
     "item_id": "t4_program",
@@ -29,7 +35,9 @@
     "price": 2000,
     "tier_level": 4,
     "available": true,
-    "examples": ["wardrone"]
+    "faction": "ta",
+    "examples": ["wardrone"],
+    "description": "Corporate-grade ICE. Tessier-Ashpool contract work."
   },
   "t5_program": {
     "item_id": "t5_program",
@@ -38,6 +46,7 @@
     "tier_level": 5,
     "available": false,
     "crafting_only": true,
+    "faction": "ta",
     "note": "T5 programs are crafting only. The Kraken is not for sale."
   }
 }

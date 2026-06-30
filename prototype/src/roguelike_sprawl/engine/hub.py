@@ -199,6 +199,46 @@ def _render_reputation_dots(state: AppState) -> str:
     return "".join(parts)
 
 
+def _render_market_summary(state: AppState) -> str:
+    """Render a one-line Info Market summary for the Hub.
+
+    Shows the discounted T1 program price so the player sees their
+    faction-discount in action. Example outputs:
+      - "T1 100cr (neutral)"
+      - "T1 50cr (Hosaka -50%)"
+      - "T1 130cr (Maas +30%)"
+      - "" if market unavailable
+    """
+    try:
+        from ..crafting.info_market import InfoMarket
+    except ImportError:
+        return ""
+    try:
+        market = InfoMarket.load_default()
+    except (OSError, ValueError):
+        return ""
+    t1 = market.get("t1_program")
+    if t1 is None or t1.base_price is None:
+        return ""
+    # Cached (load_default has its own cache)
+    if not hasattr(state, "reputation") or state.reputation is None:
+        return f"T1 {t1.base_price}cr (neutral)"
+    base = t1.base_price
+    if t1.faction is None:
+        return f"T1 {base}cr (neutral)"
+    score = state.reputation.get(t1.faction).score
+    final = t1.discounted_price(score)
+    if final is None:
+        return ""
+    if final < base:
+        pct = round((1 - final / base) * 100)
+        return f"T1 {final}cr ({t1.faction.value} -{pct}%)"
+    if final > base:
+        pct = round((final / base - 1) * 100)
+        return f"T1 {final}cr ({t1.faction.value} +{pct}%)"
+    return f"T1 {final}cr (neutral)"
+
+
 def _draw_avatar_panel(
     console: tcod.console.Console,
     main: Region,
@@ -232,6 +272,18 @@ def _draw_avatar_panel(
     # as a coloured dot whose intensity reflects reputation tier.
     rep_line = _render_reputation_dots(state)
     console.print(x=x, y=y + 4, string=f"Rep: {rep_line}", fg=(180, 180, 180))
+
+    # Phase 6+: show the discounted Info Market price for T1 so the
+    # player sees the effect of their faction standing at a glance.
+    market_line = _render_market_summary(state)
+    if market_line:
+        console.print(x=x, y=y + 5, string=f"Market: {market_line}", fg=(180, 180, 180))
+
+    # Phase 6+: show the discounted Info Market price for T1 so the
+    # player sees the effect of their faction standing at a glance.
+    market_line = _render_market_summary(state)
+    if market_line:
+        console.print(x=x, y=y + 5, string=f"Market: {market_line}", fg=(180, 180, 180))
 
     # HP bar
     hp = state.player_hp if state.player_hp > 0 else 100
