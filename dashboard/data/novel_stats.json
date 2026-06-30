@@ -1,5 +1,5 @@
 {
-  "catalog_entries": 30,
+  "catalog_entries": 27,
   "hook_kinds": 6,
   "hook_kind_names": [
     "narrative",
@@ -12,15 +12,10 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "short_stories_en": 35,
-  "short_stories_ko": 30,
-  "_generated_at": "2026-06-30T12:10:01",
+  "short_stories_en": 32,
+  "short_stories_ko": 32,
+  "_generated_at": "2026-07-01T03:33:17",
   "catalog_entries_list": [
-    {
-      "stem": "aleph_fragment",
-      "title_en": "Aleph Fragment",
-      "title_ko": "Aleph Fragment"
-    },
     {
       "stem": "black_ice_dream",
       "title_en": "Black Ice Dream",
@@ -92,11 +87,6 @@
       "title_ko": "Mollys Market"
     },
     {
-      "stem": "mollys_razor",
-      "title_en": "Mollys Razor",
-      "title_ko": "Mollys Razor"
-    },
-    {
       "stem": "neuromancer_merger",
       "title_en": "Neuromancer Merger",
       "title_ko": "Neuromancer Merger"
@@ -120,11 +110,6 @@
       "stem": "sense_net_trace",
       "title_en": "Sense Net Trace",
       "title_ko": "Sense Net Trace"
-    },
-    {
-      "stem": "ta_heist",
-      "title_en": "Ta Heist",
-      "title_ko": "Ta Heist"
     },
     {
       "stem": "the_choice",

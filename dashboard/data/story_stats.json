@@ -1,14 +1,14 @@
 {
   "missions": 29,
-  "stories": 30,
-  "html_files": 65,
-  "en_files": 35,
-  "ko_files": 30,
+  "stories": 27,
+  "html_files": 64,
+  "en_files": 32,
+  "ko_files": 32,
   "en_only": 0,
   "ko_only": 0,
-  "complete_pairs": 30,
-  "quotes": 30,
-  "references": 30,
+  "complete_pairs": 27,
+  "quotes": 27,
+  "references": 27,
   "arcs": 3,
   "chapters": 3,
   "characters": [
@@ -16,5 +16,5 @@
     "Sil",
     "Kas"
   ],
-  "_generated_at": "2026-06-30T12:10:01"
+  "_generated_at": "2026-07-01T03:33:17"
 }
