@@ -52,7 +52,15 @@ def render_hub(console: tcod.console.Console, t: Translator, state: AppState) ->
 
     # Title
     ppl = calculate_ppl(state.player_loadout)
-    subtitle = t("hub.fixer_intro") + f"  |  Grade: {state.player_grade}-up  |  PPL: {ppl}"
+    # Phase 6+: subtitle reflects Finn's reputation-based greeting
+    # (so the player sees the effect of their faction standing at a
+    # glance). Falls back to the default greeting if reputation is
+    # neutral or the helper returns nothing.
+    from .npc_greeting import get_greeting_text
+
+    greeting = get_greeting_text("finn", state, korean=False)
+    subtitle_base = greeting if greeting else t("hub.fixer_intro")
+    subtitle = subtitle_base + f"  |  Grade: {state.player_grade}-up  |  PPL: {ppl}"
     draw_title(console, title_r, title=t("hub.title"), subtitle=subtitle)
 
     # Main area: 4-panel layout
@@ -156,11 +164,11 @@ _REPUTATION_GLYPHS: dict[str, str] = {
 # Faction order shown in the rep strip (Sprawl's big 5 — plus the
 # "ghost" NONE for unaligned fixers).
 _REP_DISPLAY_ORDER: list[tuple[str, tuple[int, int, int]]] = [
-    ("hosaka", (180, 50, 50)),      # red — corp
-    ("maas", (200, 150, 50)),       # amber — biz
+    ("hosaka", (180, 50, 50)),  # red — corp
+    ("maas", (200, 150, 50)),  # amber — biz
     ("sense_net", (50, 200, 150)),  # teal — research
-    ("ta", (200, 50, 200)),         # magenta — T-A
-    ("none", (100, 100, 100)),      # grey — neutral
+    ("ta", (200, 50, 200)),  # magenta — T-A
+    ("none", (100, 100, 100)),  # grey — neutral
 ]
 
 
