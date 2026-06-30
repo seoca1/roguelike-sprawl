@@ -35,7 +35,7 @@ from ..combat.state import (
 )
 from ..i18n import Translator
 from ..matrix.graph import MatrixGraph
-from ..matrix.node import Node
+from ..matrix.node import Faction, Node
 from ..matrix.ppl import calculate_ppl
 from ..matrix.zdr import node_status, node_zdr
 from .input_utils import is_confirm_key
@@ -694,6 +694,11 @@ def _end_combat(state: AppState, combat_state: CombatState) -> None:
         state.status_messages.append(">>> VICTORY! Gained: 1x ICE Shard")
         state.status_messages.append(">>> Gained: 50 credits")
 
+        # Phase 6+: defeating ICE in a faction's server boosts that
+        # faction's rep (you successfully infiltrated their space).
+        # Reverse-direction targets (opposing factions) lose rep.
+        _apply_combat_reputation(state, ice_type)
+
         # Progress mission objective (defeat)
         from .mission_completion import update_mission_progress
 
@@ -759,6 +764,53 @@ def _check_post_combat_event(state: AppState, trigger_id: str) -> None:
     if event is not None:
         state.active_event = EventState(event=event)
         state.screen = ScreenKind.EVENT
+
+
+# Reputation deltas when player defeats ICE on a faction's server.
+# The defending faction (whose ICE was killed) loses rep (you hurt them);
+# opposing factions gain rep (you're weakening their rivals).
+COMBAT_REPUTATION: dict[Faction, dict[Faction, int]] = {
+    Faction.HOSAKA: {Faction.HOSAKA: -3, Faction.MAAS: +1},
+    Faction.MAAS: {Faction.MAAS: -3, Faction.HOSAKA: +1},
+    Faction.SENSE_NET: {Faction.SENSE_NET: -3, Faction.TA: +1},
+    Faction.TA: {Faction.TA: -3, Faction.SENSE_NET: +1},
+}
+
+
+def _apply_combat_reputation(state: AppState, ice_type: object) -> None:
+    """Adjust faction reputation after defeating an ICE.
+
+    Looks up the defeated node's faction (where you successfully
+    infiltrated) and applies:
+      - defending faction: -3 (you hurt them)
+      - opposing faction: +1 (you weakened their rivals)
+
+    Pure black-ICE / non-corp ICE → no rep change.
+    """
+    if not hasattr(state, "reputation"):
+        return
+    # Find the current node to determine its faction.
+    node_faction = Faction.NONE
+    if state.matrix is not None and state.current_node_id is not None:
+        node = next(
+            (n for n in state.matrix.nodes if n.id == state.current_node_id),
+            None,
+        )
+        if node is not None:
+            node_faction = node.faction
+
+    if node_faction is Faction.NONE or node_faction not in COMBAT_REPUTATION:
+        return
+
+    # ice_type is the IceType enum (or fallback IceType.STANDARD).
+    type_name = getattr(ice_type, "name", str(ice_type))
+    deltas = COMBAT_REPUTATION[node_faction]
+    for faction, delta in deltas.items():
+        state.reputation.adjust(faction, delta, source=f"combat:{type_name}")
+    affected = ", ".join(
+        f"{f.value} {d:+d}" for f, d in deltas.items()
+    )
+    state.status_messages.append(f">>> Rep shifted: {affected}")
 
 
 def _defeat_current_ice_node(state: AppState) -> None:
