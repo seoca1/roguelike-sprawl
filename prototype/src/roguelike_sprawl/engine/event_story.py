@@ -25,13 +25,24 @@ if TYPE_CHECKING:
 
 
 class EventTrigger(StrEnum):
-    """When an event story is triggered."""
+    """When an event story is triggered.
+
+    Phase 6+ additions:
+      - CHAPTER_COMPLETE: after a chapter arc finishes
+      - VENDOR_UNLOCKED: a vendor/faction rep threshold reached
+      - HUB_VISITED: every hub transition (replayable)
+      - DIALOGUE_COMPLETED: after a dialogue tree finishes
+    """
 
     NPC_CHOICE = "npc_choice"  # After a specific NPC choice
     NPC_GREETING = "npc_greeting"  # When meeting NPC first time
     COMBAT_END = "combat_end"  # After defeating an enemy
     NODE_ENTER = "node_enter"  # When entering a specific node
     STORY_MILESTONE = "story_milestone"  # After story progress
+    CHAPTER_COMPLETE = "chapter_complete"  # After a chapter arc finishes
+    VENDOR_UNLOCKED = "vendor_unlocked"  # Faction rep threshold → vendor access
+    HUB_VISITED = "hub_visited"  # Every hub transition (replayable flavor)
+    DIALOGUE_COMPLETED = "dialogue_completed"  # Dialogue tree finished
 
 
 class CharacterMood(StrEnum):
