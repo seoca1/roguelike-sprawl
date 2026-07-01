@@ -73,7 +73,7 @@
           "title_en": "The Job",
           "title_ko": "일",
           "description_en": "The Finn offers Case a simple data extraction job: Sense/Net payroll records. The pay is five thousand credits. The ICE is light. The Finn does not mention that the last cowboy who took this job died in the firewall. Case needs the money. Case takes the job.",
-          "description_ko": "핀은 케이에게 간단한 데이터 추출일을 제안한다: Sense/Net 급여 기록..pay는 5,000 크레딧. ICE는 가볍다. 핀은 이 일을 마지막으로 받은 카우보이가 방화벽에서 죽었다는 말은 하지 않는다. 케이는 돈이 필요하다. 케이는 일자리를 受諾한다.",
+          "description_ko": "핀은 케이에게 간단한 데이터 추출일을 제안한다: Sense/Net 급여 기록..pay는 5,000 크레딧. ICE는 가볍다. 핀은 이 일을 마지막으로 받은 카우보이가 방화벽에서 죽었다는 말은 하지 않는다. 케이는 돈이 필요하다. 케이는 일자리를 수락한다.",
           "episode_ref": "ep_02",
           "story_beats": [
             "beat_02_01",
@@ -149,13 +149,13 @@
               "beat_id": "beat_03_03",
               "type": "combat",
               "text_en": "The Wisp T1 turns. A mote of pale light drifting between the data columns, looking for something to burn. I freeze. The Finn said light ICE, but this thing moves like it knows I am here. I calculate the angle, the trajectory, the probability of a clean bypass. Sixty percent. Not good enough. I reach for a fragmentation bomb instead.",
-              "text_ko": "Wisp T1이 돌아본다. 데이터 기둥 사이를 떠다니며 태울 무언가를 찾는 엷은 빛의 입자. 굳어버린다. 핀이 가벼운 ICE라고 했지만, 이东西는 내가 여기 있다는 걸 아는 것처럼 움직인다. 각도, 궤적, 깨끗한 우회 확률을 계산한다. 60%. 충분하지 않다. 대신 분열 폭탄에 손을 뻗는다."
+              "text_ko": "Wisp T1이 돌아본다. 데이터 기둥 사이를 떠다니며 태울 무언가를 찾는 엷은 빛의 입자. 굳어버린다. 핀이 가벼운 ICE라고 했지만, 이것는 내가 여기 있다는 걸 아는 것처럼 움직인다. 각도, 궤적, 깨끗한 우회 확률을 계산한다. 60%. 충분하지 않다. 대신 분열 폭탄에 손을 뻗는다."
             },
             {
               "beat_id": "beat_03_04",
               "type": "action",
               "text_en": "The bomb goes off silent in the matrix — a cascade of corrupted data that makes the Wisp loop back on its own patrol path. I move through the gap I created. The node is ahead, blinking soft blue like a heart that does not know it is about to be opened.",
-              "text_ko": "폭탄이 매트릭스 안에서 소리 없이 터진다 — Wisp를 자체 순찰 경로로 되돌리는 손상된 데이터의 级联. 내가 만든 틈을 지난다. 노드가 앞쪽에 있다, 열린 줄 모르는 심장처럼 부드러운 파란색으로 깜빡이고."
+              "text_ko": "폭탄이 매트릭스 안에서 소리 없이 터진다 — Wisp를 자체 순찰 경로로 되돌리는 손상된 데이터의 캐스케이드. 내가 만든 틈을 지난다. 노드가 앞쪽에 있다, 열린 줄 모르는 심장처럼 부드러운 파란색으로 깜빡이고."
             }
           ]
         },
@@ -165,7 +165,7 @@
           "title_en": "The Extraction",
           "title_ko": "추출",
           "description_en": "Case finds the payroll database and begins the extraction. But Sense/Net has a backup ICE — a Watchdog patrol that was not in the Finn's briefing. Case has to fight his way out while the data streams into his deck.",
-          "description_ko": "케이가 급여 데이터베이스를 찾아 추출을 시작한다. 하지만 Sense/Net에는 백업 ICE가 있다 — 핀이 말하지 않은 Watchdog 순찰. 케이는 데이터가 데크로流入되는 동안 싸워서 빠져나가야 한다.",
+          "description_ko": "케이가 급여 데이터베이스를 찾아 추출을 시작한다. 하지만 Sense/Net에는 백업 ICE가 있다 — 핀이 말하지 않은 Watchdog 순찰. 케이는 데이터가 데크로흐른다되는 동안 싸워서 빠져나가야 한다.",
           "episode_ref": "ep_04",
           "story_beats": [
             "beat_04_01",
@@ -191,7 +191,7 @@
               "beat_id": "beat_04_01",
               "type": "action",
               "text_en": "The node opens like a flower made of data. Employee names, salary grades, Social security numbers — the entire payroll for the Sense/Net subsidiary, ready to be copied. I start the extraction protocol. The data streams into my deck at the speed of thought.",
-              "text_ko": "노드가 데이터로 만든 꽃처럼 열린다. 직원 이름, 급여 등급, 주민등록번호 — Sense/Net 자회사 전체 급여, 복사 준비 완료. 추출 프로토콜을 시작한다. 데이터가 사고 속도로 데크로流入된다."
+              "text_ko": "노드가 데이터로 만든 꽃처럼 열린다. 직원 이름, 급여 등급, 주민등록번호 — Sense/Net 자회사 전체 급여, 복사 준비 완료. 추출 프로토콜을 시작한다. 데이터가 사고 속도로 데크로흐른다된다."
             },
             {
               "beat_id": "beat_04_02",
@@ -298,7 +298,7 @@
           "title_en": "The Clinic",
           "title_ko": "클리닉",
           "description_en": "Case arrives at Mikael's Clinic to meet Molly. She is augmented, dangerous, beautiful. She explains the deal: help her with a job involving Tessier-Ashpool corporate ICE.",
-          "description_ko": "케이가 몰리를 만나러 미카엘 클리닉에 도착한다. 그녀는 강 augmentation되었으며, 위험하고, 아름답다. 그녀가 거래를 설명한다: 테시에-애스풀 기업 ICE와 관련된 일자리를帮她.",
+          "description_ko": "케이가 몰리를 만나러 미카엘 클리닉에 도착한다. 그녀는 강 augmentation되었으며, 위험하고, 아름답다. 그녀가 거래를 설명한다: 테시에-애스풀 기업 ICE와 관련된 일자리를그녀를 돕다.",
           "episode_ref": "ep_06",
           "story_beats": [
             "ch2_beat_01_01",
@@ -364,7 +364,7 @@
               "beat_id": "ch2_beat_02_01",
               "type": "dialogue",
               "text_en": "The job is a data extraction, Molly says. But not like the Sense/Net garbage you have been running. This is Tessier-Ashpool corporate. The ice there will kill you nine times before you see the first layer.",
-              "text_ko": "일은 데이터 추출이야, 몰리가 말한다. 하지만 네가 해왔던 Sense/Net 쓰레기 같지 않아. 이것은 테시에-애스풀 기업이다.那里的 ICE는 첫 번째 레이어를 보기 전에 9번 죽인다."
+              "text_ko": "일은 데이터 추출이야, 몰리가 말한다. 하지만 네가 해왔던 Sense/Net 쓰레기 같지 않아. 이것은 테시에-애스풀 기업이다.거기서 ICE는 첫 번째 레이어를 보기 전에 9번 죽인다."
             },
             {
               "beat_id": "ch2_beat_02_02",
@@ -382,7 +382,7 @@
               "beat_id": "ch2_beat_02_04",
               "type": "dialogue",
               "text_en": "There is a construct, Molly says. We need to carry it into the system. A ghost in the machine, someone who has already died in the matrix. His name is McCoy Pauley. They call him Dixie Flatline.",
-              "text_ko": "콘스트럭트가 있어, 몰리가 말한다. 시스템으로運般해야 해. 기계 속 유령, 이미 매트릭스에서 죽은 누군가.彼のの名前はマコイ・ポーリ이다. 딕시 플랫라인이라고 부른다."
+              "text_ko": "콘스트럭트가 있어, 몰리가 말한다. 시스템으로운반해야 해. 기계 속 유령, 이미 매트릭스에서 죽은 누군가.그のの이름はマコイ・ポーリ이다. 딕시 플랫라인이라고 부른다."
             },
             {
               "beat_id": "ch2_beat_02_05",
@@ -446,7 +446,7 @@
           "title_en": "The Jack-In",
           "title_ko": "잭인",
           "description_en": "Case and Molly jack in together. The matrix folds around them. Molly moves through data streams like she was born there. Case follows, carrying the Dixie Flatline construct in his deck.",
-          "description_ko": "케이와 몰리가 함께 잭인한다. 매트릭스가 둘을 감싼다. 몰리가 그녀가 태어나면서부터 그랬던 것처럼 데이터 스트림을 통해 움직인다. 케이가 데크에서 딕시 플랫라인 콘스트럭트를運般하며 따라간다.",
+          "description_ko": "케이와 몰리가 함께 잭인한다. 매트릭스가 둘을 감싼다. 몰리가 그녀가 태어나면서부터 그랬던 것처럼 데이터 스트림을 통해 움직인다. 케이가 데크에서 딕시 플랫라인 콘스트럭트를운반하며 따라간다.",
           "episode_ref": "ep_09",
           "story_beats": [
             "ch2_beat_04_01",
@@ -481,7 +481,7 @@
               "beat_id": "ch2_beat_04_03",
               "type": "action",
               "text_en": "Dixie Flatline is waking up, I tell her. I can feel him in the deck, stirring like a dream you cannot remember. He knows where we are going. He knows the architecture better than we do.",
-              "text_ko": "딕시 플랫라인이 깨어나고 있어, 내가 그녀에게 말한다. 데크에서 그를 느낄 수 있다, 기억할 수 없는 꿈처럼 깨우며. 그가 우리가去哪里知oo고 있다. 그가 아키텍처를 우리보다 더 잘 안다."
+              "text_ko": "딕시 플랫라인이 깨어나고 있어, 내가 그녀에게 말한다. 데크에서 그를 느낄 수 있다, 기억할 수 없는 꿈처럼 깨우며. 그가 우리가어디로 가는지oo고 있다. 그가 아키텍처를 우리보다 더 잘 안다."
             },
             {
               "beat_id": "ch2_beat_04_04",
@@ -523,7 +523,7 @@
               "beat_id": "ch2_beat_05_02",
               "type": "dialogue",
               "text_en": "The back door is in the Villa Straylight, Dixie says. The family compound on the moon. Freeside is just the front door, and the ice there is just the lock. But the Villa is where they keep the real secrets.",
-              "text_ko": "백도어는 빌라 스트레이라이트에 있어, 딕시가 말한다. 달의 가족 복합 단지. 프리사이드는 정문일 뿐이고,那里的 ICE는 자물쇠일 뿐. 하지만 빌라는 그들이 진짜 비밀을 지키는 곳이다."
+              "text_ko": "백도어는 빌라 스트레이라이트에 있어, 딕시가 말한다. 달의 가족 복합 단지. 프리사이드는 정문일 뿐이고,거기서 ICE는 자물쇠일 뿐. 하지만 빌라는 그들이 진짜 비밀을 지키는 곳이다."
             },
             {
               "beat_id": "ch2_beat_05_03",
@@ -706,7 +706,7 @@
               "beat_id": "ch3_beat_03_03",
               "type": "dialogue",
               "text_en": "The Finn says you can get us to the Villa, Molly says. Lurz smiles. I can get you credentials. I can get you close. But the Villa itself is another matter. The ice there is not corporate. It is family.",
-              "text_ko": "핀이 당신이 우리를 빌라로 데려다줄 수 있다고 했어, 몰리가 말한다. 루르츠가 미소 짓는다. 내가 너흘 자격 증명을 줄 수 있어. 가까이까지 데려다줄 수 있어. 하지만 빌라 자체는 다른 문제야.那里的 ICE는 기업이 아니야. 가족이야."
+              "text_ko": "핀이 당신이 우리를 빌라로 데려다줄 수 있다고 했어, 몰리가 말한다. 루르츠가 미소 짓는다. 내가 너흘 자격 증명을 줄 수 있어. 가까이까지 데려다줄 수 있어. 하지만 빌라 자체는 다른 문제야.거기서 ICE는 기업이 아니야. 가족이야."
             },
             {
               "beat_id": "ch3_beat_03_04",
@@ -728,7 +728,7 @@
           "title_en": "The Aza-Thracian Run",
           "title_ko": "아자-스라시안 러시",
           "description_en": "Case and Molly execute the Aza-Thracian data extraction. A rival corporate cowboy is also targeting the same node. They must fight through the competition and ICE simultaneously.",
-          "description_ko": "케이와 몰리가 아자-스라시안 데이터 추출을実行한다. 라이벌 기업 카우보이도 같은 노드를 목표로 하고 있다. 그들은 경쟁사와 ICE를 동시에 뚫고 나가야 한다.",
+          "description_ko": "케이와 몰리가 아자-스라시안 데이터 추출을실행한다. 라이벌 기업 카우보이도 같은 노드를 목표로 하고 있다. 그들은 경쟁사와 ICE를 동시에 뚫고 나가야 한다.",
           "episode_ref": "ep_14",
           "story_beats": [
             "ch3_beat_04_01",
@@ -818,7 +818,7 @@
               "beat_id": "ch3_beat_05_03",
               "type": "dialogue",
               "text_en": "The credentials will get you into the Tessier-Ashpool sectors, Lurz says. They will get you past the outer security. But the Villa itself is beyond my reach. The family there does not deal with fixers.",
-              "text_ko": "자격 증명이 너흘 테시에-애스풀 구역으로 들어오게 해줄 거야, 루르츠가 말한다. 외부 보안은 통과할 수 있어. 하지만 빌라 자체는 내 손이 닿지 않아.那里的 가족은 픽서들과 거래하지 않아."
+              "text_ko": "자격 증명이 너흘 테시에-애스풀 구역으로 들어오게 해줄 거야, 루르츠가 말한다. 외부 보안은 통과할 수 있어. 하지만 빌라 자체는 내 손이 닿지 않아.거기서 가족은 픽서들과 거래하지 않아."
             },
             {
               "beat_id": "ch3_beat_05_04",
@@ -868,7 +868,7 @@
           "title_en": "The Approach",
           "title_ko": "접근",
           "description_en": "Case and Molly move through the Tessier-Ashpool sectors of Freeside. The architecture here is older, stranger. The ice is everywhere, watching, waiting. They can feel the Villa pulling at them.",
-          "description_ko": "케이와 몰리가 프리사이드의 테시에-애스풀 구역을 지나간다.这里的建筑更古老、更陌生。 ICE到处都是，在监视，在等待。 그들은 빌라가 그들을 잡아당기는 것을 느낄 수 있다.",
+          "description_ko": "케이와 몰리가 프리사이드의 테시에-애스풀 구역을 지나간다.이곳의 건축물은더 오래된、더 낯선。 ICE도처에 있다，감시하고 있다，기다리고 있다。 그들은 빌라가 그들을 잡아당기는 것을 느낄 수 있다.",
           "episode_ref": "ep_16",
           "story_beats": [
             "ch4_beat_01_01",
@@ -897,7 +897,7 @@
               "beat_id": "ch4_beat_01_03",
               "type": "dialogue",
               "text_en": "The Villa is three kilometers from here, Molly says. I can feel it in the architecture. The way the data flows toward it like water toward a drain. The ice is thickest there, but it is also thinnest there.",
-              "text_ko": "빌라가 여기서 3킬로미터 떨어져 있어, 몰리가 말한다. 아키텍처에서 그것을 느낄 수 있어. 데이터가 물이 배수구를 향해 흐르듯 그것을 향해 흐르는 방식. ICE가那里가 가장 두껍지만, 가장 얇기도 해."
+              "text_ko": "빌라가 여기서 3킬로미터 떨어져 있어, 몰리가 말한다. 아키텍처에서 그것을 느낄 수 있어. 데이터가 물이 배수구를 향해 흐르듯 그것을 향해 흐르는 방식. ICE가거기가 가장 두껍지만, 가장 얇기도 해."
             },
             {
               "beat_id": "ch4_beat_01_04",
@@ -913,7 +913,7 @@
           "title_en": "The Villa Gates",
           "title_ko": "빌라 문",
           "description_en": "Case and Molly reach the outer gates of Villa Straylight. The architecture is ancient, older than the matrix itself. The ice is not just protection — it is architecture, art, a statement of power.",
-          "description_ko": "케이와 몰리가 빌라 스트레이라이트의 외부 문에 도달한다.建筑是古老的，比矩阵本身还要古老。 ICE不仅仅是保护 — 它是建筑，艺术，权力的声明.",
+          "description_ko": "케이와 몰리가 빌라 스트레이라이트의 외부 문에 도달한다.건축은 오래되었다，매트릭스 자체보다 더 오래되었다。 ICE단순한 보호가 아니라 — 그것은 건축물이다，예술，권력의소리밝다.",
           "episode_ref": "ep_17",
           "story_beats": [
             "ch4_beat_02_01",
@@ -933,7 +933,7 @@
               "beat_id": "ch4_beat_02_01",
               "type": "action",
               "text_en": "The Villa is not what I expected. It is not a building. It is a wound in the landscape, a place where the matrix folds in on itself like origami made of light and old regrets. The ice surrounding it is not a wall. It is a poem.",
-              "text_ko": "빌라는 내가 기대한 것이 아니다. 건물이 아니다. 풍경 속의 상처다, 매트릭스가origami가 빛과 오래된 후회로 접히는 것처럼 자체적으로 접히는 곳. 그것을囲む ICE는 벽이 아니다. 시다."
+              "text_ko": "빌라는 내가 기대한 것이 아니다. 건물이 아니다. 풍경 속의 상처다, 매트릭스가origami가 빛과 오래된 후회로 접히는 것처럼 자체적으로 접히는 곳. 그것을둘러싸인む ICE는 벽이 아니다. 시다."
             },
             {
               "beat_id": "ch4_beat_02_02",
@@ -945,7 +945,7 @@
               "beat_id": "ch4_beat_02_03",
               "type": "interior_monologue",
               "text_en": "I am thinking about the ice. About the way it moves around the Villa like a living thing, breathing, watching, waiting. It is not just program and data. It is something more. Something that was put here by the family.",
-              "text_ko": "나는 ICE에 대해 생각하고 있다. 그것이 Villa 주위를 살아있는 것처럼 움직이는 방식, 숨 쉬고, 지켜보고, 기다리고. 그것은 단지 프로그램과 데이터가 아니다. 그것은 더 무언가다. 가족이 그들이 100년 동안 지켜온 것을 보호하기 위해 여置한 무언가."
+              "text_ko": "나는 ICE에 대해 생각하고 있다. 그것이 Villa 주위를 살아있는 것처럼 움직이는 방식, 숨 쉬고, 지켜보고, 기다리고. 그것은 단지 프로그램과 데이터가 아니다. 그것은 더 무언가다. 가족이 그들이 100년 동안 지켜온 것을 보호하기 위해 여기 둔 무언가."
             },
             {
               "beat_id": "ch4_beat_02_04",
@@ -961,7 +961,7 @@
           "title_en": "The Jack-In",
           "title_ko": "잭인",
           "description_en": "Case and Molly jack in at the Villa interface. The ice here is alive — it thinks, adapts, remembers. The construct guides them through outer layers, but the deeper they go, the more the ice recognizes them as intruders.",
-          "description_ko": "케이와 몰리가 빌라 인터페이스에서 잭인한다.这里的 ICE是活着的 — 它会思考、适应、记忆。 构造体引导他们穿过外层，但他们越深入，ICE就越能将他们识别为入侵者。",
+          "description_ko": "케이와 몰리가 빌라 인터페이스에서 잭인한다.이곳의 ICE살아있다 — 그것은 생각한다,적응,기억. 구성체가 그들을 외층으로 안내한다.그들이 더 깊이 들어갈수록，ICE그들을 침입자로 식별할 수 있다。",
           "episode_ref": "ep_18",
           "story_beats": [
             "ch4_beat_03_01",
@@ -1002,7 +1002,7 @@
               "beat_id": "ch4_beat_03_04",
               "type": "action",
               "text_en": "We are through the second layer. The architecture here is different — older, stranger, built by minds that did not think like human minds. The data flows around us like water in a cave, ancient and patient. The back door is close now.",
-              "text_ko": "우리는 두 번째 층을 통과했다.这里的建筑不一样 — 更古老、更陌生，由不像人类思维那样思考的思维构建。 数据在我们周围流动，像洞穴中的水一样古老而耐心。 后门现在很近了。"
+              "text_ko": "우리는 두 번째 층을 통과했다.이곳의 건축물은 다르다 — 더 오래된、더 낯선，비슷하지 않은사람인간 사고처럼 사고하지 않는 사고로 만들어진。 데이터가 우리 주변에서 흐른다，동굴의 물처럼 오래되고 인내심 있다。 백도어가 이제 가까워졌다。"
             }
           ]
         },
@@ -1237,7 +1237,7 @@
           "phase_id": "RESOLUTION",
           "phase_index": 22,
           "title_en": "The Reckoning",
-          "title_ko": "清算",
+          "title_ko": "청산",
           "description_en": "Case and Molly part ways with the Finn's money in their pockets and the truth in their heads. They have won the game, but the game never ends. The matrix is still humming in Case's spine. The debt is still there.",
           "description_ko": "케이와 몰리가 핀의 돈이 주머니에, 진실이 머릿속에 있다. 그들이 게임에서 이겼지만, 게임은 절대 끝나지 않는다. 매트릭스가 여전히 케이의 척추에서 윙윙거린다. 빚이 여전히 있다.",
           "episode_ref": "ep_23",
@@ -1370,7 +1370,7 @@
               "beat_id": "ch5_beat_05_04",
               "type": "interior_monologue",
               "text_en": "Molly's Deal is over. Case survived the Villa. He found the truth. He lost the Dixie Flatline. He gained a partner. He paid his debts. And now he is jacking in again, because that is what cowboys do. We give until there is nothing left, and then we give more. Welcome to the Sprawl.",
-              "text_ko": "몰리의 거래가 끝났다. 케이가 빌라에서 살아남았다. 그가 진실을 찾았다. 그가 딕시 플랫라인을 잃었다. 그가 파트너를 얻었다. 그가 빚을 갚았다. 그리고 지금 그는 다시 잭인하고 있다, 그것이 카우보이들이 하는 것이니까. 우리는什么都没有 남을 때까지 주고, 그리고 더 많이준다. 스프롤에 오신 것을 환영합니다."
+              "text_ko": "몰리의 거래가 끝났다. 케이가 빌라에서 살아남았다. 그가 진실을 찾았다. 그가 딕시 플랫라인을 잃었다. 그가 파트너를 얻었다. 그가 빚을 갚았다. 그리고 지금 그는 다시 잭인하고 있다, 그것이 카우보이들이 하는 것이니까. 우리는아무것도 없다 남을 때까지 주고, 그리고 더 많이준다. 스프롤에 오신 것을 환영합니다."
             }
           ]
         }

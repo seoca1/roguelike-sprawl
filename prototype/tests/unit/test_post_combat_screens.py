@@ -198,8 +198,9 @@ class TestRewardReturnToHub:
         state.current_mission = _make_mission()
         reward_view.enter_reward(state)
         reward_view.return_to_hub_from_reward(state)
-        # After return_to_hub, run_state is reset to MEET_NPC for next run
-        assert state.run_state.current_stage is Stage.MEET_NPC
+        # After return_to_hub, run_state is reset to BRIEFING for next
+        # run (CONTENT_EXPANSION Phase B; was MEET_NPC).
+        assert state.run_state.current_stage is Stage.BRIEFING
         # But mission is marked completed
         assert "test_mission" in state.completed_missions
 
@@ -379,7 +380,11 @@ class TestJackOutToRewardFlow:
         state.inventory = {}
         state.credits = 0
         state.run_state = start_run("first_jack")
-        state.run_state.current_stage = Stage.DEFEAT_ICE
+        # CONTENT_EXPANSION Phase B: simulate being mid-run at DEFEAT_ICE
+        # (start at BRIEFING then advance to DEFEAT_ICE: 4 advances).
+        for _ in range(4):
+            state.run_state.mark_advance()
+        assert state.run_state.current_stage is Stage.DEFEAT_ICE
 
         # Set mission BEFORE the flow so rewards can be awarded
         state.current_mission = _make_mission(
@@ -409,9 +414,10 @@ class TestJackOutToRewardFlow:
         reward_view.handle_reward_input(event, state)
 
         # 6. Should be back at Hub
-        # Note: return_to_hub_from_reward resets run_state to fresh MEET_NPC
-        # for the next run; check mission completion instead.
+        # Note: return_to_hub_from_reward resets run_state to fresh BRIEFING
+        # (Phase B; was MEET_NPC) for the next run; check mission completion.
         assert state.screen is ScreenKind.HUB
         assert state.credits == 300
         assert "test_mission" in state.completed_missions
-        assert state.run_state.current_stage is Stage.MEET_NPC
+        # CONTENT_EXPANSION Phase B: return_to_hub now resets to BRIEFING
+        assert state.run_state.current_stage is Stage.BRIEFING

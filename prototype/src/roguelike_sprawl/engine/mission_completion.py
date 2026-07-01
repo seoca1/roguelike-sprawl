@@ -29,6 +29,7 @@ FIXER_REPUTATION: dict[str, dict[str, int]] = {
     "maas": {"maas": +10, "hosaka": -3},  # Direct Maas work, against Hosaka
     "sally": {"sense_net": +10, "maas": -3},  # Sense/Net ally
     "ta_rep": {"ta": +10, "sense_net": -3},  # Tessier-Ashpool work
+    "3jane": {"ta": +5, "sense_net": +3},  # Romantic (Phase 6+) — T-A insider
     "yakuza": {},  # No faction in enum — neutral for rep
 }
 

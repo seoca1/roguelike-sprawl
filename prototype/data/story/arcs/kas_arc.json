@@ -73,7 +73,7 @@
               "beat_id": "beat_01_04",
               "type": "interior_monologue",
               "text_en": "I take the credstick. I do not ask what the Declaration means. I have learned that the matrix does not explain. It simply consumes. The wheel turns. Someone always pays. Tonight, it seems, the debt is mine.",
-              "text_ko": "크레딧스틱을 받는다. 선언이 무슨 의미인지 묻지 않는다. 매트릭스는 설명하지 않는다는 걸 배웠다. 그저 집어삼킬 뿐. 바퀴가 돌아간다. 누군가는 항상を払한다. 오늘 밤, 그 빚은 내 것인 것 같다."
+              "text_ko": "크레딧스틱을 받는다. 선언이 무슨 의미인지 묻지 않는다. 매트릭스는 설명하지 않는다는 걸 배웠다. 그저 집어삼킬 뿐. 바퀴가 돌아간다. 누군가는 항상を치른한다. 오늘 밤, 그 빚은 내 것인 것 같다."
             }
           ]
         },
@@ -103,7 +103,7 @@
               "beat_id": "beat_02_01",
               "type": "dialogue",
               "text_en": "The construct-Sally tilts her head, that awful stillness flickering for just a moment with something like confusion. You want to know more, it says. That is good. The ones who ask questions are the ones who survive longest. The ones who do not ask are the ones who become constructs.",
-              "text_ko": "컨스트럭트-샐리가 고개를 기울인다, 그 무서운 정적함이 순간의糊涂함 같은 것으로 깜빡인다. 더 알고 싶어한다, 그것이 말한다. 질문을 하는 자들이 가장 오래 살아남는 자들이다. 질문하지 않는 자들은 컨스트럭트가 되는 자들이다."
+              "text_ko": "컨스트럭트-샐리가 고개를 기울인다, 그 무서운 정적함이 순간의혼란스러운함 같은 것으로 깜빡인다. 더 알고 싶어한다, 그것이 말한다. 질문을 하는 자들이 가장 오래 살아남는 자들이다. 질문하지 않는 자들은 컨스트럭트가 되는 자들이다."
             },
             {
               "beat_id": "beat_02_02",
@@ -131,7 +131,7 @@
           "title_en": "The Jack-In",
           "title_ko": "잭인",
           "description_en": "Kumiko jacks in from the Manarase's back room, using the access codes Sally's construct provided. The matrix feels wrong tonight — tighter, more aware, the construct-Sallies frozen in their eternal loops. She is looking for the source node, the corporate heart that broadcasts the Declaration. But she is not alone.",
-          "description_ko": "구미코가 매나리사의 뒷방에서 잭인한다, 샐리의 컨스트럭트가 제공한 접근 코드를 사용해서. 오늘 밤 매트릭스는 이상하다 — 더 단단하고, 더 의식적이며, 컨스트럭트-샐리들이 영원한 루프에冻结되어 있다. 소스 노드를 찾고 있다, 선언을 브로드캐스트하는 기업의 심장. 하지만 혼자가 아니다.",
+          "description_ko": "구미코가 매나리사의 뒷방에서 잭인한다, 샐리의 컨스트럭트가 제공한 접근 코드를 사용해서. 오늘 밤 매트릭스는 이상하다 — 더 단단하고, 더 의식적이며, 컨스트럭트-샐리들이 영원한 루프에동결되어 있다. 소스 노드를 찾고 있다, 선언을 브로드캐스트하는 기업의 심장. 하지만 혼자가 아니다.",
           "episode_ref": "ep_03",
           "story_beats": [
             "beat_03_01",
@@ -160,7 +160,7 @@
               "beat_id": "beat_03_02",
               "type": "action",
               "text_en": "The construct-Sallies are waiting in the ice. Dozens of them, rendered in that same terrible stillness, frozen in loops of corporate memory. They were all chosen, once. They all spoke the Declaration. They are all dead now, or something that is worse than dead.",
-              "text_ko": "컨스트럭트-샐리들이 ICE 안에서 기다리고 있다. 수십 개, 그 동일한 무서운 정적함으로, 기업의 기억 루프에冻结되어 있다. 그들 모두 한때 선택받았다. 그들 모두 선언을 했다. 지금은 모두 죽었거나, 죽은 것보다 더 나쁜 무언가다."
+              "text_ko": "컨스트럭트-샐리들이 ICE 안에서 기다리고 있다. 수십 개, 그 동일한 무서운 정적함으로, 기업의 기억 루프에동결되어 있다. 그들 모두 한때 선택받았다. 그들 모두 선언을 했다. 지금은 모두 죽었거나, 죽은 것보다 더 나쁜 무언가다."
             },
             {
               "beat_id": "beat_03_03",
@@ -172,7 +172,7 @@
               "beat_id": "beat_03_04",
               "type": "action",
               "text_en": "The explosion is silent in the matrix — a cascade of electromagnetic death that tears the Harrow apart at the seams. I move through the wreckage. The source node is ahead, pulsing with the sickly green light of corporate benediction.",
-              "text_ko": "폭발은 매트릭스 안에서 무声다 — Harrow를 균열로 찢어버리는 전자기적 죽음의 级联. 폐허를 지나간다. 소스 노드가 앞쪽에 있다, 기업의 축복의 정신없이 녹색 빛으로 맥동하고."
+              "text_ko": "폭발은 매트릭스 안에서 무소리다 — Harrow를 균열로 찢어버리는 전자기적 죽음의 캐스케이드. 폐허를 지나간다. 소스 노드가 앞쪽에 있다, 기업의 축복의 정신없이 녹색 빛으로 맥동하고."
             }
           ]
         },
@@ -182,7 +182,7 @@
           "title_en": "The Source",
           "title_ko": "소스",
           "description_en": "Kumiko reaches the source node — the corporate heart that broadcasts the Declaration. Inside, she finds data streams that rewrite what she thought she knew about the wheel of industry, about Tessier-Ashpool's true heirs, about what it means to speak the Declaration. But the node is guarded by something worse than ICE: a feedback loop that turns cowboys into constructs.",
-          "description_ko": "구미코가 소스 노드에 도달한다 — 선언을 브로드캐스트하는 기업의 심장. 내부에서, 그녀는 산업의 바퀴, 테시에-애스풀의 진정한 후계자들, 선언을 말한다는 것의 의미에 대해 그녀가 안다고 생각했던 것을 다시 쓰는 데이터 스트림을 발견한다. 하지만 노드는 ICE보다 더 무서운 것으로守护된다: 카우보이들을 컨스트럭트로 만드는 피드백 루프.",
+          "description_ko": "구미코가 소스 노드에 도달한다 — 선언을 브로드캐스트하는 기업의 심장. 내부에서, 그녀는 산업의 바퀴, 테시에-애스풀의 진정한 후계자들, 선언을 말한다는 것의 의미에 대해 그녀가 안다고 생각했던 것을 다시 쓰는 데이터 스트림을 발견한다. 하지만 노드는 ICE보다 더 무서운 것으로수호된다: 카우보이들을 컨스트럭트로 만드는 피드백 루프.",
           "episode_ref": "ep_04",
           "story_beats": [
             "beat_04_01",
@@ -265,7 +265,7 @@
               "beat_id": "beat_05_02",
               "type": "interior_monologue",
               "text_en": "The last speaker is a construct in the matrix, frozen in a loop of corporate memory. The speaker before her became the wheel. The one before that was consumed by what she created. The wheel turns. It always turns. And the ones who speak the Declaration are just the ones who happen to be standing closest when the wheel decides to move.",
-              "text_ko": "마지막 연사는 매트릭스에서 컨스트럭트다, 기업의 기억 루프에冻结되어 있다. 그 전 연사는 바퀴가 되었다. 그 전의 것은 그녀가 만든 것에 집어삼켜졌다. 바퀴가 돌아간다. 늘 돌아간다. 그리고 선언을 말하는 자들은 그냥 바퀴가 움직이기로 결정했을 때 가장 가까이 서 있던 자들일 뿐이다."
+              "text_ko": "마지막 연사는 매트릭스에서 컨스트럭트다, 기업의 기억 루프에동결되어 있다. 그 전 연사는 바퀴가 되었다. 그 전의 것은 그녀가 만든 것에 집어삼켜졌다. 바퀴가 돌아간다. 늘 돌아간다. 그리고 선언을 말하는 자들은 그냥 바퀴가 움직이기로 결정했을 때 가장 가까이 서 있던 자들일 뿐이다."
             },
             {
               "beat_id": "beat_05_03",
@@ -395,7 +395,7 @@
               "beat_id": "ch2_beat_02_02",
               "type": "combat",
               "text_en": "The first Harrow finds me on level 11. It locks on with patient precision and I realize: this is not a deterrent. This is a hunter. They want me alive.",
-              "text_ko": "첫 번째 Harrow가 11층에서 나를 찾는다.忍耐의 정밀함으로 잠근다. 이것은 억제가 아니다. 이것은 헌터다. 그들은 날 살아있길 원한다."
+              "text_ko": "첫 번째 Harrow가 11층에서 나를 찾는다.인내의 정밀함으로 잠근다. 이것은 억제가 아니다. 이것은 헌터다. 그들은 날 살아있길 원한다."
             },
             {
               "beat_id": "ch2_beat_02_03",
@@ -497,7 +497,7 @@
               "beat_id": "ch2_beat_04_02",
               "type": "action",
               "text_en": "The door opens without a knock. Sally Shearer walks in—or something that wears her face, something that has learned to move through the Sprawl like a woman instead of a message.",
-              "text_ko": "문을 두드리지 않고 열린다. 샐리 시어어가走了进来—아니면 그녀의 얼굴을 쓴 무언가, 스프롤을女性처럼 걷는 법을 배운 무언가."
+              "text_ko": "문을 두드리지 않고 열린다. 샐리 시어어가들어왔다—아니면 그녀의 얼굴을 쓴 무언가, 스프롤을여성처럼 걷는 법을 배운 무언가."
             },
             {
               "beat_id": "ch2_beat_04_03",
@@ -575,7 +575,7 @@
       "title_en": "The Shadow",
       "title_ko": "그림자",
       "description_en": "Into the shadow. What waits there?",
-      "description_ko": "그림자 속으로. 무엇이那里에서 기다리는가?",
+      "description_ko": "그림자 속으로. 무엇이거기에서 기다리는가?",
       "cutscene_start": {
         "scene_id": "scene_kas_weapon",
         "title_en": "THE WEAPON",
@@ -691,7 +691,7 @@
           "title_en": "Shadow ICE",
           "title_ko": "그림자 ICE",
           "description_en": "The shadow node is guarded by Shadow ICE—ICE that does not hunt, does not chase, simply exists in the darkness and waits.",
-          "description_ko": "그림자 노드는 그림자 ICE에 의해守护된다—사냥하지 않고, 추격하지 않고, 그저 어둠 속에 존재하며 기다리는 ICE.",
+          "description_ko": "그림자 노드는 그림자 ICE에 의해수호된다—사냥하지 않고, 추격하지 않고, 그저 어둠 속에 존재하며 기다리는 ICE.",
           "episode_ref": "ep_13",
           "story_beats": [
             "ch3_beat_03_01",
@@ -892,7 +892,7 @@
               "beat_id": "ch4_beat_01_02",
               "type": "action",
               "text_en": "The message came through Sallys construct, but it was not Sallys voice. It was the wheels voice—cold, corporate. The Weapon is in Villa Straylight. You will retrieve it. You will do this, or the debt will come due.",
-              "text_ko": "메시지가 샐리의 컨스트럭트를 통해 왔지만, 샐리의 목소리가 아니었다. 바퀴의 목소리였다—차갑고 기업적인. 무기가 Villa Straylight에 있다. 너는 그것을 회수할 것이다. 너는 이것을 할 것이다, 아니면 대가가届时 된다."
+              "text_ko": "메시지가 샐리의 컨스트럭트를 통해 왔지만, 샐리의 목소리가 아니었다. 바퀴의 목소리였다—차갑고 기업적인. 무기가 Villa Straylight에 있다. 너는 그것을 회수할 것이다. 너는 이것을 할 것이다, 아니면 대가가그때 된다."
             },
             {
               "beat_id": "ch4_beat_01_03",
@@ -1069,7 +1069,7 @@
               "beat_id": "ch4_beat_04_04",
               "type": "action",
               "text_en": "Lady-3Jane saves me. She burns through her own kind. The wheels children fall. I make it to the exit with the fire still burning in my hands. The Weapon is mine. The price is everything I used to be.",
-              "text_ko": "레이디-3제인이 날 구한다. 그녀가 그녀의 동족들을 타고 난투한다. 바퀴의 아이들이 쓰러지고, 나는 불이 여전히 내 손에서 타오르는 가운데 출구에 도착한다. 무기는 내 것이다. 대가는 내가以前あったすべてのもの."
+              "text_ko": "레이디-3제인이 날 구한다. 그녀가 그녀의 동족들을 타고 난투한다. 바퀴의 아이들이 쓰러지고, 나는 불이 여전히 내 손에서 타오르는 가운데 출구에 도착한다. 무기는 내 것이다. 대가는 내가이전あったすべてのもの."
             }
           ]
         },
@@ -1114,7 +1114,7 @@
               "beat_id": "ch4_beat_05_03",
               "type": "interior_monologue",
               "text_en": "But if I speak it, what burns? The wheel, yes. But also the people inside it—the cowboys, the runners, the ones who thought they were free. The fire does not discriminate.",
-              "text_ko": "하지만 내가 말하면, 무엇이 타는가? 바퀴, 그래. 하지만 그것 안의 사람들도—카우보이들, 러너들,自由다고 생각했던 자들. 불은 차별하지 않는다."
+              "text_ko": "하지만 내가 말하면, 무엇이 타는가? 바퀴, 그래. 하지만 그것 안의 사람들도—카우보이들, 러너들,자유다고 생각했던 자들. 불은 차별하지 않는다."
             },
             {
               "beat_id": "ch4_beat_05_04",
@@ -1286,7 +1286,7 @@
               "beat_id": "ch5_beat_03_01",
               "type": "action",
               "text_en": "At the center of the wheels core, I find her. Sally Shearer—the first speaker, frozen in the architecture for a hundred years. She is not a warning anymore. She is a door.",
-              "text_ko": "바퀴의 핵심 중앙에서, 나는 그녀를 찾는다. 샐리 시어어—첫 연사, 백 년 동안 아키텍처에冻结된. 그녀는 더 이상 경고가 아니다. 그녀는 문이다."
+              "text_ko": "바퀴의 핵심 중앙에서, 나는 그녀를 찾는다. 샐리 시어어—첫 연사, 백 년 동안 아키텍처에동결된. 그녀는 더 이상 경고가 아니다. 그녀는 문이다."
             },
             {
               "beat_id": "ch5_beat_03_02",
@@ -1331,7 +1331,7 @@
               "beat_id": "ch5_beat_04_01",
               "type": "action",
               "text_en": "I stand at the center of the wheel, the Weapon burning in my hands, Sally frozen before me. The wheel is all around me—its architecture, its lies, its century of control. I raise the Weapon.",
-              "text_ko": "내가 바퀴의 중앙에 서 있다, 무기가 내 손에서 타오르고, 샐리가 내 앞에서冻结되어. 바퀴가 나를 둘러싸고 있다—그의 아키텍처, 그 거짓말, 그 백 년의 통제. 내가 무기를 든다."
+              "text_ko": "내가 바퀴의 중앙에 서 있다, 무기가 내 손에서 타오르고, 샐리가 내 앞에서동결되어. 바퀴가 나를 둘러싸고 있다—그의 아키텍처, 그 거짓말, 그 백 년의 통제. 내가 무기를 든다."
             },
             {
               "beat_id": "ch5_beat_04_02",
@@ -1343,7 +1343,7 @@
               "beat_id": "ch5_beat_04_03",
               "type": "interior_monologue",
               "text_en": "I think of my father. I think of the wheel that killed him. I think of Lady-3Jane, trapped for a hundred years. I think of Sally, frozen waiting for this moment. I speak the Declaration. The fire begins.",
-              "text_ko": "나는 내 아버지를 생각한다. 그를 죽인 바퀴를 생각한다. 백 년 동안 갇힌 레이디-3제인을 생각한다. 이 순간을 기다리며冻结된 샐리를 생각한다. 나는 선언을 말한다. 불이 시작된다."
+              "text_ko": "나는 내 아버지를 생각한다. 그를 죽인 바퀴를 생각한다. 백 년 동안 갇힌 레이디-3제인을 생각한다. 이 순간을 기다리며동결된 샐리를 생각한다. 나는 선언을 말한다. 불이 시작된다."
             },
             {
               "beat_id": "ch5_beat_04_04",
@@ -1359,7 +1359,7 @@
           "title_en": "What Remains",
           "title_ko": "남는 것",
           "description_en": "The wheel is burning. Kumiko is burning with it. But in the ashes of what was, something new can grow. The Declaration has been spoken. The wheel has been broken. What remains is a choice.",
-          "description_ko": "바퀴가 타고 있다. 구미코도 그것과 함께 타고 있다. 하지만以前것의 재에서, 무언가 새로운 것이 자랄 수 있다. 선언이 말해졌다. 바퀴가 부서졌다. 남는 것은 선택이다.",
+          "description_ko": "바퀴가 타고 있다. 구미코도 그것과 함께 타고 있다. 하지만이전것의 재에서, 무언가 새로운 것이 자랄 수 있다. 선언이 말해졌다. 바퀴가 부서졌다. 남는 것은 선택이다.",
           "episode_ref": "ep_25",
           "story_beats": [
             "ch5_beat_05_01",

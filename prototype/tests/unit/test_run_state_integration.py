@@ -321,6 +321,12 @@ class TestRunStateFullFlow:
 
         state = AppState()
         state.run_state = ensure_run_state(state)
+        # CONTENT_EXPANSION Phase B: starts at BRIEFING
+        assert state.run_state.current_stage is Stage.BRIEFING
+
+        # Advance through BRIEFING → TRAVEL → MEET_NPC
+        state.run_state.mark_advance()  # BRIEFING → TRAVEL
+        state.run_state.mark_advance()  # TRAVEL → MEET_NPC
         assert state.run_state.current_stage is Stage.MEET_NPC
 
         # 1. Talk to NPC

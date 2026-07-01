@@ -60,15 +60,20 @@ from enum import StrEnum
 class Stage(StrEnum):
     """Ordered stages of a single Run (aliased as Phase).
 
-    Default first_jack mission flow:
-      PENDING → MEET_NPC → EXTRACT_DATA → DEFEAT_ICE → JACK_OUT → REWARD → COMPLETE
+    Default first_jack mission flow (CONTENT_EXPANSION Phase B):
+      PENDING → BRIEFING → TRAVEL → MEET_NPC →
+      EXTRACT_DATA → BYPASS_SECURITY (optional) → DEFEAT_ICE →
+      JACK_OUT → REWARD → DEBRIEF → COMPLETE
 
     Phase is the new canonical name; Stage is kept for backward compatibility.
     """
 
     PENDING = "pending"  # Run not started (Hub: waiting for mission accept)
+    BRIEFING = "briefing"  # NPC (Finn, Dixie, ...) explains the job details
+    TRAVEL = "travel"  # Jack-in animation / pre-matrix prep
     MEET_NPC = "meet_npc"  # Find and talk to a construct NPC
     EXTRACT_DATA = "extract_data"  # Find data node, extract payload
+    BYPASS_SECURITY = "bypass_security"  # Optional: bypass a security layer
     DEFEAT_ICE = "defeat_ice"  # Find ICE node, win combat
     JACK_OUT = "jack_out"  # Disconnect from matrix (animation)
     REWARD = "reward"  # Show mission rewards
@@ -154,7 +159,39 @@ DEFAULT_FLOW: dict[Stage, StageInfo] = {
         title="Awaiting Jack-In",
         objective_kind=ObjectiveKind.NONE,
         hint="Accept a mission at the Hub to begin.",
+        next_stage=Stage.BRIEFING,
+    ),
+    Stage.BRIEFING: StageInfo(
+        stage=Stage.BRIEFING,
+        title="Mission Briefing",
+        objective_kind=ObjectiveKind.NONE,
+        hint="Listen to the fixer's briefing.",
+        next_stage=Stage.TRAVEL,
+        on_enter="The Finn leans back. 'Listen close, cowboy.'",
+        ascii_art=(
+            "  ┌──────────────────────────┐",
+            "  │  ♠F♠ THE FINN'S OFFICE   │",
+            "  │  ────────────────────    │",
+            "  │  'Pay's in the credstick │",
+            "  │   when the data's in     │",
+            "  │   my hand. Don't die.'   │",
+            "  └──────────────────────────┘",
+        ),
+    ),
+    Stage.TRAVEL: StageInfo(
+        stage=Stage.TRAVEL,
+        title="Travel to Jack-In Point",
+        objective_kind=ObjectiveKind.NONE,
+        hint="Head to the jack-in spot.",
         next_stage=Stage.MEET_NPC,
+        on_enter="Rain on the Chiba window. The deck hums warm.",
+        ascii_art=(
+            "  ░░░░░░░░░░░░░░░░░░░░░░░░░░",
+            "  ░  ◢◣  HEADING TO ▒░░░  ░",
+            "  ░  ──  JACK-IN POINT ──  ░",
+            "  ░  ░▒▓  CHIBA, 11LV  ▓▒░ ░",
+            "  ░░░░░░░░░░░░░░░░░░░░░░░░░░",
+        ),
     ),
     Stage.MEET_NPC: StageInfo(
         stage=Stage.MEET_NPC,
@@ -171,6 +208,14 @@ DEFAULT_FLOW: dict[Stage, StageInfo] = {
         hint="Locate the data node and extract the payload.",
         next_stage=Stage.DEFEAT_ICE,
         on_enter="Data fragment detected. Locking on...",
+    ),
+    Stage.BYPASS_SECURITY: StageInfo(
+        stage=Stage.BYPASS_SECURITY,
+        title="Bypass Security",
+        objective_kind=ObjectiveKind.NONE,
+        hint="Slip past the corporate security layer.",
+        next_stage=Stage.DEFEAT_ICE,
+        on_enter="You ghost the Watchdog's patrol route. The blind spot lasts three seconds.",
     ),
     Stage.DEFEAT_ICE: StageInfo(
         stage=Stage.DEFEAT_ICE,
@@ -264,6 +309,8 @@ StageSequence = tuple[StageInfo, ...]
 # Ice Run has same flow as First Jack but different ICE count.
 MISSION_FLOWS: dict[str, StageSequence] = {
     "first_jack": (
+        DEFAULT_FLOW[Stage.BRIEFING],
+        DEFAULT_FLOW[Stage.TRAVEL],
         DEFAULT_FLOW[Stage.MEET_NPC],
         DEFAULT_FLOW[Stage.EXTRACT_DATA],
         DEFAULT_FLOW[Stage.DEFEAT_ICE],
@@ -272,14 +319,19 @@ MISSION_FLOWS: dict[str, StageSequence] = {
         DEFAULT_FLOW[Stage.COMPLETE],
     ),
     "watchdog_patrol": (
+        DEFAULT_FLOW[Stage.BRIEFING],
+        DEFAULT_FLOW[Stage.TRAVEL],
         DEFAULT_FLOW[Stage.MEET_NPC],
-        # No EXTRACT_DATA — pure combat mission
+        # No EXTRACT_DATA — pure combat mission; BYPASS_SECURITY flavor.
+        DEFAULT_FLOW[Stage.BYPASS_SECURITY],
         DEFAULT_FLOW[Stage.DEFEAT_ICE],
         DEFAULT_FLOW[Stage.JACK_OUT],
         DEFAULT_FLOW[Stage.REWARD],
         DEFAULT_FLOW[Stage.COMPLETE],
     ),
     "ice_run": (
+        DEFAULT_FLOW[Stage.BRIEFING],
+        DEFAULT_FLOW[Stage.TRAVEL],
         DEFAULT_FLOW[Stage.MEET_NPC],
         DEFAULT_FLOW[Stage.EXTRACT_DATA],
         DEFAULT_FLOW[Stage.DEFEAT_ICE],
@@ -397,7 +449,10 @@ class RunState:
 
     def reset(self, mission_id: str = "first_jack") -> None:
         """Reset to initial state for a new Run."""
-        self.current_stage = Stage.MEET_NPC
+        # CONTENT_EXPANSION Phase B: missions now start at BRIEFING
+        # (was MEET_NPC). The first mark_advance() progresses through
+        # TRAVEL → MEET_NPC → ...
+        self.current_stage = Stage.BRIEFING
         self.completed_stages = ()
         self.pending_advance = False
         self.current_target_node = None
@@ -641,14 +696,17 @@ def start_run(mission_id: str = "first_jack", initial_stage: Stage | None = None
 
     Args:
         mission_id: The mission to start. Defaults to "first_jack".
-        initial_stage: Override the initial stage (default: MEET_NPC for
-            active missions, PENDING for unstarted).
+        initial_stage: Override the initial stage (default: BRIEFING for
+            active missions, PENDING for unstarted).  CONTENT_EXPANSION
+            Phase B moved the first in-mission stage from MEET_NPC to
+            BRIEFING so the player sees the fixer's briefing before
+            traveling to the jack-in point.
 
     Returns:
         A new RunState.
     """
     if initial_stage is None:
-        initial_stage = Stage.MEET_NPC
+        initial_stage = Stage.BRIEFING
     return RunState(
         current_stage=initial_stage,
         mission_id=mission_id,

@@ -1,0 +1,46 @@
+{
+  "character": "suit",
+  "id": "chapter_suit",
+  "title_en": "The Suit",
+  "title_ko": "수트",
+  "subtitle_en": "Armitage's First Infiltration",
+  "subtitle_ko": "아미티지의 첫 침투",
+  "portrait": "art:armitage",
+  "theme": "tessier_ashpool_lab",
+  "excerpt_en": "Armitage had been in the matrix for eleven years before he ever jacked in himself. He'd spent those years at a console in a sterile room above Chiba, watching other people break for him. The data came back. The money came back. He never did. That was the point. Then the Tessier-Ashpool board had asked him to do something the contractors couldn't: go in himself, alone, no support. The matrix had been his office for so long that it knew his hands. He didn't need to be told what to do. He needed to be told why. He found out why in the third node, in a construct older than the Sprawl, in a voice that remembered his name. 'Armitage,' it said. 'We've been waiting for you.'",
+  "excerpt_ko": "아미티지가 스스로 잭인하기 전 11년 동안 매트릭스에 있었다. 그는 그 11년 동안 지바 위의 무균실에 있는 콘솔에서, 다른 사람들이 자신을 위해 부러지는 것을 지켜보았다. 데이터는 돌아왔다. 돈은 돌아왔다. 그는 돌아오지 않았다. 그것이 요점이었다. 그러다 테시에-애스풀 이사회가 계약자들로는 할 수 없는 무언가를 그에게 요청했다: 스스로, 혼자, 지원 없이 들어가라고. 매트릭스는 너무 오래 그만의 사무실이어서 그의 손을 알고 있었다. 그에게 무엇을 해야 할지 말할 필요가 없었다. 이유를 말할 필요가 있었다. 세 번째 노드에서, 스프롤보다 오래된 구성체 안에서, 그의 이름을 기억하는 목소리 안에서 이유를 알게 되었다. '아미티지,' 그것이 말했다. '당신이 올 때까지 기다렸습니다.'",
+  "duration_ms": 12000,
+  "next_screen": "HUB",
+  "char_delay_ms": 60,
+  "_wiki_refs": {
+    "fictions": [
+      "Fiction/wiki/works/neuromancer",
+      "Fiction/wiki/characters/armitage"
+    ],
+    "themes": [
+      "Fiction/wiki/themes/identity-and-the-matrix",
+      "Fiction/wiki/themes/corporate-infiltration"
+    ],
+    "motifs": [
+      "console-over-matrix",
+      "construct-recognition",
+      "the-suit"
+    ]
+  },
+  "_integrated_with": {
+    "missions": [
+      "armitage_infiltration",
+      "hosaka_extraction",
+      "ta_defection",
+      "wintermute_negotiation"
+    ],
+    "character_ref": "suit",
+    "fixers_used": ["ta_rep", "finn", "3jane"]
+  },
+  "_play_notes": {
+    "narrative_role": "Armitage is the suit — corporate operator who jacked in for stealth. Phase 6+ adds him as the 4th character after Case/Sil/Kas. The 4 missions trace his arc: 1) Infiltration (introduce), 2) Hosaka extraction (corruption revealed), 3) TA defection (side switch), 4) Wintermute negotiation (full circle).",
+    "ending": "His ending is silent — he never jacks out.",
+    "tone": "Cold, calculating, second-person POV. He uses the matrix the way other people use a desk.",
+    "replaces_case": "Same role as Case but reversed: Case is a cowboy who ends up a construct, Armitage is a suit who ends up the construct's mouthpiece."
+  }
+}

@@ -54,7 +54,7 @@
     "trigger": "matrix.zone.core_first_time",
     "duration_ms": 5000,
     "narrative_en": "You've reached the core. The data here is older, stranger. Light doesn't recede so much as *fold*.\n\nThe constructs here are different. Slower. They watch you back.\n\nIn the meat, your heart rate spikes. The deck is warm against your spine. You jack deeper.",
-    "narrative_ko": "코어에 도달했다.这里的 데이터는 더 오래되고, 더 기묘하다. 빛은 물러나기보다는 *접힌다*.\n\n这里的 구성체들은 다르다. 더 느리다. 너를 되돌아본다.\n\n메트스페이스에서, 네 심박수가 치솟는다. 데크가 네 척추에 닿아 따뜻하다. 더 깊이 잭인한다.",
+    "narrative_ko": "코어에 도달했다.여기의 데이터는 더 오래되고, 더 기묘하다. 빛은 물러나기보다는 *접힌다*.\n\n여기의 구성체들은 다르다. 더 느리다. 너를 되돌아본다.\n\n메트스페이스에서, 네 심박수가 치솟는다. 데크가 네 척추에 닿아 따뜻하다. 더 깊이 잭인한다.",
     "reactions": [
       "case_react_core",
       "maelcum_react_core"
@@ -174,7 +174,7 @@
     "trigger": "matrix.zone.freeside_first_time",
     "duration_ms": 8000,
     "narrative_en": "Freeside. The L5 colony at the edge of everything. They say no one jacks out the same.\n\nYou see why now. The constructs here are old. Patient. They look at you like they remember you from a run you don't.\n\nThe data you came for is small. The data you take with you is not.",
-    "narrative_ko": "프리사이드. 모든 것의 가장자리에 있는 L5 식민지. 아무도 똑같이 잭아웃하지 못한다고 한다.\n\n이제 이유를 안다.这里的 구성체들은 오래되었다. 인내심이 있다. 기억하지 못하는 런에서 너를 기억하는 것처럼 본다.\n\n네가 찾으러 온 데이터는 작다. 가지고 나오는 데이터는 작지 않다.",
+    "narrative_ko": "프리사이드. 모든 것의 가장자리에 있는 L5 식민지. 아무도 똑같이 잭아웃하지 못한다고 한다.\n\n이제 이유를 안다.여기의 구성체들은 오래되었다. 인내심이 있다. 기억하지 못하는 런에서 너를 기억하는 것처럼 본다.\n\n네가 찾으러 온 데이터는 작다. 가지고 나오는 데이터는 작지 않다.",
     "reactions": [
       "case_react_freeside",
       "sally_react_freeside",

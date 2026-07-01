@@ -30,14 +30,17 @@ class TestStageDataFile:
         data = json.loads(DATA.read_text(encoding="utf-8"))
         assert isinstance(data, dict)
 
-    def test_has_nine_stages(self) -> None:
-        """v0.3: DEBRIEF removed (9 stages)."""
+    def test_has_twelve_stages(self) -> None:
+        """v0.4: 12 stages (BRIEFING/TRAVEL/BYPASS_SECURITY added, Phase B)."""
         data = json.loads(DATA.read_text(encoding="utf-8"))
         ids = {s["id"] for s in data["stages"]}
         expected = {
             "pending",
+            "briefing",
+            "travel",
             "meet_npc",
             "extract_data",
+            "bypass_security",
             "defeat_ice",
             "jack_out",
             "reward",

@@ -57,7 +57,7 @@ class TestMissionsStoryMetadata:
             assert 1 <= arc <= 5, f"{mid}: arc={arc} out of range 1-5"
 
     def test_character_ref_valid(self, missions):
-        valid_chars = {"novice", "veteran", "heretic"}
+        valid_chars = {"novice", "veteran", "heretic", "suit"}
         for mid, m in missions.items():
             char = m["story"]["character_ref"]
             assert char in valid_chars, f"{mid}: character_ref={char} not in {valid_chars}"

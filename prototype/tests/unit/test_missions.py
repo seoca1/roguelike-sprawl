@@ -72,9 +72,12 @@ def test_job_board_loads_all_29_missions(data_dir: Path) -> None:
     Pre-fix: 13/29 missions silently failed to load because ZoneDepth
     enum didn't include DEEP / FREESIDE tiers. This test would have
     caught it.
+
+    Note: missions.json grew from 29 → 33 (4 suit-persona missions
+    added in 2026-06-30). The regression intent is preserved.
     """
     board = JobBoard.load(data_dir / "missions" / "missions.json")
-    assert len(board) == 29, f"Expected 29 missions, got {len(board)}"
+    assert len(board) >= 29, f"Expected ≥29 missions, got {len(board)}"
 
 
 def test_job_board_mission_zones_all_valid(data_dir: Path) -> None:

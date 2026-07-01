@@ -45,6 +45,7 @@ def _find_repo() -> Path:
 
 
 REPO = _find_repo()
+_PROJECTS_ROOT = Path("/Users/emilio/projects/Projects/Game/roguelike_sprawl")
 
 
 @pytest.fixture
@@ -61,9 +62,9 @@ class TestLoadStoryStats:
     def test_basic_fields_present(self, data_dir: Path) -> None:
         stats = load_story_stats(REPO)
         # Legacy fields
-        assert stats["missions"] >= 25  # real game has 29
-        assert stats["arcs"] == 3
-        assert stats["chapters"] == 3
+        assert stats["missions"] >= 25  # real game has 29+
+        assert stats["arcs"] == 4  # case/sil/kas/suit
+        assert stats["chapters"] == 4
 
     def test_aftermath_events_count(self, data_dir: Path) -> None:
         """Phase 6+ content expansion: 12 aftermath events in data."""
@@ -120,13 +121,13 @@ class TestLoadStoryStats:
 
 class TestLoadEventDialoguesStats:
     def test_basic_fields(self, data_dir: Path) -> None:
-        stats = load_event_dialogues_stats(REPO)
+        stats = load_event_dialogues_stats(_PROJECTS_ROOT)
         assert stats["npcs"] >= 5  # finn, dixie, maelcum, bartender, ta_rep
         assert stats["dialogues"] >= 10
         assert stats["lines"] >= 30
 
     def test_characters_list_populated(self, data_dir: Path) -> None:
-        stats = load_event_dialogues_stats(REPO)
+        stats = load_event_dialogues_stats(_PROJECTS_ROOT)
         chars = stats["characters"]
         assert "finn" in chars
         assert "dixie" in chars
@@ -149,23 +150,24 @@ class TestLoadEventDialoguesStats:
 class TestLoadStagesStats:
     def test_stages_from_source(self, data_dir: Path) -> None:
         """Stage enum count parsed from run/state.py source."""
-        stats = load_stages_stats(REPO)
-        # run.state.Stage has 9 enum values.
-        assert stats["stages"] == 10
-        assert stats["stage_enum"] == 10
+        stats = load_stages_stats(_PROJECTS_ROOT)
+        # CONTENT_EXPANSION Phase B added BRIEFING / TRAVEL /
+        # BYPASS_SECURITY → 10 → 13 stages.
+        assert stats["stages"] == 13
+        assert stats["stage_enum"] == 13
 
     def test_chapter_states_from_source(self, data_dir: Path) -> None:
         """ChapterState enum: PROLOGUE + 3 ENDING_ + 5 IN_CHAPTER_ + 5 CHAPTER_*_COMPLETE = 14."""
-        stats = load_stages_stats(REPO)
+        stats = load_stages_stats(_PROJECTS_ROOT)
         assert stats["chapter_states"] == 14
 
     def test_objectives_from_source(self, data_dir: Path) -> None:
         """ObjectiveKind: NPC / DATA / ICE / NONE = 4."""
-        stats = load_stages_stats(REPO)
+        stats = load_stages_stats(_PROJECTS_ROOT)
         assert stats["objectives"] == 4
 
     def test_missions_mirrors_story(self, data_dir: Path) -> None:
-        stats = load_stages_stats(REPO)
+        stats = load_stages_stats(_PROJECTS_ROOT)
         story = load_story_stats(REPO)
         assert stats["missions"] == story["missions"]
 
@@ -269,7 +271,7 @@ class TestMetadataPipeline:
         if not evt_p.exists():
             pytest.skip("event_dialogues.json not available")
         data = json.loads(evt_p.read_text(encoding="utf-8"))
-        stats = load_event_dialogues_stats(REPO)
+        stats = load_event_dialogues_stats(_PROJECTS_ROOT)
         npc_count = len(data.get("npcs", {}))
         dlg_count = len(data.get("dialogues", {}))
         assert stats["npcs"] == npc_count

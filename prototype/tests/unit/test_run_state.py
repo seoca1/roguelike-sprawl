@@ -84,8 +84,8 @@ class TestStageInfo:
         """PENDING stage has no objective."""
         info = get_stage_info(Stage.PENDING)
         assert info.objective_kind is ObjectiveKind.NONE
-        # New flow: PENDING -> MEET_NPC (when starting a run)
-        assert info.next_stage is Stage.MEET_NPC
+        # New flow (CONTENT_EXPANSION Phase B): PENDING → BRIEFING
+        assert info.next_stage is Stage.BRIEFING
 
     def test_get_stage_info_failed(self) -> None:
         """FAILED stage transitions to DEATH_RESTART."""
@@ -117,9 +117,14 @@ class TestRunStateInit:
         assert rs.current_target_node is None
 
     def test_start_run(self) -> None:
-        """start_run creates fresh RunState at default stage (MEET_NPC)."""
+        """start_run creates fresh RunState at default stage (BRIEFING).
+
+        CONTENT_EXPANSION Phase B: missions now start at BRIEFING
+        (was MEET_NPC). The first mark_advance() progresses through
+        TRAVEL → MEET_NPC → ...
+        """
         rs = start_run()
-        assert rs.current_stage is Stage.MEET_NPC
+        assert rs.current_stage is Stage.BRIEFING
 
     def test_start_run_with_initial_stage(self) -> None:
         """start_run accepts initial stage."""
@@ -127,13 +132,13 @@ class TestRunStateInit:
         assert rs.current_stage is Stage.MEET_NPC
 
     def test_reset(self) -> None:
-        """reset() returns to PENDING (for new run)."""
+        """reset() returns to BRIEFING (for new run, Phase B flow)."""
         rs = start_run(initial_stage=Stage.MEET_NPC)
         rs.completed_stages = (Stage.MEET_NPC,)
         rs.current_target_node = "n1"
         rs.reset("first_jack")
-        # New: reset goes to MEET_NPC (active state), not PENDING
-        assert rs.current_stage is Stage.MEET_NPC
+        # CONTENT_EXPANSION Phase B: reset goes to BRIEFING (was MEET_NPC)
+        assert rs.current_stage is Stage.BRIEFING
         assert rs.completed_stages == ()
         assert rs.current_target_node is None
         assert rs.mission_id == "first_jack"
@@ -370,10 +375,10 @@ class TestStartNewRun:
     """start_new_run() factory."""
 
     def test_start_new_run_default(self) -> None:
-        """start_new_run defaults to MEET_NPC."""
+        """start_new_run defaults to BRIEFING (Phase B)."""
         state = AppState()
         rs = start_new_run(state)
-        assert rs.current_stage is Stage.MEET_NPC
+        assert rs.current_stage is Stage.BRIEFING
         assert state.run_state is rs
 
     def test_start_new_run_with_stage(self) -> None:
@@ -639,24 +644,29 @@ class TestDeathRestartCycle:
         rs.mark_death_restart()
         assert rs.current_stage is Stage.MEET_NPC
 
-    def test_reset_returns_to_meet_npc(self) -> None:
-        """reset() moves from any stage back to MEET_NPC for a fresh run."""
+    def test_reset_returns_to_briefing(self) -> None:
+        """reset() moves from any stage back to BRIEFING for a fresh run.
+
+        CONTENT_EXPANSION Phase B: BRIEFING is the new mission start
+        (was MEET_NPC).
+        """
         rs = RunState(current_stage=Stage.DEATH_RESTART, mission_id="zion_express")
         rs.completed_stages = (Stage.MEET_NPC, Stage.EXTRACT_DATA, Stage.DEFEAT_ICE)
         rs.reset(mission_id="first_jack")
-        assert rs.current_stage is Stage.MEET_NPC
+        assert rs.current_stage is Stage.BRIEFING
         assert rs.completed_stages == ()
         assert rs.mission_id == "first_jack"
         assert rs.pending_advance is False
 
-    def test_full_death_cycle_meet_to_restart(self) -> None:
-        """Full cycle: MEET_NPC → mark_failed → DEATH_RESTART → reset.
+    def test_full_death_cycle_briefing_to_restart(self) -> None:
+        """Full cycle: BRIEFING → mark_failed → DEATH_RESTART → reset.
 
         Regression for P2 #13: ensures the player can re-enter a fresh
         run after a death without manually bypassing the stage machine.
+        Phase B update: cycle now starts at BRIEFING instead of MEET_NPC.
         """
         # Start a normal run
-        rs = RunState(current_stage=Stage.MEET_NPC, mission_id="first_jack")
+        rs = RunState(current_stage=Stage.BRIEFING, mission_id="first_jack")
 
         # Mid-run, player dies
         rs.mark_failed()
@@ -666,9 +676,9 @@ class TestDeathRestartCycle:
         rs.mark_death_restart()
         assert rs.current_stage is Stage.DEATH_RESTART
 
-        # Player picks restart → reset to MEET_NPC
+        # Player picks restart → reset to BRIEFING
         rs.reset(mission_id="black_ice_dream")
-        assert rs.current_stage is Stage.MEET_NPC
+        assert rs.current_stage is Stage.BRIEFING
         assert rs.mission_id == "black_ice_dream"
         assert rs.completed_stages == ()
         assert rs.is_complete() is False

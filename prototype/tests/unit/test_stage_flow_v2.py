@@ -107,9 +107,11 @@ class TestPerMissionFlows:
         assert flow == expected
 
     def test_mission_stage_count(self) -> None:
-        assert get_mission_stage_count("first_jack") == 6
-        assert get_mission_stage_count("watchdog_patrol") == 5
-        assert get_mission_stage_count("ice_run") == 6
+        # CONTENT_EXPANSION Phase B: +BRIEFING +TRAVEL → 8 stages
+        # (watchdog adds BYPASS_SECURITY → 8 also).
+        assert get_mission_stage_count("first_jack") == 8
+        assert get_mission_stage_count("watchdog_patrol") == 8
+        assert get_mission_stage_count("ice_run") == 8
 
 
 class TestStageValidation:
@@ -160,50 +162,57 @@ class TestRunStateProgress:
     def test_initial_state_zero_progress(self) -> None:
         run = start_run("first_jack")
         assert run.stages_completed() == 0
-        assert run.stages_total() == 6
+        assert run.stages_total() == 8
         assert run.progress_fraction() == 0.0
 
     def test_progress_increases_with_advance(self) -> None:
         run = start_run("first_jack")
-        run.mark_advance()  # MEET_NPC -> EXTRACT_DATA
+        run.mark_advance()  # BRIEFING -> TRAVEL
         assert run.stages_completed() == 1
-        # In progress on EXTRACT_DATA (stage 2 of 6)
-        assert run.current_stage is Stage.EXTRACT_DATA
+        # In progress on TRAVEL (stage 2 of 8)
+        assert run.current_stage is Stage.TRAVEL
 
     def test_full_run_to_complete(self) -> None:
         run = start_run("first_jack")
-        # 6 stages: MEET_NPC -> EXTRACT_DATA -> DEFEAT_ICE -> JACK_OUT -> REWARD -> COMPLETE
-        # 5 mark_advance() calls to traverse all 5 transitions
-        for _ in range(5):
+        # 8 stages: BRIEFING -> TRAVEL -> MEET_NPC -> EXTRACT_DATA ->
+        # DEFEAT_ICE -> JACK_OUT -> REWARD -> COMPLETE
+        # 7 mark_advance() calls to traverse all 7 transitions
+        for _ in range(7):
             run.mark_advance()
         assert run.current_stage is Stage.COMPLETE
-        assert run.stages_completed() == 5
-        # Progress: 5 completed out of 6 stages = 5/6
-        assert abs(run.progress_fraction() - 5 / 6) < 0.01
+        assert run.stages_completed() == 7
+        # Progress: 7 completed out of 8 stages = 7/8
+        assert abs(run.progress_fraction() - 7 / 8) < 0.01
 
     def test_progress_text(self) -> None:
         run = start_run("first_jack")
-        run.mark_advance()  # now on EXTRACT_DATA
+        run.mark_advance()  # now on TRAVEL (stage 2 of 8)
+        run.mark_advance()  # now on MEET_NPC (stage 3 of 8)
+        run.mark_advance()  # now on EXTRACT_DATA (stage 4 of 8)
         text = get_progress_text(run)
-        assert "Stage 2/6" in text
+        assert "Stage 4/8" in text
         assert "Extract the Data" in text
 
     def test_run_mission_id(self) -> None:
         run = start_run("watchdog_patrol")
         assert run.mission_id == "watchdog_patrol"
-        assert run.stages_total() == 5
+        assert run.stages_total() == 8
 
     def test_advance_stage_helper(self) -> None:
         run = start_run("first_jack")
         new_stage = advance_stage(run)
-        assert new_stage is Stage.EXTRACT_DATA
-        assert run.current_stage is Stage.EXTRACT_DATA
+        assert new_stage is Stage.TRAVEL
+        assert run.current_stage is Stage.TRAVEL
 
     def test_watchdog_skips_extract_on_advance(self) -> None:
-        """Watchdog: MEET_NPC -> DEFEAT_ICE (skip EXTRACT_DATA)."""
+        """Watchdog: MEET_NPC -> BYPASS_SECURITY -> DEFEAT_ICE (skip EXTRACT_DATA)."""
         run = start_run("watchdog_patrol")
-        run.mark_advance()  # MEET_NPC -> next
-        assert run.current_stage is Stage.DEFEAT_ICE, "Should skip EXTRACT_DATA"
+        # BRIEFING -> TRAVEL -> MEET_NPC -> BYPASS_SECURITY (skip EXTRACT_DATA)
+        for _ in range(3):
+            run.mark_advance()
+        assert run.current_stage is Stage.BYPASS_SECURITY, (
+            "Should reach BYPASS_SECURITY (skipping EXTRACT_DATA)"
+        )
 
 
 class TestRunStateLifecycle:
@@ -215,14 +224,16 @@ class TestRunStateLifecycle:
         run.mark_advance()
         run.mark_failed()
         run.reset("ice_run")
-        assert run.current_stage is Stage.MEET_NPC
+        # CONTENT_EXPANSION Phase B: reset() now starts at BRIEFING
+        assert run.current_stage is Stage.BRIEFING
         assert run.completed_stages == ()
         assert run.mission_id == "ice_run"
         assert run.pending_advance is False
 
     def test_is_complete_at_complete(self) -> None:
         run = start_run("first_jack")
-        for _ in range(5):
+        # 8 stages → 7 mark_advance() to reach COMPLETE
+        for _ in range(7):
             run.mark_advance()
         assert run.is_complete()
         assert not run.is_in_progress()
@@ -247,7 +258,7 @@ class TestRunStateLifecycle:
 
     def test_mark_failed_after_complete_is_noop(self) -> None:
         run = start_run("first_jack")
-        for _ in range(5):
+        for _ in range(7):
             run.mark_advance()
         assert run.current_stage is Stage.COMPLETE
         before = run.completed_stages
@@ -264,16 +275,15 @@ class TestRunStateLifecycle:
 
     def test_advance_to_jack_out(self) -> None:
         run = start_run("first_jack")
-        # MEET_NPC -> EXTRACT_DATA -> DEFEAT_ICE -> JACK_OUT
-        run.mark_advance()
-        run.mark_advance()
-        run.mark_advance()
+        # BRIEFING -> TRAVEL -> MEET_NPC -> EXTRACT_DATA -> DEFEAT_ICE -> JACK_OUT
+        for _ in range(5):
+            run.mark_advance()
         assert run.current_stage is Stage.JACK_OUT
 
     def test_advance_to_reward_after_jackout(self) -> None:
         run = start_run("first_jack")
-        # ... -> JACK_OUT
-        for _ in range(3):
+        # ... -> JACK_OUT (5 advances from BRIEFING)
+        for _ in range(5):
             run.mark_advance()
         # JACK_OUT -> REWARD
         run.mark_advance()
@@ -410,26 +420,29 @@ class TestFullRunFlow:
 
     def test_first_jack_full_run(self) -> None:
         run = start_run("first_jack")
-        # 6 stages total, 5 mark_advance() calls to reach COMPLETE
-        for _ in range(5):
+        # CONTENT_EXPANSION Phase B: 8 stages total, 7 advances to reach COMPLETE
+        for _ in range(7):
             run.mark_advance()
 
         assert run.current_stage is Stage.COMPLETE
-        # 5 transitions = 5 completed stages (COMPLETE itself isn't in completed)
-        assert run.stages_completed() == 5
+        # 7 transitions = 7 completed stages (COMPLETE itself isn't in completed)
+        assert run.stages_completed() == 7
+        assert Stage.BRIEFING in run.completed_stages
+        assert Stage.TRAVEL in run.completed_stages
         assert Stage.MEET_NPC in run.completed_stages
         assert Stage.JACK_OUT in run.completed_stages
         assert Stage.REWARD in run.completed_stages
 
     def test_watchdog_patrol_shorter_flow(self) -> None:
         run = start_run("watchdog_patrol")
-        # 5 stages: MEET_NPC -> DEFEAT_ICE -> JACK_OUT -> REWARD -> COMPLETE
-        # 4 mark_advance() calls to reach COMPLETE
-        for _ in range(4):
+        # 8 stages (with BYPASS_SECURITY replacing EXTRACT_DATA)
+        # 7 mark_advance() calls to reach COMPLETE
+        for _ in range(7):
             run.mark_advance()
         assert run.current_stage is Stage.COMPLETE
-        assert run.stages_completed() == 4
+        assert run.stages_completed() == 7
         assert Stage.EXTRACT_DATA not in run.completed_stages
+        assert Stage.BYPASS_SECURITY in run.completed_stages
 
     def test_failure_mid_run(self) -> None:
         run = start_run("first_jack")

@@ -17,6 +17,7 @@ import tcod.event
 from ..audio import sound_manager as _sm_module
 from ..run import Stage, start_run
 from . import config as _engine_config
+from .novel_integration import trigger_mission_completion_novel_hooks
 from .state import AppState, ScreenKind
 
 # --- Stage transition helpers ---
@@ -75,6 +76,10 @@ def return_to_hub_from_reward(state: AppState) -> None:
             state.completed_missions.add(mission_id)
         state.mission_progress[mission_id] = 100  # Mark as 100% complete
         state.status_messages.append(f">>> Mission '{mission_id}' completed")
+
+        # Fire novel hooks tied to this mission's story.source (ADR-0061).
+        # Best-effort: novel_integration swallows its own errors.
+        trigger_mission_completion_novel_hooks(state, mission_id)
 
     # Clean up matrix state
     state.matrix = None
