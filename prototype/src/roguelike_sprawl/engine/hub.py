@@ -522,9 +522,23 @@ def _draw_job_board_panel(
     console.print(x=x, y=y, string="[Job Board]", fg=(180, 180, 180))
     y += 1
 
-    available = state.job_board.available_for(state.player_grade)
+    # Phase 6+: pass reputation so locked missions are excluded.
+    rep = getattr(state, "reputation", None)
+    available = state.job_board.available_for(state.player_grade, reputation=rep)
+    locked_count = 0
+    if rep is not None:
+        locked_count = len(state.job_board.locked_for(rep))
+
     if not available:
-        console.print(x=x, y=y, string="No jobs available", fg=(128, 128, 128))
+        if locked_count > 0:
+            console.print(
+                x=x,
+                y=y,
+                string=f"All {locked_count} jobs LOCKED (faction rep)",
+                fg=(200, 50, 50),
+            )
+        else:
+            console.print(x=x, y=y, string="No jobs available", fg=(128, 128, 128))
         return
 
     for i, mission in enumerate(available):
@@ -557,6 +571,15 @@ def _draw_job_board_panel(
             fg=(200, 200, 0),
         )
         y += 2  # spacing
+
+    # Phase 6+: show locked count footer.
+    if locked_count > 0 and y < main.y + main.h - 1:
+        console.print(
+            x=x,
+            y=y,
+            string=f"[+{locked_count} jobs locked by rep]",
+            fg=(140, 100, 100),
+        )
 
 
 def _preview_zdr(mission: Mission) -> int:
