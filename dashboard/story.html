@@ -2416,10 +2416,10 @@ fetch('data/character_stats.json').then(r => r.ok ? r.json() : null)
   .catch(() => { /* keep static fallback */ });
 
 /* Endings count + ChapterState card build from run_stats.json:
-   the enum lists 14 entries (PROLOGUE + IN_CHAPTER_1..5 +
-   CHAPTER_1..5_COMPLETE + ENDING_A/B/C).  The 3 ENDING_* cards
-   are surfaced here so the section's wording and the underlying
-   enum stay in lockstep. */
+    the enum lists 14 entries (PROLOGUE + IN_CHAPTER_1..5 +
+    CHAPTER_1..5_COMPLETE + ENDING_A/B/C).  The 3 ENDING_* cards
+    are surfaced here so the section's wording and the underlying
+    enum stay in lockstep. */
 fetch('data/run_stats.json').then(r => r.ok ? r.json() : null)
   .then(stats => {
     if (!stats) return;
@@ -2454,6 +2454,24 @@ fetch('data/run_stats.json').then(r => r.ok ? r.json() : null)
         grid.appendChild(card);
       });
     }
+  })
+  .catch(() => { /* keep static fallback */ });
+
+/* Event dialogue viewer — auto-fetch NPC / dialogue / line counts
+    from event_dialogues_stats.json so the stat-pills stay in
+    lockstep with design/story/event_dialogues.json. */
+fetch('data/event_dialogues_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    document.querySelectorAll('[data-stat]').forEach(el => {
+      const k = el.getAttribute('data-stat');
+      // Skip keys handled by earlier scripts (endings-count, character-*).
+      if (!stats.hasOwnProperty(k)) return;
+      const v = stats[k];
+      if (typeof v === 'number' || typeof v === 'string') {
+        el.textContent = String(v);
+      }
+    });
   })
   .catch(() => { /* keep static fallback */ });
 </script>

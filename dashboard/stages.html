@@ -845,6 +845,24 @@ fetch('data/run_stats.json').then(r => r.ok ? r.json() : null)
     }
   })
   .catch(() => { /* keep static fallback */ });
+
+/* Stages / transitions / chapter-states auto-fetched from stages_stats.json
+    so the count reflects run/state.py without manual HTML editing. */
+fetch('data/stages_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    set('stages',         stats.stages);
+    set('stage-enum',     stats.stage_enum);
+    set('transitions',    stats.transitions);
+    set('chapter-states', stats.chapter_states);
+  })
+  .catch(() => { /* keep static fallback */ });
 </script>
 </body>
 </html>

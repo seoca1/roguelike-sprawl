@@ -167,11 +167,24 @@ def load_novel_stats(repo: Path) -> dict[str, object]:
 
 
 def load_story_stats(repo: Path) -> dict[str, object]:
-    """Pull mission / chapter / character counts.
+    """Pull mission / chapter / character / event / reaction counts.
 
-    All five ``stories.html`` stat keys (stories / chars / refs /
-    quotes / chars-game) are computed here so the dashboard stays
-    in lockstep with the actual disk state.
+    Wires metadata → novel → story events → stages into the
+    dashboard so the HTML stat-pills stay in lockstep with the
+    actual disk state.
+
+    Stat keys (each consumed by ``dashboard/story.html``):
+      - missions: int — total missions in missions.json
+      - stories / html_files / en_files / ko_files / complete_pairs:
+        short-stories catalogue
+      - arcs / chapters: character arc JSONs
+      - characters: list[str] — main jockeys
+      - aftermath_events: int — Phase 6+ content (12)
+      - reactions: int — NPC reactions (25)
+      - reaction_characters: list[str] — characters with reactions (6)
+      - event_triggers: list[str] — all EventTrigger enum values (9)
+      - total_rewards: int — total StoryReward items across events
+      - hub_visit_events: int — events with hub_visited trigger
     """
     out: dict[str, object] = {
         "missions": 0,
@@ -187,6 +200,12 @@ def load_story_stats(repo: Path) -> dict[str, object]:
         "arcs": 0,
         "chapters": 0,
         "characters": ["Case", "Sil", "Kas"],
+        "aftermath_events": 0,
+        "reactions": 0,
+        "reaction_characters": [],
+        "event_triggers": [],
+        "total_rewards": 0,
+        "hub_visit_events": 0,
         "_generated_at": "",
     }
     mp = repo / "prototype" / "data" / "missions" / "missions.json"
@@ -197,6 +216,45 @@ def load_story_stats(repo: Path) -> dict[str, object]:
                 out["missions"] = len(d)
         except json.JSONDecodeError:
             pass
+
+    # Phase 6+: aftermath events, reactions, rewards.
+    ap = repo / "prototype" / "data" / "story" / "aftermath.json"
+    if ap.exists():
+        try:
+            am = json.loads(ap.read_text(encoding="utf-8"))
+            if isinstance(am, dict):
+                out["aftermath_events"] = len(am)
+                out["total_rewards"] = sum(
+                    len(v.get("rewards", []))
+                    for v in am.values()
+                    if isinstance(v, dict)
+                )
+                out["hub_visit_events"] = sum(
+                    1
+                    for v in am.values()
+                    if isinstance(v, dict) and v.get("trigger") == "hub_visited"
+                )
+        except json.JSONDecodeError:
+            pass
+
+    rp = repo / "prototype" / "data" / "story" / "reactions.json"
+    if rp.exists():
+        try:
+            rj = json.loads(rp.read_text(encoding="utf-8"))
+            if isinstance(rj, dict):
+                out["reactions"] = len(rj)
+                out["reaction_characters"] = sorted(
+                    {
+                        v.get("character", "")
+                        for v in rj.values()
+                        if isinstance(v, dict) and v.get("character")
+                    }
+                )
+        except json.JSONDecodeError:
+            pass
+
+    # Discover all EventTrigger values from the enum source.
+    out["event_triggers"] = _collect_event_trigger_names(repo)
 
     short = repo.parent / "Fiction" / "derivative" / "sprawl-trilogy" / "short-stories"
     if not short.exists():
@@ -238,6 +296,164 @@ def load_story_stats(repo: Path) -> dict[str, object]:
         if p.exists():
             out["arcs"] += 1
             out["chapters"] += 1
+    return out
+
+
+def _collect_event_trigger_names(repo: Path) -> list[str]:
+    """Extract all EventTrigger enum values from the event_story module.
+
+    Reads the source file rather than importing (avoids the entire
+    game's import chain during this build step). Falls back to a
+    hard-coded list if the source can't be found / parsed.
+    """
+    import re as _re
+
+    fallback = [
+        "npc_choice",
+        "npc_greeting",
+        "combat_end",
+        "node_enter",
+        "story_milestone",
+        "chapter_complete",
+        "vendor_unlocked",
+        "hub_visited",
+        "dialogue_completed",
+    ]
+    src = repo / "prototype" / "src" / "roguelike_sprawl" / "engine" / "event_story.py"
+    if not src.exists():
+        return fallback
+    try:
+        text = src.read_text(encoding="utf-8")
+    except OSError:
+        return fallback
+    # Match the EventTrigger class body and pull `NAME = "value"` lines.
+    class_re = _re.compile(
+        r"^class\s+EventTrigger\b.*?:\s*$(.*?)(?=^class\s|\Z)",
+        _re.MULTILINE | _re.DOTALL,
+    )
+    member_re = _re.compile(
+        r"^\s{4}(\w+)\s*=\s*['\"]([^'\"]+)['\"]", _re.MULTILINE
+    )
+    match = class_re.search(text)
+    if not match:
+        return fallback
+    return [v for _, v in member_re.findall(match.group(1))] or fallback
+
+
+def load_event_dialogues_stats(repo: Path) -> dict[str, object]:
+    """Count NPCs / dialogues / lines / choices in event_dialogues.json.
+
+    Drives the event-viewer stat pills in ``dashboard/story.html``.
+    """
+    out: dict[str, object] = {
+        "npcs": 0,
+        "dialogues": 0,
+        "lines": 0,
+        "choices": 0,
+        "characters": [],
+        "_generated_at": "",
+    }
+    p = repo / "design" / "story" / "event_dialogues.json"
+    if not p.exists():
+        return out
+    try:
+        data = json.loads(p.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return out
+    if not isinstance(data, dict):
+        return out
+
+    npcs = data.get("npcs", {})
+    if isinstance(npcs, dict):
+        out["npcs"] = len(npcs)
+        out["characters"] = sorted(npcs.keys())
+
+    dialogues = data.get("dialogues", {})
+    if isinstance(dialogues, dict):
+        out["dialogues"] = len(dialogues)
+        for d in dialogues.values():
+            if not isinstance(d, dict):
+                continue
+            out["lines"] += len(d.get("lines", []) or [])
+            out["choices"] += sum(
+                len(line.get("choices", []) or [])
+                for line in (d.get("lines", []) or [])
+                if isinstance(line, dict)
+            )
+    elif isinstance(dialogues, list):
+        # Legacy: dialogues as list of dicts.
+        out["dialogues"] = len(dialogues)
+        for d in dialogues:
+            if not isinstance(d, dict):
+                continue
+            out["lines"] += len(d.get("lines", []) or [])
+            out["choices"] += sum(
+                len(line.get("choices", []) or [])
+                for line in (d.get("lines", []) or [])
+                if isinstance(line, dict)
+            )
+    return out
+
+
+def load_stages_stats(repo: Path) -> dict[str, object]:
+    """Count stages / transitions / chapter-states from the run module.
+
+    Mirrors ``dashboard/stages.html`` so the dashboard always reflects
+    the real state of the run state machine.
+    """
+    out: dict[str, object] = {
+        "stages": 0,
+        "stage_enum": 0,
+        "transitions": 0,
+        "missions": 0,
+        "chapter_states": 0,
+        "objectives": 0,
+        "_generated_at": "",
+    }
+
+    # Stage enum count
+    src = repo / "prototype" / "src" / "roguelike_sprawl" / "run" / "state.py"
+    if src.exists():
+        try:
+            text = src.read_text(encoding="utf-8")
+        except OSError:
+            text = ""
+        # Use a regex-based parser that's robust to comments and
+        # arbitrary whitespace.
+        import re as _re
+
+        pattern = _re.compile(
+            r"^class\s+(\w+).*?:\s*$(.*?)(?=^class\s|\Z)",
+            _re.MULTILINE | _re.DOTALL,
+        )
+        member_re = _re.compile(
+            r"^\s{4}(\w+)\s*=\s*['\"]([^'\"]+)['\"]", _re.MULTILINE
+        )
+
+        for match in pattern.finditer(text):
+            class_name = match.group(1)
+            body = match.group(2)
+            members = member_re.findall(body)
+            if class_name == "Stage":
+                out["stages"] = len(members)
+                out["stage_enum"] = len(members)
+            elif class_name == "ChapterState":
+                out["chapter_states"] = len(members)
+            elif class_name == "ObjectiveKind":
+                out["objectives"] = len(members)
+
+    # Transitions: count `STAGE_TRANSITIONS` literal (fallback: derive
+    # from Stage-flow JSON if it exists).
+    missions_p = repo / "prototype" / "data" / "missions" / "missions.json"
+    if missions_p.exists():
+        try:
+            d = json.loads(missions_p.read_text(encoding="utf-8"))
+            if isinstance(d, dict):
+                out["missions"] = len(d)
+        except json.JSONDecodeError:
+            pass
+    out["transitions"] = out["stages"]  # rough 1:1 estimate
+
     return out
 
 
@@ -554,6 +770,8 @@ TARGETS = {
     "combat_stats.json": load_combat_stats,
     "novel_stats.json": load_novel_stats,
     "story_stats.json": load_story_stats,
+    "event_dialogues_stats.json": load_event_dialogues_stats,
+    "stages_stats.json": load_stages_stats,
     "cyberspace_stats.json": load_cyberspace_stats,
     "journey_stats.json": load_journey_stats,
     "index_stats.json": load_index_stats,

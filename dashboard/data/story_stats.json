@@ -16,5 +16,28 @@
     "Sil",
     "Kas"
   ],
-  "_generated_at": "2026-07-01T04:10:03"
+  "aftermath_events": 12,
+  "reactions": 25,
+  "reaction_characters": [
+    "3jane",
+    "case",
+    "dixie",
+    "finn",
+    "maelcum",
+    "sally"
+  ],
+  "event_triggers": [
+    "npc_choice",
+    "npc_greeting",
+    "combat_end",
+    "node_enter",
+    "story_milestone",
+    "chapter_complete",
+    "vendor_unlocked",
+    "hub_visited",
+    "dialogue_completed"
+  ],
+  "total_rewards": 24,
+  "hub_visit_events": 1,
+  "_generated_at": "2026-07-01T09:41:39"
 }
