@@ -107,7 +107,10 @@ class TestRoguelikeSubmenu:
     @skip_in_ci
     def test_submenu_links_to_top_hub(self) -> None:
         html = ROGUE_DASH.read_text(encoding="utf-8")
-        assert "../../Game/dashboard/index.html" in html, "Should link to top hub"
+        # v0.4: Hub link uses a JS-gated ../../  anchor (no longer
+        # the broken ../../Game/dashboard/index.html path).
+        assert 'id="projects-hub-link"' in html, "Should include hub link anchor"
+        assert 'href="../../"' in html, "Hub href should be ../../"
 
     @skip_in_ci
     def test_submenu_has_top_hub_link_visible(self) -> None:
@@ -147,12 +150,13 @@ class TestRoguelikeSubDashboards:
     @skip_in_ci
     def test_story_has_top_hub_link(self) -> None:
         html = ROGUE_STORY.read_text(encoding="utf-8")
-        assert "../../Game/dashboard/index.html" in html
+        # v0.4: hub link is now a JS-gated ../../  anchor.
+        assert 'id="projects-hub-link"' in html
 
     @skip_in_ci
     def test_stages_has_top_hub_link(self) -> None:
         html = ROGUE_STAGES.read_text(encoding="utf-8")
-        assert "../../Game/dashboard/index.html" in html
+        assert 'id="projects-hub-link"' in html
 
 
 class TestTypingDashboardExists:
@@ -179,7 +183,9 @@ class TestNavigation:
     @skip_in_ci
     def test_roguelike_submenu_to_hub(self) -> None:
         sub = ROGUE_DASH.read_text(encoding="utf-8")
-        assert "../../Game/dashboard/index.html" in sub
+        # v0.4: hub link is now a JS-gated ../../  anchor.
+        assert 'id="projects-hub-link"' in sub
+        assert 'href="../../"' in sub
 
     def test_submenu_to_sub_dashboards(self) -> None:
         sub = ROGUE_DASH.read_text(encoding="utf-8")

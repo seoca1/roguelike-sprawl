@@ -303,7 +303,9 @@ class TestNavigationConsistency:
         for path in [SOUND_HTML, COMBAT_HTML, EQUIPMENT_HTML, CYBERSPACE_HTML]:
             html = path.read_text(encoding="utf-8")
             assert "Hub" in html
-            assert "../../Game/dashboard/index.html" in html
+            # v0.4: hub link is now a JS-gated ../../  anchor.
+            assert 'id="projects-hub-link"' in html
+            assert 'href="../../"' in html
 
     def test_submenu_links_to_new_dashboards(self) -> None:
         """Submenu (index.html) now links to the 4 new dashboards."""

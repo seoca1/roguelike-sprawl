@@ -6,34 +6,33 @@ import sys
 from pathlib import Path
 
 
-STORY_ID_MAP = {
-    'watchdog_patrol': 'watchdog_patrol',
-    'ice_run': 'ice_run',
-    'black_ice_dream': 'black_ice_dream',
-    'case_jackout-30sec': 'first_jack',
-    'dixies_last_run': 'dixies_offer',
-    'wigan_zavijava': 'aleph_fragment',
-    'loa_voodoo_contact': 'voodoo_loa_encounter',
-    'the_choice': 'final_choice',
-    'flatline_again': 'craft_job',
-    'kumiko_manarase-midnight': 'sense_net_tip',
-    'marly_louisiana-god': 'mollys_razor',
-    'sally_sandii-3am': 'ta_heist',
-    'sally_returns': 'delivery_to_finn',
-    'sense_net_trace': 'sense_net_tip',
-    'yakuza_deal': 'yakuza_deal',
-    'first_trace': 'first_trace',
-    'tutorial_maze': 'tutorial_maze',
-    'first_contact': 'first_contact',
-    'data_retrieval': 'data_retrieval',
-    'mollys_market': 'mollys_market',
-    'zion_express': 'zion_express',
-    'vegas_stakeout': 'vegas_stakeout',
-    'winter_infiltrate': 'winter_infiltrate',
-    'neuromancer_whisper': 'neuromancer_whisper',
-    'matrix_revelation': 'matrix_revelation',
-    'dixies_choice': 'dixies_choice',
-    'neuromancer_merger': 'neuromancer_merger',
+# Map Fiction-stem → dashboard-stem.  Each Fiction stem is the
+# authoritative identifier; aliases exist only for legacy reasons and
+# each must keep a 1:1 mapping (no two Fiction stems may share a
+# dashboard page).  Empty dicts default to identity (the Fiction stem
+# becomes the dashboard stem verbatim).
+STORY_ID_MAP: dict[str, str] = {
+    # Legacy aliases kept ONLY because dashboard/stories.html still
+    # links to these names.  Each alias points at a single Fiction
+    # stem — never at another alias — so the page title and the URL
+    # always agree.
+    'case_jackout-30sec': 'case_jackout-30sec',
+    'dixies_last_run': 'dixies_last_run',
+    'wigan_zavijava': 'wigan_zavijava',
+    'loa_voodoo_contact': 'loa_voodoo_contact',
+    'the_choice': 'the_choice',
+    'flatline_again': 'flatline_again',
+    'kumiko_manarase-midnight': 'kumiko_manarase-midnight',
+    'marly_louisiana-god': 'marly_louisiana-god',
+    'sally_sandii-3am': 'sally_sandii-3am',
+    'sally_returns': 'sally_returns',
+    'sense_net_trace': 'sense_net_trace',
+    # v0.4 (2026-07-01) added 5 fresh stories; no alias needed.
+    'sense_net_infiltration': 'sense_net_infiltration',
+    'wigan_call': 'wigan_call',
+    'hosaka_core': 'hosaka_core',
+    'straylight_approach': 'straylight_approach',
+    'maas_heist': 'maas_heist',
 }
 
 
@@ -252,20 +251,57 @@ def markdown_to_html(text: str, lang: str) -> str:
 
 
 def get_story_id(md_path: Path) -> str:
-    """Extract story ID from markdown filename."""
+    """Extract the dashboard story-id from a markdown filename.
+
+    Strips the ``YYYY-MM-DD_`` date prefix and the ``.ko`` suffix
+    (if present) and applies the ``STORY_ID_MAP`` for the rare
+    legacy alias cases.  As of v0.4 (2026-07-01) the map is
+    1:1, so almost every Fiction stem becomes its own dashboard
+    page; see ``STORY_ID_MAP`` for the few remaining aliases.
+    """
     stem = md_path.stem
     if stem.endswith('.ko'):
         stem = stem[:-3]
 
+    # Direct match (the common case after v0.4).
+    if stem in STORY_ID_MAP:
+        return STORY_ID_MAP[stem]
+
+    # Legacy date-prefixed filenames ("2026-06-23_case_jackout-30sec"):
+    # the story-id is whatever comes after "YYYY-MM-DD_".
     for md_id, html_id in STORY_ID_MAP.items():
         if stem.endswith(md_id):
             return html_id
 
-    for md_id, html_id in STORY_ID_MAP.items():
-        if md_id in stem:
-            return html_id
+    # Unknown stem → strip the date prefix if present.
+    if stem.startswith("20") and "-" in stem[:10]:
+        return stem[11:]
 
-    return stem.split('_', 2)[-1]
+    return stem
+
+
+def _pick_localised(value: object, lang: str, fallback: str = "") -> str:
+    """Resolve a possibly-bilingual frontmatter value.
+
+    Frontmatter in the short-stories directory uses two patterns:
+
+    1. ``title: "Plain string"`` — works for either language.
+    2. ``title: { en: "...", ko: "..." }`` — used for stories with
+       explicit per-language titles.
+
+    The builder must always return a string; otherwise the format()
+    call would print the dict repr (e.g. ``{'en': 'Foo'}``) into the
+    HTML, which is exactly the dashboard regression the v0.4 audit
+    flagged.
+    """
+    if value is None:
+        return fallback
+    if isinstance(value, dict):
+        chosen = value.get(lang)
+        if chosen is None:
+            chosen = value.get("en") or value.get("ko")
+        return str(chosen) if chosen else fallback
+    return str(value)
 
 
 def convert_markdown_to_html(md_path: Path, output_dir: Path, lang: str) -> Path:
@@ -273,8 +309,16 @@ def convert_markdown_to_html(md_path: Path, output_dir: Path, lang: str) -> Path
     content = md_path.read_text(encoding='utf-8')
     frontmatter, body = parse_frontmatter(content)
 
-    title = frontmatter.get(f'title_{lang}', frontmatter.get('title', 'Untitled'))
-    subtitle = frontmatter.get(f'subtitle_{lang}', frontmatter.get('subtitle', ''))
+    title = _pick_localised(
+        frontmatter.get(f"title_{lang}") or frontmatter.get("title"),
+        lang,
+        fallback="Untitled",
+    )
+    subtitle = _pick_localised(
+        frontmatter.get(f"subtitle_{lang}") or frontmatter.get("subtitle"),
+        lang,
+        fallback="",
+    )
     word_count = frontmatter.get('word_count', 0)
 
     character = frontmatter.get('character', [{}])
@@ -326,10 +370,42 @@ def main():
 
     languages = ['en', 'ko'] if args.lang == 'both' else [args.lang]
 
-    en_files = sorted(f for f in source_dir.glob('2026-06-*_*.md') if '.ko.' not in f.name)
-    ko_files = sorted(source_dir.glob('2026-06-*_*.ko.md'))
+    # Match any date-prefixed story file (2026-06-*, 2026-07-01, ...).
+    # Earlier this glob was hardcoded to 2026-06-*, which silently
+    # dropped every story added after the original cut-off (Phase B
+    # CONTENT_EXPANSION added 5 stories in 2026-07-01).  See the
+    # dashboard validation follow-up for details.
+    en_files = sorted(
+        f for f in source_dir.glob('20*-*-*_*.md') if '.ko.' not in f.name
+    )
+    ko_files = sorted(source_dir.glob('20*-*-*_*.ko.md'))
 
-    for md_path in en_files:
+    # De-dup: only the *latest* markdown wins per dashboard stem.
+    # Two date-prefixed files with the same story-id (alias map)
+    # would otherwise overwrite each other and the printed log would
+    # be misleading.  Sorting newest-first by mtime keeps behaviour
+    # predictable.
+    en_seen: set[str] = set()
+    en_unique: list[Path] = []
+    for md_path in sorted(en_files, key=lambda p: p.stat().st_mtime, reverse=True):
+        sid = get_story_id(md_path)
+        if sid in en_seen:
+            print(f"  skip (dup): {md_path.name}  →  {sid}_en.html")
+            continue
+        en_seen.add(sid)
+        en_unique.append(md_path)
+
+    ko_seen: set[str] = set()
+    ko_unique: list[Path] = []
+    for md_path in sorted(ko_files, key=lambda p: p.stat().st_mtime, reverse=True):
+        sid = get_story_id(md_path)
+        if sid in ko_seen:
+            print(f"  skip (dup): {md_path.name}  →  {sid}_ko.html")
+            continue
+        ko_seen.add(sid)
+        ko_unique.append(md_path)
+
+    for md_path in en_unique:
         if 'en' in languages:
             try:
                 output_path = convert_markdown_to_html(md_path, output_dir, 'en')
@@ -337,7 +413,7 @@ def main():
             except Exception as e:
                 print(f"Error processing {md_path.name}: {e}")
 
-    for md_path in ko_files:
+    for md_path in ko_unique:
         if 'ko' in languages:
             try:
                 output_path = convert_markdown_to_html(md_path, output_dir, 'ko')
