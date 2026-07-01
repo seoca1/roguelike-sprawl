@@ -1,13 +1,67 @@
-"""Job board: loads missions and filters by grade (ADR-0008, ADR-0010, ADR-0017)."""
+"""Job board: loads missions and filters by grade (ADR-0008, ADR-0010, ADR-0017).
+
+Phase 6+: optionally filter by faction reputation so a player with
+too-negative rep with a fixer's primary faction can't see (or take)
+that fixer's missions. See :class:`JobBoard.locked_for` and
+:func:`mission_rep_status`.
+"""
 
 from __future__ import annotations
 
 import json
 from collections.abc import Iterator
+from enum import StrEnum
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from ..matrix.node import ZoneDepth
 from .mission import Mission, Objective, Rewards
+
+if TYPE_CHECKING:
+    from ..run.reputation import ReputationState
+
+
+class MissionRepStatus(StrEnum):
+    """Why a mission is or isn't available right now."""
+
+    AVAILABLE = "available"  # Grade + reputation both qualify
+    LOCKED_GRADE = "locked_grade"  # Player grade out of range
+    LOCKED_REPUTATION = "locked_reputation"  # Player hostile to fixer's faction
+
+
+def _mission_rep_status(mission: Mission, reputation: ReputationState | None) -> MissionRepStatus:
+    """Determine why ``mission`` is/n't available right now.
+
+    Args:
+        mission: Mission to check.
+        reputation: Player's faction reputation (or None for legacy
+            state — every mission is AVAILABLE in that case).
+
+    Returns:
+        One of:
+          - AVAILABLE: player qualifies (grade in range AND rep
+            not hostile with any of the fixer's factions)
+          - LOCKED_REPUTATION: player is at HOSTILE or worse with
+            one of the fixer's primary factions
+          - LOCKED_GRADE: player grade is out of [grade_min, grade_max]
+    """
+    # Lazy import to avoid circular dependency with reputation module.
+    from ..run.reputation import reputation_tier
+
+    # Rep-based lock: hostile with any of the fixer's factions
+    # → mission locked regardless of grade.
+    if reputation is not None:
+        from ..engine.mission_completion import fixer_to_factions
+
+        for faction in fixer_to_factions(mission.fixer):
+            score = reputation.get(faction).score
+            tier = reputation_tier(score)
+            # Only hostile-or-worse tiers lock the mission. (NEUTRAL
+            # and above are fine — the player is welcome to take the
+            # job even if not allied.)
+            if tier in ("HOSTILE", "ENEMY", "OUTCAST"):
+                return MissionRepStatus.LOCKED_REPUTATION
+    return MissionRepStatus.AVAILABLE
 
 
 class JobBoard:
@@ -53,9 +107,73 @@ class JobBoard:
         """Return a mission by id, or None if absent."""
         return self._missions.get(mission_id)
 
-    def available_for(self, grade: int) -> tuple[Mission, ...]:
-        """Return missions whose ``[grade_min, grade_max]`` includes ``grade``."""
-        return tuple(m for m in self._missions.values() if m.grade_min <= grade <= m.grade_max)
+    def available_for(
+        self,
+        grade: int,
+        reputation: ReputationState | None = None,
+    ) -> tuple[Mission, ...]:
+        """Return missions whose ``[grade_min, grade_max]`` includes ``grade``.
+
+        Args:
+            grade: Player's current grade (1..6).
+            reputation: Optional player reputation state. When provided,
+                missions whose fixer is hostile to the player are
+                excluded (see :func:`mission_rep_status`).
+
+        Returns:
+            Tuple of missions the player can currently take. Empty
+            tuple if no missions qualify.
+        """
+        return tuple(
+            m
+            for m in self._missions.values()
+            if m.grade_min <= grade <= m.grade_max
+            and _mission_rep_status(m, reputation)
+            in (MissionRepStatus.AVAILABLE, MissionRepStatus.LOCKED_GRADE)
+        )
+
+    def locked_for(self, reputation: ReputationState | None) -> tuple[Mission, ...]:
+        """Return missions locked out by the player's reputation.
+
+        These are missions the player could otherwise take (grade
+        in range) but whose fixer is hostile with one of the player's
+        factions. Useful for the Hub's "locked" sub-list display.
+        """
+        return tuple(
+            m
+            for m in self._missions.values()
+            if _mission_rep_status(m, reputation) is MissionRepStatus.LOCKED_REPUTATION
+        )
+
+    def mission_status(
+        self, mission: Mission | None, grade: int, reputation: ReputationState | None = None
+    ) -> MissionRepStatus | None:
+        """Return the availability status of ``mission`` for the given
+        player state.
+
+        Args:
+            mission: Mission to check (or None for unknown mission —
+                returns None).
+            grade: Player's current grade.
+            reputation: Optional player reputation.
+
+        Returns:
+            One of AVAILABLE / LOCKED_GRADE / LOCKED_REPUTATION, or
+            None if ``mission`` is None (unknown id).
+
+        Precedence:
+          1. LOCKED_REPUTATION — player hostile to fixer's faction
+          2. LOCKED_GRADE — grade out of range
+          3. AVAILABLE — both checks pass
+        """
+        if mission is None:
+            return None
+        rep_status = _mission_rep_status(mission, reputation)
+        if rep_status is MissionRepStatus.LOCKED_REPUTATION:
+            return MissionRepStatus.LOCKED_REPUTATION
+        if not (mission.grade_min <= grade <= mission.grade_max):
+            return MissionRepStatus.LOCKED_GRADE
+        return MissionRepStatus.AVAILABLE
 
     def __iter__(self) -> Iterator[Mission]:
         return iter(self._missions.values())
