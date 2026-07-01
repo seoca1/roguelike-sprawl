@@ -1,6 +1,11 @@
 """NPC event system: dialogue trees and encounters.
 
 Provides structured NPC interactions with dialogue lines and player choices.
+
+Phase 6+ faction-aware dialogue: choices can carry a
+``faction_gate`` (Faction) + ``min_tier`` (str) that restricts when
+they are visible. The view layer in :mod:`engine.npc_view` filters
+choices that don't match the current player's reputation state.
 """
 
 from __future__ import annotations
@@ -10,7 +15,18 @@ from enum import StrEnum
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    pass
+    from ..matrix.node import Faction
+    from ..run.reputation import ReputationState
+
+
+# Tier names used by the faction_gate (matches reputation_tier()).
+_VALID_TIERS: frozenset[str] = frozenset(
+    {"ALLIED", "FRIENDLY", "TRUSTED", "NEUTRAL", "HOSTILE", "ENEMY", "OUTCAST"}
+)
+
+# Re-export the matrix Faction for the gate field (avoid circular
+# import — dialogue modules only need the type at annotation time).
+from ..matrix.node import Faction as Faction  # noqa: E402, F811
 
 
 class NPCId(StrEnum):
@@ -35,7 +51,30 @@ class ChoiceEffect(StrEnum):
 
 @dataclass
 class DialogueChoice:
-    """A player choice in dialogue."""
+    """A player choice in dialogue.
+
+    Phase 6+ adds faction-aware gating:
+      - ``faction_gate`` (Faction or None): choice is only visible
+        when the player has a non-None reputation with this faction
+        AND the reputation tier is in the desired direction.
+      - ``min_tier`` (str or None): minimum tier required.
+        For positive tiers (ALLIED, FRIENDLY, TRUSTED, NEUTRAL) the
+        current tier must be **at or above** the required rank
+        (i.e. the player is friendly or better).
+        For negative tiers (HOSTILE, ENEMY, OUTCAST) the current
+        tier must be **at or below** the required rank (i.e. the
+        player is hostile or worse — used for dark-plot options).
+
+    Example::
+
+        DialogueChoice(
+            key="1",
+            text="Mention that Hosaka has your back.",
+            text_ko="호사카가 자네 편이라고 말해.",
+            faction_gate=Faction.HOSAKA,
+            min_tier="FRIENDLY",
+        )
+    """
 
     key: str  # 1, 2, 3... or letter
     text: str  # English text
@@ -47,6 +86,59 @@ class DialogueChoice:
     response_ko: str = ""  # Korean response
     # What message to log in status
     log_message: str = ""
+    # Faction-aware gating (Phase 6+).
+    faction_gate: Faction | None = None
+    min_tier: str | None = None
+
+    def is_available(self, reputation: ReputationState | None) -> bool:
+        """Return True if this choice is visible to the player.
+
+        A choice without ``faction_gate`` is always available. A
+        gated choice is only available when the player's reputation
+        with the configured faction is at or beyond the required
+        tier (see class docstring for the directional rule).
+        """
+        if self.faction_gate is None:
+            return True
+        if reputation is None:
+            # Legacy save (no .reputation). Be conservative: show the
+            # choice but flag via default tier neutral.
+            return True
+        # Lazy import to avoid circular dependency.
+        from ..run.reputation import reputation_tier
+
+        score = reputation.get(self.faction_gate).score
+        current_tier = reputation_tier(score)
+        return _evaluate_faction_gate(current_tier, self.min_tier)
+
+
+def _evaluate_faction_gate(current_tier: str, min_tier: str | None) -> bool:
+    """Return True if the player's tier satisfies the required tier.
+
+    Direction matches :func:`npc_greeting.matches`:
+      - Positive tiers (ALLIED, FRIENDLY, TRUSTED, NEUTRAL) trigger
+        when current rank ≤ required rank.
+      - Negative tiers (HOSTILE, ENEMY, OUTCAST) trigger when
+        current rank ≥ required rank.
+    """
+    if min_tier is None:
+        return True
+    _rank = {
+        "ALLIED": 0,
+        "FRIENDLY": 1,
+        "TRUSTED": 2,
+        "NEUTRAL": 3,
+        "HOSTILE": 4,
+        "ENEMY": 5,
+        "OUTCAST": 6,
+    }
+    if min_tier not in _rank or current_tier not in _rank:
+        return True
+    required = _rank[min_tier]
+    current = _rank[current_tier]
+    if required <= 3:  # positive half
+        return current <= required
+    return current >= required
 
 
 @dataclass
@@ -134,6 +226,39 @@ DIXIE_FLATLINE_EVENT = NPCEvent(
                     effect=ChoiceEffect.GAIN_INFO,
                     effect_data={"info": "The ICE blocks the direct path. Find another way."},
                     log_message="Dixie shares tactical info.",
+                ),
+                # Phase 6+ faction-gated choice: only visible to players
+                # who are FRIENDLY or better with Hosaka. Dixie remembers
+                # the data they stole for Hosaka and will share it.
+                DialogueChoice(
+                    key="4",
+                    text="I work for Hosaka. We have history.",
+                    text_ko="나는 호사카 일해. 우리 사이에 역사 있어.",
+                    effect=ChoiceEffect.GAIN_INFO,
+                    effect_data={
+                        "info": "Hosaka's runs are clean. T-A's are dirty. The difference is who paid first."
+                    },
+                    response="Oh. Then you already know the game. Hosaka's data is on the second ICE — T-A's on the third. Take your pick.",
+                    response_ko="오. 그러면 너는 이미 게임을 알고 있군. 호사카 데이터는 두 번째 ICE에 — T-A는 세 번째. 골라.",
+                    log_message="Dixie shares intel — faction-aware branch.",
+                    faction_gate=Faction.HOSAKA,
+                    min_tier="FRIENDLY",
+                ),
+                # Dark-plot choice: only visible to players who are
+                # HOSTILE or worse with T-A. Dixie reveals the dark side.
+                DialogueChoice(
+                    key="5",
+                    text="I'm here to burn T-A's data.",
+                    text_ko="T-A 데이터 태우러 왔어.",
+                    effect=ChoiceEffect.GAIN_INFO,
+                    effect_data={
+                        "info": "T-A ICE will self-destruct. The data's on the second node — not the third. Don't go to the third."
+                    },
+                    response="Heh. Good. Hit the second node hard — the third is a trap. T-A put a black ICE in the core to catch runners like you.",
+                    response_ko="흐흐. 좋아. 두 번째 노드 강하게 쳐 — 세 번째는 함정이다. T-A가 너 같은 러너를 잡으려고 코어에 블랙 ICE를 심어놨어.",
+                    log_message="Dixie reveals a dark path — anti-T-A branch.",
+                    faction_gate=Faction.TA,
+                    min_tier="HOSTILE",
                 ),
             ],
         ),

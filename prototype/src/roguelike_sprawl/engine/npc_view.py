@@ -157,26 +157,48 @@ def _draw_dialogue(
 
     # Choices
     if line.choices:
-        console.print(x=x, y=y, string="What do you say?", fg=(180, 180, 180))
-        y += 2
+        # Phase 6+: filter choices by faction rep gate. Choices whose
+        # `faction_gate` is set and doesn't match the current player
+        # reputation are hidden from the menu.
 
-        # Initialize selection index
-        if not hasattr(state, "npc_choice_index"):
-            state.npc_choice_index = 0
+        reputation = getattr(state, "reputation", None)
+        visible_choices: list[DialogueChoice] = [
+            c for c in line.choices if c.is_available(reputation)
+        ]
 
-        for i, choice in enumerate(line.choices):
-            is_selected = i == state.npc_choice_index
-            cursor = ">" if is_selected else " "
-            fg = (0, 255, 255) if is_selected else (200, 200, 200)
-            # Use Korean if available
-            choice_text = choice.text
-            if config.LANGUAGE_MODE == "ko" and choice.text_ko and is_korean_capable():
-                choice_text = choice.text_ko
+        if visible_choices:
+            console.print(x=x, y=y, string="What do you say?", fg=(180, 180, 180))
+            y += 2
+
+            # Initialize selection index
+            if not hasattr(state, "npc_choice_index"):
+                state.npc_choice_index = 0
+
+            for i, choice in enumerate(visible_choices):
+                is_selected = i == state.npc_choice_index
+                cursor = ">" if is_selected else " "
+                fg = (0, 255, 255) if is_selected else (200, 200, 200)
+                # Use Korean if available
+                choice_text = choice.text
+                if config.LANGUAGE_MODE == "ko" and choice.text_ko and is_korean_capable():
+                    choice_text = choice.text_ko
+                # Show a small tag for faction-gated choices.
+                gate_tag = ""
+                if choice.faction_gate is not None:
+                    gate_tag = f" [{choice.faction_gate.value}/{choice.min_tier or '?'}]"
+                console.print(
+                    x=x,
+                    y=y + i,
+                    string=f"  {cursor} [{choice.key}] {choice_text}{gate_tag}",
+                    fg=fg,
+                )
+        else:
+            # All choices were filtered out — show a locked message.
             console.print(
                 x=x,
-                y=y + i,
-                string=f"  {cursor} [{choice.key}] {choice_text}",
-                fg=fg,
+                y=y,
+                string="[dialogue locked — faction standing required]",
+                fg=(140, 100, 100),
             )
     else:
         # No choices: any key continues
@@ -212,38 +234,44 @@ def handle_npc_input(
     if line is None:
         return True
 
+    # Phase 6+: filter choices by faction rep gate so the index space
+    # matches the visible list drawn by `_draw_dialogue`.
+
+    reputation = getattr(state, "reputation", None)
+    visible_choices: list[DialogueChoice] = [c for c in line.choices if c.is_available(reputation)]
+
     # Initialize choice index
     if not hasattr(state, "npc_choice_index"):
         state.npc_choice_index = 0
 
     # Navigation
     if event.sym is KeySym.UP:
-        if line.choices:
+        if visible_choices:
             state.npc_choice_index = max(0, state.npc_choice_index - 1)
             safe_play("ui/menu_select")
         return True
 
     if event.sym is KeySym.DOWN:
-        if line.choices:
-            state.npc_choice_index = min(len(line.choices) - 1, state.npc_choice_index + 1)
+        if visible_choices:
+            state.npc_choice_index = min(len(visible_choices) - 1, state.npc_choice_index + 1)
         return True
 
     # Confirm with ENTER or SPACE
     if is_confirm_key(event.sym):
-        if line.choices and 0 <= state.npc_choice_index < len(line.choices):
+        if visible_choices and 0 <= state.npc_choice_index < len(visible_choices):
             safe_play("ui/menu_confirm")
-            _execute_choice(state, npc_state, line.choices[state.npc_choice_index])
+            _execute_choice(state, npc_state, visible_choices[state.npc_choice_index])
         else:
             safe_play("story/dialogue_advance")
             _advance_dialogue(state, npc_state)
         return True
 
     # Quick select with number key
-    if line.choices and event.sym.name.startswith("N"):
+    if visible_choices and event.sym.name.startswith("N"):
         try:
             num = int(event.sym.name[1:])
-            if 1 <= num <= len(line.choices):
-                _execute_choice(state, npc_state, line.choices[num - 1])
+            if 1 <= num <= len(visible_choices):
+                _execute_choice(state, npc_state, visible_choices[num - 1])
         except (ValueError, IndexError):
             pass
         return True
