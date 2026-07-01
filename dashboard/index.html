@@ -167,7 +167,17 @@
   <span class="sep">|</span>
   <span class="current">🌆 Roguelike</span>
 </nav>
-<a class="top-hub-link" href="../../Game/dashboard/index.html" title="Local dev workspace only — 404 on GitHub Pages">🌐 Projects Hub (dev)</a>
+<a class="top-hub-link" id="projects-hub-link" href="../../" title="Projects Hub (local dev only)">🌐 Projects Hub</a>
+<script>
+  // Hide on non-local filesystems (e.g. GitHub Pages) where the
+  // workspace path ../../Game/ does not exist.
+  (function () {
+    var link = document.getElementById("projects-hub-link");
+    if (!link) return;
+    link.style.display = (window.location.protocol === "file:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+      ? "inline-block" : "none";
+  })();
+</script>
 
 <div class="hero">
   <h1>🌆 ROGUELIKE SPRAWL</h1>
