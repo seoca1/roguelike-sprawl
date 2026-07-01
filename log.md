@@ -2,6 +2,73 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-01] feat | 소설→스토리→이벤트 통합 작업 (P1~P4 + B)
+
+- **P1 테스트 10건 수정** (ADR-0051 통합):
+  - 4개 단편 스텁 생성 (suit 미션: `armitage_infiltration`, `hosaka_extraction`, `ta_defection`, `wintermute_negotiation`, EN+KO, 깁슨 톤)
+  - `test_dashboard_metadata.py` 오타 (`_projects_root` → `_PROJECTS_ROOT`, 4곳)
+  - `test_dashboard_metadata.py` stale: arcs 3→4, stages 10→13
+  - `test_missions_with_story.py`: `valid_chars`에 `"suit"` 추가
+  - `test_missions.py`: `==29` → `>=29`
+  - `missions.json` `word_count_en`/`char_count_ko` 4건 보정
+  - 결과: **3654 passed, 10 failed → 3728 passed, 0 failed**
+
+- **P2 Novel Dispatcher 미션 트리거 연동** (ADR-0061):
+  - 신규 `engine/novel_integration.py` (215 lines) — `mission_to_stem` + `dispatch_for_state` 자동 호출
+  - `reward_view.return_to_hub_from_reward()`에 와이어링
+  - 11개 신규 테스트 (`tests/unit/test_novel_integration.py`)
+
+- **P3 KO 번역 통일**:
+  - `missions.json`: 13개 한자 시퀀스 → 한국어 (방식, 言行, 招募, 报酬, etc.)
+  - `story/arcs/{case,sil,kas}.json`: 47+34+20+40 한자 → 한국어
+  - `story/chapters/{case,sil,kas}_expanded.json`: 53+53+29 한자 → 한국어
+  - `story/aftermath.json`: 9 한자 → 한국어 (这里的 → 여기의)
+  - `prototype/data/` 전체 한자 잔재 0건 확인
+
+- **P4 CONTENT_EXPANSION Phase A/B (Stage 확장)**:
+  - `Stage` enum +3: BRIEFING / TRAVEL / BYPASS_SECURITY (10 → 13)
+  - `DEFAULT_FLOW` +3 + ASCII art (Finn's Office / Chiba 11th level)
+  - `MISSION_FLOWS`: first_jack (6→8), watchdog_patrol (5→8 with BYPASS), ice_run (6→8)
+  - `start_run()` 초기 stage MEET_NPC → BRIEFING
+  - 16개 신규 테스트 (`tests/unit/test_stage_expansion.py`)
+  - 모든 stage flow 테스트 업데이트
+
+- **B CONTENT_EXPANSION Phase A+ (신규 미션 5개)**:
+  - 단편 5편 작성 (EN + KO, 깁슨 톤, 4섹션 구조):
+    - `sense_net_infiltration` (Arc 2, novice, mid) — Sense/Net 2nd ring
+    - `wigan_call` (Arc 2, heretic, mid) — Wigan Ludgate vodoun construct
+    - `hosaka_core` (Arc 3, novice, mid) — Hosaka corporate memory
+    - `straylight_approach` (Arc 3, veteran, core) — T-A inter-family correspondence
+    - `maas_heist` (Arc 3, novice, mid) — Maas biochip specs
+  - `missions.json` +5 entries (33 → 38)
+  - 59개 신규 테스트 (`tests/integration/test_expansion_missions.py`)
+  - 미션 보상: credits 1200~2200, materials (upgrade_t2~t3, loa_chip, t_a_data_fragment, bio_chip)
+  - 후속 적응: test_armitage/test_mission_rep_filter 33→38 동기화, test_combat ice.goliath로 정정
+
+- **검증**:
+  - pytest: **3894 passed, 44 skipped, 24 xfailed** (이전 3654 passed / 10 failed)
+  - 신규 테스트 +240, 실패 0
+  - ruff: All checks passed (변경 파일)
+  - mypy: Success (2 source files)
+
+## [2026-07-01] doc | 대시보드 / 문서 / 노션 동기화
+
+- `tools/build_dashboard.py` 실행: 10개 stats JSON 모두 갱신
+  - `story_stats.json`: missions 33→38, stories 27→36, en/ko 32→41
+  - `stages_stats.json`: stages 10→13 (Phase B)
+  - `index_stats.json`: missions 33→38, tests_total 3714→3962
+  - `novel_stats.json`: catalog_entries 36
+  - `load_index_stats` 우선순위: missions.json > stage_structure.json
+- `design/systems/stage_structure.json` v0.3.0 → v0.4.0
+  - stages 9 → 12 (BRIEFING, TRAVEL, BYPASS_SECURITY)
+  - transitions 8 → 13 (브리핑/이동/우회 체인)
+  - canonical mission count = 38 (missions.json이 source of truth)
+- `index.md` Phase 5+6 상태로 갱신 (ADR 0041~0061 + 시스템 노트)
+- `log.md` P1~P4 + B 작업 1개 항목으로 통합 기록
+- `SESSION_HANDOVER.md` v0.4 (이전 v0.3 → 신규 미션/스테이지 반영)
+- `decisions/README.md` ADR 인덱스 갱신 (52~61)
+- `docs/NOTION_IMPORT.md` v0.4 동기화용 마크다운 갱신
+
 ## [2026-06-30] feat | Phase 5 데모 카탈로그 30 entries — 부모 디렉토리 워크스루 + dispatch 시그니처
 
 - **`prototype/scripts/play_novel_runtime.py` 진단 + 수정**:

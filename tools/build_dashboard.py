@@ -199,7 +199,7 @@ def load_story_stats(repo: Path) -> dict[str, object]:
         "references": 0,
         "arcs": 0,
         "chapters": 0,
-        "characters": ["Case", "Sil", "Kas"],
+        "characters": ["Case", "Sil", "Kas", "Armitage"],
         "aftermath_events": 0,
         "reactions": 0,
         "reaction_characters": [],
@@ -289,7 +289,7 @@ def load_story_stats(repo: Path) -> dict[str, object]:
         out["complete_pairs"] = len(stems_en & stems_ko)
         out["quotes"] = out["complete_pairs"]
         out["references"] = out["complete_pairs"]
-    for c in ("case", "sil", "kas"):
+    for c in ("case", "sil", "kas", "suit"):
         p = repo / "prototype" / "data" / "story" / "chapters" / f"{c}.json"
         if not p.exists():
             p = repo / "prototype" / "data" / "chapters" / f"{c}.json"
@@ -646,16 +646,28 @@ def load_index_stats(repo: Path) -> dict[str, object]:
         if isinstance(d, dict) and isinstance(d.get("npcs"), dict):
             out["npcs_unique"] = len(d["npcs"])
 
-    stg = repo / "design" / "systems" / "stage_structure.json"
-    if stg.exists():
+    # Missions: prefer the live missions.json (canonical source) over
+    # the legacy stage_structure.json snapshot. Fall back to the snapshot
+    # only when the live file is missing.
+    missions_p = repo / "prototype" / "data" / "missions" / "missions.json"
+    if missions_p.exists():
         try:
-            d = json.loads(stg.read_text(encoding="utf-8"))
+            d = json.loads(missions_p.read_text(encoding="utf-8"))
         except json.JSONDecodeError:
             d = {}
         if isinstance(d, dict):
-            out["stages_per_run"] = len(d.get("stages", []) or [])
-            out["transitions"] = len(d.get("transitions", []) or [])
-            out["missions"] = len(d.get("missions", []) or [])
+            out["missions"] = len(d)
+    if out["missions"] == 0:
+        stg = repo / "design" / "systems" / "stage_structure.json"
+        if stg.exists():
+            try:
+                d = json.loads(stg.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                d = {}
+            if isinstance(d, dict):
+                out["stages_per_run"] = len(d.get("stages", []) or [])
+                out["transitions"] = len(d.get("transitions", []) or [])
+                out["missions"] = len(d.get("missions", []) or [])
     return out
 
 

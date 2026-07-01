@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="9 stages (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29 missions (Arc 1~5 difficulty grades). 3 character arcs (Novice / Veteran / Heretic).">
+<meta name="description" content="13 stages (PENDING→BRIEFING→TRAVEL→MEET_NPC→EXTRACT_DATA→BYPASS_SECURITY→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 38 missions (Arc 1~5 difficulty grades). 4 character arcs (Novice / Veteran / Heretic / Suit).">
 <meta name="keywords" content="roguelike, cyberpunk, gibson, sprawl, neuromancer, python, tcod, ascii, stage, progression, mission, flow">
 <meta name="author" content="emilio">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="canonical" href="https://seoca1.github.io/roguelike-sprawl/stages.html">
 <meta property="og:title" content="Stage & Progression — Roguelike Sprawl">
-<meta property="og:description" content="9 stages (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29 missions (Arc 1~5 difficulty grades). 3 character arcs (Novice / Veteran / Heretic).">
+<meta property="og:description" content="13 stages (PENDING→BRIEFING→TRAVEL→MEET_NPC→EXTRACT_DATA→BYPASS_SECURITY→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 38 missions (Arc 1~5 difficulty grades). 4 character arcs (Novice / Veteran / Heretic / Suit).">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://seoca1.github.io/roguelike-sprawl/stages.html">
 <meta property="og:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
@@ -17,7 +17,7 @@
 <meta property="og:site_name" content="Roguelike Sprawl">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Stage & Progression — Roguelike Sprawl">
-<meta name="twitter:description" content="9 stages (PENDING→MEET_NPC→EXTRACT_DATA→DEFEAT_ICE→JACK_OUT→REWARD→COMPLETE). 29 missions (Arc 1~5 difficulty grades). 3 character arcs (Novice / Veteran / Heretic).">
+<meta name="twitter:description" content="13 stages (PENDING→BRIEFING→TRAVEL→MEET_NPC→EXTRACT_DATA→BYPASS_SECURITY→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 38 missions (Arc 1~5 difficulty grades). 4 character arcs (Novice / Veteran / Heretic / Suit).">
 <meta name="twitter:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
 <meta name="theme-color" content="#0a0e14">
 <title>Roguelike Sprawl — Stage & Progression Dashboard</title>
@@ -242,11 +242,11 @@
 <h1>⏱ ROGUELIKE SPRAWL — Stage & Progression Dashboard</h1>
 <div class="subtitle">
   Single Run = Prologue → Mission → Completion.
-  <span data-stat="stages">9</span> stages
-  (<span data-stat="stage-enum">10</span> Stage enum entries · <code>DEBRIEF</code> optional)
-  · <span data-stat="transitions">8</span> transitions
-  · <span data-stat="missions">29</span> missions
-  (Arc 1~5 difficulty grades · 3 character arcs: Novice / Veteran / Heretic).
+  <span data-stat="stages">12</span> stages
+  (<span data-stat="stage-enum">13</span> Stage enum entries · <code>DEBRIEF</code> optional + Phase B BRIEFING/TRAVEL/BYPASS_SECURITY)
+  · <span data-stat="transitions">13</span> transitions
+  · <span data-stat="missions">38</span> missions
+  (Arc 1~5 difficulty grades · 4 character arcs: Novice / Veteran / Heretic / Suit).
   Chapter States: <span data-stat="chapter-states">14</span>.
   Reward formula: <code>Arc×800 + (grade−1)×300</code>.
   <br>
@@ -277,7 +277,7 @@
 <h2>🧬 Stage Enum (10 entries from <code>run/state.py</code>)</h2>
 <div class="panel">
   <p style="color:#8a9aa8;font-size:13px;margin-bottom:12px;">
-    <code>Stage</code> StrEnum — 프로그래매틱 진입. <code>stage_structure.json</code> 의 9 stages 와는 별개로 <code>DEBRIEF</code> 까지 10 entries. 자동 빌드:
+    <code>Stage</code> StrEnum — 프로그래매틱 진입. <code>stage_structure.json</code> 의 12 stages 와는 별개로 <code>DEBRIEF</code> 까지 13 entries (Phase B: +BRIEFING, +TRAVEL, +BYPASS_SECURITY). 자동 빌드:
   </p>
   <div id="stage-enum-grid" style="
        display: grid;
@@ -304,7 +304,7 @@
 </table>
 
 <!-- Missions -->
-<h2>🎯 All Missions (29 missions across Arc 1~5 difficulty grades)</h2>
+<h2>🎯 All Missions (38 missions across Arc 1~5 difficulty grades)</h2>
 <div class="mission-grid" id="missionGrid"></div>
 
 <!-- Death Flow -->

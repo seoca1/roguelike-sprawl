@@ -46,9 +46,20 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | 0048 | GN Ending Menu + Save Migration 1.1.0 | **Accepted** | 2026-06-21 | P2 |
 | 0049 | Graphic Novel Ending C (3rd ending) + Save 1.2.0 | **Accepted** | 2026-06-21 | P2 |
 | 0050 | Boss ICE System (Wintermute + T-A Prime 3-phase) | **Accepted** | 2026-06-21 | P1 |
+| 0051 | Mission Story Metadata (미션 ↔ 단편 직접 매핑) | **Accepted** | 2026-06-22 | P1 |
 | 0052 | Short Story Expansion Plan (단편 3편 보강) | **Accepted** | 2026-06-22 | P2 |
 | 0060 | Dungeon Exploration Redesign (NetHack + VFX) | **Accepted** | 2026-06-30 | P2 |
 | 0061 | Novel Integration Architecture (Hook 디스패치) | **Accepted** | 2026-06-30 | P2 |
+
+### 2026-07-01 통합 작업 (P1~P4 + B)
+
+| 번호 | 제목 | 상태 | 날짜 | 우선순위 |
+| --- | --- | --- | --- | --- |
+| (—) | **Stage BRIEFING / TRAVEL / BYPASS_SECURITY** (Stage enum +3, 10→13) | **Implemented** | 2026-07-01 | P1 |
+| (—) | **Novel Integration 런타임 연동** (`engine/novel_integration.py`, `mission_to_stem` + `dispatch_for_state`) | **Implemented** | 2026-07-01 | P1 |
+| (—) | **CONTENT_EXPANSION Phase A+ 신규 미션 5개** (Arc 2-3: sense_net_infiltration, wigan_call, hosaka_core, straylight_approach, maas_heist) | **Implemented** | 2026-07-01 | P1 |
+| (—) | **KO 번역 한자 잔재 0건** (missions/arcs/chapters/aftermath 일괄 정정) | **Implemented** | 2026-07-01 | P1 |
+| (—) | **`stage_structure.json` v0.4.0** (stages 9→12, transitions 8→13) | **Implemented** | 2026-07-01 | P2 |
 
 ## 우선순위 정의
 
@@ -109,6 +120,10 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | GN Ending Menu (0048) | GRAPHIC_NOVEL_ENDING_MENU 화면 + GNProgress.ending + Save 1.0.0→1.1.0 마이그레이션 |
 | Ending C (0049) | 6 신규 씬 (Disappear/Erase/Burn) + 메뉴 4옵션 + Save 1.1.0→1.2.0 + 9 결말 조합 |
 | Boss ICE (0050) | Wintermute + T-A Prime 보스 3-phase 시스템 + phase transition cinematics |
+| Mission Metadata (0051) | 미션마다 `story.{synopsis_en, synopsis_ko, source, character_ref, arc, pillar, word_count_en, char_count_ko}` 메타데이터 필수 |
+| Story Expansion (0052) | 단편 17→35+ 확장 + frontmatter 강화 (wiki_references, game_integration, character_ref) |
+| Dungeon (0060) | NetHack BSP 미로 + 4 VFX spawner + Mission→Room 매핑 (29 미션) + ECS 통합 |
+| Novel Integration (0061) | 4-layer Hook 디스패치 (catalog/hooks/manifest/dispatcher) + 런타임 자동 호출 (`engine/novel_integration.py`) |
 
 ## 결정 절차 (참고용)
 

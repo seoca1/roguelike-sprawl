@@ -2,6 +2,21 @@
 
 ## 변경 이력 (Recent)
 
+- **2026-07-01**: 소설→스토리→이벤트 통합 + 콘텐츠 확장 — **3894 tests pass** (+452, 24 xfailed)
+  - **P1~P4 통합 작업**:
+    - **P1**: 테스트 10건 수정 (suit 단편 스텁 4편, 오타, stale 정정)
+    - **P2**: Novel Dispatcher 미션 트리거 연동 (`engine/novel_integration.py` 215 lines)
+    - **P3**: KO 번역 한자 잔재 0건 (missions/arcs/chapters/aftermath)
+    - **P4**: Stage BRIEFING/TRAVEL/BYPASS_SECURITY (+3 stages, 10→13)
+  - **B 신규 미션 5개 (Arc 2-3)**:
+    - `sense_net_infiltration` (Arc 2, novice, mid) — Sense/Net 2nd ring
+    - `wigan_call` (Arc 2, heretic, mid) — Wigan Ludgate vodoun construct
+    - `hosaka_core` (Arc 3, novice, mid) — Hosaka corporate memory
+    - `straylight_approach` (Arc 3, veteran, core) — T-A inter-family correspondence
+    - `maas_heist` (Arc 3, novice, mid) — Maas biochip specs
+  - **신규 테스트 86개** (novel_integration 11 + stage_expansion 16 + expansion_missions 59)
+  - **대시보드 stats 갱신**: missions 33→38, stories 27→36, stages 10→13
+  - **stage_structure.json v0.3.0 → v0.4.0**: 9→12 stages, 8→13 transitions
 - **2026-07-01**: Phase 5 마무리 + Phase 6 기반 — **3442 tests pass** (+188)
   - **P0 3개 해결**: ZoneDepth enum 확장 (13/29 미션 차단 해제), combat ICE hardcoded placeholder 제거, 9개 누락 ICE 엔트리 추가
   - **P1 8개 해결**: save migration 자동화, status message cap (100), theme.py 예외 로깅화, action_menu HACK/COMMUNICATE/ACCESS 동작 구현, i18n format args `<name>` fallback, Hub data-driven materials/recipes, equipment.py 39 tests (이전 0), 보상 밸런스 outliers (ta_heist, final_choice)

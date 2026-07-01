@@ -4,7 +4,10 @@
     "title_en": "Case (thinking)",
     "title_ko": "케이 (사색)",
     "character": "case",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◉   │  ",
@@ -27,7 +30,10 @@
     "title_en": "Case (trembling hands)",
     "title_ko": "케이 (떨리는 손)",
     "character": "case",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◉   │  ",
@@ -50,7 +56,10 @@
     "title_en": "Case (at terminal)",
     "title_ko": "케이 (단자 응시)",
     "character": "case",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◉◉  │  ",
@@ -73,7 +82,10 @@
     "title_en": "Case (resolved)",
     "title_ko": "케이 (결심)",
     "character": "case",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◉◉◉ │  ",
@@ -96,7 +108,10 @@
     "title_en": "Marly (mask on)",
     "title_ko": "마리 (마스크)",
     "character": "marly",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◇ ◆ │  ",
@@ -119,7 +134,10 @@
     "title_en": "Marly (smile)",
     "title_ko": "마리 (미소)",
     "character": "marly",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◉ ◉ │  ",
@@ -142,7 +160,10 @@
     "title_en": "Marly (data stream)",
     "title_ko": "마리 (데이터 흐름)",
     "character": "marly",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◉ ◉ │  ",
@@ -165,7 +186,10 @@
     "title_en": "Marly (resolve)",
     "title_ko": "마리 (결의)",
     "character": "marly",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ▲ ▲ │  ",
@@ -188,7 +212,10 @@
     "title_en": "Kumiko (in taxi)",
     "title_ko": "쿠미코 (택시 안)",
     "character": "kumiko",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◐   │  ",
@@ -211,7 +238,10 @@
     "title_en": "Kumiko (with Sally)",
     "title_ko": "쿠미코 (샐리 응시)",
     "character": "kumiko",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◐ ◐ │  ",
@@ -234,7 +264,10 @@
     "title_en": "Kumiko (declaration)",
     "title_ko": "쿠미코 (선언)",
     "character": "kumiko",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◉◉◉ │  ",
@@ -257,7 +290,10 @@
     "title_en": "Kumiko (the wheel)",
     "title_ko": "쿠미코 (바퀴)",
     "character": "kumiko",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ◐ ◐ │  ",
@@ -280,7 +316,10 @@
     "title_en": "The Finn (neutral)",
     "title_ko": "핀 (무표정)",
     "character": "finn",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ♠ ♠ │  ",
@@ -303,7 +342,10 @@
     "title_en": "Sally (neutral)",
     "title_ko": "샐리 (무표정)",
     "character": "sally",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │ ░░░ │  ",
@@ -326,7 +368,10 @@
     "title_en": "Loa vendor (old woman)",
     "title_ko": "로아 상인 (노파)",
     "character": "npc",
-    "size": [10, 14],
+    "size": [
+      10,
+      14
+    ],
     "art": [
       "  ╭─────╮  ",
       "  │○○○○ │  ",
@@ -342,6 +387,84 @@
       "   ╰───╯   ",
       "  [maison] ",
       "  [loa]    "
+    ]
+  },
+  "armitage_suit": {
+    "id": "armitage_suit",
+    "title_en": "Armitage (the suit)",
+    "title_ko": "아미티지 (수트)",
+    "character": "suit",
+    "size": [
+      10,
+      14
+    ],
+    "art": [
+      "  ╭─────╮  ",
+      "  │ ▓▓▓ │  ",
+      "  │ ▓▓▓ │  ",
+      "  │ ─── │  ",
+      "  │ ┃  ┃│  ",
+      "  ╰─┬─┬╯  ",
+      "    │ │    ",
+      "  ┌─┘ └─┐  ",
+      "  │     │  ",
+      "  │     │  ",
+      "  │  ▓  │  ",
+      "  │     │  ",
+      "  ╰─────╯  ",
+      " [hostile]  "
+    ]
+  },
+  "armitage_terminal": {
+    "id": "armitage_terminal",
+    "title_en": "Armitage (at terminal)",
+    "title_ko": "아미티지 (터미널)",
+    "character": "suit",
+    "size": [
+      10,
+      14
+    ],
+    "art": [
+      "  ╭─────╮  ",
+      "  │ ▓▓▓ │  ",
+      "  │ ▓▓▓ │  ",
+      "  │ ─── │  ",
+      "  │ ┃  ┃│  ",
+      "  ╰─┬─┬╯  ",
+      "    │ │    ",
+      "  ┌─┘ └─┐  ",
+      "  │▒▒▒▒▒│  ",
+      "  │▒>▒▒▒│  ",
+      "  │▒▒▒▒▒│  ",
+      "  │     │  ",
+      "  ╰─────╯  ",
+      "  [matrix] "
+    ]
+  },
+  "armitage_betrayed": {
+    "id": "armitage_betrayed",
+    "title_en": "Armitage (betrayed)",
+    "title_ko": "아미티지 (배신당함)",
+    "character": "suit",
+    "size": [
+      10,
+      14
+    ],
+    "art": [
+      "  ╭─────╮  ",
+      "  │ ▓▓▓ │  ",
+      "  │ ▓▓▓ │  ",
+      "  │ ─X─ │  ",
+      "  │ ┃  ┃│  ",
+      "  ╰─┬─┬╯  ",
+      "    │ │    ",
+      "  ┌─┘ └─┐  ",
+      "  │     │  ",
+      "  │ ╳╳╳ │  ",
+      "  │     │  ",
+      "  │     │  ",
+      "  ╰─────╯  ",
+      " [t-a/ta] "
     ]
   }
 }

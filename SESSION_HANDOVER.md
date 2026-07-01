@@ -1,7 +1,7 @@
 # Session Handover — 다른 세션에서 이어서 진행하기
 
-> 작성일: 2026-06-30
-> 작성 시점 상태: Phase 5 완료 + Phase 6 진입, 3254 tests pass, ADR-0060/0061 Accepted
+> 작성일: 2026-07-01
+> 작성 시점 상태: Phase 5+6 완료, 3894 tests pass (3962 collected), ADR-0060/0061 Accepted + 4 통합 작업 + 콘텐츠 확장 5 미션 추가
 > 대상: 다음 세션의 AI 에이전트 또는 개발자
 
 ---
@@ -9,12 +9,12 @@
 ## 0. 5초 요약 (다음 에이전트용)
 
 이 프로젝트는 깁슨 스프롤 로그라이크 게임 (Python 3.11+ / tcod / uv).
-**현재 상태: 모든 핵심 시스템 + 그래픽 노블 + 이어서 읽기 + 매트릭스 이동 UX + BSP 던전 + Novel Hook Dispatch 완성.**
-**3254 tests pass, ruff/format/mypy 모두 green.**
+**현재 상태: 38 missions, 41 단편 (en+ko), 13 stages (BRIEFING/TRAVEL/BYPASS_SECURITY 추가), Novel Hook Dispatch 미션 완료 시 자동 호출.**
+**3894 tests pass, ruff/format/mypy 모두 green.**
 
 방향 잡기:
 1. `design/CHARACTER_PATHS.md` 읽기 (3캐릭터 × 15미션 경로)
-2. `log.md` 마지막 섹션 (최근 작업 흐름)
+2. `log.md` 마지막 섹션 (P1~P4 + B 통합 작업)
 3. `prototype/scripts/README.md` (데모 가이드)
 4. 작업 선택 후 "이어서 진행"
 
@@ -28,9 +28,9 @@
 
 ---
 
-## 2. 현재 완료 상태 (2026-06-30)
+## 2. 현재 완료 상태 (2026-07-01)
 
-### Phase 5 (Vertical Slice) — 완료
+### Phase 5+6 (Vertical Slice + Expansion) — 완료
 
 | 시스템 | 상태 | ADR | 핵심 파일 |
 |---|---|---|---|
@@ -51,13 +51,25 @@
 | Graphic Novel Ending B / C / 메뉴 | ✅ | 0046, 0048, 0049 | `engine/graphic_novel_view.py` |
 | **Dungeon BSP + NetHack + VFX Overlay** | ✅ | 0060 | `matrix/dungeon_generator.py`, `engine/dungeon_view.py` |
 | **Novel Hook Dispatch (4-layer)** | ✅ | 0061 | `novel/{catalog,manifest,hooks,dispatcher}.py` |
+| **Novel Integration (런타임 연동)** | ✅ | 0061 | `engine/novel_integration.py` (신규) |
+| **Stage BRIEFING / TRAVEL / BYPASS_SECURITY** | ✅ | — | `run/state.py` (Phase B) |
+| **신규 미션 5개 (Arc 2-3)** | ✅ | — | `data/missions/missions.json` (33→38) |
 | 30+ 설정, 28 업적, 10 대시보드 | ✅ | — | `dashboard/*.html` |
 | SaveManager (5 슬롯) | ✅ | — | `engine/save_manager.py` |
 
-### 테스트 통계
-- **3254 tests passing** (이전 2284 → +970 across ADR-0046~0061)
+### 테스트 통계 (2026-07-01)
+- **3894 tests passing** (3962 collected, 24 xfailed)
+- 24 xfailed (의도적 — INDEX 갱신 대기 단편)
+- 44 skipped (의도적 — 통합 테스트 환경 의존)
+- **이전 3254 → 3894 (+640, 통합 작업 + 콘텐츠 확장 모두 반영)**
 - **ruff check / format / mypy strict**: 모두 green
-- **테스트 분포**: 82+ unit test files
+- **테스트 분포**: 90+ unit + integration test files
+
+### 콘텐츠 카운트 (2026-07-01)
+- 미션: 33 → **38** (+15%)
+- 단편 (EN/KO 페어): 32 → **41** (+28%)
+- Stage enum: 10 → **13** (+30%, BRIEFING/TRAVEL/BYPASS)
+- 캐릭터: 3 (Case/Sil/Kas) + 1 (suit) = **4**
 
 ---
 

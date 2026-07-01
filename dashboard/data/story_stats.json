@@ -1,20 +1,21 @@
 {
-  "missions": 29,
-  "stories": 27,
-  "html_files": 64,
-  "en_files": 32,
-  "ko_files": 32,
+  "missions": 38,
+  "stories": 36,
+  "html_files": 82,
+  "en_files": 41,
+  "ko_files": 41,
   "en_only": 0,
   "ko_only": 0,
-  "complete_pairs": 27,
-  "quotes": 27,
-  "references": 27,
-  "arcs": 3,
-  "chapters": 3,
+  "complete_pairs": 36,
+  "quotes": 36,
+  "references": 36,
+  "arcs": 4,
+  "chapters": 4,
   "characters": [
     "Case",
     "Sil",
-    "Kas"
+    "Kas",
+    "Armitage"
   ],
   "aftermath_events": 12,
   "reactions": 25,
@@ -39,5 +40,5 @@
   ],
   "total_rewards": 24,
   "hub_visit_events": 1,
-  "_generated_at": "2026-07-01T09:41:39"
+  "_generated_at": "2026-07-01T21:37:06"
 }

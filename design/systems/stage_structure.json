@@ -1,9 +1,84 @@
 {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "title": "Stage Structure & Progression",
   "title_ko": "스테이지 구조 & 진행",
-  "description": "Single Run = PENDING → Mission flow (per-mission) → COMPLETE/FAILED. v0.3: 15 missions expanded.",
+  "description": "Single Run = BRIEFING → TRAVEL → Mission flow (per-mission) → COMPLETE/FAILED. v0.4: 13 stages (added BRIEFING/TRAVEL/BYPASS_SECURITY), 38 missions.",
   "stages": [
+    {
+      "id": "briefing",
+      "name_en": "Mission Briefing",
+      "name_ko": "임무 브리핑",
+      "type": "narrative",
+      "is_terminal": false,
+      "objective_kind": "none",
+      "description_en": "Fixer's pre-mission briefing. Player sees the Finn's office ASCII and the fixer's dialogue.",
+      "description_ko": "픽서의 사전 미션 브리핑. 플레이어는 핀의 사무실 ASCII와 픽서 대사를 본다.",
+      "next_stage": "travel",
+      "trigger_en": "Player dismisses the briefing screen.",
+      "trigger_ko": "플레이어가 브리핑 화면을 종료.",
+      "ascii_art": [
+        "  ┌──────────────────────────┐",
+        "  │  ♠F♠ THE FINN'S OFFICE   │",
+        "  │  ────────────────────    │",
+        "  │  'Pay's in the credstick │",
+        "  │   when the data's in     │",
+        "  │   my hand. Don't die.'   │",
+        "  └──────────────────────────┘"
+      ],
+      "ui_elements": [
+        "briefing_screen",
+        "fixer_dialogue",
+        "ascii_finn_office"
+      ]
+    },
+    {
+      "id": "travel",
+      "name_en": "Travel to Jack-In Point",
+      "name_ko": "잭인 지점 이동",
+      "type": "animation",
+      "is_terminal": false,
+      "objective_kind": "none",
+      "description_en": "Pre-matrix travel animation. Chiba street → jack-in spot. Sets the mood before cyberspace.",
+      "description_ko": "매트릭스 진입 전 이동 애니메이션. 시바 거리 → 잭인 지점. 사이버스페이스 진입 전 분위기 조성.",
+      "next_stage": "meet_npc",
+      "trigger_en": "Player reaches the jack-in point.",
+      "trigger_ko": "플레이어가 잭인 지점에 도달.",
+      "ascii_art": [
+        "  ░░░░░░░░░░░░░░░░░░░░░░░░░░",
+        "  ░  ◢◣  HEADING TO ▒░░░  ░",
+        "  ░  ──  JACK-IN POINT ──  ░",
+        "  ░  ░▒▓  CHIBA, 11LV  ▓▒░ ░",
+        "  ░░░░░░░░░░░░░░░░░░░░░░░░░░"
+      ],
+      "ui_elements": [
+        "travel_animation",
+        "ascii_chiba_street"
+      ]
+    },
+    {
+      "id": "bypass_security",
+      "name_en": "Bypass Security",
+      "name_ko": "보안 우회",
+      "type": "matrix",
+      "is_terminal": false,
+      "objective_kind": "none",
+      "description_en": "Optional: slip past a corporate security layer (e.g. Watchdog patrol). Used by watchdog_patrol flow.",
+      "description_ko": "선택적: 기업 보안 레이어 (예: Watchdog 순찰) 통과. watchdog_patrol 플로우에서 사용.",
+      "next_stage": "defeat_ice",
+      "trigger_en": "Bypass succeeds or fails (then continues to ICE).",
+      "trigger_ko": "우회 성공 또는 실패 (그 후 ICE로 진행).",
+      "ascii_art": [
+        "  ░░░░░░░░░░░░░░░░░░░░░░░░░░",
+        "  ░  ◢◣  WATCHDOG AVOID  ░",
+        "  ░  ──  GHOST TRACE  ───  ░",
+        "  ░  ░▒▓  BLIND SPOT 3s  ░",
+        "  ░░░░░░░░░░░░░░░░░░░░░░░░░░"
+      ],
+      "ui_elements": [
+        "bypass_minigame",
+        "ascii_security_grid"
+      ]
+    },
     {
       "id": "pending",
       "name_en": "Pending",
@@ -245,6 +320,41 @@
     }
   ],
   "transitions": [
+    {
+      "from": "pending",
+      "to": "briefing",
+      "trigger_en": "Mission accepted at Hub",
+      "trigger_ko": "Hub에서 미션 수락",
+      "system": "start_run(mission_id) → briefing_screen"
+    },
+    {
+      "from": "briefing",
+      "to": "travel",
+      "trigger_en": "Player dismisses briefing",
+      "trigger_ko": "플레이어가 브리핑 종료",
+      "system": "mark_advance() → travel_screen"
+    },
+    {
+      "from": "travel",
+      "to": "meet_npc",
+      "trigger_en": "Player reaches jack-in point",
+      "trigger_ko": "플레이어가 잭인 지점 도달",
+      "system": "mark_advance() → matrix_enter"
+    },
+    {
+      "from": "extract_data",
+      "to": "bypass_security",
+      "trigger_en": "Optional: corporate security check",
+      "trigger_ko": "선택적: 기업 보안 점검",
+      "system": "bypass_security_screen"
+    },
+    {
+      "from": "bypass_security",
+      "to": "defeat_ice",
+      "trigger_en": "Bypass complete or failed",
+      "trigger_ko": "우회 완료 또는 실패",
+      "system": "mark_advance() → combat_state"
+    },
     {
       "from": "pending",
       "to": "meet_npc",
@@ -1227,5 +1337,9 @@
       "  │     → Return to Hub    │",
       "  └────────────────────────┘"
     ]
-  }
+  },
+  "mission_count_canonical": 38,
+  "mission_count_canonical_source": "prototype/data/missions/missions.json",
+  "mission_count_in_this_file": 29,
+  "note": "v0.4: 13 stages. 29 missions in legacy snapshot; canonical 38 in missions.json."
 }

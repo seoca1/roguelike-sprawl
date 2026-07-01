@@ -1,9 +1,12 @@
 {
-  "stage_enum_count": 10,
+  "stage_enum_count": 13,
   "stage_enum_names": [
     "PENDING",
+    "BRIEFING",
+    "TRAVEL",
     "MEET_NPC",
     "EXTRACT_DATA",
+    "BYPASS_SECURITY",
     "DEFEAT_ICE",
     "JACK_OUT",
     "REWARD",
@@ -38,5 +41,5 @@
     "NONE"
   ],
   "source": "prototype/src/roguelike_sprawl/run/state.py",
-  "_generated_at": "2026-07-01T09:41:39"
+  "_generated_at": "2026-07-01T21:37:06"
 }

@@ -2,7 +2,7 @@
 
 위키/디자인/결정/테스트 페이지 카탈로그. LLM Wiki 표준 패턴.
 
-**현재 상태**: Phase 5 (Vertical Slice) 완료. **2970 tests pass**. 핵심 시스템 + 그래픽 노블 + 이어서 읽기.
+**현재 상태**: Phase 5+6 (Vertical Slice + Expansion) 완료. **3894 tests pass** (3962 collected). 38 missions / 41 short stories (en+ko) / 13 stages. Novel Hook Dispatch (ADR-0061) + Novel Integration (런타임 연동) + BRIEFING/TRAVEL/BYPASS_SECURITY stages.
 
 ## 메타
 - [README](README.md) - 프로젝트 개요
@@ -57,11 +57,25 @@
 ## 테스트 케이스
 - [Index](testcases/README.md) - 모든 테스트 시나리오
 
-## 최근 결정 (ADR-0041~0044, 2026-06-21)
+## 최근 결정 (ADR-0041~0061, 2026-06-21 ~ 2026-07-01)
 - **0041 Content Expansion** — 12 씬 dialogue 4× 확장 (4188 → 16862 chars)
 - **0042 Chapter Cards** — 챕터 I-XII + fade transition (║ ─ ·)
 - **0043 Sound Cues** — 15개 scene cue → file 매핑 (path 버그 fix)
 - **0044 GN Save/Restore** — `GNProgress` atomic save + CONTINUE READING 메뉴
+- **0045 Matrix Movement** — 15개 키 + Euclidian dot-product + 시각 힌트 (◄►▲▼)
+- **0046 GN Ending B** — 엔딩 B 분기 (Refusal/Contract/Silence)
+- **0047 Status Messages** — 카테고리형 메시지 (SUCCESS/INFO/WARN/ERROR) + 색상/아이콘
+- **0048 GN Ending Menu** — 엔딩 A/B 메뉴 + Save 1.0.0→1.1.0 마이그레이션
+- **0049 GN Ending C** — 엔딩 C (소멸/망각/파괴) + Save 1.1.0→1.2.0
+- **0050 Boss ICE** — Wintermute + T-A Prime 3-phase + transition cinematics
+- **0051 Mission Story Metadata** — 미션 ↔ 단편 직접 매핑 (ADR)
+- **0052 Short Story Expansion Plan** — 17→35 단편 + 메타데이터 확장
+- **0060 Dungeon Exploration Redesign** — NetHack 스타일 BSP 미로 (Phase 1+1.5+2+3+4)
+- **0061 Novel Integration Architecture** — 4-layer Hook Dispatch (catalog/hooks/manifest/dispatcher) + 런타임 연동 (`engine/novel_integration.py`)
+
+## 시스템 (Phase B 추가)
+- **Novel Integration** (`engine/novel_integration.py`) — 미션 완료 시 `mission_to_stem` → `dispatch_for_state` 자동 호출
+- **Stage BRIEFING / TRAVEL / BYPASS_SECURITY** — 9 → 13 stages (CONTENT_EXPANSION Phase B)
 
 ## 데모 / 검증 스크립트
 - [Scripts 가이드](prototype/scripts/README.md) - **모든 데모/검증 스크립트 실행법 (27+ scripts, 추천 순서, 비교표)**
