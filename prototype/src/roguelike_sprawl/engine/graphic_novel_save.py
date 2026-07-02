@@ -123,13 +123,26 @@ class GNProgress:
         ending_raw = str(data.get("ending", "A"))
         if ending_raw not in ("A", "B", "C"):
             ending_raw = "A"  # unknown values default to A (forward-compat)
+
+        def _safe_int(key: str, default: int = 0) -> int:
+            try:
+                return int(str(data.get(key, default)))
+            except (TypeError, ValueError):
+                return default
+
+        def _safe_float(key: str, default: float = 0.0) -> float:
+            try:
+                return float(str(data.get(key, default)))
+            except (TypeError, ValueError):
+                return default
+
         return cls(
             mode=str(data.get("mode", "prologue")),
-            scene_index=int(str(data.get("scene_index", 0))),
-            dialogue_index=int(str(data.get("dialogue_index", 0))),
-            elapsed_in_dialogue_ms=float(str(data.get("elapsed_in_dialogue_ms", 0.0))),
+            scene_index=_safe_int("scene_index", 0),
+            dialogue_index=_safe_int("dialogue_index", 0),
+            elapsed_in_dialogue_ms=_safe_float("elapsed_in_dialogue_ms", 0.0),
             character_id=str(data.get("character_id", "novice")),
-            chain_length=int(str(data.get("chain_length", 0))),
+            chain_length=_safe_int("chain_length", 0),
             saved_at=str(data.get("saved_at", "")),
             ending=ending_raw,
             session_id=str(data.get("session_id", uuid.uuid4().hex[:12])),

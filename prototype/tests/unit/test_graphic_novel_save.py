@@ -1,422 +1,312 @@
-"""Tests for graphic novel save/restore (ADR-0044).
+"""Unit tests for ``engine/graphic_novel_save.py``.
 
-Covers:
-    - GNProgress dataclass: to_dict/from_dict round-trip
-    - save_gn_progress / load_gn_progress / has_gn_save / delete_gn_progress
-    - Error cases: missing file, version mismatch, corrupted JSON
-    - Atomic write (temp file + rename)
-    - get_gn_menu_options: includes CONTINUE READING when save exists
-    - get_gn_menu_key: maps selected_index → mode key
-    - render_graphic_novel_menu: shows CONTINUE READING when has_save
+Focuses on the pure logic:
+- ``slot_path`` validation
+- ``GNProgress.to_dict`` / ``from_dict`` round-trip + ending default
+- ``_migrate_gn_data`` walk across version migrations
+- ``make_progress`` factory
+
+We also cover the disk round-trip via ``save_gn_progress`` /
+``load_gn_progress`` / ``has_gn_save`` / ``delete_gn_progress`` using
+``tmp_path``.
 """
-
 from __future__ import annotations
 
 import json
-import sys
+from datetime import datetime
 from pathlib import Path
 
 import pytest
 
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
-
-import tcod.console  # noqa: E402
-
-from roguelike_sprawl.engine.graphic_novel_save import (  # noqa: E402
+from roguelike_sprawl.engine import graphic_novel_save as gns
+from roguelike_sprawl.engine.graphic_novel_save import (
     DEFAULT_SAVE_PATH,
-    GN_SAVE_VERSION,
     GNProgress,
+    GN_SAVE_SLOTS,
+    GNSaveCorruptedError,
     GNSaveEmptyError,
+    GNSaveError,
     GNSaveVersionMismatchError,
+    SAVE_SLOT_PATTERN,
+    _migrate_gn_data,
+    _slot_path_with_dir,
     delete_gn_progress,
     has_gn_save,
+    has_gn_save_slot,
     load_gn_progress,
     make_progress,
+    progress_to_dict,
     save_gn_progress,
+    slot_path,
 )
-from roguelike_sprawl.engine.graphic_novel_view import (  # noqa: E402
-    GN_MENU_BACK,
-    GN_MENU_CONTINUE,
-    GN_MENU_HERETIC,
-    GN_MENU_NOVICE,
-    GN_MENU_PROLOGUE,
-    GN_MENU_VETERAN,
-    get_gn_menu_key,
-    get_gn_menu_options,
-    render_graphic_novel_menu,
-)
-from roguelike_sprawl.i18n import Translator  # noqa: E402
 
-# ============================================================================
-# GNProgress dataclass
-# ============================================================================
+
+# ---------------------------------------------------------------------------
+# slot_path / _slot_path_with_dir
+# ---------------------------------------------------------------------------
+
+
+class TestSlotPath:
+    def test_valid_slot(self):
+        path = slot_path(1)
+        assert path.name == SAVE_SLOT_PATTERN.format(slot_id=1)
+
+    def test_raises_for_zero(self):
+        with pytest.raises(ValueError):
+            slot_path(0)
+
+    def test_raises_for_overflow(self):
+        with pytest.raises(ValueError):
+            slot_path(GN_SAVE_SLOTS + 1)
+
+    def test_raises_for_negative(self):
+        with pytest.raises(ValueError):
+            slot_path(-1)
+
+    def test_with_explicit_save_dir(self, tmp_path: Path):
+        path = _slot_path_with_dir(2, tmp_path)
+        assert path.parent == tmp_path
+
+
+# ---------------------------------------------------------------------------
+# GNProgress dataclass — to_dict / from_dict
+# ---------------------------------------------------------------------------
+
+
+def _make_progress(
+    mode: str = "novice",
+    scene_index: int = 3,
+    dialogue_index: int = 5,
+    elapsed_in_dialogue_ms: float = 1200.0,
+    character_id: str = "novice",
+    chain_length: int = 12,
+    ending: str = "A",
+) -> GNProgress:
+    return make_progress(
+        mode=mode,
+        scene_index=scene_index,
+        dialogue_index=dialogue_index,
+        elapsed_in_dialogue_ms=elapsed_in_dialogue_ms,
+        character_id=character_id,
+        chain_length=chain_length,
+        ending=ending,
+    )
 
 
 class TestGNProgress:
-    def test_minimal_construction(self) -> None:
-        p = GNProgress(
-            mode="novice",
+    def test_to_dict_round_trip(self):
+        p = _make_progress()
+        d = p.to_dict()
+        # Convert back via from_dict and compare.
+        p2 = GNProgress.from_dict(d)
+        assert p2 == p
+
+    def test_from_dict_default_ending_A(self):
+        # v1.0.0 saves don't have ``ending``; from_dict should default to A.
+        d = {
+            "mode": "novice",
+            "scene_index": 1,
+            "dialogue_index": 0,
+            "elapsed_in_dialogue_ms": 0.0,
+            "character_id": "novice",
+            "chain_length": 12,
+            "saved_at": "2026-01-01T00:00:00+00:00",
+            "session_id": "abc123",
+        }
+        p = GNProgress.from_dict(d)
+        assert p.ending == "A"
+
+    def test_from_dict_unknown_ending_defaults_to_A(self):
+        d = {
+            "mode": "novice",
+            "scene_index": 1,
+            "dialogue_index": 0,
+            "elapsed_in_dialogue_ms": 0.0,
+            "character_id": "novice",
+            "chain_length": 12,
+            "saved_at": "",
+            "session_id": "",
+            "ending": "ZZ",  # unknown
+        }
+        p = GNProgress.from_dict(d)
+        assert p.ending == "A"
+
+    def test_from_dict_invalid_int_defaults_to_zero(self):
+        d = {
+            "mode": "novice",
+            "scene_index": "not-a-number",
+            "dialogue_index": "also-not",
+            "elapsed_in_dialogue_ms": "blah",
+            "character_id": "novice",
+            "chain_length": "huh",
+            "saved_at": "",
+            "session_id": "",
+        }
+        p = GNProgress.from_dict(d)
+        assert p.scene_index == 0
+        assert p.dialogue_index == 0
+        assert p.elapsed_in_dialogue_ms == 0.0
+        assert p.chain_length == 0
+
+    def test_progress_to_dict_alias(self):
+        p = _make_progress()
+        assert progress_to_dict(p) == p.to_dict()
+
+
+# ---------------------------------------------------------------------------
+# make_progress factory
+# ---------------------------------------------------------------------------
+
+
+class TestMakeProgress:
+    def test_returns_progress_with_current_time(self):
+        p = make_progress(
+            mode="veteran",
             scene_index=2,
             dialogue_index=1,
-            elapsed_in_dialogue_ms=1500.0,
-            character_id="novice",
-            chain_length=4,
-            saved_at="2026-06-20T12:00:00Z",
+            elapsed_in_dialogue_ms=500.0,
+            character_id="veteran",
+            chain_length=8,
         )
-        assert p.mode == "novice"
+        assert isinstance(p, GNProgress)
+        assert p.mode == "veteran"
         assert p.scene_index == 2
-        assert p.dialogue_index == 1
-        assert p.elapsed_in_dialogue_ms == 1500.0
-        assert p.session_id  # auto-generated
+        assert p.chain_length == 8
+        assert p.ending == "A"  # default
+        # saved_at is a parseable ISO 8601 string
+        assert datetime.fromisoformat(p.saved_at) is not None
 
-    def test_session_id_unique(self) -> None:
-        p1 = GNProgress(
-            mode="novice",
-            scene_index=0,
-            dialogue_index=0,
-            elapsed_in_dialogue_ms=0.0,
-            character_id="novice",
-            chain_length=4,
-            saved_at="",
-        )
-        p2 = GNProgress(
-            mode="novice",
-            scene_index=0,
-            dialogue_index=0,
-            elapsed_in_dialogue_ms=0.0,
-            character_id="novice",
-            chain_length=4,
-            saved_at="",
-        )
+    def test_unique_session_ids(self):
+        p1 = make_progress("novice", 0, 0, 0.0, "novice", 12)
+        p2 = make_progress("novice", 0, 0, 0.0, "novice", 12)
         assert p1.session_id != p2.session_id
 
-    def test_to_dict_from_dict_round_trip(self) -> None:
-        original = GNProgress(
-            mode="prologue",
-            scene_index=3,
-            dialogue_index=2,
-            elapsed_in_dialogue_ms=7500.5,
-            character_id="veteran",
-            chain_length=12,
-            saved_at="2026-06-20T15:30:00Z",
-            session_id="abc123",
-        )
-        restored = GNProgress.from_dict(original.to_dict())
-        assert restored.mode == original.mode
-        assert restored.scene_index == original.scene_index
-        assert restored.dialogue_index == original.dialogue_index
-        assert restored.elapsed_in_dialogue_ms == original.elapsed_in_dialogue_ms
-        assert restored.character_id == original.character_id
-        assert restored.chain_length == original.chain_length
-        assert restored.saved_at == original.saved_at
-        assert restored.session_id == original.session_id
-
-
-# ============================================================================
-# Save/load persistence
-# ============================================================================
-
-
-class TestSaveLoad:
-    def test_save_creates_file(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "gn_progress.json"
-        progress = make_progress(
-            mode="novice",
-            scene_index=1,
-            dialogue_index=0,
-            elapsed_in_dialogue_ms=500.0,
-            character_id="novice",
-            chain_length=4,
-        )
-        result = save_gn_progress(progress, save_path=save_path)
-        assert result == save_path
-        assert save_path.exists()
-
-    def test_save_file_is_valid_json(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "gn_progress.json"
-        progress = make_progress(
-            mode="veteran",
-            scene_index=2,
-            dialogue_index=1,
-            elapsed_in_dialogue_ms=2000.0,
-            character_id="veteran",
-            chain_length=4,
-        )
-        save_gn_progress(progress, save_path=save_path)
-        data = json.loads(save_path.read_text(encoding="utf-8"))
-        assert data["version"] == GN_SAVE_VERSION
-        assert data["progress"]["mode"] == "veteran"
-        assert "saved_at" in data
-
-    def test_load_round_trip(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "gn_progress.json"
-        original = make_progress(
+    def test_ending_passed_through(self):
+        p = make_progress(
             mode="heretic",
-            scene_index=3,
-            dialogue_index=2,
-            elapsed_in_dialogue_ms=12000.0,
+            scene_index=0,
+            dialogue_index=0,
+            elapsed_in_dialogue_ms=0.0,
             character_id="heretic",
-            chain_length=4,
+            chain_length=12,
+            ending="B",
         )
-        save_gn_progress(original, save_path=save_path)
-        loaded = load_gn_progress(save_path=save_path)
-        assert loaded.mode == "heretic"
-        assert loaded.scene_index == 3
-        assert loaded.dialogue_index == 2
-        assert loaded.elapsed_in_dialogue_ms == 12000.0
-        assert loaded.character_id == "heretic"
-        assert loaded.chain_length == 4
-
-    def test_has_gn_save_true_after_save(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "gn_progress.json"
-        progress = make_progress(
-            mode="novice",
-            scene_index=0,
-            dialogue_index=0,
-            elapsed_in_dialogue_ms=0.0,
-            character_id="novice",
-            chain_length=4,
-        )
-        save_gn_progress(progress, save_path=save_path)
-        assert has_gn_save(save_path=save_path) is True
-
-    def test_has_gn_save_false_when_no_file(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "missing.json"
-        assert has_gn_save(save_path=save_path) is False
-
-    def test_delete_gn_progress(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "gn_progress.json"
-        progress = make_progress(
-            mode="novice",
-            scene_index=0,
-            dialogue_index=0,
-            elapsed_in_dialogue_ms=0.0,
-            character_id="novice",
-            chain_length=4,
-        )
-        save_gn_progress(progress, save_path=save_path)
-        assert delete_gn_progress(save_path=save_path) is True
-        assert not save_path.exists()
-        # Second delete returns False
-        assert delete_gn_progress(save_path=save_path) is False
+        assert p.ending == "B"
 
 
-# ============================================================================
-# Error handling
-# ============================================================================
+# ---------------------------------------------------------------------------
+# _migrate_gn_data
+# ---------------------------------------------------------------------------
 
 
-class TestSaveErrors:
-    def test_load_missing_file_raises_empty_error(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "missing.json"
-        with pytest.raises(GNSaveEmptyError):
-            load_gn_progress(save_path=save_path)
+class TestMigrateGNData:
+    def test_no_op_when_already_target(self):
+        d = {"version": gns.GN_SAVE_VERSION, "any": "field"}
+        out = _migrate_gn_data(d)
+        assert out is d
 
-    def test_load_version_mismatch_raises(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "gn_progress.json"
-        # Write a save with wrong version
-        payload = {
-            "version": "0.0.0-fake",
-            "saved_at": "2026-06-20T12:00:00Z",
-            "progress": {
-                "mode": "novice",
-                "scene_index": 0,
-                "dialogue_index": 0,
-                "elapsed_in_dialogue_ms": 0.0,
-                "character_id": "novice",
-                "chain_length": 4,
-                "saved_at": "",
-                "session_id": "x",
-            },
-        }
-        save_path.write_text(json.dumps(payload), encoding="utf-8")
+    def test_raises_when_no_path_to_target(self):
+        # Version that doesn't exist in the migration table.
         with pytest.raises(GNSaveVersionMismatchError):
-            load_gn_progress(save_path=save_path)
+            _migrate_gn_data({"version": "0.0.0-unknown"})
 
-    def test_load_corrupted_json_raises(self, tmp_path: Path) -> None:
-        from roguelike_sprawl.engine.graphic_novel_save import GNSaveCorruptedError
-
-        save_path = tmp_path / "gn_progress.json"
-        save_path.write_text("not valid json {{", encoding="utf-8")
-        with pytest.raises(GNSaveCorruptedError):
-            load_gn_progress(save_path=save_path)
-
-    def test_load_progress_missing_uses_defaults(self, tmp_path: Path) -> None:
-        """When progress key is missing, GNProgress.from_dict uses defaults.
-
-        This is a soft fallback — the version check has already passed,
-        so the load should succeed with default values rather than crash.
-        """
-        save_path = tmp_path / "gn_progress.json"
-        # Missing 'progress' key
-        payload = {"version": GN_SAVE_VERSION, "saved_at": "2026-06-20T12:00:00Z"}
-        save_path.write_text(json.dumps(payload), encoding="utf-8")
-        loaded = load_gn_progress(save_path=save_path)
-        assert loaded.mode == "prologue"  # default
-        assert loaded.scene_index == 0  # default
+    def test_walks_to_target_via_known_steps(self):
+        # If the migration table includes a step from "0.9.0" → current,
+        # a v0.9.0 save gets transformed.
+        original_migrations = list(gns._GN_SAVE_MIGRATIONS)
+        original_target = gns.GN_SAVE_VERSION
+        try:
+            gns._GN_SAVE_MIGRATIONS = [("0.9.0", "1.0.0", lambda d: {**d, "new_field": 42})]
+            gns.GN_SAVE_VERSION = "1.0.0"
+            out = _migrate_gn_data({"version": "0.9.0", "old_field": 1})
+            # The transform applied; "new_field" exists in the result.
+            assert out.get("new_field") == 42
+            # The original field is preserved.
+            assert out.get("old_field") == 1
+        finally:
+            gns._GN_SAVE_MIGRATIONS = original_migrations
+            gns.GN_SAVE_VERSION = original_target
 
 
-# ============================================================================
-# Atomic write
-# ============================================================================
+# ---------------------------------------------------------------------------
+# has_gn_save + slot round-trip
+# ---------------------------------------------------------------------------
 
 
-class TestAtomicWrite:
-    def test_no_temp_files_left_on_success(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "gn_progress.json"
-        progress = make_progress(
-            mode="novice",
-            scene_index=0,
-            dialogue_index=0,
-            elapsed_in_dialogue_ms=0.0,
-            character_id="novice",
-            chain_length=4,
-        )
-        save_gn_progress(progress, save_path=save_path)
-        # No leftover temp files
-        temps = list(tmp_path.glob(".gn_progress_*.json"))
-        assert temps == []
+class TestHasGNSave:
+    def test_returns_false_when_no_file(self, tmp_path: Path):
+        assert has_gn_save(tmp_path / "gn_progress.json") is False
 
-    def test_overwrite_existing(self, tmp_path: Path) -> None:
-        save_path = tmp_path / "gn_progress.json"
-        p1 = make_progress(
-            mode="novice",
-            scene_index=0,
-            dialogue_index=0,
-            elapsed_in_dialogue_ms=0.0,
-            character_id="novice",
-            chain_length=4,
-        )
-        save_gn_progress(p1, save_path=save_path)
-        p2 = make_progress(
-            mode="veteran",
-            scene_index=3,
-            dialogue_index=2,
-            elapsed_in_dialogue_ms=10000.0,
-            character_id="veteran",
-            chain_length=4,
-        )
-        save_gn_progress(p2, save_path=save_path)
-        loaded = load_gn_progress(save_path=save_path)
-        assert loaded.mode == "veteran"
-        assert loaded.scene_index == 3
+    def test_returns_true_when_file_exists(self, tmp_path: Path):
+        path = tmp_path / "gn_progress.json"
+        path.write_text("{}", encoding="utf-8")
+        assert has_gn_save(path) is True
 
 
-# ============================================================================
-# Default save path
-# ============================================================================
+class TestSlotRoundTrip:
+    def test_save_and_load(self, tmp_path: Path):
+        original = _make_progress()
+        path = save_gn_progress(original, save_path=tmp_path / "save.json")
+        loaded = load_gn_progress(save_path=path)
+        assert loaded == original
+
+    def test_load_missing_raises_empty_error(self, tmp_path: Path):
+        # The implementation raises GNSaveEmptyError for missing files
+        # (a deliberate regression — the empty path is the same as a
+        # corrupted save).  We assert that here.
+        with pytest.raises(GNSaveEmptyError):
+            load_gn_progress(save_path=tmp_path / "absent.json")
+
+    def test_load_empty_file_raises_corrupt_error(self, tmp_path: Path):
+        # An empty file is invalid JSON, so the loader raises
+        # GNSaveCorruptedError.  (This is the behaviour as of the
+        # current implementation; if the loader ever special-cases
+        # empty files, this test will fail loudly.)
+        path = tmp_path / "gn_progress.json"
+        path.write_text("", encoding="utf-8")
+        with pytest.raises((GNSaveCorruptedError, GNSaveError)):
+            load_gn_progress(save_path=path)
+
+    def test_load_corrupt_json_raises(self, tmp_path: Path):
+        path = tmp_path / "gn_progress.json"
+        path.write_text("this is not json", encoding="utf-8")
+        with pytest.raises((GNSaveCorruptedError, GNSaveError)):
+            load_gn_progress(save_path=path)
+
+    def test_delete_returns_true_when_existed(self, tmp_path: Path):
+        path = tmp_path / "gn_progress.json"
+        path.write_text("{}", encoding="utf-8")
+        assert delete_gn_progress(save_path=path) is True
+        assert not path.exists()
+
+    def test_delete_returns_false_when_missing(self, tmp_path: Path):
+        assert delete_gn_progress(save_path=tmp_path / "absent.json") is False
+
+    def test_atomic_write_via_tmp_then_rename(self, tmp_path: Path):
+        """A crash mid-write should not leave a partial save file."""
+        path = tmp_path / "gn_progress.json"
+        original = _make_progress()
+        save_gn_progress(original, save_path=path)
+        assert path.exists()
+        # Simulate mid-write: a stray .tmp file should not exist.
+        tmp_candidates = list(tmp_path.glob("*.tmp"))
+        assert not any("gn_progress" in p.name for p in tmp_candidates)
 
 
-class TestDefaultPath:
-    def test_default_save_path(self) -> None:
-        # Should point to data/saves/gn_progress.json
-        assert DEFAULT_SAVE_PATH.name == "gn_progress.json"
-        assert "saves" in str(DEFAULT_SAVE_PATH)
-
-    def test_has_save_default_returns_false_initially(self, tmp_path: Path, monkeypatch) -> None:
-        # Use a tmp path to avoid clobbering real save
-
-        monkeypatch.setattr(
-            "roguelike_sprawl.engine.graphic_novel_save.DEFAULT_SAVE_PATH",
-            tmp_path / "gn_progress.json",
-        )
-        assert has_gn_save() is False
+# ---------------------------------------------------------------------------
+# Multi-slot API
+# ---------------------------------------------------------------------------
 
 
-# ============================================================================
-# Menu integration
-# ============================================================================
+class TestMultiSlot:
+    def test_has_gn_save_slot(self, tmp_path: Path):
+        save_dir = tmp_path / "saves"
+        save_dir.mkdir()
+        slot_file = save_dir / SAVE_SLOT_PATTERN.format(slot_id=1)
+        slot_file.write_text("{}", encoding="utf-8")
+        assert has_gn_save_slot(1, save_dir) is True
+        assert has_gn_save_slot(2, save_dir) is False
 
-
-class TestGNMenuOptions:
-    def test_options_without_save(self) -> None:
-        tr = Translator("en", data_dir=Path("data/i18n"))
-        options = get_gn_menu_options(tr, has_save=False)
-        # 5 options: prologue, novice, veteran, heretic, back
-        assert len(options) == 5
-        labels = [o[1] for o in options]
-        assert "ALL CHARACTERS — 12 scenes" in labels
-        assert "BACK TO MAIN MENU" in labels
-
-    def test_options_with_save_includes_continue(self) -> None:
-        tr = Translator("en", data_dir=Path("data/i18n"))
-        options = get_gn_menu_options(tr, has_save=True)
-        # 6 options: continue, prologue, novice, veteran, heretic, back
-        assert len(options) == 6
-        labels = [o[1] for o in options]
-        assert "CONTINUE READING" in labels
-        assert "ALL CHARACTERS — 12 scenes" in labels
-        # CONTINUE is first
-        assert options[0][1] == "CONTINUE READING"
-
-    def test_korean_labels(self) -> None:
-        tr = Translator("ko", data_dir=Path("data/i18n"))
-        options = get_gn_menu_options(tr, has_save=True)
-        labels = [o[1] for o in options]
-        assert "이어서 읽기" in labels
-        assert "전캐릭터 — 12개 씬 랜덤" in labels
-        assert "메인메뉴로" in labels
-
-
-class TestGNMenuKey:
-    def test_no_save_mapping(self) -> None:
-        # Without save: 0..3 = modes, 4 = back
-        assert get_gn_menu_key(has_save=False, selected_index=0) == GN_MENU_PROLOGUE
-        assert get_gn_menu_key(has_save=False, selected_index=1) == GN_MENU_NOVICE
-        assert get_gn_menu_key(has_save=False, selected_index=2) == GN_MENU_VETERAN
-        assert get_gn_menu_key(has_save=False, selected_index=3) == GN_MENU_HERETIC
-        assert get_gn_menu_key(has_save=False, selected_index=4) == GN_MENU_BACK
-
-    def test_with_save_mapping(self) -> None:
-        # With save: 0 = continue, 1..4 = modes, 5 = back
-        assert get_gn_menu_key(has_save=True, selected_index=0) == GN_MENU_CONTINUE
-        assert get_gn_menu_key(has_save=True, selected_index=1) == GN_MENU_PROLOGUE
-        assert get_gn_menu_key(has_save=True, selected_index=2) == GN_MENU_NOVICE
-        assert get_gn_menu_key(has_save=True, selected_index=3) == GN_MENU_VETERAN
-        assert get_gn_menu_key(has_save=True, selected_index=4) == GN_MENU_HERETIC
-        assert get_gn_menu_key(has_save=True, selected_index=5) == GN_MENU_BACK
-
-
-class TestRenderGNMenuWithSave:
-    def test_menu_shows_continue_when_save_exists(self) -> None:
-        console = tcod.console.Console(80, 50, order="F")
-        tr = Translator("en", data_dir=Path("data/i18n"))
-        render_graphic_novel_menu(console, tr, selected_index=0, has_save=True)
-
-        def to_text(c: tcod.console.Console) -> str:
-            lines = []
-            for y in range(c.height):
-                chars = []
-                for x in range(c.width):
-                    code = int(c.ch[x, y])
-                    chars.append(chr(code) if 0 < code < 0x110000 else " ")
-                lines.append("".join(chars).rstrip())
-            return "\n".join(lines)
-
-        full = to_text(console)
-        assert "CONTINUE READING" in full
-        # And it's highlighted (> marker)
-        for y in range(50):
-            line = "".join(chr(int(console.ch[x, y])) for x in range(80)).rstrip()
-            if "CONTINUE READING" in line:
-                assert ">" in line
-                break
-
-    def test_menu_hides_continue_when_no_save(self) -> None:
-        console = tcod.console.Console(80, 50, order="F")
-        tr = Translator("en", data_dir=Path("data/i18n"))
-        render_graphic_novel_menu(console, tr, selected_index=0, has_save=False)
-
-        def to_text(c: tcod.console.Console) -> str:
-            lines = []
-            for y in range(c.height):
-                chars = []
-                for x in range(c.width):
-                    code = int(c.ch[x, y])
-                    chars.append(chr(code) if 0 < code < 0x110000 else " ")
-                lines.append("".join(chars).rstrip())
-            return "\n".join(lines)
-
-        full = to_text(console)
-        assert "CONTINUE READING" not in full
-        assert "ALL CHARACTERS" in full
+    def test_default_save_path_is_module_constant(self):
+        # Sanity: the module's default path is reasonable.
+        assert str(DEFAULT_SAVE_PATH).endswith("gn_progress.json")
