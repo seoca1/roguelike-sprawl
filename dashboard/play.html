@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="인터랙티브 챕터 데모: 캐릭터 선택 → 5 챕터 → 미션 → 엔딩 → 단편 발췌. (정적 HTML+JS, GitHub Pages 호환)">
+<meta name="description" content="인터랙티브 챕터 데모: 캐릭터 선택 → 5 챕터 → 38 미션 → A/B/C 엔딩 → 단편 발췌. (정적 HTML+JS, GitHub Pages 호환)">
 <title>Play (Beta) — Roguelike Sprawl</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="canonical" href="https://seoca1.github.io/roguelike-sprawl/play.html">
@@ -129,10 +129,10 @@
 <h1>▶ Play (Beta)</h1>
 <div class="subtitle">
   인터랙티브 챕터 데모 —
-  <span data-stat="characters">3</span> 캐릭터 ×
+  <span data-stat="characters">4</span> 캐릭터 ×
   <span data-stat="chapters">5</span> 챕터 ×
-  <span data-stat="missions">15</span> 미션 ×
-  <span data-stat="endings">2</span> 엔딩.
+  <span data-stat="missions">38</span> 미션 ×
+  <span data-stat="endings">3</span> 엔딩 (A/B/C).
   (정적 HTML+JS; GitHub Pages 호환)
 </div>
 
@@ -202,7 +202,7 @@ async function loadData() {
       const json = await resp.json();
       if (json && json.characters && json.characters.length >= 3 && json.chapters && json.chapters.length >= 15) {
         DATA = json;
-        setStatus('DATA LOADED · 3 CHARS · 15 CHAPTERS · 15 MISSIONS', 'ok');
+        setStatus('DATA LOADED · 4 CHARS · 5 CHAPTERS · 38 MISSIONS', 'ok');
       } else {
         setStatus('USING FALLBACK', 'ok');
       }
