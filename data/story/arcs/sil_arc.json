@@ -1,0 +1,219 @@
+{
+  "character": "veteran",
+  "arc_id": "arc_sil",
+  "title_en": "Sil's Arc",
+  "title_ko": "실의 아크",
+  "description_en": "The old score. The voodoo god. The blank.",
+  "description_ko": "오래된 의문. 부두의 신. 공백.",
+  "chapters": [
+    {
+      "chapter_number": 1,
+      "chapter_id": "ch_sil_01",
+      "title_en": "The Old Score",
+      "title_ko": "오래된 의문",
+      "description_en": "Louisiana. The voodoo shop. Masks and loa.",
+      "description_ko": "루이지아나. 부두 가게. 마스크와 로아.",
+      "cutscene_start": {
+        "scene_id": "scene_sil_intro",
+        "title_en": "LOUISIANA 11",
+        "title_ko": "루이지아나 11"
+      },
+      "cutscene_mid": {
+        "scene_id": "scene_sil_mask",
+        "title_en": "THE MASK",
+        "title_ko": "마스크"
+      },
+      "cutscene_end": {
+        "scene_id": "scene_sil_payroll",
+        "title_en": "T-A PAYROLL",
+        "title_ko": "T-A 급여"
+      },
+      "phases": [
+        {
+          "phase_id": "HUB",
+          "phase_index": 0,
+          "title_en": "Hub",
+          "title_ko": "허브",
+          "description_en": "Accept the mission from the Finn.",
+          "description_ko": "핀으로부터 미션을 수락한다."
+        },
+        {
+          "phase_id": "SEEK_NPC",
+          "phase_index": 1,
+          "title_en": "Meet the Construct",
+          "title_ko": "컨스트럭트 만나기",
+          "description_en": "Find and talk to Dixie Flatline.",
+          "description_ko": "딕시 플랫라인을 찾아 대화한다."
+        },
+        {
+          "phase_id": "EXTRACT_DATA",
+          "phase_index": 2,
+          "title_en": "Extract the Data",
+          "title_ko": "데이터 추출",
+          "description_en": "Locate the data node and extract the payload.",
+          "description_ko": "데이터 노드를 찾아 페이로드를 추출한다."
+        },
+        {
+          "phase_id": "JACK_OUT",
+          "phase_index": 3,
+          "title_en": "Jack Out",
+          "title_ko": "잭아웃",
+          "description_en": "Disconnect from the matrix.",
+          "description_ko": "매트릭스로부터 연결을 해제한다."
+        },
+        {
+          "phase_id": "REWARD",
+          "phase_index": 4,
+          "title_en": "Mission Complete",
+          "title_ko": "미션 완료",
+          "description_en": "Collect your rewards.",
+          "description_ko": "보상을 수령한다."
+        }
+      ],
+      "ending_type": "A",
+      "next_chapter_id": "ch_sil_02",
+      "is_playable": true
+    },
+    {
+      "chapter_number": 2,
+      "chapter_id": "ch_sil_02",
+      "title_en": "The Voodoo God",
+      "title_ko": "부두의 신",
+      "description_en": "The loa speaks. Mara's ghost.",
+      "description_ko": "로아가 말하다. 마라의 유령.",
+      "cutscene_start": {
+        "scene_id": "scene_sil_payroll",
+        "title_en": "PAYROLL",
+        "title_ko": "급여"
+      },
+      "cutscene_mid": {
+        "scene_id": "scene_sil_broadcast",
+        "title_en": "BROADCAST",
+        "title_ko": "방송"
+      },
+      "cutscene_end": {
+        "scene_id": "scene_sil_contract",
+        "title_en": "THE CONTRACT",
+        "title_ko": "계약"
+      },
+      "phases": [
+        {
+          "phase_id": "HUB",
+          "phase_index": 0,
+          "title_en": "Hub",
+          "title_ko": "허브",
+          "description_en": "Meet Marly with the payroll data.",
+          "description_ko": "급여 데이터와 함께 마리와 만난다."
+        },
+        {
+          "phase_id": "SEEK_NPC",
+          "phase_index": 1,
+          "title_en": "Mara's Broadcast",
+          "title_ko": "마라의 방송",
+          "description_en": "Analyze the T-A broadcast with Mara's construct.",
+          "description_ko": "마라의 컨스트럭트와 함께 T-A 방송을 분석한다."
+        },
+        {
+          "phase_id": "EXTRACT_DATA",
+          "phase_index": 2,
+          "title_en": "Extract the Evidence",
+          "title_ko": "증거 추출",
+          "description_en": "Find the contract that unmade Mara.",
+          "description_ko": "마라를 해체한 계약을 찾아낸다."
+        },
+        {
+          "phase_id": "JACK_OUT",
+          "phase_index": 3,
+          "title_en": "Jack Out",
+          "title_ko": "잭아웃",
+          "description_en": "Disconnect from the matrix with the evidence.",
+          "description_ko": "증거와 함께 매트릭스에서 연결을 해제한다."
+        },
+        {
+          "phase_id": "REWARD",
+          "phase_index": 4,
+          "title_en": "Mission Complete",
+          "title_ko": "미션 완료",
+          "description_en": "Collect your payment.",
+          "description_ko": "대가를 수령한다."
+        }
+      ],
+      "ending_type": "A",
+      "next_chapter_id": "ch_sil_03",
+      "is_playable": true
+    },
+    {
+      "chapter_number": 3,
+      "chapter_id": "ch_sil_03",
+      "title_en": "The Insider",
+      "title_ko": "내부자",
+      "description_en": "Who betrayed Mara?",
+      "description_ko": "누가 마라를 배신했는가?",
+      "cutscene_start": {
+        "scene_id": "scene_sil_contract",
+        "title_en": "THE CONTRACT",
+        "title_ko": "계약"
+      },
+      "cutscene_mid": {
+        "scene_id": "scene_sil_insider",
+        "title_en": "THE INSIDER",
+        "title_ko": "내부자"
+      },
+      "cutscene_end": {
+        "scene_id": "scene_sil_erase",
+        "title_en": "THE ERASE",
+        "title_ko": "지우기"
+      },
+      "phases": [],
+      "ending_type": "A",
+      "next_chapter_id": "ch_sil_04",
+      "is_playable": false
+    },
+    {
+      "chapter_number": 4,
+      "chapter_id": "ch_sil_04",
+      "title_en": "The Contract",
+      "title_ko": "계약",
+      "description_en": "The deal with Tessier-Ashpool.",
+      "description_ko": "테시에-애스풀과의 거래.",
+      "cutscene_start": {
+        "scene_id": "scene_sil_erase",
+        "title_en": "ERASE",
+        "title_ko": "지우기"
+      },
+      "cutscene_mid": null,
+      "cutscene_end": {
+        "scene_id": "scene_sil_blank",
+        "title_en": "THE BLANK",
+        "title_ko": "공백"
+      },
+      "phases": [],
+      "ending_type": "A",
+      "next_chapter_id": "ch_sil_05",
+      "is_playable": false
+    },
+    {
+      "chapter_number": 5,
+      "chapter_id": "ch_sil_05",
+      "title_en": "The Blank",
+      "title_ko": "공백",
+      "description_en": "After everything. What remains?",
+      "description_ko": "모든 것 이후. 무엇이 남았는가?",
+      "cutscene_start": {
+        "scene_id": "scene_sil_blank",
+        "title_en": "BLANK",
+        "title_ko": "공백"
+      },
+      "cutscene_mid": null,
+      "cutscene_end": {
+        "scene_id": "scene_sil_blank",
+        "title_en": "THE BLANK",
+        "title_ko": "공백"
+      },
+      "phases": [],
+      "ending_type": "A",
+      "next_chapter_id": null,
+      "is_playable": false
+    }
+  ]
+}

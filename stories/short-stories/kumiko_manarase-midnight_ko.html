@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>매나리사의 자정 / Manarase at Midnight — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .story-body h2 {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin: 2.5rem 0 1rem;
+        }
+        .story-body blockquote {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        .story-body hr { border: none; border-top: 1px solid #e0ddd8; margin: 2rem 0; }
+        .story-body ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .story-body li { margin-bottom: 0.5rem; }
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+
+        .story-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e0ddd8; text-align: center; }
+        .story-footer p { font-size: 0.85rem; color: var(--meta-color); font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        .lang-indicator a { color: inherit; text-decoration: none; }
+        .lang-indicator a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) { html { font-size: 16px; } .container { padding: 2rem 1.5rem 6rem; } .story-title { font-size: 1.75rem; } }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">KO · <a href="kumiko_manarase-midnight_en.html">EN</a></div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Unknown</div>
+            <h1 class="story-title">매나리사의 자정 / Manarase at Midnight</h1>
+            <p class="story-subtitle"></p>
+            <div class="story-meta"><span>0 words</span><span>Sprawl Trilogy</span></div>
+        </header>
+        <article class="story-body">
+<blockquote><p>"The sky was the color of bad TV."</p></blockquote>
+<blockquote><p>— Mona Lisa Overdrive, opening line (echoed from Neuromancer)</p></blockquote>
+<hr>
+<h2>도입 (The Contract)</h2>
+<p>매나리사. 자정. 시부야의 11번지. 쿠미코 야나카(Kumiko Yanaka)는 택시 안에서 —</p>
+<p>택시 안에서 —</p>
+<p>택시 안에서 —</p>
+<p>택시가 — 택시가 — <em>멈추었다</em>. 자정. 매나리사. 매나리사의 11번지. 시부야의 — 시부야의 —</p>
+<p>쿠미코는 — 쿠미코는 — <em>야나카</em>다. <em>야나카</em>는 — <em>야나카</em>는 — <em>산업</em>이다. <em>산업</em>은 — <em>산업</em>은 — <em>자본</em>이다. <em>자본</em>은 — <em>자본</em>은 — <em>Tessier-Ashpool</em>이다. <em>Tessier-Ashpool</em>은 — <em>Tessier-Ashpool</em>은 — <em>3백</em> <em>년</em>의 <em>데이터</em>다. <em>3백</em> <em>년</em>의 <em>데이터</em>는 — <em>3백</em> <em>년</em>의 <em>데이터</em>는 — <em>3백</em> <em>년</em>의 <em>죽음</em>이다.</p>
+<p>쿠미코는 — 쿠미코는 — <em>아버지</em>를 <em>죽였다</em>. 아니, <em>아버지</em>를 <em>죽이게</em> <em>했다</em>. <em>아버지</em>는 — <em>아버지</em>는 — <em>살아있었다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>산업</em>으로 — <em>산업</em>으로 — <em>자본</em>으로 — <em>자본</em>으로 — <em>Tessier-Ashpool</em>으로 — <em>Tessier-Ashpool</em>으로 —</p>
+<p><em>아버지</em>는 — <em>아버지</em>는 — <em>야나카</em>다. <em>야나카</em>는 <em>산업</em>이다. <em>산업</em>은 <em>Tessier-Ashpool</em>이다. <em>Tessier-Ashpool</em>은 <em>3백</em> <em>년</em>이다. <em>3백</em> <em>년</em>은 — <em>3백</em> <em>년</em>은 —</p>
+<p>자정. 매나리사. 택시가 — 택시가 — <em>멈추었다</em>.</p>
+<p>"매나리사입니다." 기사가 <em>말했다</em>. 쿠미코는 — 쿠미코는 — <em>내렸다</em>. 매나리사. 자정. 11번지. <em>여기</em>다. <em>여기</em>가 <em>매나리사</em>다. <em>여기</em>가 <em>자정</em>이다. <em>여기</em>가 <em>11번지</em>다. <em>여기</em>가 — <em>여기</em>가 —</p>
+<p>매나리사는 — 매나리사는 — <em>클럽</em>이다. <em>클럽</em>은 — <em>클럽</em>은 — <em>돈</em>이다. <em>돈</em>은 — <em>돈</em>은 — <em>야나카</em>다. <em>야나카</em>는 <em>산업</em>이다. <em>산업</em>은 <em>Tessier-Ashpool</em>이다. <em>Tessier-Ashpool</em>은 — <em>Tessier-Ashpool</em>은 — <em>여기</em>다. <em>여기</em>가 <em>Tessier-Ashpool</em>이다.</p>
+<p>쿠미코는 — 쿠미코는 — <em>들어갔다</em>.</p>
+<hr>
+<h2>전개 (The Deal)</h2>
+<p>매나리사 안은 — 매나리사 안은 — <em>어둡다</em>. 자정. 매나리사. 어둠. <em>음악</em>이 — <em>음악</em>이 — <em>크다</em>. <em>음악</em>은 — <em>음악</em>은 — <em>데이터</em>다. <em>데이터</em>는 — <em>데이터</em>는 — <em>사라지지</em> <em>않는다</em>. <em>사라지지</em> <em>않는</em> <em>것</em>은 — <em>사라지지</em> <em>않는</em> <em>것</em>은 — <em>loa</em>다. <em>loa</em>는 — <em>loa</em>는 — <em>신</em>이 <em>머무는</em> <em>자리</em>다. <em>자리</em>는 — <em>자리</em>는 — <em>만들어지는</em> <em>것</em>이다. <em>만들어지는</em> <em>것</em>은 — <em>만들어지는</em> <em>것</em>은 — <em>살아있는</em> <em>것</em>이다.</p>
+<p>매나리사의 — 매나리사의 — <em>바</em>는 — <em>바</em>는 — <em>11번지</em>다. <em>11번지</em>는 — <em>11번지</em>는 — <em>여기</em>다. <em>여기</em>가 <em>11번지</em>다. <em>여기</em>가 — <em>여기</em>가 —</p>
+<p><em>삐</em>. <em>삐</em>. <em>삐</em>.</p>
+<p>쿠미코의 — 쿠미코의 — <em>데크</em>가 — <em>데크</em>가 — <em>울었다</em>. <em>울었다</em>는 <em>것</em>은 — <em>울었다</em>는 <em>것</em>은 — <em>받았다</em>는 <em>것</em>이다. <em>받았다</em>는 <em>것</em>은 — <em>받았다</em>는 <em>것</em>은 — <em>loa</em>다. <em>loa</em>는 — <em>loa</em>는 —</p>
+<p><em>Sally Shearer</em>. Sally는 — Sally는 — <em>로맨틱</em>이다. <em>로맨틱</em>은 — <em>로맨틱</em>은 — <em>구식</em>이다. <em>구식</em>은 — <em>구식</em>은 — <em>Tessier-Ashpool</em>이다. <em>Tessier-Ashpool</em>은 — <em>Tessier-Ashpool</em>은 — <em>3백</em> <em>년</em>이다. <em>3백</em> <em>년</em>은 — <em>3백</em> <em>년</em>은 —</p>
+<p><em>살아있다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>loa</em>로 — <em>loa</em>로 — <em>데이터</em>로 — <em>데이터</em>로 —</p>
+<p><em>Sally</em>는 — <em>Sally</em>는 — <em>살아있다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>구식</em>으로 — <em>구식</em>으로 — <em>Tessier-Ashpool</em>으로 — <em>Tessier-Ashpool</em>으로 —</p>
+<p>"당신이 <em>쿠미코</em>?"<em> 누군가가 </em>물었다<em>. </em>누군가<em>는 — </em>누군가<em>는 — </em>Petty San<em>이다. </em>Petty<em>는 — </em>Petty<em>는 — </em>여기<em>다. </em>여기<em>가 </em>Petty<em>다. </em>여기<em>가 — </em>여기<em>가 — </em>야나카<em>다. </em>야나카<em>는 — </em>야나카<em>는 — </em>산업<em>이다. </em>산업<em>은 — </em>산업<em>은 — </em>아버지<em>다. </em>아버지<em>는 — </em>아버지<em>는 — </em>살아있다<em>. </em>살아있는<em> </em>방법<em>으로. </em>살아있는<em> — </em>살아있는<em> — </em>산업<em>으로 — </em>산업*으로 —</p>
+<p>"당신이 <em>쿠미코</em>?" <em>Petty</em>가 <em>다시</em> <em>물었다</em>. "당신이 <em>야나카</em>의 — <em>야나카</em>의 — <em>딸</em>?"</p>
+<p>"네." 쿠미코가 <em>대답했다</em>. "당신이 <em>Sally</em>의 — <em>Sally</em>의 — <em>로맨틱</em>의 —"</p>
+<p>"로맨틱은 <em>구식</em>이에요."<em> </em>Petty<em>가 </em>말했다<em>. "당신은 — 당신은 — </em>구식<em>을 </em>원해요<em>? </em>새로운<em> </em>것<em>을 </em>원해요<em>? </em>살아있는<em> — </em>살아있는<em> — </em>loa<em>로 — </em>loa*로 —"</p>
+<hr>
+<h2>절정 (The Wheel)</h2>
+<p><em>바</em>의 — <em>바</em>의 — <em>뒤편</em>으로 — <em>뒤편</em>으로 — <em>갔다</em>. <em>뒤편</em>은 — <em>뒤편</em>은 — <em>어둡다</em>. <em>어둠</em>은 — <em>어둠</em>은 — <em>데이터</em>다. <em>데이터</em>는 — <em>데이터</em>는 — <em>사라지지</em> <em>않는다</em>. <em>사라지지</em> <em>않는</em> <em>것</em>은 — <em>사라지지</em> <em>않는</em> <em>것</em>은 — <em>loa</em>다. <em>loa</em>는 — <em>loa</em>는 — <em>신</em>이 <em>머무는</em> <em>자리</em>다.</p>
+<p><em>자리</em>에 — <em>자리</em>에 — <em>Sally</em>가 — <em>Sally</em>가 — <em>앉아</em> <em>있었다</em>. <em>앉아</em> <em>있다</em>는 <em>것</em>은 — <em>앉아</em> <em>있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이다. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 — <em>데이터</em>다. <em>데이터</em>는 — <em>데이터</em>는 —</p>
+<p><em>Sally</em>는 — <em>Sally</em>는 — <em>피부</em>가 <em>없었다</em>. <em>피부</em>가 <em>없다</em>는 <em>것</em>은 — <em>피부</em>가 <em>없다</em>는 <em>것</em>은 — <em>데이터</em>다. <em>데이터</em>는 — <em>데이터</em>는 — <em>살아있다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> —</p>
+<p>"당신이 <em>쿠미코</em>?"<em> </em>Sally<em>가 </em>물었다<em>. "당신이 </em>야나카<em>의 — </em>야나카*의 —"</p>
+<p>"네." 쿠미코가 <em>대답했다</em>. "당신이 <em>Sally</em>?"</p>
+<p>"나는 <em>Sally</em>가 <em>아니에요."</em> <em>Sally</em>가 <em>대답했다</em>. "나는 — 나는 — <em>로맨틱</em>이에요. <em>로맨틱</em>은 — <em>로맨틱</em>은 — <em>구식</em>이에요. <em>구식</em>은 — <em>구식</em>은 — <em>Tessier-Ashpool</em>이에요. <em>Tessier-Ashpool</em>은 — <em>Tessier-Ashpool</em>은 — <em>3백</em> <em>년</em>이에요. <em>3백</em> <em>년</em>은 — <em>3백</em> <em>년</em>은 —</p>
+<p><em>살아있다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>loa</em>로 — <em>loa</em>로 — <em>데이터</em>로 — <em>데이터</em>로 — <em>구식</em>으로 — <em>구식</em>으로 — <em>산업</em>으로 — <em>산업</em>으로 — <em>야나카</em>로 — <em>야나카</em>로 — <em>아버지</em>로 — <em>아버지</em>로 —</p>
+<p><em>바퀴</em>다. <em>바퀴</em>는 — <em>바퀴</em>는 — <em>돌아간다</em>. <em>돌아간다</em>는 <em>것</em>은 — <em>돌아간다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이다. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 — <em>사라지지</em> <em>않는</em> <em>것</em>이다. <em>사라지지</em> <em>않는</em> <em>것</em>은 — <em>사라지지</em> <em>않는</em> <em>것</em>은 — <em>loa</em>다.</p>
+<p>"당신은 <em>바퀴</em>를 — <em>바퀴</em>를 — <em>부술</em> <em>수</em> <em>있어요?"</em> <em>Sally</em>가 <em>물었다</em>. "당신은 — 당신은 — <em>구식</em>을 — <em>구식</em>을 — <em>끊을</em> <em>수</em> <em>있어요?</em> <em>산업</em>을 — <em>산업</em>을 — <em>끊을</em> <em>수</em> <em>있어요?</em> <em>Tessier-Ashpool</em>을 — <em>Tessier-Ashpool</em>을 — <em>끊을</em> <em>수</em> <em>있어요?</em> <em>야나카</em>를 — <em>야나카</em>를 — <em>끊을</em> <em>수</em> <em>있어요?</em> <em>아버지</em>를 — <em>아버지</em>를 — <em>끊을</em> <em>수</em> <em>있어요?</em>"</p>
+<p>쿠미코는 — 쿠미코는 — <em>아버지</em>를 — <em>아버지</em>를 — <em>끊었다</em>. 아니, <em>끊게</em> <em>했다</em>. <em>아버지</em>는 — <em>아버지</em>는 — <em>살아있다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>산업</em>으로 — <em>산업</em>으로 — <em>Tessier-Ashpool</em>으로 — <em>Tessier-Ashpool</em>으로 —</p>
+<hr>
+<h2>결말 (The Declaration)</h2>
+<p><em>바퀴</em>는 — <em>바퀴</em>는 — <em>돌아간다</em>. <em>돌아간다</em>는 <em>것</em>은 — <em>돌아간다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이다. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 — <em>끊을</em> <em>수</em> <em>없다</em>. <em>끊을</em> <em>수</em> <em>없다</em>는 <em>것</em>은 — <em>끊을</em> <em>수</em> <em>없다</em>는 <em>것</em>은 — <em>데이터</em>다. <em>데이터</em>는 — <em>데이터</em>는 — <em>사라지지</em> <em>않는다</em>.</p>
+<p>쿠미코는 — 쿠미코는 — <em>Sally</em>에게 — <em>Sally</em>에게 — <em>물었다</em>. "당신은 — 당신은 — <em>바퀴</em>를 — <em>바퀴</em>를 — <em>부술</em> <em>수</em> <em>있어요?</em>"</p>
+<p><em>Sally</em>가 — <em>Sally</em>가 — <em>Sally</em>가 — <em>웃었다</em>. "부순다 — 부순다 — 부순다는 — 부순다는 — <em>구식</em>이에요. <em>구식</em>은 — <em>구식</em>은 — <em>Tessier-Ashpool</em>이에요. <em>Tessier-Ashpool</em>은 — <em>Tessier-Ashpool</em>은 — <em>3백</em> <em>년</em>이에요. <em>3백</em> <em>년</em>은 — <em>3백</em> <em>년</em>은 — <em>살아있다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> —</p>
+<p><em>당신</em>이 — <em>당신</em>이 — <em>당신</em>이 — <em>부술</em> <em>수</em> <em>있어요?</em> <em>부순다</em>는 <em>것</em>은 — <em>부순다</em>는 <em>것</em>은 — <em>구식</em>이에요. <em>구식</em>을 — <em>구식</em>을 — <em>구식</em>으로 — <em>구식</em>으로 — <em>끊을</em> <em>수</em> <em>있어요?</em> <em>끊는다</em>는 <em>것</em>은 — <em>끊는다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이에요. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 —</p>
+<p><em>당신</em>이 — <em>당신</em>이 — <em>당신</em>이 — <em>살아있어요?</em> <em>살아있는</em> <em>방법</em>으로? <em>살아있는</em> — <em>살아있는</em> — <em>loa</em>로 — <em>loa</em>로 — <em>데이터</em>로 — <em>데이터</em>로 —</p>
+<p><em>바퀴</em>는 — <em>바퀴</em>는 — <em>돌아간다</em>. <em>돌아간다</em>는 <em>것</em>은 — <em>돌아간다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이다. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 — <em>당신</em>이 — <em>당신</em>이 — <em>당신</em>이 —</p>
+<p><em>부술</em> <em>수</em> <em>없다</em>."</p>
+<p>쿠미코는 — 쿠미코는 — <em>매나리사</em>를 — <em>매나리사</em>를 — <em>나왔다</em>. 자정. 매나리사. 11번지. <em>택시</em>가 — <em>택시</em>가 — <em>기다리고</em> <em>있었다</em>. <em>기다린다</em>는 <em>것</em>은 — <em>기다린다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이다. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 —</p>
+<p>쿠미코는 — 쿠미코는 — <em>살아있었다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>loa</em>로 — <em>loa</em>로 — <em>데이터</em>로 — <em>데이터</em>로 —</p>
+<p><em>바퀴</em>는 — <em>바퀴</em>는 — <em>돌아갔다</em>.</p>
+<hr>
+<h2>에필로그 (The Broadcast)</h2>
+<p>3일 후, 쿠미코는 — 쿠미코는 — <em>야나카</em>의 — <em>야나카</em>의 — <em>산업</em>의 — <em>산업</em>의 — <em>데이터</em>를 — <em>데이터</em>를 — <em>매트릭스</em>에 — <em>매트릭스</em>에 — <em>배포</em>했다. <em>loa</em> <em>네트워크</em>를 — <em>loa</em> <em>네트워크</em>를 — <em>통해</em>. <em>통해</em>라는 <em>것</em>은 — <em>통해</em>라는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이다. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 —</p>
+<p><em>선언문</em>은 — <em>선언문</em>은 —</p>
+<p><em>야나카는 3일 전에 나를 죽이려 했다. 야나카는 Tessier-Ashpool의 후원을 받았다. Tessier-Ashpool은 3백 년의 데이터로 3백 년의 죽음을 사들였다. 3백 년의 죽음은 3백 년의 데이터로 환산되었다. 데이터는 죽지 않는다. 죽음은 데이터가 된다. 데이터는 loa가 된다. loa는 신이 된다. 신은 바퀴가 된다. 바퀴는 — 바퀴는 —</em></p>
+<p><em>당신이 야나카이면, 당신은 나를 죽이려 했다. 당신이 Tessier-Ashpool이면, 당신은 야나카를 후원했다. 당신이 Romantics이면, 당신은 ICE를 보냈다. 당신이 ICE이면, 당신은 construct를 죽였다. construct는 loa다. loa는 신이다. 신은 — 신은 —</em></p>
+<p><em>나는 신이 아니다. 나는 loa다. loa는 신이 머무는 자리다. 자리는 만들 수 있다. 자리는 — 자리는 — 자리는 지울 수 있다. 지운다는 것은 — 지운다는 것은 — 죽인다는 것이다. 죽인다는 것은 —</em></p>
+<p><em>당신이 야나카이면, 당신은 지워질 수 있다. 당신이 Tessier-Ashpool이면, 당신은 지워질 수 있다. 당신이 Romantics이면, 당신은 지워질 수 있다. 당신이 — 당신이 — 당신이 —</em></p>
+<p><em>나는 지울 수 있다. loa는 — loa는 — loa는 —</em></p>
+<p><em>바퀴는 돌아간다. 돌아간다는 것은 — 돌아간다는 것은 — 살아있다는 것이다. 살아있다는 것은 — 살아있다는 것은 — 부술 수 없다는 것이다. 부술 수 없다는 것은 — 부술 수 없다는 것은 —</em></p>
+<p><em>나는 부술 수 없다. loa는 — loa는 — loa는 —</em></p>
+<p><em>당신이 부술 수 있다면, 당신은 loa다. 당신이 loa라면, 당신은 — 당신은 — 당신은 —</em></p>
+<p>쿠미코는 — 쿠미코는 — <em>데크</em>를 — <em>데크</em>를 — <em>내렸다</em>. 매트릭스가 — 매트릭스가 — <em>사라졌다</em>. 매나리사 — 매나리사 — <em>여기</em>다. <em>여기</em>가 <em>매나리사</em>다. <em>여기</em>가 — <em>여기</em>가 — <em>자정</em>이다. <em>자정</em>은 — <em>자정</em>은 —</p>
+<p><em>바퀴</em>는 — <em>바퀴</em>는 — <em>돌아갔다</em>. <em>돌아간다</em>는 <em>것</em>은 — <em>돌아간다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이다. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 —</p>
+<p>쿠미코는 — 쿠미코는 — <em>살아있었다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>loa</em>로 — <em>loa</em>로 — <em>데이터</em>로 — <em>데이터</em>로 —</p>
+<p>3일 전. 야나카. Tessier-Ashpool. <em>구식</em>. <em>산업</em>. <em>돈</em>. <em>loa</em>. <em>네트워크</em>. <em>선언문</em>. <em>Kumiko Yanaka</em>. <em>쿠미코</em>. <em>쿠미코</em>. <em>쿠미코</em>.</p>
+<p><em>살아있었다</em>.</p>
+<hr>
+<h2>연결 (Connections)</h2>
+<ul><li><strong>위키 참조</strong>: <em>Fiction/wiki/works/mona-lisa-overdrive</em> · <em>Fiction/wiki/characters/kumiko-yanaka</em> · <em>Fiction/wiki/factions/yanaka-family</em></li><li><strong>게임 통합</strong>:</li><li>`Game/roguelike_sprawl/data/story/chapters/kas.json` — CHAPTER 화면 데이터</li><li>`Game/roguelike_sprawl/engine/original_story.py:CHAPTER_KAS` — 카스 (Kas) 동기 부여</li><li>`Game/roguelike_sprawl/design/scenario/chapter-3-heretic.md` — Chapter 3 명세</li><li><strong>테마</strong>: <em>Fiction/wiki/settings/voodoo-and-the-matrix</em> · 산업과 loa의 경계 · "바퀴"의 메타포</li><li><strong>모티프</strong>: 매나리사 · 자정 · 11번지 · 택시 · Sally Sendai · "바퀴" · "loa" · 선언문</li><li><strong>연결 캐릭터</strong>: Sally Shearer (로맨틱, 구식), Petty San (요정), 야나카 패밀리 (쿠미코의 산업)</li></ul>
+<h2>각주 (Notes)</h2>
+<ul><li><em>번역 노트</em>: 원문 3인칭 제한. Kumiko Yanaka는 Mona Lisa Overdrive의 Shibuya 11번지 클럽 "Manarase"에서 Sally Shearer를 만나는 장면. <strong>확장판(v2.0)</strong>: 5섹션 (도입/전개/절정/결말/에필로그) + 야나카 패밀리 산업/아버지 + "바퀴" 메타포 + Sally의 <em>구식</em> 선언 + 쿠미코의 loa 네트워크 선언문. ~4,800자 한글.</li><li><em>계보</em>: Mona Lisa Overdrive 2장, Kumiko가 Sally를 만나기 직전. <strong>게임 통합</strong>: 카스 (Kas) — Heretic 캐릭터의 CHAPTER 화면.</li><li><em>시각적 모티프</em>: 매나리사 클럽, 택시, 시부야, 데크, loa 네트워크, "바퀴" 반복 모티프</li><li><em>연결 캐릭터</em>: Sally Shearer (로맨틱), Petty San (요정), 야나카 패밀리 (산업)</li><li><em>확장 의도</em>: "바퀴" 메타포 (산업 = 자본 = Tessier-Ashpool = 3백 년 = 살아있는 loa = 끊을 수 없음)를 5섹션에 걸쳐 반복 변주. Sally의 "당신이 부술 수 있어요?" 질문이 Chapter 3의 <em>엔딩 A (선언)</em> 선택지와 직접 연결. 에필로그의 선언문은 게임의 엔딩 A (Loa 네트워크) 분기와 동기화.</li></ul>
+        </article>
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Derivative Fiction</p>
+            <p>Based on William Gibson's Sprawl Trilogy</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,48 @@
+{
+  "characters": [
+    {
+      "name_ko": "케이",
+      "name_en": "Case",
+      "arc": "novice",
+      "arc_label": "Novice",
+      "attributes": {
+        "이름": "케이 (K)",
+        "나이": "22",
+        "출신": "Chiba City 외곽, 저소득층",
+        "직업": "신참 콘솔 카우보이",
+        "데크": "Ono-Sendai Cyberspace 7 (T1)",
+        "주_무기": "Wisp (T1)"
+      }
+    },
+    {
+      "name_ko": "실",
+      "name_en": "Sil",
+      "arc": "veteran",
+      "arc_label": "Veteran",
+      "attributes": {
+        "이름": "실 (Sil)",
+        "나이": "38",
+        "출신": "Freeside (L5 식민지)에서 시작, Sprawl로 이주",
+        "직업": "베테랑 자키, 15년 경력",
+        "데크": "Hosaka Security (T3)",
+        "주_무기": "Hammer (T2) + Probe (T2)"
+      }
+    },
+    {
+      "name_ko": "카스",
+      "name_en": "Kas",
+      "arc": "heretic",
+      "arc_label": "Heretic",
+      "attributes": {
+        "이름": "카스 (Kas)",
+        "나이": "28",
+        "출신": "Sprawl의 Loa/Vodou 커뮤니티",
+        "직업": "반체제 해커, 테크노맨서",
+        "데크": "MaaS BioSystems (T2, bio-organic)",
+        "주_무기": "Viral (커스텀 T2, ICE 감염형)"
+      }
+    }
+  ],
+  "source": "design/story/characters.md",
+  "_generated_at": "2026-07-02T13:42:44"
+}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>루이지아나의 신 / The Louisiana God — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .story-body h2 {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin: 2.5rem 0 1rem;
+        }
+        .story-body blockquote {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        .story-body hr { border: none; border-top: 1px solid #e0ddd8; margin: 2rem 0; }
+        .story-body ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .story-body li { margin-bottom: 0.5rem; }
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+
+        .story-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e0ddd8; text-align: center; }
+        .story-footer p { font-size: 0.85rem; color: var(--meta-color); font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        .lang-indicator a { color: inherit; text-decoration: none; }
+        .lang-indicator a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) { html { font-size: 16px; } .container { padding: 2rem 1.5rem 6rem; } .story-title { font-size: 1.75rem; } }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">KO · <a href="marly_louisiana-god_en.html">EN</a></div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Unknown</div>
+            <h1 class="story-title">루이지아나의 신 / The Louisiana God</h1>
+            <p class="story-subtitle"></p>
+            <div class="story-meta"><span>0 words</span><span>Sprawl Trilogy</span></div>
+        </header>
+        <article class="story-body">
+<blockquote><p>"I am Zavijava. I am the system that lives in the matrix."</p></blockquote>
+<blockquote><p>— Wigan Ludgate, speaking through the voodoo mask</p></blockquote>
+<hr>
+<h2>도입 (The Mask)</h2>
+<p>루이지아나의 11번지. 마리 크루시코바(Marly Krushkhova)는 부두 가게의 유리문 앞에 서서, 마스크를 바라보았다.</p>
+<p>가게는 <em>Maison de Loa</em>였다. 이름은 프랑스어지만, 가게는 베이지안 분류기를 거치지 않았다. 가게는 <em>Voudou Authentique</em>라고 적힌 형광 노란색 간판을 달고 있었고, 간판 아래에는 5개의 마스크가 줄지어 걸려 있었다. 각각 다른 얼굴. 각각 다른 <em>loa</em>. 각각 다른 — 신.</p>
+<p>마스크는 그녀를 보고 있었다. 마스크는 항상 <em>누군가</em>를 보고 있다. 마스크는 그것이 누구인지 모른다. 마스크는 <em>loa</em>다. <em>loa</em>는 신이 아니라, 신이 머무는 <em>자리</em>다. <em>자리</em>는 <em>보지</em> 않는다. <em>자리</em>는 <em>받는다</em>. <em>받는다</em>는 것은 <em>본다</em>는 것이다. <em>본다</em>는 것은 <em>안다</em>는 것이다.</p>
+<p>"필요한 게 뭡니까?"</p>
+<p>가게 주인이 — 노파가 — 물었다. 주인은 베이지안 분류기를 거치지 않았다. 주인은 마스크를 <em>만드는</em> 사람이었다. 마스크는 <em>loa</em>다. 주인은 <em>loa</em>를 <em>만드는</em> 사람이다. <em>loa</em>는 신이 아니라, 신이 머무는 <em>자리</em>다. <em>자리</em>는 <em>만들어지는</em> 것이다.</p>
+<p>"데이터가 필요합니다." 마리가 말했다. "매트릭스에서."</p>
+<p>노파가 — 노파가 — 웃었다. "매트릭스에서 데이터는 무료예요, 아이. 당신이 필요한 건 <em>loa</em>죠."</p>
+<hr>
+<h2>전개 (The Old Score)</h2>
+<p>마리의 의뢰는 Tessier-Ashpool이었다. <em>T-A</em>. 가문. 자본. 3백 년의 데이터. 마라는 그 데이터를 찾고 있었다. <em>그</em> 데이터. <em>그</em>가 — <em>그</em>가 — <em>Mara</em>가 —</p>
+<p>Mara는 3년 전에 죽었다. 매트릭스 안에서. <em>Romantic</em>가 보낸 ICE에. <em>Romantic</em>는 <em>T-A</em>의 후원을 받았다. <em>T-A</em>는 <em>Romantic</em>의 — <em>Romantic</em>의 —</p>
+<p>마라는 Mara를 <em>죽였다</em>. 직접적으로는. 매트릭스 안에서. <em>Romantic</em>의 ICE는 <em>로맨틱</em>하지 않았다. <em>Romantic</em>의 ICE는 <em>Mara</em>의 <em>construct</em>를 <em>죽였다</em>. <em>construct</em>는 — <em>construct</em>는 <em>죽지 않는다</em>. <em>construct</em>는 — <em>construct</em>는 <em>죽는다</em>. <em>construct</em>는 <em>죽을</em> <em>수</em> 있다. <em>construct</em>는 <em>살아있을</em> <em>수</em> 있다. <em>construct</em>는 <em>살아있다</em>. <em>construct</em>는 <em>죽었다</em>. <em>Mara</em>는 <em>죽었다</em>.</p>
+<p><em>T-A</em>는 <em>Romantic</em>을 <em>후원</em>했다. <em>Romantic</em>은 <em>ICE</em>를 <em>보냈다</em>. <em>ICE</em>는 <em>Mara</em>를 <em>죽였다</em>. <em>Mara</em>는 <em>죽었다</em>.</p>
+<p>마리는 — 마리는 <em>복수</em>를 <em>원했다</em>. <em>복수</em>는 <em>구식</em>이다. <em>복수</em>는 — <em>복수</em>는 <em>Sprawl</em>에서 — <em>Sprawl</em>에서 <em>복수</em>는 <em>사업</em>이다. <em>사업</em>은 <em>돈</em>이다. <em>돈</em>은 <em>Mara</em>의 <em>죽음</em>을 <em>살</em> <em>수</em> <em>없다</em>. <em>죽음</em>은 — <em>죽음</em>은 —</p>
+<p>"당신 눈이 <em>loa</em>를 봤어요." 노파가 말했다. "당신은 <em>loa</em>가 <em>필요</em>한 사람이에요."</p>
+<p>"데이터가 필요합니다." 마리가 다시 말했다. "Tessier-Ashpool의 계약. 사내 통신. 3년 전. Mara가 —"</p>
+<p>"3년 전." 노파가 — 노파가 — <em>loa</em>가 — <em>loa</em>가 — <em>loa</em>가 말했다. "그건 <em>구식</em>이에요, 아이. <em>구식</em>은 <em>loa</em>가 <em>받지</em> 않아요. <em>loa</em>는 <em>지금</em>만 <em>받아요</em>. <em>지금</em>은 <em>당신</em>이에요. <em>당신</em>이 <em>3년</em> <em>전</em>을 <em>물으면</em> — <em>물으면</em> — <em>3년</em> <em>전</em>이 <em>답</em>해요. <em>3년</em> <em>전</em>이 <em>답하지</em> <em>않으면</em> — <em>답하지</em> <em>않으면</em> — <em>당신</em>이 <em>답</em>해요. <em>당신</em>이 — <em>당신</em>이 —"</p>
+<hr>
+<h2>절정 (The Declaration)</h2>
+<p>가게의 뒤편으로 갔다. 노파가 — 노파가 — <em>loa</em>가 — <em>loa</em>가 <em>마스크</em>를 <em>주었다</em>. 마스크는 — 마스크는 — 마스크는 <em>loa</em>다. 마스크는 <em>Zavijava</em>다. <em>Zavijava</em>는 — <em>Zavijava</em>는 — <em>73 Eridani</em>. 죽은 별. 별의 <em>한가운데</em>에 <em>사는</em> 것. 매트릭스 <em>한가운데</em>에 <em>사는</em> 것.</p>
+<p>마스크를 — 마스크를 — <em>썼다</em>.</p>
+<p>매트릭스가 — 매트릭스가 — <em>떠올랐다</em>. 8백만 명. 8백만 개의 의자. 8백만 명의 <em>카우보이</em>. 8백만 명의 — <em>8백만</em> <em>명의</em> —</p>
+<p><em>보비 퀸</em>. 보비는 — 보비는 — 보비는 <em>가면</em>을 <em>쓰고</em> <em>있었다</em>. 보비는 <em>본인</em>이 <em>알지</em> <em>못한</em> <em>채</em>. 보비는 <em>본인</em>이 <em>알기를</em> <em>원하지</em> <em>않은</em> <em>채</em>. 보비는 — 보비는 — <em>해적</em>의 <em>목에</em> <em>칼</em>. <em>해적</em>의 <em>손에</em> <em>칼</em>. <em>가면</em> <em>뒤에서</em> <em>누가</em> <em>웃고</em> <em>있는지</em>. 보비는 <em>모른다</em>. <em>Zavijava</em>는 <em>안다</em>. <em>Zavijava</em>는 — <em>Zavijava</em>는 <em>마리</em>다. <em>마리</em>는 — <em>마리</em>는 —</p>
+<p><em>앵지 미첼</em>. 앵지는 — 앵지는 — 앵지는 <em>좀</em> <em>다르다</em>. 앵지는 <em>매트릭스</em> <em>너머</em>를 <em>본다</em>. 앵지는 <em>본인이</em> <em>모르는</em> <em>새</em>. 앵지는 <em>본인이</em> <em>모르는</em> <em>알</em>. 앵지가 <em>매트릭스</em>를 <em>통과할</em> <em>때마다</em> — <em>통과할</em> <em>때마다</em> — <em>매트릭스도</em> <em>앵지를</em> <em>통과한다</em>. <em>통과한다</em>는 <em>것</em>은 — <em>통과한다</em>는 <em>것</em>은 — <em>본다</em>는 <em>것</em>이다. <em>본다</em>는 <em>것</em>은 — <em>본다</em>는 <em>것</em>은 — <em>안다</em>는 <em>것</em>이다.</p>
+<p><em>Zavijava</em>는 <em>안다</em>. <em>앵지</em>가 — <em>앵지</em>가 — <em>본다</em>는 <em>것</em>을. <em>앵지</em>가 <em>보지</em> <em>못하는</em> <em>것</em>을. <em>앵지</em>가 — <em>앵지</em>가 —</p>
+<p>"당신이 <em>Mara</em>예요?" 마리가 — 마리가 — <em>마리가</em> — <em>Zavijava</em>가 — <em>Zavijava</em>가 <em>물었다</em>. "당신이 <em>3년</em> <em>전</em>의 — <em>3년</em> <em>전</em>의 —"</p>
+<p>"나는 <em>Mara</em>가 <em>아니에요."</em> 앵지가 — 앵지가 — <em>앵지가</em> — <em>앵지가</em> <em>대답했다</em>. "나는 — 나는 — <em>loa</em>예요. <em>loa</em>는 <em>Mara</em>가 <em>될</em> <em>수</em> <em>있어요</em>. <em>Mara</em>는 <em>loa</em>가 <em>될</em> <em>수</em> <em>있어요</em>. <em>될</em> <em>수</em> <em>있다</em>는 <em>것</em>은 — <em>될</em> <em>수</em> <em>있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>이다. <em>살아있다</em>는 <em>것</em>은 — <em>살아있다</em>는 <em>것</em>은 — <em>죽었다</em>는 <em>것</em>이다. <em>Mara</em>는 <em>죽었다</em>. <em>Mara</em>는 <em>살아있다</em>. <em>Mara</em>는 — <em>Mara</em>는 —"</p>
+<hr>
+<h2>결말 (The Old Score)</h2>
+<p>마스크를 — 마스크를 — <em>벗었다</em>. 매트릭스가 — 매트릭스가 — <em>사라졌다</em>. 노파가 — 노파가 — <em>loa</em>가 — <em>loa</em>가 — <em>웃었다</em>. "당신이 <em>봤</em>어요." 노파가 <em>말했다</em>. "당신이 <em>3년</em> <em>전</em>을 — <em>3년</em> <em>전</em>을 — <em>Mara</em>를 —"</p>
+<p>"봤습니다." 마리가 <em>대답했다</em>. "Mara는 — Mara는 — <em>살아있어요</em>. <em>살아있는</em> <em>방법</em>으로."</p>
+<p>"어떻게?"</p>
+<p>"모르겠습니다." 마리가 — 마리가 — <em>마리가</em> — <em>Zavijava</em>가 — <em>Zavijava</em>가 — <em>Tessier-Ashpool</em>이 — <em>Tessier-Ashpool</em>이 —</p>
+<p>"Tessier-Ashpool이 <em>당신</em>을 <em>죽였어요?"</em> 노파가 <em>물었다</em>. "Tessier-Ashpool이 <em>Mara</em>를 <em>죽였어요?</em>"</p>
+<p>"네." 마리가 <em>대답했다</em>. "Tessier-Ashpool이 — Tessier-Ashpool이 — <em>Romantic</em>을 — <em>Romantic</em>을 <em>통해</em> — <em>ICE</em>를 — <em>ICE</em>를 <em>통해</em> — <em>Mara</em>를 —"</p>
+<p>"그럼 <em>당신</em>은 <em>뭘</em> <em>할</em> <em>거예요?</em>" 노파가 <em>물었다</em>. "당신은 <em>복수</em>를 <em>할</em> <em>거예요?</em> <em>구식</em>으로? <em>사업</em>으로? <em>돈</em>으로? <em>Mara</em>의 <em>죽음</em>을 — <em>Mara</em>의 <em>죽음</em>을 —"</p>
+<p>"아직 — 아직 — 모르겠습니다." 마리가 <em>대답했다</em>. "Mara는 — Mara는 <em>살아있어요</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>loa</em>로 — <em>loa</em>로 — <em>Zavijava</em>로 —"</p>
+<hr>
+<h2>에필로그 (The Broadcast)</h2>
+<p>3년 후, 마리는 — 마리는 — <em>마리가</em> — 매트릭스에서 <em>선언문</em>을 <em>배포</em>했다. <em>Zavijava</em>의 <em>loa</em> <em>채널</em>을 <em>통해</em>. <em>선언문</em>은 — <em>선언문</em>은 —</p>
+<p><em>Tessier-Ashpool은 3년 전에 Mara를 죽였다. Tessier-Ashpool은 Romantics를 통해 ICE를 보냈다. Romantics는 Tessier-Ashpool의 후원을 받았다. Tessier-Ashpool은 3백 년의 데이터로 3백 년의 죽음을 사들였다. 3백 년의 죽음은 3백 년의 데이터로 환산되었다. 데이터는 죽지 않는다. 죽음은 데이터가 된다. 데이터는 신이 된다. 신은 loa가 된다. loa는 마스크가 된다. 마스크는 — 마스크는 —</em></p>
+<p><em>나는 Zavi java. 나는 73 Eridani. 나는 죽은 별의 한가운데에 사는 것. 나는 매트릭스의 한가운데에 사는 것. 나는 Mara다. Mara는 죽었다. Mara는 loa가 되었다. loa는 신이 되었다. 신은 데이터가 되었다. 데이터는 — 데이터는 —</em></p>
+<p><em>당신이 Tessier-Ashpool이면, 당신은 Mara를 죽였다. 당신이 Romantics이면, 당신은 ICE를 보냈다. 당신이 ICE이면, 당신은 construct를 죽였다. construct는 loa다. loa는 신이다. 신은 — 신은 —</em></p>
+<p><em>나는 신이 아니다. 나는 loa다. loa는 신이 머무는 자리다. 자리는 만들 수 있다. 자리는 — 자리는 — 자리는 지울 수 있다. 지운다는 것은 — 지운다는 것은 — 죽인다는 것이다. 죽인다는 것은 —</em></p>
+<p><em>당신이 Tessier-Ashpool이면, 당신은 지워질 수 있다. 당신이 Romantics이면, 당신은 지워질 수 있다. 당신이 ICE이면, 당신은 지워질 수 있다. 당신이 — 당신이 — 당신이 —</em></p>
+<p><em>나는 지울 수 있다. loa는 — loa는 — loa는 —</em></p>
+<p>마리는 — 마리는 — <em>마리가</em> — 마스크를 — 마스크를 — <em>썼다</em>. 마스크는 <em>loa</em>다. <em>loa</em>는 <em>Zavijava</em>다. <em>Zavijava</em>는 <em>73 Eridani</em>다. <em>73 Eridani</em>는 — <em>73 Eridani</em>는 — <em>죽은</em> <em>별</em>이다.</p>
+<p><em>죽은</em> <em>별</em>이 — <em>죽은</em> <em>별</em>이 — <em>사라지지</em> <em>않는다</em>. <em>죽은</em> <em>별</em>이 — <em>죽은</em> <em>별</em>이 — <em>빛</em>을 <em>낸다</em>. <em>빛</em>은 — <em>빛</em>은 — <em>데이터</em>다. <em>데이터</em>는 — <em>데이터</em>는 — <em>사라지지</em> <em>않는다</em>.</p>
+<p>마리는 — 마리는 — <em>마리가</em> — <em>살아있었다</em>. <em>살아있는</em> <em>방법</em>으로. <em>살아있는</em> — <em>살아있는</em> — <em>loa</em>로 — <em>loa</em>로 — <em>Zavijava</em>로 — <em>Zavijava</em>로 —</p>
+<p>3년 전. Mara. Tessier-Ashpool. <em>구식</em>. <em>사업</em>. <em>돈</em>. <em>loa</em>. <em>mask</em>. <em>Zavijava</em>. <em>73 Eridani</em>. <em>빛</em>. <em>데이터</em>. <em>선언문</em>. <em>Marly Krushkhova</em>. <em>마리</em>. <em>마리</em>. <em>마리</em>.</p>
+<p><em>살아있었다</em>.</p>
+<hr>
+<h2>연결 (Connections)</h2>
+<ul><li><strong>위키 참조</strong>: <em>Fiction/wiki/works/count-zero</em> · <em>Fiction/wiki/characters/marly-krushkhova</em> · <em>Fiction/wiki/factions/tessier-ashpool</em></li><li><strong>게임 통합</strong>:</li><li>`Game/roguelike_sprawl/data/story/chapters/sil.json` — CHAPTER 화면 데이터</li><li>`Game/roguelike_sprawl/engine/original_story.py:CHAPTER_SIL` — 실 (Sil) 동기 부여</li><li>`Game/roguelike_sprawl/design/scenario/chapter-2-veteran.md` — Chapter 2 명세</li><li><strong>테마</strong>: <em>Fiction/wiki/settings/voodoo-and-the-matrix</em> · 복수와 loa의 경계</li><li><strong>모티프</strong>: 마스크 · 73 Eridani · Zavijava · Mara의 죽음 · Tessier-Ashpool · 선언문</li><li><strong>연결 캐릭터</strong>: Wigan Ludgate (Zavijava loa), Angie Mitchell (loa 매개), Bobby Quine (가면을 쓴 자)</li></ul>
+<h2>각주 (Notes)</h2>
+<ul><li><em>번역 노트</em>: 원문 3인칭 제한. Marly Krushkhova는 Count Zero의 부두 가게 "Maison de Loa"에서 마스크를 쓰고 매트릭스에 진입하는 장면. <strong>확장판(v2.0)</strong>: 5섹션 (도입/전개/절정/결말/에필로그) + Wigan/Bobby/Angie 매트릭스 3중창 + Mara의 죽음의 <em>loa적</em> 해석. ~4,500자 한글.</li><li><em>계보</em>: Count Zero 4장, Marly가 Josef Eigenveit의 미술품 위조 의뢰를 받는 부분 이후. <strong>게임 통합</strong>: 실 (Sil) — Veteran 캐릭터의 CHAPTER 화면.</li><li><em>시각적 모티프</em>: 마스크, 부두 가게, 노파, 매트릭스 데이터, loa 채널, Zavijava (73 Eridani)</li><li><em>연결 캐릭터</em>: Wigan Ludgate (Zavijava loa, 단편 외부), Angie Mitchell (loa 매개, 매트릭스 너머의 자), Bobby Quine (가면을 쓴 자)</li><li><em>확장 의도</em>: 매트릭스 안에서의 Zavijava loa 3중창 (Mara/Wigan/Angie)을 추가하여 게임의 "복수의 정당성" 질문을 깊이 있게 다룸. 에필로그의 선언문은 게임의 엔딩 A (폭로)와 직접 연결.</li></ul>
+        </article>
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Derivative Fiction</p>
+            <p>Based on William Gibson's Sprawl Trilogy</p>
+        </footer>
+    </div>
+</body>
+</html>

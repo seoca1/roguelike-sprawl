@@ -1,0 +1,45 @@
+{
+  "stage_enum_count": 13,
+  "stage_enum_names": [
+    "PENDING",
+    "BRIEFING",
+    "TRAVEL",
+    "MEET_NPC",
+    "EXTRACT_DATA",
+    "BYPASS_SECURITY",
+    "DEFEAT_ICE",
+    "JACK_OUT",
+    "REWARD",
+    "DEBRIEF",
+    "COMPLETE",
+    "DEATH_RESTART",
+    "FAILED"
+  ],
+  "stage_optional": [],
+  "chapter_state_enum_count": 14,
+  "chapter_state_enum_names": [
+    "PROLOGUE",
+    "IN_CHAPTER_1",
+    "CHAPTER_1_COMPLETE",
+    "IN_CHAPTER_2",
+    "CHAPTER_2_COMPLETE",
+    "IN_CHAPTER_3",
+    "CHAPTER_3_COMPLETE",
+    "IN_CHAPTER_4",
+    "CHAPTER_4_COMPLETE",
+    "IN_CHAPTER_5",
+    "CHAPTER_5_COMPLETE",
+    "ENDING_A",
+    "ENDING_B",
+    "ENDING_C"
+  ],
+  "objective_kind_enum_count": 4,
+  "objective_kind_enum_names": [
+    "NPC",
+    "DATA",
+    "ICE",
+    "NONE"
+  ],
+  "source": "prototype/src/roguelike_sprawl/run/state.py",
+  "_generated_at": "2026-07-02T13:42:44"
+}

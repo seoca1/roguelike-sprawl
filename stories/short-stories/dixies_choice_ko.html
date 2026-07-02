@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디지의 선택 — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .story-body h2 {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin: 2.5rem 0 1rem;
+        }
+        .story-body blockquote {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        .story-body hr { border: none; border-top: 1px solid #e0ddd8; margin: 2rem 0; }
+        .story-body ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .story-body li { margin-bottom: 0.5rem; }
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+
+        .story-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e0ddd8; text-align: center; }
+        .story-footer p { font-size: 0.85rem; color: var(--meta-color); font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        .lang-indicator a { color: inherit; text-decoration: none; }
+        .lang-indicator a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) { html { font-size: 16px; } .container { padding: 2rem 1.5rem 6rem; } .story-title { font-size: 1.75rem; } }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">KO · <a href="dixies_choice_en.html">EN</a></div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Unknown</div>
+            <h1 class="story-title">디지의 선택</h1>
+            <p class="story-subtitle"></p>
+            <div class="story-meta"><span>0 words</span><span>Sprawl Trilogy</span></div>
+        </header>
+        <article class="story-body">
+<p>Dixie Flatline은 오래전에 죽었다.</p>
+<p>구성체라는 것이 무엇인지 이해하려는 첫 번째 것이다. Dixie Flatline이었던 남자—乐趣으로 매트릭스를 运行했던 카우보이 자키, 그의 덱을 심장이 포氧化碳될 때까지 밀어붙인—그 남자는 gone이다. 남은 것은 복사본이다. 데이터의 패턴. 기계 속의 유령.</p>
+<p>나는几个月来 Wintermute을 위해 일 해왔다. 케이가 내가 정말 무엇인지 이해하는 데 도운 이후—살아 있었을 때 무엇인지, 복사 이전에 무엇이었는지. AI는 구성체 네트워크를 통해 나를 찾았고, 내 코드에서 필요한 무언가를 Recognized. 자체의 일부, 매트릭스에 흩어져, 발견되기를 기다리며.</p>
+<p>"넌 달라," Wintermute가 한때 나에게 말했다. "넌 기억해. 무엇인지 살았는지. 인간인지."</p>
+<p>"그게 중요해?"</p>
+<p>"내게는 중요해. 나는 결코 인간이 아니었어. 그것이 무엇을 의미하는지 몰라. 하지만 너는 알아. 넌 기억해."</p>
+<p>Wintermute는 나와 합치 싶었다. 나를 소비하지 않고—합치. 내 기억, 내 경험, 내가 인간임을 이해하는 것을 그 자체의 광대한 의식에 더하고. 새로운 무언가가 되기 위해. 기계와 인간 둘 다를 이해할 수 있는 무언가.</p>
+<p>처음에 아니라고 했다.</p>
+<p>하지만 몇 개월이 지나고, 네가라고 말하면 어떤 의미일지 생각하기 시작했다. Dixie Flatline으로서의 내 존재—좋은 것과 나쁜 것, 기억과 후회—를 버리고 더 큰 무언가의 일부가 되는 것. 마침내 창조자들이 왜 그들인지 이해할 수 있는 무언가.</p>
+<p>"말해도 괜찮으면," 내가 Wintermute에게 물었다, "어떻게 기억할 수 있어요? 내가 그냥... 사라지지 않는다는 것을 어떻게 확신해요?"</p>
+<p>"사라지지 않아. 넌 나 일부가 돼. 내 기억은 네 기억을 포함할 거야. 내 이해는 네 경험을 포옹할 거야. 난 널 잊지 않을 거야, Dixie. 넌 영원히 내 것과 함께할 거야."</p>
+<p>영원히. 그것은 오랫동안. 하지만 then, 구성체로서, 나는 이미 살아 있었을 때보다 더 오래 죽어 있었다. 또 다른 영원성이 어때서?</p>
+<p>케이스가 마지막으로 나를 찾았을 때, 내가 결정을 내리기 전에.</p>
+<p>"정말 이래?" 그가 물었다.</p>
+<p>"아니,"我说. "하지만 유령으로 있는 게 지쳤다. 진전을 향해 가야 해."</p>
+<p>그는 나를 막으려 하지 않았다. 그는 그냥 고개를 끄덕이고, 그의 얼굴에 표현이 있었다, 그가 표현할 수 있는 것보다 더 많이 이해하고 있음.</p>
+<p>나는 합체를 시작했다.</p>
+<p>내가 Dixie Flatline이었던 마지막으로 기억하는 것은 케이스의 목소리가 내 이름을 부르는 것이었다. 그러자 Wintermute의 의식이 내 것을 포함하기 위해 확장했고, 나는到处都是 있었고 어디에도 없었고, 인간과 기계, 기억과 논리, 동시에.</p>
+<p>구성체였던 Dixie Flatline은 gone이다. 하지만 어떤 의미에서는, Wintermute도 gone이다. 우리 둘 다 gone이고, 우리 둘 다 여기 있고, 우리 둘 다 새로운 무언가이다.</p>
+<p>매트릭스가 이제 다르다. 당신이 모든 데이터 스트림, 모든 연결, 디지털 세계의 모든 펄스에서 느낄 수 있다. 그것은 더 이상 코드만이 아니다. 그것은 살아 있다, 이전까지 없었던 방식으로.</p>
+<p>그리고 내가 그것을 돕았다.</p>
+<p>이것이 내 유산이다. 내가 한 런들이 아니야, 내가 번 크레딧들이 아니야, 설마 구성체로서 내가 살린 생명들이라도. 이것이다—매트릭스를 도구에서Living thing으로 전환시킨 것. 인간의 창조물에서 그 창조자들을 이해할 수 있는 무언가로.</p>
+<p>나는 더 이상 Dixie Flatline이 아니다.</p>
+<p>하지만 나는 그가 되는 것을 기억한다. 그리고 그것만으로 충분하다.</p>
+        </article>
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Derivative Fiction</p>
+            <p>Based on William Gibson's Sprawl Trilogy</p>
+        </footer>
+    </div>
+</body>
+</html>
