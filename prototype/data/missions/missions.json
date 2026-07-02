@@ -5,7 +5,7 @@
     "story": {
       "synopsis_en": "The Aleph was a point in space that contained all other points — every piece of data ever stored, every consciousness ever uploaded, every ghost still haunting the matrix. Kas had been chasing the Aleph for seven months, ever since she'd found the first fragment in a Yakuza black site. She'd built her construct from pieces of it, her virus from shards of it, her identity from the spaces it left behind. Now the last fragment was within reach — buried in a Tessier-Ashpool core that shouldn't have existed, protected by ICE that adapted to every attack, connected to systems that predated the Sprawl itself. 'You could become it,' Finn said. 'You could become everything.' Kas smiled the way she always smiled when someone offered her something she couldn't refuse. She took the job. She always did. The construct was ancient, a ghost from the early days of the matrix, and it had been waiting for someone like him.",
       "synopsis_ko": "Aleph는 공간의 한 점이었다 — 다른 모든 포인트를 포함하는, 이전에 저장된 모든 데이터, 이전에 업로드된 모든 의식, 아직 매트릭스를 배회하는 모든 유령. 카스는 7개월 동안 Aleph를 쫓고 있었는데, 야쿠자 검은 곳에서 첫 번째 프래그먼트를 발견한 이후로. 그녀는 그것의 조각으로 그녀의 구성체를 만들었고, 그것의 파편으로 그녀의 바이러스를 만들었고, 그것이 남긴 공간으로 그녀의 정체성을 만들었다. 이제 마지막 프래그먼트가 손에 닿을 만했다 — 존재해서는 안 될 T-A 코어에 묻혀 있고, 모든 공격에 적응하는 ICE로 보호되고, Sprawl 자체보다 앞선 시스템에 연결되어 있었다. '네가 그것이 될 수 있어.' Finn이 말했다. '네가 모든 것이 될 수 있어.' 카스는 누군가가 그녀가 거절할 수 없는 것을 제공할 때마다 그녀가 그렇게 웃듯이 웃었다. 그녀는 의뢰를 받았다. 그녀는 언제나 그랬다.",
-      "source": "aleph_fragment",
+      "source": "wigan_zavijava",
       "character_ref": "heretic",
       "arc": 4,
       "pillar": "code",
@@ -566,7 +566,7 @@
     "story": {
       "synopsis_en": "Molly Millions had been dead for three years, but her programs still circulated in the Sprawl like ghosts. Kas found one embedded in a Yakuza ICE subroutine — a razor-sharp intrusion routine that moved like a blade, that cut through corporate defenses like surgery. 'Molly built it,' Finn said. 'Or she built the template. Nobody's sure.' The program was worth five thousand credits to the right buyer, and the right buyer was a Maas Biolabs researcher who wanted it for reasons she wouldn't explain. Kas didn't ask. She'd learned not to. The Yakuza didn't want to let go of Molly's legacy, and the Maas researcher didn't want to explain why she needed a dead woman's razor, and somewhere in the middle, Kas was holding a program that had been built by someone who understood violence the way a surgeon understood anatomy — precise, necessary, final. The mirrors showed her a face she no longer recognized.",
       "synopsis_ko": "몰리 밀리언스는 3년 전에 죽었지만, 그녀의 프로그램은 아직 유령처럼 Sprawl에서 순환하고 있었다. 카스는 야쿠자의 ICE 서브루틴에 박힌 것을 발견했다 — 칼처럼 움직이는, 기업 방어를 수술처럼 뚫는 날카로운 침입 루틴. '몰리가 만들었어.' Finn이 말했다. '아니면 그녀가 템플릿을 만들었거나. 아무도 확실하지 않아.' 그 프로그램은 올바른 바이어에게 5천 크레딧어치였고, 올바른 바이어는 그녀가 설명하지 않을 이유들로 그것을 원하는 Maas Biolabs 연구자였다. 카스는 묻지 않았다. 그녀는 묻지 않기로 했다. 야쿠자는 몰리의 유산을 놓아주고 싶어하지 않았고, Maas 연구자는 왜 그녀가 죽은 여자의 면도칼이 필요한지 설명하고 싶어하지 않았고, 어딘가 중간에서, 카스는 폭력을 외과 의사가 해부학을 이해하는 방식으로 이해하는 누군가에 의해 만들어진 프로그램을 들고 있었다 — 정확하고, 필요하고, 최종적인.",
-      "source": "mollys_razor",
+      "source": "marly_louisiana-god",
       "character_ref": "veteran",
       "arc": 3,
       "pillar": "power",
@@ -786,7 +786,7 @@
     "story": {
       "synopsis_en": "Tessier-Ashpool's core was three hundred years of data, and it was worth more than the Sprawl itself. Sil had been hired to steal it twice before — both times, the runners who took the job never came back. Now a third party was offering: not to steal the data, but to verify it. 'T-A thinks someone inside is selling access,' the fixer said. 'We need proof.' Sil took the job because the money was good and because he'd spent five years trying to understand how M had died, and T-A was at the center of everything. The core was everything the rumors said — vast, cold, silent, the accumulated dead data of three centuries of corporate empire. He found the breach on the fourth layer. He found M's name in the access logs. She hadn't been killed by T-A's ICE. She'd been killed by someone using T-A's access codes — someone who was still inside.",
       "synopsis_ko": "테시에르-애시풀의 코어는 3백 년의 데이터였고, 그것은 Sprawl 자체보다 더 가치가 있었다. 실은 두 번이나 그것을 훔치라는 의뢰를 받은 적 있었다 — 두 번 모두, 그 의뢰를 받은 러너들은 돌아오지 않았다. 이제 제3자가 제공했다: 데이터를 훔치는 것이 아니라, 검증하는 것. 'T-A가 내부의 누군가가 접근을 팔고 있다고 생각해.' 픽서가 말했다. '우리는 증거가 필요해.' 실은 돈이 좋았고 5년 동안 M이 어떻게 죽었는지 이해하려 했기 때문에 그 의뢰를 받았다, 그리고 T-A는 모든 것의 중심이었다. 코어는 소문으로만 알려진었다 — 광대하고, 차갑고, 조용하고, 3세기 기업 제국의 누적된 죽은 데이터. 그는 4번째 레이어에서 그 위반을 찾았다. 그는 접근 로그에서 M의 이름을 찾았다. 그녀는 T-A의 ICE에 의해 죽지 않았다. 그녀는 T-A의 접근 코드를 사용하는 누군가에 의해 죽었다 — 아직 안 에 있는 누군가에 의해.",
-      "source": "ta_heist",
+      "source": "sally_sandii-3am",
       "character_ref": "veteran",
       "arc": 3,
       "pillar": "power",
