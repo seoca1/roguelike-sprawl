@@ -1,6 +1,6 @@
 # Glossary - Sprawl 세계관 용어
 
-> **Primary source**: `../../../Fiction/wiki/works/` (Sprawl Trilogy)
+> **Primary source**: `../../../../Fiction/wiki/works/` (Sprawl Trilogy)
 >
 > 깊은 분석/원문 인용은 Fiction wiki 참조. 본 페이지는 게임용 요약.
 

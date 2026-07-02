@@ -1,6 +1,6 @@
 # Style Guide (톤 & 미학)
 
-> **Primary source**: `../../../Fiction/wiki/authors/william-gibson.md` (글쓰기 스타일), `../../../Fiction/wiki/works/` (원문 인용 예시)
+> **Primary source**: `../../../../Fiction/wiki/authors/william-gibson.md` (글쓰기 스타일), `../../../../Fiction/wiki/works/` (원문 인용 예시)
 >
 > 본 가이드는 게임 텍스트 작성 규칙. 깁슨 원문의 톤/리듬은 Fiction wiki 참조.
 

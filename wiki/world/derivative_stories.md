@@ -22,31 +22,31 @@ dashboard/stories/short-stories/*.html (정적 카드)
 
 | 미션 ID | Arc | 단편 stem | 단편 파일 | KO |
 |---|:---:|---|---|:---:|
-| `first_jack` | 1 | `case_jackout-30sec` | [2026-06-23_case_jackout-30sec](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_case_jackout-30sec.md) | ✓ |
-| `watchdog_patrol` | 1 | `watchdog_patrol` | [2026-06-23_watchdog_patrol](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_watchdog_patrol.md) | ✓ |
-| `ice_run` | 1 | `ice_run` | [2026-06-23_ice_run](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_ice_run.md) | ✓ |
-| `first_trace` | 2 | `first_trace` | [2026-06-23_first_trace](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_first_trace.md) | ✓ |
+| `first_jack` | 1 | `case_jackout-30sec` | [2026-06-23_case_jackout-30sec](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_case_jackout-30sec.md) | ✓ |
+| `watchdog_patrol` | 1 | `watchdog_patrol` | [2026-06-23_watchdog_patrol](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_watchdog_patrol.md) | ✓ |
+| `ice_run` | 1 | `ice_run` | [2026-06-23_ice_run](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_ice_run.md) | ✓ |
+| `first_trace` | 2 | `first_trace` | [2026-06-23_first_trace](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_first_trace.md) | ✓ |
 
 ### Chapter Veteran (실/Sil — 베테랑)
 
 | 미션 ID | Arc | 단편 stem | 단편 파일 | KO |
 |---|:---:|---|---|:---:|
-| `delivery_to_finn` | 1 | `marly_louisiana-god` | [2026-06-23_marly_louisiana-god](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_marly_louisiana-god.md) | ✓ |
-| `sense_net_tip` | 2 | `sense_net_trace` | [2026-06-23_sense_net_trace](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_sense_net_trace.md) | ✓ |
-| `black_ice_dream` | 3 | `black_ice_dream` | [2026-06-23_black_ice_dream](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_black_ice_dream.md) | ✓ |
+| `delivery_to_finn` | 1 | `marly_louisiana-god` | [2026-06-23_marly_louisiana-god](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_marly_louisiana-god.md) | ✓ |
+| `sense_net_tip` | 2 | `sense_net_trace` | [2026-06-23_sense_net_trace](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_sense_net_trace.md) | ✓ |
+| `black_ice_dream` | 3 | `black_ice_dream` | [2026-06-23_black_ice_dream](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_black_ice_dream.md) | ✓ |
 | `ta_heist` | 3 | `ta_heist` | **단편 미작성** 🔴 | — |
 | `mollys_razor` | 3 | `mollys_razor` | **단편 미작성** 🔴 | — |
-| `dixies_offer` | 4 | `dixies_last_run` | [2026-06-23_dixies_last_run](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_dixies_last_run.md) | ✓ |
-| `voodoo_loa_encounter` | 4 | `loa_voodoo_contact` | [2026-06-23_loa_voodoo_contact](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_loa_voodoo_contact.md) | ✓ |
+| `dixies_offer` | 4 | `dixies_last_run` | [2026-06-23_dixies_last_run](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_dixies_last_run.md) | ✓ |
+| `voodoo_loa_encounter` | 4 | `loa_voodoo_contact` | [2026-06-23_loa_voodoo_contact](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_loa_voodoo_contact.md) | ✓ |
 | `aleph_fragment` | 4 | `aleph_fragment` | **단편 미작성** 🔴 | — |
-| `final_choice` | 5 | `the_choice` | [2026-06-23_the_choice](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_the_choice.md) | ✓ |
+| `final_choice` | 5 | `the_choice` | [2026-06-23_the_choice](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_the_choice.md) | ✓ |
 
 ### Chapter Heretic (카스/Kas — 이단아)
 
 | 미션 ID | Arc | 단편 stem | 단편 파일 | KO |
 |---|:---:|---|---|:---:|
-| `craft_job` | 2 | `kumiko_manarase-midnight` | [2026-06-23_kumiko_manarase-midnight](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_kumiko_manarase-midnight.md) | ✓ |
-| `yakuza_deal` | 2 | `yakuza_deal` | [2026-06-23_yakuza_deal](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_yakuza_deal.md) | ✓ |
+| `craft_job` | 2 | `kumiko_manarase-midnight` | [2026-06-23_kumiko_manarase-midnight](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_kumiko_manarase-midnight.md) | ✓ |
+| `yakuza_deal` | 2 | `yakuza_deal` | [2026-06-23_yakuza_deal](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-23_yakuza_deal.md) | ✓ |
 
 ## 단편 상세 (시점 / 출처 / 게임 통합)
 
@@ -153,35 +153,35 @@ dashboard/stories/short-stories/*.html (정적 카드)
 
 | 미션 ID | Arc | 단편 stem | 단편 파일 | KO |
 |---|:---:|---|---|:---:|
-| `data_retrieval` | 1 | `data_retrieval` | [2026-06-25_data_retrieval](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_data_retrieval.md) | ✓ |
-| `tutorial_maze` | 1 | `tutorial_maze` | [2026-06-25_tutorial_maze](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_tutorial_maze.md) | ✓ |
+| `data_retrieval` | 1 | `data_retrieval` | [2026-06-25_data_retrieval](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_data_retrieval.md) | ✓ |
+| `tutorial_maze` | 1 | `tutorial_maze` | [2026-06-25_tutorial_maze](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_tutorial_maze.md) | ✓ |
 
 ### Chapter Veteran (실/Sil — 베테랑)
 
 | 미션 ID | Arc | 단편 stem | 단편 파일 | KO |
 |---|:---:|---|---|:---:|
-| `first_contact` | 2 | `first_contact` | [2026-06-25_first_contact](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_first_contact.md) | ✓ |
-| `mollys_market` | 2 | `mollys_market` | [2026-06-29_mollys_market](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_mollys_market.md) | ✓ |
-| `vegas_stakeout` | 3 | `vegas_stakeout` | [2026-06-29_vegas_stakeout](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_vegas_stakeout.md) | ✓ |
-| `dixies_choice` | 4 | `dixies_choice` | [2026-06-29_dixies_choice](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_dixies_choice.md) | ✓ |
-| `winter_infiltrate` | 4 | `winter_infiltrate` | [2026-06-29_winter_infiltrate](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_winter_infiltrate.md) | ✓ |
-| `zion_express` | 5 | `zion_express` | [2026-06-29_zion_express](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_zion_express.md) | ✓ |
+| `first_contact` | 2 | `first_contact` | [2026-06-25_first_contact](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-25_first_contact.md) | ✓ |
+| `mollys_market` | 2 | `mollys_market` | [2026-06-29_mollys_market](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_mollys_market.md) | ✓ |
+| `vegas_stakeout` | 3 | `vegas_stakeout` | [2026-06-29_vegas_stakeout](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_vegas_stakeout.md) | ✓ |
+| `dixies_choice` | 4 | `dixies_choice` | [2026-06-29_dixies_choice](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_dixies_choice.md) | ✓ |
+| `winter_infiltrate` | 4 | `winter_infiltrate` | [2026-06-29_winter_infiltrate](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_winter_infiltrate.md) | ✓ |
+| `zion_express` | 5 | `zion_express` | [2026-06-29_zion_express](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_zion_express.md) | ✓ |
 
 ### Chapter Heretic (카스/Kas — 이단아)
 
 | 미션 ID | Arc | 단편 stem | 단편 파일 | KO |
 |---|:---:|---|---|:---:|
-| `neuromancer_whisper` | 3 | `neuromancer_whisper` | [2026-06-29_neuromancer_whisper](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_neuromancer_whisper.md) | ✓ |
-| `matrix_revelation` | 4 | `matrix_revelation` | [2026-06-29_matrix_revelation](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_matrix_revelation.md) | ✓ |
-| `neuromancer_merger` | 5 | `neuromancer_merger` | [2026-06-29_neuromancer_merger](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_neuromancer_merger.md) | ✓ |
+| `neuromancer_whisper` | 3 | `neuromancer_whisper` | [2026-06-29_neuromancer_whisper](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_neuromancer_whisper.md) | ✓ |
+| `matrix_revelation` | 4 | `matrix_revelation` | [2026-06-29_matrix_revelation](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_matrix_revelation.md) | ✓ |
+| `neuromancer_merger` | 5 | `neuromancer_merger` | [2026-06-29_neuromancer_merger](../../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-29_neuromancer_merger.md) | ✓ |
 
 ### 신규 오리지널 단편 (06-30 시리즈 — 게임 통합 강화)
 
 | 미션 ID | Arc | 단편 stem | 단편 파일 | KO | 챕터 | 동기 |
 |---|:---:|---|---|:---:|---|---|
-| `mollys_razor` | 3 | `mollys_razor` | [2026-06-30_mollys_razor](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-30_mollys_razor.md) | ✓ | veteran | Molly 자취 추적 (면도칼 모티프) |
-| `ta_heist` | 3 | `ta_heist` | [2026-06-30_ta_heist](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-30_ta_heist.md) | ✓ | veteran | T-A Straylight 침투 (3백 년 모티프) |
-| `aleph_fragment` | 4 | `aleph_fragment` | [2026-06-30_aleph_fragment](../../../Fiction/derivative/sprawl-trilogy/short-stories/2026-06-30_aleph_fragment.md) | ✓ | heretic | Aleph 파편 (loa 매개, 모든 미래) |
+| `mollys_razor` | 3 | `mollys_razor` | `2026-06-30_mollys_razor` (미작성) | ⏳ | veteran | Molly 자취 추적 (면도칼 모티프) |
+| `ta_heist` | 3 | `ta_heist` | `2026-06-30_ta_heist` (미작성) | ⏳ | veteran | T-A Straylight 침투 (3백 년 모티프) |
+| `aleph_fragment` | 4 | `aleph_fragment` | `2026-06-30_aleph_fragment` (미작성) | ⏳ | heretic | Aleph 파편 (loa 매개, 모든 미래) |
 
 ## 다음 단계
 

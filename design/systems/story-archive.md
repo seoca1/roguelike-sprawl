@@ -1,6 +1,6 @@
 # System: Story Archive (이야기 아카이브)
 
-> **관련**: [aftermath.md](./aftermath.md) (전투 후일담), [story-events.md](./story-events.md) (이벤트), [jockey_history.md](./jockey_history.md) (자키 이력)
+> **관련**: [aftermath.md](./aftermath.md) (전투 후일담), [story-events.md](./story-events.md) (이벤트), `engine/jockey_history.py` (자키 이력)
 > **구현**: `../../prototype/src/roguelike_sprawl/engine/story_view.py`, `event_story.py`
 > **ADR**: 0009 (Story/News 전달 시스템), 0019 (Combat Aftermath), 0031 (Original Scenario)
 

@@ -1,6 +1,6 @@
 # Cyberspace (The Matrix)
 
-> **Primary source**: `../../../Fiction/wiki/settings/cyberspace.md` (깊은 분석), `../../../Fiction/wiki/works/neuromancer.md` (원문 인용)
+> **Primary source**: `../../../../Fiction/wiki/settings/cyberspace.md` (깊은 분석), `../../../../Fiction/wiki/works/neuromancer.md` (원문 인용)
 >
 > 본 페이지는 게임용 요약. 원작의 모든 디테일은 Fiction wiki 참조.
 
@@ -18,7 +18,7 @@
 
 ## 원작의 추가 디테일 (Fiction wiki)
 
-> **상세 분석**: `../../../Fiction/wiki/settings/cyberspace.md`
+> **상세 분석**: `../../../../Fiction/wiki/settings/cyberspace.md`
 
 - **인터페이스**: 신경 전극(trodes / microsofts) → cyberdeck → 매트릭스
 - **체감**:

@@ -1,6 +1,6 @@
 # Sprawl Universe
 
-> **Primary source**: `../../../Fiction/wiki/works/` (Sprawl Trilogy), `../../../Fiction/wiki/authors/william-gibson.md`
+> **Primary source**: `../../../../Fiction/wiki/works/` (Sprawl Trilogy), `../../../../Fiction/wiki/authors/william-gibson.md`
 >
 > 본 페이지는 게임용 요약. 깊은 분석/원문은 Fiction wiki 참조.
 
@@ -86,7 +86,7 @@
 
 | 소설 요소 | 게임 활용 | Fiction wiki 페이지 |
 | --- | --- | --- |
-| The Finn | 픽서 NPC (자주 등장) | `../../../Fiction/wiki/characters/` (case.md 인맥) |
+| The Finn | 픽서 NPC (자주 등장) | `../../../../Fiction/wiki/characters/` (case.md 인맥) |
 | Dixie Flatline | 메타 진행으로 unlock 가능한 construct | (construct는 case.md / neuromancer.md 참조) |
 | Tessier-Ashpool | 주요 의뢰인 / 엔드 콘텐츠 (Straylight) | (neuromancer.md 참조) |
 | 3Jane | construct 또는 ghost로 등장 가능 | (neuromancer.md 참조) |
@@ -103,16 +103,16 @@
 
 깁슨 원작의 깊은 분석/원문 인용은 Fiction wiki 참조:
 
-- **저자**: `../../../Fiction/wiki/authors/william-gibson.md`
+- **저자**: `../../../../Fiction/wiki/authors/william-gibson.md`
 - **작품**:
-  - `../../../Fiction/wiki/works/neuromancer.md` (1984)
-  - `../../../Fiction/wiki/works/count-zero.md` (1986)
-  - `../../../Fiction/wiki/works/mona-lisa-overdrive.md` (1988)
+  - `../../../../Fiction/wiki/works/neuromancer.md` (1984)
+  - `../../../../Fiction/wiki/works/count-zero.md` (1986)
+  - `../../../../Fiction/wiki/works/mona-lisa-overdrive.md` (1988)
 - **등장인물**:
-  - `../../../Fiction/wiki/characters/case.md`
-  - `../../../Fiction/wiki/characters/molly-millions.md`
-- **설정**: `../../../Fiction/wiki/settings/cyberspace.md`
-- **인덱스**: `../../../Fiction/wiki/index.md`
+  - `../../../../Fiction/wiki/characters/case.md`
+  - `../../../../Fiction/wiki/characters/molly-millions.md`
+- **설정**: `../../../../Fiction/wiki/settings/cyberspace.md`
+- **인덱스**: `../../../../Fiction/wiki/index.md`
 
 ## Open Questions
 - 어느 시대를 배경으로 하는가? (원작 동시대 vs 미래 vs 임의)

@@ -1,6 +1,6 @@
 # Factions (주요 세력)
 
-> **Primary source**: `../../../Fiction/wiki/works/neuromancer.md`, `../../../Fiction/wiki/works/count-zero.md`, `../../../Fiction/wiki/works/mona-lisa-overdrive.md`
+> **Primary source**: `../../../../Fiction/wiki/works/neuromancer.md`, `../../../../Fiction/wiki/works/count-zero.md`, `../../../../Fiction/wiki/works/mona-lisa-overdrive.md`
 >
 > 본 페이지는 게임용 요약. 깊은 분석은 Fiction wiki 참조.
 
@@ -8,7 +8,7 @@
 
 ## Tessier-Ashpool (T-A)
 
-> **원작 참조**: `../../../Fiction/wiki/works/neuromancer.md` (Villa Straylight, Freeside)
+> **원작 참조**: `../../../../Fiction/wiki/works/neuromancer.md` (Villa Straylight, Freeside)
 
 - 가장 부유한 패밀리 중 하나
 - Freeside / Straylight 소유
@@ -21,7 +21,7 @@
 
 ## Maas Biolabs
 
-> **원작 참조**: `../../../Fiction/wiki/works/count-zero.md` (Mitchell, Angie)
+> **원작 참조**: `../../../../Fiction/wiki/works/count-zero.md` (Mitchell, Angie)
 
 - 바이오테크 거대 기업
 - Biosoftware, biochips, 인간-기계 인터페이스 연구
@@ -38,7 +38,7 @@
 
 ## Sense/Net
 
-> **원작 참조**: `../../../Fiction/wiki/works/neuromancer.md` (Case의 전 고용주), `../../../Fiction/wiki/works/mona-lisa-overdrive.md` (Angie의 매니저)
+> **원작 참조**: `../../../../Fiction/wiki/works/neuromancer.md` (Case의 전 고용주), `../../../../Fiction/wiki/works/mona-lisa-overdrive.md` (Angie의 매니저)
 
 - 미디어/엔터테인먼트
 - **원작 디테일**: SAMURAI 등급 자키 시스템 운영 (자키 등급 시스템의 원형)
@@ -47,7 +47,7 @@
 
 ## Yakuza
 
-> **원작 참조**: `../../../Fiction/wiki/works/neuromancer.md` (자키 환경), `../../../Fiction/wiki/works/mona-lisa-overdrive.md` (Kumiko의 oyabun)
+> **원작 참조**: `../../../../Fiction/wiki/works/neuromancer.md` (자키 환경), `../../../../Fiction/wiki/works/mona-lisa-overdrive.md` (Kumiko의 oyabun)
 
 - 일본 마피아
 - 자키들이 종종 일함 (특히 일본계 의뢰)
@@ -69,7 +69,7 @@
 
 ## The Lo Teks (Vodou Community)
 
-> **원작 참조**: `../../../Fiction/wiki/works/count-zero.md` (The Projects, Vodou)
+> **원작 참조**: `../../../../Fiction/wiki/works/count-zero.md` (The Projects, Vodou)
 
 - Sprawl 내 하우징 프로젝트의 Vodou 공동체
 - **원작 디테일**: 매트릭스의 AI들을 voodoo loa(영혼)로 숭배
@@ -78,7 +78,7 @@
 
 ## Biosoft / Simstim 사용자
 
-> **원작 참조**: `../../../Fiction/wiki/works/count-zero.md` (Angie Mitchell), `../../../Fiction/wiki/works/mona-lisa-overdrive.md` (simstim celebrity)
+> **원작 참조**: `../../../../Fiction/wiki/works/count-zero.md` (Angie Mitchell), `../../../../Fiction/wiki/works/mona-lisa-overdrive.md` (simstim celebrity)
 
 - **Biosoft**: 인체 내장형 생체-소프트웨어 (Count Zero)
   - Angie Mitchell는 어린 시절 biosoft 이식
@@ -90,7 +90,7 @@
 
 ## The Loa (Fragmented AIs)
 
-> **원작 참조**: `../../../Fiction/wiki/works/count-zero.md`, `../../../Fiction/wiki/works/mona-lisa-overdrive.md`
+> **원작 참조**: `../../../../Fiction/wiki/works/count-zero.md`, `../../../../Fiction/wiki/works/mona-lisa-overdrive.md`
 
 - *Count Zero*부터 등장
 - **원작**: Wintermute/Neuromancer가 합쳐진 후, 알 수 없는 이유로 *분열*되어 voodoo loa 형태로 등장
@@ -101,7 +101,7 @@
 
 ## The Finn (Finn)
 
-> **원작 참조**: `../../../Fiction/wiki/works/neuromancer.md`, `../../../Fiction/wiki/works/count-zero.md`
+> **원작 참조**: `../../../../Fiction/wiki/works/neuromancer.md`, `../../../../Fiction/wiki/works/count-zero.md`
 
 - 픽서 (중개인)
 - 동유럽 / 아시아 연결
@@ -112,7 +112,7 @@
 
 ## Freeside (L5)
 
-> **원작 참조**: `../../../Fiction/wiki/works/neuromancer.md` (Freeside, Straylight)
+> **원작 참조**: `../../../../Fiction/wiki/works/neuromancer.md` (Freeside, Straylight)
 
 - 궤도 식민지 자체
 - 클레르 드 라 메르 호텔
@@ -121,7 +121,7 @@
 
 ## 주요 인물 (자주 등장)
 
-> **상세**: `../../../Fiction/wiki/characters/case.md`, `../../../Fiction/wiki/characters/molly-millions.md`
+> **상세**: `../../../../Fiction/wiki/characters/case.md`, `../../../../Fiction/wiki/characters/molly-millions.md`
 
 ### Neuromancer
 - Henry Dorsett Case — 프로토타입 자키, "the best" *(주인공 아님)*
