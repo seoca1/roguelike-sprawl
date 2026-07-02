@@ -168,7 +168,7 @@ class TestLoadStagesStats:
 
     def test_missions_mirrors_story(self, data_dir: Path) -> None:
         stats = load_stages_stats(_PROJECTS_ROOT)
-        story = load_story_stats(REPO)
+        story = load_story_stats(_PROJECTS_ROOT)
         assert stats["missions"] == story["missions"]
 
 

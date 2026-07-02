@@ -85,7 +85,7 @@ def _load_aftermaths(path: Path) -> dict[str, Aftermath]:
         if not isinstance(value, dict):
             continue
         try:
-            reactions = value.get("reactions", ())
+            reactions = value.get("reaction_ids", ())
             if not isinstance(reactions, list):
                 reactions = ()
             out[str(key)] = Aftermath(

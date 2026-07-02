@@ -260,16 +260,17 @@ def _draw_equipment_list(
 def _slot_short_label(slot: EquipSlot) -> str:
     """Short label for a slot."""
     labels = {
-        EquipSlot.DECK: "DECK",
-        EquipSlot.HEADWARE: "HEAD",
-        EquipSlot.EYEWARE: "EYES",
-        EquipSlot.BODYSUIT: "BODY",
-        EquipSlot.GLOVES: "HAND",
-        EquipSlot.BOOTS: "FEET",
-        EquipSlot.IMPLANT: "IMPL",
-        EquipSlot.TRODES: "TROD",
+        EquipSlot.DECK.value: "DECK",
+        EquipSlot.HEADWARE.value: "HEAD",
+        EquipSlot.EYEWARE.value: "EYES",
+        EquipSlot.BODYSUIT.value: "BODY",
+        EquipSlot.GLOVES.value: "HAND",
+        EquipSlot.BOOTS.value: "FEET",
+        EquipSlot.IMPLANT.value: "IMPL",
+        EquipSlot.TRODES.value: "TROD",
     }
-    return labels.get(slot, slot.value.upper())
+    slot_key = getattr(slot, "value", slot)
+    return labels.get(slot_key, str(slot_key).upper())
 
 
 def _tier_color(tier: object) -> tuple[int, int, int]:
