@@ -1,6 +1,6 @@
 {
   "standard": {
-    "name": "ICE \u2014 Standard",
+    "name": "ICE — Standard",
     "portrait": "ice.standard",
     "hp_base": 80,
     "hp_per_grade": 15,
@@ -25,7 +25,7 @@
     ]
   },
   "watchdog": {
-    "name": "ICE \u2014 Watchdog",
+    "name": "ICE — Watchdog",
     "portrait": "ice.standard",
     "hp_base": 50,
     "hp_per_grade": 10,
@@ -50,7 +50,7 @@
     ]
   },
   "spider": {
-    "name": "ICE \u2014 Spider",
+    "name": "ICE — Spider",
     "portrait": "ice.standard",
     "hp_base": 40,
     "hp_per_grade": 8,
@@ -75,7 +75,7 @@
     ]
   },
   "wisp": {
-    "name": "ICE \u2014 Wisp",
+    "name": "ICE — Wisp",
     "portrait": "ice.standard",
     "hp_base": 35,
     "hp_per_grade": 5,
@@ -95,7 +95,7 @@
     ]
   },
   "raven": {
-    "name": "ICE \u2014 Raven",
+    "name": "ICE — Raven",
     "portrait": "ice.standard",
     "hp_base": 60,
     "hp_per_grade": 12,
@@ -125,7 +125,7 @@
     ]
   },
   "black": {
-    "name": "ICE \u2014 Black",
+    "name": "ICE — Black",
     "portrait": "ice.black",
     "hp_base": 200,
     "hp_per_grade": 40,
@@ -155,7 +155,7 @@
     ]
   },
   "goliath": {
-    "name": "ICE \u2014 Goliath",
+    "name": "ICE — Goliath",
     "portrait": "ice.standard",
     "hp_base": 150,
     "hp_per_grade": 30,
@@ -185,7 +185,7 @@
     ]
   },
   "dixie": {
-    "name": "Construct \u2014 Dixie",
+    "name": "Construct — Dixie",
     "portrait": "construct.dixie",
     "hp_base": 300,
     "hp_per_grade": 60,
@@ -215,7 +215,7 @@
     ]
   },
   "ice_wisp_t1": {
-    "name": "ICE \u2014 Wisp (ice_wisp_t1)",
+    "name": "ICE — Wisp (ice_wisp_t1)",
     "portrait": "ice.standard",
     "hp_base": 35,
     "hp_per_grade": 5,
@@ -237,7 +237,7 @@
     "base_type": "wisp"
   },
   "ice_watchdog": {
-    "name": "ICE \u2014 Watchdog (ice_watchdog)",
+    "name": "ICE — Watchdog (ice_watchdog)",
     "portrait": "ice.standard",
     "hp_base": 50,
     "hp_per_grade": 10,
@@ -264,7 +264,7 @@
     "base_type": "watchdog"
   },
   "ice_worm": {
-    "name": "ICE \u2014 Spider (ice_worm)",
+    "name": "ICE — Spider (ice_worm)",
     "portrait": "ice.standard",
     "hp_base": 40,
     "hp_per_grade": 8,
@@ -291,7 +291,7 @@
     "base_type": "spider"
   },
   "ice_unknown": {
-    "name": "ICE \u2014 Standard (ice_unknown)",
+    "name": "ICE — Standard (ice_unknown)",
     "portrait": "ice.standard",
     "hp_base": 80,
     "hp_per_grade": 15,
@@ -318,7 +318,7 @@
     "base_type": "standard"
   },
   "loa_entity": {
-    "name": "ICE \u2014 Raven (loa_entity)",
+    "name": "ICE — Raven (loa_entity)",
     "portrait": "ice.standard",
     "hp_base": 60,
     "hp_per_grade": 12,
@@ -350,7 +350,7 @@
     "base_type": "raven"
   },
   "loa_priest": {
-    "name": "ICE \u2014 Raven (loa_priest)",
+    "name": "ICE — Raven (loa_priest)",
     "portrait": "ice.standard",
     "hp_base": 60,
     "hp_per_grade": 12,
@@ -382,7 +382,7 @@
     "base_type": "raven"
   },
   "loa_betrayer": {
-    "name": "ICE \u2014 Black (loa_betrayer)",
+    "name": "ICE — Black (loa_betrayer)",
     "portrait": "ice.black",
     "hp_base": 200,
     "hp_per_grade": 40,
@@ -414,7 +414,7 @@
     "base_type": "black"
   },
   "loa_disguised": {
-    "name": "ICE \u2014 Standard (loa_disguised)",
+    "name": "ICE — Standard (loa_disguised)",
     "portrait": "ice.standard",
     "hp_base": 80,
     "hp_per_grade": 15,
@@ -441,7 +441,7 @@
     "base_type": "standard"
   },
   "romantics_ice": {
-    "name": "ICE \u2014 Raven (romantics_ice)",
+    "name": "ICE — Raven (romantics_ice)",
     "portrait": "ice.standard",
     "hp_base": 60,
     "hp_per_grade": 12,
@@ -473,7 +473,7 @@
     "base_type": "raven"
   },
   "romantics_ice_elite": {
-    "name": "ICE \u2014 Black (romantics_ice_elite)",
+    "name": "ICE — Black (romantics_ice_elite)",
     "portrait": "ice.black",
     "hp_base": 200,
     "hp_per_grade": 40,
@@ -505,7 +505,7 @@
     "base_type": "black"
   },
   "oua_entity": {
-    "name": "ICE \u2014 Goliath (oua_entity)",
+    "name": "ICE — Goliath (oua_entity)",
     "portrait": "ice.standard",
     "hp_base": 150,
     "hp_per_grade": 30,
@@ -537,7 +537,7 @@
     "base_type": "goliath"
   },
   "prime_loa": {
-    "name": "Construct \u2014 Dixie (prime_loa)",
+    "name": "Construct — Dixie (prime_loa)",
     "portrait": "construct.dixie",
     "hp_base": 300,
     "hp_per_grade": 60,
@@ -569,7 +569,7 @@
     "base_type": "dixie"
   },
   "ta_security_ice": {
-    "name": "ICE \u2014 Watchdog (ta_security_ice)",
+    "name": "ICE — Watchdog (ta_security_ice)",
     "portrait": "ice.standard",
     "hp_base": 50,
     "hp_per_grade": 10,
@@ -596,7 +596,7 @@
     "base_type": "watchdog"
   },
   "blank_entity": {
-    "name": "Construct \u2014 Dixie (blank_entity)",
+    "name": "Construct — Dixie (blank_entity)",
     "portrait": "construct.dixie",
     "hp_base": 300,
     "hp_per_grade": 60,
@@ -628,7 +628,7 @@
     "base_type": "dixie"
   },
   "ice_harrow_3": {
-    "name": "ICE \u2014 Raven (ice_harrow_3)",
+    "name": "ICE — Raven (ice_harrow_3)",
     "portrait": "ice.standard",
     "hp_base": 60,
     "hp_per_grade": 12,
@@ -660,7 +660,7 @@
     "base_type": "raven"
   },
   "ice_feedback_loop": {
-    "name": "ICE \u2014 Spider (ice_feedback_loop)",
+    "name": "ICE — Spider (ice_feedback_loop)",
     "portrait": "ice.standard",
     "hp_base": 40,
     "hp_per_grade": 8,
@@ -687,7 +687,7 @@
     "base_type": "spider"
   },
   "ice_shadow_variant": {
-    "name": "ICE \u2014 Standard (ice_shadow_variant)",
+    "name": "ICE — Standard (ice_shadow_variant)",
     "portrait": "ice.standard",
     "hp_base": 80,
     "hp_per_grade": 15,
@@ -714,7 +714,7 @@
     "base_type": "standard"
   },
   "ice_burned_cowboy": {
-    "name": "ICE \u2014 Black (ice_burned_cowboy)",
+    "name": "ICE — Black (ice_burned_cowboy)",
     "portrait": "ice.black",
     "hp_base": 200,
     "hp_per_grade": 40,
@@ -746,7 +746,7 @@
     "base_type": "black"
   },
   "ice_weapon_construct": {
-    "name": "ICE \u2014 Goliath (ice_weapon_construct)",
+    "name": "ICE — Goliath (ice_weapon_construct)",
     "portrait": "ice.standard",
     "hp_base": 150,
     "hp_per_grade": 30,
@@ -778,7 +778,7 @@
     "base_type": "goliath"
   },
   "ice_wheel_children": {
-    "name": "ICE \u2014 Raven (ice_wheel_children)",
+    "name": "ICE — Raven (ice_wheel_children)",
     "portrait": "ice.standard",
     "hp_base": 60,
     "hp_per_grade": 12,
@@ -810,7 +810,7 @@
     "base_type": "raven"
   },
   "ice_wheel_guardians": {
-    "name": "Construct \u2014 Dixie (ice_wheel_guardians)",
+    "name": "Construct — Dixie (ice_wheel_guardians)",
     "portrait": "construct.dixie",
     "hp_base": 300,
     "hp_per_grade": 60,
@@ -1077,6 +1077,104 @@
       {
         "item": "data_fragment",
         "chance": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "corporate_guard": {
+    "name": "ICE — Corporate Guard",
+    "portrait": "ice.standard",
+    "hp_base": 100,
+    "hp_per_grade": 18,
+    "dmg_base": 4,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 3,
+    "speed": 5,
+    "skills": [
+      "scan",
+      "report"
+    ],
+    "resistance": 0.1,
+    "zone": "mid",
+    "loot_table": [
+      {
+        "item": "data_fragment",
+        "chance": 0.6,
+        "quantity": 1
+      },
+      {
+        "item": "upgrade_t2",
+        "chance": 0.2,
+        "quantity": 1
+      }
+    ]
+  },
+  "archive_sentinel": {
+    "name": "ICE — Archive Sentinel",
+    "portrait": "ice.black",
+    "hp_base": 180,
+    "hp_per_grade": 25,
+    "dmg_base": 8,
+    "dmg_per_grade": 2,
+    "tier": 4,
+    "defense": 5,
+    "speed": 4,
+    "skills": [
+      "archive_guard",
+      "deep_trace"
+    ],
+    "resistance": 0.25,
+    "zone": "core",
+    "loot_table": [
+      {
+        "item": "data_fragment",
+        "chance": 0.7,
+        "quantity": 2
+      },
+      {
+        "item": "upgrade_t4",
+        "chance": 0.3,
+        "quantity": 1
+      },
+      {
+        "item": "loa_chip",
+        "chance": 0.1,
+        "quantity": 1
+      }
+    ]
+  },
+  "wintermute_proxy": {
+    "name": "ICE — Wintermute Proxy",
+    "portrait": "ice.construct",
+    "hp_base": 400,
+    "hp_per_grade": 50,
+    "dmg_base": 18,
+    "dmg_per_grade": 4,
+    "tier": 6,
+    "defense": 8,
+    "speed": 6,
+    "skills": [
+      "ai_negotiate",
+      "matrix_merge",
+      "construct_proxy"
+    ],
+    "resistance": 0.5,
+    "zone": "ta",
+    "loot_table": [
+      {
+        "item": "t_a_data_fragment",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "unique_construct",
+        "chance": 0.4,
+        "quantity": 1
+      },
+      {
+        "item": "wintermute_key",
+        "chance": 0.15,
         "quantity": 1
       }
     ]

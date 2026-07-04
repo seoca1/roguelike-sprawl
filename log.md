@@ -2,6 +2,38 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Phase 7.2 — Mid/Core/TA zone 콘텐츠 보강
+
+- **배경**: ROADMAP 차순. zone 분포 불균형 — MID 2, CORE 3, TA 1 (vs SURFACE 12, DEEP 10, FREESIDE 5).
+- **신규 자산**:
+  - `design/scenario/zone-expansion.md` — Phase 7.2 디자인 (9 신규 미션 + 3 zone ICE)
+  - **9 신규 미션** (`data/missions/missions.json`):
+    - **MID (3)**: hosaka_corporate_infiltration, sense_net_media_extract, yakuza_loan_shark
+    - **CORE (3)**: ta_payroll_archive, maas_neural_extract, construct_memory_rescue
+    - **TA (3)**: ta_straylight_archive, ta_3jane_betrayal, ta_wintermute_direct
+  - **3 신규 ICE** (`data/combat/ice_types.json`):
+    - `corporate_guard` (T2, MID, 100 HP, 4 dmg)
+    - `archive_sentinel` (T4, CORE, 180 HP, 8 dmg)
+    - `wintermute_proxy` (T6, TA, 400 HP, 18 dmg, boss급)
+  - `dashboard/index.html` / `stages.html` / `novel.html` 카운트 동기화 (38 → 47 missions)
+- **테스트** (`tests/unit/test_zone_expansion.py`, 10 신규):
+  - MID/CORE/TA 신규 미션 카운트 (각 3)
+  - zone 분포 개선 검증
+  - 신규 미션 story metadata 완성도 (ADR-0051)
+  - TA 미션 grade 5-6 검증
+  - 3 신규 ICE zone 검증
+- **기존 테스트 갱신**:
+  - `test_real_data_loaded`: 38 → 47 미션
+  - `test_dashboard_reflects_4th_character`: 38 → 47
+  - `test_*_html_meta_description_has_correct_count`: 38 → 47
+- **검증**:
+  - pytest: **4147 passed** (4137 → +10)
+  - ruff check / format: All passed
+  - mypy: 0 errors in 114 source files
+- **최종 zone 분포**:
+  - surface 12 / mid 9 / deep 10 / core 7 / freeside 5 / ta 4 = **47 미션**
+- **대시보드 stats 갱신**: mission_count 38 → 47, gn_scenes_total 24 → 48, ice_unique 38 → 41
+
 ## [2026-07-04] docs | CHARACTER_PATHS.md 6자 갱신 (v0.5.0)
 
 - **문서 버전**: 0.4.0 → 0.5.0

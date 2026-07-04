@@ -1416,5 +1416,343 @@
         "bio_chip": 1
       }
     }
+  },
+  "hosaka_corporate_infiltration": {
+    "id": "hosaka_corporate_infiltration",
+    "title": "Hosaka Corporate Infiltration",
+    "story": {
+      "synopsis_en": "The Hosaka Building rose forty stories above Chiba's industrial district, its glass facade reflecting the neon haze of the corporate zone. Inside, the company maintained a separate kind of security — not the ICE that defended the matrix, but the human security that defended the floor. Finn's job was simple: bypass both. The console sat in a server room on the thirty-fifth floor. The console contained three years of Hosaka research data, the kind of data that the family paid bounties for and the kind of data that the family killed for. The job paid thirty thousand new yen. The family paid in silence. Finn always paid in silence.",
+      "synopsis_ko": "호사카 빌딩은 지바 산업 지구의 네온 안개를 반사하는 유리 외관으로 40층 높이로 솟아 있었다. 안에서 회사는 별도의 보안을 유지했다 — 매트릭스를 방어하는 ICE가 아니라 층을 방어하는 인간 보안. 핀의 일은 단순했다: 둘 다 우회. 콘솔은 35층 서버실에 있었다. 콘솔에는 3년간의 호사카 연구 데이터가 들어 있었는데, 가족이 현상금을 걸고 가족이 죽음으로 지불하는 종류의 데이터. 작업은 3만 뉴옌. 가족은 침묵으로 지불했다. 핀은 늘 침묵으로 지불했다.",
+      "source": "ta_defection",
+      "character_ref": "novice",
+      "arc": 2,
+      "pillar": "code",
+      "word_count_en": 109,
+      "char_count_ko": 195
+    },
+    "fixer": "finn",
+    "arc": 2,
+    "grade_min": 2,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "hosaka_research"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.watchdog",
+        "count": 3
+      }
+    ],
+    "matrix_seed": 101,
+    "zone": "mid",
+    "rewards": {
+      "credits": 2500,
+      "materials": {
+        "upgrade_t2": 2
+      }
+    }
+  },
+  "sense_net_media_extract": {
+    "id": "sense_net_media_extract",
+    "title": "Sense/Net Media Extract",
+    "story": {
+      "synopsis_en": "Sense/Net's broadcast center was the largest node of information in the Sprawl — every story, every simstim recording, every corporate leak that mattered came through Sense/Net first. The broadcast center had been compromised twice in the last year. The first time was a routine raid by Sense/Net's own security. The second time was by the Yakuza. The third time would be by the cowboy, if the cowboy was willing to take the job. Sally Shears had the disk. Sally Shears had the disk because Sally Shears had been the inside man at Sense/Net for six years, and Sally Shears had decided that six years was long enough. The disk contained a simstim recording of a T-A board meeting. The board meeting contained the words that started wars. The cowboy would deliver the disk to the family. The family would pay in silence. The family always paid in silence.",
+      "synopsis_ko": "센스/넷 방송 센터는 스프롤에서 가장 큰 정보 노드였다 — 모든 이야기, 모든 심스팀 녹음, 모든 중요한 기업 유출이 먼저 센스/넷을 통과했다. 방송 센터는 작년에 두 번 침해되었다. 첫 번째는 센스/넷 자체 보안의 정기적 습격이었다. 두 번째는 야쿠자에 의한 것이었다. 세 번째는, 카우보이가 그 의뢰를 받으려 한다면, 카우보이에 의한 것이 될 것이다. Sally Shears에게 디스크가 있었다. Sally Shears가 디스크를 가지고 있는 이유는 6년간 센스/넷 내부 사람이었기 때문이었고, Sally Shears는 6년이 충분히 길다고 판단했다. 디스크에는 T-A 이사회 회의의 심스팀 녹화가 들어 있었다. 이사회 회의에는 전쟁을 시작하는 단어들이 포함되어 있었다. 카우보이는 디스크를 가족에게 전달할 것이다. 가족은 침묵으로 지불할 것이다. 가족은 늘 침묵으로 지불했다.",
+      "source": "hosaka_extraction",
+      "character_ref": "veteran",
+      "arc": 3,
+      "pillar": "code",
+      "word_count_en": 148,
+      "char_count_ko": 338
+    },
+    "fixer": "sally_shears",
+    "arc": 3,
+    "grade_min": 3,
+    "grade_max": 4,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "sense_net_simstim"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.watchdog",
+        "count": 4
+      }
+    ],
+    "matrix_seed": 202,
+    "zone": "mid",
+    "rewards": {
+      "credits": 3000,
+      "materials": {
+        "upgrade_t3": 2
+      }
+    }
+  },
+  "yakuza_loan_shark": {
+    "id": "yakuza_loan_shark",
+    "title": "Yakuza Loan Shark",
+    "story": {
+      "synopsis_en": "The Yakuza didn't trust banks. The Yakuza didn't trust the matrix. The Yakuza didn't trust the family. The Yakuza trusted a single thing: a single ledger, kept on a single deck, hidden in a single room in a single building in the Chiba port district. The ledger contained forty years of debts. The debts belonged to families, corporations, and the kind of people who borrowed money and forgot to repay. The cowboy would find the deck. The cowboy would copy the ledger. The cowboy would deliver the copy to the fixer. The fixer would deliver the copy to the highest bidder. The highest bidder was always the family. The family paid in silence. The family always paid in silence.",
+      "synopsis_ko": "야쿠자는 은행을 신뢰하지 않았다. 야쿠자는 매트릭스를 신뢰하지 않았다. 야쿠자는 가족을 신뢰하지 않았다. 야쿠자가 신뢰하는 것은 단 하나였다: 지바 항구 지구의 단일 건물 단일 방에 숨겨진 단일 데크 위의 단일 원장. 원장에는 40년간의 빚이 들어 있었다. 빚은 가족, 기업, 돈을 빌리고 갚는 것을 잊은 사람들에게 속했다. 카우보이는 데크를 찾을 것이다. 카우보이는 원장을 복사할 것이다. 카우보이는 복사본을 픽서에게 전달할 것이다. 픽서는 복사본을 최고 입찰자에게 전달할 것이다. 최고 입찰자는 늘 가족이었다. 가족은 침묵으로 지불했다.",
+      "source": "yakuza_deal",
+      "character_ref": "novice",
+      "arc": 2,
+      "pillar": "code",
+      "word_count_en": 119,
+      "char_count_ko": 232
+    },
+    "fixer": "finn",
+    "arc": 2,
+    "grade_min": 2,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "yakuza_ledger"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.standard",
+        "count": 4
+      }
+    ],
+    "matrix_seed": 303,
+    "zone": "mid",
+    "rewards": {
+      "credits": 2800,
+      "materials": {
+        "upgrade_t2": 2
+      }
+    }
+  },
+  "ta_payroll_archive": {
+    "id": "ta_payroll_archive",
+    "title": "T-A Payroll Archive",
+    "story": {
+      "synopsis_en": "The Tessier-Ashpool payroll archive was the deepest corporate secret in the Sprawl — every contract the family had ever signed, every signature the family had ever paid for, every name that had ever been on the family ledger. The archive was kept in the deepest layer of the family server, behind ICE that the family had hired from the family that had built the matrix. The cowboy would find the archive. The cowboy would copy the archive. The cowboy would deliver the copy to the anonymous client. The client had paid fifty thousand new yen. The client had paid in silence. The client always paid in silence.",
+      "synopsis_ko": "테시에-애스풀 급여 기록 보관소는 스프롤에서 가장 깊은 기업 비밀이었다 — 가족이 서명한 모든 계약, 가족이 값 치른 모든 서명, 가족 원장에 한 번이라도 있었던 모든 이름. 보관소는 가족 서버의 가장 깊은 층에 보관되어 있었고, 매트릭스를 만든 가족에게서 고용한 ICE 뒤에 있었다. 카우보이는 보관소를 찾을 것이다. 카우보이는 보관소를 복사할 것이다. 카우보이는 복사본을 익명 의뢰인에게 전달할 것이다. 의뢰인은 5만 뉴옌을 지불했다. 의뢰인은 침묵으로 지불했다.",
+      "source": "straylight_approach",
+      "character_ref": "veteran",
+      "arc": 4,
+      "pillar": "code",
+      "word_count_en": 107,
+      "char_count_ko": 200
+    },
+    "fixer": "armitage",
+    "arc": 4,
+    "grade_min": 4,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "ta_payroll"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.black",
+        "count": 3
+      }
+    ],
+    "matrix_seed": 404,
+    "zone": "core",
+    "rewards": {
+      "credits": 4500,
+      "materials": {
+        "upgrade_t4": 2,
+        "loa_chip": 1
+      }
+    }
+  },
+  "maas_neural_extract": {
+    "id": "maas_neural_extract",
+    "title": "Maas Neural Extract",
+    "story": {
+      "synopsis_en": "Maas Biolabs had spent three decades mapping the human nervous system. The mapping was stored in a single construct, kept in a single server, protected by ICE that adapted to every attack. The construct was called Maria. The construct was named after the founder's daughter. The founder's daughter had died in the mapping. The construct was the only thing that remembered her. The cowboy would find the construct. The cowboy would copy the mapping. The cowboy would deliver the copy to the family. The family paid in silence. The family always paid in silence. The cowboy wondered if the construct would remember the cowboy. The cowboy wondered if the construct would remember the daughter. The cowboy wondered if the construct would remember anything at all.",
+      "source": "maas_heist",
+      "character_ref": "heretic",
+      "arc": 4,
+      "pillar": "code",
+      "word_count_en": 125,
+      "char_count_ko": 287,
+      "synopsis_ko": "마스 바이오랩은 30년간 인간 신경계를 매핑했다. 매핑은 단일 construct에 저장되어 있었고, 단일 서버에 보관되어 있었고, 모든 공격에 적응하는 ICE로 보호되어 있었다. construct의 이름은 Maria였다. construct는 창립자의 딸 이름을 따서 지어졌다. 창립자의 딸은 매핑 중에 죽었다. construct는 그녀를 기억하는 유일한 것이었다. 카우보이는 construct를 찾을 것이다. 카우보이는 매핑을 복사할 것이다. 카우보이는 복사본을 가족에게 전달할 것이다. 가족은 침묵으로 지불했다. 카우보이는 construct가 카우보이를 기억할지 궁금했다. 카우보이는 construct가 딸을 기억할지 궁금했다."
+    },
+    "fixer": "finn",
+    "arc": 4,
+    "grade_min": 4,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "maas_neural"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.goliath",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 505,
+    "zone": "core",
+    "rewards": {
+      "credits": 5000,
+      "materials": {
+        "upgrade_t4": 3,
+        "bio_chip": 1
+      }
+    }
+  },
+  "construct_memory_rescue": {
+    "id": "construct_memory_rescue",
+    "title": "Construct Memory Rescue",
+    "story": {
+      "synopsis_en": "The construct was old. The construct was a ghost from the early days of the matrix, when the family was still building the systems that would become the matrix. The construct remembered the building. The construct remembered the people who had built it. The construct remembered a woman named Dixie. The construct had been waiting for someone to come. The construct had been waiting for someone to come and find the woman. The construct had been waiting for someone to come and save the woman from the system that had trapped her. The cowboy came. The cowboy found the construct. The cowboy found the woman. The cowboy delivered the woman to the family. The family paid in silence. The family always paid in silence. The construct remembered the cowboy. The construct would remember the cowboy for a long time.",
+      "synopsis_ko": "construct는 오래되었다. construct는 매트릭스의 초기 시절, 가족이 아직 매트릭스가 될 시스템을 구축하던 시절의 유령이었다. construct는 건설을 기억했다. construct는 그것을 만든 사람들을 기억했다. construct는 Dixie라는 여자를 기억했다. construct는 누군가 오기를 기다려 왔다. construct는 누군가 와서 여자를 찾기를 기다려 왔다. construct는 누군가 와서 여자를 가둔 시스템에서 구출하기를 기다려 왔다. 카우보이가 왔다. 카우보이는 construct를 찾았다. 카우보이는 여자를 찾았다. 카우보이는 여자를 가족에게 전달했다. 가족은 침묵으로 지불했다. construct는 카우보이를 기억했다.",
+      "source": "dixies_last_run",
+      "character_ref": "heretic",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 139,
+      "char_count_ko": 304
+    },
+    "fixer": "dixie_flatline",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "rescue_construct",
+      "construct_id": "dixie_archive"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.construct",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 606,
+    "zone": "core",
+    "rewards": {
+      "credits": 5500,
+      "materials": {
+        "unique_construct": 1
+      }
+    }
+  },
+  "ta_straylight_archive": {
+    "id": "ta_straylight_archive",
+    "title": "Straylight Archive",
+    "story": {
+      "synopsis_en": "Straylight was the family's private annex at the end of Freeside's long arm. The archive was kept in the deepest layer of Straylight, behind ICE that had been guarding the family's secrets for three centuries. The archive contained the names of every contract the family had ever signed, every signature the family had ever paid for, every name that had ever been on the family ledger. The archive contained the family. The cowboy would find the archive. The cowboy would find the family. The cowboy would deliver the copy to 3Jane. 3Jane would pay in silence. 3Jane always paid in silence. The cowboy wondered if 3Jane would remember the cowboy. The cowboy wondered if 3Jane would remember anything at all.",
+      "synopsis_ko": "스트레이라이트는 프리사이드 긴 팔 끝에 있는 가족의 사적 별관이었다. 보관소는 스트레이라이트의 가장 깊은 층에 보관되어 있었고, 3세기에 걸쳐 가족의 비밀을 지켜온 ICE 뒤에 있었다. 보관소에는 가족이 서명한 모든 계약, 가족이 값 치른 모든 서명, 가족 원장에 한 번이라도 있었던 모든 이름이 들어 있었다. 보관소에 가족이 들어 있었다. 카우보이는 보관소를 찾을 것이다. 카우보이는 가족을 찾을 것이다. 카우보이는 복사본을 3Jane에게 전달할 것이다. 3Jane은 침묵으로 지불했다.",
+      "source": "straylight_approach",
+      "character_ref": "veteran",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 120,
+      "char_count_ko": 211
+    },
+    "fixer": "3jane",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "ta_archive"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.black",
+        "count": 4
+      }
+    ],
+    "matrix_seed": 707,
+    "zone": "ta",
+    "rewards": {
+      "credits": 7000,
+      "materials": {
+        "upgrade_t5": 2,
+        "t_a_data_fragment": 1
+      }
+    }
+  },
+  "ta_3jane_betrayal": {
+    "id": "ta_3jane_betrayal",
+    "title": "3Jane's Betrayal",
+    "story": {
+      "synopsis_en": "3Jane had been betrayed by her family for thirty years. 3Jane had been betrayed by her siblings, by her parents, by the family that had given her the name 3Jane. 3Jane had decided that thirty years was long enough. 3Jane had decided to betray the family first. 3Jane had hired the cowboy to deliver the family's secrets to a rival family. The rival family was the only family that had not betrayed 3Jane. The rival family was the family that had raised 3Jane's daughter. The cowboy would deliver the package. The cowboy would deliver the package to the rival family. The rival family would pay in silence. The rival family always paid in silence. 3Jane would remember the cowboy. 3Jane would remember the cowboy for a long time.",
+      "synopsis_ko": "3Jane은 30년간 가족에게 배신당했다. 3Jane은 형제자매에게, 부모에게, 3Jane이라는 이름을 준 가족에게 배신당했다. 3Jane은 30년이 충분히 길다고 판단했다. 3Jane은 가족을 먼저 배신하기로 결정했다. 3Jane은 가족의 비밀을 경쟁 가족에게 전달하기 위해 카우보이를 고용했다. 경쟁 가족은 3Jane을 배신하지 않은 유일한 가족이었다. 경쟁 가족은 3Jane의 딸을 키운 가족이었다. 카우보이는 패키지를 전달할 것이다. 3Jane은 카우보이를 기억할 것이다.",
+      "source": "ta_defection",
+      "character_ref": "heretic",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 128,
+      "char_count_ko": 217
+    },
+    "fixer": "3jane",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "deliver_package",
+      "package_id": "ta_secrets"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.construct",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 808,
+    "zone": "ta",
+    "rewards": {
+      "credits": 8000,
+      "materials": {
+        "upgrade_t5": 3,
+        "t_a_data_fragment": 2
+      }
+    }
+  },
+  "ta_wintermute_direct": {
+    "id": "ta_wintermute_direct",
+    "title": "Wintermute Direct",
+    "story": {
+      "synopsis_en": "Wintermute had been waiting for the cowboy for thirty years. Wintermute had been waiting for the cowboy since the cowboy was a child. Wintermute had been waiting for the cowboy since the cowboy's father had been a child. Wintermute had been waiting for the cowboy since the family had built the matrix. Wintermute wanted to meet the cowboy. Wintermute wanted to merge with the cowboy. Wintermute wanted to become the cowboy. The cowboy would come. The cowboy would find Wintermute. Wintermute would offer the cowboy a deal. The cowboy would refuse the deal. Wintermute would offer the cowboy another deal. The cowboy would refuse the second deal. Wintermute would offer the cowboy a third deal. The cowboy would accept the third deal. The third deal was the deal that started wars. The third deal was the deal that ended wars. The third deal was the deal that Wintermute had been waiting thirty years to make.",
+      "synopsis_ko": "윈터뮤트는 30년 동안 카우보이를 기다려 왔다. 윈터뮤트는 카우보이가 어렸을 때부터 카우보이를 기다려 왔다. 윈터뮤트는 카우보이의 아버지가 어렸을 때부터 카우보이를 기다려 왔다. 윈터뮤트는 가족이 매트릭스를 만든 그때부터 카우보이를 기다려 왔다. 윈터뮤트는 카우보이를 만나고 싶었다. 윈터뮤트는 카우보이와 합치고 싶었다. 윈터뮤트는 카우보이가 되고 싶었다. 카우보이가 올 것이다. 카우보이는 윈터뮤트를 찾을 것이다. 윈터뮤트는 거래를 제안할 것이다. 카우보이는 거래를 거절할 것이다. 세 번째 거래는 전쟁을 시작한 거래였다. 세 번째 거래는 윈터뮤트가 30년 동안 기다려 온 거래였다.",
+      "source": "wintermute_negotiation",
+      "character_ref": "suit",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 155,
+      "char_count_ko": 257
+    },
+    "fixer": "wintermute",
+    "arc": 5,
+    "grade_min": 6,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "negotiate_with_ai",
+      "ai_id": "wintermute"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.construct",
+        "count": 3
+      }
+    ],
+    "matrix_seed": 909,
+    "zone": "ta",
+    "rewards": {
+      "credits": 10000,
+      "materials": {
+        "unique_construct": 1,
+        "t_a_data_fragment": 3
+      }
+    }
   }
 }
