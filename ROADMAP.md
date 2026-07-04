@@ -2,6 +2,13 @@
 
 ## 변경 이력 (Recent)
 
+- **2026-07-04**: Phase 6.0+ 인프라 정리 + Phase 6.1/6.2 — **4109 tests pass** (+215)
+  - **lint/mypy 174 → 0** (29c3eeb): ruff check/format + mypy strict 모두 green. 114 source files.
+  - **ADR-0030 Accepted** (12764e2): GitHub 활용 계획 (MIT/Public/MkDocs 결정)
+  - **MkDocs build + Pages 통합** (3194eeb): `mkdocs build --strict` 통과
+  - **mkdocs --strict 빌드 성공** (1440a5b): 워닝 41 → 0, 316 HTML pages 통합 위키
+  - **Phase 6.1 — Suit 자키** (05de519, 2e404e2): 4 base + 4 ending = 8 씬, 4번째 캐릭터 통합
+  - **Phase 6.2 audit** (25fd9d3): NPC dialogue + faction rep 연동 이미 구현됨 확인
 - **2026-07-01**: 소설→스토리→이벤트 통합 + 콘텐츠 확장 — **3894 tests pass** (+452, 24 xfailed)
   - **P1~P4 통합 작업**:
     - **P1**: 테스트 10건 수정 (suit 단편 스텁 4편, 오타, stale 정정)
@@ -252,19 +259,25 @@ Phase 7: 알파 빌드
 **목표**: 다양한 미션, 적, 도구를 추가하여 replayability 확보.
 
 **작업**:
-- [ ] ICE 타입 N개 (블랙 ICE, 와치독, 킬러 등)
-- [ ] 프로그램 카탈로그
-- [ ] 데크 카탈로그
-- [ ] 웨웨어 카탈로그
-- [ ] 미션 템플릿 N개
-- [ ] 의뢰인/픽서 NPC 카탈로그
-- [ ] 톤/문체 가이드 (대화, 로그 등)
-- [ ] 절차적 생성 규칙
+- [x] **ICE 타입 5종** (2026-06-30) — standard/watchdog/black/goliath/construct
+- [x] **프로그램 카탈로그** — `data/programs/programs.json` (strike/hammer/virus/wardrone 등)
+- [x] **데크 카탈로그** — `data/equipment/decks.json`
+- [x] **웨어웨어 카탈로그** — `data/equipment/wetware.json`
+- [x] **미션 38개** (2026-07-01) — Arc 1-5 분포, story metadata 포함
+- [x] **픽서 NPC 카탈로그** (2026-06-30) — Finn/Dixie/Maelcum/Sally 등
+- [x] **톤/문체 가이드** (2026-06-17) — `wiki/world/style_guide.md`
+- [x] **절차적 생성 규칙** (2026-06-30) — BSP 미로 + Mission→Room 매핑 (ADR-0060)
+- [x] **4번째 자키 Suit** (2026-07-04, Phase 6.1) — 8 씬 (4 base + 4 ending)
+- [x] **NPC faction dialogue** (2026-07-04, Phase 6.2 audit) — `npc_greeting.py` 297 lines
+- [x] **Faction Reputation 연동** (2026-07-04) — Info Market 7 tier × 가격 multiplier / Mission Board LOCKED_REPUTATION
 
 **완료 조건**:
-- 한 런이 30~60분 분량
-- 매 런이 의미 있게 다름
-- 적어도 20개 이상의 미션이 생성 가능
+- [x] 한 런이 30~60분 분량 — Vertical Slice 완성
+- [x] 매 런이 의미 있게 다름 — 절차적 BSP 미로 + 미션 매핑
+- [x] **38 미션** (목표 20+ 초과 달성)
+- [x] 5 factions × 7 tiers 동적 dialogue + 가격/잠금 연동
+
+**Phase 6 진행률**: ✅ **10/10 완료**
 
 ---
 
@@ -284,11 +297,21 @@ Phase 7: 알파 빌드
 
 ## 현재 위치
 
-**현재 Phase**: **Phase 5 (Vertical Slice) 완료 + Phase 6 (Content) 진입**
-**누적 테스트**: 3442 pass + 35 skip + 15 xfail (2026-07-01)
-**상세 내역**: [`IMPROVEMENTS.md`](./IMPROVEMENTS.md) — 2026-07-01 사이클에서 P0 ×3, P1 ×8, P2 ×12 해결 + 신규 시스템 2개 (Faction Reputation, Grade 6 Master) + 디자인 문서 7개
+**현재 Phase**: **Phase 5 + Phase 6 완료 (2026-07-04)**
+**누적 테스트**: **4109 passed** + 44 skipped + 0 xfailed (2026-07-04)
+**검증 상태**: ruff check ✅ / ruff format ✅ / mypy strict ✅ (114 source files)
 
-**완료된 세션**:
+**Phase 6+ 사이클 요약 (2026-07-04)**:
+- **lint/mypy 174 errors → 0** (29c3eeb) — 43 files 변경, +717/-645 lines
+- **ADR-0030 Accepted** (12764e2) — MIT/Public/MkDocs 결정
+- **MkDocs build + Pages 통합** (3194eeb) — 316 HTML pages 통합 위키
+- **mkdocs --strict 빌드** (1440a5b) — 워닝 41 → 0
+- **Phase 6.1 — Suit 자키 통합** (05de519, 2e404e2) — 8 씬 (4 base + 4 ending)
+- **Phase 6.2 audit** (25fd9d3) — NPC dialogue + faction rep 이미 구현됨 확인
+- **INDEX.md 24편 등재** (ca30f96) — Fiction xfailed 24 → 0
+- **combat_view 분할** (9d2d123) — 135→11 lines + 3 버그 수정
+
+**완료된 세션** (전체):
 - [x] 매트릭스 진입 + 노드 그래프 (2026-06-18) — 80 tests
 - [x] Combat Simulator (developer/QA tool) (2026-06-18) — 97 tests
 - [x] Grade Progression (5단계 검증) (2026-06-18) — 110 tests
@@ -301,22 +324,27 @@ Phase 7: 알파 빌드
 - [x] ADR-0041~0044 Graphic Novel Polish (2026-06-21) — 2257 tests
 - [x] ADR-0046~0052, 0060, 0061 (2026-06-21~30) — 3254 tests
 - [x] **P0/P1/P2 마무리 + 신규 시스템** (2026-07-01) — **3442 tests** (Faction Reputation, Grade 6, Set Bonuses, 디자인 7문서)
+- [x] **소설→스토리→이벤트 통합** (2026-07-01) — **3894 tests** (단편 24편, 미션 5개, Stage 13)
+- [x] **Phase 6.0+ 인프라 정리** (2026-07-04) — **4109 tests** (lint/mypy 0, MkDocs strict, Phase 6.1/6.2)
 
-**Phase 5 핵심 시스템 완료**:
+**Phase 5 + Phase 6 핵심 시스템 완료**:
 - [x] 전투 (RT-MS) — ICE 진입 시 자동 공격 + 메뉴 스킬 + 5-Layer VFX
 - [x] Action menu — scan/extract/engage/communicate/**hack/access** (Phase 6+ unlock)
 - [x] 의뢰 완료 / 보상 — Data Salvage + faction reputation hook
 - [x] 죽음/재시작 — flatline → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키 (회귀 테스트 7개)
 - [x] 오리지널 시나리오 통합 — 단편 → 챕터 → 초반 플레이 (12 씬)
-- [x] 그래픽 노블 자동플레이 — 메인메뉴 5 옵션 + 12 씬 자동재생 + Save Progress
+- [x] 그래픽 노블 자동플레이 — 메인메뉴 6 옵션 + 16 씬 자동재생 (4 chars × 4 ending A) + Save Progress
 - [x] 사이드 콘텐츠 — 30+ 설정, 28 업적, 10 대시보드
-- [x] **Faction Reputation** (2026-07-01) — 5 faction × 7 tier, 미션/전투/Hub 통합
+- [x] **Faction Reputation** (2026-07-01) — 5 faction × 7 tier, NPC dialogue/Info Market/Mission Board 통합
 - [x] **Equipment Set Bonuses** (2026-07-01) — 3 세트 × 2pc/3pc 임계값
+- [x] **Phase 6.1 — Suit 자키** (2026-07-04) — 4번째 캐릭터 (3인칭 corporate), 8 씬 (4 base + 4 ending B/C)
+- [x] **lint/mypy 0** (2026-07-04) — ruff check/format/mypy strict 모두 green
+- [x] **MkDocs --strict 빌드** (2026-07-04) — 316 HTML pages 통합 위키 (wiki/design/decisions/Fiction)
 
-**차순 작업** (Phase 6 → 콘텐츠 확장):
-1. **NPC dialogue 가 faction rep 에 따라 다른 응답** (Dialogue.md "Persistent reputation")
-2. **Info Market faction 할인** — shop_price × (1 - rep/100)
-3. **Mission Board rep 잠금 해제** — board.available_for() 에 rep threshold
-4. **추가 캐릭터 / 미션** — 4번째 자키, 신규 미션 타입
-5. **추가 시나리오** — 단편 4편, 엔딩 B 확장
-6. Mid / Core / TA zone 콘텐츠 보강
+**차순 작업** (Phase 7+):
+1. **5번째 자키** — Wigan Ludgate (Vodou construct 시점)
+2. **추가 시나리오** — 단편 4편 + 엔딩 B 확장 (novelettes 3개 추가 보강)
+3. **튜토리얼/온보딩** — 첫 런 가이드, Help 시스템
+4. **GitHub Projects 보드** — 이슈 카드 마이그레이션 (ADR-0030 §9 마지막 보류)
+5. **Mid / Core / TA zone 콘텐츠 보강** — 현재 Surface 위주, 깊이별 다양성
+6. **세이브/로드 폴리시** — 5 슬롯 → 10 슬롯 확장 + 자동저장

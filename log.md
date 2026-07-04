@@ -2,6 +2,38 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] docs | ROADMAP.md 갱신 (Phase 5+6 완료, 4109 tests)
+
+- **Phase 6.0+ 변경 이력 추가** (2026-07-04 항목):
+  - lint/mypy 174 → 0 (29c3eeb)
+  - ADR-0030 Accepted (12764e2) — MIT/Public/MkDocs
+  - MkDocs build + Pages 통합 (3194eeb) — 316 HTML pages
+  - mkdocs --strict 빌드 (1440a5b) — 워닝 41 → 0
+  - Phase 6.1 Suit 8 씬 (05de519, 2e404e2)
+  - Phase 6.2 audit (25fd9d3) — 이미 구현됨 확인
+  - INDEX.md 24편 등재 (ca30f96)
+  - combat_view 분할 (9d2d123) — 3 버그 수정
+- **Phase 6 작업 항목 갱신** (10/10 ✅):
+  - ICE 5종, 프로그램/데크/웨어웨어 카탈로그, 미션 38개, 픽서 NPC
+  - 톤 가이드, 절차적 생성 (BSP)
+  - **4번째 자키 Suit** (Phase 6.1)
+  - **NPC faction dialogue** (Phase 6.2 audit)
+  - **Faction Reputation 연동** (Info Market + Mission Board)
+- **현재 위치**:
+  - "Phase 5 (Vertical Slice) 완료 + Phase 6 (Content) 진입" → "Phase 5 + Phase 6 완료 (2026-07-04)"
+  - 누적 테스트: 3442 → **4109 passed** (+215)
+  - 검증 상태: ruff ✅ / format ✅ / mypy strict ✅
+- **차순 작업** (Phase 7+):
+  1. 5번째 자키 Wigan Ludgate
+  2. 추가 시나리오 (단편 4편 + 엔딩 B)
+  3. 튜토리얼/온보딩
+  4. GitHub Projects 보드
+  5. Mid/Core/TA zone 콘텐츠
+  6. 세이브/로드 폴리시
+- **완료된 세션** (전체):
+  - 2026-06-18 ~ 07-04 사이클 (13개 항목)
+  - 마지막: Phase 6.0+ 인프라 정리 (4109 tests)
+
 ## [2026-07-04] feat | Suit 엔딩 B/C 씬 4개 추가 (Phase 6.1 마무리)
 
 - **배경**: Phase 6.1에서 Suit 캐릭터 4 base scenes만 추가. 엔딩 B/C 미구현으로 프롤로그 ending='B'에서 8씬 (4 chars × 2) 기대.
