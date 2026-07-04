@@ -1,20 +1,55 @@
 # 캐릭터별 진행 경로 (Character Playthrough Paths)
 
-> **문서 버전**: 0.3.0
-> **최종 업데이트**: 2026-06-25
+> **문서 버전**: 0.4.0
+> **최종 업데이트**: 2026-07-04
 > **관련**: `design/systems/stage_structure.json`, `design/story/prologue_data.json`
 
 ---
 
 ## 1. 개요
 
-### 1.1 캐릭터 구성
+### 1.1 캐릭터 구성 (5명, 2026-07-04 기준)
 
-| ID | 이름 | 아키타입 | 연령 | Deck Tier | 무기 | 동기 |
+| ID | 이름 | 아키타입 | 시점 | 동기 | 톤 | Deck Tier |
 |---|---|---|---|---|---|---|
-| `novice` | 케이 (K) | Novice | 22 | T1 | Wisp (T1) | 빚 갚기 (생존) |
-| `veteran` | 실 (Sil) | Veteran | 35 | T2 | Hammer (T2) | 복수 (T-Aへの) |
-| `heretic` | 카스 (Kas) | Heretic | 28 | T3 (bio) | Viral Sermon | 시스템 폭로 |
+| `novice` | 케이 (K) | Novice | 1인칭 | 빚 (생존) | 떨리는 손, 자기성찰 | T1 (Wisp) |
+| `veteran` | 실 (Sil) | Veteran | 1인칭 | 복수 (과거) | 직접적, 강렬함 | T2 (Hammer) |
+| `heretic` | 카스 (Kas) | Heretic | 1인칭 | 전복 (미래) | 예술적, 가족 안에서 | T3 bio (Viral Sermon) |
+| `suit` | 스위트 (Suit) | Corporate | **3인칭** | 거래 (영구) | 차가움, 계산, 침묵 | T2-T3 |
+| `wigan` | 위건 (Wigan) | Vodou Construct | 1인칭 loa | 회복 (자아) | Dreamlike, ritualistic | T2-T3 |
+
+### 1.2 디자인 비교 (5자)
+
+| 차원 | 케이 | 실 | 카스 | 수트 | 위건 |
+|---|---|---|---|---|---|
+| **Gibson 원작** | Case | Marly | Kumiko | Armitage | Wigan Ludgate |
+| **등장 작품** | Neuromancer | Count Zero | Mona Lisa Overdrive | Neuromancer | Count Zero |
+| **시점** | 1인칭 | 1인칭 | 1인칭 | **3인칭** | 1인칭 loa-인플루언스드 |
+| **동기** | 돈 (생존) | 복수 (T-A) | 전복 (T-A 가족) | 거래 (가족) | 자아 회복 |
+| **자키 등급** | 1-up | 2-3 up | 3-4 up | 4-5 up | 4-5 up (Loa-Bound) |
+| **첫 의뢰** | Sense/Net 데이터 추출 | T-A 페이롤 추출 | Manarase wheel 캐스팅 | Armitage 침투 작전 | Zavijava loa 만남 |
+| **엔딩 A** | 의뢰 수락 → 1차 잭 성공 | T-A 데이터 계약 성공 | Kas 침묵 — wheel 캐스팅 | 계약 성사 — Hosaka 성공 | 회복 — Zavijava 통과 자아 회복 |
+| **엔딩 B** | 신비 의뢰 거절 | 내부자 — 대가와 비밀 | 그림자 — 가족 떠나기 | 이탈 — 핀 사무실에서 새 가족 | 용해 — loa에 완전히 녹아듦 |
+| **엔딩 C** | 소멸 — 도시 떠나 정체성 | 망각 — 자발적 기억 소거 | 파괴 — 가족 내부 무너뜨림 | 협상 — Wintermute 불가역 거래 | 빅마마 — Angie 가족 |
+| **대표 단편** | `case_jackout-30sec` | `marly_louisiana-god` | `kumiko_manarase-midnight` | `armitage_infiltration` | `wigan_zavijava` |
+| **대표 단편 (KO)** | 잭아웃 후 30초 | 루이지아나의 신 | 매나리사의 자정 | 아미티지 침투 | 위건이 본 것 |
+| **미션 수 (Arc)** | 5 (Arc 1-2) | 5 (Arc 2-3) | 5 (Arc 3-4) | 4 (Arc 2-5) | 4 (Arc 2-3) |
+| **대표 무기** | Wisp T1 | Hammer T2 | Viral Sermon | (없음 — 키보드만) | (없음 — loa가 무기) |
+| **테마 색상** | cyan | red | purple | gray | violet/gold |
+| **음악** | `matrix_rain` | `loa_drum` | `shibuya_traffic` | `hvac_hum` | `voodoo_drum_loop` |
+| **GN 씬 수** | 8 (4 base + 2 B + 2 C) | 8 | 8 | 8 | 8 |
+| **클로징 문장** | "I am just a man. And that is enough." | "I have waited three years to find that signature." | "I will walk into a Tessier-Ashpool subsidiary..." | "The matrix is vast. The suit is small. The suit is free." | "Zavijava is Zavijava. Zavijava is Zavijava. Zavijava is Zavijava." |
+| **깁슨 톤 디멘션** | 떨림 (vulnerability) | 분노 (rage) | 예술 (art) | cold (detachment) | ritual (mysticism) |
+
+### 1.3 캐릭터 선택 가이드 (신규 자키)
+
+| 플레이 성향 | 추천 캐릭터 | 이유 |
+|---|---|---|
+| **첫 런** | 케이 (Novice) | 가장 짧은 미션 체인, 빚 동기로 즉시 동기부여 |
+| **전투 중시** | 실 (Veteran) | T2 Hammer + 직접적 전투, 복수 동기로 명확한 목표 |
+| **가족/예술** | 카스 (Heretic) | T-A 가족 내부 plot, Viral Sermon bio 프로그램 |
+| **세계관 관찰** | 수트 (Suit) | 3인칭 cold observer, T-A/Hosaka/Wintermute corporate 시점 |
+| **신비주의/실험** | 위건 (Wigan) | Vodou loa 시점, Angie와의 시그널링, 가장 깁슨적인 톤 |
 
 ### 1.2 공통 스테이지 플로우
 

@@ -2,6 +2,25 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] docs | CHARACTER_PATHS.md 갱신 (5자 비교 테이블)
+
+- **문서 버전**: 0.3.0 → 0.4.0
+- **신규 섹션**:
+  - **§1.1 캐릭터 구성 (5명)** — 시점/동기/톤/Deck Tier 표
+  - **§1.2 디자인 비교 (5자)** — Gibson 원작/등장작/엔딩/단편/미션/색상/음악/씬/클로징 13개 차원
+  - **§1.3 캐릭터 선택 가이드** — 신규 자키 추천 (5가지 플레이 성향)
+- **5자 비교 핵심**:
+  - **시점**: 4명이 1인칭, 수트만 3인칭 cold observer
+  - **동기**: 돈(생존)/복수/전복/거래/자아회복 — 5가지 인간 동기의 완전 분포
+  - **깁슨 톤 5 디멘션**: 떨림/분노/예술/cold/ritual — 각 캐릭터가 1개씩 대표
+  - **클로징 문장**: 5명 각자의 시그니처 한 줄로 캐릭터 정의
+- **신규 캐릭터 매핑**:
+  - 케이 → `case_jackout-30sec` (Neuromancer 1인칭)
+  - 실 → `marly_louisiana-god` (Count Zero 복수)
+  - 카스 → `kumiko_manarase-midnight` (Mona Lisa 전복)
+  - 수트 → `armitage_infiltration` (Neuromancer 3인칭 corporate)
+  - 위건 → `wigan_zavijava` (Count Zero Vodou loa)
+
 ## [2026-07-04] feat | Phase 7.1 — Wigan Ludgate (5번째 자키) 통합
 
 - **배경**: ROADMAP 차순 1번 (5번째 자키 Wigan Ludgate). 단편 `wigan_zavijava`(2026-06-19), `wigan_call`(2026-07-01)는 존재했으나 캐릭터 통합 미완.
