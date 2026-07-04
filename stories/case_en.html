@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The First Jack — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+        
+        /* Header */
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+        
+        /* Body */
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .chapter-opening {
+            font-size: 1.1rem; font-weight: 600;
+            color: var(--accent-color); margin-bottom: 2rem;
+        }
+        .story-body p.chapter-opening::first-letter {
+            font-size: 3.5rem; float: left; line-height: 1;
+            padding-right: 0.5rem; padding-top: 0.1rem;
+            font-weight: 600; color: var(--accent-color);
+        }
+        
+        /* Episode divider */
+        .episode-divider {
+            margin: 3rem 0 2rem;
+            padding: 1rem 0;
+            border-top: 1px solid #e0ddd8;
+            border-bottom: 1px solid #e0ddd8;
+        }
+        .episode-title {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin-bottom: 0.25rem;
+        }
+        .episode-location { font-size: 0.85rem; color: var(--meta-color); font-style: italic; }
+        
+        /* Beat type badges */
+        .beat-type {
+            display: inline-block;
+            font-size: 0.65rem; font-family: monospace;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            padding: 0.15rem 0.5rem;
+            border-radius: 2px; margin-bottom: 0.5rem;
+        }
+        .beat-type.interior_monologue { background: #ffaa5522; color: #cc8800; }
+        .beat-type.action { background: #66ffcc22; color: #00cc88; }
+        .beat-type.dialogue { background: #00ccff22; color: #0088cc; }
+        .beat-type.combat { background: #ff557722; color: #cc0033; }
+        
+        /* Combat block */
+        .combat-block {
+            background: linear-gradient(135deg, #1a0a14, #0a0a14);
+            border: 1px solid #ff5577;
+            border-radius: 6px; padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .combat-block h4 { color: #ff5577; font-size: 1rem; margin-bottom: 0.5rem; }
+        .combat-info { font-size: 0.85rem; color: #666; }
+        .combat-info span { margin-right: 1rem; }
+        .combat-info .outcome { color: #00cc88; font-weight: 600; }
+        
+        /* Emphasis */
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+        
+        /* Quote block */
+        .epigraph {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        
+        /* Footer */
+        .story-footer {
+            margin-top: 4rem; padding-top: 2rem;
+            border-top: 1px solid #e0ddd8; text-align: center;
+        }
+        .story-footer p {
+            font-size: 0.85rem; color: var(--meta-color);
+            font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        
+        /* Language indicator */
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        
+        @media (max-width: 600px) {
+            html { font-size: 16px; }
+            .container { padding: 2rem 1.5rem 6rem; }
+            .story-title { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">EN</div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Case — Console Cowboy</div>
+            <h1 class="story-title">The First Jack</h1>
+            <p class="story-subtitle">Thirty Seconds After Jack-Out</p>
+            <div class="story-meta">
+                <span>25 Episodes</span>
+                <span>103 Beats</span>
+                <span>8 Combats</span>
+            </div>
+        </header>
+
+        <article class="story-body">
+<div class="episode-divider">
+<div class="episode-title">Chapter 1: The Wait</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Wait</div>
+<div class="episode-location">Chiba City, 11th Level</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The electrodes lift. The world comes back in pieces — the smell of synthetic melon from the vending machine, the flicker of the fluorescent light, the weight of my own hands. I am twenty-four years old and I have already died twice. Once in the matrix, and once when they told me the pancreas was gone.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The comm unit buzzes. A text message, routed through three proxy nodes: FINN'S OFFICE. NOW. The Finn does not ask. The Finn does not wait. The Finn owns the kind of patience that kills people who are late.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Finn's office is on the ninth level, two floors down and a world away. The elevator smells of cigarette smoke and the particular desperation of people who live in the Sprawl. The door is open. The Finn sits behind a desk made of something that used to be a tree. He does not stand when I enter. He never stands.</p>
+<div class="episode-divider">
+<div class="episode-title">The Job</div>
+<div class="episode-location">The Finn's Office, Level 9</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Sense/Net. The Finn slides a credstick across the desk. Five thousand credits on the nail. The job is simple: their payroll subsidiary has a node near the surface. Light ICE, the kind they put on the outside to discourage amateurs. You go in, you copy the employee database, you come out. Thirty minutes, tops.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> What's the catch? I ask. The Finn smiles the way a shark smiles. The catch is that Sense/Net is a Tessier-Ashpool subsidiary, and T-A has been tightening their firewalls since the Straylight incident. The ICE might be lighter than last year. It might not. You'll find out when you jack in.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> I take the credstick. The Finn tells me the access codes and the node address. He tells me to burn the data after I deliver it. He tells me not to die. He has buried too many cowboys who thought the matrix owed them something.</p>
+<div class="episode-divider">
+<div class="episode-title">The Jack-In</div>
+<div class="episode-location">ChattO's 24/7, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> ChattO's smells of burnt coffee and the particular desperation of cowboys who are running out of options. The owner doesn't look up as I take a booth in the back. The Ono-Sendai deck is warm from the last user. I jack in.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The world goes gray. The matrix unfolds — not the color of television tuned to a dead channel, but the gray of a system initializing, of data waiting to be read. The Ono-Sendai hums against my spine like a second heartbeat. I am in. I have always been in.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The Wisp T1 turns. A mote of pale light drifting between the data columns, looking for something to burn. I freeze. The Finn said light ICE, but this thing moves like it knows I am here. I calculate the angle, the trajectory, the probability of a clean bypass. Sixty percent. Not good enough. I reach for a fragmentation bomb instead.</p>
+<div class="combat-block">
+                        <h4>Combat: ice_wisp_t1</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 1</span>
+                            <span>Tactics: bypass_attempt, fragmentation_bomb</span>
+                            <span class="outcome">Outcome: bypass</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> The bomb goes off silent in the matrix — a cascade of corrupted data that makes the Wisp loop back on its own patrol path. I move through the gap I created. The node is ahead, blinking soft blue like a heart that does not know it is about to be opened.</p>
+<div class="episode-divider">
+<div class="episode-title">The Extraction</div>
+<div class="episode-location">Sense/Net Node, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> The node opens like a flower made of data. Employee names, salary grades, Social security numbers — the entire payroll for the Sense/Net subsidiary, ready to be copied. I start the extraction protocol. The data streams into my deck at the speed of thought.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The Watchdog comes online. A corporate ICE, the kind they put inside to catch the ones who get past the outer defenses. It is faster than the Wisp, meaner, and it knows the layout of this node better than I do. I am still copying when it locks onto my signature.</p>
+<div class="combat-block">
+                        <h4>Combat: ice_watchdog</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 2</span>
+                            <span>Tactics: stealth, speed_copy</span>
+                            <span class="outcome">Outcome: damage_taken</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> The Watchdog burns. I feel it in the back of my skull — a white-hot flash of synaptic overload that makes my hands spasm on the deck. But the copy is complete. Ninety-seven percent. Good enough. I initiate the jack-out sequence.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Thirty seconds. The electrodes lift from my scalp. The matrix goes gray, then black, then the color of television tuned to a dead channel. I am back in the booth at ChattO's, and my hands are still shaking, and the data is in my deck, and I am still alive.</p>
+<div class="episode-divider">
+<div class="episode-title">The Payment</div>
+<div class="episode-location">The Finn's Office</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Finn looks at the data. He nods. He slides another credstick across the desk — five thousand credits, as promised. He asks me if I want to burn the data or keep a copy. I tell him I burned it. I did not burn it. The Finn knows I did not burn it. The Finn does not care.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> There's another job, the Finn says. Bigger. Better pay. A woman named Molly wants to meet you. She has a job that requires someone with your particular talents. Someone who can survive the matrix and come back wrong.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I take the credstick. I stand up. I walk to the door. The Finn does not try to stop me. He never tries to stop anyone. The ones who come back are the ones who could not stop themselves. The ones who do not come back are the ones who should not have started.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Outside the Finn's office, the Chiba rain is falling like it always does — the kind of rain that never stops because the Sprawl has forgotten what the sun looks like. I have five thousand credits. I have a dead pancreas. I have a ticket to somewhere else. I am going to find out what Molly wants.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 2: The Clinic</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Clinic</div>
+<div class="episode-location">Mikael's Clinic, Level 8</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The clinic smells of antiseptic and something cheaper — the particular scent of bodies being bought and sold in the gray market between the real and the fake. Mikael's is not the worst place in the Sprawl, but it is not the best either.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The Finn's address led me to a door that did not look like a clinic. It looked like a meat locker, the kind where they store the bodies of the recently dead. The door opens before I can knock. She is standing in the doorway.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Molly Millions stands three inches taller than me, and that is before the heels. Her skin is chrome beneath the surgical film, a patchwork of corporate augmentation that makes her beautiful and deadly in equal measure. Her eyes are the color of the matrix after a crash.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> You are Case, she says. The Finn told me you were good. He did not tell me you were stupid enough to take the Sense/Net job. You need someone to watch your back in the matrix. I need someone who can carry me through the ice.</p>
+<div class="episode-divider">
+<div class="episode-title">The Deal</div>
+<div class="episode-location">Mikael's Clinic, Level 8</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The job is a data extraction, Molly says. But not like the Sense/Net garbage you have been running. This is Tessier-Ashpool corporate. The ice there will kill you nine times before you see the first layer.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Fifty thousand credits, she says. Twenty-five each. The Finn takes fifteen percent off the top. Enough to buy a new pancreas on the street, if you can find one. Enough to disappear, if you want to.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am calculating the odds. Twenty-one thousand credits. A new pancreas. A chance to be whole again. Or a chance to die in the matrix with military ice crawling through my synapses.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> There is a construct, Molly says. We need to carry it into the system. A ghost in the machine, someone who has already died in the matrix. His name is McCoy Pauley. They call him Dixie Flatline.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> I take her hand. Her skin is warm where the chrome meets the flesh. We have a deal. Molly smiles, and her smile is a knife, and her eyes are the color of the matrix, and I know I am going to die unless I am very careful.</p>
+<div class="episode-divider">
+<div class="episode-title">The Preparation</div>
+<div class="episode-location">Mikael's Clinic, Level 8</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> Molly strips to the waist and I see what they did to her in the corps. Her spine is a roadmap of chrome, each vertebra replaced with something that hums when she moves. They call it the Milan procedure.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> My name is not Molly, she says. They took the name when they took the rest of me. I was a rainmaker for a zaibatsu in Taipei when they caught me. The last thing I remember is the operating table and the smell of my own skin burning.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I understand her in a way that most people cannot understand anyone. We are both products of the Sprawl, both things that were made instead of born, both weapons that forgot we were ever human.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The system we are hitting belongs to Tessier-Ashpool, Molly says. Freeside corporate. They run everything from the moon, and their ice is older than the matrix itself. We are not breaking in to steal data. We are breaking in to find a back door.</p>
+<div class="episode-divider">
+<div class="episode-title">The Jack-In</div>
+<div class="episode-location">Safe House, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> We jack in at the same time, our chairs facing each other in the dark. The matrix comes up gray and cold, and I feel Molly beside me like a warm wire in the static. She is already moving, her consciousness a blade cutting through the data.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The first ice is a Worm, she says through ghost talk. Corporate defense, nothing we cannot handle. But watch the architecture. T-A builds their ice to look like something else. The pretty things are the traps.</p>
+<div class="combat-block">
+                        <h4>Combat: ice_worm</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 2</span>
+                            <span>Tactics: molly_navigation, case_backup</span>
+                            <span class="outcome">Outcome: bypass</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> Dixie Flatline is waking up, I tell her. I can feel him in the deck, stirring like a dream you cannot remember. He knows where we are going. He knows the architecture better than we do.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The matrix is different with Molly in it. It is not just the data or the ice or the endless gray. It is the way she moves, the way she sees the architecture like a map of intentions rather than instructions.</p>
+<div class="episode-divider">
+<div class="episode-title">The Dixie Flatline</div>
+<div class="episode-location">T-A Corporate Matrix, Deep Architecture</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The construct speaks before I can ask. His voice is a ghost in the signal, something that was once warm and alive and now is just a pattern in the data. You are looking for the back door, he says. I know because I built it.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The back door is in the Villa Straylight, Dixie says. The family compound on the moon. Freeside is just the front door, and the ice there is just the lock. But the Villa is where they keep the real secrets.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the ice. About the family on the moon. About the construct who died and came back and is now telling me things that will change the way I see everything. The matrix is not just a network. It is a memory.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> You have a choice, Dixie says. You can jack out now, take the money, forget you ever heard my voice. Or you can go to the Villa, and see what I saw, and become what I became. A ghost in the machine. The price is higher than you know.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 3: The Return</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Return</div>
+<div class="episode-location">Safe House</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> We jack out in the dark, the electrodes lifting from our scalps like we are being born again. Molly is sweating beside me, her chrome spine humming with the heat of the run.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Finn is going to want his cut, I say. Molly laughs, and it is not a nice laugh. The Finn always wants his cut. But the Finn does not know what we found in there.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the moon. About the Villa Straylight. About the ice that is older than the matrix. The debt is getting bigger. The job is getting more dangerous. And I am going to give it anyway.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Molly stands up, her chrome spine straightening like a weapon being loaded. We need to see the Finn, she says. We have a job to finish. And a moon to catch.</p>
+<div class="episode-divider">
+<div class="episode-title">The Finn's Share</div>
+<div class="episode-location">The Finn's Office, Level 9</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Finn listens to our report without changing expression. His face is a mask of patience, the kind of patience that comes from having buried too many cowboys who thought they were smarter than the system.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> You found the back door, the Finn says. It is not a question. Villa Straylight. The ice that has killed everyone who has ever tried to breach it. You are going to need a sponsor. Freeside does not let just anyone through its doors.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the cost of everything. The cost of the moon. The cost of the ice. The Finn is also the only reason I am still alive. And the only reason I am about to go somewhere I might not come back from.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> I know someone, the Finn says. A woman on Freeside. She owes me a favor. She can get you through the door, set you up with credentials, get you close to the Villa. Her name is Lurz.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Molly takes the credstick. We will take the Lurz job, she says. We will get to Freeside. We will get to the Villa. And when we come back, the Finn will have his cut of whatever we find there.</p>
+<div class="episode-divider">
+<div class="episode-title">The Lurz Job</div>
+<div class="episode-location">Lurz's Office, Freeside</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> Freeside is not like the Sprawl. Freeside is clean and cold and smells like recycled air and money. The people here are not like the people below. They have accents that cost credits to learn.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Lurz is waiting for us in an office that costs more per month than I made in a year. She is chrome and silk, a woman who has made herself into a product. Her smile is a transaction. Her handshake is a contract.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Finn says you can get us to the Villa, Molly says. Lurz smiles. I can get you credentials. I can get you close. But the Villa itself is another matter. The ice there is not corporate. It is family.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> I have a job, Lurz says. Aza-Thracian data. Corporate internal memos that someone wants to stay buried. The pay is fifteen thousand credits. Your share is seven thousand five hundred each. It will get you the credentials you need.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Another job. Another debt. Another piece of myself traded for a piece of the puzzle. The matrix taught me that everything has a price. Freeside is teaching me that the price is never what you think it is.</p>
+<div class="episode-divider">
+<div class="episode-title">The Aza-Thracian Run</div>
+<div class="episode-location">Aza-Thracian Corporate Node, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> We jack in from a Freeside hotel room that costs more per night than I used to make in a month. The matrix is the same gray, but the architecture is different here — cleaner, more ordered.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> There is another signature in the node, Molly says. Corporate. Someone else is running the same job. I can see them in the architecture — a second blade in the dark, cutting toward the same data we are after.</p>
+<div class="combat-block">
+                        <h4>Combat: ICE</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 1</span>
+                            <span>Tactics: </span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The rival cowboy is fast. They are good, maybe as good as I was before the pancreas died. But they do not have Molly. They do not have the construct in my deck. We take the node. We grab the data.</p>
+<div class="combat-block">
+                        <h4>Combat: ICE</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 1</span>
+                            <span>Tactics: </span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The ICE wakes up while we are running. A Black ice, the kind that does not just stop you — it finishes you. Molly sees it first. I am already moving, throwing everything between the Black and her. The ice burns. But we are through. We are out.</p>
+<div class="combat-block">
+                        <h4>Combat: ice_black</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: molly_warning, case_sacrifice</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<div class="episode-divider">
+<div class="episode-title">The Delivery</div>
+<div class="episode-location">Lurz's Office, Freeside</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> We jack out in the hotel room, the electrodes lifting like we are shedding a second skin. My hands are shaking. My spine is singing a song of damage that will not fade for days. But the data is in the deck, and we are alive.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Lurz takes the data without looking at it. She nods. Good, she says. Clean extraction. No traces. You are professionals. She slides two credsticks across the desk. Seven thousand five hundred each. And a Freeside identity card.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The credentials will get you into the Tessier-Ashpool sectors, Lurz says. They will get you past the outer security. But the Villa itself is beyond my reach. The family there does not deal with fixers.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the Villa. About the ice. About the construct who died trying to do what we are about to try. Every step toward the Villa takes something from us. Every step closer to the truth takes something more.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Molly takes her credstick and identity card. We have the credentials. We have the money. We have the construct. Now we just need to find a way into the Villa. And a way out.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 4: The Approach</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Approach</div>
+<div class="episode-location">Freeside, T-A Sectors</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The T-A sectors feel different than the rest of Freeside. The air is colder here, and the light has a quality that does not exist anywhere else — a kind of sterile brightness that makes everything look like a memory of itself.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Molly is tense beside me. I can feel her chrome spine humming with a frequency that means danger. She grew up in zaibatsu corp tanks, turned into a weapon for corporate wars. She knows what this place reminds her of.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Villa is three kilometers from here, Molly says. I can feel it in the architecture. The way the data flows toward it like water toward a drain. The ice is thickest there, but it is also thinnest there.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the construct in my deck. About Dixie Flatline, who died here once and came back as something else. He is awake now, I can feel him stirring. He knows what is waiting for us.</p>
+<div class="episode-divider">
+<div class="episode-title">The Villa Gates</div>
+<div class="episode-location">Villa Straylight Outer Perimeter</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> The Villa is not what I expected. It is not a building. It is a wound in the landscape, a place where the matrix folds in on itself like origami made of light and old regrets. The ice surrounding it is not a wall. It is a poem.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The construct speaks, and his voice is clearer now than it has ever been. You are at the gates, he says. I built them. I built them the way a surgeon builds a wound — with precision, with intent. What lies beyond is not what you expect.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the ice. About the way it moves around the Villa like a living thing, breathing, watching, waiting. It is not just program and data. It is something more. Something that was put here by the family.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> There is one thing you need to know, Dixie says. The family is not what they seem. The ice is not what they seem. And the back door is not what you think. You will understand why the matrix was built.</p>
+<div class="episode-divider">
+<div class="episode-title">The Jack-In</div>
+<div class="episode-location">Villa Straylight, Matrix Interface</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> We jack in at the base of the Villa, where the matrix meets the flesh of the building. The ice is already watching us, I can feel it like a pressure against my skull. It knows we are here. It has been waiting.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The first layer of ice is a maze. Not a trap — a test. The Villa ice does not just stop intruders. It evaluates them. It learns their patterns, their weaknesses. I can feel it probing my defenses.</p>
+<div class="combat-block">
+                        <h4>Combat: ICE</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 1</span>
+                            <span>Tactics: </span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The second layer is a Black ice. Not as aggressive as the Aza-Thracian, but smarter. Much smarter. It speaks to us in a language that is half program and half something else. Dixie is guiding us through, but even he is struggling.</p>
+<div class="combat-block">
+                        <h4>Combat: ice_villa_black</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: dixie_guidance, molly_distraction</span>
+                            <span class="outcome">Outcome: bypass</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> We are through the second layer. The architecture here is different — older, stranger, built by minds that did not think like human minds. The data flows around us like water in a cave, ancient and patient. The back door is close now.</p>
+<div class="episode-divider">
+<div class="episode-title">The Heart</div>
+<div class="episode-location">Villa Straylight Core, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The back door is not what I expected. It is not a program or a password or a hole in the ice. It is a person. Or what is left of one. The construct leads us to a chamber in the heart of the Villa, and in that chamber is a figure that is neither alive nor dead.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The construct speaks, his voice different now. I built the back door, he says. I built it to find her. To bring her back. She has been waiting here for a hundred years, preserved in the ice. She is the ice. The ice is her.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Molly is frozen beside me. She has never seen anything like this — a woman preserved in ice, a family secret that is older than the matrix, a truth that changes everything we thought we knew.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> You came for data, the figure says. But data is not what you will find here. You will find me. You will find the truth about what the family built and why. The matrix was not built for money or power. It was built to preserve us. To bring us back.</p>
+<div class="episode-divider">
+<div class="episode-title">The Choice</div>
+<div class="episode-location">Villa Straylight Core</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The construct is dying. I can feel it in the signal — the ghost is fading, the pattern that was McCoy Pauley dissolving. You found her, he says. You found what I could not find. The back door is open. The debt is paid.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the debt. The Finn's cut. Lurz's cut. The matrix's cut. Every step toward the Villa takes something from us. The debt was never about money. The debt was about time. And now I understand why the construct could not stay dead.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Molly takes my hand. Her chrome skin is warm against my flesh. We came for the data, she says. We found something else. Something bigger. We can jack out now, take what we learned, sell it. Or we can go through the door and see what Marie has been protecting.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The matrix hums around us, patient and cold. It has been waiting for this moment for a hundred years. The debt is paid in full when the borrower accepts that there was never a loan. The matrix is not a place of debt. It is a place of becoming.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> We step through the door. The matrix folds around us like a second skin, like a mother's arms, like a grave that is also a birthplace. The debt is paid. The story is over. And the next story is just beginning. Welcome to the Sprawl. Welcome to the matrix.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 5: The Jack-Out</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Jack-Out</div>
+<div class="episode-location">Villa Straylight, Outer Perimeter</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> We jack out in the gray of the Villa's outer perimeter, the electrodes lifting like we are shedding a skin we did not know we were wearing. The matrix fades around us, and the real comes back in pieces. We are alive. We are changed.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the construct. About Dixie Flatline, who died in the matrix and came back as a ghost and is now gone forever. He found what he was looking for. He found Marie. And in finding her, he found peace.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Molly is looking at me with those matrix-colored eyes. She knows what I am thinking. The Finn is going to want his cut, she says. But we are not going to tell him what we found. We are going to sell it to the highest bidder.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> We walk out of the Villa compound into the cold of Freeside night. The stars are different here, seen from orbit. The Sprawl is waiting for us. The Finn is waiting for us. And somewhere out there, something is waiting for us too. The debt is paid. Long live the debt.</p>
+<div class="episode-divider">
+<div class="episode-title">The Report</div>
+<div class="episode-location">The Finn's Office, Level 9</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Finn is waiting for us in his office, behind his desk made of something that used to be a tree. His face is the same face it has always been — patient, hungry, knowing. He knows we found something. He does not know what.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Finn listens. He nods. He asks questions that are not really questions. When we finish, he slides a credstick across the desk. His cut. Fifteen percent of fifty thousand. Seven thousand five hundred credits. Always his cut.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am thinking about the credstick in my hand. About the money, about the debt, about all the things that led me to this moment. The matrix gave me a second chance. It gave me Molly. It gave me the truth. And now it is asking for more.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> There is always more, I say. The Finn smiles his shark smile. That is the game, he says. You did good, cowboy. You came back from the Villa. Take the money. Take the win. And when you are ready for the next job, you know where to find me.</p>
+<div class="episode-divider">
+<div class="episode-title">The Reckoning</div>
+<div class="episode-location">Chiba City, 11th Level</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I am walking through the Sprawl with money in my pocket and knowledge in my head that could change everything. The rain is falling like it always does, the kind of rain that never stops because the Sprawl has forgotten what the sun looks like.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Molly walks beside me, her chrome spine catching the neon light of the Sprawl. We did it, she says. We found the back door. We found the truth. And we are still alive. That is more than most people can say.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I think about the construct. About Dixie Flatline, who is now gone forever, dissolved into the data that made him. He found what he was looking for. He found peace. Or something like peace. I wonder if I will ever find the same.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The matrix is still humming in my spine, patient and cold. It is waiting for me to jack in again. It is always waiting. That is the nature of the beast. That is the nature of the debt. We are cowboys, and the matrix is our home, and we will never be free of it.</p>
+<div class="episode-divider">
+<div class="episode-title">The Next Run</div>
+<div class="episode-location">ChattO's 24/7</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> ChattO's smells of burnt coffee and the particular desperation of cowboys who are running out of options. The owner still does not look up as I take a booth in the back. The Ono-Sendai deck is warm from the last user. I jack in.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The matrix comes up gray and cold, and I feel like I am coming home. This is where I belong. This is what I was made for. The data streams are calling me, and I am answering. I am always answering.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> Molly is jacking in beside me, her consciousness a blade of chrome in the static. We are partners now. We are cowboys together. And the matrix is big enough for both of us, and mean enough to try to kill us both.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The debt is paid. The story is over. And the next story is just beginning. The matrix does not let you go. It never has. It only waits for you to come back, and back, and back, forever. And I am coming back. I am always coming back.</p>
+<div class="episode-divider">
+<div class="episode-title">End of Chapter</div>
+<div class="episode-location">The Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> The matrix unfolds around us like a second skin. Molly is beside me, her consciousness a blade of chrome cutting through the data. We are home. We are where we belong. We are cowboys in the Sprawl, and the Sprawl is in our blood.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I think about the Finn, watching us walk away, knowing we will be back. The game never ends. The debt never stops. The matrix is always waiting. And somewhere out there, another cowboy is jacking in, and another story is beginning.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The ice is waiting for us. The data is flowing. The debt is calling. And we are answering. We are always answering. That is what it means to be a cowboy. That is what it means to be alive in the Sprawl.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Molly's Deal is over. Case survived the Villa. He found the truth. He lost the Dixie Flatline. He gained a partner. He paid his debts. And now he is jacking in again, because that is what cowboys do. We give until there is nothing left, and then we give more. Welcome to the Sprawl.</p>
+        </article>
+
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Gibson-inspired fiction</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,243 @@
+{
+  "character": "novice",
+  "arc_id": "arc_case",
+  "title_en": "Case's Arc",
+  "title_ko": "케이의 아크",
+  "description_en": "The first jack. The last run. The space between.",
+  "description_ko": "첫 잭인. 마지막 런. 그 사이의 공간.",
+  "chapters": [
+    {
+      "chapter_number": 1,
+      "chapter_id": "ch_case_01",
+      "title_en": "The First Run",
+      "title_ko": "첫 런",
+      "description_en": "Chiba. The Finn's office. Data extraction.",
+      "description_ko": "지바. 핀의 사무실. 데이터 추출.",
+      "cutscene_start": {
+        "scene_id": "scene_case_intro",
+        "title_en": "CHATTO'S 24/7",
+        "title_ko": "챠토 24/7"
+      },
+      "cutscene_mid": {
+        "scene_id": "scene_case_jackin",
+        "title_en": "JACK-IN",
+        "title_ko": "잭인"
+      },
+      "cutscene_end": {
+        "scene_id": "scene_case_jackout",
+        "title_en": "JACK-OUT",
+        "title_ko": "잭아웃"
+      },
+      "phases": [
+        {
+          "phase_id": "WAIT",
+          "phase_index": 0,
+          "title_en": "The Wait",
+          "title_ko": "기다림",
+          "description_en": "Wake from jack-out. Receive summons from the Finn.",
+          "description_ko": "잭아웃에서 깨어난다. 핀의 소환을 받는다.",
+          "episode_ref": "ep_01",
+          "story_beats": ["beat_01_01", "beat_01_02", "beat_01_03"],
+          "game_action": "wake_up → receive_summons"
+        },
+        {
+          "phase_id": "BRIEFING",
+          "phase_index": 1,
+          "title_en": "The Job",
+          "title_ko": "일",
+          "description_en": "Meet the Finn. Accept the Sense/Net data extraction job.",
+          "description_ko": "핀을 만난다. Sense/Net 데이터 추출 일을 수락한다.",
+          "episode_ref": "ep_02",
+          "story_beats": ["beat_02_01", "beat_02_02", "beat_02_03"],
+          "game_action": "accept_mission",
+          "combat": null,
+          "gain": "sense_net_access_codes"
+        },
+        {
+          "phase_id": "JACK_IN",
+          "phase_index": 2,
+          "title_en": "The Jack-In",
+          "title_ko": "잭인",
+          "description_en": "Jack in at ChattO's 24/7. Bypass Wisp T1 ICE.",
+          "description_ko": "챠토 24/7에서 잭인한다. Wisp T1 ICE를 우회한다.",
+          "episode_ref": "ep_03",
+          "story_beats": ["beat_03_01", "beat_03_02", "beat_03_03", "beat_03_04"],
+          "game_action": "jack_in → bypass_ice",
+          "combat": {
+            "encounter_id": "ice_01",
+            "enemy_type": "ice_wisp_t1",
+            "difficulty": 1,
+            "outcome": "bypass"
+          }
+        },
+        {
+          "phase_id": "EXTRACT_DATA",
+          "phase_index": 3,
+          "title_en": "The Extraction",
+          "title_ko": "추출",
+          "description_en": "Extract payroll data. Encounter Watchdog ICE.",
+          "description_ko": "급여 데이터를 추출한다. Watchdog ICE를 만나는다.",
+          "episode_ref": "ep_04",
+          "story_beats": ["beat_04_01", "beat_04_02", "beat_04_03", "beat_04_04"],
+          "game_action": "extract_data → ice_encounter → jack_out",
+          "combat": {
+            "encounter_id": "ice_02",
+            "enemy_type": "ice_watchdog",
+            "difficulty": 2,
+            "outcome": "damage_taken",
+            "damage_amount": 15
+          },
+          "gain": "sense_net_payroll"
+        },
+        {
+          "phase_id": "DEBRIEF",
+          "phase_index": 4,
+          "title_en": "The Payment",
+          "title_ko": "지불",
+          "description_en": "Deliver data to the Finn. Receive payment. Learn about Molly's job.",
+          "description_ko": "핀에게 데이터를 배달한다. 페이를 받는다. 몰리의 일에 대해 알게 된다.",
+          "episode_ref": "ep_05",
+          "story_beats": ["beat_05_01", "beat_05_02", "beat_05_03", "beat_05_04"],
+          "game_action": "deliver_data → receive_payment",
+          "combat": null,
+          "gain": {
+            "money": 5000,
+            "data": "sense_net_payroll"
+          },
+          "loss": {
+            "health": 15,
+            "type": "synaptic_damage"
+          }
+        }
+      ],
+      "ending_type": "A",
+      "next_chapter_id": "ch_case_02",
+      "is_playable": true
+    },
+    {
+      "chapter_number": 2,
+      "chapter_id": "ch_case_02",
+      "title_en": "Molly's Deal",
+      "title_ko": "몰리의 거래",
+      "description_en": "Molly. The deal. The ICE.",
+      "description_ko": "몰리. 거래. ICE.",
+      "cutscene_start": {
+        "scene_id": "scene_case_freedom",
+        "title_en": "THE FREEDOM",
+        "title_ko": "자유"
+      },
+      "cutscene_mid": {
+        "scene_id": "scene_case_disappear",
+        "title_en": "THE DISAPPEARANCE",
+        "title_ko": "소멸"
+      },
+      "cutscene_end": {
+        "scene_id": "scene_case_finn",
+        "title_en": "THE FINN'S OFFICE",
+        "title_ko": "핀의 사무실"
+      },
+      "phases": [
+        {
+          "phase_id": "HUB",
+          "phase_index": 0,
+          "title_en": "Hub",
+          "title_ko": "허브",
+          "description_en": "Meet Molly at the clinic.",
+          "description_ko": "클리닉에서 몰리와 만난다."
+        },
+        {
+          "phase_id": "SEEK_NPC",
+          "phase_index": 1,
+          "title_en": "Molly's Deal",
+          "title_ko": "몰리의 거래",
+          "description_en": "Negotiate the terms with Molly.",
+          "description_ko": "몰리와 조건을 협상한다."
+        },
+        {
+          "phase_id": "EXTRACT_DATA",
+          "phase_index": 2,
+          "title_en": "Confront the ICE",
+          "title_ko": "ICE 대면",
+          "description_en": "Face the corporate ICE protecting the data.",
+          "description_ko": "데이터를 보호하는 기업 ICE에 맞선다."
+        },
+        {
+          "phase_id": "JACK_OUT",
+          "phase_index": 3,
+          "title_en": "Jack Out",
+          "title_ko": "잭아웃",
+          "description_en": "Disconnect from the matrix.",
+          "description_ko": "매트릭스로부터 연결을 해제한다."
+        },
+        {
+          "phase_id": "REWARD",
+          "phase_index": 4,
+          "title_en": "Mission Complete",
+          "title_ko": "미션 완료",
+          "description_en": "Collect your rewards.",
+          "description_ko": "보상을 수령한다."
+        }
+      ],
+      "ending_type": "A",
+      "next_chapter_id": "ch_case_03",
+      "is_playable": true
+    },
+    {
+      "chapter_number": 3,
+      "chapter_id": "ch_case_03",
+      "title_en": "Straylight Run",
+      "title_ko": "스트레이라이트 런",
+      "description_en": "Villa Straylight. The data. The truth.",
+      "description_ko": "빌라 스트레이라이트. 데이터. 진실.",
+      "cutscene_start": null,
+      "cutscene_mid": null,
+      "cutscene_end": {
+        "scene_id": "scene_case_refusal",
+        "title_en": "THE REFUSAL",
+        "title_ko": "거절"
+      },
+      "phases": [],
+      "ending_type": "A",
+      "next_chapter_id": "ch_case_04",
+      "is_playable": false
+    },
+    {
+      "chapter_number": 4,
+      "chapter_id": "ch_case_04",
+      "title_en": "The Flatline",
+      "title_ko": "플랫라인",
+      "description_en": "Dixie. Wintermute. The merge.",
+      "description_ko": "딕시. 윈터뮤트. 통합.",
+      "cutscene_start": null,
+      "cutscene_mid": null,
+      "cutscene_end": {
+        "scene_id": "scene_case_freedom",
+        "title_en": "THE FREEDOM",
+        "title_ko": "자유"
+      },
+      "phases": [],
+      "ending_type": "A",
+      "next_chapter_id": "ch_case_05",
+      "is_playable": false
+    },
+    {
+      "chapter_number": 5,
+      "chapter_id": "ch_case_05",
+      "title_en": "Neuromancer",
+      "title_ko": "뉴로맨서",
+      "description_en": "The end. The beginning. The matrix.",
+      "description_ko": "끝. 시작. 매트릭스.",
+      "cutscene_start": null,
+      "cutscene_mid": null,
+      "cutscene_end": {
+        "scene_id": "scene_case_freeside",
+        "title_en": "THE MORNING AFTER",
+        "title_ko": "다음 아침"
+      },
+      "phases": [],
+      "ending_type": "A",
+      "next_chapter_id": null,
+      "is_playable": false
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "missions": 38,
+  "stories": 36,
+  "html_files": 82,
+  "en_files": 41,
+  "ko_files": 41,
+  "en_only": 0,
+  "ko_only": 0,
+  "complete_pairs": 36,
+  "quotes": 36,
+  "references": 36,
+  "arcs": 4,
+  "chapters": 4,
+  "characters": [
+    "Case",
+    "Sil",
+    "Kas",
+    "Armitage"
+  ],
+  "aftermath_events": 12,
+  "reactions": 25,
+  "reaction_characters": [
+    "3jane",
+    "case",
+    "dixie",
+    "finn",
+    "maelcum",
+    "sally"
+  ],
+  "event_triggers": [
+    "npc_choice",
+    "npc_greeting",
+    "combat_end",
+    "node_enter",
+    "story_milestone",
+    "chapter_complete",
+    "vendor_unlocked",
+    "hub_visited",
+    "dialogue_completed"
+  ],
+  "total_rewards": 24,
+  "hub_visit_events": 1,
+  "_generated_at": "2026-07-02T13:42:44"
+}

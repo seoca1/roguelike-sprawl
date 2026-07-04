@@ -1,0 +1,200 @@
+{
+  "catalog_entries": 36,
+  "hook_kinds": 6,
+  "hook_kind_names": [
+    "narrative",
+    "excerpt",
+    "event",
+    "combat",
+    "item",
+    "cinematic"
+  ],
+  "layers": 4,
+  "tests_passing": 39,
+  "code_lines_approx": 900,
+  "short_stories_en": 41,
+  "short_stories_ko": 41,
+  "_generated_at": "2026-07-02T13:42:44",
+  "catalog_entries_list": [
+    {
+      "stem": "armitage_infiltration",
+      "title_en": "Armitage Infiltration",
+      "title_ko": "Armitage Infiltration"
+    },
+    {
+      "stem": "black_ice_dream",
+      "title_en": "Black Ice Dream",
+      "title_ko": "Black Ice Dream"
+    },
+    {
+      "stem": "case_jackout-30sec",
+      "title_en": "Case Jackout-30Sec",
+      "title_ko": "Case Jackout-30Sec"
+    },
+    {
+      "stem": "data_retrieval",
+      "title_en": "Data Retrieval",
+      "title_ko": "Data Retrieval"
+    },
+    {
+      "stem": "dixies_choice",
+      "title_en": "Dixies Choice",
+      "title_ko": "Dixies Choice"
+    },
+    {
+      "stem": "dixies_last_run",
+      "title_en": "Dixies Last Run",
+      "title_ko": "Dixies Last Run"
+    },
+    {
+      "stem": "first_contact",
+      "title_en": "First Contact",
+      "title_ko": "First Contact"
+    },
+    {
+      "stem": "first_trace",
+      "title_en": "First Trace",
+      "title_ko": "First Trace"
+    },
+    {
+      "stem": "flatline_again",
+      "title_en": "Flatline Again",
+      "title_ko": "Flatline Again"
+    },
+    {
+      "stem": "hosaka_core",
+      "title_en": "Hosaka Core",
+      "title_ko": "Hosaka Core"
+    },
+    {
+      "stem": "hosaka_extraction",
+      "title_en": "Hosaka Extraction",
+      "title_ko": "Hosaka Extraction"
+    },
+    {
+      "stem": "ice_run",
+      "title_en": "Ice Run",
+      "title_ko": "Ice Run"
+    },
+    {
+      "stem": "kumiko_manarase-midnight",
+      "title_en": "Kumiko Manarase-Midnight",
+      "title_ko": "Kumiko Manarase-Midnight"
+    },
+    {
+      "stem": "loa_voodoo_contact",
+      "title_en": "Loa Voodoo Contact",
+      "title_ko": "Loa Voodoo Contact"
+    },
+    {
+      "stem": "maas_heist",
+      "title_en": "Maas Heist",
+      "title_ko": "Maas Heist"
+    },
+    {
+      "stem": "marly_louisiana-god",
+      "title_en": "Marly Louisiana-God",
+      "title_ko": "Marly Louisiana-God"
+    },
+    {
+      "stem": "matrix_revelation",
+      "title_en": "Matrix Revelation",
+      "title_ko": "Matrix Revelation"
+    },
+    {
+      "stem": "mollys_market",
+      "title_en": "Mollys Market",
+      "title_ko": "Mollys Market"
+    },
+    {
+      "stem": "neuromancer_merger",
+      "title_en": "Neuromancer Merger",
+      "title_ko": "Neuromancer Merger"
+    },
+    {
+      "stem": "neuromancer_whisper",
+      "title_en": "Neuromancer Whisper",
+      "title_ko": "Neuromancer Whisper"
+    },
+    {
+      "stem": "sally_returns",
+      "title_en": "Sally Returns",
+      "title_ko": "Sally Returns"
+    },
+    {
+      "stem": "sally_sandii-3am",
+      "title_en": "Sally Sandii-3Am",
+      "title_ko": "Sally Sandii-3Am"
+    },
+    {
+      "stem": "sense_net_infiltration",
+      "title_en": "Sense Net Infiltration",
+      "title_ko": "Sense Net Infiltration"
+    },
+    {
+      "stem": "sense_net_trace",
+      "title_en": "Sense Net Trace",
+      "title_ko": "Sense Net Trace"
+    },
+    {
+      "stem": "straylight_approach",
+      "title_en": "Straylight Approach",
+      "title_ko": "Straylight Approach"
+    },
+    {
+      "stem": "ta_defection",
+      "title_en": "Ta Defection",
+      "title_ko": "Ta Defection"
+    },
+    {
+      "stem": "the_choice",
+      "title_en": "The Choice",
+      "title_ko": "The Choice"
+    },
+    {
+      "stem": "tutorial_maze",
+      "title_en": "Tutorial Maze",
+      "title_ko": "Tutorial Maze"
+    },
+    {
+      "stem": "vegas_stakeout",
+      "title_en": "Vegas Stakeout",
+      "title_ko": "Vegas Stakeout"
+    },
+    {
+      "stem": "watchdog_patrol",
+      "title_en": "Watchdog Patrol",
+      "title_ko": "Watchdog Patrol"
+    },
+    {
+      "stem": "wigan_call",
+      "title_en": "Wigan Call",
+      "title_ko": "Wigan Call"
+    },
+    {
+      "stem": "wigan_zavijava",
+      "title_en": "Wigan Zavijava",
+      "title_ko": "Wigan Zavijava"
+    },
+    {
+      "stem": "winter_infiltrate",
+      "title_en": "Winter Infiltrate",
+      "title_ko": "Winter Infiltrate"
+    },
+    {
+      "stem": "wintermute_negotiation",
+      "title_en": "Wintermute Negotiation",
+      "title_ko": "Wintermute Negotiation"
+    },
+    {
+      "stem": "yakuza_deal",
+      "title_en": "Yakuza Deal",
+      "title_ko": "Yakuza Deal"
+    },
+    {
+      "stem": "zion_express",
+      "title_en": "Zion Express",
+      "title_ko": "Zion Express"
+    }
+  ]
+}

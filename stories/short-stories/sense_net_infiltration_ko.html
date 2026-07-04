@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>센스넷 침투 — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .story-body h2 {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin: 2.5rem 0 1rem;
+        }
+        .story-body blockquote {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        .story-body hr { border: none; border-top: 1px solid #e0ddd8; margin: 2rem 0; }
+        .story-body ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .story-body li { margin-bottom: 0.5rem; }
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+
+        .story-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e0ddd8; text-align: center; }
+        .story-footer p { font-size: 0.85rem; color: var(--meta-color); font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        .lang-indicator a { color: inherit; text-decoration: none; }
+        .lang-indicator a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) { html { font-size: 16px; } .container { padding: 2rem 1.5rem 6rem; } .story-title { font-size: 1.75rem; } }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">KO · <a href="sense_net_infiltration_en.html">EN</a></div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Unknown</div>
+            <h1 class="story-title">센스넷 침투</h1>
+            <p class="story-subtitle"></p>
+            <div class="story-meta"><span>0 words</span><span>Sprawl Trilogy</span></div>
+        </header>
+        <article class="story-body">
+<h2>도입</h2>
+<blockquote><p>*"매트릭스는 과거가 진정으로 과거가 아닌 장소다."*</p></blockquote>
+<blockquote><p>— Gibson, Neuromancer, 4장</p></blockquote>
+<h2>전개</h2>
+<p>센스넷에는 세 개의 고리가 있었다. 바깥 고리는 Wisp급 — 정중하고, 부서지기 쉽고, 충분히 세게 치면 부서지는 종류의 ICE였다. 케이는 첫 런에서 그 고리를 뚫었고, 만지면 안 되는 급여 데이터를 들고 걸어 나왔다.</p>
+<p>두 번째 고리는 달랐다. 두 번째 고리는 기억했다.</p>
+<p>핀은 케이에게 경고했다: 센스넷은 두 번 용서하지 않는다. 그들은 Maas 자회사에 카운터-침투를 외주주고, Maas 사람들은 협상하지 않는다. 계약에는 킬 조항이 따라온다 — 트레이스가 플래그되면, 데크가 블랙리스트에 오르고, 자키 자격이 지바의 기업 서버 농장에서 탄다.</p>
+<p>케이는 그래도 그 의뢰를 받았다. 시장 조사 파일 하나에 5천 크레딧 — 특별한 것도, 중요한 것도 없는. 들어가서, 나와서, 두 번째 고리가 그가 있다는 걸 알기 전에 사라질 생각이었다.</p>
+<h2>절정</h2>
+<p>틀렸다.</p>
+<p>두 번째 고리가 기다리고 있었다. 그것의 순찰 경로에 케이의 오래된 트레이스가 구워져 있었다 — 매번의 데크, 매번의 프로그램, 첫 번째 런 동안 키보드에 흘린 커피의 흔적까지. 센스넷 ICE는 그의 접근을 읽지 않았다. 그것은 그것을 기억했다. 주변의 Wisp는 정중한 저항의 예식조차 하지 않았다. 그저 문처럼 열려서 그를 들여보내고, 다시 닫혔다.</p>
+<p>두 번째 고리는 더 작았다. 더 조용했다. 데이터의 기하학은 더 촘촘하고, 더 조밀했다 — 센스넷의 경쟁 정보, 누가 누구를 사는지를 결정하는 파일들. 케이는 후각으로 항해했다. 매트릭스는 오존과 오래된 커피 냄새가 난다. 두 번째 고리는 오존과 오래된 커피 그리고 다른 무언가의 희미한 전기적 서명 — 케이의 것이 아닌 — 이 났다.</p>
+<p>M.</p>
+<p>그녀도 여기 있었다. 케이보다 3주 전, 아무도 설명하지 않는 의뢰에서. 그녀는 두 번째 고리의 심장을 만졌다. 그녀는 워치독에 자신의 흔적을 남겼다. 그리고 워치독은 그녀의 서명을 기억했다 — 그리고 이제 그것을 사냥하고 있었다.</p>
+<h2>결말</h2>
+<p>케이는 그들이 방향을 트는 것을 느낄 수 있었다. 둘, 검은 외피, 기업 논리, 협상하지 않는 종류의 ICE. 그들은 더 이상 M을 사냥하지 않았다. 케이를 찾았다.</p>
+<p>케이는 달렸다. 두 번째 고리가 그물처럼 그를 감쌌다. 케이의 손가락은 없는 키들을 두드렸고, 그가 없는 방에서, 그의 것이 아닌 심장박동을 쫓았다.</p>
+<p>어딘가 시바에서는 비가 내렸다. 매트릭스 어딘가에서는 M의 서명이 희미해졌다.</p>
+<p>케이는 혼자였다. 워치독은 혼자가 아니었다. 매트릭스 어딘가에서 그는 차가운 노이즈의 의자가 되었고, 매트릭스 어딘가에서 그는 차가운 노이즈의 손이 되었다. 매트릭스는 진짜보다 더 진짜였고, 케이는 매트릭스 안에 있었다.</p>
+        </article>
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Derivative Fiction</p>
+            <p>Based on William Gibson's Sprawl Trilogy</p>
+        </footer>
+    </div>
+</body>
+</html>

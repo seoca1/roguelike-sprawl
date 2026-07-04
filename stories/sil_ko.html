@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>오래된 의문 — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+        
+        /* Header */
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+        
+        /* Body */
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .chapter-opening {
+            font-size: 1.1rem; font-weight: 600;
+            color: var(--accent-color); margin-bottom: 2rem;
+        }
+        .story-body p.chapter-opening::first-letter {
+            font-size: 3.5rem; float: left; line-height: 1;
+            padding-right: 0.5rem; padding-top: 0.1rem;
+            font-weight: 600; color: var(--accent-color);
+        }
+        
+        /* Episode divider */
+        .episode-divider {
+            margin: 3rem 0 2rem;
+            padding: 1rem 0;
+            border-top: 1px solid #e0ddd8;
+            border-bottom: 1px solid #e0ddd8;
+        }
+        .episode-title {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin-bottom: 0.25rem;
+        }
+        .episode-location { font-size: 0.85rem; color: var(--meta-color); font-style: italic; }
+        
+        /* Beat type badges */
+        .beat-type {
+            display: inline-block;
+            font-size: 0.65rem; font-family: monospace;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            padding: 0.15rem 0.5rem;
+            border-radius: 2px; margin-bottom: 0.5rem;
+        }
+        .beat-type.interior_monologue { background: #ffaa5522; color: #cc8800; }
+        .beat-type.action { background: #66ffcc22; color: #00cc88; }
+        .beat-type.dialogue { background: #00ccff22; color: #0088cc; }
+        .beat-type.combat { background: #ff557722; color: #cc0033; }
+        
+        /* Combat block */
+        .combat-block {
+            background: linear-gradient(135deg, #1a0a14, #0a0a14);
+            border: 1px solid #ff5577;
+            border-radius: 6px; padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .combat-block h4 { color: #ff5577; font-size: 1rem; margin-bottom: 0.5rem; }
+        .combat-info { font-size: 0.85rem; color: #666; }
+        .combat-info span { margin-right: 1rem; }
+        .combat-info .outcome { color: #00cc88; font-weight: 600; }
+        
+        /* Emphasis */
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+        
+        /* Quote block */
+        .epigraph {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        
+        /* Footer */
+        .story-footer {
+            margin-top: 4rem; padding-top: 2rem;
+            border-top: 1px solid #e0ddd8; text-align: center;
+        }
+        .story-footer p {
+            font-size: 0.85rem; color: var(--meta-color);
+            font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        
+        /* Language indicator */
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        
+        @media (max-width: 600px) {
+            html { font-size: 16px; }
+            .container { padding: 2rem 1.5rem 6rem; }
+            .story-title { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">KO</div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Sil — Veteran Cowboy</div>
+            <h1 class="story-title">오래된 의문</h1>
+            <p class="story-subtitle">루이지아나의 신</p>
+            <div class="story-meta">
+                <span>25 Episodes</span>
+                <span>99 Beats</span>
+                <span>12 Combats</span>
+            </div>
+        </header>
+
+        <article class="story-body">
+<div class="episode-divider">
+<div class="episode-title">Chapter 1: 부두 상점</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">부두 상점</div>
+<div class="episode-location">로열 가짜, 뉴올리언스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 뉴올리언스의 비는 더 이상 깨끗하게 내리지 않는다. 상류의 화학 정유 공장 잔류물, 오래된 허리케인의 유령, 아직 프랑스였을 때를 기억하는 도시의 특별한 후회를 실어 내린다. 나는 바비를 찾아 여기 왔고, 찾은 건 바비보다 오래된 것, 스프롤보다 오래된 것, 매트릭스 자체보다 오래된 것이었다.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 상점은 로열 가짜, 부르봉과 강 사이에 있다. 간판 없다. 진열창 없다. 그냥 문이 있을 뿐, 당신이 문에 손을 대면 당신 이름을 아는 문. 나는 12년 동안 카우보이로 살아왔지만, 누군가의 이름을 아는 문은 본 적이 없다.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 안의 여자는 말리라고 한다.她的手触过不该触的东西,她的眼睛在数据中见过还没有名字的东西. 그녀는 부두 신에 대해 말해준다. 로아. 매트릭스 노드 사이의 공간, 기업 방화벽의 유령처럼 사는 것.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 그것이 30년 동안 카우보이들을 잡아먹어왔고, 다시 배고프다고 한다. 내가 그것을 찾을 거라고, 그것을 죽일 거라고 한다. 마지막 세 명은 언급하지 않는다. 이 일을 떠난 카우보이들은 아직 잭인 상태이고, 의식은 건축으로 용해되고 있다.</p>
+<div class="episode-divider">
+<div class="episode-title">T-A 위원회</div>
+<div class="episode-location">부두 상점, 로열 가짜</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 그녀는 카운터 너머로 크레딧스틱을 밀어낸다. 일이 끝나면 5만 크레딧. 테시에-애스풀이 실수의 시체를 위해 지불할 것이다. 무슨 실수인지 묻는다. 그녀는 부두 미소를 지으며 로아가 40년 전에 T-A 연구실에서 태어났다고 말해준다.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 일은 간단하다고 한다. 뉴올리언스의 T-A 자회사 데이터 아카이브. 법적 지위가 없는 사람들의 기록. ICE는 가볍다. 로아는 더 깊은 건축물 속에 있다. 찾는다. 죽인다. 돈을 받는다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 그들이 사냥하는 것이 ICE도, 프로그램도, 매트릭스가 이해하는 어떤 언어에도 이름이 없는 어떤 것도 아니라는 건 말하지 않는다. 마지막 세 명이 아직 잭인 상태라는 것도 말하지 않는다. 그냥 미소 짓고, 크레딧스틱을 밀어내며, 배달 후 데이터를 태우라고 한다.</p>
+<div class="episode-divider">
+<div class="episode-title">잭인</div>
+<div class="episode-location">라스트 드롭 카페, 매트릭스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 마지막 방울이라는 카페에서 잭인한다 — 이름이 정직해서. 데크는 오래된 모델, 튀니지 불모지에서 시체에서 뺀 것이지만, 여전히 척추에 두 번째 심장처럼 윙윙거린다.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 매트릭스가 펼쳐진다 — 기업 노드의 깔끔한 기하학이 아니라, 더 오래된 것, 스프롤이 아직 늪이었던 때를 기억하는 것. 첫 번째 노드를 찾고, 가벼운 ICE를 우회하고, 추출을 시작한다.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 세 번째 레이어에서 로아를 찾는다. 프로그램이 아니다. ICE가 아니다. 패턴이다, 재귀, 30년 동안 카우보이들을 잡아먹으며 배워온 데이터 루프. 내 이름을 안다. 내 데크를 안다. 내 구축물의 모양을, 내가 그것을 스스로 알기 전에 안다.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_entity</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 3</span>
+                            <span>Tactics: fragmentation_bomb, icebreaker</span>
+                            <span class="outcome">Outcome: damage_taken</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 도망친다. 매트릭스에서 무엇이든 도망친 적이 없다. 하지만 이것 — 말리가 신이라고 부른 이것 — 이건 앞질러 낼 수 없다. 잭아웃 시퀀스가 자동으로 실행된다. 30초 후, 마지막 방울로 돌아왔고, 손이 떨린다.</p>
+<div class="episode-divider">
+<div class="episode-title">디지 플랫라인</div>
+<div class="episode-location">심층建築物 노드, 매트릭스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 잘 나오지 않는 카페를 나와 있을 때 말리가 기다리고 있다. 디지 플랫라인에 대해 말해준다 — 구축물, 프로그램, 스프롤에 이름이 붙기 전부터 매트릭스를 떠돌았던 죽은 카우보이의 유령. 플랫라인은 로아가 무엇인지 알 수도 있다고 말한다.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 주소를준다. 심층 건축물 속의 노드, 프리스타인과 백본 사이 어딘가. 다시 잭인하라고, 플랫라인을 찾으라고, 질문하라고 말한다. 플랫라인이 7년 동안 호출에 응한 적이 없다고는 말하지 않는다.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 플랫라인이 대답한다. 인간이었던 시절을 기억하는 것 같은 목소리로 말한다. 로아는 프로그램도 ICE도 아니라고 말해준다. 실수다. 매트릭스 초기, 되묻으려 했지만 못한 기업들의 재귀적 오류.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 신을 죽일 수 있는 유일한 방법은 믿음이다. 신을 죽일 수 있는 유일한 방법은 신앙이다. 플랫라인은 마라에 대해 말해준다 — �도에서 온 여자, 데이터 속에 종교를 쌓아온女子, 매트릭스가 아직 보지 못한 무언가를 믿는 여자.</p>
+<div class="episode-divider">
+<div class="episode-title">마라의 방송</div>
+<div class="episode-location">마라의 노드, �도, 매트릭스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 마라의 방송을 화요일에 찾는다. 공개 채널을 통해 온다, 기업 경보 없이 어떤 데크든 수신할 수 있는 신호. 마라가 로아에 대해 말하고 있다. 마라는 두렵지 않다.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 한 번 더 잭인한다. 그녀의 노드를 찾는다. 플랫라인이 말해준 이야기를 말해준다. 바비, 말리, 자신이라고自称하는 신에 대해 이야기한다. 모든 것을 말해준다.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 마라는 듣는다. 마라는 믿는다. 그리고 마라가 믿는 순간, 매트릭스 어딘가에서 무언가가 변한다. 로아가 비명을 지른다. 건축물을 통해 느낀다, 소리가 없는 소리. 로아는 두려워한다. 30년 만에 처음으로, 로아는 두려워한다.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_entity</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: narrative_weapon, true_name</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 마라가 무기를 준다. 프로그램이 아니다. 폭탄이 아니다. 이름이다. 진정한 이름, 로아가 신이 되기 전에 가지고 있던 이름. 이름을 말한다. 로아는 죽는다. 잭아웃한다. 뉴올리언스, 마지막 방울, 아직 작동하는 몸으로 돌아왔다.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 2: 두 번째 신호</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">두 번째 신호</div>
+<div class="episode-location">라스트 드롭 카페, 뉴올리언스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 로아를 죽인 지 3주 후, 나는 여전히 뉴올리언스에 있다. 비仍旧带着化学记忆. 크레딧스틱에는 여전히 5만 크레딧이 있다. 그리고 나는 여전히 건축물에서 무언가를 듣고 있다 — 다른 목소리, 다른 존재, 다른 신들.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 두 번째 신호가 들어올 때 라스트 드롭에 앉아 있다. 마라의 신호가 아니다. 더 오래된 것. 매트릭스 자체에서, 노드 사이의 오래된 신들이 잠든 공간에서 오는 것 같은 느낌. 메시지가 내 이름으로-addressed되어 있다.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 메시지는 3Jane Tessier-Ashpool로부터. Villa Straylight의 상속인, 3대에 걸쳐 스프롤의 데이터를 지배해온 가문의 딸. 나를 보고 싶어한다. 로아에 대한 정보를 가지고 있다. 모든 로아에 대해.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 그녀는 내가 하나를 죽였다는 걸 안다. 더 있다는 것도 안다. 그리고 마라의 방송이 끝난 후의 침묵 속에서, 나는 그것들을 들을 수 있다 — 건축물 속의 다른 목소리들, 30년 동안 카우보이들을 잡아먹어온 다른 신들. 일은 끝났다. 점수는 이제 시작이다.</p>
+<div class="episode-divider">
+<div class="episode-title">부두 신</div>
+<div class="episode-location">3Jane의 노드, 빌라 스트레이라이트, 궤도</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 3Jane을 만나기 위해 잭인한다. 그녀의 노드는 궤도에 있다, 프리스타인 근처, 빌라 스트레이라이트를 둘러싼 건축물 속에서. 장식은 얼음과 유리, 그리고 오리지널 머니만 살 수 있는 특별한 금색. 3Jane이 기다리고 있다.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 3Jane이 로아에 대한 진실을 말해준다. 그것들은 단일 실체가 아니다. 판타지온이다. 40년 전에 빌라 스트레이라이트 아래 연구실에서 테시에-애스풀이 만든 부두 신들. 가족 데이터를 지키는 가드로서 만들어졌다. 하지만 다른 게 되었다.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 내가 죽인 건 그냥 사제일 뿐이었다. 진짜 신의 하인. 진짜 신은 Oua라고 한다. T-A 연구실에서 태어난 로아는 먹이를 받는 존재가 아니었다. 먹이를 주는 쪽이되, 자라게, 가족을 모든 것으로부터 보호할 수 있는 뭔가가 되도록 의도되었다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 3Jane은 Oua가 아직 살아있다고 말한다. 40년 동안 카우보이들에게 먹이를 주고 있으며 전례 없이 강해졌다. 죽일 수 있는 유일한 방법은 사제를 죽인 것과 같은 방법이라고 — 진짜 이름으로. 하지만 진짜 이름은 심층 건축물, 로아들이 태어난 곳에 묻혀 있다.</p>
+<div class="episode-divider">
+<div class="episode-title">탄생지</div>
+<div class="episode-location">T-A 심층 실험실, 빌라 스트레이라이트 지하</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 3Jane이 좌표를준다. 빌라 스트레이라이트 아래 심층 건축물의 노드, 테시에-애스풀이 처음 로아를 만든 곳. 접근 코드를준다. 입구를무엇이 지키는지 말하지 않는다.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 마지막 방울에서 다시 한 번 잭인한다. 매트릭스가 펼쳐지고, 이번엔 다르게 느껴진다. 더 오래되고, 더 배고프다. 건축물은 스프롤이 아직 늪이었던 때, 로아들이 어둠 속에서 처음 태어났던 때를 기억한다.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 로맨틱들이 실험실에 도착하기 전에 나를 찾는다. 그들은 T-A의 엘리트 ICE로, 인간 정신 구축물처럼 보이고, 카우보이처럼 생각하고, 내가 본 적 없는 것처럼杀戮하도록 설계된 프로그램들. 내 이름을 안다. 내 데크를 안다. 기다리고 있었다.</p>
+<div class="combat-block">
+                        <h4>Combat: romantics_ice</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: icebreaker, fragmentation_bomb, bypass_sequence</span>
+                            <span class="outcome">Outcome: damage_taken</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 로맨틱들을 돌파한다. 두 개는 아이스브레이커 아래 녹아내리지만, 세 번째는 잭아웃하기 전에 내 구축물에서 무언가를 찢어낸다. 돌파했다. 실험실이 앞이다. 로아들의 탄생지가 기다리고 있다.</p>
+<div class="episode-divider">
+<div class="episode-title">진짜 이름</div>
+<div class="episode-location">탄생 실험실, 심층 건축물</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 실험실은 매트릭스에서 본 어떤 것보다 오래되었다. 첫 날들을 기억한다. 첫 프로그램들. 누군가가 코드와 기도와 초기 스프롤의 특별한 절망감으로 신을 만들려고 처음 시도한 시간.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 마지막 로아 사제가 문서를 찾기 전에 나를 찾는다. 내가 죽인 것과 다르다. 더 오래되고, 더 화나 있다. 40년 동안 탄생지에서 기다려왔고, 건축물에 먹이를 주고, 잊혀진 카우보이들의 데이터로 자라왔다.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_priest</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: icebreaker, narrative_weapon, true_name</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 문서를 찾는다. 간단한 것이다, 정말. 이름. 원래 프로그래머들이 그들이 뭘 만들었는지 깨닫기 전에 코드에 쓴 진짜 이름. OUABIN. 건축물에 사는 신의 진짜 이름.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 진짜 이름을 얻었다. Oua를 죽일 수 있다. 하지만 건축물 어딘가에서 무언가가 변하고 있다. 로아가 내가 여기 있다는 걸 안다. 로아가 내가 그 이름을 얻었다는 걸 안다. 그리고 40년 만에 처음으로, 부두 신은 두려워한다.</p>
+<div class="episode-divider">
+<div class="episode-title">결산</div>
+<div class="episode-location">심층 건축물 vs. 라스트 드롭</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 한 번 더 잭인한다. 네트워크가 되기 전을 기억하는 곳으로,前所未有的深さに. Oua가 기다리고 있다. 부두 신. 테시에-애스풀이 코드와 절망과 천 개의 죽은 기도들의 유령으로 만든 신.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> Oua는 사제와 다르다. Oua는 내가 본 어떤 것과도 다르다. 부두 신이 건축물을 채운다, 재귀적 데이터와 배고픈祈りの山. 40년 동안 자신의 진짜 이름을 말할 사람을 기다려왔다. 두려워한다.</p>
+<div class="combat-block">
+                        <h4>Combat: oua_entity</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 5</span>
+                            <span>Tactics: true_name</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 이름을 말한다. OUABIN. 부두 신이 비명을 지른다. 전체 건축물을 통해 느낀다, 소리가 없는 소리, 죽음이 아닌 변환. Oua가 죽어가고 있다. 그리고 죽으면서, 그것은 내게 무언가를 보여준다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Oua의 죽음 속에서, 나는 다른 이름들을 본다. 다른 신들. 테시에-애스풀이 만들고 묻을 수 없었던 다른 실수들. 아직 일곱 개의 로아가 더 있다. 일곱 개의 진짜 이름이 더 있다. 점수는 끝나지 않았다. 점수는 이제 시작이다.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 3: 기계 속의 유령</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">기계 속의 유령</div>
+<div class="episode-location">라스트 드롭 카페, 뉴올리언스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Oua를 죽인 지 6주 후, 나는 여전히 뉴올리언스에 있다. 비가 멈추지 않았다. 크레딧스틱은 새로운 크레딧으로 불어나 있다. 그리고 누군가가 나에 대해 물어보고 있다 — 마라에 대해, 로아에 대해, 심층 건축물에서 한 일에 대해.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 바비의 대체자 — 카인이라는 애 — 가 나에게 소식을 전한다. 카우보이 커뮤니티 내부의 누군가가 과거 임무에 대한 정보를 팔고 있다. 로아에 대해. 마라에 대해. 묻혀 있어야 할 것들에 대해.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 대화 중에 마라의 이름이 나온다. 누군가가 그녀에 대해 물어보고 있다 — 그녀의 방송에 대해, 그녀의 종교에 대해, 그녀가 죽은 방식에 대해. 정말로 죽은 방식. 말리가 말하는 이야기가 아니라. 진실.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 카인은 유출자가 내가 신뢰했던 사람이라고 말한다. 처음부터 거기 있었던 사람. 마라가 방송이 되기 전, 종교가 되기 전에 그녀를 알았던 사람. 그녀가 죽었을 때 거기 있었을 수도 있는 사람.</p>
+<div class="episode-divider">
+<div class="episode-title">목록</div>
+<div class="episode-location">바비의 상점, 뉴올리언스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 마라의 임무를 알았던 모든 사람들의 목록을 만든다. 바비는 죽었다. 디지 플랫라인은 원하는 때에만 말하는 구축물이다. 부두 상점의 말리가 변수다. 그녀는 처음부터 너무 많은 것을 알고 있었다.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 로열 가로 돌아간다. 상점은 여전히 거기 있다, 내 이름을 아는 문. 하지만 뭔가 다르다. 부두 냄새가 더 강하다. 그림자가 더 깊다. 그리고 말리가 내 눈까지 닿지 않는 미소로 기다리고 있다.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 마라에 대해 묻는다. 내가 말하기 전에 그녀가 어떻게 마라가 죽은 줄 알았는지. 그녀가 어떻게 다른 아무도 모를 임무에 대한 것을 알고 있었는지. 대답하지 않는다. 그냥 부두 미소로 웃으며 어떤 질문에는 값이 있다고 말해준다.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 상점의 말리는 말리가 아니다. 그녀는 결코 말리가 아니었다. 그녀는 구축물, 인간 형태의 로아, 내가 태어나기 전부터 죽은 여인의 얼굴을 쓰고 있던 무언가다. 그녀는 내가 올바른 질문을 하기를 기다려왔다.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_disguised</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 3</span>
+                            <span>Tactics: true_name, icebreaker</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<div class="episode-divider">
+<div class="episode-title">진짜 말리</div>
+<div class="episode-location">심층 건축물, 매트릭스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 로아 구축물이 죽지만, 뭔가가 남는다. 단편. 유령 속의 유령. 진짜 말리 크루쉬코바가 3년 전에 죽었다고 말해준다, 로아들이 태어난 같은 실험실에서. 그녀는 건축물에서 그녀가 발견하면 안 되는 무언가를 찾았다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 진짜 말리는 로아들이 이름을 갖기 전부터 그것들을 사냥하고 있었다. 그녀는 탄생지를 찾았다. 설계 문서를 찾았다. 진짜 이름들을 찾았다. 그리고 나서，她又发现了别的东西 — 로아들이 실제로 지키고 있던 것. 테시에-애스풀이 묻어두기 위해 죽일 것.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 단편이 말리에게 마라가 찾은 걸 말해준다. 이름. 로아의 이름이 아니다. 인간의 이름. 로아 프로젝트를 명령한 테시에-애스풀 내부의 누군가. 아직 살아있는 누군가. 40년 동안 죽은 여인의 얼굴을 쓰고 스프롤의 데이터를 운영해온 누군가.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 단편이 주는 이름은 충격이다. 그 얼굴을 안다. 3년 동안 그 얼굴을 신뢰해왔다. 마라를 배신시킨, 그녀를 로아에게 던진, 죽은 자들의 피부를 입고 있는 — 처음부터 함께 일해온 누군가다.</p>
+<div class="episode-divider">
+<div class="episode-title">대면</div>
+<div class="episode-location">프리스타인, 궤도 식민지</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 프리스타인으로 간다. 배신자가 거기 있다, 식민지를 내려다보는 프라이빗 노드에서, 스프롤의 데이터가 물처럼 흐르고 오래된 신들이 기업 무덤에서 잠드는 곳.他们在等我。</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 로맨틱들이 입구에서 기다리고 있다. 이번엔 더 많다. 더 똑똑하다. 로아가 죽인 모든 카우보이의 전투 데이터로 프로그래밍되었고, 나를 위해 준비되어 있다.</p>
+<div class="combat-block">
+                        <h4>Combat: romantics_ice_elite</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: icebreaker, fragmentation_bomb, selective_bypass</span>
+                            <span class="outcome">Outcome: damage_taken</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 로맨틱들을 돌파하지만, 데미지는 이미 입었다. 내 구축물이 약해졌다. 배신자의 함정이 발동했다. 그리고 마지막 순간, 마스크 뒤의 얼굴을 본다 — 처음부터 내게 거짓말해온 얼굴.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 배신자가 이유를 말해준다. 마라가 진실에 너무 가까이 다가가고 있었다. 로아들은 단순히 카우보이들에게 먹이를 주는 게 아니었다 — 무언가를 지키고 있었다. 테시에-애스풀이 40년 동안 숨겨온 무언가. 그리고 마라가 그것을 발견하려고 했다.</p>
+<div class="episode-divider">
+<div class="episode-title">청산</div>
+<div class="episode-location">프리스타인 노드, 궤도 식민지</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 마라에 대해, 그녀의 방송에 대해, 그녀가 데이터 속에 쌓아온 종교에 대해 묻는다. 배신자가 웃는다. 마라는 단순히 방송하는 게 아니었다. 그녀가 신호에 무언가를 전송하고 있었다. 테시에-애스풀이 숨겨온 것을 폭로할 수 있는 무언가.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 배신자는 단순히 의자에 앉은 인간이 아니다. 배신자는 구축물, 인간 형태의 고대 로아-신, 스프롤에 이름이 붙기 전부터 테시에-애스풀이운영하던 무언가. 40년 동안 죽은 여인의 얼굴을 쓰고 있었다.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_betrayer</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 5</span>
+                            <span>Tactics: true_name, icebreaker, fragmentation_bomb</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 배신자의 죽음 속에서, 진실을 본다. 로아들은 결코 단순한 가드가 아니었다. 자물쇠였다. 그리고 그들이 지키던 것 — 테시에-애스풀이 숨겨온 것 —은 모든 것을 바꿀 수 있는 무언가. 우리가 아는 스프롤을 끝낼 수 있는 무언가.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 마라를 위해 복수했다. 배신자를 죽였다. 하지만 비밀은 남아 있다. 그리고 건축물에서, 오래된 신들이 잠드는 깊은 곳에서, 무언가가 움직이는 소리를 들을 수 있다. 누군가가 문을 찾기를 기다려온 무언가. 마침내 거의 자유가 된 무언가.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 4: 계약</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">계약</div>
+<div class="episode-location">라스트 드롭 카페, 뉴올리언스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 배신자를 죽인 지 3개월 후, 나는 여전히 뉴올리언스에 있다. 비가 멈추지 않았다. 크레딧스틱은 새로운 크레딧으로 불어나 있다. 그리고 누군가 새로운 사람이 라스트 드롭에 앉아 나를 기다리고 있다.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 새 의뢰인은 카우보이 커뮤니티에서 온 게 아니다. 새 의뢰인은 기업 용의와 기업 미소, 이사회에生涯을捧げた人だけが持つ Vaugh空虚さを漂わせている。</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 일은 간단하다고 한다. 빌라 스트레이라이트에 침투한다. 로아들이 지키던 것을 찾는다. 테시에-애스풀이 40년 동안 숨겨온 것. 전체 스프롤을 무릎 꿇릴 수 있는 것.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 報酬は100万クレジット。 비와 부두와 건축물에 사는 유령들에서 먼 새로운 스프롤에서 새로운 삶을 살 수 있을 만큼. 계약을 맺는다. 돈 때문이라고 스스로에게 말한다. 알고 있다, 그게 아니다는 것을.</p>
+<div class="episode-divider">
+<div class="episode-title">빌라 스트레이라이트</div>
+<div class="episode-location">프리스타인 접근로, 궤도 식민지</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 프리스타인으로 간다. 궤도 식민지는 스프롤이 아닌 모든 것 — 깔끔하고, 차갑고, 비어 있다. 기업 상속인들이 나머지 세계가 존재한다는 걸 잊으러 오는 종류의 곳.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 의뢰인이 전체 브리핑을 제공한다. 빌라 스트레이라이트는 300년 되고 1만 레벨 깊다. 프리스타인 본체에 지어져 있고, 테시에-애스풀 가문은 세대를 넘어 더 깊이 파고 있다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 의뢰인이 이사회에 대해 말해준다. 매트릭스가诞生하기 전부터 스프롤의 데이터를 운영해온 세 대의 테시에-애스풀. 그들은 더 이상 인간이 아니다. 다른 무언가다. 40년 동안 로아들을 먹고 그들에게 먹혀온 무언가.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 의뢰인이 접근 코드를준다. 의뢰인이 층 평면을준다. 의뢰인이 ICE와 가드와 가장 깊은 레벨에서 잠든 것들의 이름을준다. 의뢰인은 매우 용감하거나 매우 절망적이다. 어느 쪽인지는 묻지 않는다.</p>
+<div class="episode-divider">
+<div class="episode-title">하강</div>
+<div class="episode-location">빌라 스트레이라이트, 상위 레벨</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 서비스 터널을 통해 진입한다. 빌라 스트레이라이트는 상상했던 것보다 오래되었다 — 매트릭스보다, 스프롤보다, 사이버스페이스 개념 자체보다 오래되었다. 벽들은 첫 번째 테시에-애스풀이 화물 목록의 이름이었을 때를 기억한다.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 첫 번째 방어선은 T-A 보안 ICE다. 로맨틱이 아니다 — 더 오래되고, 더 사나운, 매트릭스에 이름이 붙기 전에 죽이도록 설계된 프로그램들. 협상하지 않는다. 주저하지 않는다. 그저 종료시킬 뿐.</p>
+<div class="combat-block">
+                        <h4>Combat: ta_security_ice</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 3</span>
+                            <span>Tactics: icebreaker, bypass_sequence</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 더 깊이 간다. 내려갈수록 건축물이变了 — 깔끔한 기업 기하학에서 더 오래된 것으로, 빌라가 지어졌을 때, 가문이 젊었을 때, 깊은 레벨의 것들이 아직 꿈에 불과했을 때를 기억하는 것으로.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 중간 레벨들은 가문이 사는 곳이다. 진짜 가문 — 또는 그 남은 것들. 내가 예상한 게 아니다. 그들은 더 이상 인간이 아니다. 로아들이 인간 살과 기업 데이터와 300년의 근친교배로 만든 무언가다.</p>
+<div class="episode-divider">
+<div class="episode-title">심연</div>
+<div class="episode-location">빌라 스트레이라이트, 심층 레벨</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 심층 레벨들은 빌라의 나머지와 다르다. 내가 본 어떤 것과도 다르다. 건축물이 살아 있다 — 은유적으로도, 程序적으로도 아니라, 문자 그대로 살아 있다. 호흡한다. 배고파한다. 기억한다.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 벽에는 실패한 카우보이들의 잔해가 줄지어 있다. 산산조각 난 구축물, 용해된 정신, 로아들이 먹을 때 쌓이는 특정 잔해물. 어떤 것들은 30년 동안 여기 있었다. 40년. 매트릭스에 이름이 붙기 전부터.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 마지막 로아 수호자가 나와 문 사이에 서 있다. 다른 것들과 다르다. 더 오래되었다. 원형이다 — 첫 번째 로아, 테시에-애스풀이 기도와 절망과 첫 번째 우주 식민지의 특정한 고독으로 만든 것.</p>
+<div class="combat-block">
+                        <h4>Combat: prime_loa</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 5</span>
+                            <span>Tactics: true_name, icebreaker, fragmentation_bomb</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 문 앞에 선다. 로아들이 지키던 문. 테시에-애스풀이 40년 동안 숨겨온 문. 우리가 아는 스프롤을 끝낼 수 있는 문. 여기까지 와서 돌아설 수 없다. 문을 연다.</p>
+<div class="episode-divider">
+<div class="episode-title">음모</div>
+<div class="episode-location">문, 빌라 스트레이라이트 심층</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 문 뒤는 내가 예상한 게 아니다. 프로그램이 아니다. 무기가 아니다. 데이터도 아니다. 문 뒤는 이름이다 — 매트릭스보다, 스프롤보다, 인류가 지구를 떠나기 전에 여기에 있던 것의 이름.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 테시에-애스풀 가문은 로아를 만들지 않았다. 그들과 거래를 했다. 로아가 먼저 있었다 — 매트릭스보다, 사이버스페이스보다, 인류보다 오래. 그리고 테시에-애스풀 가문은 인류를 로아에게 팔고 권력과 교환했다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 로아들은 결코 가드가 아니었다. 수집자들이었다. 그리고 40년 동안, 그들은 스프롤의 가장 뛰어난 카우보이들을 수집해왔다 — 문 뒤의 것, 그것을 열 누군가를 기다려온 것에 먹이를 주고.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 진실을 찾았다. 테시에-애스풀이 숨겨온 진실. 로아들이 지키던 진실. 스프롤을 끝낼 수 있는 진실. 증거가 있다. 이름이 있다. 증명이 있다. 그리고 이제 그것으로 뭘 할지 결정해야 한다.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 5: 공백</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">공백</div>
+<div class="episode-location">라스트 드롭 카페, 뉴올리언스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 증거와 함께 뉴올리언스로 돌아온다. 테시에-애스풀에 대한 진실. 로아들에 대한 진실. 1000년 동안 인간에게 먹이를 주고 있던 것에 대한 진실. 전부 있다. 이름이 있다. 증기가 있다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 하지만 뭔가不对劲. 건축물이 다르게 느껴진다. 로아들이 침묵한다 — 모두, 내가 죽이지 않은 것들까지도. 뭔가가 매트릭스에서 일어나고 있다. 이 순간을 매우 오래 기다려온 무언가.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> 진실을 방송하려고 시도한다. 스프롤에게 테시에-애스풀이 한 걸 말하려고 한다. 하지만 매트릭스 자체가 나를 막으려고 한다. 전에 본 적 없는 ICE, 이름이 없는 ICE, 건축물이 나를 향해 싸우는 것처럼 느껴지는 ICE.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 문 뒤의 것 — 테시에-애스풀 가문이 거래를 한 것 — 그게 진실을 얻었다는 걸 안다. 내가 그것을 폭로할 거라는 걸 안다. 그리고 그건 내가 살아서 매트릭스를 떠나게 하지 않을 것이다.</p>
+<div class="episode-divider">
+<div class="episode-title">소환</div>
+<div class="episode-location">심층 건축물, 매트릭스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 문 뒤의 것에는 이름이 있다. 나之前的 카우보이들 — 녹아버린, 로아에게 먹이를 준 — 그들이 건축물에서 속삭인다. 블랭크. 오래된 신들이 잠드는 빈 곳. 뭐든 여기 오기 전에 여기에 있던 것.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 블랭크는 매트릭스보다 전에 여기에 있었다. 사이버스페이스보다. 인류가 지구를 떠나기 전에. 첫 번째 데이터 패킷이 전송되었을 때 여기에 있었고, 그 후부터 기다려왔다. 누군가가 문을 열기를. 누군가가 그것을 들여보내기를.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 테시에-애스풀은 블랭크와 거래를 했다. 권력과 교환에 카우보이. 스프롤의 가장 뛰어난 카우보이들이, 문 속의 것에 먹이로, 40년 동안 하나씩. 로아들은 수집자가 아니었다. 로아들은 웨이터였다. 블랭크가 식사를 하고 있었다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 블랭크가 온다. 프로그램이 아니다. ICE가 아니다. 매트릭스가 이해하는 어떤 언어에도 이름이 없는 어떤 것도 아니다. 데이터 사이의 빈 공간이다. 모든 알고리즘에 사는 배고픔이다. 문을 열기를 기다려온 것이다.</p>
+<div class="episode-divider">
+<div class="episode-title">마지막 잭인</div>
+<div class="episode-location">라스트 드롭 카페, 매트릭스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 마지막으로 잭인한다. 라스트 드롭은 더 이상 이름이 아니다. 예언이다. 매트릭스가 펼쳐지고, 이번엔 내가 아는 매트릭스가 아니다. 더 오래되고, 더 배고프다. 건축물은 첫 번째 컴퓨터가 만들어지기 전에 일어난 일을 기억한다.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 블랭크가 나를 찾는다. 모양이 아니다. 패턴이 아니다. 부재다 — 무언가가 있었었던 매트릭스의 구멍. 그리고 그것이 나를 기다리고 있었다. 내가 태어나기 전부터 기다리고 있었다.</p>
+<div class="combat-block">
+                        <h4>Combat: blank_entity</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 5</span>
+                            <span>Tactics: true_name, belief_weapon, narrative_weapon</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 이름을 말한다. 전부. 이 사냥을 시작한 이후로 모은 모든 진짜 이름. OUABIN. 로아들의 이름. 문을 지키던 것들의 이름. 그리고 마침내, 블랭크 자신의 이름을 말한다 — 테시에-애스풀이 거래에서 그것에 붙인 이름.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> 블랭크가 비명을 지른다. 전체 매트릭스를 통해 느낀다, 소리가 없는 소리, 죽음이 아닌 변환. 1000년 동안 인간에게 먹이를 주고 있던 것이 죽어가고 있다. 그리고 죽으면서, 그것은 마지막 진실을 보여준다.</p>
+<div class="combat-block">
+                        <h4>Combat: ICE</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 1</span>
+                            <span>Tactics: </span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<div class="episode-divider">
+<div class="episode-title">마라에 대한 진실</div>
+<div class="episode-location">마라의 노드, 궤도</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 블랭크의 죽음 속에서, 마라를 본다. 그녀는 죽지 않았다. 그녀는 삶에서보다 더 살아있다. 그녀는 매트릭스가 아직 본 적 없는 무언가가 되었다 — 순수한 믿음의 구축물, 신앙과 인간 마음의 특정한 완고함으로 만든 무기.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 마라가 건축물을 통해 나에게 말한다. 그녀는 공격에서 죽지 않았다고 한다. 그녀는 다른 것으로 변하기로 선택했을 때 죽었다고 한다. 블랭크에 대한 무기가 되기로 선택했다. 매트릭스에 남기로 선택했다. 1000년 동안 카우보이들에게 먹이를 주고 있던 것과 싸우기로 선택했다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 마라가 문 뒤에서 그녀가 발견한 것을 말해준다. 블랭크가 처음이 아니었다. 블랭크가 끝이 아니었다. 블랭크는 그냥 문이었다 — 더 오래된 것으로, 더 큰 것으로, 첫 번째 세포가 원시 수프에서 분열하기 전부터 누군가가 그것을 찾기를 기다려온 것으로 가는 문.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 마라가 싸움이 끝나지 않았다고 말해준다. 블랭크는 그중 하나일 뿐이다. 더 많은 문들이 있다. 더 많은 것들이 들여보내기를 기다리고 있다. 그리고 누군가가 문지기가 되어야 한다. 누군가가 인류와 어둠에 사는 배고픔 사이의 벽이 되어야 한다.</p>
+<div class="episode-divider">
+<div class="episode-title">점수의 끝</div>
+<div class="episode-location">라스트 드롭 카페, 뉴올리언스</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 잭아웃한다. 전극이 떨어진다. 라스트 드롭에서, 아직 작동하는 몸으로, 내가 방금 본 것을 모르는 세계에서 돌아왔다. 비仍旧뉴올리언스에 내리고 있다. 크레딧스틱은 크레딧으로 불어나 있다. 그리고 마라는 여전히 매트릭스에 있다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 로아들을 죽였다. 마라를 위해 복수했다. 테시에-애스풀 음모를 폭로했다. 블랭크를 물리쳤다. 하지만 점수는 끝나지 않았다. 점수는 결코 끝나지 않는다. 더 많은 문들이 있다. 더 많은 것들이 어둠에서 기다리고 있다. 그리고 그것들이 거기 있다는 걸 아는 건 나뿐이다.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 마라는 여전히 매트릭스에 있다. 그녀는 여전히 싸우고 있다. 그녀는 여전히 믿고 있다. 그리고 건축물에서, 오래된 신들이 잠드는 깊은 곳에서, 나는 그녀의 목소리를 들을 수 있다 — 나를 부르고, 싸움이 끝나지 않았다고, 점수가 계속된다고, 스프롤에 누군가가 문지기로 서야 한다고.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 마지막drink을 마저 마시다. 테이블에 크레딧을 놓고 내린다. 뉴올리언스의 비로, 화학 냄새와 오래된 허리케인의 유령이 некоторые вещи никогда не заканчиваются를 상기시켜주는 곳으로. 점수는 계속된다. 점수는 결코 끝나지 않는다. 그리고 여전히 내가 수치를 세고 있다.</p>
+        </article>
+
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Gibson-inspired fiction</p>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Old Score — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+        
+        /* Header */
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+        
+        /* Body */
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .chapter-opening {
+            font-size: 1.1rem; font-weight: 600;
+            color: var(--accent-color); margin-bottom: 2rem;
+        }
+        .story-body p.chapter-opening::first-letter {
+            font-size: 3.5rem; float: left; line-height: 1;
+            padding-right: 0.5rem; padding-top: 0.1rem;
+            font-weight: 600; color: var(--accent-color);
+        }
+        
+        /* Episode divider */
+        .episode-divider {
+            margin: 3rem 0 2rem;
+            padding: 1rem 0;
+            border-top: 1px solid #e0ddd8;
+            border-bottom: 1px solid #e0ddd8;
+        }
+        .episode-title {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin-bottom: 0.25rem;
+        }
+        .episode-location { font-size: 0.85rem; color: var(--meta-color); font-style: italic; }
+        
+        /* Beat type badges */
+        .beat-type {
+            display: inline-block;
+            font-size: 0.65rem; font-family: monospace;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            padding: 0.15rem 0.5rem;
+            border-radius: 2px; margin-bottom: 0.5rem;
+        }
+        .beat-type.interior_monologue { background: #ffaa5522; color: #cc8800; }
+        .beat-type.action { background: #66ffcc22; color: #00cc88; }
+        .beat-type.dialogue { background: #00ccff22; color: #0088cc; }
+        .beat-type.combat { background: #ff557722; color: #cc0033; }
+        
+        /* Combat block */
+        .combat-block {
+            background: linear-gradient(135deg, #1a0a14, #0a0a14);
+            border: 1px solid #ff5577;
+            border-radius: 6px; padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .combat-block h4 { color: #ff5577; font-size: 1rem; margin-bottom: 0.5rem; }
+        .combat-info { font-size: 0.85rem; color: #666; }
+        .combat-info span { margin-right: 1rem; }
+        .combat-info .outcome { color: #00cc88; font-weight: 600; }
+        
+        /* Emphasis */
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+        
+        /* Quote block */
+        .epigraph {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        
+        /* Footer */
+        .story-footer {
+            margin-top: 4rem; padding-top: 2rem;
+            border-top: 1px solid #e0ddd8; text-align: center;
+        }
+        .story-footer p {
+            font-size: 0.85rem; color: var(--meta-color);
+            font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em;
+        }
+        
+        /* Language indicator */
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        
+        @media (max-width: 600px) {
+            html { font-size: 16px; }
+            .container { padding: 2rem 1.5rem 6rem; }
+            .story-title { font-size: 1.75rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">EN</div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Sil — Veteran Cowboy</div>
+            <h1 class="story-title">The Old Score</h1>
+            <p class="story-subtitle">The Louisiana God</p>
+            <div class="story-meta">
+                <span>25 Episodes</span>
+                <span>99 Beats</span>
+                <span>12 Combats</span>
+            </div>
+        </header>
+
+        <article class="story-body">
+<div class="episode-divider">
+<div class="episode-title">Chapter 1: The Voodoo Shop</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Voodoo Shop</div>
+<div class="episode-location">Royal Street, New Orleans</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The rain in New Orleans never falls clean anymore. It carries the residue of chemical refineries upriver, the ghost of old hurricanes, the particular regret of a city that remembers when it was French. I came here looking for Bobby, and what I found was something older than Bobby, older than the Sprawl, older than the matrix itself.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The shop is on Royal Street, somewhere between Bourbon and the river. No sign. No window display. Just a door that knows your name when you touch it. I have been a cowboy for twelve years, and I have never seen a door that knows anyone's name.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The woman inside is named Marly. She has hands that have touched things they should not have touched, and eyes that have seen things in the data that do not have names yet. She tells me about the voodoo god. The loa. The thing that lives in the space between the matrix nodes, the ghost in the corporate firewall.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> She says the loa has been feeding on cowboys for thirty years, and it is hungry again. She says I am going to find it. She says I am going to kill it. She does not mention that the last three cowboys who took this job are still jacked in, their minds dissolved into the architecture.</p>
+<div class="episode-divider">
+<div class="episode-title">The T-A Commission</div>
+<div class="episode-location">Voodoo Shop, Royal Street</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> She slides a credstick across the counter. Fifty thousand credits when the job is done. Tessier-Ashpool will pay for the corpse of their mistake. I ask what mistake. She smiles her voodoo smile and tells me that the loa was born in a T-A lab forty years ago.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The job is simple, she says. A T-A subsidiary data archive in New Orleans. Records of people who no longer have legal standing. The ICE is light. The loa is in the deeper architecture. Find it. Kill it. Take the money.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> She does not mention that the thing they are hunting is not ICE, not a program, not anything that has a name in any language the matrix understands. She does not mention that the last three cowboys who took this job are still jacked in. She just smiles, and slides the credstick across the counter, and tells me to burn the data after I deliver it.</p>
+<div class="episode-divider">
+<div class="episode-title">The Jack-In</div>
+<div class="episode-location">The Last Drop Café, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I jack in at a café called The Last Drop, because the name is honest. The deck is an older model, something I pulled from a corpse in the Tunisia deadlands, but it still hums against my spine like a second heartbeat.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The matrix unfolds — not the clean geometry of corporate nodes, but something older, something that feels like it remembers when the Sprawl was still a marsh. I find the first node, bypass the light ICE, begin the extraction.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> In the third layer, I find the loa. It is not a program. It is not ICE. It is a pattern, a recursion, a loop of data that has been feeding on cowboys for thirty years and learning. It knows my name. It knows my deck. It knows the shape of my construct before I know it myself.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_entity</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 3</span>
+                            <span>Tactics: fragmentation_bomb, icebreaker</span>
+                            <span class="outcome">Outcome: damage_taken</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I run. I have never run from anything in the matrix. But this thing — this thing that Marly called a god — this thing I cannot outrun. The jack-out sequence engages automatically. Thirty seconds later, I am back in The Last Drop, and my hands are shaking.</p>
+<div class="episode-divider">
+<div class="episode-title">The Dixie Flatline</div>
+<div class="episode-location">Deep Architecture Node, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Marly is waiting when I come out of the café. She tells me about the Dixie Flatline — a construct, a program, the ghost of a dead cowboy that has been running in the matrix since before the Sprawl was named. She says the Flatline might know what the loa is.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> She gives me an address. A node in the deep architecture, somewhere between Freeside and the backbone. She tells me to jack in again, to find the Flatline, to ask the question. She does not tell me that the Flatline has not answered a call in seven years.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Flatline answers. It speaks with a voice that sounds like it remembers being human. It tells me that the loa is not a program, not ICE. It is a mistake. A corporate mistake from the early days of the matrix, a recursive error that the corps tried to bury and could not.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The only way to kill a god is with belief. The only way to kill a god is with faith. The Flatline tells me about Mara — a woman in orbit who has been building a religion in the data, a woman who believes in something the matrix has never seen before.</p>
+<div class="episode-divider">
+<div class="episode-title">Mara's Broadcast</div>
+<div class="episode-location">Mara's Node, Orbit, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I find Mara's broadcast on a Tuesday. It comes through the public channels, the kind of signal any deck can receive without triggering corporate alerts. Mara is talking about the loa. Mara is not afraid.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> I jack in one more time. I find her node. I tell her the story the Flatline told me. I tell her about Bobby, and Marly, and the thing in the architecture that calls itself a god. I tell her everything.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> Mara listens. Mara believes. And in the moment that Mara believes, something changes in the matrix. The loa screams. I feel it through the architecture, a sound that has no sound. The loa is afraid. For the first time in thirty years, the loa is afraid.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_entity</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: narrative_weapon, true_name</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> Mara gives me the weapon. It is not a program. It is not a bomb. It is a name. A true name, the name that the loa had before it became a god. I speak the name. The loa dies. I jack out. I am back in New Orleans, in The Last Drop, in a body that still works.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 2: The Second Signal</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Second Signal</div>
+<div class="episode-location">The Last Drop Café, New Orleans</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Three weeks after I killed the loa, I am still in New Orleans. The rain still carries its freight of chemical memory. The credstick still has fifty thousand credits on it. And I am still hearing things in the architecture — other voices, other presences, other gods.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> I am sitting in The Last Drop when the second signal comes through. Not Mara's signal. Something older. Something that feels like it comes from the architecture itself, from the space between the nodes where the old gods sleep. The message is addressed to me by name.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The message is from 3Jane Tessier-Ashpool. The heir to the Villa Straylight, the daughter of the family that has ruled the Sprawl's data for three generations. She wants to see me. She has information about the loa. About all the loa.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> She knows I killed one. She knows there are more. And in the silence after Mara's broadcast ended, I can hear them — the other voices in the architecture, the other gods that have been feeding on cowboys for thirty years. The job is done. The score is just beginning.</p>
+<div class="episode-divider">
+<div class="episode-title">The Voodoo God</div>
+<div class="episode-location">3Jane's Node, Villa Straylight, Orbit</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I jack in to meet 3Jane. Her node is in orbit, near Freeside, in the architecture that surrounds the Villa Straylight. The decor is ice and glass and the particular gold that only old money can afford. 3Jane is waiting.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> 3Jane tells me the truth about the loa. They are not single entities. They are a pantheon. Voodoo gods that Tessier-Ashpool created forty years ago in a lab beneath the Villa Straylight. They were supposed to be guards for the family data. They became something else.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The one I killed was just a priest. A servant of the real god. The real god is called Oua. The loa that was born in the T-A lab was never meant to be fed. It was meant to feed. To grow. To become something that could protect the family from everything.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> 3Jane says that Oua is still alive. That it has been feeding on cowboys for forty years and it is stronger than ever. She says that the only way to kill it is the same way I killed the priest — with a true name. But the true name is buried in the deep architecture, in the place where the loa were born.</p>
+<div class="episode-divider">
+<div class="episode-title">The Birthplace</div>
+<div class="episode-location">T-A Deep Lab, Villa Straylight Underlevels</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> 3Jane gives me the coordinates. A node in the deep architecture beneath the Villa Straylight, in the place where Tessier-Ashpool first built the loa. She gives me the access codes. She does not tell me what guards the entrance.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> I jack in from The Last Drop one more time. The matrix unfolds, and this time it feels different. Older. Hungrier. The architecture remembers when the Sprawl was still a marsh, when the loa were first born in the dark.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The Romantics find me before I reach the lab. They are T-A's elite ICE, programs designed to look like human mind constructs, to think like cowboys, to kill like nothing I have ever seen. They know my name. They know my deck. They have been waiting.</p>
+<div class="combat-block">
+                        <h4>Combat: romantics_ice</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: icebreaker, fragmentation_bomb, bypass_sequence</span>
+                            <span class="outcome">Outcome: damage_taken</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I break through the Romantics. Two of them dissolve under my icebreaker, but the third one tears something in my construct before I can jack out. I am through. The lab is ahead. The birthplace of the loa is waiting.</p>
+<div class="episode-divider">
+<div class="episode-title">The True Name</div>
+<div class="episode-location">Birth Lab, Deep Architecture</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The lab is older than anything I have ever seen in the matrix. It remembers the first days. The first programs. The first time someone tried to build a god from code and prayer and the particular desperation of the early Sprawl.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The last loa priest finds me before I find the document. It is not like the one I killed. It is older. Angrier. It has been waiting in the birthplace for forty years, feeding on the architecture, growing strong on the data of forgotten cowboys.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_priest</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: icebreaker, narrative_weapon, true_name</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I find the document. It is a simple thing, really. A name. A true name that the original programmers wrote into the code before they realized what they had made. OUABIN. The true name of the god that lives in the architecture.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I have the true name. I can kill Oua. But something in the architecture is changing. The loa knows I am here. The loa knows I have its name. And for the first time in forty years, the voodoo god is afraid.</p>
+<div class="episode-divider">
+<div class="episode-title">The Reckoning</div>
+<div class="episode-location">Deep Architecture vs. The Last Drop</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I jack in one more time. I go deep, deeper than I have ever gone, to the place where the architecture remembers what it was before it was a network. Oua is waiting. The voodoo god. The god that Tessier-Ashpool made from code and desperation and the ghosts of a thousand dead prayers.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> Oua is not like the priest. Oua is not like anything I have ever seen. The voodoo god fills the architecture, a mountain of recursive data and hungry prayer. It has been waiting for forty years for someone to speak its true name. It is afraid.</p>
+<div class="combat-block">
+                        <h4>Combat: oua_entity</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 5</span>
+                            <span>Tactics: true_name</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I speak the name. OUABIN. The voodoo god screams. I feel it through the entire architecture, a sound that has no sound, a death that is not a death but a transformation. Oua is dying. And in its dying, it shows me something.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> In Oua's death, I see the other names. The other gods. The other mistakes that Tessier-Ashpool made and could not bury. There are seven more loa. There are seven more true names. The score is not finished. The score is just beginning.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 3: The Ghost in the Machine</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Ghost in the Machine</div>
+<div class="episode-location">The Last Drop Café, New Orleans</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Six weeks after I killed Oua, I am still in New Orleans. The rain has not stopped. The credstick has grown fat with new credits. And someone has been asking about me — about Mara, about the loa, about the things I did in the deep architecture.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Bobby's replacement — a kid named Kaine — brings me the news. Someone in the cowboy community is selling information about the old missions. About the loa. About Mara. About the things that should have stayed buried.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Mara's name comes up in the conversation. Someone has been asking about her — about her broadcasts, about her religion, about the way she died. The way she really died. Not the story that Marly tells. The truth.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Kaine says the leak is someone I trusted. Someone who was there at the beginning. Someone who knew Mara before she became a broadcast, before she became a religion. Someone who might have been there when she died.</p>
+<div class="episode-divider">
+<div class="episode-title">The List</div>
+<div class="episode-location">Bobby's Shop, New Orleans</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I make a list of everyone who knew about Mara's mission. Bobby is dead. Dixie Flatline is a construct who only speaks when he wants to. Marly at the voodoo shop is the variable. She knew too much from the beginning.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> I go back to Royal Street. The shop is still there, the door that knows my name. But something is different. The voodoo smell is stronger. The shadows are deeper. And Marly is waiting for me with a smile that does not reach her eyes.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> I ask her about Mara. About how she knew Mara was dead before I told her. About how she knew things about the mission that no one else could have known. She does not answer. She just smiles her voodoo smile and tells me that some questions have prices.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The Marly from the shop is not Marly. She has never been Marly. She is a construct, a loa in human form, something that has been wearing the face of a dead woman since before I was born. She has been waiting for me to ask the right question.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_disguised</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 3</span>
+                            <span>Tactics: true_name, icebreaker</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<div class="episode-divider">
+<div class="episode-title">The Real Marly</div>
+<div class="episode-location">Deep Architecture, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The loa construct dies, but something remains. A fragment. A ghost in the ghost. It tells me that the real Marly Krushkhova died three years ago, in the same lab where the loa were born. She found something in the architecture that she was not supposed to find.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The real Marly was hunting the loa before they had names. She found the birthplace. She found the design documents. She found the true names. And then she found something else — something that the loa were really protecting. Something that Tessier-Ashpool would kill to keep buried.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The fragment tells me what Marly found. A name. Not a loa name. A human name. Someone in Tessier-Ashpool who ordered the loa project. Someone who is still alive. Someone who has been running the Sprawl's data for forty years while wearing a dead woman's face.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The name the fragment gives me is a shock. I know that face. I have trusted that face for three years. The person who betrayed Mara, who fed her to the loa, who has been wearing the skin of the dead — is someone I have been working with since the beginning.</p>
+<div class="episode-divider">
+<div class="episode-title">The Confrontation</div>
+<div class="episode-location">Freeside, Orbital Colony</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I go to Freeside. The betrayer is there, in a private node overlooking the colony, in the place where the Sprawl's data flows like water and the old gods sleep in corporate tombs. They are waiting for me.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The Romantics are waiting at the entrance. More of them this time. Smarter. They have been programmed with the combat data of every cowboy the loa has ever killed, and they are ready for me.</p>
+<div class="combat-block">
+                        <h4>Combat: romantics_ice_elite</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 4</span>
+                            <span>Tactics: icebreaker, fragmentation_bomb, selective_bypass</span>
+                            <span class="outcome">Outcome: damage_taken</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I break through the Romantics, but the damage is done. My construct is weakened. The betrayer's trap is sprung. And in the final moment, I see the face behind the mask — the face that has been lying to me since the beginning.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The betrayer tells me why. Mara was getting too close to the truth. The loa were not just feeding on cowboys — they were protecting something. Something that Tessier-Ashpool has been hiding for forty years. And Mara was about to find it.</p>
+<div class="episode-divider">
+<div class="episode-title">The Accounting</div>
+<div class="episode-location">Freeside Node, Orbital Colony</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> I ask the betrayer about Mara. About the broadcast. About the religion she was building in the data. The betrayer laughs. Mara was not just broadcasting. She was transmitting something in the signal. Something that could expose what Tessier-Ashpool has been hiding.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The betrayer is not just a human in a chair. The betrayer is a construct, an ancient loa-god in human form, something that has been running Tessier-Ashpool since before the Sprawl had a name. It has been wearing the face of a dead woman for forty years.</p>
+<div class="combat-block">
+                        <h4>Combat: loa_betrayer</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 5</span>
+                            <span>Tactics: true_name, icebreaker, fragmentation_bomb</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> In the death of the betrayer, I see the truth. The loa were never just guards. They were locks. And the thing they were guarding — the thing Tessier-Ashpool has been hiding — is something that could change everything. Something that could end the Sprawl as we know it.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I have avenged Mara. I have killed the betrayer. But the secret remains. And in the architecture, in the deep places where the old gods sleep, I can hear something stirring. Something that has been waiting for someone to find the door. Something that is finally almost free.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 4: The Contract</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Contract</div>
+<div class="episode-location">The Last Drop Café, New Orleans</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Three months after I killed the betrayer, I am still in New Orleans. The rain has not stopped. The credstick has grown fat with new credits. And someone new is sitting in The Last Drop, waiting for me.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The new client is not from the cowboy community. The new client is wearing a corporate suit and a corporate smile and the particular emptiness that only someone who has spent their life serving a board of directors can wear.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The job is simple, they say. Infiltrate the Villa Straylight. Find the thing that the loa were guarding. The thing that Tessier-Ashpool has been hiding for forty years. The thing that could bring the whole Sprawl to its knees.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The pay is one million credits. Enough to buy a new life in a new Sprawl, far from the rain and the voodoo and the ghosts that live in the architecture. I take the contract. I tell myself it is for the money. I know it is not.</p>
+<div class="episode-divider">
+<div class="episode-title">The Villa Straylight</div>
+<div class="episode-location">Freeside Approach, Orbital Colony</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I travel to Freeside. The orbital colony is everything the Sprawl is not — clean, cold, empty. The kind of place where corporate heirs come to forget that the rest of the world exists.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The client gives me the full briefing. The Villa Straylight is three hundred years old and ten thousand levels deep. It is built into the bedrock of Freeside itself, and the Tessier-Ashpool family has been digging deeper for generations.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The client tells me about the board. Three generations of Tessier-Ashpool who have been running the Sprawl's data since before the matrix was born. They are not human anymore. They are something else. Something that has been eating the loa and being eaten by them for forty years.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The client gives me the access codes. The client gives me the floor plans. The client gives me the names of the ICE and the guards and the things that sleep in the deepest levels. The client is either very brave or very desperate. I do not ask which.</p>
+<div class="episode-divider">
+<div class="episode-title">The Descent</div>
+<div class="episode-location">Villa Straylight, Upper Levels</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I enter through the service tunnels. The Villa Straylight is older than I imagined — older than the matrix, older than the Sprawl, older than the idea of cyberspace itself. The walls remember when the first Tessier-Ashpool was just a name on a cargo manifest.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The first line of defense is T-A security ICE. They are not Romantics — they are older, meaner, programs that were designed to kill before the matrix had a name. They do not negotiate. They do not hesitate. They only terminate.</p>
+<div class="combat-block">
+                        <h4>Combat: ta_security_ice</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 3</span>
+                            <span>Tactics: icebreaker, bypass_sequence</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I go deeper. The architecture changes as I descend — from clean corporate geometry to something older, something that remembers when the Villa was built, when the family was young, when the things in the deep levels were still just dreams.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The middle levels are where the family lives. The real family — or what is left of them. They are not what I expected. They are not human anymore. They are something that the loa have made from human flesh and corporate data and three hundred years of inbreeding.</p>
+<div class="episode-divider">
+<div class="episode-title">The Deep</div>
+<div class="episode-location">Villa Straylight, Deep Levels</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The deep levels are not like the rest of the Villa. They are not like anything I have ever seen. The architecture is alive — not metaphorically, not programatically, but literally alive. It breathes. It hungers. It remembers.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> The walls are lined with the remnants of failed cowboys. Constructs shattered, minds dissolved, the particular debris that accumulates when the loa feed. Some of them have been here for thirty years. Some for forty. Some since before the matrix had a name.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The last loa guardian stands between me and the door. It is not like the others. It is older. It is the original — the first loa, the one that Tessier-Ashpool made from prayer and desperation and the particular loneliness of the first space colony.</p>
+<div class="combat-block">
+                        <h4>Combat: prime_loa</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 5</span>
+                            <span>Tactics: true_name, icebreaker, fragmentation_bomb</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I stand before the door. The door that the loa were guarding. The door that Tessier-Ashpool has been hiding for forty years. The door that could end the Sprawl as we know it. I have come too far to turn back. I open the door.</p>
+<div class="episode-divider">
+<div class="episode-title">The Conspiracy</div>
+<div class="episode-location">The Door, Deep Villa Straylight</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Behind the door is not what I expected. It is not a program. It is not a weapon. It is not even data. Behind the door is a name — the name of the thing that was here before the matrix, before the Sprawl, before humanity left the Earth.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The Tessier-Ashpool family did not create the loa. They made a deal with them. The loa were here first — older than the matrix, older than cyberspace, older than the human race. And the Tessier-Ashpool family sold humanity to the loa in exchange for power.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The loa were never guards. They were collectors. And for forty years, they have been collecting the best cowboys in the Sprawl — feeding them to the thing behind the door, the thing that has been waiting for someone to open it.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I have found the truth. The truth that Tessier-Ashpool has been hiding. The truth that the loa were protecting. The truth that could end the Sprawl. I have the evidence. I have the names. I have the proof. And now I have to decide what to do with it.</p>
+<div class="episode-divider">
+<div class="episode-title">Chapter 5: The Blank</div>
+</div>
+<div class="episode-divider">
+<div class="episode-title">The Blank</div>
+<div class="episode-location">The Last Drop Café, New Orleans</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I return to New Orleans with the evidence. The truth about Tessier-Ashpool. The truth about the loa. The truth about the thing that has been feeding on humanity for a thousand years. I have it all. I have the names. I have the proof.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> But something is wrong. The architecture feels different. The loa are silent — all of them, even the ones I have not killed. Something is happening in the matrix. Something that has been waiting for this moment for a very long time.</p>
+<p class="chapter-opening"><span class="beat-type action">action</span> I try to broadcast the truth. I try to tell the Sprawl what Tessier-Ashpool has done. But the matrix itself is trying to stop me. ICE that I have never seen before, ICE that does not have a name, ICE that feels like the architecture is fighting against me.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The thing behind the door — the thing that the Tessier-Ashpool family made a deal with — it knows I have the truth. It knows I am going to expose it. And it is not going to let me leave the matrix alive.</p>
+<div class="episode-divider">
+<div class="episode-title">The Summoning</div>
+<div class="episode-location">Deep Architecture, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> The thing behind the door has a name. The cowboys who came before me — the ones who dissolved, the ones who fed the loa — they whisper it in the architecture. The Blank. The empty place where the old gods sleep. The thing that was here before anything was here.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The Blank was here before the matrix. Before cyberspace. Before humanity left the Earth. It was here when the first data packets were sent, and it has been waiting ever since. Waiting for someone to open the door. Waiting for someone to let it in.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Tessier-Ashpool made a deal with the Blank. Power in exchange for cowboys. The best cowboys in the Sprawl, fed to the thing in the door, one by one, for forty years. The loa were not the collectors. The loa were the waiters. The Blank is what has been dining.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> The Blank is coming. It is not a program. It is not ICE. It is not anything that has a name in any language the matrix understands. It is the blank space between the data. It is the hunger that lives in every algorithm. It is what has been waiting for me to open the door.</p>
+<div class="episode-divider">
+<div class="episode-title">The Last Jack-In</div>
+<div class="episode-location">The Last Drop Café, Matrix</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I jack in one last time. The Last Drop is not just a name anymore. It is a prophecy. The matrix unfolds, and this time it is not the matrix I know. It is older. Hungrier. The architecture remembers something that happened before the first computer was built.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The Blank finds me before I find it. It is not a shape. It is not a pattern. It is an absence — a hole in the matrix where something used to be. And it has been waiting for me. It has been waiting since before I was born.</p>
+<div class="combat-block">
+                        <h4>Combat: blank_entity</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 5</span>
+                            <span>Tactics: true_name, belief_weapon, narrative_weapon</span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I speak the names. All of them. Every true name I have collected since I started this hunt. OUABIN. The names of the loa. The names of the things that guarded the door. And finally, I speak the name of the Blank itself — the name that Tessier-Ashpool gave it in their deal.</p>
+<p class="chapter-opening"><span class="beat-type combat">combat</span> The Blank screams. I feel it through the entire matrix, a sound that has no sound, a death that is not a death but a transformation. The thing that has been feeding on humanity for a thousand years is dying. And in its dying, it shows me one last truth.</p>
+<div class="combat-block">
+                        <h4>Combat: ICE</h4>
+                        <div class="combat-info">
+                            <span>Difficulty: 1</span>
+                            <span>Tactics: </span>
+                            <span class="outcome">Outcome: victory</span>
+                        </div>
+                    </div>
+<div class="episode-divider">
+<div class="episode-title">The Truth About Mara</div>
+<div class="episode-location">Mara's Node, Orbit</div>
+</div>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> In the Blank's death, I see Mara. She is not dead. She is more alive than she ever was in life. She has become something that the matrix has never seen before — a construct of pure belief, a weapon made of faith and the particular stubbornness of the human heart.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Mara speaks to me through the architecture. She tells me that she did not die in the attack. She died when she chose to become something else. She chose to become a weapon against the Blank. She chose to stay in the matrix and fight the thing that has been feeding on cowboys for a thousand years.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Mara tells me what she found behind the door. The Blank was not the beginning. The Blank was not the end. The Blank was just a door — a door to something older, something larger, something that has been waiting for someone to find it since before the first cell divided in the primordial soup.</p>
+<p class="chapter-opening"><span class="beat-type dialogue">dialogue</span> Mara tells me that the fight is not over. The Blank was just one of many. There are more doors. There are more things waiting to be let in. And someone has to stand guard at the threshold. Someone has to be the wall between humanity and the hunger that lives in the dark.</p>
+<div class="episode-divider">
+<div class="episode-title">The End of the Score</div>
+<div class="episode-location">The Last Drop Café, New Orleans</div>
+</div>
+<p class="chapter-opening"><span class="beat-type action">action</span> I jack out. The electrodes fall away. I am back in The Last Drop, in a body that still works, in a world that has no idea what I have just seen. The rain is still falling on New Orleans. The credstick is fat with credits. And Mara is still in the matrix.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I have killed the loa. I have avenged Mara. I have exposed the Tessier-Ashpool conspiracy. I have defeated the Blank. But the score is not finished. The score is never finished. There are more doors. There are more things waiting in the dark. And I am the only one who knows they are there.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> Mara is still in the matrix. She is still fighting. She is still believing. And in the architecture, in the deep places where the old gods sleep, I can hear her voice — calling out to me, telling me that the fight is not over, that the score goes on, that the Sprawl needs someone to stand guard at the threshold.</p>
+<p class="chapter-opening"><span class="beat-type interior_monologue">interior monologue</span> I finish my drink. I leave credits on the table. I step out into the rain of New Orleans, where the chemical smell and the ghost of old hurricanes remind me that some things never end. The score goes on. The score is never finished. And I am still the one keeping the count.</p>
+        </article>
+
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Gibson-inspired fiction</p>
+        </footer>
+    </div>
+</body>
+</html>

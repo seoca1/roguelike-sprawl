@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>호사카 코어 — Roguelike Sprawl</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2c2c;
+            --accent-color: #e94560;
+            --meta-color: #666666;
+            --font-serif: "Crimson Pro", "Source Serif 4", Georgia, serif;
+            --max-width: 680px;
+            --line-height: 1.8;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { font-size: 18px; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-serif);
+            line-height: var(--line-height);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 4rem 2rem 8rem; }
+
+        .story-header { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid #e0ddd8; }
+        .character-badge {
+            display: inline-block;
+            font-family: monospace;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-color);
+            background: #1a1a2e15;
+            padding: 0.25rem 0.75rem;
+            border-radius: 2px;
+            margin-bottom: 1rem;
+        }
+        .story-title { font-size: 2.25rem; font-weight: 600; line-height: 1.2; margin-bottom: 0.5rem; }
+        .story-subtitle { font-size: 1.1rem; font-style: italic; color: var(--meta-color); }
+        .story-meta { margin-top: 1rem; font-size: 0.85rem; color: var(--meta-color); }
+        .story-meta span { margin-right: 1rem; }
+
+        .story-body { text-align: justify; hyphens: auto; }
+        .story-body p { margin-bottom: 1.5rem; }
+        .story-body h2 {
+            font-size: 1.4rem; font-weight: 600;
+            color: var(--accent-color); margin: 2.5rem 0 1rem;
+        }
+        .story-body blockquote {
+            font-style: italic; color: var(--meta-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: 1rem; margin: 2rem 0;
+        }
+        .story-body hr { border: none; border-top: 1px solid #e0ddd8; margin: 2rem 0; }
+        .story-body ul { margin: 1.5rem 0; padding-left: 1.5rem; }
+        .story-body li { margin-bottom: 0.5rem; }
+        em { font-style: italic; }
+        strong { font-weight: 600; }
+
+        .story-footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid #e0ddd8; text-align: center; }
+        .story-footer p { font-size: 0.85rem; color: var(--meta-color); font-family: monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+
+        .lang-indicator {
+            position: fixed; top: 1rem; right: 1rem;
+            font-family: monospace; font-size: 0.7rem;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--meta-color); background: var(--bg-color);
+            padding: 0.25rem 0.5rem; border-radius: 2px; opacity: 0.7;
+        }
+        .lang-indicator a { color: inherit; text-decoration: none; }
+        .lang-indicator a:hover { text-decoration: underline; }
+
+        @media (max-width: 600px) { html { font-size: 16px; } .container { padding: 2rem 1.5rem 6rem; } .story-title { font-size: 1.75rem; } }
+    </style>
+</head>
+<body>
+    <div class="lang-indicator">KO · <a href="hosaka_core_en.html">EN</a></div>
+    <div class="container">
+        <header class="story-header">
+            <div class="character-badge">Unknown</div>
+            <h1 class="story-title">호사카 코어</h1>
+            <p class="story-subtitle"></p>
+            <div class="story-meta"><span>0 words</span><span>Sprawl Trilogy</span></div>
+        </header>
+        <article class="story-body">
+<h2>도입</h2>
+<blockquote><p>*"깊은 매트릭스는 오래된 것들이 사는 곳이다. 기업들이 죽이지 못한 것들이."*</p></blockquote>
+<blockquote><p>— Gibson, Neuromancer, 6장</p></blockquote>
+<h2>전개</h2>
+<p>호사카 코어는 잠자는 동물처럼 세 번째 노드에 자리 잡고 있었다.</p>
+<p>케이는 첫 두 노드를 맹목적으로 지나왔었다 — 센스넷 주변 경계, 그리고 얇은 기업 핸드셰이크 — 그리고 이제 그는 세 단계 깊이, 데이터가 더 오래되고 ICE가 더 날카로운 곳에 있었다. 깊은 매트릭스는 다른 색을 가졌다. 죽은 채널에 맞춘 TV의 회색이 아니다. 결정의 순간에 있는 뇌의 회색이다. 케이는 비를 읽는 법을 배운 것처럼 그 회색을 읽는 법을 배웠다.</p>
+<p>핀은 케이에게 경고했다: 세 번째 노드는 센스넷이 잃을 수 없는 것들을 보관하는 곳이라고. 급여, 출석, 이사회 회의록. 큰 스캔들로 변하는 작은 민망함들. 호사카는 그 작은 민망함 아카이브의 두뇌였고, 두뇌는 깨어 있었다.</p>
+<h2>절정</h2>
+<p>케이는 기하학이 변하는 것을 보기 전에 그것이 자신을 지켜보는 것을 느꼈다.</p>
+<p>호사카 코어 주변의 매트릭스는 정확히 건축물 같지 않았다. 그것은 더 가까이 날씨에 가까웠다 — 움직이는 패턴, 의도를 가진 패턴, 무언가가 여기에 속하지 않는다는 것을 인식하는 패턴. 여기 데이터 스트림은 더 오래되고 더 조밀했다. 그것들은 기업 기억의 질감을 가지고 있었다: 빛의 스트림으로 압축된 수년간의 회의들, 타는 커피와 오존의 희미한 냄새가 나는 패킷으로 압축된 수년간의 결정들.</p>
+<p>코어 자체는 엷은 파란 빛의 구체로, 노드의 중심에서 천천히 회전했다. 그것은 적대적이지 않았다. 우호적이지도 않았다. 그것은 단순히 지켜보고 있었다, 뇌가 자신의 생각을 지켜보는 것처럼.</p>
+<p>케이는 이제 두 달 동안 카우보이였고, 매트릭스는 여전히 그를 놀라게 했다. 위험성으로 — 위험성은 예상된 것이었다. 주의로. 매트릭스는 깊은 곳에서, 주의를 기울였다. 호스카가 지금 주의를 기울이고 있었다.</p>
+<h2>결말</h2>
+<p>케이는 데이터에 손을 뻗었다. 데이터가 손을 뻗어왔다.</p>
+<p>그는 그것에 대해 생각할 시간이 없었다. 그는 파일을 잡고, 압축하고, 잭아웃 시퀀스를 시작했다. 호사카 코어는 그를 멈추려 하지 않았다. 그것은 단순히 계속 지켜보았다, M을 지켜본 것처럼, 이 깊이까지 와서 자신이 찾은 것을 가지고 떠나려 한 모든 카우보이를 지켜본 것처럼.</p>
+<p>파일은 기억이 정리되는 것처럼 케이의 데크로 자신을 압축했다. 그는 잭아웃했다. 전극이 떨어졌다. 시바의 비는 그가 방금 태운 데이터와 같은 색이었다.</p>
+<p>매트릭스 어딘가에서, 호사카 코어는 계속해서 지켜보고 있었다. 그것은 30년 동안 지켜보고 있었다. 그것은 30년을 더 지켜볼 것이다.</p>
+<p>그것은 세상의 모든 시간을 가지고 있었다.</p>
+        </article>
+        <footer class="story-footer">
+            <p>Roguelike Sprawl — Derivative Fiction</p>
+            <p>Based on William Gibson's Sprawl Trilogy</p>
+        </footer>
+    </div>
+</body>
+</html>

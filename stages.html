@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="13 stages (PENDING→BRIEFING→TRAVEL→MEET_NPC→EXTRACT_DATA→BYPASS_SECURITY→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 38 missions (Arc 1~5 difficulty grades). 4 character arcs (Novice / Veteran / Heretic / Suit).">
+<meta name="keywords" content="roguelike, cyberpunk, gibson, sprawl, neuromancer, python, tcod, ascii, stage, progression, mission, flow">
+<meta name="author" content="emilio">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://seoca1.github.io/roguelike-sprawl/stages.html">
+<meta property="og:title" content="Stage & Progression — Roguelike Sprawl">
+<meta property="og:description" content="13 stages (PENDING→BRIEFING→TRAVEL→MEET_NPC→EXTRACT_DATA→BYPASS_SECURITY→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 38 missions (Arc 1~5 difficulty grades). 4 character arcs (Novice / Veteran / Heretic / Suit).">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://seoca1.github.io/roguelike-sprawl/stages.html">
+<meta property="og:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Roguelike Sprawl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Stage & Progression — Roguelike Sprawl">
+<meta name="twitter:description" content="13 stages (PENDING→BRIEFING→TRAVEL→MEET_NPC→EXTRACT_DATA→BYPASS_SECURITY→DEFEAT_ICE→JACK_OUT→REWARD→DEBRIEF→COMPLETE). 38 missions (Arc 1~5 difficulty grades). 4 character arcs (Novice / Veteran / Heretic / Suit).">
+<meta name="twitter:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
+<meta name="theme-color" content="#0a0e14">
+<title>Roguelike Sprawl — Stage & Progression Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+    background: #0a0e14;
+    color: #c5d4e3;
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  h1, h2, h3 { color: #66ffcc; font-weight: 600; }
+  h1 { font-size: 28px; margin-bottom: 8px; text-shadow: 0 0 8px #66ffcc33; }
+  h2 { font-size: 20px; margin: 32px 0 16px; border-bottom: 1px solid #2a3540; padding-bottom: 8px; }
+  h3 { font-size: 16px; margin: 16px 0 8px; color: #ffaa55; }
+  .subtitle { color: #6a7888; font-size: 14px; margin-bottom: 24px; }
+
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #0a0e14; border-bottom: 1px solid #2a3540;
+    padding: 8px 24px; margin: -24px -24px 16px -24px;
+    display: flex; gap: 16px; align-items: center;
+  }
+  .top-nav a { color: #66ffcc; text-decoration: none; font-size: 13px; }
+  .top-nav a:hover { color: #00ccff; }
+  .top-nav .current { color: #ffaa55; font-weight: 600; }
+  .top-nav .sep { color: #2a3540; }
+  .top-hub-link {
+    display: inline-block; background: #131a23; border: 1px solid #2a3540;
+    border-radius: 4px; padding: 6px 12px; color: #00d9ff; text-decoration: none;
+    font-size: 12px; margin-bottom: 16px;
+  }
+  .top-hub-link:hover { border-color: #00d9ff; }
+
+  .lang-toggle { display: flex; gap: 4px; margin-bottom: 16px; }
+  .lang-btn {
+    background: #0a0e14; border: 1px solid #2a3540; color: #8a9aa8;
+    padding: 6px 12px; border-radius: 3px; cursor: pointer; font-size: 12px;
+    font-family: inherit;
+  }
+  .lang-btn:hover { border-color: #66ffcc; color: #c5d4e3; }
+  .lang-btn.active { background: #66ffcc22; color: #66ffcc; border-color: #66ffcc; }
+
+  /* Stage flow diagram */
+  .stage-flow {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 6px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .flow-diagram {
+    display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+    margin: 16px 0; justify-content: center;
+  }
+  .mission-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .mission-tab {
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 4px;
+    padding: 8px 14px; cursor: pointer; transition: all 0.15s;
+    color: inherit; font-family: inherit; text-align: left;
+  }
+  .mission-tab:hover { border-color: #66ffcc; background: #1a2530; }
+  .mission-tab.active { border-color: #66ffcc; background: #1a2530; box-shadow: 0 0 8px #66ffcc33; }
+  .mission-tab .mission-name { color: #ffaa55; font-size: 13px; font-weight: 600; }
+  .mission-tab .mission-stages { color: #6a7888; font-size: 11px; margin-top: 2px; }
+  .mission-tab.active .mission-stages { color: #8a9aa8; }
+  .flow-node {
+    background: #0a0e14; border: 2px solid #2a3540; border-radius: 6px;
+    padding: 10px 16px; min-width: 120px; text-align: center;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .flow-node:hover { border-color: #66ffcc; transform: translateY(-2px); }
+  .flow-node.hub { border-color: #ffaa55; }
+  .flow-node.matrix { border-color: #00ccff; }
+  .flow-node.combat { border-color: #ff5555; }
+  .flow-node.terminal { background: #1a2530; }
+  .flow-node.failed { border-color: #ff5555; background: #2a1015; }
+  .flow-node.completed { border-color: #66ffcc; background: #0a2018; }
+  .flow-node .stage-name { color: #ffaa55; font-weight: 600; font-size: 13px; }
+  .flow-node .stage-type { color: #6a7888; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+  .flow-arrow { color: #66ffcc; font-size: 20px; padding: 0 4px; }
+  .flow-branch { color: #ff5555; font-size: 20px; padding: 0 4px; }
+
+  /* Stage cards */
+  .stage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+  .stage-card {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 6px;
+    padding: 16px; position: relative;
+  }
+  .stage-card.hub { border-left: 3px solid #ffaa55; }
+  .stage-card.matrix { border-left: 3px solid #00ccff; }
+  .stage-card.combat { border-left: 3px solid #ff5555; }
+  .stage-card.terminal { border-left: 3px solid #66ffcc; }
+  .stage-card.failed { border-left: 3px solid #ff5555; }
+  .stage-card .stage-id {
+    position: absolute; top: 8px; right: 12px;
+    color: #2a3540; font-size: 11px; font-family: monospace;
+  }
+  .stage-card h3 { color: #ffaa55; margin: 0 0 4px; }
+  .stage-card .stage-subtitle { color: #6a7888; font-size: 12px; margin-bottom: 8px; }
+  .stage-card .ascii-art {
+    background: #050a10; border: 1px solid #1a2530; border-radius: 3px;
+    padding: 10px; color: #66ffcc; font-size: 12px; line-height: 1.2;
+    margin: 8px 0; overflow-x: auto; white-space: pre;
+  }
+  .stage-card .description { color: #c5d4e3; font-size: 13px; margin: 8px 0; line-height: 1.5; }
+  .stage-card .description-en { color: #8a9aa8; font-size: 12px; margin: 4px 0; padding-top: 4px; border-top: 1px dashed #1a2530; }
+  .stage-card .trigger {
+    background: #1a2530; border-radius: 3px; padding: 8px 12px;
+    color: #8a9aa8; font-size: 12px; margin-top: 8px;
+    border-left: 2px solid #66ffcc;
+  }
+  .stage-card .meta { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .stage-card .meta .pill {
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 12px;
+    padding: 2px 8px; font-size: 11px; color: #8a9aa8;
+  }
+  .stage-card .pill.terminal { color: #66ffcc; border-color: #66ffcc; }
+  .stage-card .pill.failed { color: #ff8888; border-color: #ff5555; }
+  .stage-card .ui-list { margin-top: 8px; }
+  .stage-card .ui-list .ui-tag {
+    display: inline-block; background: #1a2530; color: #66ffcc;
+    padding: 2px 8px; border-radius: 3px; font-size: 11px; margin: 2px 4px 2px 0;
+  }
+
+  /* Transitions table */
+  .transitions-table { width: 100%; border-collapse: collapse; background: #131a23; border: 1px solid #2a3540; border-radius: 6px; overflow: hidden; }
+  .transitions-table th { background: #1a2530; color: #66ffcc; padding: 10px 12px; text-align: left; font-size: 12px; }
+  .transitions-table td { padding: 10px 12px; border-top: 1px solid #1a2530; color: #c5d4e3; font-size: 13px; }
+  .transitions-table tr:hover { background: #1a2530; }
+  .transitions-table code { color: #00ccff; background: #0a0e14; padding: 2px 6px; border-radius: 3px; font-size: 12px; }
+  .transitions-table .arrow-cell { color: #66ffcc; font-weight: 700; }
+  .transitions-table .from-failed { color: #ff5555; }
+
+  /* Mission cards */
+  .mission-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 12px; }
+  .mission-card {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 6px;
+    padding: 16px;
+  }
+  .mission-card h3 { color: #ffaa55; margin: 0 0 4px; }
+  .mission-card .mission-stage-flow {
+    display: flex; gap: 4px; align-items: center; flex-wrap: wrap; margin: 8px 0;
+  }
+  .mission-card .mini-stage {
+    background: #0a0e14; border: 1px solid #2a3540; border-radius: 3px;
+    padding: 3px 8px; font-size: 11px; color: #8a9aa8;
+  }
+  .mission-card .mini-arrow { color: #66ffcc; font-size: 12px; }
+  .mission-card .objectives { margin: 8px 0; font-size: 12px; }
+  .mission-card .objectives li { color: #8a9aa8; list-style: none; margin: 2px 0; padding-left: 12px; }
+  .mission-card .objectives li::before { content: "▸ "; color: #66ffcc; }
+  .mission-card .rewards {
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 3px;
+    padding: 6px 10px; margin-top: 8px; font-size: 12px;
+  }
+  .mission-card .rewards .credit { color: #ffaa55; font-weight: 700; }
+  .mission-card .rewards .material { color: #00ccff; }
+  .mission-card .meta { display: flex; gap: 6px; margin-top: 6px; font-size: 11px; }
+  .mission-card .meta .pill { background: #1a2530; padding: 2px 8px; border-radius: 3px; color: #8a9aa8; }
+
+  /* Death flow */
+  .death-flow {
+    background: #131a23; border: 1px solid #ff5555; border-radius: 6px;
+    padding: 20px; margin-bottom: 24px; border-left: 4px solid #ff5555;
+  }
+  .death-flow h2 { color: #ff8888; border-bottom-color: #ff5555; }
+  .death-flow .steps { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .death-flow .step {
+    display: grid; grid-template-columns: 40px 1fr; gap: 12px;
+    background: #0a0e14; border: 1px solid #1a2530; border-radius: 4px;
+    padding: 12px;
+  }
+  .death-flow .step .step-num {
+    color: #ff5555; font-size: 18px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .death-flow .step h3 { margin: 0 0 4px; color: #ffaa55; }
+  .death-flow .step p { color: #c5d4e3; font-size: 13px; margin: 4px 0; }
+  .death-flow .step p.en { color: #8a9aa8; font-size: 12px; }
+  .death-flow .step .arrow { color: #ff5555; text-align: center; font-size: 14px; }
+
+  /* Hub loop */
+  .hub-loop {
+    background: #131a23; border: 1px solid #2a3540; border-radius: 6px;
+    padding: 20px; margin-bottom: 24px;
+  }
+  .hub-loop pre {
+    background: #050a10; border: 1px solid #1a2530; border-radius: 3px;
+    padding: 16px; color: #66ffcc; font-size: 12px; line-height: 1.2;
+    margin: 12px 0; overflow-x: auto; white-space: pre;
+  }
+
+  .footer { text-align: center; color: #6a7888; font-size: 12px; margin-top: 48px; padding: 24px; border-top: 1px solid #2a3540; }
+  .footer code { background: #1a2530; padding: 2px 6px; border-radius: 3px; }
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <a href="./index.html">🌐 Hub</a>
+  <span class="sep">|</span>
+  <a href="index.html">◀ Roguelike</a>
+  <span class="sep">|</span>
+  <a href="story.html">📖 Story</a>
+  <span class="sep">|</span>
+  <span class="current">⏱ Stages</span>
+  <span class="sep">|</span>
+  <a href="stories.html">📚 Short Stories</a>
+  <a href="graphic-novel.html">Graphic Novel</a>
+  <span class="sep">|</span>
+  <a href="sound.html">🔊 Sound</a>
+  <span class="sep">|</span>
+  <a href="combat.html">⚔ Combat</a>
+  <span class="sep">|</span>
+  <a href="equipment.html">📦 Equipment</a>
+  <span class="sep">|</span>
+  <a href="cyberspace.html">🌐 Cyberspace</a>
+</nav>
+<a class="top-hub-link" id="projects-hub-link" href="../../" title="Projects Hub (local dev only)">🌐 Projects Hub</a>
+<script>
+  // Hide on non-local filesystems (e.g. GitHub Pages) where the
+  // workspace path ../../Game/ does not exist.
+  (function () {
+    var link = document.getElementById("projects-hub-link");
+    if (!link) return;
+    link.style.display = (window.location.protocol === "file:" || window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
+      ? "inline-block" : "none";
+  })();
+</script>
+
+<h1>⏱ ROGUELIKE SPRAWL — Stage & Progression Dashboard</h1>
+<div class="subtitle">
+  Single Run = Prologue → Mission → Completion.
+  <span data-stat="stages">12</span> stages
+  (<span data-stat="stage-enum">13</span> Stage enum entries · <code>DEBRIEF</code> optional + Phase B BRIEFING/TRAVEL/BYPASS_SECURITY)
+  · <span data-stat="transitions">13</span> transitions
+  · <span data-stat="missions">38</span> missions
+  (Arc 1~5 difficulty grades · 4 character arcs: Novice / Veteran / Heretic / Suit).
+  Chapter States: <span data-stat="chapter-states">14</span>.
+  Reward formula: <code>Arc×800 + (grade−1)×300</code>.
+  <br>
+  출처: <code>design/systems/stage_structure.json</code> · <code>prototype/data/missions/missions.json</code> · <code>prototype/src/run/state.py</code> (Stage / ChapterState enums)
+</div>
+
+<div class="lang-toggle">
+  <button class="lang-btn active" data-lang="ko">한글</button>
+  <button class="lang-btn" data-lang="en">English</button>
+  <button class="lang-btn" data-lang="both">Both</button>
+</div>
+
+<!-- Mission Flow Selector -->
+<h2>🎯 Mission Stage Flows (미션별 스테이지 흐름)</h2>
+<div class="stage-flow" data-stage-src="../design/systems/stage_structure.json">
+  <div class="mission-tabs" id="missionTabs"></div>
+  <div class="flow-diagram" id="flowDiagram"></div>
+  <div class="flow-legend" style="text-align: center; color: #6a7888; font-size: 11px; margin-top: 8px;">
+    [Hub] 주황 · [Matrix] 파랑 · [Combat] 빨강 · [Animation] 보라 · [Death] 검정 · [Terminal] 초록
+  </div>
+</div>
+
+<!-- Stage Cards -->
+<h2>📦 Stages (스테이지 상세)</h2>
+<div class="stage-grid" id="stageGrid"></div>
+
+<!-- Stage Enum (auto-built from prototype/src/run/state.py) -->
+<h2>🧬 Stage Enum (10 entries from <code>run/state.py</code>)</h2>
+<div class="panel">
+  <p style="color:#8a9aa8;font-size:13px;margin-bottom:12px;">
+    <code>Stage</code> StrEnum — 프로그래매틱 진입. <code>stage_structure.json</code> 의 12 stages 와는 별개로 <code>DEBRIEF</code> 까지 13 entries (Phase B: +BRIEFING, +TRAVEL, +BYPASS_SECURITY). 자동 빌드:
+  </p>
+  <div id="stage-enum-grid" style="
+       display: grid;
+       grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+       gap: 8px;
+       margin-bottom: 12px;"></div>
+  <div id="stage-optional-banner" style="
+       font-size: 12px; color: #ffaa55;"></div>
+</div>
+
+<!-- Transitions -->
+<h2>↗ Transitions (전이 트리거)</h2>
+<table class="transitions-table" id="transitionsTable">
+  <thead>
+    <tr>
+      <th>From</th>
+      <th></th>
+      <th>To</th>
+      <th>Trigger</th>
+      <th>System</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- Missions -->
+<h2>🎯 All Missions (38 missions across Arc 1~5 difficulty grades)</h2>
+<div class="mission-grid" id="missionGrid"></div>
+
+<!-- Death Flow -->
+<h2>💀 Death Flow (사망 흐름)</h2>
+<div class="death-flow">
+  <div class="steps" id="deathSteps"></div>
+</div>
+
+<!-- Hub Loop -->
+<h2>🏠 Hub Loop (메인 게임 루프)</h2>
+<div class="hub-loop" id="hubLoop">
+  <div id="hubDescription"></div>
+  <pre id="hubAscii"></pre>
+</div>
+
+<!-- Chapter Flow -->
+<h2>📖 Chapter Flow (챕터 흐름 — 케이 Ch1 순차 매핑)</h2>
+<p style="color:#8a9aa8;font-size:13px;margin-bottom:16px;">
+  단편소설 episodes → game phases → combats → cutscenes 순차 매핑.
+  출처: <code>data/story/arcs/chapter_flow.json</code>
+</p>
+<div class="cf-controls">
+  <button class="cf-char-btn active" data-cf-char="case">케이 (Case)</button>
+  <button class="cf-char-btn" data-cf-char="sil">실 (Sil)</button>
+  <button class="cf-char-btn" data-cf-char="kas">카스 (Kas)</button>
+  <span style="color:#2a3540">|</span>
+  <button class="cf-lang-btn active" data-cf-lang="ko">한글</button>
+  <button class="cf-lang-btn" data-cf-lang="en">English</button>
+</div>
+<div id="chapterFlowContent"></div>
+
+<div class="footer">
+  Roguelike Sprawl — Stage & Progression Dashboard<br>
+  <code>design/systems/stage_structure.json</code> · <code>src/run/state.py</code> · <code>src/engine/death.py</code>
+</div>
+
+<script>
+  document.getElementById('last-updated').textContent = new Date().toISOString().slice(0, 10);
+
+  // Stage Dashboard
+  (function() {
+    const state = { data: null, lang: 'ko', missionId: 'first_jack' };
+    const src = document.querySelector('.stage-flow').dataset.stageSrc;
+
+    function text(obj, base) {
+      if (!obj) return '';
+      if (state.lang === 'en') return obj[base + '_en'] || '';
+      if (state.lang === 'ko') return obj[base + '_ko'] || '';
+      return { en: obj[base + '_en'] || '', ko: obj[base + '_ko'] || '' };
+    }
+
+    function textBoth(obj, base) {
+      const en = obj[base + '_en'] || '';
+      const ko = obj[base + '_ko'] || '';
+      if (state.lang === 'en') return en;
+      if (state.lang === 'ko') return ko;
+      return `${en}<br><span style="color:#8a9aa8;font-size:12px;display:block;margin-top:4px;padding-top:4px;border-top:1px dashed #1a2530">${ko}</span>`;
+    }
+
+    function renderMissionTabs() {
+      const missions = state.data.missions || [];
+      // Arc color mapping
+      const arcColors = { 1: '#66ffcc', 2: '#00ccff', 3: '#ffaa55', 4: '#ff6699', 5: '#ffffff' };
+      const html = missions.map(m => {
+        const title = state.lang === 'en' ? m.title_en
+          : state.lang === 'ko' ? m.title_ko
+          : `${m.title_en} / ${m.title_ko}`;
+        const isActive = m.id === state.missionId;
+        const arcColor = arcColors[m.arc] || '#66ffcc';
+        return `<button class="mission-tab ${isActive ? 'active' : ''}" data-mission="${m.id}" style="border-left: 3px solid ${arcColor};">
+          <div class="mission-name" style="color: ${arcColor};">${title}</div>
+          <div class="mission-stages">Arc ${m.arc} · ${m.stages.length} stages</div>
+        </button>`;
+      }).join('');
+      document.getElementById('missionTabs').innerHTML = html;
+
+      // Bind click handlers
+      document.querySelectorAll('.mission-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.missionId = btn.dataset.mission;
+          renderMissionTabs();
+          renderFlowDiagram();
+        });
+      });
+    }
+
+    function renderFlowDiagram() {
+      const stages = state.data.stages;
+      const missions = state.data.missions || [];
+      const mission = missions.find(m => m.id === state.missionId) || missions[0];
+      if (!mission) return;
+
+      const stageOrder = mission.stages;
+      const html = [];
+
+      // PENDING (start)
+      const pending = stages.find(s => s.id === 'pending');
+      if (pending) {
+        const name = state.lang === 'en' ? pending.name_en
+          : state.lang === 'ko' ? pending.name_ko
+          : `${pending.name_en} / ${pending.name_ko}`;
+        html.push(`<div class="flow-node hub">
+          <div class="stage-name">${name}</div>
+          <div class="stage-type">${pending.type}</div>
+        </div>`);
+        html.push(`<div class="flow-arrow">→</div>`);
+      }
+
+      // Mission stages
+      stageOrder.forEach((sid, i) => {
+        const stage = stages.find(s => s.id === sid);
+        if (!stage) return;
+        const cls = stage.type;
+        const name = state.lang === 'en' ? stage.name_en
+          : state.lang === 'ko' ? stage.name_ko
+          : `${stage.name_en} / ${stage.name_ko}`;
+        const isTerminal = stage.is_terminal;
+        const nodeCls = isTerminal && sid === 'complete' ? 'completed'
+          : isTerminal && sid === 'failed' ? 'failed'
+          : '';
+        html.push(`<div class="flow-node ${cls} ${nodeCls}" data-stage="${sid}">
+          <div class="stage-name">${name}</div>
+          <div class="stage-type">${stage.type}</div>
+        </div>`);
+        if (i < stageOrder.length - 1) {
+          html.push(`<div class="flow-arrow">→</div>`);
+        }
+      });
+
+      // Failure branch
+      html.push(`<div class="flow-branch">↘</div>`);
+      const failed = stages.find(s => s.id === 'failed');
+      if (failed) {
+        const fName = state.lang === 'en' ? failed.name_en
+          : state.lang === 'ko' ? failed.name_ko
+          : `${failed.name_en} / ${failed.name_ko}`;
+        html.push(`<div class="flow-node failed">
+          <div class="stage-name">${fName}</div>
+          <div class="stage-type">death</div>
+        </div>`);
+        // FAILED -> DEATH_RESTART
+        const dr = stages.find(s => s.id === 'death_restart');
+        if (dr) {
+          html.push(`<div class="flow-arrow">→</div>`);
+          const drName = state.lang === 'en' ? dr.name_en
+            : state.lang === 'ko' ? dr.name_ko
+            : `${dr.name_en} / ${dr.name_ko}`;
+          html.push(`<div class="flow-node death">
+            <div class="stage-name">${drName}</div>
+            <div class="stage-type">${dr.type}</div>
+          </div>`);
+        }
+      }
+
+      document.getElementById('flowDiagram').innerHTML = html.join('');
+    }
+
+    function renderStageCard(stage) {
+      const desc = state.lang === 'en' ? stage.description_en
+        : state.lang === 'ko' ? stage.description_ko
+        : `<div>${stage.description_en}</div><div class="description-en">${stage.description_ko}</div>`;
+      const trigger = state.lang === 'en' ? stage.trigger_en
+        : state.lang === 'ko' ? stage.trigger_ko
+        : `<div>${stage.trigger_en}</div><div style="color:#8a9aa8;font-size:11px;margin-top:4px">${stage.trigger_ko}</div>`;
+      const name = state.lang === 'en' ? stage.name_en
+        : state.lang === 'ko' ? stage.name_ko
+        : `${stage.name_en} / ${stage.name_ko}`;
+      const objectivePill = stage.objective_kind === 'none'
+        ? '<span class="pill">—</span>'
+        : `<span class="pill">objective: ${stage.objective_kind}</span>`;
+      const terminalPill = stage.is_terminal
+        ? (stage.id === 'failed'
+            ? '<span class="pill failed">TERMINAL (DEATH)</span>'
+            : '<span class="pill terminal">TERMINAL (COMPLETE)</span>')
+        : '<span class="pill">in progress</span>';
+      const nextPill = stage.next_stage
+        ? `<span class="pill">next → ${stage.next_stage}</span>`
+        : '<span class="pill">end</span>';
+      const uiTags = (stage.ui_elements || []).map(u => `<span class="ui-tag">${u}</span>`).join('');
+
+      return `<div class="stage-card ${stage.type}">
+        <div class="stage-id">${stage.id}</div>
+        <h3>${name}</h3>
+        <div class="stage-subtitle">type: ${stage.type}</div>
+        <div class="ascii-art">${stage.ascii_art.join('\n')}</div>
+        <div class="description">${desc}</div>
+        <div class="trigger"><b>Trigger:</b> ${trigger}</div>
+        <div class="meta">
+          ${terminalPill}
+          ${objectivePill}
+          ${nextPill}
+        </div>
+        <div class="ui-list">${uiTags}</div>
+      </div>`;
+    }
+
+    function renderStages() {
+      const html = state.data.stages.map(renderStageCard).join('');
+      document.getElementById('stageGrid').innerHTML = html;
+    }
+
+    function renderTransitions() {
+      const tbody = document.querySelector('#transitionsTable tbody');
+      const html = state.data.transitions.map(t => {
+        const trig = state.lang === 'en' ? t.trigger_en
+          : state.lang === 'ko' ? t.trigger_ko
+          : `${t.trigger_en} / ${t.trigger_ko}`;
+        const fromClass = t.from === 'any' ? 'from-failed' : '';
+        return `<tr>
+          <td><code class="${fromClass}">${t.from}</code></td>
+          <td class="arrow-cell">→</td>
+          <td><code>${t.to}</code></td>
+          <td>${trig}</td>
+          <td><code>${t.system}</code></td>
+        </tr>`;
+      }).join('');
+      tbody.innerHTML = html;
+    }
+
+    function renderMissions() {
+      const arcColors = { 1: '#66ffcc', 2: '#00ccff', 3: '#ffaa55', 4: '#ff6699', 5: '#ffffff' };
+      const html = state.data.missions.map(m => {
+        const arcColor = arcColors[m.arc] || '#66ffcc';
+        const title = state.lang === 'en' ? m.title_en
+          : state.lang === 'ko' ? m.title_ko
+          : `${m.title_en} / ${m.title_ko}`;
+        const prim = state.lang === 'en' ? m.primary_objective_en
+          : state.lang === 'ko' ? m.primary_objective_ko
+          : `${m.primary_objective_en} / ${m.primary_objective_ko}`;
+        const sec = m.secondary_objective_en
+          ? (state.lang === 'en' ? m.secondary_objective_en
+              : state.lang === 'ko' ? m.secondary_objective_ko
+              : `${m.secondary_objective_en} / ${m.secondary_objective_ko}`)
+          : null;
+        const stagesHtml = m.stages.map(sid =>
+          `<span class="mini-stage">${sid}</span>`
+        ).join('<span class="mini-arrow">→</span>');
+        const rewards = [];
+        if (m.rewards.credits) rewards.push(`<span class="credit">+${m.rewards.credits} credits</span>`);
+        if (m.rewards.materials) {
+          Object.entries(m.rewards.materials).forEach(([k, v]) => {
+            rewards.push(`<span class="material">+${v} ${k}</span>`);
+          });
+        }
+        return `<div class="mission-card" style="border-left: 3px solid ${arcColor};">
+          <h3 style="color: ${arcColor};">${title}</h3>
+          <div style="color: #6a7888; font-size: 12px;">fixer: ${m.fixer} · arc ${m.arc} · grade ${m.grade_min}-${m.grade_max}</div>
+          <div class="mission-stage-flow">${stagesHtml}</div>
+          <ul class="objectives">
+            <li>${prim}</li>
+            ${sec ? `<li>${sec}</li>` : ''}
+          </ul>
+          <div class="rewards">${rewards.join(' · ')}</div>
+          <div class="meta">
+            <span class="pill">~${m.estimated_minutes} min</span>
+            <span class="pill">${m.stages.length} stages</span>
+          </div>
+        </div>`;
+      }).join('');
+      document.getElementById('missionGrid').innerHTML = html;
+    }
+
+    function renderDeathFlow() {
+      const df = state.data.death_flow;
+      const html = df.steps.map((step, i) => {
+        const name = state.lang === 'en' ? step.name_en
+          : state.lang === 'ko' ? step.name_ko
+          : `${step.name_en} / ${step.name_ko}`;
+        const desc = state.lang === 'en' ? step.description_en
+          : state.lang === 'ko' ? step.description_ko
+          : `<div>${step.description_en}</div><div class="en" style="color:#8a9aa8;font-size:12px;margin-top:4px">${step.description_ko}</div>`;
+        const arrow = i < df.steps.length - 1
+          ? '<div class="arrow" style="grid-column: 1 / -1;">▼</div>'
+          : '';
+        return `<div class="step">
+          <div class="step-num">${i + 1}</div>
+          <div>
+            <h3>${name}</h3>
+            <p>${desc}</p>
+          </div>
+          ${arrow}
+        </div>`;
+      }).join('');
+      document.getElementById('deathSteps').innerHTML = html;
+    }
+
+    function renderHubLoop() {
+      const hl = state.data.hub_loop;
+      const name = state.lang === 'en' ? hl.name_en
+        : state.lang === 'ko' ? hl.name_ko
+        : `${hl.name_en} / ${hl.name_ko}`;
+      const desc = state.lang === 'en' ? hl.description_en
+        : state.lang === 'ko' ? hl.description_ko
+        : `<div>${hl.description_en}</div><div style="color:#8a9aa8;font-size:13px;margin-top:4px">${hl.description_ko}</div>`;
+      document.getElementById('hubDescription').innerHTML = `<h3 style="color: #ffaa55; margin: 0 0 8px;">${name}</h3><div>${desc}</div>`;
+      document.getElementById('hubAscii').textContent = hl.ascii_art.join('\n');
+    }
+
+    function render() {
+      if (!state.data) return;
+      renderMissionTabs();
+      renderFlowDiagram();
+      renderStages();
+      renderTransitions();
+      renderMissions();
+      renderDeathFlow();
+      renderHubLoop();
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.lang = btn.dataset.lang;
+        render();
+      });
+    });
+
+    fetch(src)
+      .then(r => r.json())
+      .then(data => {
+        state.data = data;
+        render();
+      })
+      .catch(err => {
+        document.getElementById('stageGrid').innerHTML =
+          `<div style="color:#ff8888;padding:20px;">
+            ⚠ JSON 로드 실패: <code>${src}</code><br>
+            <small style="color:#6a7888">${err.message}</small>
+          </div>`;
+      });
+  })();
+
+// Chapter Flow Section (loads from chapter_flow.json)
+(function() {
+  const cfState = { data: null, char: 'case', lang: 'ko' };
+  const cfSrc = '../data/story/arcs/chapter_flow.json';
+
+  function renderChapterFlow() {
+    if (!cfState.data) return;
+    const charData = cfState.data[cfState.char];
+    if (!charData) return;
+
+    const totalPhases = charData.chapters.reduce((sum, c) => sum + c.phases.length, 0);
+    const playableChs = charData.chapters.filter(c => c.is_playable).length;
+    const totalCombats = charData.chapters.reduce((sum, c) =>
+      sum + c.phases.filter(p => p.combat).length, 0);
+
+    let html = `<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;">
+      <div class="stat-cell">
+        <div style="color:#6a7888;font-size:11px;">Chapters</div>
+        <div style="color:#ffaa55;font-size:24px;font-weight:700;">${charData.chapters.length}</div>
+      </div>
+      <div class="stat-cell">
+        <div style="color:#6a7888;font-size:11px;">Playable</div>
+        <div style="color:#66ffcc;font-size:24px;font-weight:700;">${playableChs}</div>
+      </div>
+      <div class="stat-cell">
+        <div style="color:#6a7888;font-size:11px;">Combats</div>
+        <div style="color:#ff6699;font-size:24px;font-weight:700;">${totalCombats}</div>
+      </div>
+    </div>`;
+
+    for (const ch of charData.chapters) {
+      const playableCls = ch.is_playable ? 'playable-badge' : 'locked-badge';
+      const playableTxt = ch.is_playable ? 'PLAYABLE' : 'LOCKED';
+      const title = cfState.lang === 'ko' ? ch.title_ko : ch.title_en;
+
+      html += `<div class="ch-card">
+        <div class="ch-card-header">
+          <span class="ch-num">Ch${ch.chapter_number}</span>
+          <span class="ch-title">${title}</span>
+          <span class="${playableCls}">${playableTxt}</span>
+        </div>
+        <div class="ch-phases">`;
+
+      for (const ph of ch.phases) {
+        const phTitle = cfState.lang === 'ko' ? ph.title_ko : ph.title_en;
+        const hasCombat = !!ph.combat;
+        const combatTag = hasCombat
+          ? `<span class="combat-tag">${ph.combat.enemy_type} (D${ph.combat.difficulty})</span>`
+          : '';
+        const gainTag = ph.gain
+          ? `<span class="gain-tag">+${typeof ph.gain === 'object' ? ph.gain.money || ph.gain.data : ph.gain}</span>`
+          : '';
+
+        html += `<div class="ch-phase-row">
+          <span class="ch-phase-num ${hasCombat ? 'has-combat' : ''}">${ph.phase_index}</span>
+          <span class="ch-phase-title">${phTitle}</span>
+          ${combatTag}
+          ${gainTag}
+        </div>`;
+      }
+
+      html += `</div></div>`;
+    }
+
+    document.getElementById('chapterFlowContent').innerHTML = html;
+  }
+
+  function setupChapterFlowControls() {
+    document.querySelectorAll('.cf-char-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cf-char-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        cfState.char = btn.dataset.cfChar;
+        renderChapterFlow();
+      });
+    });
+    document.querySelectorAll('.cf-lang-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.cf-lang-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        cfState.lang = btn.dataset.cfLang;
+        renderChapterFlow();
+      });
+    });
+  }
+
+  fetch(cfSrc)
+    .then(r => r.json())
+    .then(data => {
+      cfState.data = data;
+      renderChapterFlow();
+    })
+    .catch(err => {
+      document.getElementById('chapterFlowContent').innerHTML =
+        `<div style="color:#ff8888;padding:16px;">
+          ⚠ 챕터 흐름 로드 실패: <code>${cfSrc}</code><br>
+          <small style="color:#6a7888">${err.message}</small>
+        </div>`;
+    });
+
+  // Setup after DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupChapterFlowControls);
+  } else {
+    setupChapterFlowControls();
+  }
+})();
+</script>
+
+<style>
+  .cf-controls { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .cf-char-btn, .cf-lang-btn {
+    background: #1a2530; border: 1px solid #2a3540; color: #c5d4e3;
+    padding: 6px 12px; cursor: pointer; font-size: 12px; border-radius: 4px;
+  }
+  .cf-char-btn.active, .cf-lang-btn.active {
+    background: #66ffcc22; border-color: #66ffcc; color: #66ffcc;
+  }
+  .stat-cell { background: #131a23; border: 1px solid #2a3540; border-radius: 6px; padding: 12px; text-align: center; }
+  .ch-card { background: #131a23; border: 1px solid #2a3540; border-radius: 8px; margin-bottom: 12px; overflow: hidden; }
+  .ch-card-header {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: #1a2530; border-bottom: 1px solid #2a3540;
+  }
+  .ch-num { color: #ffaa55; font-weight: 700; font-size: 14px; }
+  .ch-title { color: #c5d4e3; font-size: 13px; flex: 1; }
+  .playable-badge { background: #66ffcc22; color: #66ffcc; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+  .locked-badge { background: #2a354022; color: #6a7888; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+  .ch-phases { padding: 8px 0; }
+  .ch-phase-row {
+    display: flex; align-items: center; gap: 10px; padding: 6px 14px;
+    border-bottom: 1px dashed #1a2530; font-size: 12px;
+  }
+  .ch-phase-row:last-child { border-bottom: none; }
+  .ch-phase-num {
+    width: 24px; height: 24px; border-radius: 50%; background: #1a2530;
+    color: #6a7888; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+  }
+  .ch-phase-num.has-combat { background: #ffaa5522; color: #ffaa55; }
+  .ch-phase-title { color: #c5d4e3; flex: 1; }
+  .combat-tag { background: #ff669922; color: #ff6699; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+  .gain-tag { background: #66ffcc22; color: #66ffcc; font-size: 10px; padding: 2px 6px; border-radius: 3px; }
+</style>
+
+<script>
+/* Auto-sync stage counts from build_dashboard.py output
+   (story_stats.json already drives missions; this file just
+   reads the same key so build_dashboard's generators stay
+   compatible across pages).  When the fetch fails the static
+   fallback numbers stay visible.
+   run_stats.json adds the Stage enum + ChapterState enum
+   counts so the dashboard reflects the actual Python code. */
+fetch('data/story_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    set('missions', stats.missions);
+    // stages + transitions come from stage_structure.json itself
+    // (already inlined as data-stage-src); the <span>s above remain
+    // static for those.  missions is mirrored here for completeness.
+  })
+  .catch(() => { /* keep static fallback */ });
+fetch('data/run_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    set('stage-enum',     stats.stage_enum_count);
+    set('chapter-states', stats.chapter_state_enum_count);
+    // Auto-build the Stage enum cards.
+    const grid = document.getElementById('stage-enum-grid');
+    if (grid && Array.isArray(stats.stage_enum_names)) {
+      grid.innerHTML = '';
+      const optional = new Set(stats.stage_optional || []);
+      stats.stage_enum_names.forEach((name, i) => {
+        const card = document.createElement('div');
+        const isOpt = optional.has(name);
+        const bg = isOpt ? '#ffaa5522' : '#131a23';
+        const bord = isOpt ? '#ffaa5566' : '#2a3540';
+        const label = isOpt
+          ? `<div style="color:#ffaa55;font-size:10px;margin-top:2px;">optional</div>`
+          : '';
+        card.style.cssText = `background:${bg};border:1px solid ${bord};` +
+                             `border-radius:6px;padding:8px 10px;font-size:11px;`;
+        card.innerHTML =
+          `<div style="color:#8a9aa8;font-size:10px;">#${i}</div>` +
+          `<div style="color:#66ffcc;font-weight:600;">${name}</div>` +
+          label;
+        grid.appendChild(card);
+      });
+      const banner = document.getElementById('stage-optional-banner');
+      if (banner && optional.size) {
+        banner.textContent = `(주황 강조) = optional: ${Array.from(optional).join(', ')}`;
+      }
+    }
+  })
+  .catch(() => { /* keep static fallback */ });
+
+/* Stages / transitions / chapter-states auto-fetched from stages_stats.json
+    so the count reflects run/state.py without manual HTML editing. */
+fetch('data/stages_stats.json').then(r => r.ok ? r.json() : null)
+  .then(stats => {
+    if (!stats) return;
+    const set = (key, value) => {
+      const el = document.querySelector(`[data-stat="${key}"]`);
+      if (el && value !== undefined && value !== null) {
+        el.textContent = String(value);
+      }
+    };
+    set('stages',         stats.stages);
+    set('stage-enum',     stats.stage_enum);
+    set('transitions',    stats.transitions);
+    set('chapter-states', stats.chapter_states);
+  })
+  .catch(() => { /* keep static fallback */ });
+</script>
+</body>
+</html>
