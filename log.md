@@ -2,6 +2,44 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Phase 7.1 — Angie Mitchell (6번째 자키) 통합
+
+- **배경**: ROADMAP 차순. 5번째 자키 Wigan의 단짝이자 loa 시그널 receiver.
+- **디자인**: 1인칭 12세 소녀. 장난감에서 loa를 봄. Vodou loa의 가교.
+- **신규 자산**:
+  - `design/scenario/chapter-6-angie.md` — 캐릭터 디자인 (Childlike + mystical)
+  - `data/story/chapters/angie.json` — chapter excerpt + 4 missions
+  - `data/scenes/angie/` — 8 씬 (4 base + 4 ending):
+    - 01_toys, 02_mama_search, 03_leopard, 04_zavijava (base)
+    - 05_release (B-1), 06_free (B-2)
+    - 07_big_mama (C-1), 08_third_room (C-2)
+- **엔진 통합** (`graphic_novel_view.py`):
+  - `char_to_dir`: `"angie" → "angie"` (2곳)
+  - `chars` 리스트 (prologue): 6 chars
+  - `GN_MENU_ANGIE = "angie"` 상수
+  - `_character_label("angie", ...)`: `Angie — Loa Receiver`
+  - `get_gn_menu_options`: 6번째 캐릭터 옵션 (8 옵션)
+  - `get_gn_menu_key`: 인덱스 (no-save=6, save=7)
+  - `_ENDING_DESCRIPTIONS`: `("angie", "A"/"B"/"C")` 3개
+- **`chapter_view.py`**: `chapter_for_character("angie")` → `angie.json` 로드
+- **버그 수정**: `get_gn_menu_key()`의 tuple에서 `GN_MENU_ANGIE` 누락 → 추가
+- **포트레잇 매핑**: portraits.json에 없는 `angie_portrait`/`wigan_zavijava` → `kumiko_taxi`/`loa_vendor`로 대체
+- **테스트** (`tests/unit/test_angie_character.py`, 14 신규):
+  - 8씬 디스커버리/로드, GN 메뉴, 라벨, 엔딩, 챕터, 프롤로그
+  - **6 chars × 4 ending A = 24 scenes**
+- **기존 테스트 갱신**:
+  - test_load_prologue_chain_length: 20 → 24
+  - test_prologue_default_uses_ending_a: 20 → 24
+  - test_prologue_ending_b_explicit: 10 → 12
+- **디자인 차별화** (6명):
+  - 5명 1인칭 vs 수트 3인칭 cold observer
+  - 앤지: 12세 소녀, 장난감 → loa 시그널
+  - 4 미션: 장난감 → 엄마 추적 → 표범 construct → 자비야바 만남
+- **검증**:
+  - pytest: **4137 passed** (4123 → +14)
+  - ruff check / format: All passed
+  - mypy: 0 errors in 114 source files
+
 ## [2026-07-04] docs | CHARACTER_PATHS.md 갱신 (5자 비교 테이블)
 
 - **문서 버전**: 0.3.0 → 0.4.0

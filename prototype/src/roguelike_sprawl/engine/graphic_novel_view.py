@@ -257,7 +257,7 @@ def list_scenes_for_character(scenes_dir: Path, character: str) -> list[str]:
 
     Args:
         scenes_dir: Path to data/scenes/
-        character: "novice" | "veteran" | "heretic" | "suit" | "wigan"
+        character: "novice" | "veteran" | "heretic" | "suit" | "wigan" | "angie"
 
     Returns:
         List of scene file stems (e.g. ["01_chattos", "02_jackin", ...])
@@ -268,6 +268,7 @@ def list_scenes_for_character(scenes_dir: Path, character: str) -> list[str]:
         "heretic": "kas",
         "suit": "suit",
         "wigan": "wigan",
+        "angie": "angie",
     }
     char_dir_name = char_to_dir.get(character)
     if char_dir_name is None:
@@ -307,6 +308,7 @@ def load_scene_chain(
         "heretic": "kas",
         "suit": "suit",
         "wigan": "wigan",
+        "angie": "angie",
     }
     char_dir = scenes_dir / char_to_dir[character]
 
@@ -346,7 +348,7 @@ def load_prologue_chain(
         seed: Optional random seed for reproducibility.
         ending: "A" (default) or "B" — which ending set to load.
     """
-    chars = ["novice", "veteran", "heretic", "suit", "wigan"]
+    chars = ["novice", "veteran", "heretic", "suit", "wigan", "angie"]
     rng = random.Random(seed)
     rng.shuffle(chars)
     chain: list[SceneData] = []
@@ -822,6 +824,7 @@ def _character_label(character_id: str, lang: str) -> str:
         "heretic": {"en": "Kumiko (Kas) — Heretic", "ko": "카스 (Kas) — Heretic"},
         "suit": {"en": "Suit — Corporate (3인칭)", "ko": "스위트 — 기업 픽서 (3인칭)"},
         "wigan": {"en": "Wigan — Vodou Construct", "ko": "위건 — 부두 construct"},
+        "angie": {"en": "Angie — Loa Receiver", "ko": "앤지 — 로아 수신자"},
     }
     return labels.get(character_id, {}).get(lang, character_id)
 
@@ -1051,6 +1054,7 @@ GN_MENU_VETERAN = "veteran"
 GN_MENU_HERETIC = "heretic"
 GN_MENU_SUIT = "suit"
 GN_MENU_WIGAN = "wigan"
+GN_MENU_ANGIE = "angie"
 
 # Ending menu option keys (ADR-0048).
 GN_ENDING_A = "A"
@@ -1085,15 +1089,16 @@ def get_gn_menu_options(
             options.append(("1", "CONTINUE READING"))
     # Prologue / characters / back
     if has_save:
-        keys = ["2", "3", "4", "5", "6", "7"]
+        keys = ["2", "3", "4", "5", "6", "7", "8"]
     else:
-        keys = ["1", "2", "3", "4", "5", "6"]
-    options.append((keys[0], "전캐릭터 — 20개 씬 랜덤" if is_ko else "ALL CHARACTERS — 20 scenes"))
+        keys = ["1", "2", "3", "4", "5", "6", "7"]
+    options.append((keys[0], "전캐릭터 — 24개 씬 랜덤" if is_ko else "ALL CHARACTERS — 24 scenes"))
     options.append((keys[1], "케이 (K) — Novice"))
     options.append((keys[2], "실 (Sil) — Veteran"))
     options.append((keys[3], "카스 (Kas) — Heretic"))
     options.append((keys[4], "스위트 (Suit) — Corporate"))
     options.append((keys[5], "위건 (Wigan) — Vodou"))
+    options.append((keys[6], "앤지 (Angie) — Loa Receiver"))
     options.append(("", "메인메뉴로" if is_ko else "BACK TO MAIN MENU"))
     return options
 
@@ -1107,12 +1112,12 @@ def get_gn_menu_key(has_save: bool, selected_index: int) -> str:
 
     Returns:
         One of GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC,
-        GN_MENU_SUIT, GN_MENU_WIGAN, GN_MENU_CONTINUE, GN_MENU_BACK.
+        GN_MENU_SUIT, GN_MENU_WIGAN, GN_MENU_ANGIE, GN_MENU_CONTINUE, GN_MENU_BACK.
     """
     if has_save:
         if selected_index == 0:
             return GN_MENU_CONTINUE
-        if selected_index == 7:
+        if selected_index == 8:
             return GN_MENU_BACK
         return (
             GN_MENU_PROLOGUE,
@@ -1121,8 +1126,9 @@ def get_gn_menu_key(has_save: bool, selected_index: int) -> str:
             GN_MENU_HERETIC,
             GN_MENU_SUIT,
             GN_MENU_WIGAN,
+            GN_MENU_ANGIE,
         )[selected_index - 1]
-    if selected_index == 6:
+    if selected_index == 7:
         return GN_MENU_BACK
     return (
         GN_MENU_PROLOGUE,
@@ -1131,6 +1137,7 @@ def get_gn_menu_key(has_save: bool, selected_index: int) -> str:
         GN_MENU_HERETIC,
         GN_MENU_SUIT,
         GN_MENU_WIGAN,
+        GN_MENU_ANGIE,
     )[selected_index]
 
 
@@ -1243,6 +1250,18 @@ _ENDING_DESCRIPTIONS: dict[tuple[str, str], dict[str, str]] = {
     ("wigan", "C"): {
         "ko": "빅마마 — Angie의 가족이 되어 부두에 안주",
         "en": "Big Mama — adopted into Angie's Vodou family",
+    },
+    ("angie", "A"): {
+        "ko": "해방 — 렌즈를 놓아주고 평범한 소녀가 됨",
+        "en": "The Release — lens set free, ordinary girl",
+    },
+    ("angie", "B"): {
+        "ko": "자유 소녀 — 엄마를 찾고 집으로",
+        "en": "The Free Girl — finds mama, goes home",
+    },
+    ("angie", "C"): {
+        "ko": "빅마마의 딸 — 부두 가족의 일원이 됨",
+        "en": "Big Mama's Daughter — Vodou family member",
     },
 }
 

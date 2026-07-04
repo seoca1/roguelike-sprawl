@@ -59,14 +59,14 @@ class TestWiganMenuOption:
         assert GN_MENU_WIGAN == "wigan"
 
     def test_wigan_in_menu_options_without_save(self) -> None:
-        """7 total options: prologue + 4 chars + suit + wigan + back."""
+        """8 total options: prologue + 5 chars + suit + wigan + back (Phase 7.1 added angie)."""
         from roguelike_sprawl.i18n import Translator
 
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=False)
         keys = [k for k, _ in options]
-        # 6 menu keys + 1 empty BACK key
-        assert len(options) == 7
+        # 7 menu keys + 1 empty BACK key
+        assert len(options) == 8
         # Wigan is the 6th option (index 5) when no save
         assert keys[5] == "6"
 
@@ -76,8 +76,8 @@ class TestWiganMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=True)
         keys = [k for k, _ in options]
-        # CONTINUE + 6 menu keys + BACK = 8 options
-        assert len(options) == 8
+        # CONTINUE + 7 menu keys + BACK = 9 options
+        assert len(options) == 9
         # Wigan is the 6th menu key (index 6) with save
         assert keys[6] == "7"
 
@@ -125,9 +125,9 @@ class TestPrologueWithWigan:
         wigan_scenes = [s for s in chain if s.character == "wigan"]
         assert len(wigan_scenes) == 4
 
-    def test_prologue_has_5_characters(self) -> None:
+    def test_prologue_has_6_characters(self) -> None:
         from roguelike_sprawl.engine.graphic_novel_view import load_prologue_chain
 
         chain = load_prologue_chain(SCENES_DIR, seed=42)
         chars = {s.character for s in chain}
-        assert chars == {"novice", "veteran", "heretic", "suit", "wigan"}
+        assert chars == {"novice", "veteran", "heretic", "suit", "wigan", "angie"}

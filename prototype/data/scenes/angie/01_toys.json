@@ -1,0 +1,40 @@
+{
+  "id": "scene_angie_toys",
+  "character": "angie",
+  "order": 1,
+  "title_en": "THE TOYS",
+  "title_ko": "장난감",
+  "background_id": "bg_broadcast",
+  "portrait_left": "art:kumiko_taxi",
+  "portrait_right": null,
+  "dialogue": [
+    {
+      "speaker": "narrator",
+      "speaker_ko": "내레이터",
+      "portrait": null,
+      "text_en": "Angie's bedroom is small. Angie's bedroom is the only bedroom in the apartment. Angie's bedroom has a bed, and a desk, and a chair, and a window, and the window looks out at the city, and the city is full of buildings, and the buildings are full of people, and the people are full of loas. The loas are not in the people. The loas are in the toys. Angie's toys are on the desk. Angie's toys are plastic. Angie's toys are cheap. Angie's toys see things. The toys see things that people cannot see. The toys see things that the city cannot see. The toys see things that only a girl of twelve can see, and the toys show the girl, and the girl watches, and the girl is named Angie.",
+      "text_ko": "앤지의 방은 작다. 앤지의 방은 아파트의 유일한 방이다. 앤지의 방에는 침대가 있고, 책상이 있고, 의자가 하나 있고, 창문이 있고, 창문은 도시를 향해 있고, 도시는 건물로 가득 차 있고, 건물은 사람으로 가득 차 있고, 사람은 loa로 가득 차 있다. loa는 사람 안에 있지 않다. loa는 장난감 안에 있다. 앤지의 장난감은 책상 위에 있다. 앤지의 장난감은 플라스틱이다. 앤지의 장난감은 싸구려다. 앤지의 장난감은 무언가를 본다. 장난감은 사람들이 볼 수 없는 것을 본다. 장난감은 도시가 볼 수 없는 것을 본다. 장난감은 12살 소녀만이 볼 수 있는 것을 보고, 장난감은 소녀에게 보여주고, 소녀는 보고, 소녀의 이름은 앤지다.",
+      "duration_ms": 20000,
+      "sound": "neon_hum"
+    },
+    {
+      "speaker": "angie",
+      "speaker_ko": "앤지",
+      "portrait": "art:kumiko_taxi",
+      "text_en": "I see you. I see you in the toys. I see a lady in the toys. The lady is in the leopard. The leopard is in the city. The city is in the matrix. The matrix is in the toys. The toys are on the desk. I am at the desk. I see the lady. The lady sees me. The lady says come. The lady says come find me. The lady says come find me in the leopard. I will find the lady. I will find the lady in the leopard. The lady is my mama.",
+      "text_ko": "저를 봐요. 장난감에서 저를 봐요. 장난감에서 여자를 봐요. 그 여자는 표범 안에 있어요. 표범은 도시에 있어요. 도시는 매트릭스에 있어요. 매트릭스는 장난감 안에 있어요. 장난감은 책상 위에 있어요. 저는 책상에 있어요. 여자를 봐요. 여자도 절 봐요. 여자가 오라고 해요. 여자가 표범에서 절 찾아오라고 해요. 여자를 찾을 거예요. 표범에서 여자를 찾을 거예요. 그 여자가 제 엄마예요.",
+      "duration_ms": 18000,
+      "sound": null
+    },
+    {
+      "speaker": "narrator",
+      "speaker_ko": "내레이터",
+      "portrait": null,
+      "text_en": "The toys are cheap. The toys are plastic. The toys see things. The toys have always seen things. The toys saw things before Angie was born. The toys will see things after Angie is dead. The toys are not magical. The toys are simply plastic. The toys are simply toys. The toys are simply the lens through which a girl of twelve can see what the city cannot see. The city cannot see the leopard. The city cannot see the lady. The city cannot see the construct. The girl can see. The girl is twelve. The girl sees.",
+      "text_ko": "장난감은 싸구려다. 장난감은 플라스틱이다. 장난감은 무언가를 본다. 장난감은 늘 무언가를 보았다. 장난감은 앤지가 태어나기 전에 무언가를 보았다. 장난감은 앤지가 죽은 후에도 무언가를 볼 것이다. 장난감은 마법이 아니다. 장난감은 단지 플라스틱이다. 장난감은 단지 장난감이다. 장난감은 단지 12살 소녀가 도시가 볼 수 없는 것을 볼 수 있는 렌즈다. 도시는 표범을 볼 수 없다. 도시는 여자를 볼 수 없다. 도시는 construct를 볼 수 없다. 소녀는 볼 수 있다. 소녀는 12살이다. 소녀는 본다.",
+      "duration_ms": 18000,
+      "sound": "neon_hum"
+    }
+  ],
+  "next_scene": "scene_angie_mama_search"
+}

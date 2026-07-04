@@ -243,7 +243,7 @@ def test_load_scene_chain_shuffle() -> None:
 
 def test_load_prologue_chain_length() -> None:
     chain = load_prologue_chain(SCENES_DIR, seed=42)
-    assert len(chain) == 20  # 5 chars × 4 scenes (ending A) — Phase 7 added wigan
+    assert len(chain) == 24  # 6 chars × 4 scenes (ending A) — Phase 7.1 added angie
 
 
 def test_load_prologue_chain_groups_characters() -> None:

@@ -1,0 +1,50 @@
+{
+  "character": "angie",
+  "id": "chapter_angie",
+  "title_en": "The Loa Receiver",
+  "title_ko": "로아 수신자",
+  "subtitle_en": "Angie Mitchell — Big Mama's Daughter",
+  "subtitle_ko": "앤지 미첼 — 빅마마의 딸",
+  "portrait": "art:angie_portrait",
+  "theme": "broadcast_signal",
+  "excerpt_en": "Angie Mitchell is twelve years old. Angie Mitchell sees things in her toys. The toys are plastic. The toys are cheap. The toys have been in her bedroom for as long as Angie Mitchell has been in her bedroom, and the toys have always seen things, and the toys have always shown her. Angie Mitchell does not know why the toys show her. Angie Mitchell does not know what the toys are showing. Angie Mitchell knows that her mama is somewhere, and the toys show her where.",
+  "excerpt_ko": "앤지 미첼은 12살이다. 앤지 미첼은 자기 장난감에서 무언가를 본다. 장난감은 플라스틱이다. 장난감은 싸구려다. 장난감은 앤지 미첼이 자기 방에 있었던 그 오랜 시간 동안 항상 앤지 미첼의 방에 있었고, 장난감은 늘 무언가를 보았고, 장난감은 늘 보여주었다. 앤지 미첼은 장난감이 왜 보여주는지 모른다. 앤지 미첼은 장난감이 무엇을 보여주는지 모른다. 앤지 미첼은 자기 엄마가 어딘가에 있다는 것을 알고, 장난감은 어디인지 보여준다.",
+  "duration_ms": 12000,
+  "next_screen": "HUB",
+  "char_delay_ms": 60,
+  "_wiki_refs": {
+    "fictions": [
+      "Fiction/wiki/works/count-zero",
+      "Fiction/wiki/characters/angie-mitchell",
+      "Fiction/wiki/characters/wigan-ludgate",
+      "Fiction/wiki/settings/voodoo-and-the-matrix"
+    ],
+    "themes": [
+      "Fiction/wiki/themes/loa-and-voodoo-in-the-matrix",
+      "Fiction/wiki/themes/media-and-perception",
+      "Fiction/wiki/themes/art-and-creation"
+    ],
+    "motifs": [
+      "loa-receiver",
+      "child-of-vodou",
+      "mama-search",
+      "the-leopard-construct"
+    ]
+  },
+  "_integrated_with": {
+    "missions": [
+      "angie_toy_signal",
+      "angie_mama_search",
+      "angie_leopard_construct",
+      "angie_zavijava_meeting"
+    ],
+    "character_ref": "angie",
+    "fixers_used": ["mama", "zavijava", "wigan"]
+  },
+  "_play_notes": {
+    "narrative_role": "Angie is the 6th character — a 12-year-old loa receiver who sees things in her toys. Phase 7+ adds her as the youngest POV. Her 4 missions trace her arc: 1) Toy signal introduction, 2) Mama search, 3) Leopard construct, 4) Wigan meeting.",
+    "ending": "Her ending is motherhood — whether she finds her mama, becomes one with the loa, or becomes Big Mama herself.",
+    "tone": "Childlike, mystical-seeing, hopeful. Simple vocabulary. 'I see you.' repeated.",
+    "replaces_case": "Opposite of Case: Case is a cowboy who lost the ability to see, Angie is a child who sees too much."
+  }
+}
