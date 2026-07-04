@@ -2,6 +2,27 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] refactor | combat_view 분할 마무리 + 커밋 (474a3fa 누락분)
+
+- **배경**: 474a3fa (Option A 분할 사이클)에서 combat_view.py 분할이 누락되어 working tree에 머물러 있었음
+- **분할 헬퍼 6개 + frozenset 상수** (`engine/combat_view.py`):
+  - `_handle_combat_disengage` — ESC 탈출
+  - `_handle_combat_skill_navigation(state, cs, delta)` — UP/DOWN (delta 파라미터 통합)
+  - `_handle_combat_skill_activation` — ENTER/SPACE
+  - `_handle_combat_number_key` — 1~9 단축키
+  - `_execute_skill` — sound + VFX + use_skill 공유
+  - `_report_skill_unavailable` — cooldown/AP 에러 메시지
+  - `_COMBAT_NUMBER_KEYS` — N1~N9 frozenset
+- **`handle_combat_input` 135 lines → 11 lines** (orchestrator만 남김)
+- **3 버그 수정**:
+  1. `_handle_combat_number_key` 사운드 누락 → `_execute_skill` 경유로 일관성
+  2. `_handle_combat_skill_activation` bounds check silent return → 명시적 가드
+  3. `_handle_combat_skill_navigation` UP/DOWN clamp 분리 → delta 분기 통일
+- **검증**:
+  - pytest: 4073 passed, 44 skipped, 24 xfailed (변동 없음)
+  - ruff check / format / mypy: 모두 green
+- **커밋**: `9d2d123`
+
 ## [2026-07-01] feat | 소설→스토리→이벤트 통합 작업 (P1~P4 + B)
 
 - **P1 테스트 10건 수정** (ADR-0051 통합):
