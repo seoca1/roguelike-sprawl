@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/seoca1/roguelike-sprawl/actions/workflows/ci.yml/badge.svg)](https://github.com/seoca1/roguelike-sprawl/actions)
 [![Pages](https://github.com/seoca1/roguelike-sprawl/actions/workflows/pages.yml/badge.svg)](https://seoca1.github.io/roguelike-sprawl/)
-[![Tests](https://img.shields.io/badge/tests-3254%20passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-4169%20passing-brightgreen)]()
 [![Lint](https://img.shields.io/badge/lint-ruff-blue)]()
 [![Typecheck](https://img.shields.io/badge/typecheck-mypy%20strict-blue)]()
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()
@@ -19,6 +19,15 @@
 - 사이버펑크 톤 — 네온, 크롬, 거대 기업, 인공 지능
 - "flatline" = 게임 오버
 
+## 현재 상태 (2026-07-04)
+
+- **Phase 5+6+7+8 완료** (19 commits in this session)
+- **7 characters** × **8 scenes** = **56 GN scenes** (케이/실/카스/수트/위건/앤지/샐리)
+- **47 missions** (5 zones 균형: Surface/Mid/Deep/Core/TA/Freeside)
+- **41 ICE types** (Standard/Watchdog/Black/Goliath/Construct/Construct-proxy 등)
+- **10 manual + 1 auto save slots** (Phase 7.3)
+- **pytest 4169 passed** / ruff 0 errors / mypy strict 0 errors / mkdocs --strict 0 warnings (316 pages)
+
 ## 디렉토리 구조
 
 | 경로 | 목적 | 비고 |
@@ -31,14 +40,15 @@
 | `prototype/` | 프로토타입 코드 (엔진 결정 후) | 미정 |
 | `ROADMAP.md` | 단계별 계획 | 본 디렉토리 루트 |
 | `AGENTS.md` | AI 에이전트 작업 가이드 | 본 디렉토리 루트 |
+| `SESSION_SUMMARY.md` | 세션 요약 (현재 상태) | 세션 단위 |
 
 ## 빠른 시작
 
-1. `ROADMAP.md` — 현재 단계와 다음 단계 확인
-2. `decisions/README.md` — 미해결 결정 사항 확인
-3. `wiki/world/sprawl_universe.md` — 세계관 컨셉 참조
-4. `design/pillars.md` → `design/GDD.md` — 현재 게임 디자인 확인
-5. `design/CHARACTER_PATHS.md` — 캐릭터별 진행 경로 (3인 × 15미션)
+1. `SESSION_SUMMARY.md` — 현재 세션 요약 (가장 먼저)
+2. `ROADMAP.md` — 현재 단계와 다음 단계 확인
+3. `decisions/README.md` — 미해결 결정 사항 확인
+4. `CHARACTER_PATHS.md` — 7자 비교표 + 선택 가이드
+5. `wiki/world/sprawl_universe.md` — 세계관 컨셉 참조
 
 ## 주요 문서
 
@@ -47,28 +57,29 @@
 - 결정 사항은 `decisions/`에 ADR 형식으로 기록 (결정 후 immutable)
 - 디자인 변경 시 `testcases/`도 동기화
 
-## 최근 작업 (2026-06-21)
+## 최근 작업 (2026-07-04)
 
-Phase 5 (Vertical Slice) 완료. 핵심 시스템 + 콘텐츠 통합 + 그래픽 노블 모드:
+19 commits, Phase 5+6+7+8 통합:
 
-- **전투 (RT-MS)** — 5 ICE 타입 (Standard/Watchdog/Black/Goliath/Construct), 5-Layer VFX, 5-Stage Combo
-- **자키 사이클** — Death → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키 (3 옵션)
-- **오리지널 시나리오** — 단편 3편 소설 레벨 (12 씬, 38 dialogues, 16,862 chars)
-- **그래픽 노블** — 메인메뉴 5 옵션 + 자동재생 + 30줄 소설 페이지 + 챕터 카드 I-XII + fade
-- **사운드** — 15개 scene cue → file 매핑 (theme/movement 카테고리)
-- **이어서 읽기** — GNProgress atomic save + CONTINUE READING 메뉴
+- **인프라 정리**: lint/mypy 174 errors → 0, mkdocs --strict 워닝 41 → 0
+- **MkDocs 통합**: 316 pages (wiki + design + decisions 통합)
+- **3명 캐릭터 추가**: Suit (4번째, 3인칭), Wigan (5번째, 1인칭 loa), Angie (6번째, 1인칭 12세), Sally (7번째, 1인칭 cold operator)
+- **9 미션 추가**: Mid (Hosaka/Sense-Net/Yakuza), Core (T-A payroll/Maas/Construct 기억), TA (Straylight/3Jane/Wintermute)
+- **3 ICE 추가**: corporate_guard (MID), archive_sentinel (CORE), wintermute_proxy (TA boss)
+- **세이브 시스템**: 5슬롯 → 10슬롯 + 자동저장 슬롯
 
-상세: [`ROADMAP.md`](./ROADMAP.md), [`decisions/`](./decisions/), [`log.md`](./log.md).
+상세: [`SESSION_SUMMARY.md`](./SESSION_SUMMARY.md), [`ROADMAP.md`](./ROADMAP.md), [`log.md`](./log.md).
 
 ## 핵심 데모 명령
 
 ```bash
 cd prototype
-make test      # 2257 tests
+make test      # 4169 tests
 make all       # format + lint + typecheck + test
 
-# 그래픽 노블 자동재생
+# 그래픽 노블 자동재생 (7 캐릭터)
 uv run python scripts/graphic_novel.py --mode novice --lang ko
+uv run python scripts/graphic_novel.py --mode sally --lang en
 
 # 전투 시뮬레이터
 uv run python scripts/combat_simulator.py --ppl 24 --enemy standard

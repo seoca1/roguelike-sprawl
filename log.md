@@ -2,6 +2,40 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] docs | 세션 마무리 — SESSION_SUMMARY.md 작성
+
+- **세션 종료 시점**: Phase 5+6+7+8 통합 완료
+- **총 커밋**: 19 (이번 세션, 9d2d123 → da5c64a)
+- **최종 상태**:
+  - pytest **4169 passed** (44 skipped, 0 failed, 0 xfailed)
+  - ruff check / format ✅
+  - mypy strict ✅ (114 source files)
+  - mkdocs --strict ✅ (316 HTML pages, 워닝 0)
+  - 7 characters × 8 scenes = **56 GN scenes**
+  - 47 missions (5 zones 균형)
+  - 41 ICE types
+  - 10 manual + 1 auto save slots
+- **신규 자산** (세션 누적):
+  - 캐릭터 3명 추가 (Suit, Wigan, Angie, Sally) → 7명
+  - 32 새 씬 (4 chars × 8 each)
+  - 9 새 미션 (Mid/Core/TA zones)
+  - 3 새 ICE (corporate_guard, archive_sentinel, wintermute_proxy)
+  - SESSION_SUMMARY.md (이 문서)
+  - ROADMAP.md v0.5+
+  - CHARACTER_PATHS.md v0.6.0 (7자 비교표)
+- **남은 ROADMAP** (후속 세션용):
+  - 8번째 자키 (3Jane TA 시점)
+  - Salvation Phase (Phase 9)
+  - GitHub Projects 보드
+  - 미션 47개 단편 매핑
+- **세션 시작 가이드**:
+  - `SESSION_SUMMARY.md` (이 문서) — 빠른 현황 파악
+  - `log.md` (이 파일) — 시간 순 작업 이력
+  - `ROADMAP.md` — Phase 5+6 완료
+  - `CHARACTER_PATHS.md` — 7자 비교 + 선택 가이드
+  - `decisions/README.md` — ADR 인덱스
+- **세션 종료**: 외부 입력 대기
+
 ## [2026-07-04] feat | Phase 8 — Sally Shears (7번째 자키) 통합
 
 - **배경**: ROADMAP의 마지막 자키. Count Zero의 A.I. 시장 운영자. Bobby Quine과 파트너였으나 배신.

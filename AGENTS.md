@@ -237,8 +237,10 @@ uv run python scripts/play.py --lang ko
 
 ## 8. 작업 시작 체크리스트
 
+- [ ] `SESSION_SUMMARY.md` — 현재 세션 요약 (가장 먼저)
 - [ ] `ROADMAP.md` 의 "Current Phase" 확인
 - [ ] `decisions/README.md` 에서 미해결 결정 확인
+- [ ] `CHARACTER_PATHS.md` — 7자 비교표
 - [ ] `index.md` 에서 관련 위키 페이지 찾기
 - [ ] 작업 완료 후 `log.md` 갱신
 
@@ -248,6 +250,7 @@ uv run python scripts/play.py --lang ko
 - [ ] `log.md` 에 이번 세션 작업이 기록되었는가
 - [ ] 영향 받는 `design/`/`testcases/`/`decisions/`가 동기화되었는가
 - [ ] raw에서 읽은 자료는 모두 인용되었는가
+- [ ] 세션 종료 시 `SESSION_SUMMARY.md` 갱신 (해당 시)
 
 ## 10. 그래픽 노블 모드 (ADR-0032)
 
