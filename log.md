@@ -2,6 +2,33 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] fix | lint/mypy 174 errors → 0 (전체 그린)
+
+- **Pre-existing 문제 정리** (다른 세션에서 누적):
+  - ruff check: 116 errors → **0**
+  - mypy: 58 errors (114 source files) → **0**
+- **Ruff 자동 수정 (99건)**: F401/I001/F541/W292/F841/F811/UP037/PT006/PT018
+- **Ruff 수동 수정 (17건)**:
+  - F821 undefined-name 5건: `BeatData`/`PhaseData`/`Region` 누락 import 추가
+  - N802 invalid-function-name 5건: `T0→t0`, `ending_A→ending_a`, `MagicMock_story_state→magicmock_story_state`
+  - N814 camelcase-imported-as-constant 3건: `SimpleNamespace as _SN` → 직접 사용
+  - PT011 pytest-raises-too-broad 3건: `match=r"slot_id must be"` 추가
+  - E402/PT028: 각각 `noqa` 추가
+- **Mypy 수정**:
+  - 39 no-untyped-def: `Any` 타입 어노테이션 추가
+  - 7 type-arg: `dict` → `dict[str, Any]`, `tuple` → `tuple[int, int, int, int]` 등
+  - 4 attr-defined (진짜 잠재 버그):
+    - `matrix_view.py:748`: `state.current_node` → `state.current_node_id` (런타임 크래시 가능)
+    - `story_cinematic.py`: `scene: object` → `scene: StoryScene`, `current_line: StoryLine | None`
+  - 2 arg-type: `getattr()` default 제거하고 직접 접근
+  - return-type: `-> None`/`-> int` 추가
+- **검증**:
+  - pytest: **4097 passed** (변동 없음), 44 skipped, 0 xfailed
+  - ruff check / format: All passed
+  - mypy: Success: no issues found in 114 source files
+- **커밋**: `29c3eeb` (43 files, +717/-645)
+- **제외**: `prototype/data/jockeys/deceased.json` (런타임 누적 데이터)
+
 ## [2026-07-04] fix | INDEX.md 단편 24편 등재 (xfailed 24 → 0)
 
 - **문제**: `tests/unit/test_novels.py::test_novel_in_index` 24건 XFAIL
