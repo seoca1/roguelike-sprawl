@@ -350,188 +350,208 @@ def step_combat(state: CombatState) -> None:
 
 
 def use_skill(state: CombatState, skill: Skill) -> bool:
-    """Apply a player skill. Returns True if the skill was used."""
+    """Apply a player skill. Returns True if the skill was used.
+
+    The dispatch into effect-specific code paths is delegated to
+    small per-category helpers below — this top-level function
+    exists to enforce the pre-flight checks (AP, cooldown,
+    finished-flag) and to apply the post-hit end-of-fight check.
+    """
+    if not _skill_prerequisites_ok(state, skill):
+        return False
+
+    # Consume AP + start cooldown.
+    state.player.ap -= skill.ap_cost
+    state.last_skill_used = skill
+    if skill.cooldown_ms > 0:
+        state.skill_cooldowns[skill.id] = skill.cooldown_ms
+
+    # Dispatch to per-category effect.
+    dispatch = {
+        SkillEffect.ATTACK:        _apply_damage_skill,
+        SkillEffect.HEAVY_ATTACK:  _apply_heavy_attack,
+        SkillEffect.PIERCE:        _apply_pierce,
+        SkillEffect.MULTI_HIT:      _apply_multi_hit,
+        SkillEffect.DOT:           _apply_dot,
+        SkillEffect.POISON:        _apply_dot,
+        SkillEffect.SHIELD:        _apply_shield,
+        SkillEffect.HEAL:          _apply_heal,
+        SkillEffect.REGEN:         _apply_regen,
+        SkillEffect.BUFF:          _apply_buff,
+        SkillEffect.DEBUFF:        _apply_debuff,
+        SkillEffect.STUN:          _apply_stun,
+        SkillEffect.DETECT:        _apply_detect,
+        SkillEffect.LIFESTEAL:     _apply_lifesteal,
+    }
+    handler = dispatch.get(skill.effect)
+    if handler is None:
+        state.push(f">> {skill.name}: used.")
+    else:
+        handler(state, skill)
+
+    # Re-check end of fight.
+    if state.enemy.hp <= 0:
+        state.finished = True
+        state.outcome = "victory"
+    return True
+
+
+def _skill_prerequisites_ok(state: CombatState, skill: Skill) -> bool:
+    """Return True iff the skill can fire (not finished, enough AP,
+    not on cooldown)."""
     if state.finished:
         return False
     if skill.ap_cost > state.player.ap:
         return False
-    # Check cooldown
     if state.skill_cooldowns.get(skill.id, 0) > 0:
         return False
-
-    state.player.ap -= skill.ap_cost
-    state.last_skill_used = skill
-
-    # Set cooldown
-    if skill.cooldown_ms > 0:
-        state.skill_cooldowns[skill.id] = skill.cooldown_ms
-
-    # Apply effect
-    if skill.effect == SkillEffect.ATTACK:
-        dmg, is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
-        applied = _apply_damage(state, state.enemy, dmg)
-        crit_text = " [CRITICAL!]" if is_crit else ""
-        state.last_event = "skill_attack"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name}! {applied} damage to {state.enemy.name}.{crit_text}")
-
-    elif skill.effect == SkillEffect.HEAVY_ATTACK:
-        # Bigger damage, ignores variance
-        dmg, is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
-        applied = _apply_damage(state, state.enemy, dmg)
-        crit_text = " [DEVASTATING!]" if is_crit else ""
-        state.last_event = "heavy_attack"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name} SMASH! {applied} damage!{crit_text}")
-
-    elif skill.effect == SkillEffect.PIERCE:
-        # Damage bypasses shield
-        dmg, is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
-        applied = _apply_damage(state, state.enemy, dmg, bypass_shield=True)
-        crit_text = " [PIERCING!]" if is_crit else ""
-        state.last_event = "pierce"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name} pierces through! {applied} damage.{crit_text}")
-
-    elif skill.effect == SkillEffect.MULTI_HIT:
-        # Hit multiple times
-        hits = skill.hit_count
-        total_dmg = 0
-        crit_hit = False
-        for _ in range(hits):
-            dmg, is_crit = _calculate_damage(
-                state, skill.damage, state.player, state.enemy, can_crit=False
-            )
-            applied = _apply_damage(state, state.enemy, dmg)
-            total_dmg += applied
-            if is_crit:
-                crit_hit = True
-        crit_text = " [ALL CRITS!]" if crit_hit else ""
-        state.last_event = "multi_hit"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name} strikes {hits} times! Total: {total_dmg} damage.{crit_text}")
-
-    elif skill.effect == SkillEffect.DOT or skill.effect == SkillEffect.POISON:
-        # Direct damage + DoT
-        dmg, is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
-        applied = _apply_damage(state, state.enemy, dmg)
-        # Add DoT status
-        state.enemy.statuses.append(
-            StatusEffect(
-                effect_id="burn",
-                remaining_ms=skill.dot_duration_ms,
-                dot_damage=skill.dot_damage,
-            )
-        )
-        state.last_event = "dot"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(
-            f">> {skill.name}: {applied} damage + burn ({skill.dot_damage}/s for {skill.dot_duration_ms // 1000}s)!"
-        )
-
-    elif skill.effect == SkillEffect.SHIELD:
-        # Add shield status
-        state.shield += skill.shield
-        state.last_event = "shield"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name}: +{skill.shield} shield! (Total: {state.shield})")
-
-    elif skill.effect == SkillEffect.HEAL:
-        # Instant heal
-        healed = min(skill.heal, state.player.max_hp - state.player.hp)
-        state.player.hp = min(state.player.max_hp, state.player.hp + skill.heal)
-        state.last_event = "heal"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name}: +{healed} HP restored!")
-
-    elif skill.effect == SkillEffect.REGEN:
-        # Add HoT status
-        state.player.statuses.append(
-            StatusEffect(
-                effect_id="regen",
-                remaining_ms=skill.buff_duration_ms,
-                heal_per_tick=max(1, skill.heal // 10),
-            )
-        )
-        state.last_event = "regen"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name}: regen active ({skill.heal // 10}/s)")
-
-    elif skill.effect == SkillEffect.BUFF:
-        # Self buff (attack +X)
-        state.player.statuses.append(
-            StatusEffect(
-                effect_id="powered",
-                remaining_ms=skill.buff_duration_ms,
-                attack_bonus=skill.buff_amount,
-            )
-        )
-        state.last_event = "buff"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name}: +{skill.buff_amount} attack power!")
-
-    elif skill.effect == SkillEffect.DEBUFF:
-        # Enemy debuff (attack -X)
-        state.enemy.statuses.append(
-            StatusEffect(
-                effect_id="weakened",
-                remaining_ms=skill.buff_duration_ms,
-                attack_bonus=-skill.buff_amount,
-            )
-        )
-        state.last_event = "debuff"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name}: {state.enemy.name} weakened (-{skill.buff_amount} attack)!")
-
-    elif skill.effect == SkillEffect.STUN:
-        # Stun enemy
-        state.enemy.statuses.append(
-            StatusEffect(
-                effect_id="stun",
-                remaining_ms=skill.stun_duration_ms,
-                is_stunned=True,
-            )
-        )
-        state.last_event = "stun"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(
-            f">> {skill.name}: {state.enemy.name} stunned for {skill.stun_duration_ms // 1000}s!"
-        )
-
-    elif skill.effect == SkillEffect.DETECT:
-        # Reveal info
-        state.push(
-            f">> {skill.name}: {state.enemy.name} HP {state.enemy.hp}/{state.enemy.max_hp} | AP {state.enemy.ap}/{state.enemy.max_ap}"
-        )
-
-    elif skill.effect == SkillEffect.LIFESTEAL:
-        # Damage + heal
-        dmg, is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
-        applied = _apply_damage(state, state.enemy, dmg)
-        healed = applied // 2
-        state.player.hp = min(state.player.max_hp, state.player.hp + healed)
-        state.last_event = "lifesteal"
-        state.last_event_color = skill.effect_color
-        state.last_event_tick = state.tick_ms
-        state.push(f">> {skill.name}: {applied} damage, drained {healed} HP!")
-
-    else:
-        state.push(f">> {skill.name}: used.")
-
-    # Re-check end
-    if state.enemy.hp <= 0:
-        state.finished = True
-        state.outcome = "victory"
-
     return True
+
+
+# ---------------------------------------------------------------------------
+# Effect handlers — one per category. Each modifies ``state`` in place.
+# ---------------------------------------------------------------------------
+
+
+def _record_event(
+    state: CombatState,
+    event: str,
+    color: tuple[int, int, int],
+) -> None:
+    """Stamp the last-event fields used by the renderer."""
+    state.last_event = event
+    state.last_event_color = color
+    state.last_event_tick = state.tick_ms
+
+
+def _apply_damage_skill(state: CombatState, skill: Skill) -> None:
+    dmg, is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
+    applied = _apply_damage(state, state.enemy, dmg)
+    crit = " [CRITICAL!]" if is_crit else ""
+    _record_event(state, "skill_attack", skill.effect_color)
+    state.push(f">> {skill.name}! {applied} damage to {state.enemy.name}.{crit}")
+
+
+def _apply_heavy_attack(state: CombatState, skill: Skill) -> None:
+    dmg, is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
+    applied = _apply_damage(state, state.enemy, dmg)
+    crit = " [DEVASTATING!]" if is_crit else ""
+    _record_event(state, "heavy_attack", skill.effect_color)
+    state.push(f">> {skill.name} SMASH! {applied} damage!{crit}")
+
+
+def _apply_pierce(state: CombatState, skill: Skill) -> None:
+    dmg, is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
+    applied = _apply_damage(state, state.enemy, dmg, bypass_shield=True)
+    crit = " [PIERCING!]" if is_crit else ""
+    _record_event(state, "pierce", skill.effect_color)
+    state.push(f">> {skill.name} pierces through! {applied} damage.{crit}")
+
+
+def _apply_multi_hit(state: CombatState, skill: Skill) -> None:
+    total = 0
+    crit_hit = False
+    for _ in range(skill.hit_count):
+        dmg, is_crit = _calculate_damage(
+            state, skill.damage, state.player, state.enemy, can_crit=False
+        )
+        total += _apply_damage(state, state.enemy, dmg)
+        crit_hit = crit_hit or is_crit
+    crit = " [ALL CRITS!]" if crit_hit else ""
+    _record_event(state, "multi_hit", skill.effect_color)
+    state.push(f">> {skill.name} strikes {skill.hit_count} times! Total: {total} damage.{crit}")
+
+
+def _apply_dot(state: CombatState, skill: Skill) -> None:
+    dmg, _is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
+    applied = _apply_damage(state, state.enemy, dmg)
+    state.enemy.statuses.append(
+        StatusEffect(
+            effect_id="burn",
+            remaining_ms=skill.dot_duration_ms,
+            dot_damage=skill.dot_damage,
+        )
+    )
+    _record_event(state, "dot", skill.effect_color)
+    state.push(
+        f">> {skill.name}: {applied} damage + burn ({skill.dot_damage}/s for {skill.dot_duration_ms // 1000}s)!"
+    )
+
+
+def _apply_shield(state: CombatState, skill: Skill) -> None:
+    state.shield += skill.shield
+    _record_event(state, "shield", skill.effect_color)
+    state.push(f">> {skill.name}: +{skill.shield} shield! (Total: {state.shield})")
+
+
+def _apply_heal(state: CombatState, skill: Skill) -> None:
+    healed = min(skill.heal, state.player.max_hp - state.player.hp)
+    state.player.hp = min(state.player.max_hp, state.player.hp + skill.heal)
+    _record_event(state, "heal", skill.effect_color)
+    state.push(f">> {skill.name}: +{healed} HP restored!")
+
+
+def _apply_regen(state: CombatState, skill: Skill) -> None:
+    state.player.statuses.append(
+        StatusEffect(
+            effect_id="regen",
+            remaining_ms=skill.buff_duration_ms,
+            heal_per_tick=max(1, skill.heal // 10),
+        )
+    )
+    _record_event(state, "regen", skill.effect_color)
+    state.push(f">> {skill.name}: regen active ({skill.heal // 10}/s)")
+
+
+def _apply_buff(state: CombatState, skill: Skill) -> None:
+    state.player.statuses.append(
+        StatusEffect(
+            effect_id="powered",
+            remaining_ms=skill.buff_duration_ms,
+            attack_bonus=skill.buff_amount,
+        )
+    )
+    _record_event(state, "buff", skill.effect_color)
+    state.push(f">> {skill.name}: +{skill.buff_amount} attack power!")
+
+
+def _apply_debuff(state: CombatState, skill: Skill) -> None:
+    state.enemy.statuses.append(
+        StatusEffect(
+            effect_id="weakened",
+            remaining_ms=skill.buff_duration_ms,
+            attack_bonus=-skill.buff_amount,
+        )
+    )
+    _record_event(state, "debuff", skill.effect_color)
+    state.push(f">> {skill.name}: {state.enemy.name} weakened (-{skill.buff_amount} attack)!")
+
+
+def _apply_stun(state: CombatState, skill: Skill) -> None:
+    state.enemy.statuses.append(
+        StatusEffect(
+            effect_id="stun",
+            remaining_ms=skill.stun_duration_ms,
+            is_stunned=True,
+        )
+    )
+    _record_event(state, "stun", skill.effect_color)
+    state.push(
+        f">> {skill.name}: {state.enemy.name} stunned for {skill.stun_duration_ms // 1000}s!"
+    )
+
+
+def _apply_detect(state: CombatState, skill: Skill) -> None:
+    state.push(
+        f">> {skill.name}: {state.enemy.name} HP {state.enemy.hp}/{state.enemy.max_hp}"
+        f" | AP {state.enemy.ap}/{state.enemy.max_ap}"
+    )
+
+
+def _apply_lifesteal(state: CombatState, skill: Skill) -> None:
+    dmg, _is_crit = _calculate_damage(state, skill.damage, state.player, state.enemy)
+    applied = _apply_damage(state, state.enemy, dmg)
+    healed = applied // 2
+    state.player.hp = min(state.player.max_hp, state.player.hp + healed)
+    _record_event(state, "lifesteal", skill.effect_color)
+    state.push(f">> {skill.name}: {applied} damage, drained {healed} HP!")

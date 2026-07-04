@@ -82,6 +82,23 @@ class ProgramRegistry:
 
 def _default_skills() -> dict[str, Skill]:
     """Default skill set (used when JSON is missing or as fallback)."""
+    skills: dict[str, Skill] = {}
+    skills.update(_default_offensive_skills())
+    skills.update(_default_defensive_skills())
+    skills.update(_default_heal_regen_skills())
+    skills.update(_default_buff_debuff_skills())
+    return skills
+
+
+# ------------------------------------------------------------------
+# Skill-family helpers — each builds a small subset of the default
+# skill roster.  Splitting the long dict into per-category factories
+# makes it trivial to find and tune any single skill.
+# ------------------------------------------------------------------
+
+
+def _default_offensive_skills() -> dict[str, Skill]:
+    """Direct-damage skills (attack, heavy, pierce, multi-hit, dot)."""
     return {
         "wisp": Skill(
             id="wisp",
@@ -105,18 +122,17 @@ def _default_skills() -> dict[str, Skill]:
             effect_glyph="◆",
             crit_bonus=0.10,
         ),
-        "probe": Skill(
-            id="probe",
-            name="Probe",
+        "ice_breaker": Skill(
+            id="ice_breaker",
+            name="ICE BREAKER",
             tier=1,
-            effect=SkillEffect.SHIELD,
-            ap_cost=1,
-            shield=15,
+            effect=SkillEffect.HEAVY_ATTACK,
+            ap_cost=3,
+            damage=30,
             cooldown_ms=2000,
-            effect_color=(0, 200, 255),
-            effect_glyph="◇",
+            effect_color=(255, 255, 0),
+            effect_glyph="▲",
         ),
-        # New skills
         "jackhammer": Skill(
             id="jackhammer",
             name="Jackhammer",
@@ -153,17 +169,50 @@ def _default_skills() -> dict[str, Skill]:
             effect_color=(0, 255, 0),
             effect_glyph="¤",
         ),
-        "ice_breaker": Skill(
-            id="ice_breaker",
-            name="ICE BREAKER",
+    }
+
+
+def _default_defensive_skills() -> dict[str, Skill]:
+    """Shields, detects, and stuns — utility defence."""
+    return {
+        "probe": Skill(
+            id="probe",
+            name="Probe",
             tier=1,
-            effect=SkillEffect.HEAVY_ATTACK,
-            ap_cost=3,
-            damage=30,
+            effect=SkillEffect.SHIELD,
+            ap_cost=1,
+            shield=15,
             cooldown_ms=2000,
-            effect_color=(255, 255, 0),
-            effect_glyph="▲",
+            effect_color=(0, 200, 255),
+            effect_glyph="◇",
         ),
+        "stun_bolt": Skill(
+            id="stun_bolt",
+            name="Stun Bolt",
+            tier=2,
+            effect=SkillEffect.STUN,
+            ap_cost=3,
+            stun_duration_ms=3000,
+            cooldown_ms=6000,
+            effect_color=(255, 255, 0),
+            effect_glyph="✦",
+        ),
+        "detect": Skill(
+            id="detect",
+            name="Detect",
+            tier=1,
+            effect=SkillEffect.DETECT,
+            ap_cost=1,
+            cooldown_ms=3000,
+            effect_color=(255, 255, 255),
+            effect_glyph="?",
+        ),
+    }
+
+
+def _default_heal_regen_skills() -> dict[str, Skill]:
+    """Direct heal + regen (HoT) skills."""
+    return {
         "bandage": Skill(
             id="bandage",
             name="Patch Up",
@@ -187,6 +236,23 @@ def _default_skills() -> dict[str, Skill]:
             effect_color=(100, 255, 100),
             effect_glyph="♥",
         ),
+        "bloodlust": Skill(
+            id="bloodlust",
+            name="Bloodlust",
+            tier=2,
+            effect=SkillEffect.LIFESTEAL,
+            ap_cost=3,
+            damage=18,
+            cooldown_ms=4000,
+            effect_color=(200, 0, 0),
+            effect_glyph="♥",
+        ),
+    }
+
+
+def _default_buff_debuff_skills() -> dict[str, Skill]:
+    """Self-buff + enemy-debuff skills."""
+    return {
         "boost": Skill(
             id="boost",
             name="Boost",
@@ -196,7 +262,7 @@ def _default_skills() -> dict[str, Skill]:
             buff_amount=8,
             buff_duration_ms=10000,
             cooldown_ms=8000,
-            effect_color=(255, 200, 100),
+            effect_color=(255, 200, 0),
             effect_glyph="↑",
         ),
         "jammer": Skill(
@@ -210,38 +276,6 @@ def _default_skills() -> dict[str, Skill]:
             cooldown_ms=6000,
             effect_color=(150, 150, 255),
             effect_glyph="↓",
-        ),
-        "stun_bolt": Skill(
-            id="stun_bolt",
-            name="Stun Bolt",
-            tier=2,
-            effect=SkillEffect.STUN,
-            ap_cost=3,
-            stun_duration_ms=3000,
-            cooldown_ms=6000,
-            effect_color=(255, 255, 0),
-            effect_glyph="✦",
-        ),
-        "bloodlust": Skill(
-            id="bloodlust",
-            name="Bloodlust",
-            tier=2,
-            effect=SkillEffect.LIFESTEAL,
-            ap_cost=3,
-            damage=18,
-            cooldown_ms=4000,
-            effect_color=(200, 0, 0),
-            effect_glyph="♥",
-        ),
-        "detect": Skill(
-            id="detect",
-            name="Detect",
-            tier=1,
-            effect=SkillEffect.DETECT,
-            ap_cost=1,
-            cooldown_ms=3000,
-            effect_color=(255, 255, 255),
-            effect_glyph="?",
         ),
     }
 

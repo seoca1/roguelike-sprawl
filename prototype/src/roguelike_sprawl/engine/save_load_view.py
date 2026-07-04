@@ -113,42 +113,52 @@ def render_save_load(console: tcod.console.Console, state: AppState) -> None:
     SCREEN_HEIGHT = _engine_config.SCREEN_HEIGHT  # noqa: N806
 
     console.clear(bg=(0, 0, 0))
+    _draw_save_load_header(console, SCREEN_WIDTH)
+    manager = SaveManager()
+    slots = manager.list_slots()
+    selected = get_selected_slot(state)
+    _draw_save_load_slots(console, SCREEN_WIDTH, slots, selected, state)
+    _draw_save_load_controls(console, SCREEN_WIDTH, SCREEN_HEIGHT)
+    _draw_save_load_status(console, SCREEN_HEIGHT, state)
 
-    # Title
+
+# ------------------------------------------------------------------
+# render_save_load helpers
+# ------------------------------------------------------------------
+
+
+def _draw_save_load_header(console, screen_width: int) -> None:
+    """Title and subtitle rows at the top of the save/load browser."""
     title = "═══ SAVE / LOAD ═══"
     console.print(
-        x=(SCREEN_WIDTH - len(title)) // 2,
+        x=(screen_width - len(title)) // 2,
         y=2,
         string=title,
         fg=(100, 200, 255),
     )
-
-    # Subtitle
     subtitle = "Select a slot to load or delete"
     console.print(
-        x=(SCREEN_WIDTH - len(subtitle)) // 2,
+        x=(screen_width - len(subtitle)) // 2,
         y=3,
         string=subtitle,
         fg=(150, 150, 150),
     )
 
-    # Get metadata for all slots
-    manager = SaveManager()
-    slots = manager.list_slots()
 
-    # Render slots as a vertical list
+def _draw_save_load_slots(
+    console, screen_width: int, slots, selected: int, state,
+) -> None:
+    """Render the per-slot rows.  Each slot is a 6-row tall box with
+    a one-line status header plus the metadata summary."""
     start_y = 6
-    slot_h = 6  # height per slot
+    slot_h = 6
     slot_w = 60
-    slot_x = (SCREEN_WIDTH - slot_w) // 2
-
-    selected = get_selected_slot(state)
+    slot_x = (screen_width - slot_w) // 2
 
     for i, meta in enumerate(slots):
         slot_y = start_y + i * slot_h
         is_selected = meta.slot == selected
 
-        # Highlight selected slot
         if is_selected:
             border_color = (255, 200, 100)
             text_color = (255, 255, 200)
@@ -157,70 +167,97 @@ def render_save_load(console: tcod.console.Console, state: AppState) -> None:
             text_color = (180, 180, 180)
 
         # Slot frame
-        top = "┌" + "─" * (slot_w - 2) + "┐"
-        bottom = "└" + "─" * (slot_w - 2) + "┘"
-        console.print(x=slot_x, y=slot_y, string=top, fg=border_color)
-        for y in range(slot_y + 1, slot_y + slot_h - 1):
-            console.print(x=slot_x, y=y, string="│" + " " * (slot_w - 2) + "│", fg=border_color)
-        console.print(x=slot_x, y=slot_y + slot_h - 1, string=bottom, fg=border_color)
+        _draw_save_load_slot_frame(
+            console, slot_x, slot_y, slot_w, slot_h, border_color
+        )
+        _draw_save_load_slot_content(
+            console, slot_x, slot_y, slot_w, meta, is_selected, state, text_color
+        )
 
-        # Slot content
+
+def _draw_save_load_slot_frame(
+    console, slot_x: int, slot_y: int, slot_w: int, slot_h: int, border_color,
+) -> None:
+    """The rounded box outline for a single slot row."""
+    top = "┌" + "─" * (slot_w - 2) + "┐"
+    bottom = "└" + "─" * (slot_w - 2) + "┘"
+    console.print(x=slot_x, y=slot_y, string=top, fg=border_color)
+    for y in range(slot_y + 1, slot_y + slot_h - 1):
+        console.print(
+            x=slot_x, y=y,
+            string="│" + " " * (slot_w - 2) + "│",
+            fg=border_color,
+        )
+    console.print(
+        x=slot_x, y=slot_y + slot_h - 1,
+        string=bottom, fg=border_color,
+    )
+
+
+def _draw_save_load_slot_content(
+    console, slot_x: int, slot_y: int, slot_w: int, meta, is_selected: bool,
+    state, text_color,
+) -> None:
+    """Either an existing save (4 detail lines) or an empty placeholder."""
+    if not meta.exists:
         cursor = "▶" if is_selected else " "
-        slot_label = f"{cursor} Slot {meta.slot}"
-        if meta.exists:
-            compat = "✓" if meta.is_compatible else "⚠"
-            mission_str = meta.mission_id or "?"
-            stage_str = meta.current_stage or "?"
-            elapsed_str = _format_elapsed(meta.elapsed_seconds)
-            saved_str = _format_saved_at(meta.saved_at)
-            size_kb = meta.size_bytes / 1024.0
+        line = f"{cursor} Slot {meta.slot}  (empty)"
+        console.print(
+            x=slot_x + 2,
+            y=slot_y + 2,
+            string=line,
+            fg=(80, 80, 90),
+        )
+        return
 
-            line1 = f"{slot_label}  [{compat}]  {mission_str}"
-            line2 = f"    Stage: {stage_str:<14}  Credits: {meta.credits}"
-            line3 = f"    Grade: {meta.player_grade or '?':<14}  Time:  {elapsed_str}"
-            line4 = f"    Saved: {saved_str}  ({size_kb:.1f} KB)"
+    cursor = "▶" if is_selected else " "
+    compat = "✓" if meta.is_compatible else "⚠"
+    mission_str = meta.mission_id or "?"
+    stage_str = meta.current_stage or "?"
+    elapsed_str = _format_elapsed(meta.elapsed_seconds)
+    saved_str = _format_saved_at(meta.saved_at)
+    size_kb = meta.size_bytes / 1024.0
 
-            console.print(x=slot_x + 2, y=slot_y + 1, string=line1, fg=text_color)
-            console.print(x=slot_x + 2, y=slot_y + 2, string=line2, fg=text_color)
-            console.print(x=slot_x + 2, y=slot_y + 3, string=line3, fg=text_color)
-            console.print(x=slot_x + 2, y=slot_y + 4, string=line4, fg=(120, 120, 130))
-        else:
-            line = f"{slot_label}  (empty)"
-            console.print(
-                x=slot_x + 2,
-                y=slot_y + 2,
-                string=line,
-                fg=(80, 80, 90),
-            )
+    line1 = f"{cursor} Slot {meta.slot}  [{compat}]  {mission_str}"
+    line2 = f"    Stage: {stage_str:<14}  Credits: {meta.credits}"
+    line3 = f"    Grade: {meta.player_grade or '?':<14}  Time:  {elapsed_str}"
+    line4 = f"    Saved: {saved_str}  ({size_kb:.1f} KB)"
 
-    # Controls
-    controls_y = SCREEN_HEIGHT - 5
-    controls_lines = [
+    console.print(x=slot_x + 2, y=slot_y + 1, string=line1, fg=text_color)
+    console.print(x=slot_x + 2, y=slot_y + 2, string=line2, fg=text_color)
+    console.print(x=slot_x + 2, y=slot_y + 3, string=line3, fg=text_color)
+    console.print(x=slot_x + 2, y=slot_y + 4, string=line4, fg=(120, 120, 130))
+
+
+def _draw_save_load_controls(
+    console, screen_width: int, screen_height: int,
+) -> None:
+    """Two-line control hint at the bottom of the screen."""
+    controls_y = screen_height - 5
+    lines = [
         "[↑/↓] Select  [1-5] Jump to slot",
         "[ENTER] Load  [DEL] Delete  [ESC] Cancel",
     ]
-    for i, line in enumerate(controls_lines):
+    for i, line in enumerate(lines):
         console.print(
-            x=(SCREEN_WIDTH - len(line)) // 2,
+            x=(screen_width - len(line)) // 2,
             y=controls_y + i,
             string=line,
             fg=(150, 150, 150),
         )
 
-    # Recent status
-    if state.status_messages:
-        for i, msg in enumerate(state.status_messages[-3:]):
-            console.print(
-                x=2,
-                y=SCREEN_HEIGHT - 3 + i,
-                string=msg,
-                fg=(120, 120, 120),
-            )
 
-
-# --- Input ---
-
-
+def _draw_save_load_status(console, screen_height: int, state) -> None:
+    """The last 3 status messages, dimmed, along the very bottom."""
+    if not state.status_messages:
+        return
+    for i, msg in enumerate(state.status_messages[-3:]):
+        console.print(
+            x=2,
+            y=screen_height - 3 + i,
+            string=msg,
+            fg=(120, 120, 120),
+        )
 def handle_save_load_input(event: tcod.event.Event, state: AppState) -> bool:
     """Handle input on the Save/Load screen. Returns False to quit."""
     if not isinstance(event, tcod.event.KeyDown):

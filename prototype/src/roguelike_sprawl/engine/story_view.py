@@ -147,12 +147,10 @@ def render_story(
     controls = shell[RegionId.CONTROLS]
     footer = shell[RegionId.FOOTER]
 
-    # Clear
     for r in shell.values():
         clear_region(console, r)
     draw_dividers(console)
 
-    # Title
     draw_title(
         console,
         title,
@@ -160,107 +158,15 @@ def render_story(
         subtitle=f"Importance: {state.story_importance or 'major'}  [{elapsed_s:.1f}s]",
     )
 
-    # Main area: narrative
     after = registry.get_aftermath(aftermath_id) or _default_aftermath()
-    y = 0
-    console.print(
-        x=main.x + 2,
-        y=main.y + y,
-        string="[Narrative]",
-        fg=(180, 180, 180),
-    )
-    y += 1
-    for line in after.narrative_en.split("\n"):
-        if y >= main.h - 1:
-            break
-        console.print(
-            x=main.x + 2,
-            y=main.y + y,
-            string=f"> {line[: main.w - 4]}",
-            fg=(255, 255, 255),
-        )
-        y += 1
-    y += 1
-    if y < main.h - 4:
-        console.print(
-            x=main.x + 2,
-            y=main.y + y,
-            string="[한국어 자막]",
-            fg=(180, 180, 180),
-        )
-        y += 1
-        for line in after.narrative_ko.split("\n"):
-            if y >= main.h - 1:
-                break
-            console.print(
-                x=main.x + 2,
-                y=main.y + y,
-                string=f"> {line[: main.w - 4]}",
-                fg=(255, 220, 100),
-            )
-            y += 1
-
-    # Reactions (in main area, below narrative)
-    y += 1
-    if y < main.h - 5:
-        console.print(
-            x=main.x + 2,
-            y=main.y + y,
-            string="[Reactions]",
-            fg=(180, 180, 180),
-        )
-        y += 1
-        for rid in after.reaction_ids:
-            if y >= main.h - 1:
-                break
-            react = registry.get_reaction(rid)
-            if react is None:
-                continue
-            console.print(
-                x=main.x + 2,
-                y=main.y + y,
-                string=f"[{react.character.title()}]",
-                fg=(0, 255, 255),
-            )
-            y += 1
-            console.print(
-                x=main.x + 4,
-                y=main.y + y,
-                string=f"> {react.text_en[: main.w - 6]}",
-                fg=(255, 255, 255),
-            )
-            y += 1
-            console.print(
-                x=main.x + 4,
-                y=main.y + y,
-                string=f"> {react.text_ko[: main.w - 6]}",
-                fg=(255, 220, 100),
-            )
-            y += 1
-
-    # Side panel
-    draw_side(
-        console,
-        side,
-        label="Context",
-        lines=[
-            f"Mission: {state.current_mission.title if state.current_mission else 'n/a'}",
-            f"Player HP: {state.player_hp}/{state.player_max_hp}",
-            f"PPL: {state.player_ppl}",
-            f"Grade: {state.player_grade}-up",
-        ],
-    )
-
-    # Controls
+    y = _draw_narrative(console, main, after)
+    y = _draw_reactions(console, main, after, registry, y)
+    _draw_story_side_panel(console, side, state)
     draw_controls(
         console,
         controls,
-        lines=[
-            "[Space] Continue  [Esc] Skip  [Q] Quit",
-        ],
+        lines=["[Space] Continue  [Esc] Skip  [Q] Quit"],
     )
-
-    # Footer
     draw_footer(
         console,
         footer,
@@ -280,6 +186,115 @@ def _default_aftermath() -> Aftermath:
         reaction_ids=(),
     )
 
+
+
+
+# ------------------------------------------------------------------
+# render_story helpers — one per logical concern
+# ------------------------------------------------------------------
+
+
+def _draw_narrative(
+    console: tcod.console.Console,
+    main,
+    after,
+) -> int:
+    """Draw the English + Korean narrative paragraphs into the main
+    region.  Returns the next free y-row after the narrative.
+    """
+    y = 0
+    console.print(
+        x=main.x + 2, y=main.y + y,
+        string="[Narrative]", fg=(180, 180, 180),
+    )
+    y += 1
+    for line in after.narrative_en.split("\n"):
+        if y >= main.h - 1:
+            return y
+        console.print(
+            x=main.x + 2, y=main.y + y,
+            string=f"> {line[: main.w - 4]}", fg=(255, 255, 255),
+        )
+        y += 1
+    y += 1
+    if y < main.h - 4:
+        console.print(
+            x=main.x + 2, y=main.y + y,
+            string="[한국어 자막]", fg=(180, 180, 180),
+        )
+        y += 1
+        for line in after.narrative_ko.split("\n"):
+            if y >= main.h - 1:
+                return y
+            console.print(
+                x=main.x + 2, y=main.y + y,
+                string=f"> {line[: main.w - 4]}", fg=(255, 220, 100),
+            )
+            y += 1
+    return y
+
+
+def _draw_reactions(
+    console: tcod.console.Console,
+    main,
+    after,
+    registry: StoryRegistry,
+    y: int,
+) -> int:
+    """Draw the [Reactions] section (bilingual).  Returns the next
+    free y-row after the reactions block.
+    """
+    y += 1
+    if y < main.h - 5:
+        console.print(
+            x=main.x + 2, y=main.y + y,
+            string="[Reactions]", fg=(180, 180, 180),
+        )
+        y += 1
+        for rid in after.reaction_ids:
+            if y >= main.h - 1:
+                return y
+            react = registry.get_reaction(rid)
+            if react is None:
+                continue
+            console.print(
+                x=main.x + 2, y=main.y + y,
+                string=f"[{react.character.title()}]", fg=(0, 255, 255),
+            )
+            y += 1
+            console.print(
+                x=main.x + 4, y=main.y + y,
+                string=f"> {react.text_en[: main.w - 6]}", fg=(255, 255, 255),
+            )
+            y += 1
+            console.print(
+                x=main.x + 4, y=main.y + y,
+                string=f"> {react.text_ko[: main.w - 6]}", fg=(255, 220, 100),
+            )
+            y += 1
+    return y
+
+
+def _draw_story_side_panel(
+    console: tcod.console.Console,
+    side,
+    state: AppState,
+) -> None:
+    """Draw the right-side context panel (mission + player stats)."""
+    mission_title = (
+        state.current_mission.title if state.current_mission else "n/a"
+    )
+    draw_side(
+        console,
+        side,
+        label="Context",
+        lines=[
+            f"Mission: {mission_title}",
+            f"Player HP: {state.player_hp}/{state.player_max_hp}",
+            f"PPL: {state.player_ppl}",
+            f"Grade: {state.player_grade}-up",
+        ],
+    )
 
 def handle_story_input(event: object, state: AppState) -> bool:
     """Handle input on the Story Event screen. Returns False to quit."""

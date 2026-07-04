@@ -90,115 +90,86 @@ def _draw_equipment_summary(
     state: AppState,
     max_width: int,
 ) -> int:
-    """Draw a compact equipment summary with ASCII character."""
-    # Section header
-    console.print(x=x, y=y, string="=" * (max_width - 1), fg=(100, 200, 255))
-    y += 1
-    console.print(x=x, y=y, string=" RIG", fg=(100, 200, 255))
-    y += 1
-    console.print(x=x, y=y, string="=" * (max_width - 1), fg=(100, 200, 255))
-    y += 1
+    """Draw a compact equipment summary with ASCII character.
 
-    # Get equipment loadout (if exists)
+    Returns the y-row just past the last drawn line.
+    """
+    y = _draw_equipment_header(console, x, y, max_width)
     loadout = getattr(state, "equipment_loadout", None)
     if loadout is None:
         console.print(x=x, y=y, string="(no equipment)", fg=(100, 100, 100))
         return y + 1
+    y = _draw_equipment_slot_rows(console, x, y, loadout)
+    return _draw_equipment_total(console, x, y, loadout)
 
-    # Compact ASCII character with equipment glyphs
+
+# ------------------------------------------------------------------
+# _draw_equipment_summary helpers
+# ------------------------------------------------------------------
+
+
+def _draw_equipment_header(
+    console: tcod.console.Console,
+    x: int,
+    y: int,
+    max_width: int,
+) -> int:
+    """Top + bottom section dividers plus the RIG label."""
+    bar = "=" * (max_width - 1)
+    console.print(x=x, y=y, string=bar, fg=(100, 200, 255))
+    y += 1
+    console.print(x=x, y=y, string=" RIG", fg=(100, 200, 255))
+    y += 1
+    console.print(x=x, y=y, string=bar, fg=(100, 200, 255))
+    y += 1
+    return y
+
+
+def _draw_equipment_slot_rows(
+    console: tcod.console.Console,
+    x: int,
+    y: int,
+    loadout,
+) -> int:
+    """Draw the 8 body-slot rows (head, eyes, body, gloves, boots, deck,
+    implant, trodes).  Each row either shows the equipment glyph/tier
+    or a dimmed ``[  ]`` placeholder.
+    """
     from ..equipment.equipment import EquipSlot
 
-    head = loadout.get(EquipSlot.HEADWARE)
-    eyes = loadout.get(EquipSlot.EYEWARE)
-    body = loadout.get(EquipSlot.BODYSUIT)
-    gloves = loadout.get(EquipSlot.GLOVES)
-    boots = loadout.get(EquipSlot.BOOTS)
-    deck = loadout.get(EquipSlot.DECK)
-    implant = loadout.get(EquipSlot.IMPLANT)
-    trodes = loadout.get(EquipSlot.TRODES)
+    slot_labels: list[tuple[EquipSlot, str]] = [
+        (EquipSlot.HEADWARE, "HEAD"),
+        (EquipSlot.EYEWARE, "EYES"),
+        (EquipSlot.BODYSUIT, "BODY"),
+        (EquipSlot.GLOVES, "GRIP"),
+        (EquipSlot.BOOTS, "BOOT"),
+        (EquipSlot.DECK, "DECK"),
+        (EquipSlot.IMPLANT, "IMPL"),
+        (EquipSlot.TRODES, "TROD"),
+    ]
+    placeholder = "[  ]"
+    for slot, label in slot_labels:
+        item = loadout.get(slot)
+        if item is None:
+            console.print(x=x, y=y, string=f"{label}: {placeholder}", fg=(80, 80, 80))
+        else:
+            console.print(
+                x=x,
+                y=y,
+                string=f"{label}: {item.ascii_glyph} {item.tier.value}",
+                fg=item.ascii_color,
+            )
+        y += 1
+    return y
 
-    # Row 1: Head
-    if head:
-        console.print(
-            x=x, y=y, string=f"HEAD: {head.ascii_glyph} {head.tier.value}", fg=head.ascii_color
-        )
-    else:
-        console.print(x=x, y=y, string="HEAD: [  ]", fg=(80, 80, 80))
-    y += 1
 
-    # Row 2: Eyes
-    if eyes:
-        console.print(
-            x=x, y=y, string=f"EYES: {eyes.ascii_glyph} {eyes.tier.value}", fg=eyes.ascii_color
-        )
-    else:
-        console.print(x=x, y=y, string="EYES: [  ]", fg=(80, 80, 80))
-    y += 1
-
-    # Row 3: Body
-    if body:
-        console.print(
-            x=x, y=y, string=f"BODY: {body.ascii_glyph} {body.tier.value}", fg=body.ascii_color
-        )
-    else:
-        console.print(x=x, y=y, string="BODY: [  ]", fg=(80, 80, 80))
-    y += 1
-
-    # Row 4: Gloves
-    if gloves:
-        console.print(
-            x=x,
-            y=y,
-            string=f"GRIP: {gloves.ascii_glyph} {gloves.tier.value}",
-            fg=gloves.ascii_color,
-        )
-    else:
-        console.print(x=x, y=y, string="GRIP: [  ]", fg=(80, 80, 80))
-    y += 1
-
-    # Row 5: Boots
-    if boots:
-        console.print(
-            x=x, y=y, string=f"BOOT: {boots.ascii_glyph} {boots.tier.value}", fg=boots.ascii_color
-        )
-    else:
-        console.print(x=x, y=y, string="BOOT: [  ]", fg=(80, 80, 80))
-    y += 1
-
-    # Row 6: Deck
-    if deck:
-        console.print(
-            x=x, y=y, string=f"DECK: {deck.ascii_glyph} {deck.tier.value}", fg=deck.ascii_color
-        )
-    else:
-        console.print(x=x, y=y, string="DECK: [  ]", fg=(80, 80, 80))
-    y += 1
-
-    # Row 7: Implant (optional)
-    if implant:
-        console.print(
-            x=x,
-            y=y,
-            string=f"IMPL: {implant.ascii_glyph} {implant.tier.value}",
-            fg=implant.ascii_color,
-        )
-    else:
-        console.print(x=x, y=y, string="IMPL: [  ]", fg=(80, 80, 80))
-    y += 1
-
-    # Row 8: Trodes (optional)
-    if trodes:
-        console.print(
-            x=x,
-            y=y,
-            string=f"TROD: {trodes.ascii_glyph} {trodes.tier.value}",
-            fg=trodes.ascii_color,
-        )
-    else:
-        console.print(x=x, y=y, string="TROD: [  ]", fg=(80, 80, 80))
-    y += 1
-
-    # Total stats line
+def _draw_equipment_total(
+    console: tcod.console.Console,
+    x: int,
+    y: int,
+    loadout,
+) -> int:
+    """Bottom line: total bonus summary across all slots."""
     stats = loadout.total_stats()
     total_bonuses = (
         stats.attack_bonus
@@ -215,7 +186,6 @@ def _draw_equipment_summary(
     else:
         console.print(x=x, y=y, string="Total: (no bonuses)", fg=(100, 100, 100))
     y += 1
-
     return y
 
 

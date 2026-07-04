@@ -381,14 +381,29 @@ class SaveManager:
 
         if not isinstance(state, AppState):
             raise TypeError(f"state must be AppState, got {type(state).__name__}")
-
-        # Build saved run from AppState
-        run_state = state.run_state
-        if run_state is None:
+        if state.run_state is None:
             raise SaveError("No run in progress to save")
 
-        # Run state as dict (Stage enums -> strings)
-        run_state_dict: dict[str, Any] = {
+        saved_run = SavedRun(
+            version=SAVE_FORMAT_VERSION,
+            saved_at=datetime.now(UTC).isoformat(),
+            elapsed_seconds=elapsed_seconds,
+            run_state=self._serialize_run_state(state.run_state),
+            mission=self._serialize_mission(state.current_mission),
+            app_state=self._serialize_app_state(state),
+            metadata=self._serialize_metadata(state),
+        )
+        json_data = json.dumps(saved_run.to_dict(), indent=2, ensure_ascii=False)
+        _atomic_write(self._slot_path(slot), json_data)
+        return self.get_metadata(slot)
+
+    # ------------------------------------------------------------------
+    # save() helpers — split for readability
+    # ------------------------------------------------------------------
+
+    def _serialize_run_state(self, run_state) -> dict[str, Any]:
+        """Flatten the run-state into a JSON-safe dict (Stage enums → strings)."""
+        return {
             "current_stage": run_state.current_stage.value,
             "completed_stages": [s.value for s in run_state.completed_stages],
             "pending_advance": run_state.pending_advance,
@@ -398,30 +413,33 @@ class SaveManager:
             "started_at_ms": run_state.started_at_ms,
         }
 
-        # Mission as dict
-        mission_dict: dict[str, Any] | None = None
-        if state.current_mission is not None:
-            m = state.current_mission
-            mission_dict = {
-                "id": m.id,
-                "title": m.title,
-                "fixer": m.fixer,
-                "arc": m.arc,
-                "grade_min": m.grade_min,
-                "grade_max": m.grade_max,
-                "matrix_seed": m.matrix_seed,
-                "zone": m.zone.value,
-                "rewards": {
-                    "credits": m.rewards.credits if m.rewards else 0,
-                    "materials": dict(m.rewards.materials) if m.rewards else {},
-                },
-            }
+    def _serialize_mission(self, mission) -> dict[str, Any] | None:
+        """Flatten the current mission into a JSON-safe dict, or None."""
+        if mission is None:
+            return None
+        return {
+            "id": mission.id,
+            "title": mission.title,
+            "fixer": mission.fixer,
+            "arc": mission.arc,
+            "grade_min": mission.grade_min,
+            "grade_max": mission.grade_max,
+            "matrix_seed": mission.matrix_seed,
+            "zone": mission.zone.value,
+            "rewards": {
+                "credits": mission.rewards.credits if mission.rewards else 0,
+                "materials": dict(mission.rewards.materials) if mission.rewards else {},
+            },
+        }
 
-        # App state — only the fields needed to resume a Run
-        # Include matrix graph if present (for complete state restoration).
-        # If serialization fails (e.g. newer field the saver doesn't know
-        # about), fall back to no-matrix save rather than crashing — the
-        # player will re-jack-in on restore.
+    def _serialize_app_state(self, state) -> dict[str, Any]:
+        """Serialize the AppState fields needed to resume a Run.
+
+        Includes the matrix graph if present — falls back to no-matrix
+        save on serialization errors (the player will re-jack-in on
+        restore) so a single unknown field doesn't break the entire
+        save.
+        """
         matrix_dict: dict[str, object] | None = None
         if state.matrix is not None:
             try:
@@ -430,7 +448,7 @@ class SaveManager:
                 _log_save_warning(f"matrix serialization failed: {exc}")
                 matrix_dict = None
 
-        app_state_dict: dict[str, Any] = {
+        return {
             "inventory": dict(state.inventory),
             "credits": state.credits,
             "current_node_id": state.current_node_id,
@@ -445,27 +463,12 @@ class SaveManager:
             "reputation": state.reputation.to_dict(),
         }
 
-        # Metadata for display
-        metadata_dict: dict[str, Any] = {
+    def _serialize_metadata(self, state) -> dict[str, Any]:
+        """Lightweight display metadata for the save-slot list."""
+        return {
             "player_grade": state.player_grade,
             "screen": state.screen.value,
         }
-
-        saved_run = SavedRun(
-            version=SAVE_FORMAT_VERSION,
-            saved_at=datetime.now(UTC).isoformat(),
-            elapsed_seconds=elapsed_seconds,
-            run_state=run_state_dict,
-            mission=mission_dict,
-            app_state=app_state_dict,
-            metadata=metadata_dict,
-        )
-
-        # Atomic write
-        json_data = json.dumps(saved_run.to_dict(), indent=2, ensure_ascii=False)
-        _atomic_write(self._slot_path(slot), json_data)
-
-        return self.get_metadata(slot)
 
     def load(self, slot: int) -> SavedRun:
         """Load a saved Run from a slot.
@@ -512,23 +515,52 @@ class SaveManager:
         Raises:
             SaveSlotEmptyError, SaveVersionMismatchError, SaveCorruptedError
         """
-        from ..run import RunState, Stage
         from .state import ScreenKind
 
         saved = self.load(slot)
         rs_data = saved.run_state
         app_data = saved.app_state
 
-        # Restore RunState
+        current_stage = self._restore_run_state(state, rs_data)
+        self._restore_app_state_fields(state, app_data)
+        self._restore_reputation(state, app_data)
+        if saved.metadata.get("player_grade") is not None:
+            state.player_grade = int(saved.metadata["player_grade"])
+
+        matrix_restored = self._restore_matrix(state, app_data)
+        self._reset_transient_state(state)
+        self._restore_mission(state, app_data)
+
+        # Recompute layouts if matrix came back.
+        if matrix_restored and state.matrix is not None:
+            state.cyberspace_layouts = self._recompute_layouts(state.matrix)
+        else:
+            state.cyberspace_layouts = None
+
+        self._restore_screen(state, current_stage)
+        state.status_messages.append(f">>> Game loaded from slot {slot}")
+        state.status_messages.append(f">>> Stage: {current_stage.value}")
+        if matrix_restored and state.matrix is not None:
+            state.status_messages.append(
+                f">>> Matrix restored: {len(state.matrix.nodes)} nodes, "
+                f"{len(state.matrix.edges)} edges"
+            )
+
+    # ------------------------------------------------------------------
+    # restore_state helpers — each handles one logical step.
+    # ------------------------------------------------------------------
+
+    def _restore_run_state(self, state: AppState, rs_data: dict) -> Any:
+        """Rebuild ``state.run_state`` from the saved run dict."""
+        from ..run import RunState, Stage
+
         try:
             current_stage = Stage(rs_data.get("current_stage", "pending"))
         except ValueError:
             current_stage = Stage.PENDING
-
         completed_stages: tuple[Stage, ...] = tuple(
             Stage(s) for s in rs_data.get("completed_stages", [])
         )
-
         state.run_state = RunState(
             current_stage=current_stage,
             completed_stages=completed_stages,
@@ -538,8 +570,10 @@ class SaveManager:
             mission_id=rs_data.get("mission_id", "first_jack"),
             started_at_ms=rs_data.get("started_at_ms", 0),
         )
+        return current_stage
 
-        # Restore AppState fields
+    def _restore_app_state_fields(self, state: AppState, app_data: dict) -> None:
+        """Populate the small AppState scalar / set fields."""
         state.inventory = dict(app_data.get("inventory", {}))
         state.credits = int(app_data.get("credits", 0))
         state.current_node_id = app_data.get("current_node_id")
@@ -549,54 +583,58 @@ class SaveManager:
         state.in_server_browser = app_data.get("in_server_browser", True)
         state.selected_server_index = int(app_data.get("selected_server_index", 0))
 
-        # Restore faction reputation (Phase 6+). Missing/legacy saves
-        # simply leave the default (empty) reputation state.
+    def _restore_reputation(self, state: AppState, app_data: dict) -> None:
+        """Phase 6+: restore faction reputation.  Missing/legacy saves
+        simply leave the default (empty) reputation state.
+        """
         rep_data = app_data.get("reputation")
-        if isinstance(rep_data, dict):
-            from ..run.reputation import ReputationState
+        if not isinstance(rep_data, dict):
+            return
+        from ..run.reputation import ReputationState
+        try:
+            state.reputation = ReputationState.from_dict(rep_data)
+        except (KeyError, TypeError, ValueError) as exc:
+            _log_save_warning(f"reputation restore failed: {exc}")
+            state.reputation = ReputationState()
 
-            try:
-                state.reputation = ReputationState.from_dict(rep_data)
-            except (KeyError, TypeError, ValueError) as exc:
-                _log_save_warning(f"reputation restore failed: {exc}")
-                state.reputation = ReputationState()
-        # Restore player_grade from metadata (persistent across runs)
-        if saved.metadata.get("player_grade") is not None:
-            state.player_grade = int(saved.metadata["player_grade"])
-
-        # Matrix and other state — try to restore from saved data.
-        # If the matrix can't be restored (corrupted/missing), the player
-        # will need to re-jack-in but other state is preserved.
+    def _restore_matrix(self, state: AppState, app_data: dict) -> bool:
+        """Try to restore the cyberspace MatrixGraph.  Returns True iff
+        a valid matrix was deserialised (the caller then recomputes
+        layouts; otherwise the player must re-jack-in).
+        """
         matrix_data = app_data.get("matrix")
-        matrix_restored = False
-        if matrix_data and isinstance(matrix_data, dict):
-            try:
-                from ..matrix.graph import MatrixGraph
-
-                state.matrix = MatrixGraph.from_dict(matrix_data)
-                matrix_restored = True
-            except (KeyError, TypeError, ValueError, AttributeError) as e:
-                # Matrix schema evolved; treat as missing rather than crash.
-                state.status_messages.append(
-                    f">>> Warning: matrix restore failed ({e}), re-jack-in required"
-                )
-                state.matrix = None
-        else:
+        if not (matrix_data and isinstance(matrix_data, dict)):
             state.matrix = None
+            return False
+        try:
+            from ..matrix.graph import MatrixGraph
 
-        # Recompute cyberspace_layouts if matrix was restored
-        if matrix_restored and state.matrix is not None:
-            try:
-                from ..matrix.graph import compute_layout
+            state.matrix = MatrixGraph.from_dict(matrix_data)
+            return True
+        except (KeyError, TypeError, ValueError, AttributeError) as e:
+            # Matrix schema evolved; treat as missing rather than crash.
+            state.status_messages.append(
+                f">>> Warning: matrix restore failed ({e}), re-jack-in required"
+            )
+            state.matrix = None
+            return False
 
-                state.cyberspace_layouts = dict(compute_layout(state.matrix))
-            except (KeyError, TypeError, ValueError, ImportError):
-                # Layout computation can fail for unusual graph shapes
-                # but the matrix itself is valid — degrade gracefully.
-                state.cyberspace_layouts = None
-        else:
-            state.cyberspace_layouts = None
+    def _recompute_layouts(self, matrix: Any) -> dict | None:
+        """Rebuild cyberspace_layouts after a successful matrix restore.
+        Returns None if the layout computation can't run for any
+        reason — the matrix itself is still valid.
+        """
+        try:
+            from ..matrix.graph import compute_layout
 
+            return dict(compute_layout(matrix))
+        except (KeyError, TypeError, ValueError, ImportError):
+            return None
+
+    def _reset_transient_state(self, state: AppState) -> None:
+        """Clear per-run transient objects (combat, cinematic, NPC)
+        that we don't serialise and that should start fresh on load.
+        """
         state.server_subgraph = None
         state.combat_state = None
         state.cinematic_state = None
@@ -605,39 +643,44 @@ class SaveManager:
         state.action_menu_open = False
         state.action_menu_index = 0
 
-        # Restore mission (just id reference; full data is in saved file)
-        # The mission is reloaded from mission data when needed
-        if app_data.get("current_mission_id"):
-            from ..missions import JobBoard
-            from . import config as _engine_config
+    def _restore_mission(self, state: AppState, app_data: dict) -> None:
+        """Reload the current mission object from the JSON registry
+        if its id is present in the save.
+        """
+        mission_id = app_data.get("current_mission_id")
+        if not mission_id:
+            return
+        from ..missions import JobBoard
+        from . import config as _engine_config
+        try:
+            board = JobBoard.load(
+                _engine_config.DATA_DIR / "missions" / "missions.json"
+            )
+            state.current_mission = board.get(mission_id)
+        except (OSError, json.JSONDecodeError, KeyError, ValueError):
+            # Mission JSON missing or unparseable — fall back to no mission.
+            state.current_mission = None
 
-            try:
-                board = JobBoard.load(_engine_config.DATA_DIR / "missions" / "missions.json")
-                state.current_mission = board.get(app_data["current_mission_id"])
-            except (OSError, json.JSONDecodeError, KeyError, ValueError):
-                # Mission JSON missing or unparseable — fall back to no mission.
-                state.current_mission = None
+    def _restore_screen(self, state: AppState, current_stage: Any) -> None:
+        """Choose the right ScreenKind for the saved stage.
+        If the matrix was restored and the stage is mid-run, jump
+        back into MATRIX; otherwise fall back to HUB.
+        """
+        from .state import ScreenKind
+        from ..run import Stage
 
-        # Set screen based on saved stage
-        # If matrix was restored, go to MATRIX (continue exploration).
-        # Otherwise, fall back to HUB (player must re-jack-in).
-        if current_stage in (Stage.PENDING, Stage.MEET_NPC, Stage.EXTRACT_DATA, Stage.DEFEAT_ICE):
-            state.screen = ScreenKind.MATRIX if state.matrix is not None else ScreenKind.HUB
+        if current_stage in (
+            Stage.PENDING, Stage.MEET_NPC, Stage.EXTRACT_DATA, Stage.DEFEAT_ICE,
+        ):
+            state.screen = (
+                ScreenKind.MATRIX if state.matrix is not None else ScreenKind.HUB
+            )
         elif current_stage in (Stage.JACK_OUT, Stage.REWARD, Stage.DEBRIEF):
-            # Post-combat: return to hub to continue
             state.screen = ScreenKind.HUB
         elif current_stage in (Stage.COMPLETE,):
             state.screen = ScreenKind.HUB
         elif current_stage in (Stage.FAILED, Stage.DEATH_RESTART):
             state.screen = ScreenKind.DEATH
-
-        state.status_messages.append(f">>> Game loaded from slot {slot}")
-        state.status_messages.append(f">>> Stage: {current_stage.value}")
-        if matrix_restored and state.matrix is not None:
-            state.status_messages.append(
-                f">>> Matrix restored: {len(state.matrix.nodes)} nodes, "
-                f"{len(state.matrix.edges)} edges"
-            )
 
     def delete(self, slot: int) -> bool:
         """Delete a save slot.

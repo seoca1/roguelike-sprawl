@@ -388,119 +388,131 @@ def boss_death_sequence(spec: BossSpec) -> list[CinematicSequence]:
     4. Final destruction (3-4 frames)
     5. Epilogue dialogue
     """
-    sequences: list[CinematicSequence] = []
+    dispatch = {
+        IceType.GOLIATH: _goliath_death_sequence,
+        IceType.BLACK:   _black_death_sequence,
+    }
+    handler = dispatch.get(spec.base_ice_type, _watchdog_death_sequence)
+    return handler()
 
-    if spec.base_ice_type == IceType.GOLIATH:
-        # Slow, heavy destruction with earthquake
-        seq1 = CinematicSequence(
-            name="goliath_dmg_phase",
-            phases=(
-                ("[X_X]", (255, 100, 100), 100),
-                ("[X!X]", (255, 50, 50), 100),
-                ("[#_#]", (200, 100, 100), 150),
-                ("[╳_╳]", (200, 50, 50), 200),
-            ),
-        )
-        seq2 = CinematicSequence(
-            name="goliath_crit_fail",
-            phases=(
-                ("▓▓▓ 경고 ▓▓▓", (255, 200, 0), 300),
-                ("코어 보호 실패", (255, 150, 0), 400),
-                ("·····", (200, 100, 100), 300),
-            ),
-        )
-        seq3 = CinematicSequence(
-            name="goliath_core_exposure",
-            phases=(
-                ("[___]", (255, 100, 100), 200),
-                ("[*_*]", (255, 200, 0), 250),
-                ("[*█*]", (255, 255, 100), 300),
-            ),
-        )
-        seq4 = CinematicSequence(
-            name="goliath_final",
-            phases=(
-                ("[*█*]", (255, 255, 200), 150),
-                ("[*▓*]", (200, 200, 100), 200),
-                ("·····", (100, 100, 100), 300),
-            ),
-        )
-        sequences = [seq1, seq2, seq3, seq4]
 
-    elif spec.base_ice_type == IceType.BLACK:
-        # Glitchy corruption, code collapse
-        seq1 = CinematicSequence(
-            name="black_dmg_phase",
-            phases=(
-                (f"[{GLITCH_COLOR[0]}ERR]", (255, 100, 0), 100),
-                ("[ERR]", (255, 0, 0), 100),
-                (f"[{GLITCH_COLOR[0]}?????]", (200, 0, 200), 150),
-                ("[▓▓▓▓▓]", (100, 100, 100), 200),
-            ),
-        )
-        seq2 = CinematicSequence(
-            name="black_crit_fail",
-            phases=(
-                ("▒ 권한 박탈 ▒", (255, 0, 100), 250),
-                ("[연결 손상]", (200, 0, 100), 300),
-                ("·····", (100, 0, 100), 250),
-            ),
-        )
-        seq3 = CinematicSequence(
-            name="black_core_exposure",
-            phases=(
-                ("[▒▒▒▒▒]", (80, 80, 80), 200),
-                ("[░░░░░]", (60, 60, 60), 250),
-                ("[_____]", (40, 40, 40), 300),
-            ),
-        )
-        seq4 = CinematicSequence(
-            name="black_final",
-            phases=(
-                ("[_____]", (40, 40, 40), 200),
-                ("· · ·", (30, 30, 30), 300),
-                ("[연결 종료]", (100, 100, 100), 400),
-            ),
-        )
-        sequences = [seq1, seq2, seq3, seq4]
+# ------------------------------------------------------------------
+# Per-ICE-type death-sequence builders.  Each returns the four-stage
+# CinematicSequence list for that ICE archetype.
+# ------------------------------------------------------------------
 
-    else:  # WATCHDOG
-        # Predatory fall, final howl
-        seq1 = CinematicSequence(
-            name="watchdog_dmg_phase",
-            phases=(
-                ("[X_O]", (220, 180, 100), 150),
-                ("[X_X]", (200, 100, 100), 200),
-                ("[X_X]", (150, 80, 80), 250),
-            ),
-        )
-        seq2 = CinematicSequence(
-            name="watchdog_crit_fail",
-            phases=(
-                ("...", (200, 150, 100), 200),
-                ("...woof?", (200, 100, 100), 400),
-                ("[system: target lost]", (180, 100, 100), 400),
-            ),
-        )
-        seq3 = CinematicSequence(
-            name="watchdog_core_exposure",
-            phases=(
-                ("[X_X]", (150, 80, 80), 200),
-                ("[X·X]", (100, 60, 60), 250),
-                ("[·_·]", (80, 40, 40), 300),
-            ),
-        )
-        seq4 = CinematicSequence(
-            name="watchdog_final",
-            phases=(
-                ("[·_·]", (60, 30, 30), 200),
-                ("· · ·", (40, 20, 20), 400),
-                ("[추적 종료]", (100, 100, 100), 400),
-            ),
-        )
-        sequences = [seq1, seq2, seq3, seq4]
 
-    return sequences
+def _goliath_death_sequence() -> list[CinematicSequence]:
+    """Slow, heavy destruction with earthquake — corp-war-machine feel."""
+    seq1 = CinematicSequence(
+        name="goliath_dmg_phase",
+        phases=(
+            ("[X_X]", (255, 100, 100), 100),
+            ("[X!X]", (255, 50, 50), 100),
+            ("[#_#]", (200, 100, 100), 150),
+            ("[╳_╳]", (200, 50, 50), 200),
+        ),
+    )
+    seq2 = CinematicSequence(
+        name="goliath_crit_fail",
+        phases=(
+            ("▓▓▓ 경고 ▓▓▓", (255, 200, 0), 300),
+            ("코어 보호 실패", (255, 150, 0), 400),
+            ("·····", (200, 100, 100), 300),
+        ),
+    )
+    seq3 = CinematicSequence(
+        name="goliath_core_exposure",
+        phases=(
+            ("[___]", (255, 100, 100), 200),
+            ("[*_*]", (255, 200, 0), 250),
+            ("[*█*]", (255, 255, 100), 300),
+        ),
+    )
+    seq4 = CinematicSequence(
+        name="goliath_final",
+        phases=(
+            ("[*█*]", (255, 255, 200), 150),
+            ("[*▓*]", (200, 200, 100), 200),
+            ("·····", (100, 100, 100), 300),
+        ),
+    )
+    return [seq1, seq2, seq3, seq4]
+
+
+def _black_death_sequence() -> list[CinematicSequence]:
+    """Glitchy corruption, code collapse — ICE-controlled ICE."""
+    seq1 = CinematicSequence(
+        name="black_dmg_phase",
+        phases=(
+            (f"[{GLITCH_COLOR[0]}ERR]", (255, 100, 0), 100),
+            ("[ERR]", (255, 0, 0), 100),
+            (f"[{GLITCH_COLOR[0]}?????]", (200, 0, 200), 150),
+            ("[▓▓▓▓▓]", (100, 100, 100), 200),
+        ),
+    )
+    seq2 = CinematicSequence(
+        name="black_crit_fail",
+        phases=(
+            ("▒ 권한 박탈 ▒", (255, 0, 100), 250),
+            ("[연결 손상]", (200, 0, 100), 300),
+            ("·····", (100, 0, 100), 250),
+        ),
+    )
+    seq3 = CinematicSequence(
+        name="black_core_exposure",
+        phases=(
+            ("[▒▒▒▒▒]", (80, 80, 80), 200),
+            ("[░░░░░]", (60, 60, 60), 250),
+            ("[_____]", (40, 40, 40), 300),
+        ),
+    )
+    seq4 = CinematicSequence(
+        name="black_final",
+        phases=(
+            ("[_____]", (40, 40, 40), 200),
+            ("· · ·", (30, 30, 30), 300),
+            ("[연결 종료]", (100, 100, 100), 400),
+        ),
+    )
+    return [seq1, seq2, seq3, seq4]
+
+
+def _watchdog_death_sequence() -> list[CinematicSequence]:
+    """Predatory fall, final howl — default for non-archetype bosses."""
+    seq1 = CinematicSequence(
+        name="watchdog_dmg_phase",
+        phases=(
+            ("[X_O]", (220, 180, 100), 150),
+            ("[X_X]", (200, 100, 100), 200),
+            ("[X_X]", (150, 80, 80), 250),
+        ),
+    )
+    seq2 = CinematicSequence(
+        name="watchdog_crit_fail",
+        phases=(
+            ("...", (200, 150, 100), 200),
+            ("...woof?", (200, 100, 100), 400),
+            ("[system: target lost]", (180, 100, 100), 400),
+        ),
+    )
+    seq3 = CinematicSequence(
+        name="watchdog_core_exposure",
+        phases=(
+            ("[X_X]", (150, 80, 80), 200),
+            ("[X·X]", (100, 60, 60), 250),
+            ("[·_·]", (80, 40, 40), 300),
+        ),
+    )
+    seq4 = CinematicSequence(
+        name="watchdog_final",
+        phases=(
+            ("[·_·]", (60, 30, 30), 200),
+            ("· · ·", (40, 20, 20), 400),
+            ("[추적 종료]", (100, 100, 100), 400),
+        ),
+    )
+    return [seq1, seq2, seq3, seq4]
 
 
 # ----------------------------------------------------------------------------

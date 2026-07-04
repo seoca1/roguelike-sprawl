@@ -557,7 +557,34 @@ def render_scene(
     speaker = dialogue.speaker_ko if is_ko else dialogue.speaker
     text = dialogue.text_ko if is_ko else dialogue.text_en
 
-    # ---- Top bar (1 line) ----
+    _draw_scene_top_bar(console, width, scene_index, scene_total,
+                         title, scene, paused)
+    _draw_scene_background_band(console, width, background)
+    _draw_scene_portrait(console, width, portrait_l, portrait_r)
+    _draw_scene_speaker_heading(console, width, speaker)
+    page_count = _draw_scene_prose_body(
+        console, width, text, typed_chars, speaker,
+        scene_index, scene_total,
+    )
+    _draw_scene_footer(console, width, height, scene_index, scene_total,
+                        paused, page_count)
+
+
+# ------------------------------------------------------------------
+# render_scene helpers — one per band of the book-page layout.
+# ------------------------------------------------------------------
+
+
+def _draw_scene_top_bar(
+    console: tcod.console.Console,
+    width: int,
+    scene_index: int,
+    scene_total: int,
+    title: str,
+    scene: SceneData,
+    paused: bool,
+) -> None:
+    """Top bar: scene counter + title + character + control hint."""
     top = f" [{scene_index + 1}/{scene_total}]  {title}  ·  {scene.character.upper()}"
     if paused:
         top += "                [PAUSED]  [P] resume"
@@ -566,84 +593,144 @@ def render_scene(
     console.print(0, 0, top[:width])
     console.print(0, 1, "─" * width)
 
-    # ---- Background band (subtle, y=2..13) ----
+
+def _draw_scene_background_band(
+    console: tcod.console.Console,
+    width: int,
+    background: Background | None,
+) -> None:
+    """Atmospheric background art, y=2..13."""
+    if background is None:
+        return
     bg_band_bottom = 14
-    if background is not None:
-        for i, line in enumerate(background.art):
-            y = 2 + i
-            if y >= bg_band_bottom:
-                break
-            console.print(0, y, line[:width])
+    for i, line in enumerate(background.art):
+        y = 2 + i
+        if y >= bg_band_bottom:
+            break
+        console.print(0, y, line[:width])
 
-    # ---- Portrait (small, top-left or top-right) ----
+
+def _draw_scene_portrait(
+    console: tcod.console.Console,
+    width: int,
+    portrait_l: Portrait | None,
+    portrait_r: Portrait | None,
+) -> None:
+    """A small portrait in the corner with a dimmed backdrop."""
     portrait = portrait_l or portrait_r
-    if portrait is not None:
-        px = 2 if portrait_l else width - portrait.width - 2
-        py = 2
-        # Dim background panel behind portrait
-        for dy in range(portrait.height):
-            y = py + dy
-            if y >= bg_band_bottom:
-                break
-            for dx in range(portrait.width + 4):
-                x = px - 2 + dx
-                if 0 <= x < width:
-                    code = int(console.ch[x, y])
-                    if code == 0x20:
-                        console.print(x, y, "░")
-        for i, line in enumerate(portrait.art):
-            y = py + i
-            if y >= bg_band_bottom:
-                break
-            console.print(px, y, line[:width])
+    if portrait is None:
+        return
+    px = 2 if portrait_l else width - portrait.width - 2
+    py = 2
+    bg_band_bottom = 14
+    # Dim background panel behind portrait
+    for dy in range(portrait.height):
+        y = py + dy
+        if y >= bg_band_bottom:
+            break
+        for dx in range(portrait.width + 4):
+            x = px - 2 + dx
+            if 0 <= x < width:
+                code = int(console.ch[x, y])
+                if code == 0x20:
+                    console.print(x, y, "░")
+    for i, line in enumerate(portrait.art):
+        y = py + i
+        if y >= bg_band_bottom:
+            break
+        console.print(px, y, line[:width])
 
-    # ---- Speaker heading (chapter-style) ----
-    heading_y = 14
-    if speaker:
-        heading = f"── {speaker} ──"
-        console.print((width - len(heading)) // 2, heading_y, heading)
 
-    # ---- Novel prose body (y=15..HEIGHT-4) ----
+def _draw_scene_speaker_heading(
+    console: tcod.console.Console,
+    width: int,
+    speaker: str,
+) -> None:
+    """Centered chapter-style heading above the prose body."""
+    if not speaker:
+        return
+    heading = f"── {speaker} ──"
+    console.print((width - len(heading)) // 2, 14, heading)
+
+
+def _draw_scene_prose_body(
+    console: tcod.console.Console,
+    width: int,
+    text: str,
+    typed_chars: int,
+    speaker: str,
+    scene_index: int,
+    scene_total: int,
+) -> int:
+    """Auto-paginated prose with a per-character typing effect.
+
+    Uses the typed cursor to figure out which page is on-screen and
+    how many characters of it are revealed.
+    """
+    height = console.height
     body_y = 16 if speaker else 14
     body_bottom = height - 4
     lines_per_page = max(1, body_bottom - body_y)
-    # Use a slightly wider body for the novel feel
     body_width = width - NOVEL_LEFT_MARGIN - NOVEL_RIGHT_MARGIN
     wrapped = wrap_text_for_novel(text, width=width)
     pages = paginate_lines(wrapped, lines_per_page=lines_per_page, blank_separator=False)
     current_page = compute_typed_page_index(pages, typed_chars, text)
     page_lines = pages[current_page] if pages else []
+    rendered_lines = _truncate_page_to_typed(page_lines, typed_chars, pages, current_page)
+    _emit_typed_lines(console, width, body_y, body_bottom, body_width,
+                     rendered_lines)
+    return len(pages)
 
-    # Count chars in all previous pages (so we know how many chars into
-    # the current page the typing cursor has reached)
+
+def _truncate_page_to_typed(
+    page_lines: list[str],
+    typed_chars: int,
+    pages: list[list[str]],
+    current_page: int,
+) -> list[str]:
+    """Return the page's lines, with the last one cut at the typed
+    cursor so the rest of the text appears progressively."""
+
     def _page_char_count(page: list[str]) -> int:
         # n lines joined by single spaces = sum(len) + (n-1) spaces
         return sum(len(line) for line in page) + max(0, len(page) - 1)
 
     chars_so_far = sum(_page_char_count(p) for p in pages[:current_page])
     chars_this_page = max(0, typed_chars - chars_so_far)
-    # Render lines up to the typed cursor
     cursor = 0
-    rendered_lines: list[str] = []
+    rendered: list[str] = []
     for line in page_lines:
         if cursor >= chars_this_page:
-            rendered_lines.append("")
+            rendered.append("")
             continue
         remaining = chars_this_page - cursor
         if remaining >= len(line):
-            rendered_lines.append(line)
-            cursor += len(line) + 1  # +1 for the space between words
+            rendered.append(line)
+            cursor += len(line) + 1
         else:
-            rendered_lines.append(line[:remaining])
+            rendered.append(line[:remaining])
             cursor = chars_this_page
+    return rendered
+
+
+def _emit_typed_lines(
+    console: tcod.console.Console,
+    width: int,
+    body_y: int,
+    body_bottom: int,
+    body_width: int,
+    rendered_lines: list[str],
+) -> None:
+    """Print each line, character by character, in the soft-cream
+    color that we use for novel prose (ADR-0047)."""
+    # ADR-0047: prose body text with explicit color for readability.
+    # Use light cream-white (warmer than pure white for less eye strain)
+    # on a subtle dark teal background to enhance contrast.
+    prose_fg = (232, 230, 220)  # soft cream
     for i, line in enumerate(rendered_lines):
         y = body_y + i
         if y >= body_bottom:
             break
-        # ADR-0047: prose body text with explicit color for readability.
-        # Use light cream-white (warmer than pure white for less eye strain)
-        # on a subtle dark teal background to enhance contrast.
-        prose_fg = (232, 230, 220)  # soft cream
         # Render with subtle per-character for proper Korean/CJK width
         for col, ch in enumerate(line.ljust(body_width)):
             xx = NOVEL_LEFT_MARGIN + col
@@ -651,12 +738,28 @@ def render_scene(
                 break
             console.print(xx, y, ch, fg=prose_fg)
 
-    # ---- Page footer (y=HEIGHT-3) ----
-    if len(pages) > 1:
-        page_label = f" PAGE {current_page + 1}/{len(pages)} "
-        console.print((width - len(page_label)) // 2, height - 3, page_label)
 
-    # ---- Bottom progress bar (y=HEIGHT-2) + controls (y=HEIGHT-1) ----
+def _draw_scene_footer(
+    console: tcod.console.Console,
+    width: int,
+    height: int,
+    scene_index: int,
+    scene_total: int,
+    paused: bool,
+    page_count: int = 1,
+) -> None:
+    """Page counter (when paginated) + progress bar + control hint."""
+    if height < 6:
+        return
+    # Page label (y=height-3). Only when paginated — single-page scenes
+    # don't need a "PAGE 1/1" footer.
+    if page_count > 1:
+        label = f" PAGE 1/{page_count} "
+        console.print(
+            (width - len(label)) // 2,
+            height - 3,
+            label,
+        )
     progress = scene_progress(scene_index, scene_total)
     bar_w = width - 4
     filled = int(bar_w * progress)
@@ -751,47 +854,77 @@ def render_chapter_card(
     is_ko = lang == "ko"
     title = scene.title_ko if is_ko else scene.title_en
     char_label = _character_label(scene.character, lang)
-
-    # Optional fade factor (0.0 = dim, 1.0 = full)
-    fade = 1.0
-    if transition_duration_ms > 0 and transition_ms < transition_duration_ms:
-        fade = max(0.0, transition_ms / transition_duration_ms)
-
-    # Determine header text
-    if is_last_scene and scene_total >= 3:
-        header = " ·  FINALE  · " if is_ko else " ·  FINALE  · "
-    else:
-        roman = _to_roman(scene_index + 1)
-        header = f" ·  CHAPTER {roman}  · "
-
-    # Ornamental top/bottom border
+    fade = _compute_card_fade(transition_ms, transition_duration_ms)
+    header = _chapter_header_text(scene_index, scene_total, is_last_scene, is_ko)
     border = "═" * (width - 2)
-
-    # Vertical centering: card is 7 rows (header, divider, title, char, scene n/total, divider2, ...)
-    # Place it roughly at center y=20..26
     card_y_start = (height - 9) // 2
 
-    console.print(0, card_y_start, border)
+    _draw_card_borders(console, width, card_y_start, border, header)
+    _draw_card_text(
+        console, width, card_y_start, is_ko, title, char_label,
+        scene_index, scene_total,
+    )
+    _draw_card_bottom_hint(console, width, height, is_ko)
+    _apply_card_fade(console, width, card_y_start, fade)
 
-    # Header (chapter number)
+
+# ------------------------------------------------------------------
+# render_chapter_card helpers — one per logical concern
+# ------------------------------------------------------------------
+
+
+def _compute_card_fade(transition_ms: int, transition_duration_ms: int) -> float:
+    """Return a 0.0–1.0 fade factor based on elapsed time."""
+    if transition_duration_ms <= 0 or transition_ms >= transition_duration_ms:
+        return 1.0
+    return max(0.0, transition_ms / transition_duration_ms)
+
+
+def _chapter_header_text(
+    scene_index: int,
+    scene_total: int,
+    is_last_scene: bool,
+    is_ko: bool,
+) -> str:
+    """Format the chapter header (FINALE or roman-numeral)."""
+    if is_last_scene and scene_total >= 3:
+        return " ·  FINALE  · "
+    roman = _to_roman(scene_index + 1)
+    return f" ·  CHAPTER {roman}  · "
+
+
+def _draw_card_borders(
+    console: tcod.console.Console,
+    width: int,
+    card_y_start: int,
+    border: str,
+    header: str,
+) -> None:
+    """Top + bottom border, the header line, and a thin divider."""
+    console.print(0, card_y_start, border)
     header_x = (width - len(header)) // 2
     console.print(header_x, card_y_start + 1, header)
-
-    # Decorative divider
     divider = "─" * min(width - 6, 30)
     div_x = (width - len(divider)) // 2
     console.print(div_x, card_y_start + 2, divider)
 
-    # Empty row
-    # Title (the scene title)
+
+def _draw_card_text(
+    console: tcod.console.Console,
+    width: int,
+    card_y_start: int,
+    is_ko: bool,
+    title: str,
+    char_label: str,
+    scene_index: int,
+    scene_total: int,
+) -> None:
+    """Title, character, and scene-count lines (the card body)."""
     title_x = (width - len(title)) // 2
     console.print(title_x, card_y_start + 4, title)
-
-    # Character label
     char_x = (width - len(char_label)) // 2
     console.print(char_x, card_y_start + 5, char_label)
 
-    # Scene number / total
     if is_ko:
         scene_label = f"씬 {scene_index + 1} / {scene_total}"
     else:
@@ -799,40 +932,48 @@ def render_chapter_card(
     scene_x = (width - len(scene_label)) // 2
     console.print(scene_x, card_y_start + 7, scene_label)
 
+    divider = "─" * min(width - 6, 30)
+    div_x = (width - len(divider)) // 2
     console.print(div_x, card_y_start + 8, divider)
-    console.print(0, card_y_start + 9, border)
+    console.print(0, card_y_start + 9, "═" * (width - 2))
 
-    # Bottom hint (controls)
+
+def _draw_card_bottom_hint(
+    console: tcod.console.Console,
+    width: int,
+    height: int,
+    is_ko: bool,
+) -> None:
+    """Control hint at the bottom of the card."""
     if is_ko:
         hint = "         [Space] 시작  [ESC] 메뉴"
     else:
         hint = "         [Space] begin  [ESC] menu"
     console.print(2, height - 2, hint)
 
-    # Apply fade dim by replacing with spaces if not yet faded in
-    if fade < 1.0:
-        # Re-render with dim chars based on fade factor (rough simulation)
-        # Below threshold: render with light shade; above: full
-        # This is a soft transition — in practice the title shows gradually
-        # We approximate by reducing border brightness proportionally
-        dim_level = int(fade * 100)
+
+def _apply_card_fade(
+    console: tcod.console.Console,
+    width: int,
+    card_y_start: int,
+    fade: float,
+) -> None:
+    """Substitute ornament glyphs with dimmer characters when fading in."""
+    if fade >= 1.0:
+        return
+    dim_level = int(fade * 100)
+    border_height = 10
+    for y in range(card_y_start, card_y_start + border_height):
+        line = "".join(chr(int(console.ch[x, y])) for x in range(width)).rstrip()
         if dim_level < 33:
-            # Heavy fade: use ▒ instead of ═, · becomes space
-            for y in range(card_y_start, card_y_start + 10):
-                line = "".join(chr(int(console.ch[x, y])) for x in range(width)).rstrip()
-                # Only modify ornament chars; preserve letters
-                line = line.replace("═", "▒").replace("─", "░").replace("·", " ")
-                for x, ch in enumerate(line):
-                    if ch:
-                        console.print(x, y, ch)
+            # Heavy fade: heavy- and mid-line ornament to block, dots to space
+            line = line.replace("═", "▒").replace("─", "░").replace("·", " ")
         elif dim_level < 66:
             # Mid fade
-            for y in range(card_y_start, card_y_start + 10):
-                line = "".join(chr(int(console.ch[x, y])) for x in range(width)).rstrip()
-                line = line.replace("═", "▓").replace("─", "▒")
-                for x, ch in enumerate(line):
-                    if ch:
-                        console.print(x, y, ch)
+            line = line.replace("═", "▓").replace("─", "▒")
+        for x, ch in enumerate(line):
+            if ch:
+                console.print(x, y, ch)
 
 
 def render_blank_transition(

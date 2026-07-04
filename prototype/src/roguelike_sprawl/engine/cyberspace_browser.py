@@ -85,40 +85,39 @@ def _render_browser(console: tcod.console.Console, main: Region, state: AppState
     if wm is None:
         return
 
-    # Top half: Worlds and Sectors
     top_h = main.h // 2 - 2
+    y = _render_browser_worlds(console, main, wm)
+    _render_browser_servers(console, main, state, wm, top_h, y)
 
-    # Top section: World/Sector tree
+
+# ------------------------------------------------------------------
+# _render_browser helpers
+# ------------------------------------------------------------------
+
+
+def _render_browser_worlds(
+    console: tcod.console.Console,
+    main: Region,
+    wm,
+) -> int:
+    """Render the world/sector tree in the top half of the browser.
+
+    Returns the y-row just past the world tree.
+    """
     y = main.y + 1
-    console.print(
-        x=main.x + 2,
-        y=y,
-        string="=" * (main.w - 4),
-        fg=(0, 200, 200),
-    )
+    bar = "=" * (main.w - 4)
+    console.print(x=main.x + 2, y=y, string=bar, fg=(0, 200, 200))
     y += 1
-    console.print(
-        x=main.x + 2,
-        y=y,
-        string=" WORLDS & SECTORS",
-        fg=(0, 255, 255),
-    )
+    console.print(x=main.x + 2, y=y, string=" WORLDS & SECTORS", fg=(0, 255, 255))
     y += 1
-    console.print(
-        x=main.x + 2,
-        y=y,
-        string="=" * (main.w - 4),
-        fg=(0, 200, 200),
-    )
+    console.print(x=main.x + 2, y=y, string=bar, fg=(0, 200, 200))
     y += 1
 
-    # List all worlds and their sectors
     current_world = wm.current_world
     for world in wm.worlds.values():
-        # World header
         is_current_world = world.id is current_world
         world_fg = (255, 255, 0) if is_current_world else (180, 180, 180)
-        world_marker = "▶" if is_current_world else " "
+        world_marker = "\u25b6" if is_current_world else " "
         console.print(
             x=main.x + 2,
             y=y,
@@ -134,13 +133,14 @@ def _render_browser(console: tcod.console.Console, main: Region, state: AppState
         )
         y += 1
 
-        # Sectors in this world
         current_sector = wm.current_sector
         for sector in world.sectors.values():
             is_current_sector = (
-                is_current_world and current_sector is not None and sector.id is current_sector
+                is_current_world
+                and current_sector is not None
+                and sector.id is current_sector
             )
-            sector_marker = "→" if is_current_sector else " "
+            sector_marker = "\u2192" if is_current_sector else " "
             sector_fg = (0, 255, 255) if is_current_sector else (150, 150, 150)
             console.print(
                 x=main.x + 4,
@@ -151,18 +151,23 @@ def _render_browser(console: tcod.console.Console, main: Region, state: AppState
             y += 1
 
         y += 1  # Space between worlds
+    return y
 
-    # Bottom section: Servers in current sector
+
+def _render_browser_servers(
+    console: tcod.console.Console,
+    main: Region,
+    state: AppState,
+    wm,
+    top_h: int,
+    y: int,
+) -> None:
+    """Render the server list in the bottom half of the browser."""
     y = main.y + top_h + 2
-    console.print(
-        x=main.x + 2,
-        y=y,
-        string="-" * (main.w - 4),
-        fg=(80, 80, 80),
-    )
+    sep = "-" * (main.w - 4)
+    console.print(x=main.x + 2, y=y, string=sep, fg=(80, 80, 80))
     y += 1
 
-    # Get current sector
     current_sector_obj = wm.get_current_sector()
     if current_sector_obj is None:
         return
@@ -174,27 +179,20 @@ def _render_browser(console: tcod.console.Console, main: Region, state: AppState
         fg=(0, 255, 255),
     )
     y += 1
-    console.print(
-        x=main.x + 2,
-        y=y,
-        string="-" * (main.w - 4),
-        fg=(80, 80, 80),
-    )
+    console.print(x=main.x + 2, y=y, string=sep, fg=(80, 80, 80))
     y += 1
 
-    # List servers
     for i, server in enumerate(current_sector_obj.servers):
         is_selected = i == state.selected_server_index
-        marker = "▶" if is_selected else " "
+        marker = "\u25b6" if is_selected else " "
         if is_selected:
             fg = (255, 255, 0)
         elif server.mission_id is not None:
-            fg = (255, 215, 0)  # Gold for mission target
+            fg = (255, 215, 0)
         else:
             fg = (180, 180, 180)
 
-        # Server line
-        mission_marker = " ★" if server.mission_id else "  "
+        mission_marker = " \u2605" if server.mission_id else "  "
         line = f"{marker}{mission_marker} {server.name} (Diff: {server.difficulty})"
         console.print(
             x=main.x + 2,
@@ -202,8 +200,6 @@ def _render_browser(console: tcod.console.Console, main: Region, state: AppState
             string=line[: main.w - 4],
             fg=fg,
         )
-
-
 def handle_browser_input(
     event: tcod.event.Event,
     state: AppState,

@@ -115,24 +115,7 @@ def _draw_box(
             on the box edge. Direction codes: "L", "R", "U", "D".
             E.g. {"L": "←", "U": "↑"} for neighbors on the left and up.
     """
-    # Current node: bright cyan/yellow, double border effect
-    # Other nodes: normal gray
-    if is_current:
-        fg_box = (0, 255, 255)  # Bright cyan for current node
-        border_chars = {
-            "corner": "#",
-            "horiz": "=",
-            "vert": "║",
-        }
-    else:
-        fg_box = (200, 200, 200)  # Gray for other nodes
-        border_chars = {
-            "corner": "+",
-            "horiz": "-",
-            "vert": "|",
-        }
-
-    fg_status = status_color(status)
+    fg_box, border_chars, bg_label = _resolve_box_style(is_current)
     abs_x = main.x + col
     abs_y = main.y + row
     if not main.contains(abs_x, abs_y) or not main.contains(
@@ -140,97 +123,150 @@ def _draw_box(
     ):
         return
 
-    # Draw corners
-    console.print(x=abs_x, y=abs_y, string=border_chars["corner"], fg=fg_box)
-    console.print(x=abs_x + BOX_WIDTH - 1, y=abs_y, string=border_chars["corner"], fg=fg_box)
-    console.print(x=abs_x, y=abs_y + BOX_HEIGHT - 1, string=border_chars["corner"], fg=fg_box)
-    console.print(
-        x=abs_x + BOX_WIDTH - 1,
-        y=abs_y + BOX_HEIGHT - 1,
-        string=border_chars["corner"],
-        fg=fg_box,
+    _draw_box_frame(console, abs_x, abs_y, fg_box, border_chars)
+    _draw_box_content(
+        console, abs_x, abs_y, label, zdr, status, is_current, bg_label
     )
+    if is_current:
+        _draw_box_external_markers(console, main, abs_x, abs_y)
+        if direction_hints:
+            _draw_box_direction_hints(
+                console, abs_x, abs_y, direction_hints, bg_label
+            )
 
-    # Draw horizontal borders (with directional hint chars if applicable)
-    for c in range(abs_x + 1, abs_x + BOX_WIDTH - 1):
-        console.print(x=c, y=abs_y, string=border_chars["horiz"], fg=fg_box)
-        console.print(x=c, y=abs_y + BOX_HEIGHT - 1, string=border_chars["horiz"], fg=fg_box)
 
-    # Draw vertical borders
-    for r in range(abs_y + 1, abs_y + BOX_HEIGHT - 1):
-        console.print(x=abs_x, y=r, string=border_chars["vert"], fg=fg_box)
-        console.print(x=abs_x + BOX_WIDTH - 1, y=r, string=border_chars["vert"], fg=fg_box)
+def _resolve_box_style(
+    is_current: bool,
+) -> tuple[tuple[int, int, int], dict[str, str], tuple[int, int, int]]:
+    """Pick colors and border glyphs based on whether this is the
+    current node.  Returns ``(fg_box, border_chars, bg_label)``."""
+    if is_current:
+        fg_box = (0, 255, 255)  # Bright cyan
+        border_chars = {"corner": "#", "horiz": "=", "vert": "║"}
+        bg_label = (0, 64, 64)  # Dark cyan
+    else:
+        fg_box = (200, 200, 200)  # Gray
+        border_chars = {"corner": "+", "horiz": "-", "vert": "|"}
+        bg_label = (0, 0, 0)  # Black
+    return fg_box, border_chars, bg_label
 
-    # Inner content
+
+def _draw_box_frame(
+    console: tcod.console.Console,
+    abs_x: int,
+    abs_y: int,
+    fg_box: tuple[int, int, int],
+    border_chars: dict[str, str],
+) -> None:
+    """Draw the 4 corners, top/bottom, and left/right borders."""
+    for cx, cy in [
+        (abs_x, abs_y),
+        (abs_x + BOX_WIDTH - 1, abs_y),
+        (abs_x, abs_y + BOX_HEIGHT - 1),
+        (abs_x + BOX_WIDTH - 1, abs_y + BOX_HEIGHT - 1),
+    ]:
+        console.print(x=cx, y=cy, string=border_chars["corner"], fg=fg_box)
+    for cx in range(abs_x + 1, abs_x + BOX_WIDTH - 1):
+        console.print(x=cx, y=abs_y, string=border_chars["horiz"], fg=fg_box)
+        console.print(x=cx, y=abs_y + BOX_HEIGHT - 1, string=border_chars["horiz"], fg=fg_box)
+    for cy in range(abs_y + 1, abs_y + BOX_HEIGHT - 1):
+        console.print(x=abs_x, y=cy, string=border_chars["vert"], fg=fg_box)
+        console.print(x=abs_x + BOX_WIDTH - 1, y=cy, string=border_chars["vert"], fg=fg_box)
+
+
+def _draw_box_content(
+    console: tcod.console.Console,
+    abs_x: int,
+    abs_y: int,
+    label: str,
+    zdr: int,
+    status: Status,
+    is_current: bool,
+    bg_label: tuple[int, int, int],
+) -> None:
+    """Draw the inner label and ZDR line; fill the inside for the
+    current node so the yellow text stands out."""
     glyph = _status_glyph(status)
     inner_label = label[: BOX_INNER_W - 2].center(BOX_INNER_W - 2)
     zdr_text = f"{glyph}ZDR:{zdr:<3}".center(BOX_INNER_W)
+    fg_status = status_color(status)
+    fg_label = (255, 255, 0) if is_current else (200, 200, 200)
 
-    # Current node: bright yellow text with dark background highlight
-    # Other nodes: normal gray text
     if is_current:
-        fg_label = (255, 255, 0)
-        bg_label = (0, 64, 64)  # Dark cyan background
-        # Fill inner area with background color
+        # Fill inner area with background color.
         for r in range(abs_y + 1, abs_y + BOX_HEIGHT - 1):
             for c in range(abs_x + 1, abs_x + BOX_WIDTH - 1):
                 console.print(x=c, y=r, string=" ", bg=bg_label)
-    else:
-        fg_label = (200, 200, 200)
-        bg_label = (0, 0, 0)  # Default black background
 
-    console.print(x=abs_x + 1, y=abs_y + 1, string=inner_label, fg=fg_label, bg=bg_label)
-    console.print(x=abs_x + 1, y=abs_y + 2, string=zdr_text, fg=fg_status, bg=bg_label)
+    console.print(
+        x=abs_x + 1, y=abs_y + 1, string=inner_label,
+        fg=fg_label, bg=bg_label,
+    )
+    console.print(
+        x=abs_x + 1, y=abs_y + 2, string=zdr_text,
+        fg=fg_status, bg=bg_label,
+    )
 
-    # External marker (arrow pointing to current node)
-    if is_current:
-        # Left arrow
-        if abs_x > main.x:
-            console.print(x=abs_x - 1, y=abs_y + 1, string=">", fg=(255, 255, 0))
-        # Right arrow
-        if abs_x + BOX_WIDTH < main.x2:
-            console.print(x=abs_x + BOX_WIDTH, y=abs_y + 1, string="<", fg=(255, 255, 0))
-        # Top indicator
-        if abs_y > main.y:
-            console.print(x=abs_x + BOX_WIDTH // 2, y=abs_y - 1, string="v", fg=(255, 255, 0))
-        # Bottom indicator
-        if abs_y + BOX_HEIGHT < main.y2:
+
+def _draw_box_external_markers(
+    console: tcod.console.Console,
+    main: Region,
+    abs_x: int,
+    abs_y: int,
+) -> None:
+    """Draw the bright-yellow "→ ← ↑ ↓" arrows + "[ YOU ]" label
+    that visually mark the player's current node."""
+    marker_color = (255, 255, 0)
+    if abs_x > main.x:
+        console.print(x=abs_x - 1, y=abs_y + 1, string=">", fg=marker_color)
+    if abs_x + BOX_WIDTH < main.x2:
+        console.print(x=abs_x + BOX_WIDTH, y=abs_y + 1, string="<", fg=marker_color)
+    if abs_y > main.y:
+        console.print(
+            x=abs_x + BOX_WIDTH // 2, y=abs_y - 1, string="v", fg=marker_color,
+        )
+    if abs_y + BOX_HEIGHT < main.y2:
+        console.print(
+            x=abs_x + BOX_WIDTH // 2, y=abs_y + BOX_HEIGHT, string="^",
+            fg=marker_color,
+        )
+    you_here = "[ YOU ]"
+    if abs_y > main.y + 1:
+        console.print(
+            x=abs_x + (BOX_WIDTH - len(you_here)) // 2,
+            y=abs_y - 1,
+            string=you_here,
+            fg=marker_color,
+        )
+
+
+def _draw_box_direction_hints(
+    console: tcod.console.Console,
+    abs_x: int,
+    abs_y: int,
+    direction_hints: dict[str, str],
+    bg_label: tuple[int, int, int],
+) -> None:
+    """Overlay arrow glyphs on the border edges where a neighbor
+    exists.  Lets the player see at a glance which arrow keys move
+    them somewhere.
+    """
+    hint_color = (200, 255, 200)  # Light green
+    cx = abs_x + BOX_WIDTH // 2
+    cy = abs_y + BOX_HEIGHT // 2
+    for code, glyph in direction_hints.items():
+        if code == "L":
+            console.print(x=abs_x, y=cy, string=glyph, fg=hint_color, bg=bg_label)
+        elif code == "R":
             console.print(
-                x=abs_x + BOX_WIDTH // 2, y=abs_y + BOX_HEIGHT, string="^", fg=(255, 255, 0)
+                x=abs_x + BOX_WIDTH - 1, y=cy, string=glyph, fg=hint_color, bg=bg_label,
             )
-
-        # "YOU ARE HERE" label above the box
-        you_here = "[ YOU ]"
-        if abs_y > main.y + 1:
+        elif code == "U":
+            console.print(x=cx, y=abs_y, string=glyph, fg=hint_color, bg=bg_label)
+        elif code == "D":
             console.print(
-                x=abs_x + (BOX_WIDTH - len(you_here)) // 2,
-                y=abs_y - 1,
-                string=you_here,
-                fg=(255, 255, 0),
+                x=cx, y=abs_y + BOX_HEIGHT - 1, string=glyph, fg=hint_color, bg=bg_label,
             )
-
-    # Direction hints — overlay arrow glyphs on the border edges where a
-    # neighboring node exists. This lets the player see at a glance which
-    # arrow keys will move them somewhere.
-    if is_current and direction_hints:
-        hint_color = (200, 255, 200)  # Light green for hints
-        cx = abs_x + BOX_WIDTH // 2  # center x
-        cy = abs_y + BOX_HEIGHT // 2  # center y
-        for code, glyph in direction_hints.items():
-            if code == "L":
-                # Left edge midpoint
-                console.print(x=abs_x, y=cy, string=glyph, fg=hint_color, bg=bg_label)
-            elif code == "R":
-                console.print(
-                    x=abs_x + BOX_WIDTH - 1, y=cy, string=glyph, fg=hint_color, bg=bg_label
-                )
-            elif code == "U":
-                # Top edge midpoint
-                console.print(x=cx, y=abs_y, string=glyph, fg=hint_color, bg=bg_label)
-            elif code == "D":
-                console.print(
-                    x=cx, y=abs_y + BOX_HEIGHT - 1, string=glyph, fg=hint_color, bg=bg_label
-                )
 
 
 def _draw_box_fog(
@@ -359,68 +395,46 @@ def _draw_breadcrumb(
     )
 
 
-def render_matrix(
-    console: tcod.console.Console,
-    t: Translator,
+def _compute_direction_hints(
+    matrix: MatrixGraph,
     state: AppState,
     layouts: dict[str, tuple[int, int]],
-    prog_registry: ProgramRegistry | None = None,
-    ice_registry: IceRegistry | None = None,
-) -> None:
-    """Render the matrix screen with fog + shell (ADR-0020).
+) -> dict[str, str]:
+    """Return cardinal direction hints for the current node (ADR-0045).
 
-    If state.action_menu_open is True, render the action menu popup.
+    For each neighbor, compute the dominant axis and map to a single
+    glyph. The dict has at most four keys (L / R / U / D).
     """
-    matrix = state.matrix
-    if matrix is None or state.current_node_id is None:
-        console.clear(bg=(0, 0, 0))
-        console.print(x=2, y=2, string="(no matrix loaded)", fg=(255, 0, 0))
-        return
+    direction_hints: dict[str, str] = {}
+    if not state.current_node_id:
+        return direction_hints
+    cx, cy = layouts.get(state.current_node_id, (0, 0))
+    for nbr in matrix.neighbors(state.current_node_id):
+        np = layouts.get(nbr.id)
+        if np is None:
+            continue
+        nx, ny = np
+        dx, dy = nx - cx, ny - cy
+        if dx < 0 and abs(dx) >= abs(dy):
+            direction_hints.setdefault("L", "◄")
+        elif dx > 0 and abs(dx) >= abs(dy):
+            direction_hints.setdefault("R", "►")
+        elif dy < 0 and abs(dy) > abs(dx):
+            direction_hints.setdefault("U", "▲")
+        elif dy > 0 and abs(dy) > abs(dx):
+            direction_hints.setdefault("D", "▼")
+    return direction_hints
 
-    ppl = calculate_ppl(state.player_loadout)
-    zone = matrix.get(state.current_node_id)
-    zone_str = zone_label(t, zone.zone) if zone is not None else "?"
-    if zone is not None:
-        zdr = node_zdr(zone)
-        st = node_status(zone, ppl)
-    else:
-        zdr = 0
-        st = Status.MATCH
 
-    # Build shell
-    shell = make_shell()
-    title_r = shell[RegionId.TITLE]
-    main_r = shell[RegionId.MAIN]
-    side_r = shell[RegionId.SIDE]
-    ctrl_r = shell[RegionId.CONTROLS]
-    foot_r = shell[RegionId.FOOTER]
-    panel_r = shell[RegionId.STATUS_PANEL]
-
-    # Clear and draw dividers
-    for r in shell.values():
-        clear_region(console, r)
-    draw_dividers(console, shell)
-
-    # Render persistent status panel
-    render_status_panel(console, state, panel_r)
-
-    # Title with current node prominently displayed
-    if zone is not None:
-        ratio = ppl / zdr if zdr > 0 else float("inf")
-        # Main title with current node name
-        title_text = f"MATRIX — {zone.label} [{_short_kind(zone.kind)}]"
-        status_text = (
-            f"PPL: {ppl}  |  Zone: {zone_str}  |  "
-            f"ZDR: {zdr}  |  Status: {st.value.upper()} ({ratio:.2f}x)"
-        )
-        draw_title(console, title_r, title=title_text, subtitle=status_text)
-    else:
-        draw_title(console, title_r, title="MATRIX", subtitle="Connecting...")
-
-    # Edges
-    exploration = state.exploration
-    use_fog = exploration is not None
-    expl: ExplorationState | None = exploration
+def _render_matrix_edges(
+    console: tcod.console.Console,
+    main_r: Region,
+    matrix: MatrixGraph,
+    layouts: dict[str, tuple[int, int]],
+    expl: ExplorationState | None,
+    use_fog: bool,
+) -> None:
+    """Draw every visible edge, skipping fog-of-war unknowns."""
     for edge in matrix.edges:
         if use_fog and expl is not None:
             sv = expl.visibility(matrix, edge.src)
@@ -433,27 +447,19 @@ def render_matrix(
             continue
         _draw_edge_line(console, main_r, sp, dp)
 
-    # Compute direction hints for the current node (ADR-0045)
-    direction_hints: dict[str, str] = {}
-    if state.current_node_id:
-        cx, cy = layouts.get(state.current_node_id, (0, 0))
-        for nbr in matrix.neighbors(state.current_node_id):
-            np = layouts.get(nbr.id)
-            if np is None:
-                continue
-            nx, ny = np
-            dx, dy = nx - cx, ny - cy
-            # Only cardinal hints for clarity
-            if dx < 0 and abs(dx) >= abs(dy):
-                direction_hints.setdefault("L", "◄")
-            elif dx > 0 and abs(dx) >= abs(dy):
-                direction_hints.setdefault("R", "►")
-            elif dy < 0 and abs(dy) > abs(dx):
-                direction_hints.setdefault("U", "▲")
-            elif dy > 0 and abs(dy) > abs(dx):
-                direction_hints.setdefault("D", "▼")
 
-    # Nodes
+def _render_matrix_nodes(
+    console: tcod.console.Console,
+    main_r: Region,
+    matrix: MatrixGraph,
+    layouts: dict[str, tuple[int, int]],
+    state: AppState,
+    ppl: int,
+    expl: ExplorationState | None,
+    use_fog: bool,
+    direction_hints: dict[str, str],
+) -> None:
+    """Draw every node as a box (or fog placeholder if unknown)."""
     for node in matrix.nodes:
         pos = layouts.get(node.id)
         if pos is None:
@@ -478,9 +484,21 @@ def render_matrix(
             direction_hints=direction_hints if node.id == state.current_node_id else None,
         )
 
-    # Side: Current node status + node selection list
+
+def _render_matrix_side_panel(
+    console: tcod.console.Console,
+    side_r: Region,
+    matrix: MatrixGraph,
+    state: AppState,
+    zone: Node | None,
+    st: Status,
+    expl: ExplorationState | None,
+    use_fog: bool,
+) -> None:
+    """Draw the side panel: current-node status, neighbor list, and
+    either a minimap+breadcrumb (no current zone) or a status panel.
+    """
     if zone is not None:
-        # Show adjacent node selection list (cursor-based navigation)
         neighbors = (
             _adjacent_nodes_list(matrix, state.current_node_id)
             if matrix and state.current_node_id
@@ -489,7 +507,6 @@ def render_matrix(
         state.matrix_nav_index = (
             max(0, min(state.matrix_nav_index, len(neighbors) - 1)) if neighbors else 0
         )
-
         side_lines = [
             "=== CURRENT NODE ===",
             f"Name: {zone.label}",
@@ -497,8 +514,6 @@ def render_matrix(
             f"ZDR: {node_zdr(zone)} | Status: {st.value.upper()}",
             "",
         ]
-
-        # Node selection list with cursor
         if neighbors:
             side_lines.append("=== MOVE TO ===")
             for i, n in enumerate(neighbors):
@@ -519,7 +534,6 @@ def render_matrix(
                     "[SPACE] Action menu",
                 ]
             )
-
         side_lines.extend(
             [
                 "→ ESC: Leave matrix",
@@ -527,35 +541,43 @@ def render_matrix(
                 f"Visited: {len(expl.discovered) if expl else 0} nodes",
             ]
         )
-
         draw_side(console, side_r, label="STATUS", lines=side_lines)
     elif use_fog and expl is not None:
         _draw_minimap(console, matrix, expl, side_r)
         _draw_breadcrumb(console, matrix, expl, side_r)
 
-    # ADR-0047: show recent typed status messages as a multi-line log
-    # using the SIDE area when matrix view is the primary focus.
-    # We use a separate small log overlay at the bottom-right area.
-    # (Already used draw_side above for status panel; add a recent-activity
-    # log overlay in the area between main and controls when zone is set.)
-    if zone is not None and state.status_messages:
-        # Render recent 3 messages in a thin overlay strip just above controls
-        # Use the bottom 3 rows of the side panel for the message log.
-        log_region = Region(
-            RegionId.SIDE,
-            x=side_r.x,
-            y=side_r.y2 - 2,
-            w=side_r.w,
-            h=3,
-        )
-        draw_message_log(
-            console,
-            log_region,
-            state.status_messages[-3:],
-            max_lines=3,
-        )
 
-    # Controls (cursor-based navigation: ↑/↓ to select, Enter to move)
+def _render_matrix_message_log(
+    console: tcod.console.Console,
+    side_r: Region,
+    status_messages: list,
+) -> None:
+    """Render the most recent 3 status messages in a thin overlay
+    above the controls panel (ADR-0047).
+    """
+    if not status_messages:
+        return
+    log_region = Region(
+        RegionId.SIDE,
+        x=side_r.x,
+        y=side_r.y2 - 2,
+        w=side_r.w,
+        h=3,
+    )
+    draw_message_log(
+        console,
+        log_region,
+        status_messages[-3:],
+        max_lines=3,
+    )
+
+
+def _render_matrix_controls(
+    console: tcod.console.Console,
+    ctrl_r: Region,
+    zone: Node | None,
+) -> None:
+    """Draw the controls bar at the bottom of the matrix screen."""
     if zone is not None:
         action_hint = "SPACE: Action menu"
         if zone.kind is NodeKind.DATA:
@@ -564,7 +586,6 @@ def render_matrix(
             action_hint = "SPACE: Engage ICE (combat)"
         elif zone.kind is NodeKind.EXIT:
             action_hint = "SPACE: Jack out (exit matrix)"
-
         draw_controls(
             console,
             ctrl_r,
@@ -583,7 +604,118 @@ def render_matrix(
             ],
         )
 
-    # Footer with status messages
+
+def render_matrix(
+    console: tcod.console.Console,
+    t: Translator,
+    state: AppState,
+    layouts: dict[str, tuple[int, int]],
+    prog_registry: ProgramRegistry | None = None,
+    ice_registry: IceRegistry | None = None,
+) -> None:
+    """Render the matrix screen with fog + shell (ADR-0020).
+
+    If state.action_menu_open is True, render the action menu popup.
+    """
+    matrix = state.matrix
+    if matrix is None or state.current_node_id is None:
+        console.clear(bg=(0, 0, 0))
+        console.print(x=2, y=2, string="(no matrix loaded)", fg=(255, 0, 0))
+        return
+
+    ppl = calculate_ppl(state.player_loadout)
+    zone = matrix.get(state.current_node_id)
+    zdr, st = _compute_zone_stats(zone, ppl)
+    zone_str = zone_label(t, zone.zone) if zone is not None else "?"
+
+    shell = make_shell()
+    title_r = shell[RegionId.TITLE]
+    main_r = shell[RegionId.MAIN]
+    side_r = shell[RegionId.SIDE]
+    ctrl_r = shell[RegionId.CONTROLS]
+    foot_r = shell[RegionId.FOOTER]
+    panel_r = shell[RegionId.STATUS_PANEL]
+
+    _init_matrix_shell(console, shell)
+    render_status_panel(console, state, panel_r)
+    _draw_matrix_title(console, title_r, zone, zdr, st, ppl, zone_str)
+    _draw_matrix_main_content(
+        console, main_r, matrix, layouts, state, ppl, zone, st
+    )
+    use_fog = state.exploration is not None
+    _render_matrix_side_panel(
+        console, side_r, matrix, state, zone, st, state.exploration, use_fog
+    )
+    _render_matrix_message_log(console, side_r, state.status_messages)
+    _render_matrix_controls(console, ctrl_r, zone)
+    _draw_matrix_footer(console, foot_r, state)
+    _render_action_menu_overlay(console, t, state, matrix, main_r)
+
+
+# ------------------------------------------------------------------
+# render_matrix helpers
+# ------------------------------------------------------------------
+
+
+def _compute_zone_stats(zone, ppl: int) -> tuple[int, Status]:
+    """Return (zdr, status) for the current zone (or 0/MATCH if none)."""
+    if zone is None:
+        return 0, Status.MATCH
+    return node_zdr(zone), node_status(zone, ppl)
+
+
+def _init_matrix_shell(console: tcod.console.Console, shell: dict) -> None:
+    """Clear every region and draw the dividers once."""
+    for r in shell.values():
+        clear_region(console, r)
+    draw_dividers(console, shell)
+
+
+def _draw_matrix_title(
+    console: tcod.console.Console,
+    title_r: Region,
+    zone,
+    zdr: int,
+    st: Status,
+    ppl: int,
+    zone_str: str,
+) -> None:
+    """Draw the top title strip with the current-node summary."""
+    if zone is None:
+        draw_title(console, title_r, title="MATRIX", subtitle="Connecting...")
+        return
+    ratio = ppl / zdr if zdr > 0 else float("inf")
+    title_text = f"MATRIX — {zone.label} [{_short_kind(zone.kind)}]"
+    status_text = (
+        f"PPL: {ppl}  |  Zone: {zone_str}  |  "
+        f"ZDR: {zdr}  |  Status: {st.value.upper()} ({ratio:.2f}x)"
+    )
+    draw_title(console, title_r, title=title_text, subtitle=status_text)
+
+
+def _draw_matrix_main_content(
+    console: tcod.console.Console,
+    main_r: Region,
+    matrix: MatrixGraph,
+    layouts: dict[str, tuple[int, int]],
+    state: AppState,
+    ppl: int,
+    zone,
+    st: Status,
+) -> None:
+    """Draw the centre column: edges, direction hints, then nodes."""
+    exploration = state.exploration
+    use_fog = exploration is not None
+    expl: ExplorationState | None = exploration
+    _render_matrix_edges(console, main_r, matrix, layouts, expl, use_fog)
+    direction_hints = _compute_direction_hints(matrix, state, layouts)
+    _render_matrix_nodes(
+        console, main_r, matrix, layouts, state, ppl, expl, use_fog, direction_hints
+    )
+
+
+def _draw_matrix_footer(console: tcod.console.Console, foot_r: Region, state) -> None:
+    """Draw the footer with the game-time line."""
     draw_footer(
         console,
         foot_r,
@@ -591,23 +723,33 @@ def render_matrix(
         status_messages=state.status_messages,
     )
 
-    # Action menu overlay (if open)
-    if state.action_menu_open:
-        current_node = matrix.get(state.current_node_id)
-        if current_node is not None:
-            # Center popup in main area
-            menu_w = 50
-            menu_h = 12
-            menu_x = main_r.x + (main_r.w - menu_w) // 2
-            menu_y = main_r.y + (main_r.h - menu_h) // 2
-            menu_region = Region(
-                id=RegionId.MAIN,  # Reuse ID (not a new region)
-                x=menu_x,
-                y=menu_y,
-                w=menu_w,
-                h=menu_h,
-            )
-            action_menu.render_action_menu(console, t, state, current_node, menu_region)
+
+def _render_action_menu_overlay(
+    console: tcod.console.Console,
+    t: Translator,
+    state: AppState,
+    matrix: MatrixGraph,
+    main_r: Region,
+) -> None:
+    """If the action menu is open, render it as a centred popup."""
+    if not state.action_menu_open:
+        return
+    current_node = matrix.get(state.current_node)
+    if current_node is None:
+        return
+    # Center popup in main area
+    menu_w = 50
+    menu_h = 12
+    menu_x = main_r.x + (main_r.w - menu_w) // 2
+    menu_y = main_r.y + (main_r.h - menu_h) // 2
+    menu_region = Region(
+        id=RegionId.MAIN,  # Reuse ID (not a new region)
+        x=menu_x,
+        y=menu_y,
+        w=menu_w,
+        h=menu_h,
+    )
+    action_menu.render_action_menu(console, t, state, current_node, menu_region)
 
 
 def handle_matrix_input(

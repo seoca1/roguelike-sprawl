@@ -92,116 +92,101 @@ def _draw_dialogue(
 
     x = main.x + 2
     y = main.y + 1
+    y = _draw_dialogue_header(console, main, line, x, y)
+    y = _draw_dialogue_text(console, main, line.text, x, y, (200, 200, 200))
+    y = _draw_dialogue_korean(console, main, line, x, y)
+    _draw_dialogue_choices_or_prompt(console, main, line, state, x, y)
 
-    # NPC portrait
-    if line.portrait:
-        console.print(x=x, y=y, string=line.portrait, fg=(0, 255, 255))
-        # Use Korean speaker name if available
-        from . import config
-        from .font_loader import is_korean_capable
 
-        speaker_name = line.speaker
-        if (
-            config.LANGUAGE_MODE in ("ko", "both")
-            and is_korean_capable()
-            and hasattr(line, "speaker_ko")
-            and line.speaker_ko
-        ):
-            speaker_name = f"{line.speaker} ({line.speaker_ko})"
-        console.print(x=x + 5, y=y, string=speaker_name, fg=(255, 255, 0))
-        y += 1
-        # Separator
-        console.print(x=x, y=y, string="=" * (main.w - 4), fg=(80, 80, 80))
-        y += 2
+# ------------------------------------------------------------------
+# _draw_dialogue helpers
+# ------------------------------------------------------------------
 
-    # Dialogue text (wrap manually for simplicity)
-    text = line.text
-    max_width = main.w - 6
-    words = text.split()
-    current_line = ""
-    for word in words:
-        if len(current_line) + len(word) + 1 > max_width:
-            console.print(x=x, y=y, string=current_line, fg=(200, 200, 200))
-            y += 1
-            current_line = word
-        else:
-            if current_line:
-                current_line += " " + word
-            else:
-                current_line = word
-    if current_line:
-        console.print(x=x, y=y, string=current_line, fg=(200, 200, 200))
-        y += 2
 
-    # Korean subtitle (if available and enabled)
+def _draw_dialogue_header(
+    console: tcod.console.Console,
+    main: Region,
+    line,
+    x: int,
+    y: int,
+) -> int:
+    """Render the NPC portrait + speaker name + separator.
+
+    Returns the y-row just past the separator.
+    """
+    if not line.portrait:
+        return y
+    console.print(x=x, y=y, string=line.portrait, fg=(0, 255, 255))
+    # Use Korean speaker name if available
     from . import config
     from .font_loader import is_korean_capable
 
-    if config.LANGUAGE_MODE in ("ko", "both") and is_korean_capable() and line.text_ko:
-        text_ko = line.text_ko
-        words_ko = text_ko.split()
-        current_ko = ""
-        for word in words_ko:
-            if len(current_ko) + len(word) + 1 > max_width:
-                console.print(x=x, y=y, string=current_ko, fg=(255, 220, 100))
-                y += 1
-                current_ko = word
-            else:
-                if current_ko:
-                    current_ko += " " + word
-                else:
-                    current_ko = word
-        if current_ko:
-            console.print(x=x, y=y, string=current_ko, fg=(255, 220, 100))
-        y += 2
+    speaker_name = line.speaker
+    if (
+        config.LANGUAGE_MODE in ("ko", "both")
+        and is_korean_capable()
+        and hasattr(line, "speaker_ko")
+        and line.speaker_ko
+    ):
+        speaker_name = f"{line.speaker} ({line.speaker_ko})"
+    console.print(x=x + 5, y=y, string=speaker_name, fg=(255, 255, 0))
+    y += 1
+    console.print(x=x, y=y, string="=" * (main.w - 4), fg=(80, 80, 80))
+    y += 2
+    return y
 
-    # Choices
-    if line.choices:
-        # Phase 6+: filter choices by faction rep gate. Choices whose
-        # `faction_gate` is set and doesn't match the current player
-        # reputation are hidden from the menu.
 
-        reputation = getattr(state, "reputation", None)
-        visible_choices: list[DialogueChoice] = [
-            c for c in line.choices if c.is_available(reputation)
-        ]
+def _draw_dialogue_text(
+    console: tcod.console.Console,
+    main,
+    text: str,
+    x: int,
+    y: int,
+    color: tuple[int, int, int],
+) -> int:
+    """Word-wrap and print a single dialogue paragraph.  Returns new y."""
+    max_width = main.w - 6
+    for line_text in _wrap_text(text, max_width):
+        console.print(x=x, y=y, string=line_text, fg=color)
+        y += 1
+    return y + 1
 
-        if visible_choices:
-            console.print(x=x, y=y, string="What do you say?", fg=(180, 180, 180))
-            y += 2
 
-            # Initialize selection index
-            if not hasattr(state, "npc_choice_index"):
-                state.npc_choice_index = 0
+def _draw_dialogue_korean(
+    console: tcod.console.Console,
+    main,
+    line,
+    x: int,
+    y: int,
+) -> int:
+    """Render the Korean subtitle (if enabled, font supports it, and
+    the line has a translation).  Returns the new y-row."""
+    from . import config
+    from .font_loader import is_korean_capable
 
-            for i, choice in enumerate(visible_choices):
-                is_selected = i == state.npc_choice_index
-                cursor = ">" if is_selected else " "
-                fg = (0, 255, 255) if is_selected else (200, 200, 200)
-                # Use Korean if available
-                choice_text = choice.text
-                if config.LANGUAGE_MODE == "ko" and choice.text_ko and is_korean_capable():
-                    choice_text = choice.text_ko
-                # Show a small tag for faction-gated choices.
-                gate_tag = ""
-                if choice.faction_gate is not None:
-                    gate_tag = f" [{choice.faction_gate.value}/{choice.min_tier or '?'}]"
-                console.print(
-                    x=x,
-                    y=y + i,
-                    string=f"  {cursor} [{choice.key}] {choice_text}{gate_tag}",
-                    fg=fg,
-                )
-        else:
-            # All choices were filtered out — show a locked message.
-            console.print(
-                x=x,
-                y=y,
-                string="[dialogue locked — faction standing required]",
-                fg=(140, 100, 100),
-            )
-    else:
-        # No choices: any key continues
+    if not (
+        config.LANGUAGE_MODE in ("ko", "both")
+        and is_korean_capable()
+        and line.text_ko
+    ):
+        return y
+    return _draw_dialogue_text(
+        console, main, line.text_ko, x, y, (255, 220, 100),
+    ) + 1
+
+
+def _draw_dialogue_choices_or_prompt(
+    console: tcod.console.Console,
+    main,
+    line,
+    state: AppState,
+    x: int,
+    y: int,
+) -> None:
+    """Draw the player-choice list (with faction-gate filtering) or
+    a generic continue prompt if the line has no choices.
+    """
+    if not line.choices:
         y += 1
         console.print(
             x=x,
@@ -209,8 +194,72 @@ def _draw_dialogue(
             string=">> Press any key to continue...",
             fg=(128, 128, 128),
         )
+        return
+
+    from . import config
+    from .font_loader import is_korean_capable
+
+    # Phase 6+: filter choices by faction rep gate. Choices whose
+    # `faction_gate` is set and doesn't match the current player
+    # reputation are hidden from the menu.
+    reputation = getattr(state, "reputation", None)
+    visible_choices: list[DialogueChoice] = [
+        c for c in line.choices if c.is_available(reputation)
+    ]
+
+    if not visible_choices:
+        # All choices were filtered out — show a locked message.
+        console.print(
+            x=x,
+            y=y,
+            string="[dialogue locked — faction standing required]",
+            fg=(140, 100, 100),
+        )
+        return
+
+    console.print(x=x, y=y, string="What do you say?", fg=(180, 180, 180))
+    y += 2
+
+    # Initialize selection index
+    if not hasattr(state, "npc_choice_index"):
+        state.npc_choice_index = 0
+
+    for i, choice in enumerate(visible_choices):
+        is_selected = i == state.npc_choice_index
+        cursor = ">" if is_selected else " "
+        fg = (0, 255, 255) if is_selected else (200, 200, 200)
+        # Use Korean if available
+        choice_text = choice.text
+        if config.LANGUAGE_MODE == "ko" and choice.text_ko and is_korean_capable():
+            choice_text = choice.text_ko
+        # Show a small tag for faction-gated choices.
+        gate_tag = ""
+        if choice.faction_gate is not None:
+            gate_tag = f" [{choice.faction_gate.value}/{choice.min_tier or '?'}]"
+        console.print(
+            x=x,
+            y=y + i,
+            string=f"  {cursor} [{choice.key}] {choice_text}{gate_tag}",
+            fg=fg,
+        )
 
 
+def _wrap_text(text: str, max_width: int) -> list[str]:
+    """Word-wrap helper shared by the EN/KO dialogue renderers."""
+    words = text.split()
+    if not words:
+        return []
+    lines: list[str] = []
+    current = ""
+    for word in words:
+        if len(current) + len(word) + 1 > max_width:
+            lines.append(current)
+            current = word
+        else:
+            current = (current + " " + word) if current else word
+    if current:
+        lines.append(current)
+    return lines
 def handle_npc_input(
     event: tcod.event.Event,
     state: AppState,

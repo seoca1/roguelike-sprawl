@@ -152,7 +152,38 @@ def render_arc_phase(
     beat_progress = len(text) / max(len(text), 1)
     beat_bar_width = width - 4
     beat_filled = int(beat_bar_width * (typed_chars / max(len(text), 1)))
-    beat_bar = "█" * beat_filled + "░" * (beat_bar_width - beat_filled)
+    _draw_arc_phase_footer(
+        console, width, height, phase, beat_index, beat_bar_width,
+        beat_progress, state,
+    )
+
+
+def _draw_arc_phase_footer(
+    console,
+    width: int,
+    height: int,
+    phase,
+    beat_index: int,
+    beat_bar_width: int,
+    beat_progress: float,
+    state,
+) -> None:
+    """Render the two progress bars + the controls hint or last status.
+
+    The state argument is the original AppState; it may be ``None``
+    in some test paths and we fall back to a generic controls hint.
+    """
+    if state is not None and state.status_messages:
+        last_msg = state.status_messages[-1]
+        msg_color = (255, 180, 100) if "VICTORY" in last_msg else (180, 180, 180)
+        status = last_msg[: width - 4]
+    else:
+        msg_color = (180, 180, 180)
+        status = " [ENTER] Next Beat   [SPACE] Skip Beat   [ESC] Exit Phase"
+
+    beat_bar = "█" * int(beat_bar_width * beat_progress) + "░" * (
+        beat_bar_width - int(beat_bar_width * beat_progress)
+    )
     console.print(
         2,
         height - 4,
@@ -165,11 +196,5 @@ def render_arc_phase(
     phase_bar = "▓" * phase_filled + "░" * (beat_bar_width - phase_filled)
     console.print(2, height - 3, f"Phase: [{phase_bar}] {int(phase_progress * 100):3d}%")
 
-    if state is not None and state.status_messages:
-        last_msg = state.status_messages[-1]
-        msg_color = (255, 180, 100) if "VICTORY" in last_msg else (180, 180, 180)
-        console.print(2, height - 2, last_msg[: width - 4], fg=msg_color)
-    else:
-        controls = " [ENTER] Next Beat   [SPACE] Skip Beat   [ESC] Exit Phase"
-        console.print(2, height - 2, controls)
+    console.print(2, height - 2, status, fg=msg_color)
     console.print(0, height - 1, "═" * width)

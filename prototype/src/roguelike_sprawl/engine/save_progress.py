@@ -112,83 +112,96 @@ def get_progress_summary(
 
         save_manager = SaveManager(save_dir or Path("saves"))
 
-    # Find the most recent save via list_slots
+    latest_meta = _find_latest_save(save_manager)
+    if latest_meta is None:
+        return _empty_summary()
+
+    try:
+        latest = save_manager.load(latest_meta.slot)
+    except Exception:
+        return _summary_from_metadata(latest_meta)
+
+    return _summary_from_save(latest_meta, latest)
+
+
+# ------------------------------------------------------------------
+# get_progress_summary helpers
+# ------------------------------------------------------------------
+
+
+def _find_latest_save(save_manager):
+    """Return the slot metadata for the most recent save, or None."""
     try:
         slots = save_manager.list_slots()
         existing = [s for s in slots if s.exists]
     except (OSError, AttributeError):
-        return _empty_summary()
-
+        return None
     if not existing:
-        return _empty_summary()
+        return None
+    return max(existing, key=lambda s: s.saved_at or "")
 
-    # Pick the slot with the latest saved_at
-    latest_meta = max(existing, key=lambda s: s.saved_at or "")
 
-    # Try to load full data for richer summary
-    try:
-        latest = save_manager.load(latest_meta.slot)
-    except Exception:
-        # Fall back to metadata only
-        return ProgressSummary(
-            has_save=True,
-            character_name="",
-            character_id="",
-            grade=latest_meta.player_grade or 0,
-            grade_label=_grade_label(latest_meta.player_grade or 0),
-            missions_completed=0,
-            missions_total=30,
-            data_recovered=0,
-            data_total=500,
-            last_mission_id=latest_meta.mission_id or "",
-            last_zone=latest_meta.current_stage or "",
-            credits=latest_meta.credits or 0,
-            playtime_minutes=(latest_meta.elapsed_seconds or 0) // 60,
-        )
+def _summary_from_metadata(latest_meta) -> ProgressSummary:
+    """Build a ProgressSummary from slot metadata only (no full load)."""
+    return ProgressSummary(
+        has_save=True,
+        character_name="",
+        character_id="",
+        grade=latest_meta.player_grade or 0,
+        grade_label=_grade_label(latest_meta.player_grade or 0),
+        missions_completed=0,
+        missions_total=30,
+        data_recovered=0,
+        data_total=500,
+        last_mission_id=latest_meta.mission_id or "",
+        last_zone=latest_meta.current_stage or "",
+        credits=latest_meta.credits or 0,
+        playtime_minutes=(latest_meta.elapsed_seconds or 0) // 60,
+    )
 
-    # Extract from SavedRun nested structure
-    run_state: dict[str, object] = latest.run_state if isinstance(latest.run_state, dict) else {}
-    app_state: dict[str, object] = latest.app_state if isinstance(latest.app_state, dict) else {}
-    metadata: dict[str, object] = latest.metadata if isinstance(latest.metadata, dict) else {}
 
-    # Find character_id from app_state or metadata
-    character_id = str(app_state.get("character_id", metadata.get("character_id", "novice")))
+def _summary_from_save(latest_meta, latest) -> ProgressSummary:
+    """Build a ProgressSummary from a fully-loaded SavedRun."""
+    run_state: dict[str, object] = (
+        latest.run_state if isinstance(latest.run_state, dict) else {}
+    )
+    app_state: dict[str, object] = (
+        latest.app_state if isinstance(latest.app_state, dict) else {}
+    )
+    metadata: dict[str, object] = (
+        latest.metadata if isinstance(latest.metadata, dict) else {}
+    )
+
+    character_id = str(
+        app_state.get("character_id", metadata.get("character_id", "novice"))
+    )
     character_name = _CHARACTER_LABELS.get(character_id, "")
 
-    # Grade: prefer metadata, then app_state
     grade_raw = metadata.get("player_grade", app_state.get("player_grade", 0))
     try:
         grade = int(str(grade_raw))
     except (ValueError, TypeError):
         grade = 0
 
-    # Mission info from run_state
     last_mission = str(run_state.get("mission_id", ""))
-
-    # Stage / zone
     last_zone = str(run_state.get("current_stage", ""))
 
-    # Credits / playtime
     try:
         credits_val = int(str(metadata.get("credits", latest_meta.credits or 0)))
     except (ValueError, TypeError):
         credits_val = 0
     playtime_minutes = (latest.elapsed_seconds or 0) // 60
 
-    # Mission count and data: from metadata if present, else estimate
     missions_completed = 0
-    try:
-        completed_stages = run_state.get("completed_stages", [])
-        if isinstance(completed_stages, list):
-            missions_completed = len(completed_stages)
-    except Exception:
-        pass
+    completed_stages = run_state.get("completed_stages", [])
+    if isinstance(completed_stages, list):
+        missions_completed = len(completed_stages)
 
     data_recovered = 0
     try:
         data_recovered = int(str(metadata.get("data_recovered", 0)))
     except (ValueError, TypeError):
-        pass
+        data_recovered = 0
 
     return ProgressSummary(
         has_save=True,
@@ -205,8 +218,6 @@ def get_progress_summary(
         credits=credits_val,
         playtime_minutes=playtime_minutes,
     )
-
-
 def render_summary_lines(summary: ProgressSummary, t_lang: str = "ko") -> list[str]:
     """Render the progress summary as a list of text lines.
 

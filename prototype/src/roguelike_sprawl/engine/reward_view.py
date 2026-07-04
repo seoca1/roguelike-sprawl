@@ -114,21 +114,51 @@ def render_reward(console: tcod.console.Console, state: AppState) -> None:
 
     console.clear(bg=(0, 0, 0))
 
-    # Title box
+    box_x, box_y, box_w, box_h = _draw_reward_box(console, SCREEN_WIDTH)
+
+    _draw_reward_title(console, box_x, box_y, box_w)
+    _draw_reward_mission(console, box_x, box_y, box_w, state)
+    _draw_reward_credits(console, box_x, box_y, state)
+    _draw_reward_materials(console, box_x, box_y, state)
+    _draw_reward_bottom_accent(console, box_x, box_y, box_h)
+    _draw_reward_prompt(console, SCREEN_WIDTH, box_x, box_y, box_h)
+    _draw_reward_status(console, SCREEN_HEIGHT, state)
+
+
+# ------------------------------------------------------------------
+# render_reward helpers
+# ------------------------------------------------------------------
+
+
+def _draw_reward_box(console, screen_width: int) -> tuple:
+    """Draw the centered box outline and return (x, y, w, h)."""
+    box_w = 50
+    box_x = (screen_width - box_w) // 2
     box_y = 4
     box_h = 12
-    box_x = (SCREEN_WIDTH - 50) // 2
-    box_w = 50
 
-    # Top border
-    console.print(x=box_x, y=box_y, string="┌" + "─" * (box_w - 2) + "┐", fg=(0, 255, 100))
-    for y in range(box_y + 1, box_y + box_h - 1):
-        console.print(x=box_x, y=y, string="│" + " " * (box_w - 2) + "│", fg=(0, 255, 100))
+    box_border_h = "─" * (box_w - 2)
     console.print(
-        x=box_x, y=box_y + box_h - 1, string="└" + "─" * (box_w - 2) + "┘", fg=(0, 255, 100)
+        x=box_x, y=box_y,
+        string=f"┌{box_border_h}┐",
+        fg=(0, 255, 100),
     )
+    for y in range(box_y + 1, box_y + box_h - 1):
+        console.print(
+            x=box_x, y=y,
+            string=f"│{' ' * (box_w - 2)}│",
+            fg=(0, 255, 100),
+        )
+    console.print(
+        x=box_x, y=box_y + box_h - 1,
+        string=f"└{box_border_h}┘",
+        fg=(0, 255, 100),
+    )
+    return box_x, box_y, box_w, box_h
 
-    # Title
+
+def _draw_reward_title(console, box_x: int, box_y: int, box_w: int) -> None:
+    """The green "✓ MISSION COMPLETE" header."""
     title = "✓ MISSION COMPLETE"
     console.print(
         x=box_x + (box_w - len(title)) // 2,
@@ -137,17 +167,24 @@ def render_reward(console: tcod.console.Console, state: AppState) -> None:
         fg=(0, 255, 100),
     )
 
-    # Mission title
-    if state.current_mission is not None:
-        mission_name = state.current_mission.title
-        console.print(
-            x=box_x + (box_w - len(mission_name)) // 2,
-            y=box_y + 3,
-            string=mission_name,
-            fg=(255, 200, 100),
-        )
 
-    # Credits
+def _draw_reward_mission(
+    console, box_x: int, box_y: int, box_w: int, state,
+) -> None:
+    """Center the mission title, if a mission is in flight."""
+    if state.current_mission is None:
+        return
+    mission_name = state.current_mission.title
+    console.print(
+        x=box_x + (box_w - len(mission_name)) // 2,
+        y=box_y + 3,
+        string=mission_name,
+        fg=(255, 200, 100),
+    )
+
+
+def _draw_reward_credits(console, box_x: int, box_y: int, state) -> None:
+    """Show credits earned and the new total."""
     credits_line = f"Credits:  {state.credits}"
     if state.current_mission is not None and state.current_mission.rewards:
         earned = state.current_mission.rewards.credits
@@ -159,67 +196,70 @@ def render_reward(console: tcod.console.Console, state: AppState) -> None:
         fg=(255, 200, 100),
     )
 
-    # Materials
+
+def _draw_reward_materials(console, box_x: int, box_y: int, state) -> None:
+    """List up to 4 inventory items; collapse the rest into a summary."""
     mat_y = box_y + 7
     console.print(x=box_x + 4, y=mat_y, string="Materials:", fg=(200, 200, 200))
-    if state.inventory:
-        for i, (mat_id, qty) in enumerate(sorted(state.inventory.items())):
-            mat_line = f"  • {qty}x {mat_id}"
-            console.print(
-                x=box_x + 4,
-                y=mat_y + 1 + i,
-                string=mat_line,
-                fg=(100, 200, 255),
-            )
-            if i >= 3:  # Limit to 4 materials
-                remaining = len(state.inventory) - 4
-                if remaining > 0:
-                    console.print(
-                        x=box_x + 4,
-                        y=mat_y + 2 + i,
-                        string=f"  • ... and {remaining} more",
-                        fg=(150, 150, 150),
-                    )
-                break
-    else:
+    if not state.inventory:
+        console.print(
+            x=box_x + 4, y=mat_y + 1,
+            string="  (none)", fg=(150, 150, 150),
+        )
+        return
+
+    for i, (mat_id, qty) in enumerate(sorted(state.inventory.items())):
+        mat_line = f"  • {qty}x {mat_id}"
         console.print(
             x=box_x + 4,
-            y=mat_y + 1,
-            string="  (none)",
-            fg=(150, 150, 150),
+            y=mat_y + 1 + i,
+            string=mat_line,
+            fg=(100, 200, 255),
         )
+        if i >= 3:
+            remaining = len(state.inventory) - 4
+            if remaining > 0:
+                console.print(
+                    x=box_x + 4,
+                    y=mat_y + 2 + i,
+                    string=f"  • ... and {remaining} more",
+                    fg=(150, 150, 150),
+                )
+            break
 
-    # Bottom border accent
+
+def _draw_reward_bottom_accent(console, box_x: int, box_y: int, box_h: int) -> None:
+    """Single horizontal line under the inner content."""
     console.print(
         x=box_x + 1,
         y=box_y + box_h - 1,
-        string="─" * (box_w - 2),
+        string="─" * 48,
         fg=(0, 200, 80),
     )
 
-    # Prompt
+
+def _draw_reward_prompt(console, screen_width: int, box_x: int, box_y: int, box_h: int) -> None:
+    """Centered "[ENTER] Return to Hub" line below the box."""
     prompt = "[ENTER] Return to Hub"
     console.print(
-        x=(SCREEN_WIDTH - len(prompt)) // 2,
+        x=(screen_width - len(prompt)) // 2,
         y=box_y + box_h + 2,
         string=prompt,
         fg=(200, 200, 200),
     )
 
-    # Recent status
-    if state.status_messages:
-        for i, msg in enumerate(state.status_messages[-5:]):
-            console.print(
-                x=2,
-                y=SCREEN_HEIGHT - 7 + i,
-                string=msg,
-                fg=(120, 120, 120),
-            )
 
-
-# --- Input ---
-
-
+def _draw_reward_status(console, screen_height: int, state) -> None:
+    """Last few status messages, dimmed, at the bottom of the screen."""
+    if not state.status_messages:
+        return
+    for i, msg in enumerate(state.status_messages[-5:]):
+        console.print(
+            x=2,
+            y=screen_height - 7 + i,
+            string=msg,
+            fg=(120, 120, 120),
+        )
 def handle_reward_input(
     event: tcod.event.Event,
     state: AppState,

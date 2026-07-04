@@ -124,6 +124,151 @@ class CinematicState:
     current_theme: str | None = None
 
 
+def _draw_cinematic_art(
+    console: tcod.console.Console,
+    main_r: Region,
+    art: AsciiArt | None,
+    current_line: object | None,
+    art_w: int,
+) -> None:
+    """Draw the ASCII art on the left side, or fall back to a glyph."""
+    if art is not None:
+        _draw_ascii_art(
+            console,
+            x=main_r.x + 2,
+            y=main_r.y + 3,
+            art=art,
+            max_w=art_w,
+            max_h=main_r.h - 4,
+        )
+        return
+    # Fallback: use the legacy single-glyph portrait inline.
+    if current_line is not None and getattr(current_line, "portrait", ""):
+        console.print(
+            x=main_r.x + 2,
+            y=main_r.y + 3,
+            string=current_line.portrait,
+            fg=(0, 255, 255),
+        )
+
+
+def _render_cinematic_lines(
+    console: tcod.console.Console,
+    main_r: Region,
+    scene: object,
+    cinematic_state: CinematicState,
+    text_x: int,
+    text_w: int,
+) -> None:
+    """Draw the text-and-Korean-subtitle column for every line up to
+    and including the current line.  Returns when the row cursor falls
+    off the main region (a soft overflow — the caller doesn't need it).
+    """
+    y = main_r.y + 2
+    for i, line in enumerate(scene.lines):
+        if i > cinematic_state.current_line_index:
+            break
+
+        # Speaker label
+        if line.speaker and line.portrait and not line.portrait.startswith("art:"):
+            console.print(
+                x=text_x, y=y,
+                string=f"{line.portrait} {line.speaker.upper()}:",
+                fg=(0, 255, 255),
+            )
+            y += 1
+        elif line.speaker and (getattr(line, "portrait", "") or "").startswith("art:"):
+            console.print(
+                x=text_x, y=y,
+                string=f">> {line.speaker.upper()}:",
+                fg=(0, 255, 255),
+            )
+            y += 1
+
+        # English text — apply typing effect for the current line.
+        text_en = line.text_en
+        if i == cinematic_state.current_line_index:
+            text_en = _apply_typing_effect(
+                text_en,
+                cinematic_state.current_char_index,
+                getattr(line, "effect", None),
+                cinematic_state.glitch_active,
+            )
+
+        wrapped_en = wrap_text_for_novel(
+            text_en, width=text_w - 2, left_margin=0, right_margin=0,
+        )
+        for line_text in wrapped_en:
+            console.print(x=text_x + 2, y=y, string=line_text, fg=(255, 255, 255))
+            y += 1
+
+        # Korean subtitle (optional).
+        if cinematic_state.show_korean:
+            text_ko = line.text_ko
+            if i == cinematic_state.current_line_index:
+                text_ko = _apply_typing_effect(
+                    text_ko,
+                    cinematic_state.current_char_index,
+                    EffectKind.NONE,  # No glitch on Korean
+                    False,
+                )
+            from .font_loader import is_korean_capable
+            if is_korean_capable() and text_ko:
+                wrapped_ko = wrap_text_for_novel(
+                    text_ko, width=text_w - 2, left_margin=0, right_margin=0,
+                )
+                for ko_line in wrapped_ko:
+                    console.print(
+                        x=text_x + 2, y=y, string=ko_line, fg=(255, 220, 100),
+                    )
+                    y += 1
+            elif text_ko:
+                console.print(
+                    x=text_x + 2, y=y,
+                    string=f"[KO: {len(text_ko)} chars]",
+                    fg=(180, 180, 100),
+                )
+                y += 1
+        y += 1  # spacing between lines
+
+
+def _render_cinematic_controls(
+    console: tcod.console.Console,
+    ctrl_r: Region,
+    cinematic_state: CinematicState,
+    scene: object,
+) -> None:
+    """Draw the controls bar at the bottom — different hint depending on
+    whether the player is currently mid-typing, between lines, or the
+    scene is finished."""
+    if cinematic_state.finished:
+        draw_controls(
+            console, ctrl_r,
+            lines=["[Enter/Space] Next line  [ESC] Skip  [Q] Quit"],
+        )
+        return
+    if (
+        cinematic_state.current_line_index < len(scene.lines)
+        and cinematic_state.current_char_index
+        < len(scene.lines[cinematic_state.current_line_index].text_en)
+    ):
+        # Currently typing
+        draw_controls(
+            console, ctrl_r,
+            lines=[
+                "[Enter/Space] Skip typing & advance  [ESC] Skip scene  [Q] Quit",
+            ],
+        )
+    else:
+        # Between lines (auto-pausing)
+        draw_controls(
+            console, ctrl_r,
+            lines=[
+                "[Enter/Space] Advance  [ESC] Skip scene  [Q] Quit",
+            ],
+        )
+
+
 def render_cinematic(
     console: tcod.console.Console,
     t: Translator,
@@ -134,7 +279,7 @@ def render_cinematic(
     """Render a cinematic story scene with typing effects and large ASCII art.
 
     Layout (main region split into two columns):
-      - Left ~24 cols: Large ASCII portrait (current speaker)
+      - Left ~16 cols: Large ASCII portrait (current speaker)
       - Right: Story text with typing effect + Korean subtitle
     """
     shell = make_shell()
@@ -175,156 +320,16 @@ def render_cinematic(
     text_x = main_r.x + art_w + 2
     text_w = main_r.w - art_w - 4
 
-    # Draw ASCII art on the left
-    if art is not None:
-        _draw_ascii_art(
-            console,
-            x=main_r.x + 2,
-            y=main_r.y + 3,
-            art=art,
-            max_w=art_w,
-            max_h=main_r.h - 4,
-        )
-    else:
-        # Fallback: use the legacy single-glyph portrait inline
-        if current_line and current_line.portrait:
-            console.print(
-                x=main_r.x + 2,
-                y=main_r.y + 3,
-                string=current_line.portrait,
-                fg=(0, 255, 255),
-            )
+    # Art column.
+    _draw_cinematic_art(console, main_r, art, current_line, art_w)
 
-    # Text on the right
-    y = main_r.y + 2
-    for i, line in enumerate(scene.lines):
-        if i > cinematic_state.current_line_index:
-            break
-
-        # Speaker label (if present)
-        if line.speaker and line.portrait and not line.portrait.startswith("art:"):
-            # Legacy single-glyph portrait used inline as speaker indicator
-            console.print(
-                x=text_x,
-                y=y,
-                string=f"{line.portrait} {line.speaker.upper()}:",
-                fg=(0, 255, 255),
-            )
-            y += 1
-        elif line.speaker and (art is not None or line.portrait.startswith("art:")):
-            # Large-art mode: just show speaker name
-            console.print(
-                x=text_x,
-                y=y,
-                string=f">> {line.speaker.upper()}:",
-                fg=(0, 255, 255),
-            )
-            y += 1
-
-        # English text
-        text_en = line.text_en
-        if i == cinematic_state.current_line_index:
-            # Current line: apply typing effect
-            text_en = _apply_typing_effect(
-                text_en,
-                cinematic_state.current_char_index,
-                line.effect,
-                cinematic_state.glitch_active,
-            )
-
-        # Word-wrap text to available width
-        wrapped_en = wrap_text_for_novel(
-            text_en,
-            width=text_w - 2,
-            left_margin=0,
-            right_margin=0,
-        )
-        for line_text in wrapped_en:
-            console.print(
-                x=text_x + 2,
-                y=y,
-                string=line_text,
-                fg=(255, 255, 255),
-            )
-            y += 1
-
-        # Korean subtitle (optional)
-        if cinematic_state.show_korean:
-            text_ko = line.text_ko
-            if i == cinematic_state.current_line_index:
-                # Current line: apply typing effect
-                text_ko = _apply_typing_effect(
-                    text_ko,
-                    cinematic_state.current_char_index,
-                    EffectKind.NONE,  # No glitch on Korean
-                    False,
-                )
-
-            # Show Korean subtitle (or placeholder if font doesn't support it)
-            from .font_loader import is_korean_capable
-
-            if is_korean_capable() and text_ko:
-                # Render actual Korean text with word-wrap
-                wrapped_ko = wrap_text_for_novel(
-                    text_ko,
-                    width=text_w - 2,
-                    left_margin=0,
-                    right_margin=0,
-                )
-                for ko_line in wrapped_ko:
-                    console.print(
-                        x=text_x + 2,
-                        y=y,
-                        string=ko_line,
-                        fg=(255, 220, 100),
-                    )
-                    y += 1
-            elif text_ko:
-                # Fallback: show character count placeholder
-                console.print(
-                    x=text_x + 2,
-                    y=y,
-                    string=f"[KO: {len(text_ko)} chars]",
-                    fg=(180, 180, 100),
-                )
-                y += 1
-
-        y += 1  # Spacing between lines
+    # Text + Korean subtitle column.
+    _render_cinematic_lines(
+        console, main_r, scene, cinematic_state, text_x, text_w
+    )
 
     # Controls (semi-auto mode)
-    if cinematic_state.finished:
-        draw_controls(
-            console,
-            ctrl_r,
-            lines=[
-                "[Enter/Space] Next line  [ESC] Skip  [Q] Quit",
-            ],
-        )
-    else:
-        # Show different hint based on whether we're typing or paused
-        scene = cinematic_state.scene
-        if cinematic_state.current_line_index < len(
-            scene.lines
-        ) and cinematic_state.current_char_index < len(
-            scene.lines[cinematic_state.current_line_index].text_en
-        ):
-            # Currently typing
-            draw_controls(
-                console,
-                ctrl_r,
-                lines=[
-                    "[Enter/Space] Skip typing & advance  [ESC] Skip scene  [Q] Quit",
-                ],
-            )
-        else:
-            # Between lines (auto-pausing)
-            draw_controls(
-                console,
-                ctrl_r,
-                lines=[
-                    "[Enter/Space] Advance  [ESC] Skip scene  [Q] Quit",
-                ],
-            )
+    _render_cinematic_controls(console, ctrl_r, cinematic_state, scene)
 
     # Footer
     draw_footer(
