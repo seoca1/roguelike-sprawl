@@ -289,7 +289,14 @@ GitHub → Releases → Draft new release
 
 - GitHub Projects 보드 (Phase 6+ 작업 추적용)
 - v1.0.0 정식 release (Phase 6 완료 시)
-- `mkdocs --strict` 빌드 (현재 warning 41건 — Fiction 크로스 프로젝트 링크 + glossary 앵커 누락)
+- ✅ `mkdocs --strict` 빌드 (2026-07-04 해소)
+  - 워닝 41건 → 0건
+  - wiki/ 외부 콘텐츠 (design/, decisions/, ROADMAP.md, log.md, Fiction/) 심볼릭 링크로 통합
+  - glossary.md 앵커 (cyberdeck/program/construct/wetware/ice) 추가
+  - design/scenario/*.md Fiction 링크 depth 수정 (../../../../ → ../../)
+  - decisions/0031-original-scenario-integration.md Fiction 링크 depth 수정
+  - **결과**: 316 HTML pages, 24 MB wiki 사이트
+  - Pages 워크플로우에서 `mkdocs build --strict` 사용
 
 ## 9. 참고
 

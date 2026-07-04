@@ -2,6 +2,33 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] fix | mkdocs --strict 빌드 성공 (워닝 41 → 0)
+
+- **배경**: ADR-0030 §9 "mkdocs --strict 빌드" 보류 → 해소
+- **변경**:
+  - **wiki/ 외부 콘텐츠 심볼릭 링크 6개** (mkdocs docs_dir 내로 통합):
+    - `wiki/design` → `../design`
+    - `wiki/decisions` → `../decisions`
+    - `wiki/Fiction` → `../../../Fiction`
+    - `wiki/ROADMAP.md` → `../ROADMAP.md`
+    - `wiki/log.md` → `../log.md`
+    - `wiki/IMPROVEMENTS.md` → `../IMPROVEMENTS.md`
+  - **mkdocs.yml nav 갱신**: `../design/...` → `design/...` (심볼릭 링크 기준)
+  - **wiki/world/glossary.md 앵커 5개 추가**: `cyberdeck`, `program`, `construct`, `wetware`, `ice`
+  - **경로 depth 수정**:
+    - `design/scenario/*.md`: `../../../../Fiction/` → `../../Fiction/`
+    - `decisions/0031-original-scenario-integration.md`: `../../../Fiction/` → `../Fiction/`
+    - `design/scenario/*.md`: `../../wiki/world/` → `../../world/`
+    - `wiki/world/derivative_stories.md`: `../../../../Fiction/` → `../Fiction/`
+  - **.github/workflows/pages.yml**: `mkdocs build` → `mkdocs build --strict`
+- **빌드 결과**:
+  - **316 HTML pages** (이전 8 → +308)
+  - **24 MB wiki 사이트** (이전 2.9 MB → 8배)
+  - **워닝 0건** (Strict 모드 통과)
+  - Fiction wiki (44 characters/works/themes/settings/concepts) 모두 포함
+- **검증**: pytest 4097 passed, ruff 0, mypy 0 (변동 없음)
+- **ADR-0030 §9** "mkdocs --strict 빌드" ✅ 완료로 갱신
+
 ## [2026-07-04] feat | MkDocs build + Pages 배포 통합
 
 - **배경**: ADR-0030 §9 "mkdocs 자동 빌드/배포" 항목 보류 → 해소
