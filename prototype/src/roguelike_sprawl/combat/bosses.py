@@ -390,7 +390,7 @@ def boss_death_sequence(spec: BossSpec) -> list[CinematicSequence]:
     """
     dispatch = {
         IceType.GOLIATH: _goliath_death_sequence,
-        IceType.BLACK:   _black_death_sequence,
+        IceType.BLACK: _black_death_sequence,
     }
     handler = dispatch.get(spec.base_ice_type, _watchdog_death_sequence)
     return handler()

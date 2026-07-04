@@ -16,7 +16,6 @@ import argparse
 import json
 from pathlib import Path
 
-
 CHARACTER_DATA = {
     "case": {
         "json": "data/story/chapters/case_expanded.json",

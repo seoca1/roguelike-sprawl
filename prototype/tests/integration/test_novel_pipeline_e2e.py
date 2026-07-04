@@ -24,12 +24,12 @@ Test layout:
 - ``TestFrontmatterIntegrity``  — every Fiction file links back to
                                     its mission via game_integration
 """
+
 from __future__ import annotations
 
 import json
 import re
 import sys
-from collections import defaultdict
 from pathlib import Path
 
 import pytest
@@ -59,6 +59,7 @@ class _DispatchEndToEnd:
     in missions.json.  Lives in TestNovelPipelineDispatch below after
     forwarding through a thin alias.
     """
+
     def _dispatch(self, mission_id: str) -> bool:
         """Return True if the mission hooks fired successfully."""
         sys.path.insert(0, str(PROTOTYPE / "src"))
@@ -116,15 +117,14 @@ class TestNovelPipelineDispatch:
 # above; required to satisfy pytest's collection-time evaluation).
 # ---------------------------------------------------------------------------
 
+
 def _load_mission_sources() -> dict[str, str]:
     """Return mission_id → story.source."""
     if not MISSIONS_JSON.exists():
         return {}
     data = json.loads(MISSIONS_JSON.read_text(encoding="utf-8"))
     return {
-        mid: m["story"]["source"]
-        for mid, m in data.items()
-        if isinstance(m, dict) and "story" in m
+        mid: m["story"]["source"] for mid, m in data.items() if isinstance(m, dict) and "story" in m
     }
 
 
@@ -195,13 +195,9 @@ class TestTripleMapping:
     """Every mission ``story.source`` resolves in both Fiction and Dashboard."""
 
     def test_all_missions_have_story_field(self, mission_sources: dict[str, str]) -> None:
-        assert len(mission_sources) >= 33, (
-            f"Expected ≥33 missions, got {len(mission_sources)}"
-        )
+        assert len(mission_sources) >= 33, f"Expected ≥33 missions, got {len(mission_sources)}"
 
-    def test_mission_sources_resolve_in_fiction(
-        self, mission_sources: dict[str, str]
-    ) -> None:
+    def test_mission_sources_resolve_in_fiction(self, mission_sources: dict[str, str]) -> None:
         """Each mission source must map to a real Fiction short story."""
         stems = _fiction_stems()
         unresolved = sorted({src for src in mission_sources.values() if src not in stems})
@@ -210,28 +206,20 @@ class TestTripleMapping:
             f"  Available Fiction stems: {sorted(stems)[:5]} …"
         )
 
-    def test_mission_sources_resolve_in_dashboard(
-        self, mission_sources: dict[str, str]
-    ) -> None:
+    def test_mission_sources_resolve_in_dashboard(self, mission_sources: dict[str, str]) -> None:
         """Each mission source must map to a real dashboard HTML page."""
         stems = _dashboard_en_stems()
         unresolved = sorted({src for src in mission_sources.values() if src not in stems})
-        assert not unresolved, (
-            f"Mission sources without matching dashboard/*_en.html: {unresolved}"
-        )
+        assert not unresolved, f"Mission sources without matching dashboard/*_en.html: {unresolved}"
 
-    def test_dashboard_pages_have_mission_source(
-        self, mission_sources: dict[str, str]
-    ) -> None:
+    def test_dashboard_pages_have_mission_source(self, mission_sources: dict[str, str]) -> None:
         """Reverse direction: every dashboard page appears in some mission."""
         mission_stems = set(mission_sources.values())
         orphans = sorted(_dashboard_en_stems() - mission_stems)
         # Some dashboard pages are intentionally un-owned (e.g. free-form Fiction
         # stories that no mission points at).  Tolerate a few but fail loudly
         # if the set grows.
-        assert len(orphans) <= 2, (
-            f"Excess orphan dashboard pages (no mission source): {orphans}"
-        )
+        assert len(orphans) <= 2, f"Excess orphan dashboard pages (no mission source): {orphans}"
 
     def test_three_way_intersection(self, mission_sources: dict[str, str]) -> None:
         """The intersection of mission × fiction × dashboard should equal
@@ -286,9 +274,8 @@ class TestMissionDispatchCoverage:
                 failed.append((mid, expected_src, "mission_to_stem returned None"))
             elif stem != expected_src:
                 failed.append((mid, expected_src, f"got {stem!r}"))
-        assert not failed, (
-            "mission_to_stem() failed for these missions:\n"
-            + "\n".join(f"  {m}: src={s!r}  {why}" for m, s, why in failed)
+        assert not failed, "mission_to_stem() failed for these missions:\n" + "\n".join(
+            f"  {m}: src={s!r}  {why}" for m, s, why in failed
         )
 
     def test_dispatch_idempotent(self, mission_sources: dict[str, str]) -> None:
@@ -325,9 +312,7 @@ class TestFictionPair:
         en = _fiction_stems()
         ko = _fiction_ko_stems()
         orphans = sorted(ko - en)
-        assert not orphans, (
-            f"Fiction KO files without EN pair: {orphans}"
-        )
+        assert not orphans, f"Fiction KO files without EN pair: {orphans}"
 
 
 # ---------------------------------------------------------------------------
@@ -372,12 +357,8 @@ class TestFrontmatterIntegrity:
         build over an out-of-tree metadata drift.
         """
         mission_sources = _load_mission_sources()
-        mission_targets = {
-            fm.get("mission_id") for fm in frontmatter_records.values()
-        }
-        missing = sorted(
-            src for src in mission_sources.values() if src not in mission_targets
-        )
+        mission_targets = {fm.get("mission_id") for fm in frontmatter_records.values()}
+        missing = sorted(src for src in mission_sources.values() if src not in mission_targets)
         if missing:
             import warnings
 
@@ -428,9 +409,7 @@ class TestFrontmatterIntegrity:
                 f"stem={stem}: frontmatter.arc={gi.get('arc')} but "
                 f"mission {mid}.story.arc={mission['story']['arc']}"
             )
-            assert 1 <= gi.get("arc", 0) <= 5, (
-                f"stem={stem}: arc={gi.get('arc')} not in 1-5"
-            )
+            assert 1 <= gi.get("arc", 0) <= 5, f"stem={stem}: arc={gi.get('arc')} not in 1-5"
 
 
 # ---------------------------------------------------------------------------
@@ -453,9 +432,8 @@ def _parse_frontmatter(text: str) -> dict:
     body = text[3:end].strip()
     lines = body.split("\n")
     out: dict = {}
-    stack = [out]            # stack of dicts being built
-    indents = [0]            # indent levels for each frame
-    cur_key: str | None = None
+    stack = [out]  # stack of dicts being built
+    indents = [0]  # indent levels for each frame
     for raw in lines:
         if not raw.strip() or raw.lstrip().startswith("#"):
             continue

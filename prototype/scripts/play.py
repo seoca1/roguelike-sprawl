@@ -812,8 +812,7 @@ def _run_phase_1_5_smoke() -> int:
         "play_arc_bsp.py",
     ]
     proto = Path(__file__).resolve().parent
-    env = {**__import__("os").environ,
-           "PYTHONPATH": str(proto.parent / "src")}
+    env = {**__import__("os").environ, "PYTHONPATH": str(proto.parent / "src")}
     rc = 0
     print("=" * 64)
     print("Phase 1-5 headless smoke test (ADR-0060 / ADR-0061)")
@@ -822,8 +821,7 @@ def _run_phase_1_5_smoke() -> int:
         cmd = [sys.executable, str(proto / s)]
         print(f"\n--- {s} ---")
         try:
-            res = subprocess.run(cmd, env=env, check=False,
-                                  capture_output=True, text=True)
+            res = subprocess.run(cmd, env=env, check=False, capture_output=True, text=True)
         except FileNotFoundError as exc:
             print(f"  ERR: {exc}")
             rc = 1
@@ -839,14 +837,12 @@ def _run_phase_1_5_smoke() -> int:
             rc = res.returncode
     print()
     print("=" * 64)
-    print(f"phase-1-5 smoke {'PASS' if rc == 0 else 'FAIL'} "
-          f"(rc={rc})")
+    print(f"phase-1-5 smoke {'PASS' if rc == 0 else 'FAIL'} (rc={rc})")
     print("=" * 64)
     return rc
 
 
-def _run_bsp_mission(mission_id: str, *, seed: int = 2026,
-                     grade: int = 2) -> int:
+def _run_bsp_mission(mission_id: str, *, seed: int = 2026, grade: int = 2) -> int:
     """Run a single BSP dungeon for the named mission via play_arc_bsp.py.
 
     Falls back to --mission <id> in the demo script; surfaces its
@@ -855,11 +851,17 @@ def _run_bsp_mission(mission_id: str, *, seed: int = 2026,
     import subprocess
 
     proto = Path(__file__).resolve().parent
-    cmd = [sys.executable, str(proto / "play_arc_bsp.py"),
-           "--mission", mission_id, "--seed", str(seed),
-           "--grade", str(grade)]
-    env = {**__import__("os").environ,
-           "PYTHONPATH": str(proto.parent / "src")}
+    cmd = [
+        sys.executable,
+        str(proto / "play_arc_bsp.py"),
+        "--mission",
+        mission_id,
+        "--seed",
+        str(seed),
+        "--grade",
+        str(grade),
+    ]
+    env = {**__import__("os").environ, "PYTHONPATH": str(proto.parent / "src")}
     print("=" * 64)
     print(f"play.py --bsp-mission {mission_id} (seed={seed}, grade={grade})")
     print("=" * 64)
@@ -894,18 +896,15 @@ def _run_arc_bsp_all() -> int:
     import subprocess
 
     proto = Path(__file__).resolve().parent
-    env = {**__import__("os").environ,
-           "PYTHONPATH": str(proto.parent / "src")}
+    env = {**__import__("os").environ, "PYTHONPATH": str(proto.parent / "src")}
     arcs = ("novice", "veteran", "heretic")
     rc = 0
     print("=" * 64)
     print(f"play.py --arc-bsp ({len(arcs)} arcs)")
     print("=" * 64)
     for arc in arcs:
-        cmd = [sys.executable, str(proto / "play_arc_bsp.py"),
-               "--arc", arc, "--missions", "3"]
-        res = subprocess.run(cmd, env=env, check=False,
-                              capture_output=True, text=True)
+        cmd = [sys.executable, str(proto / "play_arc_bsp.py"), "--arc", arc, "--missions", "3"]
+        res = subprocess.run(cmd, env=env, check=False, capture_output=True, text=True)
         tail = res.stdout.splitlines()[-1] if res.stdout else ""
         print(f"--- {arc:8s} rc={res.returncode} ---")
         print(f"  {tail}")
@@ -947,41 +946,48 @@ def main() -> int:
     parser.add_argument(
         "--phase-1-5",
         action="store_true",
-        help=("Run all five Phase 1-5 headless demos and exit.  Bypasses "
-              "the GUI playthrough."),
+        help=("Run all five Phase 1-5 headless demos and exit.  Bypasses the GUI playthrough."),
     )
     parser.add_argument(
         "--bsp-mission",
         default=None,
-        help=("Run the BSP dungeon for a single mission via "
-              "play_arc_bsp.py --mission <id>.  Bypasses the GUI "
-              "playthrough."),
+        help=(
+            "Run the BSP dungeon for a single mission via "
+            "play_arc_bsp.py --mission <id>.  Bypasses the GUI "
+            "playthrough."
+        ),
     )
     parser.add_argument(
         "--bsp-seed",
-        type=int, default=2026,
+        type=int,
+        default=2026,
         help="RNG seed forwarded to play_arc_bsp.py (default 2026).",
     )
     parser.add_argument(
         "--bsp-grade",
-        type=int, default=2,
+        type=int,
+        default=2,
         help="Mission grade 1-5 (default 2).",
     )
     parser.add_argument(
         "--arc-bsp",
         action="store_true",
-        help=("Walk all three character arcs (novice / veteran / "
-              "heretic) through the BSP integration pipeline and "
-              "print one summary line per arc.  Useful as a "
-              "regression check whenever ProceduralDungeonGenerator "
-              "or mission_to_graph is touched."),
+        help=(
+            "Walk all three character arcs (novice / veteran / "
+            "heretic) through the BSP integration pipeline and "
+            "print one summary line per arc.  Useful as a "
+            "regression check whenever ProceduralDungeonGenerator "
+            "or mission_to_graph is touched."
+        ),
     )
     parser.add_argument(
         "--list-missions",
         action="store_true",
-        help=("Print all available mission ids from data/missions/"
-              "missions.json, one per line.  Useful as a target-list "
-              "for --bsp-mission <id>."),
+        help=(
+            "Print all available mission ids from data/missions/"
+            "missions.json, one per line.  Useful as a target-list "
+            "for --bsp-mission <id>."
+        ),
     )
     parser.add_argument("--show-controls", action="store_true")
     args = parser.parse_args()
@@ -992,9 +998,7 @@ def main() -> int:
 
     # Single-mission BSP mode: hand off to play_arc_bsp.py.
     if args.bsp_mission is not None:
-        return _run_bsp_mission(args.bsp_mission,
-                                seed=args.bsp_seed,
-                                grade=args.bsp_grade)
+        return _run_bsp_mission(args.bsp_mission, seed=args.bsp_seed, grade=args.bsp_grade)
 
     # List-missions mode: print ids and exit before any GUI setup.
     if args.list_missions:

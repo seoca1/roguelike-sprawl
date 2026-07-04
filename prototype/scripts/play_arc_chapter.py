@@ -24,9 +24,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from roguelike_sprawl.engine.chapter_cutscene import ArcData, load_arc
-from roguelike_sprawl.i18n import Translator
-
+from roguelike_sprawl.engine.chapter_cutscene import ArcData, BeatData, PhaseData, load_arc
 
 BEAT_TYPE_COLORS = {
     "interior_monologue": "\033[33m",  # Yellow
@@ -39,7 +37,7 @@ COLOR_RESET = "\033[0m"
 
 
 def render_beat_console(
-    beat: "BeatData",
+    beat: BeatData,
     typed_chars: int,
     is_ko: bool,
     phase_num: int,
@@ -90,7 +88,7 @@ def tick_beat(
 
 
 def play_phase(
-    phase: "PhaseData",
+    phase: PhaseData,
     phase_num: int,
     total_phases: int,
     is_ko: bool,
@@ -101,7 +99,7 @@ def play_phase(
     print(f"\033[90m    {phase.description_en[:80]}...\033[0m")
 
     if not phase.beats:
-        print(f"\033[90m    [No beats in this phase]\033[0m")
+        print("\033[90m    [No beats in this phase]\033[0m")
         time.sleep(1)
         return
 
@@ -122,7 +120,7 @@ def play_phase(
             time.sleep(0.05)
 
         # Final display (full text)
-        print(f"\n\033[90m    Press Enter to continue...\033[0m", end="", flush=True)
+        print("\n\033[90m    Press Enter to continue...\033[0m", end="", flush=True)
         input()
 
 
@@ -143,7 +141,7 @@ def play_chapter(
     print(f"\033[1;35m{chapter.title_ko}\033[0m")
     print(f"\033[1;35m{'=' * 70}\033[0m")
     print(f"\n\033[90m{chapter.description_en[:150]}...\033[0m")
-    print(f"\n\033[90mPress Enter to start...\033[0m", end="", flush=True)
+    print("\n\033[90mPress Enter to start...\033[0m", end="", flush=True)
     input()
 
     for i, phase in enumerate(chapter.phases, 1):
@@ -151,11 +149,11 @@ def play_chapter(
 
         # Check for combat
         if phase.combat:
-            print(f"\n\033[1;31m*** COMBAT ENCOUNTER ***\033[0m")
+            print("\n\033[1;31m*** COMBAT ENCOUNTER ***\033[0m")
             print(f"    Enemy: {phase.combat.enemy_type}")
             print(f"    Difficulty: {phase.combat.difficulty}")
             print(f"    Outcome: {phase.combat.outcome}")
-            print(f"\033[90mPress Enter to continue...\033[0m", end="", flush=True)
+            print("\033[90mPress Enter to continue...\033[0m", end="", flush=True)
             input()
 
         # Check for gain/loss
@@ -177,7 +175,7 @@ def play_arc(
     print(f"\033[1;33m{'=' * 70}\033[0m")
     print(f"\n\033[90m{arc.description_en[:150]}...\033[0m")
     print(f"\n\033[90mTotal Chapters: {len(arc.chapters)}\033[0m")
-    print(f"\n\033[90mPress Enter to start Chapter 1...\033[0m", end="", flush=True)
+    print("\n\033[90mPress Enter to start Chapter 1...\033[0m", end="", flush=True)
     input()
 
     for i in range(1, len(arc.chapters) + 1):
@@ -229,7 +227,7 @@ def main() -> None:
     else:
         play_chapter(arc, args.chapter, is_ko, args.char_delay)
 
-    print(f"\n\033[1;32m=== DEMO COMPLETE ===\033[0m")
+    print("\n\033[1;32m=== DEMO COMPLETE ===\033[0m")
 
 
 if __name__ == "__main__":

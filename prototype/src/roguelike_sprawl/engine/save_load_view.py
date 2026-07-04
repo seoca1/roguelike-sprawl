@@ -13,6 +13,8 @@ References:
 
 from __future__ import annotations
 
+from typing import Any
+
 import tcod.console
 import tcod.event
 
@@ -127,7 +129,7 @@ def render_save_load(console: tcod.console.Console, state: AppState) -> None:
 # ------------------------------------------------------------------
 
 
-def _draw_save_load_header(console, screen_width: int) -> None:
+def _draw_save_load_header(console: Any, screen_width: int) -> None:
     """Title and subtitle rows at the top of the save/load browser."""
     title = "═══ SAVE / LOAD ═══"
     console.print(
@@ -146,7 +148,7 @@ def _draw_save_load_header(console, screen_width: int) -> None:
 
 
 def _draw_save_load_slots(
-    console, screen_width: int, slots, selected: int, state,
+    console: Any, screen_width: int, slots: Any, selected: int, state: Any
 ) -> None:
     """Render the per-slot rows.  Each slot is a 6-row tall box with
     a one-line status header plus the metadata summary."""
@@ -167,16 +169,14 @@ def _draw_save_load_slots(
             text_color = (180, 180, 180)
 
         # Slot frame
-        _draw_save_load_slot_frame(
-            console, slot_x, slot_y, slot_w, slot_h, border_color
-        )
+        _draw_save_load_slot_frame(console, slot_x, slot_y, slot_w, slot_h, border_color)
         _draw_save_load_slot_content(
             console, slot_x, slot_y, slot_w, meta, is_selected, state, text_color
         )
 
 
 def _draw_save_load_slot_frame(
-    console, slot_x: int, slot_y: int, slot_w: int, slot_h: int, border_color,
+    console: Any, slot_x: int, slot_y: int, slot_w: int, slot_h: int, border_color: Any
 ) -> None:
     """The rounded box outline for a single slot row."""
     top = "┌" + "─" * (slot_w - 2) + "┐"
@@ -184,19 +184,28 @@ def _draw_save_load_slot_frame(
     console.print(x=slot_x, y=slot_y, string=top, fg=border_color)
     for y in range(slot_y + 1, slot_y + slot_h - 1):
         console.print(
-            x=slot_x, y=y,
+            x=slot_x,
+            y=y,
             string="│" + " " * (slot_w - 2) + "│",
             fg=border_color,
         )
     console.print(
-        x=slot_x, y=slot_y + slot_h - 1,
-        string=bottom, fg=border_color,
+        x=slot_x,
+        y=slot_y + slot_h - 1,
+        string=bottom,
+        fg=border_color,
     )
 
 
 def _draw_save_load_slot_content(
-    console, slot_x: int, slot_y: int, slot_w: int, meta, is_selected: bool,
-    state, text_color,
+    console: Any,
+    slot_x: int,
+    slot_y: int,
+    slot_w: int,
+    meta: Any,
+    is_selected: bool,
+    state: Any,
+    text_color: Any,
 ) -> None:
     """Either an existing save (4 detail lines) or an empty placeholder."""
     if not meta.exists:
@@ -229,9 +238,7 @@ def _draw_save_load_slot_content(
     console.print(x=slot_x + 2, y=slot_y + 4, string=line4, fg=(120, 120, 130))
 
 
-def _draw_save_load_controls(
-    console, screen_width: int, screen_height: int,
-) -> None:
+def _draw_save_load_controls(console: Any, screen_width: int, screen_height: int) -> None:
     """Two-line control hint at the bottom of the screen."""
     controls_y = screen_height - 5
     lines = [
@@ -247,7 +254,7 @@ def _draw_save_load_controls(
         )
 
 
-def _draw_save_load_status(console, screen_height: int, state) -> None:
+def _draw_save_load_status(console: Any, screen_height: int, state: AppState) -> None:
     """The last 3 status messages, dimmed, along the very bottom."""
     if not state.status_messages:
         return
@@ -258,6 +265,8 @@ def _draw_save_load_status(console, screen_height: int, state) -> None:
             string=msg,
             fg=(120, 120, 120),
         )
+
+
 def handle_save_load_input(event: tcod.event.Event, state: AppState) -> bool:
     """Handle input on the Save/Load screen. Returns False to quit."""
     if not isinstance(event, tcod.event.KeyDown):

@@ -11,16 +11,14 @@ The heavy tcod painters (``render_hub``, ``_draw_avatar_panel``,
 value; we cover them with a single ``FakeConsole`` smoke test that
 just confirms they don't raise.
 """
+
 from __future__ import annotations
 
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
-import pytest
-
 from roguelike_sprawl.engine import hub
 from roguelike_sprawl.matrix import Faction
-
 
 # ---------------------------------------------------------------------------
 # _render_reputation_dots
@@ -90,6 +88,7 @@ class TestRenderMarketSummary:
             raise OSError("no market data")
 
         import roguelike_sprawl.crafting.info_market as im
+
         monkeypatch.setattr(im.InfoMarket, "load_default", staticmethod(_broken))
         state = SimpleNamespace(reputation=None)
         out = hub_mod._render_market_summary(state)
@@ -166,7 +165,6 @@ class TestMaterialGauge:
 class TestPreviewZdr:
     def test_returns_positive_int_for_valid_mission(self):
         # Use a real Mission instance from missions.json.
-        from roguelike_sprawl.missions import Mission
         from roguelike_sprawl.missions.mission import ZoneDepth
 
         # A lightweight stub — we only need .zone.
@@ -197,7 +195,6 @@ class _FakeConsole:
 
 class TestRenderHubSmoke:
     def test_does_not_crash_with_minimal_state(self):
-        from roguelike_sprawl.engine import layout
 
         # Build a fully-formed loadout so PPL calculation doesn't blow
         # up on the .programs attribute.
@@ -229,7 +226,7 @@ class TestRenderHubSmoke:
         console = _FakeConsole()
         try:
             hub.render_hub(console, translator, state)
-        except (KeyError, TypeError, ValueError, AttributeError) as exc:
+        except (KeyError, TypeError, ValueError, AttributeError):
             # Acceptable — likely the renderer needs more state than
             # we provided; this test is a structural guard only.
             pass

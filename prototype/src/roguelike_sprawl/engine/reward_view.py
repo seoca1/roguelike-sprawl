@@ -11,6 +11,8 @@ References:
 
 from __future__ import annotations
 
+from typing import Any
+
 import tcod.console
 import tcod.event
 
@@ -130,7 +132,7 @@ def render_reward(console: tcod.console.Console, state: AppState) -> None:
 # ------------------------------------------------------------------
 
 
-def _draw_reward_box(console, screen_width: int) -> tuple:
+def _draw_reward_box(console: Any, screen_width: int) -> tuple[int, int, int, int]:
     """Draw the centered box outline and return (x, y, w, h)."""
     box_w = 50
     box_x = (screen_width - box_w) // 2
@@ -139,25 +141,28 @@ def _draw_reward_box(console, screen_width: int) -> tuple:
 
     box_border_h = "─" * (box_w - 2)
     console.print(
-        x=box_x, y=box_y,
+        x=box_x,
+        y=box_y,
         string=f"┌{box_border_h}┐",
         fg=(0, 255, 100),
     )
     for y in range(box_y + 1, box_y + box_h - 1):
         console.print(
-            x=box_x, y=y,
+            x=box_x,
+            y=y,
             string=f"│{' ' * (box_w - 2)}│",
             fg=(0, 255, 100),
         )
     console.print(
-        x=box_x, y=box_y + box_h - 1,
+        x=box_x,
+        y=box_y + box_h - 1,
         string=f"└{box_border_h}┘",
         fg=(0, 255, 100),
     )
     return box_x, box_y, box_w, box_h
 
 
-def _draw_reward_title(console, box_x: int, box_y: int, box_w: int) -> None:
+def _draw_reward_title(console: Any, box_x: int, box_y: int, box_w: int) -> None:
     """The green "✓ MISSION COMPLETE" header."""
     title = "✓ MISSION COMPLETE"
     console.print(
@@ -168,9 +173,7 @@ def _draw_reward_title(console, box_x: int, box_y: int, box_w: int) -> None:
     )
 
 
-def _draw_reward_mission(
-    console, box_x: int, box_y: int, box_w: int, state,
-) -> None:
+def _draw_reward_mission(console: Any, box_x: int, box_y: int, box_w: int, state: Any) -> None:
     """Center the mission title, if a mission is in flight."""
     if state.current_mission is None:
         return
@@ -183,7 +186,7 @@ def _draw_reward_mission(
     )
 
 
-def _draw_reward_credits(console, box_x: int, box_y: int, state) -> None:
+def _draw_reward_credits(console: Any, box_x: int, box_y: int, state: Any) -> None:
     """Show credits earned and the new total."""
     credits_line = f"Credits:  {state.credits}"
     if state.current_mission is not None and state.current_mission.rewards:
@@ -197,14 +200,16 @@ def _draw_reward_credits(console, box_x: int, box_y: int, state) -> None:
     )
 
 
-def _draw_reward_materials(console, box_x: int, box_y: int, state) -> None:
+def _draw_reward_materials(console: Any, box_x: int, box_y: int, state: Any) -> None:
     """List up to 4 inventory items; collapse the rest into a summary."""
     mat_y = box_y + 7
     console.print(x=box_x + 4, y=mat_y, string="Materials:", fg=(200, 200, 200))
     if not state.inventory:
         console.print(
-            x=box_x + 4, y=mat_y + 1,
-            string="  (none)", fg=(150, 150, 150),
+            x=box_x + 4,
+            y=mat_y + 1,
+            string="  (none)",
+            fg=(150, 150, 150),
         )
         return
 
@@ -228,7 +233,7 @@ def _draw_reward_materials(console, box_x: int, box_y: int, state) -> None:
             break
 
 
-def _draw_reward_bottom_accent(console, box_x: int, box_y: int, box_h: int) -> None:
+def _draw_reward_bottom_accent(console: Any, box_x: int, box_y: int, box_h: int) -> None:
     """Single horizontal line under the inner content."""
     console.print(
         x=box_x + 1,
@@ -238,7 +243,9 @@ def _draw_reward_bottom_accent(console, box_x: int, box_y: int, box_h: int) -> N
     )
 
 
-def _draw_reward_prompt(console, screen_width: int, box_x: int, box_y: int, box_h: int) -> None:
+def _draw_reward_prompt(
+    console: Any, screen_width: int, box_x: int, box_y: int, box_h: int
+) -> None:
     """Centered "[ENTER] Return to Hub" line below the box."""
     prompt = "[ENTER] Return to Hub"
     console.print(
@@ -249,7 +256,7 @@ def _draw_reward_prompt(console, screen_width: int, box_x: int, box_y: int, box_
     )
 
 
-def _draw_reward_status(console, screen_height: int, state) -> None:
+def _draw_reward_status(console: Any, screen_height: int, state: Any) -> None:
     """Last few status messages, dimmed, at the bottom of the screen."""
     if not state.status_messages:
         return
@@ -260,6 +267,8 @@ def _draw_reward_status(console, screen_height: int, state) -> None:
             string=msg,
             fg=(120, 120, 120),
         )
+
+
 def handle_reward_input(
     event: tcod.event.Event,
     state: AppState,

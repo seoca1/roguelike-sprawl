@@ -36,6 +36,7 @@ from .cinematic_art import AsciiArt, resolve_line_art
 from .graphic_novel_view import wrap_text_for_novel
 from .input_utils import is_confirm_key
 from .layout import (
+    Region,
     RegionId,
     clear_region,
     draw_controls,
@@ -128,7 +129,7 @@ def _draw_cinematic_art(
     console: tcod.console.Console,
     main_r: Region,
     art: AsciiArt | None,
-    current_line: object | None,
+    current_line: StoryLine | None,
     art_w: int,
 ) -> None:
     """Draw the ASCII art on the left side, or fall back to a glyph."""
@@ -143,7 +144,7 @@ def _draw_cinematic_art(
         )
         return
     # Fallback: use the legacy single-glyph portrait inline.
-    if current_line is not None and getattr(current_line, "portrait", ""):
+    if current_line is not None and current_line.portrait:
         console.print(
             x=main_r.x + 2,
             y=main_r.y + 3,
@@ -155,7 +156,7 @@ def _draw_cinematic_art(
 def _render_cinematic_lines(
     console: tcod.console.Console,
     main_r: Region,
-    scene: object,
+    scene: StoryScene,
     cinematic_state: CinematicState,
     text_x: int,
     text_w: int,
@@ -172,14 +173,16 @@ def _render_cinematic_lines(
         # Speaker label
         if line.speaker and line.portrait and not line.portrait.startswith("art:"):
             console.print(
-                x=text_x, y=y,
+                x=text_x,
+                y=y,
                 string=f"{line.portrait} {line.speaker.upper()}:",
                 fg=(0, 255, 255),
             )
             y += 1
         elif line.speaker and (getattr(line, "portrait", "") or "").startswith("art:"):
             console.print(
-                x=text_x, y=y,
+                x=text_x,
+                y=y,
                 string=f">> {line.speaker.upper()}:",
                 fg=(0, 255, 255),
             )
@@ -191,12 +194,15 @@ def _render_cinematic_lines(
             text_en = _apply_typing_effect(
                 text_en,
                 cinematic_state.current_char_index,
-                getattr(line, "effect", None),
+                line.effect,
                 cinematic_state.glitch_active,
             )
 
         wrapped_en = wrap_text_for_novel(
-            text_en, width=text_w - 2, left_margin=0, right_margin=0,
+            text_en,
+            width=text_w - 2,
+            left_margin=0,
+            right_margin=0,
         )
         for line_text in wrapped_en:
             console.print(x=text_x + 2, y=y, string=line_text, fg=(255, 255, 255))
@@ -213,18 +219,26 @@ def _render_cinematic_lines(
                     False,
                 )
             from .font_loader import is_korean_capable
+
             if is_korean_capable() and text_ko:
                 wrapped_ko = wrap_text_for_novel(
-                    text_ko, width=text_w - 2, left_margin=0, right_margin=0,
+                    text_ko,
+                    width=text_w - 2,
+                    left_margin=0,
+                    right_margin=0,
                 )
                 for ko_line in wrapped_ko:
                     console.print(
-                        x=text_x + 2, y=y, string=ko_line, fg=(255, 220, 100),
+                        x=text_x + 2,
+                        y=y,
+                        string=ko_line,
+                        fg=(255, 220, 100),
                     )
                     y += 1
             elif text_ko:
                 console.print(
-                    x=text_x + 2, y=y,
+                    x=text_x + 2,
+                    y=y,
                     string=f"[KO: {len(text_ko)} chars]",
                     fg=(180, 180, 100),
                 )
@@ -236,25 +250,27 @@ def _render_cinematic_controls(
     console: tcod.console.Console,
     ctrl_r: Region,
     cinematic_state: CinematicState,
-    scene: object,
+    scene: StoryScene,
 ) -> None:
     """Draw the controls bar at the bottom — different hint depending on
     whether the player is currently mid-typing, between lines, or the
     scene is finished."""
     if cinematic_state.finished:
         draw_controls(
-            console, ctrl_r,
+            console,
+            ctrl_r,
             lines=["[Enter/Space] Next line  [ESC] Skip  [Q] Quit"],
         )
         return
-    if (
-        cinematic_state.current_line_index < len(scene.lines)
-        and cinematic_state.current_char_index
-        < len(scene.lines[cinematic_state.current_line_index].text_en)
+    if cinematic_state.current_line_index < len(
+        scene.lines
+    ) and cinematic_state.current_char_index < len(
+        scene.lines[cinematic_state.current_line_index].text_en
     ):
         # Currently typing
         draw_controls(
-            console, ctrl_r,
+            console,
+            ctrl_r,
             lines=[
                 "[Enter/Space] Skip typing & advance  [ESC] Skip scene  [Q] Quit",
             ],
@@ -262,7 +278,8 @@ def _render_cinematic_controls(
     else:
         # Between lines (auto-pausing)
         draw_controls(
-            console, ctrl_r,
+            console,
+            ctrl_r,
             lines=[
                 "[Enter/Space] Advance  [ESC] Skip scene  [Q] Quit",
             ],
@@ -324,9 +341,7 @@ def render_cinematic(
     _draw_cinematic_art(console, main_r, art, current_line, art_w)
 
     # Text + Korean subtitle column.
-    _render_cinematic_lines(
-        console, main_r, scene, cinematic_state, text_x, text_w
-    )
+    _render_cinematic_lines(console, main_r, scene, cinematic_state, text_x, text_w)
 
     # Controls (semi-auto mode)
     _render_cinematic_controls(console, ctrl_r, cinematic_state, scene)

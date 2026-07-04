@@ -19,7 +19,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .save_manager import SaveManager
@@ -129,7 +129,7 @@ def get_progress_summary(
 # ------------------------------------------------------------------
 
 
-def _find_latest_save(save_manager):
+def _find_latest_save(save_manager: Any) -> Any:
     """Return the slot metadata for the most recent save, or None."""
     try:
         slots = save_manager.list_slots()
@@ -141,7 +141,7 @@ def _find_latest_save(save_manager):
     return max(existing, key=lambda s: s.saved_at or "")
 
 
-def _summary_from_metadata(latest_meta) -> ProgressSummary:
+def _summary_from_metadata(latest_meta: Any) -> ProgressSummary:
     """Build a ProgressSummary from slot metadata only (no full load)."""
     return ProgressSummary(
         has_save=True,
@@ -160,21 +160,13 @@ def _summary_from_metadata(latest_meta) -> ProgressSummary:
     )
 
 
-def _summary_from_save(latest_meta, latest) -> ProgressSummary:
+def _summary_from_save(latest_meta: Any, latest: Any) -> ProgressSummary:
     """Build a ProgressSummary from a fully-loaded SavedRun."""
-    run_state: dict[str, object] = (
-        latest.run_state if isinstance(latest.run_state, dict) else {}
-    )
-    app_state: dict[str, object] = (
-        latest.app_state if isinstance(latest.app_state, dict) else {}
-    )
-    metadata: dict[str, object] = (
-        latest.metadata if isinstance(latest.metadata, dict) else {}
-    )
+    run_state: dict[str, object] = latest.run_state if isinstance(latest.run_state, dict) else {}
+    app_state: dict[str, object] = latest.app_state if isinstance(latest.app_state, dict) else {}
+    metadata: dict[str, object] = latest.metadata if isinstance(latest.metadata, dict) else {}
 
-    character_id = str(
-        app_state.get("character_id", metadata.get("character_id", "novice"))
-    )
+    character_id = str(app_state.get("character_id", metadata.get("character_id", "novice")))
     character_name = _CHARACTER_LABELS.get(character_id, "")
 
     grade_raw = metadata.get("player_grade", app_state.get("player_grade", 0))
@@ -218,6 +210,8 @@ def _summary_from_save(latest_meta, latest) -> ProgressSummary:
         credits=credits_val,
         playtime_minutes=playtime_minutes,
     )
+
+
 def render_summary_lines(summary: ProgressSummary, t_lang: str = "ko") -> list[str]:
     """Render the progress summary as a list of text lines.
 

@@ -18,12 +18,12 @@ Run from the prototype directory::
 
     PYTHONPATH=src uv run python prototype/tests/integration/check_dashboard.py
 """
+
 from __future__ import annotations
 
 import json
 import re
 import sys
-from collections import defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]  # tests/integration/... → repo
@@ -79,9 +79,7 @@ def check_title_h1_match() -> list[str]:
         title_clean = title.group(1).replace(" — Roguelike Sprawl", "").strip()
         h1_clean = h1.group(1).strip()
         if title_clean != h1_clean:
-            errors.append(
-                f"  {html.name}: title={title_clean!r} != h1={h1_clean!r}"
-            )
+            errors.append(f"  {html.name}: title={title_clean!r} != h1={h1_clean!r}")
     return errors
 
 
@@ -106,10 +104,7 @@ def check_mission_coverage() -> list[str]:
     sources = {m["story"]["source"] for m in missions.values() if "story" in m}
 
     # Available HTML files.
-    html_stems = {
-        html.stem.replace("_en", "")
-        for html in SHORT_STORIES_HTML.glob("*_en.html")
-    }
+    html_stems = {html.stem.replace("_en", "") for html in SHORT_STORIES_HTML.glob("*_en.html")}
 
     # HTML pages whose source doesn't exist.
     orphan_pages = sorted(html_stems - sources)
@@ -150,8 +145,6 @@ def main() -> int:
 
 
 # Pytest bridge: import the checkers and run them as a single test.
-
-import pytest
 
 
 def test_dashboard_broken_hrefs() -> None:

@@ -8,6 +8,8 @@ Two-level UI:
 
 from __future__ import annotations
 
+from typing import Any
+
 import tcod.console
 import tcod.event
 from tcod.event import KeyDown, KeySym
@@ -95,11 +97,7 @@ def _render_browser(console: tcod.console.Console, main: Region, state: AppState
 # ------------------------------------------------------------------
 
 
-def _render_browser_worlds(
-    console: tcod.console.Console,
-    main: Region,
-    wm,
-) -> int:
+def _render_browser_worlds(console: tcod.console.Console, main: Region, wm: Any) -> int:
     """Render the world/sector tree in the top half of the browser.
 
     Returns the y-row just past the world tree.
@@ -136,9 +134,7 @@ def _render_browser_worlds(
         current_sector = wm.current_sector
         for sector in world.sectors.values():
             is_current_sector = (
-                is_current_world
-                and current_sector is not None
-                and sector.id is current_sector
+                is_current_world and current_sector is not None and sector.id is current_sector
             )
             sector_marker = "\u2192" if is_current_sector else " "
             sector_fg = (0, 255, 255) if is_current_sector else (150, 150, 150)
@@ -155,12 +151,7 @@ def _render_browser_worlds(
 
 
 def _render_browser_servers(
-    console: tcod.console.Console,
-    main: Region,
-    state: AppState,
-    wm,
-    top_h: int,
-    y: int,
+    console: tcod.console.Console, main: Region, state: AppState, wm: Any, top_h: int, y: int
 ) -> None:
     """Render the server list in the bottom half of the browser."""
     y = main.y + top_h + 2
@@ -200,6 +191,8 @@ def _render_browser_servers(
             string=line[: main.w - 4],
             fg=fg,
         )
+
+
 def handle_browser_input(
     event: tcod.event.Event,
     state: AppState,

@@ -22,7 +22,7 @@ ROOT = ROOT.parent  # Game의 부모 = Projects/
 
 sys.path.insert(0, str(ROOT / "Game" / "roguelike_sprawl" / "prototype" / "src"))
 
-from roguelike_sprawl.data.story_resolver import (  # type: ignore[import-not-found]
+from roguelike_sprawl.data.story_resolver import (  # type: ignore[import-not-found]  # noqa: E402
     list_available_stems,
     validate_mission_sources,
 )

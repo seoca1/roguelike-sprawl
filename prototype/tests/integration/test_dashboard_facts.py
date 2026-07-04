@@ -24,6 +24,7 @@ Patterns of stale copy we look for:
 - 12 scenes (was 12 before characters 4-7 were added)
 - 5 ICE 적 (was 5 — replaced with categories x variants)
 """
+
 from __future__ import annotations
 
 import json
@@ -103,7 +104,7 @@ class TestStaleCopyRegression:
     """
 
     @pytest.mark.parametrize(
-        "pattern,key,description",
+        ("pattern", "key", "description"),
         _STALE_PATTERNS,
         ids=[p[2] for p in _STALE_PATTERNS],
     )
@@ -133,7 +134,7 @@ class TestStaleCopyRegression:
             body = re.sub(r"<[^>]+>", " ", text)
             body = re.sub(r"\s+", " ", body)
             for m in re.finditer(pattern, body, re.IGNORECASE):
-                ctx = body[max(0, m.start() - 50):m.end() + 50]
+                ctx = body[max(0, m.start() - 50) : m.end() + 50]
                 if any(anchor in ctx for anchor in whitelist_anchors):
                     continue
                 pytest.fail(
@@ -159,9 +160,9 @@ class TestCorrectCopyPresent:
         text = (DASHBOARD / "index.html").read_text(encoding="utf-8")
         body = re.sub(r"<[^>]+>", " ", text)
         body = re.sub(r"\s+", " ", body)
-        assert f"{facts['mission_count']} missions" in body or f"{facts['mission_count']} 미션" in body, (
-            f"index.html should advertise {facts['mission_count']} missions"
-        )
+        assert (
+            f"{facts['mission_count']} missions" in body or f"{facts['mission_count']} 미션" in body
+        ), f"index.html should advertise {facts['mission_count']} missions"
 
     def test_index_html_has_correct_stage_count(self, facts: dict) -> None:
         text = (DASHBOARD / "index.html").read_text(encoding="utf-8")
@@ -178,7 +179,7 @@ class TestCorrectCopyPresent:
             r'<meta\s+name="description"\s+content="([^"]+)"',
             text,
         )
-        assert m, "stages.html has no <meta name=\"description\">"
+        assert m, 'stages.html has no <meta name="description">'
         desc = m.group(1)
         assert f"{facts['stage_count']} stages" in desc, (
             f"stages.html description must include {facts['stage_count']} stages, got: {desc[:200]}"

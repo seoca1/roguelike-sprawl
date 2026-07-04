@@ -10,9 +10,9 @@ We also cover the disk round-trip via ``save_gn_progress`` /
 ``load_gn_progress`` / ``has_gn_save`` / ``delete_gn_progress`` using
 ``tmp_path``.
 """
+
 from __future__ import annotations
 
-import json
 from datetime import datetime
 from pathlib import Path
 
@@ -21,13 +21,13 @@ import pytest
 from roguelike_sprawl.engine import graphic_novel_save as gns
 from roguelike_sprawl.engine.graphic_novel_save import (
     DEFAULT_SAVE_PATH,
-    GNProgress,
     GN_SAVE_SLOTS,
+    SAVE_SLOT_PATTERN,
+    GNProgress,
     GNSaveCorruptedError,
     GNSaveEmptyError,
     GNSaveError,
     GNSaveVersionMismatchError,
-    SAVE_SLOT_PATTERN,
     _migrate_gn_data,
     _slot_path_with_dir,
     delete_gn_progress,
@@ -40,7 +40,6 @@ from roguelike_sprawl.engine.graphic_novel_save import (
     slot_path,
 )
 
-
 # ---------------------------------------------------------------------------
 # slot_path / _slot_path_with_dir
 # ---------------------------------------------------------------------------
@@ -52,15 +51,15 @@ class TestSlotPath:
         assert path.name == SAVE_SLOT_PATTERN.format(slot_id=1)
 
     def test_raises_for_zero(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=r"slot_id must be"):
             slot_path(0)
 
     def test_raises_for_overflow(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=r"slot_id must be"):
             slot_path(GN_SAVE_SLOTS + 1)
 
     def test_raises_for_negative(self):
-        with pytest.raises(ValueError):
+        with pytest.raises(ValueError, match=r"slot_id must be"):
             slot_path(-1)
 
     def test_with_explicit_save_dir(self, tmp_path: Path):
@@ -101,7 +100,7 @@ class TestGNProgress:
         p2 = GNProgress.from_dict(d)
         assert p2 == p
 
-    def test_from_dict_default_ending_A(self):
+    def test_from_dict_default_ending_a(self):
         # v1.0.0 saves don't have ``ending``; from_dict should default to A.
         d = {
             "mode": "novice",
@@ -116,7 +115,7 @@ class TestGNProgress:
         p = GNProgress.from_dict(d)
         assert p.ending == "A"
 
-    def test_from_dict_unknown_ending_defaults_to_A(self):
+    def test_from_dict_unknown_ending_defaults_to_a(self):
         d = {
             "mode": "novice",
             "scene_index": 1,

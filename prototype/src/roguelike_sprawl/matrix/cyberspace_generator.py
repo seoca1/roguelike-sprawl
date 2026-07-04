@@ -88,35 +88,55 @@ class CyberspaceGenerator:
 
         # Levels 1-3: branching tree.
         l1_nodes = self._build_level(
-            rng, entry_id, rng.randint(2, 3),
-            x_branching, y_spacing, DepthLevel.SHALLOW, ZoneDepth.SURFACE,
-            faction, [NodeKind.ROUTER, NodeKind.DATA, NodeKind.CONSTRUCT],
-            nodes, edges, layouts,
+            rng,
+            entry_id,
+            rng.randint(2, 3),
+            x_branching,
+            y_spacing,
+            DepthLevel.SHALLOW,
+            ZoneDepth.SURFACE,
+            faction,
+            [NodeKind.ROUTER, NodeKind.DATA, NodeKind.CONSTRUCT],
+            nodes,
+            edges,
+            layouts,
         )
         l2_nodes = self._branch_from(
-            rng, l1_nodes, 1, 2,
-            x_branching, y_spacing, DepthLevel.MID, ZoneDepth.SURFACE,
-            faction, [NodeKind.ROUTER, NodeKind.ICE, NodeKind.SYSTEM],
-            nodes, edges, layouts,
+            rng,
+            l1_nodes,
+            1,
+            2,
+            x_branching,
+            y_spacing,
+            DepthLevel.MID,
+            ZoneDepth.SURFACE,
+            faction,
+            [NodeKind.ROUTER, NodeKind.ICE, NodeKind.SYSTEM],
+            nodes,
+            edges,
+            layouts,
         )
         l3_parents = [n for n in l2_nodes if rng.random() < 0.6]
         self._branch_from(
-            rng, l3_parents, 1, 2,
-            x_branching * 1.5, y_spacing, DepthLevel.DEEP, ZoneDepth.MID,
-            faction, [NodeKind.ICE, NodeKind.DATA, NodeKind.CONSTRUCT],
-            nodes, edges, layouts,
+            rng,
+            l3_parents,
+            1,
+            2,
+            x_branching * 1.5,
+            y_spacing,
+            DepthLevel.DEEP,
+            ZoneDepth.MID,
+            faction,
+            [NodeKind.ICE, NodeKind.DATA, NodeKind.CONSTRUCT],
+            nodes,
+            edges,
+            layouts,
         )
 
         # Mandatory infrastructure: at least one ICE, one NPC, one exit.
-        self._ensure_main_ice(
-            nodes, edges, layouts, entry_id, l2_nodes, y_spacing, faction
-        )
-        self._ensure_exit(
-            nodes, edges, layouts, y_spacing, faction
-        )
-        self._ensure_npc(
-            nodes, edges, layouts, entry_id, x_branching, y_spacing, faction
-        )
+        self._ensure_main_ice(nodes, edges, layouts, entry_id, l2_nodes, y_spacing, faction)
+        self._ensure_exit(nodes, edges, layouts, y_spacing, faction)
+        self._ensure_npc(nodes, edges, layouts, entry_id, x_branching, y_spacing, faction)
         # Add a couple of DATA vaults near routers for loot.
         self._add_data_vaults(nodes, edges, layouts, x_branching, y_spacing, faction)
 
@@ -148,8 +168,18 @@ class CyberspaceGenerator:
     ) -> list[str]:
         """Build a single level of children under a parent node."""
         return self._generate_level(
-            rng, parent_id, n_children, x_spacing, y_spacing,
-            depth, zone, faction, node_kinds, nodes, edges, layouts,
+            rng,
+            parent_id,
+            n_children,
+            x_spacing,
+            y_spacing,
+            depth,
+            zone,
+            faction,
+            node_kinds,
+            nodes,
+            edges,
+            layouts,
         )
 
     def _branch_from(
@@ -175,8 +205,18 @@ class CyberspaceGenerator:
         for parent in parents:
             n_children = rng.randint(min_children, max_children)
             ids = self._generate_level(
-                rng, parent, n_children, x_spacing, y_spacing,
-                depth, zone, faction, node_kinds, nodes, edges, layouts,
+                rng,
+                parent,
+                n_children,
+                x_spacing,
+                y_spacing,
+                depth,
+                zone,
+                faction,
+                node_kinds,
+                nodes,
+                edges,
+                layouts,
             )
             all_children.extend(ids)
         return all_children
@@ -213,7 +253,10 @@ class CyberspaceGenerator:
             )
         )
         layouts[ice_id] = CyberspaceLayout(
-            ice_id, parent_layout.x, parent_layout.y + y_spacing, DepthLevel.DEEP,
+            ice_id,
+            parent_layout.x,
+            parent_layout.y + y_spacing,
+            DepthLevel.DEEP,
         )
         edges.append(Edge(parent, ice_id))
 
@@ -241,7 +284,10 @@ class CyberspaceGenerator:
             )
         )
         layouts["exit"] = CyberspaceLayout(
-            "exit", parent_layout.x, parent_layout.y + y_spacing, DepthLevel.CORE,
+            "exit",
+            parent_layout.x,
+            parent_layout.y + y_spacing,
+            DepthLevel.CORE,
         )
         edges.append(Edge(parent.id, "exit"))
 
@@ -288,7 +334,8 @@ class CyberspaceGenerator:
     ) -> None:
         """Attach a couple of DATA vaults to routers for loot."""
         router_nodes = [
-            n for n in nodes
+            n
+            for n in nodes
             if n.kind is NodeKind.ROUTER
             and layouts[n.id].depth in (DepthLevel.SHALLOW, DepthLevel.MID)
         ]

@@ -368,20 +368,20 @@ def use_skill(state: CombatState, skill: Skill) -> bool:
 
     # Dispatch to per-category effect.
     dispatch = {
-        SkillEffect.ATTACK:        _apply_damage_skill,
-        SkillEffect.HEAVY_ATTACK:  _apply_heavy_attack,
-        SkillEffect.PIERCE:        _apply_pierce,
-        SkillEffect.MULTI_HIT:      _apply_multi_hit,
-        SkillEffect.DOT:           _apply_dot,
-        SkillEffect.POISON:        _apply_dot,
-        SkillEffect.SHIELD:        _apply_shield,
-        SkillEffect.HEAL:          _apply_heal,
-        SkillEffect.REGEN:         _apply_regen,
-        SkillEffect.BUFF:          _apply_buff,
-        SkillEffect.DEBUFF:        _apply_debuff,
-        SkillEffect.STUN:          _apply_stun,
-        SkillEffect.DETECT:        _apply_detect,
-        SkillEffect.LIFESTEAL:     _apply_lifesteal,
+        SkillEffect.ATTACK: _apply_damage_skill,
+        SkillEffect.HEAVY_ATTACK: _apply_heavy_attack,
+        SkillEffect.PIERCE: _apply_pierce,
+        SkillEffect.MULTI_HIT: _apply_multi_hit,
+        SkillEffect.DOT: _apply_dot,
+        SkillEffect.POISON: _apply_dot,
+        SkillEffect.SHIELD: _apply_shield,
+        SkillEffect.HEAL: _apply_heal,
+        SkillEffect.REGEN: _apply_regen,
+        SkillEffect.BUFF: _apply_buff,
+        SkillEffect.DEBUFF: _apply_debuff,
+        SkillEffect.STUN: _apply_stun,
+        SkillEffect.DETECT: _apply_detect,
+        SkillEffect.LIFESTEAL: _apply_lifesteal,
     }
     handler = dispatch.get(skill.effect)
     if handler is None:

@@ -4,20 +4,16 @@ These tests focus on the diff/check logic.  We don't exercise the
 real data sources (we patch the collectors) so the tests run
 without touching missions.json or the source tree.
 """
+
 from __future__ import annotations
 
 import importlib.util
 import json
-import sys
 from pathlib import Path
-
-import pytest
 
 # Load the script as a module (it lives under scripts/, not in a
 # package).  We do this once and cache the module.
-SCRIPT_PATH = (
-    Path(__file__).resolve().parents[3] / "scripts" / "sync_dashboard_facts.py"
-)
+SCRIPT_PATH = Path(__file__).resolve().parents[3] / "scripts" / "sync_dashboard_facts.py"
 _spec = importlib.util.spec_from_file_location("sync_dashboard_facts", SCRIPT_PATH)
 sync_mod = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(sync_mod)
@@ -42,13 +38,15 @@ class TestDiffFacts:
         # The diff line should mention the key and both old/new values.
         joined = "\n".join(diffs)
         assert "a:" in joined
-        assert "1" in joined and "2" in joined
+        assert "1" in joined
+        assert "2" in joined
 
     def test_key_added_is_listed(self) -> None:
         diffs = sync_mod._diff_facts({}, {"a": 1})
         assert len(diffs) == 1
         joined = "\n".join(diffs)
-        assert "a:" in joined and "1" in joined
+        assert "a:" in joined
+        assert "1" in joined
 
     def test_key_removed_is_listed(self) -> None:
         diffs = sync_mod._diff_facts({"a": 1}, {})
@@ -115,24 +113,32 @@ class TestCollectFactsShape:
         monkeypatch.setattr(sync_mod, "_count_stages", lambda: 13)
         monkeypatch.setattr(sync_mod, "_count_ice", lambda: 5)
         monkeypatch.setattr(sync_mod, "_count_sounds", lambda: 0)
-        monkeypatch.setattr(
-            sync_mod, "_count_gn_scenes", lambda: ({"case": 1}, 1)
-        )
+        monkeypatch.setattr(sync_mod, "_count_gn_scenes", lambda: ({"case": 1}, 1))
         monkeypatch.setattr(sync_mod, "_count_programs", lambda: 0)
-        monkeypatch.setattr(
-            sync_mod, "_cyberspace_stats", lambda: (2, 4, 8)
-        )
+        monkeypatch.setattr(sync_mod, "_cyberspace_stats", lambda: (2, 4, 8))
         monkeypatch.setattr(sync_mod, "_count_skill_effects", lambda: 0)
         monkeypatch.setattr(sync_mod, "_count_tests", lambda: 0)
         facts = sync_mod._collect_facts()
         expected_keys = {
-            "mission_count", "character_count", "character_ids", "arcs",
-            "arc_distribution", "ice_unique_count", "stage_count",
-            "sound_wav_count", "gn_scenes_by_char", "gn_scenes_total",
-            "program_count", "ending_combinations",
-            "cyberspace_worlds", "cyberspace_sectors_per_world",
-            "cyberspace_sectors_total", "cyberspace_servers_total",
-            "skill_effect_count", "test_count_collected", "_generated_at",
+            "mission_count",
+            "character_count",
+            "character_ids",
+            "arcs",
+            "arc_distribution",
+            "ice_unique_count",
+            "stage_count",
+            "sound_wav_count",
+            "gn_scenes_by_char",
+            "gn_scenes_total",
+            "program_count",
+            "ending_combinations",
+            "cyberspace_worlds",
+            "cyberspace_sectors_per_world",
+            "cyberspace_sectors_total",
+            "cyberspace_servers_total",
+            "skill_effect_count",
+            "test_count_collected",
+            "_generated_at",
         }
         assert expected_keys.issubset(facts.keys())
 

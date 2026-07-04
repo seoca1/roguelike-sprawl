@@ -21,6 +21,8 @@ Uses the unified screen shell (engine.layout) for area separation:
 
 from __future__ import annotations
 
+from typing import Any
+
 import tcod.console
 import tcod.event
 from tcod.event import KeyDown, KeySym
@@ -124,15 +126,11 @@ def _draw_box(
         return
 
     _draw_box_frame(console, abs_x, abs_y, fg_box, border_chars)
-    _draw_box_content(
-        console, abs_x, abs_y, label, zdr, status, is_current, bg_label
-    )
+    _draw_box_content(console, abs_x, abs_y, label, zdr, status, is_current, bg_label)
     if is_current:
         _draw_box_external_markers(console, main, abs_x, abs_y)
         if direction_hints:
-            _draw_box_direction_hints(
-                console, abs_x, abs_y, direction_hints, bg_label
-            )
+            _draw_box_direction_hints(console, abs_x, abs_y, direction_hints, bg_label)
 
 
 def _resolve_box_style(
@@ -199,12 +197,18 @@ def _draw_box_content(
                 console.print(x=c, y=r, string=" ", bg=bg_label)
 
     console.print(
-        x=abs_x + 1, y=abs_y + 1, string=inner_label,
-        fg=fg_label, bg=bg_label,
+        x=abs_x + 1,
+        y=abs_y + 1,
+        string=inner_label,
+        fg=fg_label,
+        bg=bg_label,
     )
     console.print(
-        x=abs_x + 1, y=abs_y + 2, string=zdr_text,
-        fg=fg_status, bg=bg_label,
+        x=abs_x + 1,
+        y=abs_y + 2,
+        string=zdr_text,
+        fg=fg_status,
+        bg=bg_label,
     )
 
 
@@ -223,11 +227,16 @@ def _draw_box_external_markers(
         console.print(x=abs_x + BOX_WIDTH, y=abs_y + 1, string="<", fg=marker_color)
     if abs_y > main.y:
         console.print(
-            x=abs_x + BOX_WIDTH // 2, y=abs_y - 1, string="v", fg=marker_color,
+            x=abs_x + BOX_WIDTH // 2,
+            y=abs_y - 1,
+            string="v",
+            fg=marker_color,
         )
     if abs_y + BOX_HEIGHT < main.y2:
         console.print(
-            x=abs_x + BOX_WIDTH // 2, y=abs_y + BOX_HEIGHT, string="^",
+            x=abs_x + BOX_WIDTH // 2,
+            y=abs_y + BOX_HEIGHT,
+            string="^",
             fg=marker_color,
         )
     you_here = "[ YOU ]"
@@ -259,13 +268,21 @@ def _draw_box_direction_hints(
             console.print(x=abs_x, y=cy, string=glyph, fg=hint_color, bg=bg_label)
         elif code == "R":
             console.print(
-                x=abs_x + BOX_WIDTH - 1, y=cy, string=glyph, fg=hint_color, bg=bg_label,
+                x=abs_x + BOX_WIDTH - 1,
+                y=cy,
+                string=glyph,
+                fg=hint_color,
+                bg=bg_label,
             )
         elif code == "U":
             console.print(x=cx, y=abs_y, string=glyph, fg=hint_color, bg=bg_label)
         elif code == "D":
             console.print(
-                x=cx, y=abs_y + BOX_HEIGHT - 1, string=glyph, fg=hint_color, bg=bg_label,
+                x=cx,
+                y=abs_y + BOX_HEIGHT - 1,
+                string=glyph,
+                fg=hint_color,
+                bg=bg_label,
             )
 
 
@@ -550,7 +567,7 @@ def _render_matrix_side_panel(
 def _render_matrix_message_log(
     console: tcod.console.Console,
     side_r: Region,
-    status_messages: list,
+    status_messages: Any,
 ) -> None:
     """Render the most recent 3 status messages in a thin overlay
     above the controls panel (ADR-0047).
@@ -639,13 +656,9 @@ def render_matrix(
     _init_matrix_shell(console, shell)
     render_status_panel(console, state, panel_r)
     _draw_matrix_title(console, title_r, zone, zdr, st, ppl, zone_str)
-    _draw_matrix_main_content(
-        console, main_r, matrix, layouts, state, ppl, zone, st
-    )
+    _draw_matrix_main_content(console, main_r, matrix, layouts, state, ppl, zone, st)
     use_fog = state.exploration is not None
-    _render_matrix_side_panel(
-        console, side_r, matrix, state, zone, st, state.exploration, use_fog
-    )
+    _render_matrix_side_panel(console, side_r, matrix, state, zone, st, state.exploration, use_fog)
     _render_matrix_message_log(console, side_r, state.status_messages)
     _render_matrix_controls(console, ctrl_r, zone)
     _draw_matrix_footer(console, foot_r, state)
@@ -657,14 +670,14 @@ def render_matrix(
 # ------------------------------------------------------------------
 
 
-def _compute_zone_stats(zone, ppl: int) -> tuple[int, Status]:
+def _compute_zone_stats(zone: Any, ppl: int) -> tuple[int, Status]:
     """Return (zdr, status) for the current zone (or 0/MATCH if none)."""
     if zone is None:
         return 0, Status.MATCH
     return node_zdr(zone), node_status(zone, ppl)
 
 
-def _init_matrix_shell(console: tcod.console.Console, shell: dict) -> None:
+def _init_matrix_shell(console: tcod.console.Console, shell: dict[RegionId, Region]) -> None:
     """Clear every region and draw the dividers once."""
     for r in shell.values():
         clear_region(console, r)
@@ -674,7 +687,7 @@ def _init_matrix_shell(console: tcod.console.Console, shell: dict) -> None:
 def _draw_matrix_title(
     console: tcod.console.Console,
     title_r: Region,
-    zone,
+    zone: Any,
     zdr: int,
     st: Status,
     ppl: int,
@@ -700,7 +713,7 @@ def _draw_matrix_main_content(
     layouts: dict[str, tuple[int, int]],
     state: AppState,
     ppl: int,
-    zone,
+    zone: Any,
     st: Status,
 ) -> None:
     """Draw the centre column: edges, direction hints, then nodes."""
@@ -714,7 +727,7 @@ def _draw_matrix_main_content(
     )
 
 
-def _draw_matrix_footer(console: tcod.console.Console, foot_r: Region, state) -> None:
+def _draw_matrix_footer(console: tcod.console.Console, foot_r: Region, state: AppState) -> None:
     """Draw the footer with the game-time line."""
     draw_footer(
         console,
@@ -734,7 +747,9 @@ def _render_action_menu_overlay(
     """If the action menu is open, render it as a centred popup."""
     if not state.action_menu_open:
         return
-    current_node = matrix.get(state.current_node)
+    if state.current_node_id is None:
+        return
+    current_node = matrix.get(state.current_node_id)
     if current_node is None:
         return
     # Center popup in main area

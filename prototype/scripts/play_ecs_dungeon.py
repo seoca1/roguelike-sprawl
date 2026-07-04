@@ -18,6 +18,7 @@ Run::
 
     PYTHONPATH=src .venv/bin/python scripts/play_ecs_dungeon.py
 """
+
 from __future__ import annotations
 
 import sys
@@ -46,8 +47,9 @@ def main() -> int:
 
     n = sys_.populate(graph)
     print(f"[1] populate()                 : {n} entities")
-    print(f"[2] graph                       : "
-          f"{len(graph.nodes)} rooms, {len(graph.edges)} corridors")
+    print(
+        f"[2] graph                       : {len(graph.nodes)} rooms, {len(graph.edges)} corridors"
+    )
 
     first_three = [n.id for n in graph.nodes[:3]]
     print(f"[3] simulated walkthrough       : {first_three}")

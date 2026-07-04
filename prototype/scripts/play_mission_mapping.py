@@ -16,6 +16,7 @@ Run::
 
     PYTHONPATH=src .venv/bin/python scripts/play_mission_mapping.py
 """
+
 from __future__ import annotations
 
 import sys
@@ -38,8 +39,7 @@ def main() -> int:
     print(f"[1] Loaded {len(missions)} missions from missions.json")
 
     rooms_aggregate = mission_mapper.missions_to_rooms(missions[0])
-    print(f"[2] missions_to_rooms({missions[0].id}) : "
-          f"{len(rooms_aggregate)} RoomTypes")
+    print(f"[2] missions_to_rooms({missions[0].id}) : {len(rooms_aggregate)} RoomTypes")
 
     samples = []
     for arc in ("novice", "veteran", "heretic"):
@@ -56,15 +56,19 @@ def main() -> int:
         rooms = mission_mapper.missions_to_rooms(m)
         g = mission_mapper.mission_to_graph(m)
         kinds = sorted({r.value for r in rooms})
-        print(f"     - {m.id:36s} "
-              f"RoomTypes={len(rooms):2d} graph nodes={len(g.nodes):2d} "
-              f"corridors={len(g.edges):2d} kinds={kinds}")
+        print(
+            f"     - {m.id:36s} "
+            f"RoomTypes={len(rooms):2d} graph nodes={len(g.nodes):2d} "
+            f"corridors={len(g.edges):2d} kinds={kinds}"
+        )
         total_rooms += len(g.nodes)
 
     print()
-    print(f"[4] aggregate over {len(missions)} missions → "
-          f"{sum(len(mission_mapper.mission_to_graph(m).nodes) for m in missions)} "
-          f"total graph nodes")
+    print(
+        f"[4] aggregate over {len(missions)} missions → "
+        f"{sum(len(mission_mapper.mission_to_graph(m).nodes) for m in missions)} "
+        f"total graph nodes"
+    )
 
     print()
     print("*** Phase 3 OK: mission→room mapping exercised for all 29 missions ***")

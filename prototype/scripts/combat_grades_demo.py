@@ -13,7 +13,6 @@ from __future__ import annotations
 import argparse
 import random
 import sys
-import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
@@ -26,7 +25,6 @@ from roguelike_sprawl.combat import (
     step_combat,
 )
 from roguelike_sprawl.matrix.ppl import Loadout, Program, calculate_ppl
-
 
 DEMO_SCENARIOS = {
     "A": {
@@ -208,7 +206,7 @@ def run_scenario(
     ratio = calculate_power_ratio(ppl, enemy_power)
     difficulty = get_difficulty_label(ratio)
 
-    print(f"\n  Enemies:")
+    print("\n  Enemies:")
     for ice_id, _ in scenario["enemies"]:
         data = ice_reg.get(ice_id)
         if data:
@@ -221,23 +219,23 @@ def run_scenario(
     print(f"  Expected Difficulty: {scenario['expected_difficulty']}")
 
     if difficulty == scenario["expected_difficulty"]:
-        print(f"  ✓ Difficulty matches expected!")
+        print("  ✓ Difficulty matches expected!")
     else:
         print(
             f"  ⚠ Difficulty mismatch (expected {scenario['expected_difficulty']}, got {difficulty})"
         )
 
     if verbose:
-        print(f"\n  Running combat simulation...")
+        print("\n  Running combat simulation...")
         result = simulate_combat(ice_reg, scenario, seed=42, verbose=True)
-        print(f"  Combat Result:")
+        print("  Combat Result:")
         print(f"    Steps: {result['steps']}")
         print(f"    Outcome: {result['outcome']}")
         print(f"    Player HP: {result['player_hp_remaining']}/{scenario['grade'] * 20 + 80}")
         if result["player_died"]:
-            print(f"    ⚠ Player died!")
+            print("    ⚠ Player died!")
         elif result["timeout"]:
-            print(f"    ⚠ Combat timed out!")
+            print("    ⚠ Combat timed out!")
 
 
 def main() -> None:

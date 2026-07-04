@@ -5,6 +5,7 @@ green, we move on to the larger render modules (event_view,
 phase_view, story_view, chapter_cutscene, cyberspace_view,
 equipment_view, hub, graphic_novel_save).
 """
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -16,7 +17,6 @@ from roguelike_sprawl.cyberspace.registry import WorldRegistry
 from roguelike_sprawl.cyberspace.server_generator import ServerSubgraphGenerator
 from roguelike_sprawl.cyberspace.world import WorldMap
 from roguelike_sprawl.engine import font_loader
-
 
 # ---------------------------------------------------------------------------
 # font_loader.is_korean_capable
@@ -40,8 +40,12 @@ class TestLoadFont:
 
     def test_loads_ttf_when_path_exists(self) -> None:
         fake_tileset = MagicMock(name="ttf-tileset")
-        with patch.object(font_loader.config, "find_ttf_font", return_value=Path("/fake/font.ttf")), \
-             patch.object(font_loader.tcod.tileset, "load_truetype_font", return_value=fake_tileset) as loader:
+        with (
+            patch.object(font_loader.config, "find_ttf_font", return_value=Path("/fake/font.ttf")),
+            patch.object(
+                font_loader.tcod.tileset, "load_truetype_font", return_value=fake_tileset
+            ) as loader,
+        ):
             tileset, is_ttf = font_loader.load_font()
         assert tileset is fake_tileset
         assert is_ttf is True
@@ -49,25 +53,33 @@ class TestLoadFont:
 
     def test_falls_back_to_bitmap_on_ttf_error(self) -> None:
         fake_bitmap = MagicMock(name="bitmap-tileset")
-        with patch.object(font_loader.config, "find_ttf_font", return_value=Path("/fake/font.ttf")), \
-             patch.object(font_loader.tcod.tileset, "load_truetype_font", side_effect=OSError("boom")), \
-             patch.object(Path, "exists", return_value=True), \
-             patch.object(font_loader.tcod.tileset, "load_tilesheet", return_value=fake_bitmap):
+        with (
+            patch.object(font_loader.config, "find_ttf_font", return_value=Path("/fake/font.ttf")),
+            patch.object(
+                font_loader.tcod.tileset, "load_truetype_font", side_effect=OSError("boom")
+            ),
+            patch.object(Path, "exists", return_value=True),
+            patch.object(font_loader.tcod.tileset, "load_tilesheet", return_value=fake_bitmap),
+        ):
             tileset, is_ttf = font_loader.load_font()
         assert tileset is fake_bitmap
         assert is_ttf is False
 
     def test_falls_back_to_bitmap_when_no_ttf(self) -> None:
         fake_bitmap = MagicMock(name="bitmap-tileset")
-        with patch.object(font_loader.config, "find_ttf_font", return_value=None), \
-             patch.object(Path, "exists", return_value=True), \
-             patch.object(font_loader.tcod.tileset, "load_tilesheet", return_value=fake_bitmap):
+        with (
+            patch.object(font_loader.config, "find_ttf_font", return_value=None),
+            patch.object(Path, "exists", return_value=True),
+            patch.object(font_loader.tcod.tileset, "load_tilesheet", return_value=fake_bitmap),
+        ):
             tileset, is_ttf = font_loader.load_font()
         assert is_ttf is False
 
     def test_raises_when_no_font_available(self) -> None:
-        with patch.object(font_loader.config, "find_ttf_font", return_value=None), \
-             patch.object(Path, "exists", return_value=False):
+        with (
+            patch.object(font_loader.config, "find_ttf_font", return_value=None),
+            patch.object(Path, "exists", return_value=False),
+        ):
             with pytest.raises(FileNotFoundError):
                 font_loader.load_font()
 
@@ -193,9 +205,7 @@ class TestWorldRegistry:
         assert sector_id == "sense_net"
         assert server.id == "sensenet_demo"
 
-    def test_get_server_by_mission_returns_none_for_missing(
-        self, sample_json_path: Path
-    ) -> None:
+    def test_get_server_by_mission_returns_none_for_missing(self, sample_json_path: Path) -> None:
         reg = WorldRegistry.load(sample_json_path)
         assert reg.get_server_by_mission("nope") is None
 

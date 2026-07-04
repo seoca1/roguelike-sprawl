@@ -69,7 +69,7 @@ def test_bell() -> dict:
     }
 
 
-def test_python_lib(lib_name: str = "wave") -> dict:
+def test_python_lib(lib_name: str = "wave") -> dict:  # noqa: PT028
     """Test if a Python library is available.
 
     Default arg makes the test self-contained when pytest collects it

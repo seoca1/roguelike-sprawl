@@ -5,11 +5,10 @@ The state-transition functions (``_advance_event``, ``_complete_event``,
 ``_execute_choice``) and the input router (``handle_event_input``) are
 the meaningful targets for regression tests.
 """
+
 from __future__ import annotations
 
 from unittest.mock import MagicMock
-
-import pytest
 
 from roguelike_sprawl.engine import event_view
 from roguelike_sprawl.engine.event_story import (
@@ -19,7 +18,6 @@ from roguelike_sprawl.engine.event_story import (
     EventState,
     EventStory,
 )
-
 
 # ---------------------------------------------------------------------------
 # _count_wrapped_lines and _get_text_color — pure logic
@@ -209,13 +207,13 @@ class _StubRegion:
 
 class TestRenderEventMain:
     def test_no_line_returns_silently(self) -> None:
-        from types import SimpleNamespace as _SN
+        from types import SimpleNamespace
 
         from roguelike_sprawl.engine import event_view
 
         console = _FakeConsole()
-        es = _SN(
-            event=_SN(get_line=lambda i: None),
+        es = SimpleNamespace(
+            event=SimpleNamespace(get_line=lambda i: None),
             current_line_index=99,
         )
         event_view._render_event_main(console, _StubRegion(), es)
@@ -224,14 +222,12 @@ class TestRenderEventMain:
     def test_renders_art_then_dialogue_then_choices(self) -> None:
         from types import SimpleNamespace
 
+        from roguelike_sprawl.engine import event_view
         from roguelike_sprawl.engine.event_story import (
-            CharacterArt,
             EventChoice,
             EventLine,
             EventStory,
         )
-
-        from roguelike_sprawl.engine import event_view
 
         art = CharacterArt(
             character_id="case",
@@ -261,18 +257,20 @@ class TestRenderEventMain:
         event_view._render_event_main(console, _StubRegion(w=80, h=24), es)
         flat = " ".join(p["string"] for p in console.prints)
         # Speaker shown (with portrait prefix).
-        assert "KC" in flat and "Case:" in flat
+        assert "KC" in flat
+        assert "Case:" in flat
         # English + Korean dialogue.
         assert "I am Case." in flat
         assert "나는 케이다." in flat
         # Choices.
-        assert "[a]" in flat and "Option A" in flat
-        assert "[b]" in flat and "Option B" in flat
+        assert "[a]" in flat
+        assert "Option A" in flat
+        assert "[b]" in flat
+        assert "Option B" in flat
 
 
 class TestDrawCharacterArt:
     def test_draws_each_art_line(self) -> None:
-        from roguelike_sprawl.engine.event_story import CharacterArt
         from roguelike_sprawl.engine import event_view
 
         art = CharacterArt(
@@ -281,9 +279,7 @@ class TestDrawCharacterArt:
             color_hint=(255, 0, 0),
         )
         console = _FakeConsole()
-        event_view._draw_character_art(
-            console, x=0, y=0, art=art, max_height=10
-        )
+        event_view._draw_character_art(console, x=0, y=0, art=art, max_height=10)
         flat = " ".join(p["string"] for p in console.prints)
         for line in ("LINE_A", "LINE_B", "LINE_C"):
             assert line in flat
@@ -291,7 +287,6 @@ class TestDrawCharacterArt:
         assert "── CASE ──" in flat
 
     def test_respects_max_height(self) -> None:
-        from roguelike_sprawl.engine.event_story import CharacterArt
         from roguelike_sprawl.engine import event_view
 
         art = CharacterArt(
@@ -299,9 +294,7 @@ class TestDrawCharacterArt:
             art_lines=("a", "b", "c", "d", "e"),
         )
         console = _FakeConsole()
-        event_view._draw_character_art(
-            console, x=0, y=0, art=art, max_height=2
-        )
+        event_view._draw_character_art(console, x=0, y=0, art=art, max_height=2)
         flat = " ".join(p["string"] for p in console.prints)
         # max_height=2 → only 2 lines drawn.
         assert "a" in flat
@@ -310,8 +303,8 @@ class TestDrawCharacterArt:
 
 class TestDrawDialogue:
     def test_speaker_with_portrait(self) -> None:
-        from roguelike_sprawl.engine.event_story import EventLine
         from roguelike_sprawl.engine import event_view
+        from roguelike_sprawl.engine.event_story import EventLine
 
         line = EventLine(speaker="Case", portrait="KC", text="Hi.", text_ko="안녕.")
         console = _FakeConsole()
@@ -321,8 +314,8 @@ class TestDrawDialogue:
         assert "안녕." in flat
 
     def test_speaker_without_portrait(self) -> None:
-        from roguelike_sprawl.engine.event_story import EventLine
         from roguelike_sprawl.engine import event_view
+        from roguelike_sprawl.engine.event_story import EventLine
 
         line = EventLine(speaker="Finn", text="Got a job.", text_ko="작업 있어.")
         console = _FakeConsole()
@@ -334,10 +327,10 @@ class TestDrawDialogue:
 
 class TestDrawChoices:
     def test_separator_above_choices(self) -> None:
-        from types import SimpleNamespace as _SN
+        from types import SimpleNamespace
 
-        from roguelike_sprawl.engine.event_story import EventChoice, EventLine
         from roguelike_sprawl.engine import event_view
+        from roguelike_sprawl.engine.event_story import EventChoice, EventLine
 
         line = EventLine(
             choices=(
@@ -345,11 +338,9 @@ class TestDrawChoices:
                 EventChoice(key="b", text="B"),
             ),
         )
-        es = _SN(choice_index=0)
+        es = SimpleNamespace(choice_index=0)
         console = _FakeConsole()
-        event_view._draw_choices(
-            console, x=0, y=10, max_width=20, line=line, event_state=es
-        )
+        event_view._draw_choices(console, x=0, y=10, max_width=20, line=line, event_state=es)
         flat = " ".join(p["string"] for p in console.prints)
         # Row of "─" separator above choices.
         assert "─" * 20 in flat
@@ -358,10 +349,10 @@ class TestDrawChoices:
         assert "[b]" in flat
 
     def test_selected_choice_has_cursor_marker(self) -> None:
-        from types import SimpleNamespace as _SN
+        from types import SimpleNamespace
 
-        from roguelike_sprawl.engine.event_story import EventChoice, EventLine
         from roguelike_sprawl.engine import event_view
+        from roguelike_sprawl.engine.event_story import EventChoice, EventLine
 
         line = EventLine(
             choices=(
@@ -369,11 +360,9 @@ class TestDrawChoices:
                 EventChoice(key="b", text="B"),
             ),
         )
-        es = _SN(choice_index=0)
+        es = SimpleNamespace(choice_index=0)
         console = _FakeConsole()
-        event_view._draw_choices(
-            console, x=0, y=10, max_width=20, line=line, event_state=es
-        )
+        event_view._draw_choices(console, x=0, y=10, max_width=20, line=line, event_state=es)
         # The selected line carries the ▶ marker.
         flat = " ".join(p["string"] for p in console.prints)
         assert "▶" in flat

@@ -18,6 +18,7 @@ Run::
 
     PYTHONPATH=src .venv/bin/python scripts/play_vfx_overlay.py
 """
+
 from __future__ import annotations
 
 import sys
@@ -26,11 +27,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from roguelike_sprawl.combat.effects import CombatEffects  # noqa: E402
 from roguelike_sprawl.combat.effects import (  # noqa: E402
+    CombatEffects,  # noqa: E402
+    spawn_data_acquired,
     spawn_jackin_glitch,
     spawn_jackout_whiteout,
-    spawn_data_acquired,
     spawn_room_flash,
 )
 
@@ -53,7 +54,7 @@ def main() -> int:
     ]
 
     for name, fn in direct:
-        before_p, before_h, before_c = (
+        before_p, _before_h, _before_c = (
             len(fx.particles.particles),
             bool(fx.hit_flash.is_active),
             fx.cinematic is not None,
@@ -64,9 +65,11 @@ def main() -> int:
             bool(fx.hit_flash.is_active),
             fx.cinematic is not None,
         )
-        print(f"[+] {name:30s} particles Δ={after_p - before_p:+d} "
-              f"hit_flash {'on' if after_h else 'off'} "
-              f"cinematic {'on' if after_c else 'off'}")
+        print(
+            f"[+] {name:30s} particles Δ={after_p - before_p:+d} "
+            f"hit_flash {'on' if after_h else 'off'} "
+            f"cinematic {'on' if after_c else 'off'}"
+        )
 
     print()
     print(f"[summary] fx.particles.alive : {len(fx.particles.particles)}")

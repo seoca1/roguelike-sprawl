@@ -401,7 +401,7 @@ class SaveManager:
     # save() helpers — split for readability
     # ------------------------------------------------------------------
 
-    def _serialize_run_state(self, run_state) -> dict[str, Any]:
+    def _serialize_run_state(self, run_state: Any) -> dict[str, Any]:
         """Flatten the run-state into a JSON-safe dict (Stage enums → strings)."""
         return {
             "current_stage": run_state.current_stage.value,
@@ -413,7 +413,7 @@ class SaveManager:
             "started_at_ms": run_state.started_at_ms,
         }
 
-    def _serialize_mission(self, mission) -> dict[str, Any] | None:
+    def _serialize_mission(self, mission: Any) -> dict[str, Any] | None:
         """Flatten the current mission into a JSON-safe dict, or None."""
         if mission is None:
             return None
@@ -432,7 +432,7 @@ class SaveManager:
             },
         }
 
-    def _serialize_app_state(self, state) -> dict[str, Any]:
+    def _serialize_app_state(self, state: AppState) -> dict[str, Any]:
         """Serialize the AppState fields needed to resume a Run.
 
         Includes the matrix graph if present — falls back to no-matrix
@@ -463,7 +463,7 @@ class SaveManager:
             "reputation": state.reputation.to_dict(),
         }
 
-    def _serialize_metadata(self, state) -> dict[str, Any]:
+    def _serialize_metadata(self, state: AppState) -> dict[str, Any]:
         """Lightweight display metadata for the save-slot list."""
         return {
             "player_grade": state.player_grade,
@@ -515,7 +515,6 @@ class SaveManager:
         Raises:
             SaveSlotEmptyError, SaveVersionMismatchError, SaveCorruptedError
         """
-        from .state import ScreenKind
 
         saved = self.load(slot)
         rs_data = saved.run_state
@@ -550,7 +549,7 @@ class SaveManager:
     # restore_state helpers — each handles one logical step.
     # ------------------------------------------------------------------
 
-    def _restore_run_state(self, state: AppState, rs_data: dict) -> Any:
+    def _restore_run_state(self, state: AppState, rs_data: dict[str, Any]) -> Any:
         """Rebuild ``state.run_state`` from the saved run dict."""
         from ..run import RunState, Stage
 
@@ -572,7 +571,7 @@ class SaveManager:
         )
         return current_stage
 
-    def _restore_app_state_fields(self, state: AppState, app_data: dict) -> None:
+    def _restore_app_state_fields(self, state: AppState, app_data: dict[str, Any]) -> None:
         """Populate the small AppState scalar / set fields."""
         state.inventory = dict(app_data.get("inventory", {}))
         state.credits = int(app_data.get("credits", 0))
@@ -583,7 +582,7 @@ class SaveManager:
         state.in_server_browser = app_data.get("in_server_browser", True)
         state.selected_server_index = int(app_data.get("selected_server_index", 0))
 
-    def _restore_reputation(self, state: AppState, app_data: dict) -> None:
+    def _restore_reputation(self, state: AppState, app_data: dict[str, Any]) -> None:
         """Phase 6+: restore faction reputation.  Missing/legacy saves
         simply leave the default (empty) reputation state.
         """
@@ -591,13 +590,14 @@ class SaveManager:
         if not isinstance(rep_data, dict):
             return
         from ..run.reputation import ReputationState
+
         try:
             state.reputation = ReputationState.from_dict(rep_data)
         except (KeyError, TypeError, ValueError) as exc:
             _log_save_warning(f"reputation restore failed: {exc}")
             state.reputation = ReputationState()
 
-    def _restore_matrix(self, state: AppState, app_data: dict) -> bool:
+    def _restore_matrix(self, state: AppState, app_data: dict[str, Any]) -> bool:
         """Try to restore the cyberspace MatrixGraph.  Returns True iff
         a valid matrix was deserialised (the caller then recomputes
         layouts; otherwise the player must re-jack-in).
@@ -619,7 +619,7 @@ class SaveManager:
             state.matrix = None
             return False
 
-    def _recompute_layouts(self, matrix: Any) -> dict | None:
+    def _recompute_layouts(self, matrix: Any) -> dict[str, Any] | None:
         """Rebuild cyberspace_layouts after a successful matrix restore.
         Returns None if the layout computation can't run for any
         reason — the matrix itself is still valid.
@@ -643,7 +643,7 @@ class SaveManager:
         state.action_menu_open = False
         state.action_menu_index = 0
 
-    def _restore_mission(self, state: AppState, app_data: dict) -> None:
+    def _restore_mission(self, state: AppState, app_data: dict[str, Any]) -> None:
         """Reload the current mission object from the JSON registry
         if its id is present in the save.
         """
@@ -652,10 +652,9 @@ class SaveManager:
             return
         from ..missions import JobBoard
         from . import config as _engine_config
+
         try:
-            board = JobBoard.load(
-                _engine_config.DATA_DIR / "missions" / "missions.json"
-            )
+            board = JobBoard.load(_engine_config.DATA_DIR / "missions" / "missions.json")
             state.current_mission = board.get(mission_id)
         except (OSError, json.JSONDecodeError, KeyError, ValueError):
             # Mission JSON missing or unparseable — fall back to no mission.
@@ -666,15 +665,16 @@ class SaveManager:
         If the matrix was restored and the stage is mid-run, jump
         back into MATRIX; otherwise fall back to HUB.
         """
-        from .state import ScreenKind
         from ..run import Stage
+        from .state import ScreenKind
 
         if current_stage in (
-            Stage.PENDING, Stage.MEET_NPC, Stage.EXTRACT_DATA, Stage.DEFEAT_ICE,
+            Stage.PENDING,
+            Stage.MEET_NPC,
+            Stage.EXTRACT_DATA,
+            Stage.DEFEAT_ICE,
         ):
-            state.screen = (
-                ScreenKind.MATRIX if state.matrix is not None else ScreenKind.HUB
-            )
+            state.screen = ScreenKind.MATRIX if state.matrix is not None else ScreenKind.HUB
         elif current_stage in (Stage.JACK_OUT, Stage.REWARD, Stage.DEBRIEF):
             state.screen = ScreenKind.HUB
         elif current_stage in (Stage.COMPLETE,):

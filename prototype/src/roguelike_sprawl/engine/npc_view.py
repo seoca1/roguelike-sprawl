@@ -5,6 +5,8 @@ A dedicated screen for NPC encounters with dialogue trees and player choices.
 
 from __future__ import annotations
 
+from typing import Any
+
 import tcod.console
 import tcod.event
 from tcod.event import KeyDown, KeySym
@@ -104,11 +106,7 @@ def _draw_dialogue(
 
 
 def _draw_dialogue_header(
-    console: tcod.console.Console,
-    main: Region,
-    line,
-    x: int,
-    y: int,
+    console: tcod.console.Console, main: Region, line: Any, x: int, y: int
 ) -> int:
     """Render the NPC portrait + speaker name + separator.
 
@@ -137,12 +135,7 @@ def _draw_dialogue_header(
 
 
 def _draw_dialogue_text(
-    console: tcod.console.Console,
-    main,
-    text: str,
-    x: int,
-    y: int,
-    color: tuple[int, int, int],
+    console: tcod.console.Console, main: Any, text: str, x: int, y: int, color: tuple[int, int, int]
 ) -> int:
     """Word-wrap and print a single dialogue paragraph.  Returns new y."""
     max_width = main.w - 6
@@ -153,35 +146,30 @@ def _draw_dialogue_text(
 
 
 def _draw_dialogue_korean(
-    console: tcod.console.Console,
-    main,
-    line,
-    x: int,
-    y: int,
+    console: tcod.console.Console, main: Any, line: Any, x: int, y: int
 ) -> int:
     """Render the Korean subtitle (if enabled, font supports it, and
     the line has a translation).  Returns the new y-row."""
     from . import config
     from .font_loader import is_korean_capable
 
-    if not (
-        config.LANGUAGE_MODE in ("ko", "both")
-        and is_korean_capable()
-        and line.text_ko
-    ):
+    if not (config.LANGUAGE_MODE in ("ko", "both") and is_korean_capable() and line.text_ko):
         return y
-    return _draw_dialogue_text(
-        console, main, line.text_ko, x, y, (255, 220, 100),
-    ) + 1
+    return (
+        _draw_dialogue_text(
+            console,
+            main,
+            line.text_ko,
+            x,
+            y,
+            (255, 220, 100),
+        )
+        + 1
+    )
 
 
 def _draw_dialogue_choices_or_prompt(
-    console: tcod.console.Console,
-    main,
-    line,
-    state: AppState,
-    x: int,
-    y: int,
+    console: tcod.console.Console, main: Any, line: Any, state: AppState, x: int, y: int
 ) -> None:
     """Draw the player-choice list (with faction-gate filtering) or
     a generic continue prompt if the line has no choices.
@@ -203,9 +191,7 @@ def _draw_dialogue_choices_or_prompt(
     # `faction_gate` is set and doesn't match the current player
     # reputation are hidden from the menu.
     reputation = getattr(state, "reputation", None)
-    visible_choices: list[DialogueChoice] = [
-        c for c in line.choices if c.is_available(reputation)
-    ]
+    visible_choices: list[DialogueChoice] = [c for c in line.choices if c.is_available(reputation)]
 
     if not visible_choices:
         # All choices were filtered out — show a locked message.
@@ -260,6 +246,8 @@ def _wrap_text(text: str, max_width: int) -> list[str]:
     if current:
         lines.append(current)
     return lines
+
+
 def handle_npc_input(
     event: tcod.event.Event,
     state: AppState,

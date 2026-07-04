@@ -12,6 +12,8 @@ Module structure:
 
 from __future__ import annotations
 
+from typing import Any
+
 import tcod.console
 
 from roguelike_sprawl.engine.chapter_cutscene import PhaseData
@@ -151,22 +153,28 @@ def render_arc_phase(
 
     beat_progress = len(text) / max(len(text), 1)
     beat_bar_width = width - 4
-    beat_filled = int(beat_bar_width * (typed_chars / max(len(text), 1)))
+    int(beat_bar_width * (typed_chars / max(len(text), 1)))
     _draw_arc_phase_footer(
-        console, width, height, phase, beat_index, beat_bar_width,
-        beat_progress, state,
+        console,
+        width,
+        height,
+        phase,
+        beat_index,
+        beat_bar_width,
+        beat_progress,
+        state,
     )
 
 
 def _draw_arc_phase_footer(
-    console,
+    console: Any,
     width: int,
     height: int,
-    phase,
+    phase: Any,
     beat_index: int,
     beat_bar_width: int,
     beat_progress: float,
-    state,
+    state: Any,
 ) -> None:
     """Render the two progress bars + the controls hint or last status.
 

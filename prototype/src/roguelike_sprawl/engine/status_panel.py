@@ -125,12 +125,7 @@ def _draw_equipment_header(
     return y
 
 
-def _draw_equipment_slot_rows(
-    console: tcod.console.Console,
-    x: int,
-    y: int,
-    loadout,
-) -> int:
+def _draw_equipment_slot_rows(console: tcod.console.Console, x: int, y: int, loadout: Any) -> int:
     """Draw the 8 body-slot rows (head, eyes, body, gloves, boots, deck,
     implant, trodes).  Each row either shows the equipment glyph/tier
     or a dimmed ``[  ]`` placeholder.
@@ -163,12 +158,7 @@ def _draw_equipment_slot_rows(
     return y
 
 
-def _draw_equipment_total(
-    console: tcod.console.Console,
-    x: int,
-    y: int,
-    loadout,
-) -> int:
+def _draw_equipment_total(console: tcod.console.Console, x: int, y: int, loadout: Any) -> int:
     """Bottom line: total bonus summary across all slots."""
     stats = loadout.total_stats()
     total_bonuses = (

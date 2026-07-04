@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 import tcod.console
 
@@ -187,59 +188,57 @@ def _default_aftermath() -> Aftermath:
     )
 
 
-
-
 # ------------------------------------------------------------------
 # render_story helpers — one per logical concern
 # ------------------------------------------------------------------
 
 
-def _draw_narrative(
-    console: tcod.console.Console,
-    main,
-    after,
-) -> int:
+def _draw_narrative(console: tcod.console.Console, main: Any, after: Any) -> int:
     """Draw the English + Korean narrative paragraphs into the main
     region.  Returns the next free y-row after the narrative.
     """
     y = 0
     console.print(
-        x=main.x + 2, y=main.y + y,
-        string="[Narrative]", fg=(180, 180, 180),
+        x=main.x + 2,
+        y=main.y + y,
+        string="[Narrative]",
+        fg=(180, 180, 180),
     )
     y += 1
     for line in after.narrative_en.split("\n"):
         if y >= main.h - 1:
             return y
         console.print(
-            x=main.x + 2, y=main.y + y,
-            string=f"> {line[: main.w - 4]}", fg=(255, 255, 255),
+            x=main.x + 2,
+            y=main.y + y,
+            string=f"> {line[: main.w - 4]}",
+            fg=(255, 255, 255),
         )
         y += 1
     y += 1
     if y < main.h - 4:
         console.print(
-            x=main.x + 2, y=main.y + y,
-            string="[한국어 자막]", fg=(180, 180, 180),
+            x=main.x + 2,
+            y=main.y + y,
+            string="[한국어 자막]",
+            fg=(180, 180, 180),
         )
         y += 1
         for line in after.narrative_ko.split("\n"):
             if y >= main.h - 1:
                 return y
             console.print(
-                x=main.x + 2, y=main.y + y,
-                string=f"> {line[: main.w - 4]}", fg=(255, 220, 100),
+                x=main.x + 2,
+                y=main.y + y,
+                string=f"> {line[: main.w - 4]}",
+                fg=(255, 220, 100),
             )
             y += 1
     return y
 
 
 def _draw_reactions(
-    console: tcod.console.Console,
-    main,
-    after,
-    registry: StoryRegistry,
-    y: int,
+    console: tcod.console.Console, main: Any, after: Any, registry: StoryRegistry, y: int
 ) -> int:
     """Draw the [Reactions] section (bilingual).  Returns the next
     free y-row after the reactions block.
@@ -247,8 +246,10 @@ def _draw_reactions(
     y += 1
     if y < main.h - 5:
         console.print(
-            x=main.x + 2, y=main.y + y,
-            string="[Reactions]", fg=(180, 180, 180),
+            x=main.x + 2,
+            y=main.y + y,
+            string="[Reactions]",
+            fg=(180, 180, 180),
         )
         y += 1
         for rid in after.reaction_ids:
@@ -258,32 +259,32 @@ def _draw_reactions(
             if react is None:
                 continue
             console.print(
-                x=main.x + 2, y=main.y + y,
-                string=f"[{react.character.title()}]", fg=(0, 255, 255),
+                x=main.x + 2,
+                y=main.y + y,
+                string=f"[{react.character.title()}]",
+                fg=(0, 255, 255),
             )
             y += 1
             console.print(
-                x=main.x + 4, y=main.y + y,
-                string=f"> {react.text_en[: main.w - 6]}", fg=(255, 255, 255),
+                x=main.x + 4,
+                y=main.y + y,
+                string=f"> {react.text_en[: main.w - 6]}",
+                fg=(255, 255, 255),
             )
             y += 1
             console.print(
-                x=main.x + 4, y=main.y + y,
-                string=f"> {react.text_ko[: main.w - 6]}", fg=(255, 220, 100),
+                x=main.x + 4,
+                y=main.y + y,
+                string=f"> {react.text_ko[: main.w - 6]}",
+                fg=(255, 220, 100),
             )
             y += 1
     return y
 
 
-def _draw_story_side_panel(
-    console: tcod.console.Console,
-    side,
-    state: AppState,
-) -> None:
+def _draw_story_side_panel(console: tcod.console.Console, side: Any, state: AppState) -> None:
     """Draw the right-side context panel (mission + player stats)."""
-    mission_title = (
-        state.current_mission.title if state.current_mission else "n/a"
-    )
+    mission_title = state.current_mission.title if state.current_mission else "n/a"
     draw_side(
         console,
         side,
@@ -295,6 +296,7 @@ def _draw_story_side_panel(
             f"Grade: {state.player_grade}-up",
         ],
     )
+
 
 def handle_story_input(event: object, state: AppState) -> bool:
     """Handle input on the Story Event screen. Returns False to quit."""

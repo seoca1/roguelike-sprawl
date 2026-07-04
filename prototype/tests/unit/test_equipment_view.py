@@ -5,16 +5,15 @@ and assert which strings were printed at which positions.  The
 non-rendering helpers (``_slot_short_label``, ``_tier_color``) are
 pure data and easy to test.
 """
+
 from __future__ import annotations
 
 from types import SimpleNamespace
-from unittest.mock import MagicMock
 
 import pytest
 
 from roguelike_sprawl.engine import equipment_view
 from roguelike_sprawl.equipment.equipment import EquipSlot
-
 
 # ---------------------------------------------------------------------------
 # _slot_short_label
@@ -23,7 +22,7 @@ from roguelike_sprawl.equipment.equipment import EquipSlot
 
 class TestSlotShortLabel:
     @pytest.mark.parametrize(
-        "slot,expected",
+        ("slot", "expected"),
         [
             (EquipSlot.DECK, "DECK"),
             (EquipSlot.HEADWARE, "HEAD"),
@@ -50,10 +49,10 @@ class TestSlotShortLabel:
 
 
 class TestTierColor:
-    def test_known_tier_T0_is_gray(self):
+    def test_known_tier_t0_is_gray(self):
         assert equipment_view._tier_color(SimpleNamespace(value="T0")) == (150, 150, 150)
 
-    def test_known_tier_T5_is_magenta(self):
+    def test_known_tier_t5_is_magenta(self):
         assert equipment_view._tier_color(SimpleNamespace(value="T5")) == (255, 50, 200)
 
     def test_unknown_tier_falls_back_to_default_gray(self):
@@ -82,6 +81,7 @@ def _make_loadout(**slot_to_eq):
     ``loadout.equipment.items()``, and ``loadout.total_stats()``,
     so we provide all three.
     """
+
     class _Loadout:
         def __init__(self):
             self.equipment: dict = dict(slot_to_eq)

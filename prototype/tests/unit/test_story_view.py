@@ -6,6 +6,7 @@ doesn't blow up and that the expected fragments appear in the
 output.  ``_load_aftermaths`` / ``_load_reactions`` parse JSON
 files and surface error tolerance.
 """
+
 from __future__ import annotations
 
 import json
@@ -15,11 +16,8 @@ import pytest
 
 from roguelike_sprawl.engine import story_view
 from roguelike_sprawl.engine.story_view import (
-    Aftermath,
-    Reaction,
     StoryRegistry,
 )
-
 
 # ---------------------------------------------------------------------------
 # _load_aftermaths
@@ -143,27 +141,34 @@ class TestStoryRegistry:
     def data_dir(self, tmp_path: Path) -> Path:
         (tmp_path / "story").mkdir(parents=True, exist_ok=True)
         (tmp_path / "story" / "aftermath.json").write_text(
-            json.dumps({
-                "aftermath_black_ice": {
-                    "id": "aftermath_black_ice",
-                    "importance": "major",
-                    "trigger": "combat_end",
-                    "duration_ms": 4000,
-                    "narrative_en": "The Black ICE dissolves.",
-                    "narrative_ko": "블랙 ICE가 해체된다.",
-                    "reaction_ids": ["r1", "r2"],
-                },
-            }),
+            json.dumps(
+                {
+                    "aftermath_black_ice": {
+                        "id": "aftermath_black_ice",
+                        "importance": "major",
+                        "trigger": "combat_end",
+                        "duration_ms": 4000,
+                        "narrative_en": "The Black ICE dissolves.",
+                        "narrative_ko": "블랙 ICE가 해체된다.",
+                        "reaction_ids": ["r1", "r2"],
+                    },
+                }
+            ),
             encoding="utf-8",
         )
         (tmp_path / "story" / "reactions.json").write_text(
-            json.dumps({
-                "r1": {
-                    "id": "r1", "character": "case", "trigger": "npc_choice",
-                    "text_en": "I'm out.", "text_ko": "나간다.",
-                    "portrait": "case",
-                },
-            }),
+            json.dumps(
+                {
+                    "r1": {
+                        "id": "r1",
+                        "character": "case",
+                        "trigger": "npc_choice",
+                        "text_en": "I'm out.",
+                        "text_ko": "나간다.",
+                        "portrait": "case",
+                    },
+                }
+            ),
             encoding="utf-8",
         )
         return tmp_path
@@ -182,8 +187,10 @@ class TestStoryRegistry:
         reg = StoryRegistry.load(data_dir)
         a = reg.get_aftermath("aftermath_black_ice")
         r = reg.get_reaction("r1")
-        assert a is not None and a.id == "aftermath_black_ice"
-        assert r is not None and r.character == "case"
+        assert a is not None
+        assert a.id == "aftermath_black_ice"
+        assert r is not None
+        assert r.character == "case"
 
 
 # ---------------------------------------------------------------------------
@@ -210,27 +217,34 @@ class TestRenderStory:
     def data_dir(self, tmp_path: Path) -> Path:
         (tmp_path / "story").mkdir(parents=True, exist_ok=True)
         (tmp_path / "story" / "aftermath.json").write_text(
-            json.dumps({
-                "aftermath_black_ice": {
-                    "id": "aftermath_black_ice",
-                    "importance": "major",
-                    "trigger": "combat_end",
-                    "duration_ms": 4000,
-                    "narrative_en": "The Black ICE dissolves.",
-                    "narrative_ko": "블랙 ICE가 해체된다.",
-                    "reaction_ids": ["r1"],
-                },
-            }),
+            json.dumps(
+                {
+                    "aftermath_black_ice": {
+                        "id": "aftermath_black_ice",
+                        "importance": "major",
+                        "trigger": "combat_end",
+                        "duration_ms": 4000,
+                        "narrative_en": "The Black ICE dissolves.",
+                        "narrative_ko": "블랙 ICE가 해체된다.",
+                        "reaction_ids": ["r1"],
+                    },
+                }
+            ),
             encoding="utf-8",
         )
         (tmp_path / "story" / "reactions.json").write_text(
-            json.dumps({
-                "r1": {
-                    "id": "r1", "character": "case", "trigger": "npc_choice",
-                    "text_en": "I'm out.", "text_ko": "나간다.",
-                    "portrait": "case",
-                },
-            }),
+            json.dumps(
+                {
+                    "r1": {
+                        "id": "r1",
+                        "character": "case",
+                        "trigger": "npc_choice",
+                        "text_en": "I'm out.",
+                        "text_ko": "나간다.",
+                        "portrait": "case",
+                    },
+                }
+            ),
             encoding="utf-8",
         )
         return tmp_path
@@ -282,7 +296,7 @@ def _make_story_state():
     return s
 
 
-def MagicMock_story_state():
+def magicmock_story_state():
     """Minimal AppState-like mock for render_story."""
     from unittest.mock import MagicMock
 

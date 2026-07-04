@@ -5,16 +5,14 @@ router (``handle_cyberspace_input``).  The tcod painters
 (``render_cyberspace``, ``_draw_node``) are tested with a
 ``FakeConsole`` and only verified to not raise.
 """
+
 from __future__ import annotations
 
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
-import pytest
-
 from roguelike_sprawl.engine import cyberspace_view
 from roguelike_sprawl.matrix import NodeKind
-
 
 # ---------------------------------------------------------------------------
 # _is_visible
@@ -60,15 +58,17 @@ def _keydown(sym_name: str):
 class TestHandleCyberspaceInput:
     def test_returns_true_for_unknown_event(self) -> None:
         # Non-KeyDown events should be ignored.
-        result = cyberspace_view.handle_cyberspace_input(
-            "not a key event", _build_state()
-        )
+        result = cyberspace_view.handle_cyberspace_input("not a key event", _build_state())
         assert result is True
 
     def test_arrows_move_player(self) -> None:
         # Each arrow key should call the matching movement helper.
-        for direction, delta in (("UP", (0, -1)), ("DOWN", (0, 1)),
-                                  ("LEFT", (-1, 0)), ("RIGHT", (1, 0))):
+        for direction, delta in (
+            ("UP", (0, -1)),
+            ("DOWN", (0, 1)),
+            ("LEFT", (-1, 0)),
+            ("RIGHT", (1, 0)),
+        ):
             state = _build_state()
             cyberspace_view.handle_cyberspace_input(_keydown(direction), state)
             # The state was mutated — we just confirm the call did not
@@ -192,11 +192,11 @@ class TestRenderCyberspaceSmoke:
             cyberspace_view.render_cyberspace(
                 console, t, state, prog_registry=None, ice_registry=None
             )
-        except (KeyError, TypeError, ValueError) as exc:
+        except (KeyError, TypeError, ValueError):
             # Acceptable — likely the renderer needs more state than
             # we provided; this test is a structural guard only.
             pass
-        except AttributeError as exc:
+        except AttributeError:
             # The function needs an attribute we didn't provide.
             # That's the regression we care about.
             raise

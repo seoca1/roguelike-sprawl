@@ -62,9 +62,7 @@ class TestArmitageMissions:
         """Armitage's arc spans arcs 2-5: infiltration → hosaka → TA defection → Wintermute."""
         with (data_dir / "missions" / "missions.json").open(encoding="utf-8") as f:
             data = json.load(f)
-        for mid, expected_arc in zip(
-            self.EXPECTED_IDS, [2, 3, 4, 5]
-        ):
+        for mid, expected_arc in zip(self.EXPECTED_IDS, [2, 3, 4, 5]):
             assert data[mid]["arc"] == expected_arc, (
                 f"{mid} should be arc {expected_arc}, got {data[mid]['arc']}"
             )
@@ -186,9 +184,7 @@ class TestArmitagePortraits:
         p = data_dir / "art" / "portraits" / "portraits.json"
         data = json.loads(p.read_text(encoding="utf-8"))
         for portrait in self.EXPECTED_PORTRAITS:
-            assert data[portrait]["character"] == "suit", (
-                f"{portrait} should be character=suit"
-            )
+            assert data[portrait]["character"] == "suit", f"{portrait} should be character=suit"
 
     def test_portraits_have_10x14_grid(self, data_dir: Path) -> None:
         p = data_dir / "art" / "portraits" / "portraits.json"
@@ -301,12 +297,6 @@ class TestArmitageEndToEnd:
 
         with (data_dir / "missions" / "missions.json").open(encoding="utf-8") as f:
             data = json.load(f)
-        armitage_ids = [
-            "armitage_infiltration",
-            "hosaka_extraction",
-            "ta_defection",
-            "wintermute_negotiation",
-        ]
         # The T-A / 3jane mission should affect T-A reputation.
         ta_mission = data["ta_defection"]
         assert ta_mission["fixer"] == "3jane"
@@ -318,4 +308,3 @@ class TestArmitageEndToEnd:
         assert hosaka_mission["fixer"] == "finn"
         factions = fixer_to_factions("finn")
         assert Faction.HOSAKA in factions
-

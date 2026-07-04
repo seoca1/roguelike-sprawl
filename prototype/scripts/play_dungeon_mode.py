@@ -24,6 +24,7 @@ Run::
 
     PYTHONPATH=src .venv/bin/python scripts/play_dungeon_mode.py
 """
+
 from __future__ import annotations
 
 import sys
@@ -53,21 +54,19 @@ def main() -> int:
     graph = gen.generate(seed=42, mission_grade=1, character_ref="veteran")
     state.matrix = graph
     state.current_node_id = graph.nodes[0].id if graph.nodes else None
-    print(f"[3] BSP dungeon                  : "
-          f"{len(graph.nodes)} rooms, {len(graph.edges)} corridors")
+    print(
+        f"[3] BSP dungeon                  : {len(graph.nodes)} rooms, {len(graph.edges)} corridors"
+    )
 
     # Compute room_map exactly the same way render_dungeon_matrix does.
-    room_map = {
-        node.id: dungeon_view._get_room_position(node.id, graph)
-        for node in graph.nodes
-    }
+    room_map = {node.id: dungeon_view._get_room_position(node.id, graph) for node in graph.nodes}
     room_map = {k: v for k, v in room_map.items() if v is not None}
     pos_items = sorted(
         room_map.items(),
         key=lambda kv: (kv[1][1], kv[1][0]) if kv[1] else (0, 0),
     )
 
-    print(f"[4] grid layout (node_id → (x,y)):")
+    print("[4] grid layout (node_id → (x,y)):")
     for nid, pos in pos_items[:8]:
         cur = "*" if nid == state.current_node_id else " "
         print(f"      {cur} {nid:8s} → {pos}")

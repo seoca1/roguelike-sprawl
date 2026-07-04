@@ -557,17 +557,20 @@ def render_scene(
     speaker = dialogue.speaker_ko if is_ko else dialogue.speaker
     text = dialogue.text_ko if is_ko else dialogue.text_en
 
-    _draw_scene_top_bar(console, width, scene_index, scene_total,
-                         title, scene, paused)
+    _draw_scene_top_bar(console, width, scene_index, scene_total, title, scene, paused)
     _draw_scene_background_band(console, width, background)
     _draw_scene_portrait(console, width, portrait_l, portrait_r)
     _draw_scene_speaker_heading(console, width, speaker)
     page_count = _draw_scene_prose_body(
-        console, width, text, typed_chars, speaker,
-        scene_index, scene_total,
+        console,
+        width,
+        text,
+        typed_chars,
+        speaker,
+        scene_index,
+        scene_total,
     )
-    _draw_scene_footer(console, width, height, scene_index, scene_total,
-                        paused, page_count)
+    _draw_scene_footer(console, width, height, scene_index, scene_total, paused, page_count)
 
 
 # ------------------------------------------------------------------
@@ -677,8 +680,7 @@ def _draw_scene_prose_body(
     current_page = compute_typed_page_index(pages, typed_chars, text)
     page_lines = pages[current_page] if pages else []
     rendered_lines = _truncate_page_to_typed(page_lines, typed_chars, pages, current_page)
-    _emit_typed_lines(console, width, body_y, body_bottom, body_width,
-                     rendered_lines)
+    _emit_typed_lines(console, width, body_y, body_bottom, body_width, rendered_lines)
     return len(pages)
 
 
@@ -861,8 +863,14 @@ def render_chapter_card(
 
     _draw_card_borders(console, width, card_y_start, border, header)
     _draw_card_text(
-        console, width, card_y_start, is_ko, title, char_label,
-        scene_index, scene_total,
+        console,
+        width,
+        card_y_start,
+        is_ko,
+        title,
+        char_label,
+        scene_index,
+        scene_total,
     )
     _draw_card_bottom_hint(console, width, height, is_ko)
     _apply_card_fade(console, width, card_y_start, fade)

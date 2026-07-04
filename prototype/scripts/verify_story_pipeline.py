@@ -17,8 +17,8 @@ Usage:
 
 import json
 import sys
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 
 PROTOTYPE = Path(__file__).parent.parent
 DASHBOARD = PROTOTYPE.parent / "dashboard"

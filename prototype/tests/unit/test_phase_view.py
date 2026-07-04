@@ -7,16 +7,14 @@ is what matters and what regresses.  These tests focus on those
 pure functions and on a ``tcod.console.Console`` mock that captures
 each ``print()`` call.
 """
+
 from __future__ import annotations
 
 from unittest.mock import MagicMock
 
-import pytest
-
 from roguelike_sprawl.engine import phase_view
 from roguelike_sprawl.engine.chapter_cutscene import BeatData, PhaseData
 from roguelike_sprawl.i18n import Translator
-
 
 # ---------------------------------------------------------------------------
 # Helpers — a Console stub that records every print() call.
@@ -36,7 +34,11 @@ class _FakeConsole:
         self.prints.append({"op": "print", "x": x, "y": y, "string": string, "fg": fg})
 
 
-def _beat(text_en: str = "Hello world.", text_ko: str = "안녕하세요.", beat_type: str = "interior_monologue") -> BeatData:
+def _beat(
+    text_en: str = "Hello world.",
+    text_ko: str = "안녕하세요.",
+    beat_type: str = "interior_monologue",
+) -> BeatData:
     return BeatData(beat_id="b0", type=beat_type, text_en=text_en, text_ko=text_ko)
 
 
@@ -134,9 +136,7 @@ class TestRenderArcPhase:
     def test_uses_english_text_by_default(self) -> None:
         console = _FakeConsole()
         phase = _phase([_beat(text_en="EN-CONTENT", text_ko="KO내용")])
-        phase_view.render_arc_phase(
-            console, phase, 0, 100, 100.0, 100.0, self._translator("en")
-        )
+        phase_view.render_arc_phase(console, phase, 0, 100, 100.0, 100.0, self._translator("en"))
         flat = " ".join(p.get("string", "") for p in console.prints)
         assert "EN-CONTENT" in flat
         assert "KO내용" not in flat
@@ -144,9 +144,7 @@ class TestRenderArcPhase:
     def test_uses_korean_text_when_lang_ko(self) -> None:
         console = _FakeConsole()
         phase = _phase([_beat(text_en="EN-CONTENT", text_ko="KO내용")])
-        phase_view.render_arc_phase(
-            console, phase, 0, 100, 100.0, 100.0, self._translator("ko")
-        )
+        phase_view.render_arc_phase(console, phase, 0, 100, 100.0, 100.0, self._translator("ko"))
         flat = " ".join(p.get("string", "") for p in console.prints)
         assert "KO내용" in flat
         assert "EN-CONTENT" not in flat
@@ -155,9 +153,7 @@ class TestRenderArcPhase:
         console = _FakeConsole()
         phase = _phase([_beat("a"), _beat("b")])
         # beat_index past end → "Phase complete."
-        phase_view.render_arc_phase(
-            console, phase, 5, 0, 0.0, 0.0, self._translator()
-        )
+        phase_view.render_arc_phase(console, phase, 5, 0, 0.0, 0.0, self._translator())
         flat = " ".join(p.get("string", "") for p in console.prints)
         assert "Phase complete" in flat
 
@@ -165,9 +161,7 @@ class TestRenderArcPhase:
         console = _FakeConsole(width=40, height=10)
         phase = _phase([_beat("A" * 10)])  # 10 chars
         # typed=0 → no chars filled
-        phase_view.render_arc_phase(
-            console, phase, 0, 0, 0.0, 0.0, self._translator()
-        )
+        phase_view.render_arc_phase(console, phase, 0, 0, 0.0, 0.0, self._translator())
         flat = " ".join(p.get("string", "") for p in console.prints)
         # Beat 1/1: [N% of bar] format present
         assert "Beat 1/1" in flat
@@ -179,7 +173,13 @@ class TestRenderArcPhase:
         state = MagicMock()
         state.status_messages = [">>> Mission won! VICTORY"]
         phase_view.render_arc_phase(
-            console, phase, 0, 5, 50.0, 50.0, self._translator(),
+            console,
+            phase,
+            0,
+            5,
+            50.0,
+            50.0,
+            self._translator(),
             state=state,
         )
         flat = " ".join(p.get("string", "") for p in console.prints)
@@ -191,7 +191,13 @@ class TestRenderArcPhase:
         state = MagicMock()
         state.status_messages = []
         phase_view.render_arc_phase(
-            console, phase, 0, 2, 30.0, 30.0, self._translator(),
+            console,
+            phase,
+            0,
+            2,
+            30.0,
+            30.0,
+            self._translator(),
             state=state,
         )
         flat = " ".join(p.get("string", "") for p in console.prints)

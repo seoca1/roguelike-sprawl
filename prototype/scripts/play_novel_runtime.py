@@ -26,6 +26,7 @@ Run::
 
     PYTHONPATH=src .venv/bin/python scripts/play_novel_runtime.py
 """
+
 from __future__ import annotations
 
 import sys
@@ -63,8 +64,7 @@ def main() -> int:
     catalog_root = None
     for depth in range(2, 8):
         candidate = ROOT.parents[depth]
-        if (candidate / "Fiction" / "derivative" / "sprawl-trilogy" /
-                "short-stories").exists():
+        if (candidate / "Fiction" / "derivative" / "sprawl-trilogy" / "short-stories").exists():
             catalog_root = candidate
             break
     if catalog_root is None:
@@ -73,9 +73,11 @@ def main() -> int:
     print(f"[2] NovelCatalog auto-discover  : {len(catalog)} entries")
 
     runtime = load_novel_runtime(catalog_root)
-    print(f"[3] NovelRuntime wired          : "
-          f"catalog={len(runtime.catalog)} "
-          f"manifest={len(runtime.manifest) if hasattr(runtime.manifest, '__len__') else '?'}")
+    print(
+        f"[3] NovelRuntime wired          : "
+        f"catalog={len(runtime.catalog)} "
+        f"manifest={len(runtime.manifest) if hasattr(runtime.manifest, '__len__') else '?'}"
+    )
 
     state = AppState()
     state.language = "en"
@@ -86,8 +88,7 @@ def main() -> int:
         break
 
     if first_stem:
-        report = dispatch_for_state(runtime, first_stem, state,
-                                    mission_id="play_novel_demo")
+        report = dispatch_for_state(runtime, first_stem, state, mission_id="play_novel_demo")
         kind = getattr(report, "kind", "?")
         print(f"[4] dispatch('{first_stem}')     : kind={kind}")
     else:

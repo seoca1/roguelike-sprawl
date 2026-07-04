@@ -4,6 +4,7 @@ The module is mostly tcod console painters + JSON loaders.  The
 loaders are pure data transformations and easy to cover end-to-end;
 the painters we verify via the FakeConsole pattern.
 """
+
 from __future__ import annotations
 
 import json
@@ -15,16 +16,12 @@ import pytest
 from roguelike_sprawl.engine import chapter_cutscene
 from roguelike_sprawl.engine.chapter_cutscene import (
     ArcData,
-    BeatData,
-    ChapterData,
     CombatData,
     CutsceneRef,
-    PhaseData,
     get_arc_for_character,
     get_chapter,
     load_arc,
 )
-
 
 # ---------------------------------------------------------------------------
 # Sample arc JSON
@@ -193,22 +190,24 @@ class TestGetArcForCharacter:
         (tmp_path / "story" / "arcs").mkdir(parents=True)
         for char_id in ("case", "sil", "kas"):
             (tmp_path / "story" / "arcs" / f"{char_id}_arc.json").write_text(
-                json.dumps({
-                    "character": char_id,
-                    "arc_id": f"arc_{char_id}",
-                    "title_en": f"{char_id} arc",
-                    "title_ko": "k",
-                    "chapters": [
-                        {
-                            "chapter_number": 1,
-                            "chapter_id": "c1",
-                            "title_en": "c1",
-                            "title_ko": "c1k",
-                            "phases": [],
-                            "ending_type": "A",
-                        }
-                    ],
-                }),
+                json.dumps(
+                    {
+                        "character": char_id,
+                        "arc_id": f"arc_{char_id}",
+                        "title_en": f"{char_id} arc",
+                        "title_ko": "k",
+                        "chapters": [
+                            {
+                                "chapter_number": 1,
+                                "chapter_id": "c1",
+                                "title_en": "c1",
+                                "title_ko": "c1k",
+                                "phases": [],
+                                "ending_type": "A",
+                            }
+                        ],
+                    }
+                ),
                 encoding="utf-8",
             )
         for nick, expected in (("novice", "case"), ("veteran", "sil"), ("heretic", "kas")):
@@ -259,7 +258,8 @@ class TestGetCutscene:
     def test_resolves_via_load_scene(self, monkeypatch: pytest.MonkeyPatch) -> None:
         sentinel = _FakeScene(scene_id="s1")
         monkeypatch.setattr(
-            chapter_cutscene, "load_scene",
+            chapter_cutscene,
+            "load_scene",
             lambda scenes_dir, scene_id: sentinel,
         )
         ref = CutsceneRef(scene_id="s1", title_en="t", title_ko="tk")
@@ -316,6 +316,7 @@ class TestRenderCutsceneFrame:
         class _State:
             typed_chars = 5  # half of "Hello"
             dialogue_index = 0
+
         state = _State()
         state.scene = scene
         state.current_line = line
@@ -369,6 +370,7 @@ class TestRenderCutsceneFrame:
         class _State:
             typed_chars = 5
             dialogue_index = 0
+
         state = _State()
         state.scene = scene
         state.current_line = line
