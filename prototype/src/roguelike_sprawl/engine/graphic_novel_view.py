@@ -257,12 +257,17 @@ def list_scenes_for_character(scenes_dir: Path, character: str) -> list[str]:
 
     Args:
         scenes_dir: Path to data/scenes/
-        character: "novice" | "veteran" | "heretic"
+        character: "novice" | "veteran" | "heretic" | "suit"
 
     Returns:
         List of scene file stems (e.g. ["01_chattos", "02_jackin", ...])
     """
-    char_to_dir = {"novice": "case", "veteran": "sil", "heretic": "kas"}
+    char_to_dir = {
+        "novice": "case",
+        "veteran": "sil",
+        "heretic": "kas",
+        "suit": "suit",
+    }
     char_dir_name = char_to_dir.get(character)
     if char_dir_name is None:
         return []
@@ -295,7 +300,12 @@ def load_scene_chain(
         List of SceneData in order.
     """
     stems = list_scenes_for_character(scenes_dir, character)
-    char_to_dir = {"novice": "case", "veteran": "sil", "heretic": "kas"}
+    char_to_dir = {
+        "novice": "case",
+        "veteran": "sil",
+        "heretic": "kas",
+        "suit": "suit",
+    }
     char_dir = scenes_dir / char_to_dir[character]
 
     # Filter by ending
@@ -334,7 +344,7 @@ def load_prologue_chain(
         seed: Optional random seed for reproducibility.
         ending: "A" (default) or "B" — which ending set to load.
     """
-    chars = ["novice", "veteran", "heretic"]
+    chars = ["novice", "veteran", "heretic", "suit"]
     rng = random.Random(seed)
     rng.shuffle(chars)
     chain: list[SceneData] = []
@@ -808,6 +818,7 @@ def _character_label(character_id: str, lang: str) -> str:
         "novice": {"en": "Case (K) — Novice", "ko": "케이 (K) — Novice"},
         "veteran": {"en": "Marly (Sil) — Veteran", "ko": "실 (Sil) — Veteran"},
         "heretic": {"en": "Kumiko (Kas) — Heretic", "ko": "카스 (Kas) — Heretic"},
+        "suit": {"en": "Suit — Corporate (3인칭)", "ko": "스위트 — 기업 픽서 (3인칭)"},
     }
     return labels.get(character_id, {}).get(lang, character_id)
 
@@ -1035,6 +1046,7 @@ GN_MENU_PROLOGUE = "prologue"
 GN_MENU_NOVICE = "novice"
 GN_MENU_VETERAN = "veteran"
 GN_MENU_HERETIC = "heretic"
+GN_MENU_SUIT = "suit"
 
 # Ending menu option keys (ADR-0048).
 GN_ENDING_A = "A"
@@ -1069,13 +1081,14 @@ def get_gn_menu_options(
             options.append(("1", "CONTINUE READING"))
     # Prologue / characters / back
     if has_save:
-        keys = ["2", "3", "4", "5"]
+        keys = ["2", "3", "4", "5", "6"]
     else:
-        keys = ["1", "2", "3", "4"]
-    options.append((keys[0], "전캐릭터 — 12개 씬 랜덤" if is_ko else "ALL CHARACTERS — 12 scenes"))
+        keys = ["1", "2", "3", "4", "5"]
+    options.append((keys[0], "전캐릭터 — 16개 씬 랜덤" if is_ko else "ALL CHARACTERS — 16 scenes"))
     options.append((keys[1], "케이 (K) — Novice"))
     options.append((keys[2], "실 (Sil) — Veteran"))
     options.append((keys[3], "카스 (Kas) — Heretic"))
+    options.append((keys[4], "스위트 (Suit) — Corporate"))
     options.append(("", "메인메뉴로" if is_ko else "BACK TO MAIN MENU"))
     return options
 
@@ -1089,19 +1102,21 @@ def get_gn_menu_key(has_save: bool, selected_index: int) -> str:
 
     Returns:
         One of GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC,
-        GN_MENU_CONTINUE, GN_MENU_BACK.
+        GN_MENU_SUIT, GN_MENU_CONTINUE, GN_MENU_BACK.
     """
     if has_save:
         if selected_index == 0:
             return GN_MENU_CONTINUE
-        if selected_index == 5:
+        if selected_index == 6:
             return GN_MENU_BACK
-        return (GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC)[
+        return (GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC, GN_MENU_SUIT)[
             selected_index - 1
         ]
-    if selected_index == 4:
+    if selected_index == 5:
         return GN_MENU_BACK
-    return (GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC)[selected_index]
+    return (GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC, GN_MENU_SUIT)[
+        selected_index
+    ]
 
 
 def _render_gn_menu_impl(
@@ -1189,6 +1204,18 @@ _ENDING_DESCRIPTIONS: dict[tuple[str, str], dict[str, str]] = {
     ("heretic", "C"): {
         "ko": "파괴 — 가족을 내부에서 무너뜨림",
         "en": "The Burn — unmaking the wheel from within",
+    },
+    ("suit", "A"): {
+        "ko": "계약 성사 — Hosaka 거래 성공",
+        "en": "The Contract — Hosaka deal closes",
+    },
+    ("suit", "B"): {
+        "ko": "배신 — T-A 가족 내부 결속",
+        "en": "The Defection — T-A family binds internally",
+    },
+    ("suit", "C"): {
+        "ko": "협상 — Wintermute와의 불가역적 거래",
+        "en": "The Negotiation — irreversible pact with Wintermute",
     },
 }
 

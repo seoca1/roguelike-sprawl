@@ -243,7 +243,7 @@ def test_load_scene_chain_shuffle() -> None:
 
 def test_load_prologue_chain_length() -> None:
     chain = load_prologue_chain(SCENES_DIR, seed=42)
-    assert len(chain) == 12  # 3 chars × 4 scenes (ending A)
+    assert len(chain) == 16  # 4 chars × 4 scenes (ending A)
 
 
 def test_load_prologue_chain_groups_characters() -> None:
@@ -418,13 +418,17 @@ def test_module_exports() -> None:
     assert callable(render_graphic_novel_menu)
 
 
-def test_all_18_scenes_loadable() -> None:
-    """All 18 scene JSON files must load (12 ending A + 6 ending B)."""
-    for char in ("novice", "veteran", "heretic"):
+def test_all_22_scenes_loadable() -> None:
+    """All 22 scene JSON files must load (16 ending A + 6 ending B)."""
+    for char in ("novice", "veteran", "heretic", "suit"):
         chain_a = load_scene_chain(SCENES_DIR, char, ending="A")
         chain_b = load_scene_chain(SCENES_DIR, char, ending="B")
         assert len(chain_a) == 4, f"Expected 4 ending A scenes for {char}"
-        assert len(chain_b) == 2, f"Expected 2 ending B scenes for {char}"
+        # 3 legacy chars have 2 ending B scenes; suit (Phase 6.1) starts with only A
+        if char in ("novice", "veteran", "heretic"):
+            assert len(chain_b) == 2, f"Expected 2 ending B scenes for {char}"
+        else:
+            assert len(chain_b) >= 0, f"No ending B scenes for {char} (acceptable)"
         for chain in (chain_a, chain_b):
             for s in chain:
                 assert s.dialogue

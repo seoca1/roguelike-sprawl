@@ -2,6 +2,45 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Phase 6.1 — Suit (4번째 자키) 본격 통합
+
+- **배경**: ADR-0031/0052 단편 확장 + missions.json 4개 suit 미션으로 미리 통합된 캐릭터. `chapter_suit.json`도 존재했으나 GN 메뉴/엔딩/테스트 미지원.
+- **신규 자산**:
+  - `data/scenes/suit/01_aritage.json` — Armitage 브리핑 (Sense/Net 침투 작전)
+  - `data/scenes/suit/02_hosaka.json` — Hosaka 추출 (CEO construct 기억)
+  - `data/scenes/suit/03_straylight.json` — T-A 이탈 (3Jane과 협상)
+  - `data/scenes/suit/04_wintermute.json` — 윈터뮤트 협상 (베를린 술집)
+  - `design/scenario/chapter-4-suit.md` — 캐릭터 디자인 문서
+- **엔진 통합** (`graphic_novel_view.py`):
+  - `char_to_dir`: `"suit" → "suit"` 추가 (2곳)
+  - `chars` 리스트 (prologue): `["novice", "veteran", "heretic", "suit"]`
+  - `GN_MENU_SUIT = "suit"` 상수
+  - `_character_label("suit", ...)`: `Suit — Corporate` / `스위트 — 기업 픽서`
+  - `get_gn_menu_options`: 4번째 캐릭터 옵션 추가 (6개 옵션)
+  - `get_gn_menu_key`: 인덱스 매핑 (no-save=4, save=5)
+  - `_ENDING_DESCRIPTIONS`: `("suit", "A"/"B"/"C")` 3개 엔딩 설명
+- **`chapter_view.py`**: `chapter_for_character("suit")` → `suit.json` 로드
+- **테스트** (`tests/unit/test_suit_character.py`, 12 신규):
+  - 4씬 디스커버리 / 로드
+  - GN 메뉴 옵션 (with/without save)
+  - 캐릭터 라벨 (en/ko)
+  - 엔딩 3개 (A/B/C)
+  - 챕터 로드 (Armitage excerpt 확인)
+  - 프롤로그 4씬 포함
+- **기존 테스트 갱신**:
+  - `test_load_prologue_chain_length`: 12 → 16
+  - `test_all_18_scenes_loadable` → `test_all_22_scenes_loadable`: 4 chars × 4 scenes
+  - `test_prologue_default_uses_ending_a`: 12 → 16
+- **검증**:
+  - pytest: **4109 passed** (이전 4097 → +12)
+  - ruff check / format: All passed
+  - mypy: 0 errors in 114 source files
+- **디자인 차별화**:
+  - 1인칭 (케이/실/카스) vs **3인칭** (수트)
+  - 동기: 돈/복수/전복 vs **거래** (영구)
+  - 톤: 떨림/직접/예술 vs **차가움/계산/침묵**
+  - 4번째 시점이 깁슨 톤의 *cold* 디멘션을 가장 직접 표현
+
 ## [2026-07-04] fix | mkdocs --strict 빌드 성공 (워닝 41 → 0)
 
 - **배경**: ADR-0030 §9 "mkdocs --strict 빌드" 보류 → 해소
