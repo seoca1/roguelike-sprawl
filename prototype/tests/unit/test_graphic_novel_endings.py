@@ -202,9 +202,9 @@ class TestPrologueWithEnding:
             assert s.ending == "A"
 
     def test_prologue_ending_b_explicit(self) -> None:
-        """Prologue with ending='B' = 3 chars × 2 scenes = 6 (suit has no B scenes yet)."""
+        """Prologue with ending='B' = 4 chars × 2 scenes = 8 (Phase 6.1 added suit ending B/C)."""
         chain = load_prologue_chain(SCENES_DIR, seed=42, ending="B")
-        assert len(chain) == 6
+        assert len(chain) == 8
         for s in chain:
             assert s.ending == "B"
 

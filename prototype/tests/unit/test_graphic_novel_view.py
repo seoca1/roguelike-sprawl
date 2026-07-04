@@ -419,16 +419,14 @@ def test_module_exports() -> None:
 
 
 def test_all_22_scenes_loadable() -> None:
-    """All 22 scene JSON files must load (16 ending A + 6 ending B)."""
+    """All scene JSON files must load (4 chars × 4 ending A + 4 chars × 2 ending B = 24)."""
     for char in ("novice", "veteran", "heretic", "suit"):
         chain_a = load_scene_chain(SCENES_DIR, char, ending="A")
         chain_b = load_scene_chain(SCENES_DIR, char, ending="B")
         assert len(chain_a) == 4, f"Expected 4 ending A scenes for {char}"
-        # 3 legacy chars have 2 ending B scenes; suit (Phase 6.1) starts with only A
-        if char in ("novice", "veteran", "heretic"):
-            assert len(chain_b) == 2, f"Expected 2 ending B scenes for {char}"
-        else:
-            assert len(chain_b) >= 0, f"No ending B scenes for {char} (acceptable)"
+        assert len(chain_b) == 2, (
+            f"Expected 2 ending B scenes for {char} (Phase 6.1 added suit B/C)"
+        )
         for chain in (chain_a, chain_b):
             for s in chain:
                 assert s.dialogue

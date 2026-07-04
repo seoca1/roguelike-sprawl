@@ -2,6 +2,28 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Suit 엔딩 B/C 씬 4개 추가 (Phase 6.1 마무리)
+
+- **배경**: Phase 6.1에서 Suit 캐릭터 4 base scenes만 추가. 엔딩 B/C 미구현으로 프롤로그 ending='B'에서 8씬 (4 chars × 2) 기대.
+- **신규 씬** (`data/scenes/suit/`):
+  - `05_defection.json` — T-A 이탈 (ending B, 1st of 2)
+  - `06_rebirth.json` — 핀 사무실에서 탈출 후 지바 호텔 11층 (ending B, 2nd)
+  - `07_negotiation.json` — Straylight 별관에서 Wintermute의 4번째 계약 거절 (ending C, 1st)
+  - `08_constellation.json` — Freeside 전망대에서 별 보기 (ending C, 2nd)
+- **테스트 갱신**:
+  - `test_all_22_scenes_loadable` — 4 chars × 4 ending A + 4 chars × 2 ending B = 24 scenes
+  - `test_prologue_ending_b_explicit` — 8 (4 chars × 2 ending B)
+  - `test_suit_has_four_scenes` → `test_suit_has_eight_scenes` (8 total files)
+- **디자인 톤**:
+  - 엔딩 B: 핀의 사무실에서 T-A 이탈 → 새로운 가족 계약 → 지바 호텔 자유
+  - 엔딩 C: Straylight Wintermute 거절 → Freeside 전망대 자유
+  - 두 엔딩 모두 **3인칭 narrator + 1인칭 suit POV 혼합**
+  - "*The matrix is vast. The suit is small. The suit is free.*" 클로징 라인 반복
+- **검증**:
+  - pytest: **4109 passed** (변동 없음)
+  - ruff check / format: All passed
+  - mypy: 0 errors in 114 source files
+
 ## [2026-07-04] audit | Phase 6.2 — NPC dialogue + faction rep 연동 (이미 구현됨)
 
 - **점검 결과**: ROADMAP Phase 6.2 항목은 2026-07-01 사이클에서 이미 구현 완료. 추가 작업 불필요.
