@@ -19,7 +19,7 @@ import tcod.console
 import tcod.event
 
 from . import config as _engine_config
-from .save_manager import SaveError, SaveManager, SaveSlotEmptyError
+from .save_manager import MAX_SLOTS, SaveError, SaveManager, SaveSlotEmptyError
 from .state import AppState, ScreenKind
 
 # --- Selection state (per AppState) ---
@@ -27,12 +27,12 @@ from .state import AppState, ScreenKind
 
 def get_selected_slot(state: AppState) -> int:
     """Get currently selected slot (1..MAX_SLOTS)."""
-    return max(1, min(5, getattr(state, "save_load_selected", 1)))
+    return max(1, min(MAX_SLOTS, getattr(state, "save_load_selected", 1)))
 
 
 def set_selected_slot(state: AppState, slot: int) -> None:
     """Set the currently selected slot."""
-    state.save_load_selected = max(1, min(5, slot))
+    state.save_load_selected = max(1, min(MAX_SLOTS, slot))
 
 
 # --- Screen transitions ---
@@ -282,12 +282,12 @@ def handle_save_load_input(event: tcod.event.Event, state: AppState) -> bool:
     # Navigation
     if event.sym is tcod.event.KeySym.UP:
         current = get_selected_slot(state)
-        set_selected_slot(state, current - 1 if current > 1 else 5)
+        set_selected_slot(state, current - 1 if current > 1 else MAX_SLOTS)
         return True
 
     if event.sym is tcod.event.KeySym.DOWN:
         current = get_selected_slot(state)
-        set_selected_slot(state, current + 1 if current < 5 else 1)
+        set_selected_slot(state, current + 1 if current < MAX_SLOTS else 1)
         return True
 
     # Jump to slot number

@@ -2,6 +2,47 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Phase 7.3 — 세이브/로드 폴리시 확장 (10슬롯 + 자동저장)
+
+- **배경**: ROADMAP 차순. 기존 5슬롯은 짧은 런 사이클에 부족. 10슬롯 + 자동저장으로 폴리시 강화.
+- **변경** (`src/roguelike_sprawl/engine/save_manager.py`):
+  - `MAX_SLOTS = 5` → `MAX_SLOTS = 10` (Phase 7.3)
+  - `AUTO_SAVE_SLOT = 0` (별도 슬롯, 슬롯 1~10과 분리)
+  - `AUTO_SAVE_FILENAME = "autosave.json"` (manual slot_{N}.json과 분리)
+  - `_slot_path(0)` → `autosave.json` (manual 1~10은 `slot_{N}.json`)
+  - `save()` docstring 갱신: "0 for auto-save, 1..MAX_SLOTS for manual"
+- **신규 메서드** (`SaveManager`):
+  - `autosave(state) → SaveMetadata` — 자동 저장 슬롯에 저장 (덮어쓰기)
+  - `has_autosave() → bool` — 자동 저장 존재 여부
+  - `list_all() → list[SaveMetadata]` — 자동저장(0) + 수동 10슬롯 통합 리스트
+- **연쇄 수정** (`save_load_view.py`):
+  - `MAX_SLOTS` import 추가
+  - `set_selected_slot()` clamp 범위 5 → 10
+  - `get_selected_slot()` clamp 범위 5 → 10
+  - up/down 키 wrap-around 5 → 10
+- **테스트** (`tests/unit/test_save_slots_phase73.py`, 8 신규):
+  - MAX_SLOTS == 10
+  - AUTO_SAVE_SLOT == 0
+  - slot paths (slot_N.json + autosave.json)
+  - slot validation (-1, 11)
+  - autosave creates/overwrites file
+  - autosave separate from manual
+  - list_all = 11 entries (1 auto + 10 manual)
+- **기존 테스트 갱신**:
+  - `test_slot_path_validates`: 6 → 11
+  - `test_list_slots_includes_empty`: 5 → 10
+  - `test_set_clamps_high`: 5 → 10
+  - `test_up_wraps_to_5` → test_up_wraps_to_10
+  - `test_down_wraps_to_1` (slot 5 → 10)
+- **검증**:
+  - pytest: **4155 passed** (4147 → +8)
+  - ruff check / format: All passed
+  - mypy: 0 errors in 114 source files
+- **세이브 파일 구조**:
+  - `slot_1.json` ~ `slot_10.json` (manual)
+  - `autosave.json` (auto, 슬롯 0)
+  - `SAVE_FORMAT_VERSION = "0.1.0"` (유지)
+
 ## [2026-07-04] feat | Phase 7.2 — Mid/Core/TA zone 콘텐츠 보강
 
 - **배경**: ROADMAP 차순. zone 분포 불균형 — MID 2, CORE 3, TA 1 (vs SURFACE 12, DEEP 10, FREESIDE 5).

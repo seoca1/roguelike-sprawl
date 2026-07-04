@@ -86,9 +86,9 @@ class TestSaveManagerBasics:
     def test_slot_path_validates(self, save_dir: Path) -> None:
         manager = SaveManager(save_dir=save_dir)
         with pytest.raises(ValueError, match="slot must be"):
-            manager._slot_path(0)  # type: ignore[arg-type]
+            manager._slot_path(-1)  # type: ignore[arg-type]
         with pytest.raises(ValueError, match="slot must be"):
-            manager._slot_path(6)  # type: ignore[arg-type]
+            manager._slot_path(11)  # type: ignore[arg-type]  # Phase 7.3: MAX_SLOTS=10
 
     def test_has_save_false_for_empty(self, save_dir: Path) -> None:
         manager = SaveManager(save_dir=save_dir)
@@ -393,7 +393,7 @@ class TestSlotManagement:
     def test_list_slots_includes_empty(self, save_dir: Path) -> None:
         manager = SaveManager(save_dir=save_dir)
         slots = manager.list_slots()
-        assert len(slots) == 5  # MAX_SLOTS
+        assert len(slots) == 10  # MAX_SLOTS (Phase 7.3: 5 → 10)
         for meta in slots:
             assert meta.exists is False
 

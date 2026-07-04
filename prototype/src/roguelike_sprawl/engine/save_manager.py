@@ -76,8 +76,10 @@ if TYPE_CHECKING:
 
 
 SAVE_FORMAT_VERSION = "0.1.0"
-MAX_SLOTS = 5
+MAX_SLOTS = 10  # Phase 7.3: 5 → 10 manual save slots
 DEFAULT_SLOT = 1
+AUTO_SAVE_SLOT = 0  # Phase 7.3: separate auto-save slot (slot 0)
+AUTO_SAVE_FILENAME = "autosave.json"  # distinct from manual slot_{N}.json
 
 
 # Migration chain: list of (source_version, target_version, transform) tuples.
@@ -290,7 +292,13 @@ class SaveManager:
         self.save_dir.mkdir(parents=True, exist_ok=True)
 
     def _slot_path(self, slot: int) -> Path:
-        """Get the file path for a save slot."""
+        """Get the file path for a save slot.
+
+        Manual slots are 1..MAX_SLOTS (slot_{N}.json).
+        AUTO_SAVE_SLOT (0) uses a separate autosave.json file.
+        """
+        if slot == AUTO_SAVE_SLOT:
+            return self.save_dir / AUTO_SAVE_FILENAME
         if not 1 <= slot <= MAX_SLOTS:
             raise ValueError(f"slot must be 1..{MAX_SLOTS}, got {slot}")
         return self.save_dir / f"slot_{slot}.json"
@@ -307,6 +315,34 @@ class SaveManager:
         result: list[SaveMetadata] = []
         for slot in range(1, MAX_SLOTS + 1):
             result.append(self.get_metadata(slot))
+        return result
+
+    def autosave(self, state: AppState) -> SaveMetadata:
+        """Save to the dedicated auto-save slot (Phase 7.3).
+
+        Overwrites any prior auto-save. Auto-save is intended for
+        checkpoint-style persistence, not user-initiated saves.
+        The auto-save slot is rendered separately in the save/load view.
+
+        Args:
+            state: Current AppState snapshot to persist.
+
+        Returns:
+            SaveMetadata for the auto-save slot.
+        """
+        return self.save(AUTO_SAVE_SLOT, state)
+
+    def has_autosave(self) -> bool:
+        """Check if an auto-save exists."""
+        return self.has_save(AUTO_SAVE_SLOT)
+
+    def list_all(self) -> list[SaveMetadata]:
+        """List auto-save (slot 0) + all manual slots (1..MAX_SLOTS).
+
+        Auto-save appears first. Useful for unified save/load UI.
+        """
+        result: list[SaveMetadata] = [self.get_metadata(AUTO_SAVE_SLOT)]
+        result.extend(self.list_slots())
         return result
 
     def get_metadata(self, slot: int) -> SaveMetadata:
@@ -367,7 +403,7 @@ class SaveManager:
         """Save current Run state to a slot.
 
         Args:
-            slot: Save slot (1..MAX_SLOTS).
+            slot: Save slot (0 for auto-save, 1..MAX_SLOTS for manual).
             state: App state to save.
             elapsed_seconds: Game time elapsed (for display).
 
@@ -474,7 +510,7 @@ class SaveManager:
         """Load a saved Run from a slot.
 
         Args:
-            slot: Save slot (1..MAX_SLOTS).
+            slot: Save slot (0 for auto-save, 1..MAX_SLOTS for manual).
 
         Returns:
             The SavedRun.
@@ -509,7 +545,7 @@ class SaveManager:
         """Restore AppState from a saved Run.
 
         Args:
-            slot: Save slot (1..MAX_SLOTS).
+            slot: Save slot (0 for auto-save, 1..MAX_SLOTS for manual).
             state: AppState to modify in-place.
 
         Raises:

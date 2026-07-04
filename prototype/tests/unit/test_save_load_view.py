@@ -70,7 +70,7 @@ class TestSelection:
     def test_set_clamps_high(self) -> None:
         state = AppState()
         save_load_view.set_selected_slot(state, 99)
-        assert save_load_view.get_selected_slot(state) == 5  # MAX_SLOTS
+        assert save_load_view.get_selected_slot(state) == 10  # MAX_SLOTS (Phase 7.3)
 
     def test_set_clamps_low(self) -> None:
         state = AppState()
@@ -188,7 +188,7 @@ class TestInputNavigation:
         state.save_load_selected = 1
         event = tcod.event.KeyDown(sym=tcod.event.KeySym.UP, mod=0, scancode=0)
         save_load_view.handle_save_load_input(event, state)
-        assert state.save_load_selected == 5
+        assert state.save_load_selected == 10  # MAX_SLOTS (Phase 7.3)
 
     def test_down_navigates(self) -> None:
         state = AppState()
@@ -199,7 +199,7 @@ class TestInputNavigation:
 
     def test_down_wraps_to_1(self) -> None:
         state = AppState()
-        state.save_load_selected = 5
+        state.save_load_selected = 10  # MAX_SLOTS (Phase 7.3)
         event = tcod.event.KeyDown(sym=tcod.event.KeySym.DOWN, mod=0, scancode=0)
         save_load_view.handle_save_load_input(event, state)
         assert state.save_load_selected == 1
