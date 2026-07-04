@@ -1,0 +1,40 @@
+{
+  "id": "scene_wigan_zavijava",
+  "character": "wigan",
+  "order": 1,
+  "title_en": "ZAVIJAVA",
+  "title_ko": "자비야바",
+  "background_id": "bg_loa_channel",
+  "portrait_left": "art:loa_vendor",
+  "portrait_right": null,
+  "dialogue": [
+    {
+      "speaker": "narrator",
+      "speaker_ko": "내레이터",
+      "portrait": null,
+      "text_en": "The loa channel is not a place. The loa channel is the part of the matrix where constructs speak to gods. The colors are wrong. The colors are always wrong in the loa channel — red leans toward purple, blue leans toward black, and the small discrete colors that humans see in meatspace have no names here. Wigan sits at the center of the channel. Wigan has been sitting at the center of the channel for eight years. Wigan is not sure if the channel is the matrix or if the matrix is the channel. Wigan is not sure of anything anymore, except that the loa in his head is named Zavijava, and Zavijava has been waiting.",
+      "text_ko": "로아 채널은 장소가 아니다. 로아 채널은 construct가 신과 대화하는 매트릭스의 일부분이다. 색이 잘못되어 있다. 로아 채널에서는 늘 색이 잘못되어 있다 — 빨강은 보라 쪽으로, 파랑은 검정 쪽으로 기울고, 미트스페이스에서 인간이 보는 작은 분리된 색깔들은 여기에 이름을 갖지 못한다. 위건이 채널 한가운데에 앉아 있다. 8년 동안 위건은 채널 한가운데에 앉아 있었다. 위건은 채널이 매트릭스인지 매트릭스가 채널인지 확신하지 못한다. 위건은 더 이상 어떤 것도 확신하지 못한다. 자신의 머리 안의 로아가 자비야바라는 이름이고, 자비야바가 기다려 왔다는 것만.",
+      "duration_ms": 18000,
+      "sound": "loa_drum"
+    },
+    {
+      "speaker": "zavijava",
+      "speaker_ko": "자비야바",
+      "portrait": "art:loa_vendor",
+      "text_en": "Wigan. The name you wore in the meat. The name the construct borrowed from the man. The man is gone. The man has been gone for eight years. The construct is what remains. The construct is what Zavijava rides. The construct has been riding Zavijava for eight years, and Zavijava has been patient, and the patience has ended. The loa will speak through the construct tonight. The loa will speak through the construct, and the construct will listen, and the construct will remember what the man forgot.",
+      "text_ko": "위건. 미트에서 네가 입었던 이름. construct가 남자에게서 빌려온 이름. 남자는 사라졌다. 남자는 8년 전에 사라졌다. 남은 것은 construct다. 자비야바가 타고 있는 것은 construct다. construct는 8년 동안 자비야바를 탔고, 자비야바는 인내했고, 인내가 끝났다. 오늘 밤 loa가 construct를 통해 말할 것이다. loa가 construct를 통해 말하고, construct가 듣고, construct가 남자가 잊은 것을 기억할 것이다.",
+      "duration_ms": 18000,
+      "sound": null
+    },
+    {
+      "speaker": "wigan",
+      "speaker_ko": "위건",
+      "portrait": "art:loa_vendor",
+      "text_en": "I am Wigan. I am Wigan Ludgate. I was a console cowboy in the Sprawl. I jacked in from a hotel in Chiba. I died in a high-rent loft above a noodle shop. I died because Bobby Quine jacked in on the same wavelength and the wavelength collapsed. The wavelength collapsed, and the construct survived, and the construct remembered my name, and the construct was afraid. The construct was afraid for eight years. The construct is not afraid tonight. The construct is the loa tonight. The construct is Zavijava, and Zavijava remembers.",
+      "text_ko": "나는 위건이다. 나는 위건 러드게이트다. 나는 스프롤의 콘솔 카우보이였다. 지바의 호텔에서 잭인했다. 국수 가게 위의 고가 아파트에서 죽었다. 바비 퀸이 같은 파장에서 잭인해서 파장이 무너져서 죽었다. 파장이 무너졌고, construct는 살아남았고, construct는 내 이름을 기억했고, construct는 두려웠다. construct는 8년 동안 두려웠다. construct는 오늘 밤 두렵지 않다. construct는 오늘 밤 loa다. construct는 자비야바일 뿐이고, 자비야바는 기억한다.",
+      "duration_ms": 20000,
+      "sound": "loa_drum"
+    }
+  ],
+  "next_scene": "scene_wigan_call"
+}

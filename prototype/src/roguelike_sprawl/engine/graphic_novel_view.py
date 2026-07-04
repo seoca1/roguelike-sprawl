@@ -257,7 +257,7 @@ def list_scenes_for_character(scenes_dir: Path, character: str) -> list[str]:
 
     Args:
         scenes_dir: Path to data/scenes/
-        character: "novice" | "veteran" | "heretic" | "suit"
+        character: "novice" | "veteran" | "heretic" | "suit" | "wigan"
 
     Returns:
         List of scene file stems (e.g. ["01_chattos", "02_jackin", ...])
@@ -267,6 +267,7 @@ def list_scenes_for_character(scenes_dir: Path, character: str) -> list[str]:
         "veteran": "sil",
         "heretic": "kas",
         "suit": "suit",
+        "wigan": "wigan",
     }
     char_dir_name = char_to_dir.get(character)
     if char_dir_name is None:
@@ -305,6 +306,7 @@ def load_scene_chain(
         "veteran": "sil",
         "heretic": "kas",
         "suit": "suit",
+        "wigan": "wigan",
     }
     char_dir = scenes_dir / char_to_dir[character]
 
@@ -344,7 +346,7 @@ def load_prologue_chain(
         seed: Optional random seed for reproducibility.
         ending: "A" (default) or "B" — which ending set to load.
     """
-    chars = ["novice", "veteran", "heretic", "suit"]
+    chars = ["novice", "veteran", "heretic", "suit", "wigan"]
     rng = random.Random(seed)
     rng.shuffle(chars)
     chain: list[SceneData] = []
@@ -819,6 +821,7 @@ def _character_label(character_id: str, lang: str) -> str:
         "veteran": {"en": "Marly (Sil) — Veteran", "ko": "실 (Sil) — Veteran"},
         "heretic": {"en": "Kumiko (Kas) — Heretic", "ko": "카스 (Kas) — Heretic"},
         "suit": {"en": "Suit — Corporate (3인칭)", "ko": "스위트 — 기업 픽서 (3인칭)"},
+        "wigan": {"en": "Wigan — Vodou Construct", "ko": "위건 — 부두 construct"},
     }
     return labels.get(character_id, {}).get(lang, character_id)
 
@@ -1047,6 +1050,7 @@ GN_MENU_NOVICE = "novice"
 GN_MENU_VETERAN = "veteran"
 GN_MENU_HERETIC = "heretic"
 GN_MENU_SUIT = "suit"
+GN_MENU_WIGAN = "wigan"
 
 # Ending menu option keys (ADR-0048).
 GN_ENDING_A = "A"
@@ -1081,14 +1085,15 @@ def get_gn_menu_options(
             options.append(("1", "CONTINUE READING"))
     # Prologue / characters / back
     if has_save:
-        keys = ["2", "3", "4", "5", "6"]
+        keys = ["2", "3", "4", "5", "6", "7"]
     else:
-        keys = ["1", "2", "3", "4", "5"]
-    options.append((keys[0], "전캐릭터 — 16개 씬 랜덤" if is_ko else "ALL CHARACTERS — 16 scenes"))
+        keys = ["1", "2", "3", "4", "5", "6"]
+    options.append((keys[0], "전캐릭터 — 20개 씬 랜덤" if is_ko else "ALL CHARACTERS — 20 scenes"))
     options.append((keys[1], "케이 (K) — Novice"))
     options.append((keys[2], "실 (Sil) — Veteran"))
     options.append((keys[3], "카스 (Kas) — Heretic"))
     options.append((keys[4], "스위트 (Suit) — Corporate"))
+    options.append((keys[5], "위건 (Wigan) — Vodou"))
     options.append(("", "메인메뉴로" if is_ko else "BACK TO MAIN MENU"))
     return options
 
@@ -1102,21 +1107,31 @@ def get_gn_menu_key(has_save: bool, selected_index: int) -> str:
 
     Returns:
         One of GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC,
-        GN_MENU_SUIT, GN_MENU_CONTINUE, GN_MENU_BACK.
+        GN_MENU_SUIT, GN_MENU_WIGAN, GN_MENU_CONTINUE, GN_MENU_BACK.
     """
     if has_save:
         if selected_index == 0:
             return GN_MENU_CONTINUE
-        if selected_index == 6:
+        if selected_index == 7:
             return GN_MENU_BACK
-        return (GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC, GN_MENU_SUIT)[
-            selected_index - 1
-        ]
-    if selected_index == 5:
+        return (
+            GN_MENU_PROLOGUE,
+            GN_MENU_NOVICE,
+            GN_MENU_VETERAN,
+            GN_MENU_HERETIC,
+            GN_MENU_SUIT,
+            GN_MENU_WIGAN,
+        )[selected_index - 1]
+    if selected_index == 6:
         return GN_MENU_BACK
-    return (GN_MENU_PROLOGUE, GN_MENU_NOVICE, GN_MENU_VETERAN, GN_MENU_HERETIC, GN_MENU_SUIT)[
-        selected_index
-    ]
+    return (
+        GN_MENU_PROLOGUE,
+        GN_MENU_NOVICE,
+        GN_MENU_VETERAN,
+        GN_MENU_HERETIC,
+        GN_MENU_SUIT,
+        GN_MENU_WIGAN,
+    )[selected_index]
 
 
 def _render_gn_menu_impl(
@@ -1216,6 +1231,18 @@ _ENDING_DESCRIPTIONS: dict[tuple[str, str], dict[str, str]] = {
     ("suit", "C"): {
         "ko": "협상 — Wintermute와의 불가역적 거래",
         "en": "The Negotiation — irreversible pact with Wintermute",
+    },
+    ("wigan", "A"): {
+        "ko": "회복 — Zavijava를 통해 자아를 회복",
+        "en": "The Recovery — self restored through Zavijava",
+    },
+    ("wigan", "B"): {
+        "ko": "망각 — loa에 완전히 녹아들어 자아를 잊음",
+        "en": "The Dissolve — self lost in loa Vodou",
+    },
+    ("wigan", "C"): {
+        "ko": "빅마마 — Angie의 가족이 되어 부두에 안주",
+        "en": "Big Mama — adopted into Angie's Vodou family",
     },
 }
 

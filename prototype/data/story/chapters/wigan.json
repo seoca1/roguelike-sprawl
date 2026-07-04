@@ -1,0 +1,50 @@
+{
+  "character": "wigan",
+  "id": "chapter_wigan",
+  "title_en": "The Vodou Code",
+  "title_ko": "부두 코드",
+  "subtitle_en": "Wigan Ludgate — Zavijava's Vessel",
+  "subtitle_ko": "위건 러드게이트 — 자비야바의 그릇",
+  "portrait": "art:wigan_zavijava",
+  "theme": "loa_network",
+  "excerpt_en": "Wigan Ludgate died in the matrix eight years ago. His body was never found. His deck was never recovered. What remained was the construct — half Bobby's deck, half a loa named Zavijava — and the loa was the part that remembered. The loa remembered what the construct had been. The loa remembered what the construct had wanted. The loa remembered, and the construct was afraid of remembering. Construct memory is the kind of thing that gets you killed twice.",
+  "excerpt_ko": "위건 러드게이트는 8년 전에 매트릭스 안에서 죽었다. 시체는 발견되지 않았다. 데크도 회수되지 않았다. 남은 것은 construct — 절반은 바비의 데크, 절반은 자비야바라는 loa — 그리고 loa가 기억하는 쪽이었다. loa는 construct가 무엇이었는지 기억했다. loa는 construct가 무엇을 원했는지 기억했다. loa는 기억했고, construct는 기억하는 것이 두려웠다. construct의 기억은 두 번 죽게 만드는 종류의 것이다.",
+  "duration_ms": 12000,
+  "next_screen": "HUB",
+  "char_delay_ms": 60,
+  "_wiki_refs": {
+    "fictions": [
+      "Fiction/wiki/works/count-zero",
+      "Fiction/wiki/characters/wigan-ludgate",
+      "Fiction/wiki/characters/angie-mitchell",
+      "Fiction/wiki/characters/bobby-quine"
+    ],
+    "themes": [
+      "Fiction/wiki/themes/loa-and-voodoo-in-the-matrix",
+      "Fiction/wiki/themes/consciousness-upload",
+      "Fiction/wiki/themes/identity-and-the-matrix"
+    ],
+    "motifs": [
+      "vodou-code",
+      "loa-vessel",
+      "construct-memory",
+      "the-second-death"
+    ]
+  },
+  "_integrated_with": {
+    "missions": [
+      "wigan_zavijava",
+      "wigan_call",
+      "bobby_quine_inquest",
+      "angie_mitchell_rescue"
+    ],
+    "character_ref": "wigan",
+    "fixers_used": ["angie", "zavijava"]
+  },
+  "_play_notes": {
+    "narrative_role": "Wigan is the 5th character — a Vodou construct whose loa (Zavijava) speaks through him. Phase 7+ adds him as the philosophical counterpart to Suit: where Suit is corporate cold, Wigan is ritualistic warm. The 4 missions trace his arc: 1) Zavijava introduction, 2) Angie's call, 3) Bobby's burial, 4) Angie reunion.",
+    "ending": "His ending is memory — whether he keeps it or lets it dissolve.",
+    "tone": "Dreamlike, ritualistic. He uses Vodou grammar (loa names, offerings, veves). Half-sentences in loa-influenced speech.",
+    "replaces_case": "Same upload/construct role as Case but reversed: Case is a cowboy who becomes a construct, Wigan is a construct who tries to remember being a cowboy."
+  }
+}

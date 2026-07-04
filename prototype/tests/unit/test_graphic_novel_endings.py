@@ -195,16 +195,16 @@ class TestEndingBContent:
 
 class TestPrologueWithEnding:
     def test_prologue_default_uses_ending_a(self) -> None:
-        """Default prologue = 4 chars × 4 scenes = 16 (Phase 6.1 added suit)."""
+        """Default prologue = 5 chars × 4 scenes = 20 (Phase 7 added wigan)."""
         chain = load_prologue_chain(SCENES_DIR, seed=42)
-        assert len(chain) == 16
+        assert len(chain) == 20
         for s in chain:
             assert s.ending == "A"
 
     def test_prologue_ending_b_explicit(self) -> None:
-        """Prologue with ending='B' = 4 chars × 2 scenes = 8 (Phase 6.1 added suit ending B/C)."""
+        """Prologue with ending='B' = 5 chars × 2 scenes = 10 (Phase 7 added wigan B/C)."""
         chain = load_prologue_chain(SCENES_DIR, seed=42, ending="B")
-        assert len(chain) == 8
+        assert len(chain) == 10
         for s in chain:
             assert s.ending == "B"
 

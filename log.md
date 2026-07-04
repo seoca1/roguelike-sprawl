@@ -2,6 +2,48 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Phase 7.1 — Wigan Ludgate (5번째 자키) 통합
+
+- **배경**: ROADMAP 차순 1번 (5번째 자키 Wigan Ludgate). 단편 `wigan_zavijava`(2026-06-19), `wigan_call`(2026-07-01)는 존재했으나 캐릭터 통합 미완.
+- **디자인**: Vodou construct 시점 — 죽은 자키 + loa Zavijava의 결합
+- **신규 자산**:
+  - `design/scenario/chapter-5-wigan.md` — 캐릭터 디자인 (Vodou 그라머, loa-인플플언스드 1인칭)
+  - `data/story/chapters/wigan.json` — chapter excerpt + 4 missions
+  - `data/scenes/wigan/` — 8 씬 (4 base + 4 ending B/C):
+    - 01_zavijava, 02_call, 03_bobby, 04_angie (base)
+    - 05_offering (B-1, 제물), 06_dissolve (B-2, 용해)
+    - 07_big_mama (C-1, 가족), 08_family (C-2)
+- **엔진 통합** (`graphic_novel_view.py`):
+  - `char_to_dir`: `"wigan" → "wigan"` (2곳)
+  - `chars` 리스트 (prologue): 5 chars
+  - `GN_MENU_WIGAN = "wigan"` 상수
+  - `_character_label("wigan", ...)`: `Wigan — Vodou Construct` / `위건 — 부두 construct`
+  - `get_gn_menu_options`: 5번째 캐릭터 옵션 (7 옵션)
+  - `get_gn_menu_key`: 인덱스 (no-save=5, save=6)
+  - `_ENDING_DESCRIPTIONS`: `("wigan", "A"/"B"/"C")` 3개
+- **`chapter_view.py`**: `chapter_for_character("wigan")` → `wigan.json` 로드
+- **테스트** (`tests/unit/test_wigan_character.py`, 14 신규):
+  - 8씬 디스커버리 / 로드 (A 4 + B 2)
+  - GN 메뉴 옵션 (with/without save)
+  - 캐릭터 라벨 (en/ko)
+  - 엔딩 3개 (A/B/C)
+  - 챕터 로드 (loa_network theme)
+  - 프롤로그 4씬 포함
+  - **5 chars × 4 ending A = 20 scenes**
+- **기존 테스트 갱신**:
+  - `test_load_prologue_chain_length`: 16 → 20
+  - `test_prologue_default_uses_ending_a`: 16 → 20
+  - `test_prologue_ending_b_explicit`: 8 → 10
+  - Suit 메뉴 옵션 (5 → 6 메뉴 키, 6 → 7 옵션)
+- **디자인 차별화** (5명):
+  - 케이/실/카스/위건: 1인칭 | 수트: 3인칭
+  - 위건의 1인칭은 Vodou 그라머로 *감싸여 있음* — 카스(가족 코드)와 차이
+  - 4 미션: Zavijava 만남 → Angie 호출 → Bobby 장례 → Angie 재회
+- **검증**:
+  - pytest: **4123 passed** (이전 4109 → +14)
+  - ruff check / format: All passed
+  - mypy: 0 errors in 114 source files
+
 ## [2026-07-04] docs | ROADMAP.md 갱신 (Phase 5+6 완료, 4109 tests)
 
 - **Phase 6.0+ 변경 이력 추가** (2026-07-04 항목):
