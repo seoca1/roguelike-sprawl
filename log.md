@@ -2,6 +2,35 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] audit | Phase 6.2 — NPC dialogue + faction rep 연동 (이미 구현됨)
+
+- **점검 결과**: ROADMAP Phase 6.2 항목은 2026-07-01 사이클에서 이미 구현 완료. 추가 작업 불필요.
+- **구현 현황**:
+  - **`src/roguelike_sprawl/run/reputation.py`** (218 lines): 5 factions × 7 tiers
+    - TIER_THRESHOLDS: ALLIED/FRIENDLY/TRUSTED/NEUTRAL/HOSTILE/ENEMY/OUTCAST
+    - `reputation_tier(rep) → str`, `FactionReputation`, `ReputationState`
+    - adjust/get/all_factions/total_score/to_dict/from_dict
+  - **`src/roguelike_sprawl/engine/npc_greeting.py`** (297 lines): NPC faction-aware 인사
+    - `_TIER_RANK`, `ReputationGreeting`, `matches()`
+    - `NPC_GREETINGS`: 5 NPC (finn/dixie/maelcum/sally/slick_henry) × 4-5 rule per NPC
+    - `get_greeting(npc_id, state)` — first-match rule wins
+  - **`src/roguelike_sprawl/engine/npc_event.py`**: DialogueChoice faction_gate
+    - `_evaluate_faction_gate(current_tier, required_tier)` — _evaluate_faction_gate helper
+    - `DIXIE_FLATLINE_EVENT` has faction-gated choices (ALLIED/HOSTILE variants)
+  - **`src/roguelike_sprawl/crafting/info_market.py`** (261 lines): faction discount
+    - `_TIER_TO_MULTIPLIER`: 0.5 (ALLIED) → 1.5 (OUTCAST)
+    - `MarketItem.discounted_price(faction_score) → int | None`
+  - **`src/roguelike_sprawl/missions/board.py`** (292 lines): Mission rep lock
+    - `MissionRepStatus` (AVAILABLE / LOCKED_GRADE / LOCKED_REPUTATION)
+    - `_mission_rep_status(mission, reputation)` — fixes rep 기반 잠금
+    - `JobBoard.locked_for(reputation) → tuple[Mission, ...]`
+- **테스트 커버리지** (140 tests, 모두 PASS):
+  - `tests/unit/test_reputation.py` (106 tests) — 티어 매핑, delta clamping, save/load
+  - `tests/unit/test_npc_greeting.py` (36 tests) — NPC 인사 매칭
+  - `tests/unit/test_npc_faction_dialogue.py` (70 tests) — _evaluate_faction_gate, faction_gate
+  - `tests/unit/test_mission_rep_filter.py` (34 tests) — JobBoard rep filter, locked_for
+- **ROADMAP 차순 1번** 완료 상태 확인 — AGENTS.md/ROADMAP.md 갱신 필요 시 별도 ADR로 분리 가능
+
 ## [2026-07-04] feat | Phase 6.1 — Suit (4번째 자키) 본격 통합
 
 - **배경**: ADR-0031/0052 단편 확장 + missions.json 4개 suit 미션으로 미리 통합된 캐릭터. `chapter_suit.json`도 존재했으나 GN 메뉴/엔딩/테스트 미지원.
