@@ -2,6 +2,24 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | MkDocs build + Pages 배포 통합
+
+- **배경**: ADR-0030 §9 "mkdocs 자동 빌드/배포" 항목 보류 → 해소
+- **변경**:
+  - `.github/workflows/pages.yml`: MkDocs Material 빌드 단계 추가
+    - `pip install mkdocs-material[recommended] pymdown-extensions`
+    - `mkdocs build` → `site/`
+    - `cp -r site/ _pages/wiki/` (대시보드 + 위키 통합 배포)
+  - `wiki/index.md` 신규 — 홈 페이지 (대시보드/GitHub/라이선스/기여)
+  - `.gitignore` 신규 (루트) — site/, .venv-mkdocs, .env, data/ 등 제외
+- **빌드 검증** (로컬):
+  - 8 HTML 페이지 (1 home + 6 world + 1 404), 약 2.9 MB
+  - 워닝 41건 (Fiction 크로스 프로젝트 링크 + glossary 앵커) — `--strict` 미사용
+  - Pages 배포 후 `https://seoca1.github.io/roguelike-sprawl/wiki/` 접속 가능
+- **ADR-0030 §9 갱신**: MkDocs 빌드 통합을 ✅ 완료로 표시
+- **테스트**: pytest 4097 passed, ruff 0, mypy 0 (변동 없음)
+- **워크플로우 이름 변경**: `Deploy Dashboard to GitHub Pages` → `Deploy Dashboard + Wiki to GitHub Pages`
+
 ## [2026-07-04] decision | ADR-0030 Accepted (GitHub 활용 계획)
 
 - **Status 변경**: Draft (2026-06-18) → **Accepted** (2026-07-04)

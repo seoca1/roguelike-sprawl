@@ -269,22 +269,27 @@ GitHub → Releases → Draft new release
 | `.github/ISSUE_TEMPLATE/` | ✅ bug.md / dashboard.md / feature.md |
 | `LICENSE` (MIT) | ✅ 신규 생성 (깁슨 IP 고지 포함) |
 | `mkdocs.yml` | ✅ 신규 생성 (wiki/ + design/ + decisions/ 통합) |
+| `wiki/index.md` | ✅ 신규 생성 (홈 + 둘러보기 + 라이선스 + 기여) |
+| MkDocs 빌드 + Pages 통합 | ✅ `.github/workflows/pages.yml` 에 `mkdocs build` 단계 추가 |
+| `.gitignore` (루트) | ✅ 신규 생성 (site/, .venv-mkdocs, .env 등 제외) |
 | `v0.5.0` 태그 | ✅ 존재 |
 | Branch 전략 (main / develop) | ✅ 부분 구현 (main/develop만, feat/*는 미사용) |
 
-### Wiki 호스팅 계획 (MkDocs Material)
+### Wiki 호스팅 결과 (MkDocs Material + Pages)
 
 - `mkdocs.yml`에서 `wiki/` + `design/` + `decisions/` + `ROADMAP.md` + `log.md` 통합
 - 깁슨 톤에 어울리는 deep purple/purple 팔레트
 - 라이트/다크 모드 토글
 - 한국어/영어 검색 지원 (Material 기본)
-- Pages 워크플로우 확장 시 mkdocs build → Pages 배포 추가 가능
+- **Pages 워크플로우**: `mkdocs build` → `site/` → `_pages/wiki/` → `gh-pages` 브랜치
+- **배포 URL**: `https://seoca1.github.io/roguelike-sprawl/wiki/`
+- 빌드 산출물: 8 HTML 페이지 (1 home + 6 world + 1 404), 약 2.9 MB
 
 ### 추후 보류
 
 - GitHub Projects 보드 (Phase 6+ 작업 추적용)
 - v1.0.0 정식 release (Phase 6 완료 시)
-- mkdocs 자동 빌드/배포 (현재는 dashboard만 Pages, mkdocs는 옵션)
+- `mkdocs --strict` 빌드 (현재 warning 41건 — Fiction 크로스 프로젝트 링크 + glossary 앵커 누락)
 
 ## 9. 참고
 
