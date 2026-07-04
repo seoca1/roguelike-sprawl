@@ -1,7 +1,7 @@
 # ADR-0030: GitHub 활용 계획 (GitHub Utilization Plan)
 
-> **상태**: Draft
-> **날짜**: 2026-06-18
+> **상태**: **Accepted**
+> **날짜**: 2026-06-18 (Draft) → 2026-07-04 (Accepted)
 > **결정자**: 사용자
 > **관련**: `../../../Fiction/`, `typing_language` (참고 프로젝트)
 
@@ -222,35 +222,69 @@ GitHub → Releases → Draft new release
 
 ## 6. 결과 (Consequences)
 
-### 긍정적
-- ✅ 코드 이력 영구 보존
-- ✅ PR마다 자동 CI (test/lint/typecheck 보장)
-- ✅ 대시보드 무료 호스팅 (https://seoca1.github.io/roguelike-sprawl/)
-- ✅ 외부 협업자/관찰자 접근 가능
-- ✅ typing_language와 일관된 워크플로우
+### 긍정적 (2026-07-04 시점)
+- ✅ **코드 이력 영구 보존**: `git log` 200+ 커밋, 모든 이전 세션 작업 추적 가능
+- ✅ **PR마다 자동 CI**: test/lint/typecheck 3-in-1, **4097 tests pass + ruff 0 + mypy 0** 보장
+- ✅ **대시보드 무료 호스팅**: `https://seoca1.github.io/roguelike-sprawl/` (GitHub Pages)
+- ✅ **외부 협업자/관찰자 접근 가능**: Public 저장소
+- ✅ **typing_language와 일관된 워크플로우**: seoca1 계정, 동일 워크플로우 패턴
+- ✅ **MIT 라이선스**: 깁슨 IP 고지 명시, 깁슨 원작과 명확히 분리
+- ✅ **MkDocs Wiki 호스팅**: 디자인 + 위키 + 결정을 단일 문서 사이트로 통합 가능
 
 ### 부정적
 - ❌ GitHub 계정/저장소 관리 부담 (typing_language 동일)
-- ❌ Public 시 코드 공개 (의도된 경우 OK)
-- ❌ Pages는 정적만 (대화형 게임은 별도 호스팅 필요)
+- ❌ Public 시 코드 공개 (깁슨 톤 자키 커뮤니티 공개 의도)
+- ❌ Pages는 정적만 (대화형 게임은 별도 호스팅 필요 — 로컬 실행)
+- ❌ MkDocs 빌드는 별도 환경 필요 (Python + mkdocs-material 패키지)
 
 ### 중립
 - typing_language와 동일 패턴 → 학습 비용 0
+- 깁슨 IP 분리 명시 → fan project로서의 법적 안전성 확보
 
-## 7. 열린 질문 (Open Questions)
+## 7. 열린 질문 (Open Questions) — 결정됨 2026-07-04
 
-1. **저장소 이름**: `roguelike-sprawl` vs `roguelike_sprawl` vs `sprawl-jockey`?
-2. **공개 범위**: Public (깁슨 톤 자키 커뮤니티 공개) vs Private (개인 작업)?
-3. **라이선스**: MIT vs Apache 2.0 vs 비공개?
-4. **대시보드 호스팅**: GitHub Pages vs Netlify vs Vercel?
-5. **Wiki 도구**: GitHub Wiki vs MkDocs vs Obsidian Publish?
+1. **저장소 이름**: ✅ `roguelike-sprawl` (remote URL 확인)
+2. **공개 범위**: ✅ **Public** — 대시보드 외부 공유, 깁슨 톤 연구자/관람자 모집
+3. **라이선스**: ✅ **MIT** — 깁슨 원작은 IP 유지, 본 프로젝트 코드/데이터는 MIT
+4. **대시보드 호스팅**: ✅ **GitHub Pages** (구현 완료)
+5. **Wiki 도구**: ✅ **MkDocs Material** — wiki/ 디렉토리 그대로, mkdocs.yml로 호스팅
 
-## 8. 열린 결정 사항
+## 8. 열린 결정 사항 — 결정됨 2026-07-04
 
-- [ ] 저장소 이름 확정
-- [ ] 공개/비공개 결정
-- [ ] 라이선스 결정
-- [ ] GitHub 계정 상태 확인 (typing_language는 seoca1, 동일 계정 사용?)
+- [x] 저장소 이름 확정: `roguelike-sprawl`
+- [x] 공개/비공개 결정: Public (대시보드 공유)
+- [x] 라이선스 결정: MIT
+- [x] GitHub 계정: `seoca1` (typing_language 동일)
+- [x] Wiki 도구: MkDocs Material
+
+## 9. 구현 결과 (2026-07-04 Accepted 시점)
+
+| 항목 | 상태 |
+|---|---|
+| `git init` + 첫 commit | ✅ 완료 (typing_language 이전 세션에서) |
+| GitHub 원격 저장소 | ✅ `https://github.com/seoca1/roguelike-sprawl` |
+| `.github/workflows/ci.yml` | ✅ 존재 (test + lint + typecheck) |
+| `.github/workflows/pages.yml` | ✅ 존재 (대시보드 자동 배포) |
+| `.github/labeler.yml` | ✅ 존재 (12개 자동 라벨) |
+| `.github/ISSUE_TEMPLATE/` | ✅ bug.md / dashboard.md / feature.md |
+| `LICENSE` (MIT) | ✅ 신규 생성 (깁슨 IP 고지 포함) |
+| `mkdocs.yml` | ✅ 신규 생성 (wiki/ + design/ + decisions/ 통합) |
+| `v0.5.0` 태그 | ✅ 존재 |
+| Branch 전략 (main / develop) | ✅ 부분 구현 (main/develop만, feat/*는 미사용) |
+
+### Wiki 호스팅 계획 (MkDocs Material)
+
+- `mkdocs.yml`에서 `wiki/` + `design/` + `decisions/` + `ROADMAP.md` + `log.md` 통합
+- 깁슨 톤에 어울리는 deep purple/purple 팔레트
+- 라이트/다크 모드 토글
+- 한국어/영어 검색 지원 (Material 기본)
+- Pages 워크플로우 확장 시 mkdocs build → Pages 배포 추가 가능
+
+### 추후 보류
+
+- GitHub Projects 보드 (Phase 6+ 작업 추적용)
+- v1.0.0 정식 release (Phase 6 완료 시)
+- mkdocs 자동 빌드/배포 (현재는 dashboard만 Pages, mkdocs는 옵션)
 
 ## 9. 참고
 

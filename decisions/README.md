@@ -33,7 +33,7 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | 0018 | Combat Animation (전투 ASCII 애니메이션) | **Accepted** | 2026-06-18 | P1 |
 | 0019 | Combat Aftermath & Immersive Subtitles (전투 후일담 & 한글 자막) | **Accepted** | 2026-06-18 | P1 |
 | 0020 | Fog of War + Exploration (안개 / 탐험 메카닉) | **Accepted** | 2026-06-18 | P1 |
-| 0030 | GitHub Utilization Plan (GitHub 활용 계획) | **Draft** | 2026-06-18 | P2 |
+| 0030 | GitHub Utilization Plan (GitHub 활용 계획) | **Accepted** | 2026-07-04 | P2 |
 | 0031 | Original Scenario Integration (단편 → 챕터 → 초반 플레이 통합) | **Accepted** | 2026-06-20 | P1 |
 | 0032 | Graphic Novel Auto-Play Mode + Main Menu 확장 (5 옵션) | **Accepted** | 2026-06-20 | P1 |
 | 0040 | Death & Restart Cycle (자키 사이클 + Hall of Dead) | **Accepted** | 2026-06-20 | P1 |

@@ -2,6 +2,25 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] decision | ADR-0030 Accepted (GitHub 활용 계획)
+
+- **Status 변경**: Draft (2026-06-18) → **Accepted** (2026-07-04)
+- **남은 결정 3건** (사용자 결정):
+  - **라이선스**: MIT (깁슨 IP 고지 명시)
+  - **공개 범위**: Public (대시보드 공유, 깁슨 톤 자키 커뮤니티 공개)
+  - **Wiki 도구**: MkDocs Material
+- **신규 파일 2개**:
+  - `LICENSE` (MIT) — 깁슨 원작 IP 고지 + 프로젝트 코드/데이터 MIT
+  - `mkdocs.yml` — wiki/ + design/ + decisions/ + ROADMAP.md + log.md 통합
+    - Material 테마, deep purple/purple 팔레트, 라이트/다크 모드
+    - 깁슨 톤 디자인 (cold, atmospheric)
+- **현 구현 상태** (ADR §9 추가):
+  - GitHub 원격 저장소 `seoca1/roguelike-sprawl` ✅
+  - CI/Pages/Labeler/Issue Templates ✅
+  - v0.5.0 태그 ✅
+  - main/develop 브랜치 전략 (feat/*는 미사용)
+- **decisions/README.md** ADR-0030 상태 갱신
+
 ## [2026-07-04] fix | lint/mypy 174 errors → 0 (전체 그린)
 
 - **Pre-existing 문제 정리** (다른 세션에서 누적):
