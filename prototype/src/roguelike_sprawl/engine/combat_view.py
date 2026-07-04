@@ -503,81 +503,39 @@ def handle_combat_input(
     """Handle input on the Combat screen. Returns False to quit."""
     if not isinstance(event, KeyDown):
         return True
+
+    # System keys (quit / escape / continue) have priority.
     if event.sym is KeySym.Q:
         return False
     if event.sym is KeySym.ESCAPE:
-        # Disengage (flee)
-        safe_play("ui/menu_cancel")
-        if not combat_state.finished:
-            combat_state.finished = True
-            combat_state.outcome = "defeat"
-            combat_state.push(">> You disengage. The ICE holds.")
-        _end_combat(state, combat_state)
-        return True
+        return _handle_combat_disengage(state, combat_state)
     if is_confirm_key(event.sym) and combat_state.finished:
-        # Continue after combat ends (ENTER or SPACE)
         safe_play("ui/menu_confirm")
         _end_combat(state, combat_state)
         return True
 
-    # Arrow key navigation for skills
-    if event.sym is KeySym.UP:
-        safe_play("ui/menu_select")
-        old_idx = state.combat_skill_index
-        state.combat_skill_index = max(0, state.combat_skill_index - 1)
-        if old_idx != state.combat_skill_index:
-            skill = combat_state.player.skills[state.combat_skill_index]
-            state.status_messages.append(f">>> Selected: {skill.name}")
-        return True
+    if not combat_state.finished:
+        if event.sym is KeySym.UP:
+            return _handle_combat_skill_navigation(state, combat_state, -1)
+        if event.sym is KeySym.DOWN:
+            return _handle_combat_skill_navigation(state, combat_state, +1)
+        if is_confirm_key(event.sym):
+            return _handle_combat_skill_activation(state, combat_state)
+        if event.sym in _COMBAT_NUMBER_KEYS:
+            _handle_combat_number_key(state, combat_state, event.sym)
+            return True
 
-    if event.sym is KeySym.DOWN:
-        max_idx = len(combat_state.player.skills) - 1
-        old_idx = state.combat_skill_index
-        state.combat_skill_index = min(max_idx, state.combat_skill_index + 1)
-        if old_idx != state.combat_skill_index:
-            skill = combat_state.player.skills[state.combat_skill_index]
-            state.status_messages.append(f">>> Selected: {skill.name}")
-        return True
+    return True
 
-    # ENTER or SPACE to use selected skill
-    if is_confirm_key(event.sym):
-        if not combat_state.finished:
-            idx = state.combat_skill_index
-            if 0 <= idx < len(combat_state.player.skills):
-                skill = combat_state.player.skills[idx]
-                if _can_use_skill(combat_state, skill):
-                    state.status_messages.append(f">>> Used skill: {skill.name}")
-                    # Play skill sound based on effect (with random pitch variation)
-                    from ..audio import sound_manager as _sm
 
-                    sound_name = _SKILL_SOUND_MAP.get(skill.effect, "combat/skill_physical")
-                    _sm.get_sound_manager().play(sound_name)
-                    # Snapshot HP for VFX damage calculation
-                    _player_hp_before = combat_state.player.hp
-                    _enemy_hp_before = combat_state.enemy.hp
-                    use_skill(combat_state, skill)
-                    _spawn_skill_vfx(
-                        state,
-                        skill,
-                        combat_state,
-                        enemy_delta=_enemy_hp_before - combat_state.enemy.hp,
-                        player_delta=_player_hp_before - combat_state.player.hp,
-                    )
+# ------------------------------------------------------------------
+# handle_combat_input helpers
+# ------------------------------------------------------------------
 
-                else:
-                    cooldown = combat_state.skill_cooldowns.get(skill.id, 0)
-                    if cooldown > 0:
-                        state.status_messages.append(
-                            f">>> {skill.name} on cooldown ({cooldown / 1000:.1f}s)"
-                        )
-                    elif combat_state.player.ap < skill.ap_cost:
-                        state.status_messages.append(
-                            f">>> Not enough AP ({combat_state.player.ap}/{skill.ap_cost})"
-                        )
-        return True
 
-    # Legacy: Direct number key shortcuts (1-9)
-    if event.sym in (
+# Direct numeric-key shortcuts (1..9) in a frozenset for fast lookup.
+_COMBAT_NUMBER_KEYS = frozenset(
+    {
         KeySym.N1,
         KeySym.N2,
         KeySym.N3,
@@ -587,22 +545,108 @@ def handle_combat_input(
         KeySym.N7,
         KeySym.N8,
         KeySym.N9,
-    ):
-        if not combat_state.finished:
-            idx = int(event.sym.name[1:]) - 1
-            if 0 <= idx < len(combat_state.player.skills):
-                skill = combat_state.player.skills[idx]
-                _player_hp_before = combat_state.player.hp
-                _enemy_hp_before = combat_state.enemy.hp
-                use_skill(combat_state, skill)
-                _spawn_skill_vfx(
-                    state,
-                    skill,
-                    combat_state,
-                    enemy_delta=_enemy_hp_before - combat_state.enemy.hp,
-                    player_delta=_player_hp_before - combat_state.player.hp,
-                )
+    }
+)
+
+
+def _handle_combat_disengage(state: AppState, combat_state: CombatState) -> bool:
+    """Handle ESC — flee the encounter."""
+    safe_play("ui/menu_cancel")
+    if not combat_state.finished:
+        combat_state.finished = True
+        combat_state.outcome = "defeat"
+        combat_state.push(">> You disengage. The ICE holds.")
+    _end_combat(state, combat_state)
     return True
+
+
+def _handle_combat_skill_navigation(
+    state: AppState,
+    combat_state: CombatState,
+    delta: int,
+) -> bool:
+    """Move the highlighted skill slot up (delta<0) or down (delta>0)."""
+    safe_play("ui/menu_select")
+    old_idx = state.combat_skill_index
+    if delta < 0:
+        state.combat_skill_index = max(0, state.combat_skill_index - 1)
+    else:
+        max_idx = len(combat_state.player.skills) - 1
+        state.combat_skill_index = min(max_idx, state.combat_skill_index + 1)
+    if old_idx != state.combat_skill_index:
+        skill = combat_state.player.skills[state.combat_skill_index]
+        state.status_messages.append(f">>> Selected: {skill.name}")
+    return True
+
+
+def _handle_combat_skill_activation(
+    state: AppState,
+    combat_state: CombatState,
+) -> bool:
+    """Try to use the highlighted skill (with AP / cooldown checks)."""
+    idx = state.combat_skill_index
+    if not (0 <= idx < len(combat_state.player.skills)):
+        return True
+    skill = combat_state.player.skills[idx]
+    if _can_use_skill(combat_state, skill):
+        _execute_skill(state, combat_state, skill)
+    else:
+        _report_skill_unavailable(state, combat_state, skill)
+    return True
+
+
+def _handle_combat_number_key(
+    state: AppState,
+    combat_state: CombatState,
+    sym: KeySym,
+) -> None:
+    """Legacy direct-number shortcut — pick the Nth skill (1-indexed)."""
+    if combat_state.finished:
+        return
+    idx = int(sym.name[1:]) - 1
+    if not (0 <= idx < len(combat_state.player.skills)):
+        return
+    skill = combat_state.player.skills[idx]
+    _execute_skill(state, combat_state, skill)
+
+
+def _execute_skill(
+    state: AppState,
+    combat_state: CombatState,
+    skill: Skill,
+) -> None:
+    """Use ``skill`` (sound + VFX + ``use_skill``)."""
+    state.status_messages.append(f">>> Used skill: {skill.name}")
+    from ..audio import sound_manager as _sm
+
+    sound_name = _SKILL_SOUND_MAP.get(skill.effect, "combat/skill_physical")
+    _sm.get_sound_manager().play(sound_name)
+
+    _player_hp_before = combat_state.player.hp
+    _enemy_hp_before = combat_state.enemy.hp
+    use_skill(combat_state, skill)
+    _spawn_skill_vfx(
+        state,
+        skill,
+        combat_state,
+        enemy_delta=_enemy_hp_before - combat_state.enemy.hp,
+        player_delta=_player_hp_before - combat_state.player.hp,
+    )
+
+
+def _report_skill_unavailable(
+    state: AppState,
+    combat_state: CombatState,
+    skill: Skill,
+) -> None:
+    """Explain why the selected skill can't be used right now."""
+    cooldown = combat_state.skill_cooldowns.get(skill.id, 0)
+    if cooldown > 0:
+        state.status_messages.append(f">>> {skill.name} on cooldown ({cooldown / 1000:.1f}s)")
+    elif combat_state.player.ap < skill.ap_cost:
+        state.status_messages.append(
+            f">>> Not enough AP ({combat_state.player.ap}/{skill.ap_cost})"
+        )
 
 
 def _spawn_skill_vfx(
