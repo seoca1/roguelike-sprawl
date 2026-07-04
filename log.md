@@ -2,6 +2,50 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Phase 8 — Sally Shears (7번째 자키) 통합
+
+- **배경**: ROADMAP의 마지막 자키. Count Zero의 A.I. 시장 운영자. Bobby Quine과 파트너였으나 배신.
+- **디자인**: 1인칭 cold operator. 거래만 보는 인간. sharp, calculating, no sentiment.
+- **신규 자산**:
+  - `design/scenario/chapter-7-sally.md` — 캐릭터 디자인 (7번째 시점)
+  - `data/story/chapters/sally.json` — chapter excerpt + 4 missions
+  - `data/scenes/sally/` — 8 씬 (4 base + 4 ending):
+    - 01_market, 02_bobby, 03_marly, 04_angie (base)
+    - 05_monopoly (B-1, 독점), 06_sold (B-2, 매각)
+    - 07_predator (C-1, 포식자), 08_desk (C-2, 단일 책상)
+- **엔진 통합**:
+  - `char_to_dir`: `"sally" → "sally"` (2곳)
+  - `chars` 리스트 (prologue): 7 chars
+  - `GN_MENU_SALLY = "sally"` 상수
+  - `_character_label`: "Sally — Market Operator" / "샐리 — 시장 운영자"
+  - `get_gn_menu_options`: 7번째 옵션 (9 옵션)
+  - `get_gn_menu_key`: 인덱스 (no-save=7, save=8)
+  - `_ENDING_DESCRIPTIONS`: `("sally", "A"/"B"/"C")` 3개
+  - `chapter_for_character("sally")` 추가
+- **테스트** (`tests/unit/test_sally_character.py`, 14 신규):
+  - 8씬 디스커버리/로드 (A 4 + B 2)
+  - GN 메뉴 옵션 (with/without save)
+  - 캐릭터 라벨 (en/ko)
+  - 엔딩 3개 (A/B/C)
+  - 챕터 로드 (industrial_market theme)
+  - 프롤로그 4씬 포함
+  - **7 chars × 4 ending A = 28 scenes**
+- **기존 테스트 갱신**:
+  - `test_load_prologue_chain_length`: 24 → 28
+  - `test_prologue_default_uses_ending_a`: 24 → 28
+  - `test_prologue_ending_b_explicit`: 12 → 14
+  - 모든 메뉴 옵션 테스트 (6 → 7 chars)
+- **디자인 차별화** (7명):
+  - 5명 1인칭 + 수트 3인칭 cold + **샐리 1인칭 cold operator**
+  - 7가지 동기 완전 분포: 돈/복수/전복/거래/자아/엄마/**시장**
+  - 깁슨 톤 7 디멘션: 떨림/분노/예술/cold/ritual/직관/**sharp**
+- **버그 수정**: `get_gn_menu_key`의 두 tuple에 모두 SALLY 추가
+- **검증**:
+  - pytest: **4169 passed** (4155 → +14)
+  - ruff check / format: All passed
+  - mypy: 0 errors in 114 source files
+- **CHARACTER_PATHS.md v0.6.0**: 7자 비교표 + 선택 가이드
+
 ## [2026-07-04] feat | Phase 7.3 — 세이브/로드 폴리시 확장 (10슬롯 + 자동저장)
 
 - **배경**: ROADMAP 차순. 기존 5슬롯은 짧은 런 사이클에 부족. 10슬롯 + 자동저장으로 폴리시 강화.

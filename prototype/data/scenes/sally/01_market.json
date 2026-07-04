@@ -1,0 +1,40 @@
+{
+  "id": "scene_sally_market",
+  "character": "sally",
+  "order": 1,
+  "title_en": "THE MARKET OPENS",
+  "title_ko": "시장 개장",
+  "background_id": "bg_industrial",
+  "portrait_left": "art:sally_neutral",
+  "portrait_right": null,
+  "dialogue": [
+    {
+      "speaker": "narrator",
+      "speaker_ko": "내레이터",
+      "portrait": null,
+      "text_en": "The market opened at three. The market always opened at three. The market was a single room in a single building in a single district in a single city. The market was a single desk. The market was a single woman behind the single desk. The market was Sally Shears. Sally Shears was the market. Sally Shears had been the market for eleven years. Sally Shears would be the market for eleven more. The market opened its eyes. The market opened its ledger. The market opened its mind. The market was ready. The market was always ready.",
+      "text_ko": "시장이 3시에 문을 열었다. 시장은 늘 3시에 문을 열었다. 시장은 단일 도시의 단일 구역의 단일 빌딩의 단일 방이었다. 시장은 단일 책상이었다. 시장은 단일 책상 뒤의 단일 여자였다. 시장이 샐리 시어스였다. 샐리 시어스가 시장이었다. 샐리 시어스는 11년 동안 시장이었다. 샐리 시어스는 11년 더 시장이 될 것이다. 시장이 눈을 떴다. 시장이 원장을 열었다. 시장이 마음을 열었다. 시장이 준비되었다. 시장은 늘 준비되어 있었다.",
+      "duration_ms": 16000,
+      "sound": "industrial_hum"
+    },
+    {
+      "speaker": "sally",
+      "speaker_ko": "샐리",
+      "portrait": "art:sally_neutral",
+      "text_en": "I am Sally. I am the market. The market opened at three. The market opened for buyers. The market opened for sellers. The market opened for the constructs that the buyers wanted to buy and the sellers wanted to sell. The market did not open for stories. The market did not open for sentiment. The market opened for transactions. The market opened for credits. The market opened for the kind of transactions that made the Sprawl small and the matrix vast.",
+      "text_ko": "나는 샐리다. 내가 시장이다. 시장이 3시에 열렸다. 시장은 구매자를 위해 열렸다. 시장은 판매자를 위해 열렸다. 시장은 구매자가 사고 싶어하고 판매자가 팔고 싶어하는 construct를 위해 열렸다. 시장은 이야기를 위해 열리지 않았다. 시장은 감정을 위해 열리지 않았다. 시장은 거래를 위해 열렸다. 시장은 크레딧을 위해 열렸다. 시장은 스프롤을 작게 만들고 매트릭스를 광활하게 만드는 종류의 거래를 위해 열렸다.",
+      "duration_ms": 18000,
+      "sound": null
+    },
+    {
+      "speaker": "sally",
+      "speaker_ko": "샐리",
+      "portrait": "art:sally_neutral",
+      "text_en": "Tonight the market has three items. Item one: a Dixie Flatline construct, in stock since last winter, price stable. Item two: a set of Tessier-Ashpool family recordings, source unverified, price negotiable. Item three: a Vodou loa fragment, extracted from a Marionette construct, price high. The buyer for item one is the cowboy. The buyer for item two is the family. The buyer for item three is unknown. The market will sell all three. The market always sells all three. The market is Sally. Sally is ready.",
+      "text_ko": "오늘 밤 시장은 세 개의 물품을 가지고 있다. 첫 번째: 딕시 플랫라인 construct, 지난 겨울부터 재고, 가격 안정. 두 번째: 테시에-애스풀 가족 녹음 세트, 출처 미확인, 가격 협상 가능. 세 번째: Vodou loa 프래그먼트, 마리온 construct에서 추출, 가격 높음. 첫 번째의 구매자는 카우보이. 두 번째의 구매자는 가족. 세 번째의 구매자는 미상. 시장은 세 개 모두 팔 것이다. 시장은 늘 세 개 모두 판다. 시장이 샐리다. 샐리가 준비되었다.",
+      "duration_ms": 20000,
+      "sound": "industrial_hum"
+    }
+  ],
+  "next_scene": "scene_sally_bobby"
+}

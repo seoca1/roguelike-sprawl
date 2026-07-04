@@ -1,6 +1,6 @@
 # 캐릭터별 진행 경로 (Character Playthrough Paths)
 
-> **문서 버전**: 0.5.0
+> **문서 버전**: 0.6.0
 > **최종 업데이트**: 2026-07-04
 > **관련**: `design/systems/stage_structure.json`, `design/story/prologue_data.json`
 
@@ -8,7 +8,7 @@
 
 ## 1. 개요
 
-### 1.1 캐릭터 구성 (6명, 2026-07-04 기준)
+### 1.1 캐릭터 구성 (7명, 2026-07-04 기준)
 
 | ID | 이름 | 아키타입 | 시점 | 동기 | 톤 | Deck Tier |
 |---|---|---|---|---|---|---|
@@ -18,40 +18,42 @@
 | `suit` | 스위트 (Suit) | Corporate | **3인칭** | 거래 (영구) | 차가움, 계산, 침묵 | T2-T3 |
 | `wigan` | 위건 (Wigan) | Vodou Construct | 1인칭 loa | 회복 (자아) | Dreamlike, ritualistic | T2-T3 |
 | `angie` | 앤지 (Angie) | Loa Receiver | **1인칭 12세** | 엄마 | Childlike, mystical | T2-T3 (Loa-Bound) |
+| `sally` | 샐리 (Sally) | Market Operator | **1인칭 cold** | **시장 지배** | **sharp, calculating** | T5-T6 (Master) |
 
-### 1.2 디자인 비교 (6자)
+### 1.2 디자인 비교 (7자)
 
-| 차원 | 케이 | 실 | 카스 | 수트 | 위건 | 앤지 |
-|---|---|---|---|---|---|---|
-| **Gibson 원작** | Case | Marly | Kumiko | Armitage | Wigan Ludgate | Angie Mitchell |
-| **등장 작품** | Neuromancer | Count Zero | Mona Lisa Overdrive | Neuromancer | Count Zero | Count Zero |
-| **시점** | 1인칭 | 1인칭 | 1인칭 | **3인칭** | 1인칭 loa | **1인칭 12세** |
-| **동기** | 돈 (생존) | 복수 (T-A) | 전복 (T-A 가족) | 거래 (가족) | 자아 회복 | 엄마 추적 |
-| **자키 등급** | 1-up | 2-3 up | 3-4 up | 4-5 up | 4-5 up (Loa) | 4-5 up (Loa-Bound) |
-| **첫 의뢰** | Sense/Net 추출 | T-A 페이롤 | Manarase wheel | Armitage 침투 | Zavijava loa | 엄마 표범 construct |
-| **엔딩 A** | 의뢰 수락 | T-A 계약 성공 | Kas 침묵 — wheel | 계약 성사 | Zavijava 통과 자아 회복 | 해방 — 렌즈 놓아줌 |
-| **엔딩 B** | 신비 의뢰 거절 | 내부자 — 비밀 | 그림자 — 가족 떠남 | 핀 사무실에서 새 가족 | 용해 — loa에 녹아듦 | 자유 소녀 — 집으로 |
-| **엔딩 C** | 소멸 — 정체성 상실 | 망각 — 기억 소거 | 파괴 — 가족 무너뜨림 | 협상 — Wintermute 거래 | 빅마마 — Angie 가족 | 빅마마의 딸 — 부두 가족 |
-| **대표 단편** | `case_jackout-30sec` | `marly_louisiana-god` | `kumiko_manarase-midnight` | `armitage_infiltration` | `wigan_zavijava` | `sally_sandii-3am` |
-| **대표 단편 (KO)** | 잭아웃 후 30초 | 루이지아나의 신 | 매나리사의 자정 | 아미티지 침투 | 위건이 본 것 | 로즈 호텔, 새벽 3시 |
-| **미션 수 (Arc)** | 5 (Arc 1-2) | 5 (Arc 2-3) | 5 (Arc 3-4) | 4 (Arc 2-5) | 4 (Arc 2-3) | 4 (Arc 2-3) |
-| **대표 무기** | Wisp T1 | Hammer T2 | Viral Sermon | (없음 — 키보드만) | (없음 — loa) | (없음 — 시그널) |
-| **테마 색상** | cyan | red | purple | gray | violet/gold | pink/gold |
-| **음악** | `matrix_rain` | `loa_drum` | `shibuya_traffic` | `hvac_hum` | `voodoo_drum_loop` | `neon_hum` |
-| **GN 씬 수** | 8 | 8 | 8 | 8 | 8 | 8 |
-| **클로징 문장** | "I am just a man. And that is enough." | "I have waited three years to find that signature." | "I will walk into a Tessier-Ashpool subsidiary..." | "The matrix is vast. The suit is small. The suit is free." | "Zavijava is Zavijava." | "Angie is twelve. Angie is free. Angie is home." |
-| **깁슨 톤 디멘션** | 떨림 (vulnerability) | 분노 (rage) | 예술 (art) | cold (detachment) | ritual (mysticism) | 직관 (childlike) |
+| 차원 | 케이 | 실 | 카스 | 수트 | 위건 | 앤지 | 샐리 |
+|---|---|---|---|---|---|---|---|
+| **Gibson 원작** | Case | Marly | Kumiko | Armitage | Wigan Ludgate | Angie Mitchell | Sally Shears |
+| **등장 작품** | Neuromancer | Count Zero | Mona Lisa Overdrive | Neuromancer | Count Zero | Count Zero | Count Zero |
+| **시점** | 1인칭 | 1인칭 | 1인칭 | **3인칭** | 1인칭 loa | 1인칭 12세 | **1인칭 cold** |
+| **동기** | 돈 (생존) | 복수 (T-A) | 전복 (T-A 가족) | 거래 (가족) | 자아 회복 | 엄마 추적 | **시장 지배** |
+| **자키 등급** | 1-up | 2-3 up | 3-4 up | 4-5 up | 4-5 up (Loa) | 4-5 up (Loa-Bound) | 5-up (Master) |
+| **첫 의뢰** | Sense/Net 추출 | T-A 페이롤 | Manarase wheel | Armitage 침투 | Zavijava loa | 엄마 표범 | **Bobby의 A.I. 매각** |
+| **엔딩 A** | 의뢰 수락 | T-A 계약 | Kas 침묵 | 계약 성사 | Zavijava 회복 | 해방 | **독점 — 유일한 시장** |
+| **엔딩 B** | 신비 거절 | 내부자 | 그림자 | 새 가족 | 용해 | 자유 소녀 | **매각 — 가족에** |
+| **엔딩 C** | 소멸 | 망각 | 파괴 | Wintermute 거래 | 빅마마 | 부두 가족 | **포식자 — 살해됨** |
+| **대표 단편** | `case_jackout-30sec` | `marly_louisiana-god` | `kumiko_manarase-midnight` | `armitage_infiltration` | `wigan_zavijava` | `sally_sandii-3am` | **`sally_sandii-3am`** |
+| **대표 단편 (KO)** | 잭아웃 후 30초 | 루이지아나의 신 | 매나리사의 자정 | 아미티지 침투 | 위건이 본 것 | 로즈 호텔, 새벽 3시 | **로즈 호텔, 새벽 3시** |
+| **미션 수 (Arc)** | 5 (Arc 1-2) | 5 (Arc 2-3) | 5 (Arc 3-4) | 4 (Arc 2-5) | 4 (Arc 2-3) | 4 (Arc 2-3) | **4 (Arc 2-4)** |
+| **대표 무기** | Wisp T1 | Hammer T2 | Viral Sermon | (키보드) | (loa) | (시그널) | **거래 — construct** |
+| **테마 색상** | cyan | red | purple | gray | violet/gold | pink/gold | **black + gold** |
+| **음악** | `matrix_rain` | `loa_drum` | `shibuya_traffic` | `hvac_hum` | `voodoo_drum_loop` | `neon_hum` | **`market_drone`** |
+| **GN 씬 수** | 8 | 8 | 8 | 8 | 8 | 8 | **8** |
+| **클로징 문장** | "I am just a man." | "I have waited three years." | "I will walk into a T-A subsidiary." | "The suit is small. The suit is free." | "Zavijava is Zavijava." | "Angie is home." | **"Sally is the market."** |
+| **깁슨 톤 디멘션** | 떨림 (vulnerability) | 분노 (rage) | 예술 (art) | cold (detachment) | ritual (mysticism) | 직관 (childlike) | **sharp (business)** |
 
 ### 1.3 캐릭터 선택 가이드 (신규 자키)
 
 | 플레이 성향 | 추천 캐릭터 | 이유 |
 |---|---|---|
 | **첫 런** | 케이 (Novice) | 가장 짧은 미션 체인, 빚 동기로 즉시 동기부여 |
-| **전투 중시** | 실 (Veteran) | T2 Hammer + 직접적 전투, 복수 동기로 명확한 목표 |
-| **가족/예술** | 카스 (Heretic) | T-A 가족 내부 plot, Viral Sermon bio 프로그램 |
-| **세계관 관찰** | 수트 (Suit) | 3인칭 cold observer, T-A/Hosaka/Wintermute corporate 시점 |
-| **신비주의/실험** | 위건 (Wigan) | Vodou loa 시점, loa의 시점에서 매트릭스 경험 |
-| **로아 가족 드라마** | 앤지 (Angie) | 12세 시점, Mama/Angie/Wigan 가족 관계, Vodou 가교 |
+| **전투 중시** | 실 (Veteran) | T2 Hammer + 직접적 전투 |
+| **가족/예술** | 카스 (Heretic) | T-A 가족 내부 plot |
+| **세계관 관찰** | 수트 (Suit) | 3인칭 cold observer |
+| **신비주의/실험** | 위건 (Wigan) | Vodou loa 시점 |
+| **로아 가족 드라마** | 앤지 (Angie) | 12세 시점, Vodou 가족 |
+| **빌런/시장관찰** | 샐리 (Sally) | 거래자 시점, Bobby 배신, construct 거래 |
 
 ### 1.2 공통 스테이지 플로우
 

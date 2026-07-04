@@ -58,14 +58,14 @@ class TestSuitMenuOption:
         assert GN_MENU_SUIT == "suit"
 
     def test_suit_in_menu_options_without_save(self) -> None:
-        """7 visible options: prologue + 5 chars + suit + back = 8 (Phase 7.1 added angie)."""
+        """8 visible options: prologue + 6 chars + suit + back = 9 (Phase 8 added sally)."""
         from roguelike_sprawl.i18n import Translator
 
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=False)
         keys = [k for k, _ in options]
-        # 7 menu keys + 1 empty BACK key
-        assert len(options) == 8
+        # 8 menu keys + 1 empty BACK key
+        assert len(options) == 9
         # Suit is the 5th option (index 4) when no save
         assert keys[4] == "5"
 
@@ -75,8 +75,8 @@ class TestSuitMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=True)
         keys = [k for k, _ in options]
-        # CONTINUE + 7 menu keys + BACK = 9 options
-        assert len(options) == 9
+        # CONTINUE + 8 menu keys + BACK = 10 options
+        assert len(options) == 10
         # Suit is the 5th menu key (index 5) with save
         assert keys[5] == "6"
 

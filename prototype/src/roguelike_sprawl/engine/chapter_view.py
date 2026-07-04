@@ -96,7 +96,7 @@ def chapter_for_character(character: str, data_dir: Path) -> ChapterData:
     """Return the chapter for the given character id.
 
     Args:
-        character: "novice" | "veteran" | "heretic" | "suit" | "wigan" | "angie"
+        character: "novice" | "veteran" | "heretic" | "suit" | "wigan" | "angie" | "sally"
         data_dir: Project data directory (containing story/chapters/)
 
     Returns:
@@ -109,6 +109,7 @@ def chapter_for_character(character: str, data_dir: Path) -> ChapterData:
         "suit": "suit",
         "wigan": "wigan",
         "angie": "angie",
+        "sally": "sally",
     }
     name = mapping.get(character, "case")
     return load_chapter(data_dir / "story" / "chapters" / f"{name}.json")
