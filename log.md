@@ -2,6 +2,24 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] docs | CHARACTER_PATHS.md 6자 갱신 (v0.5.0)
+
+- **문서 버전**: 0.4.0 → 0.5.0
+- **Angie 추가 반영**:
+  - §1.1 캐릭터 구성 (6명 표) — angie row 추가
+  - §1.2 디자인 비교 (6자) — Angie 컬럼 추가 (13개 차원 × 6명)
+  - §1.3 캐릭터 선택 가이드 — "로아 가족 드라마" 추천 추가
+- **6자 시점 분포**:
+  - 4명 1인칭 (케이/실/카스/위건) + 1명 1인칭-특수 (앤지 12세) + 1명 3인칭 (수트)
+- **6자 동기 분포**:
+  - 돈(생존)/복수(과거)/전복(미래)/거래(영구)/자아회복(내면)/엄마(가족) — 6가지 인간 동기
+- **깁슨 톤 6 디멘션**:
+  - 떨림(vulnerability)/분노(rage)/예술(art)/cold(detachment)/ritual(mysticism)/직관(childlike)
+- **6자 단편 매핑**:
+  - 케이 → case_jackout-30sec / 실 → marly_louisiana-god
+  - 카스 → kumiko_manarase-midnight / 수트 → armitage_infiltration
+  - 위건 → wigan_zavijava / 앤지 → sally_sandii-3am
+
 ## [2026-07-04] feat | Phase 7.1 — Angie Mitchell (6번째 자키) 통합
 
 - **배경**: ROADMAP 차순. 5번째 자키 Wigan의 단짝이자 loa 시그널 receiver.
