@@ -2,6 +2,25 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] fix | INDEX.md 단편 24편 등재 (xfailed 24 → 0)
+
+- **문제**: `tests/unit/test_novels.py::test_novel_in_index` 24건 XFAIL
+  - 단편 .md 파일은 존재하지만 `Fiction/derivative/sprawl-trilogy/INDEX.md`에 미등재
+  - 메시지: "YYYY-MM-DD_stem.md not in INDEX.md (INDEX may be outdated)"
+- **해결** (`Fiction/derivative/sprawl-trilogy/INDEX.md`):
+  - Short Stories 섹션 +21 entries (2026-06-23_first_trace ~ 2026-07-01_maas_heist)
+  - Novelettes 섹션 신규 (aleph_fragment, mollys_razor, ta_heist)
+  - Themes Explored + Game Integration + Production Stats 갱신
+  - 자ION 오타 → 자이온 정정 (zion_express 표시명)
+- **크로스 프로젝트 작업**: `Fiction/` 디렉토리는 git 저장소가 아니라 파일시스템 변경만 적용됨
+  - 보호 규약 (`raw/`, `wiki/` 미수정) 준수 — INDEX.md는 `derivative/` 산하 inventory
+- **검증**:
+  - `pytest tests/unit/test_novels.py`: 752 passed, 44 skipped (xfailed 24 → **0**)
+  - 전체 `pytest`: 4097 passed (이전 4073 → +24), 44 skipped, 0 xfailed
+- **메타데이터**:
+  - 캐릭터 4명 (Case/Sil/Kas + Suit 기업 픽서) 매핑 명시
+  - 39 작품 통합 카운트 (단편 36 + 중단편 3, EN+KO 페어)
+
 ## [2026-07-04] refactor | combat_view 분할 마무리 + 커밋 (474a3fa 누락분)
 
 - **배경**: 474a3fa (Option A 분할 사이클)에서 combat_view.py 분할이 누락되어 working tree에 머물러 있었음
