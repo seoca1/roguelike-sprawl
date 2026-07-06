@@ -2,6 +2,25 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] design | Salvation Phase × Stage × Epilogue 연계성 분석
+
+- **분석 문서** (`design/scenario/SALVATION_PHASE_INTEGRATION.md`):
+  - **3-layer story architecture** (Arc → Chapter → Scene) + 별도 Stage/ChapterState 계층
+  - **현황 매핑**: Stage(13) ↔ Run Stage(13) ↔ ChapterState(14) — 부분적 통합
+  - **Salvation Phase** = "현재 어디에도 명시적 정의 없음" → 통합 정의 제안
+  - **9자 × Epilogue** = 9 epilogue 씬 제안 (각 1줄 클로징)
+  - **신규 ChapterState 3개** (SALVATION_INTRO/EPILOGUE/FINAL) + **신규 Stage 1개** (SALVATION_EPILOGUE)
+  - **구현 로드맵** Phase 9-A (7-8일): 9 epilogue 씬 + Salvation 엔진
+- **ADR Draft** (`decisions/0090-salvation-phase-integration.md`):
+  - 3가지 옵션 비교 (A. 없음, B. 챕터 5만, C. epilogue만)
+  - **선택안 D**: 통합 (A+B+C)
+  - 7-8일 구현 계획
+  - 콘셉 / 컨텍스트 / 결과 / 인용
+- **연계성 검증**:
+  - ✅ 잘 통합: L1↔L2, L2↔L3, Stage↔Run Stage, Stage↔ChapterState
+  - 🟡 부분 통합: Stage(13) ↔ Phase(5) 1:1 매핑 약함
+  - 🔴 미통합: Salvation Phase 정의 부재, epilogue 0개
+
 ## [2026-07-04] docs | SESSION_SUMMARY.md v0.2.0 갱신 (9자, 23 commits, 4196 tests)
 
 - **v0.1.0 → v0.2.0**: 이번 세션 전체 작업 반영
