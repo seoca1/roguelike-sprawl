@@ -101,7 +101,7 @@ class TestLoadSceneChainEnding:
     def test_ending_a_returns_4_scenes(self) -> None:
         """Each character has 4 Ending A scenes."""
         for char in ("novice", "veteran", "heretic"):
-            chain = load_scene_chain(SCENES_DIR, char, ending="A")
+            chain = load_scene_chain(SCENES_DIR, char, ending="A", max_order=8)
             assert len(chain) == 4, f"{char} ending A: expected 4, got {len(chain)}"
 
     def test_ending_b_returns_2_scenes(self) -> None:
@@ -112,7 +112,7 @@ class TestLoadSceneChainEnding:
 
     def test_default_ending_is_a(self) -> None:
         """No ending param → defaults to A (4 scenes)."""
-        chain = load_scene_chain(SCENES_DIR, "novice")
+        chain = load_scene_chain(SCENES_DIR, "novice", max_order=8)
         assert len(chain) == 4
         for s in chain:
             assert s.ending == "A"
