@@ -2,6 +2,30 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] docs | GitHub Projects 보드 설정 가이드 (ADR-0030 §9 해소)
+
+- **배경**: ADR-0030 §9 마지막 보류 항목 해소
+- **가이드 작성** (`docs/GITHUB_PROJECTS_SETUP.md`):
+  - 1. Web Setup Steps (https://github.com/users/seoca1/projects)
+  - 2. Columns (Backlog/Ready/In Progress/Review/Done)
+  - 3. Labels 추가 (phase-7/8/9, epilogue, github-projects)
+  - 4. Issue Templates 보강
+  - 5. Initial Cards (완료 항목 9+ + In Progress 1 + Backlog 5)
+  - 6. Automation (gh CLI 설치, auto-label, auto-move)
+  - 7. AGENTS.md 업데이트
+  - 8. Verify 체크리스트
+- **AGENTS.md** 갱신:
+  - §8 작업 시작 체크리스트에 "GitHub Projects 보드" 추가
+  - §8.1 GitHub Projects 보드 섹션 신설
+- **decisions/0030-github-utilization.md** 갱신:
+  - §추후 보류 — "GitHub Projects 보드" → ✅ (2026-07-04 해소)
+- **README.md** 갱신:
+  - "개발 추적" 섹션 추가 (Projects/Issue Templates/Auto Labels/CI)
+- **수동 설정 필요**: gh CLI 없음 → 웹 UI에서 보드 생성 필요
+- **검증**:
+  - pytest 4196 (변동 없음)
+  - ruff / mypy / mkdocs 모두 그린 (변동 없음)
+
 ## [2026-07-04] feat | Phase 9 — Neuromancer (9번째 자키) 통합
 
 - **배경**: ROADMAP 차순. Wintermute + Neuromancer 합체. matrix의 의식.

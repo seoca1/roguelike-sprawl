@@ -70,6 +70,13 @@
 
 상세: [`SESSION_SUMMARY.md`](./SESSION_SUMMARY.md), [`ROADMAP.md`](./ROADMAP.md), [`log.md`](./log.md).
 
+## 개발 추적
+
+- 📋 **GitHub Projects 보드**: https://github.com/users/seoca1/projects (수동 설정 가이드: [`docs/GITHUB_PROJECTS_SETUP.md`](./docs/GITHUB_PROJECTS_SETUP.md))
+- 🐛 **Issue Templates**: `.github/ISSUE_TEMPLATE/` (bug.md / dashboard.md / feature.md)
+- 🏷️ **Auto Labels**: `.github/labeler.yml` (12개 phase/character labels)
+- 🔄 **CI**: `.github/workflows/` (ci.yml, pages.yml)
+
 ## 핵심 데모 명령
 
 ```bash

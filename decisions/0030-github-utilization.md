@@ -287,7 +287,7 @@ GitHub → Releases → Draft new release
 
 ### 추후 보류
 
-- GitHub Projects 보드 (Phase 6+ 작업 추적용)
+- ✅ **GitHub Projects 보드** (2026-07-04 해소) — `docs/GITHUB_PROJECTS_SETUP.md` (수동 설정 가이드)
 - v1.0.0 정식 release (Phase 6 완료 시)
 - ✅ `mkdocs --strict` 빌드 (2026-07-04 해소)
   - 워닝 41건 → 0건

@@ -239,10 +239,22 @@ uv run python scripts/play.py --lang ko
 
 - [ ] `SESSION_SUMMARY.md` — 현재 세션 요약 (가장 먼저)
 - [ ] `ROADMAP.md` 의 "Current Phase" 확인
+- [ ] **GitHub Projects 보드** — https://github.com/users/seoca1/projects (이슈 카드 확인)
 - [ ] `decisions/README.md` 에서 미해결 결정 확인
-- [ ] `CHARACTER_PATHS.md` — 7자 비교표
+- [ ] `CHARACTER_PATHS.md` — 캐릭터 비교
 - [ ] `index.md` 에서 관련 위키 페이지 찾기
 - [ ] 작업 완료 후 `log.md` 갱신
+
+### 8.1 GitHub Projects 보드 (ADR-0030 §9)
+
+**보드 URL**: https://github.com/users/seoca1/projects (생성 필요)
+
+Web UI에서 보드 생성:
+1. https://github.com/users/seoca1/projects → "New classic project"
+2. Name: "Roguelike Sprawl Development"
+3. Columns: Backlog / Ready / In Progress / Review / Done
+
+상세 가이드: [`docs/GITHUB_PROJECTS_SETUP.md`](./docs/GITHUB_PROJECTS_SETUP.md)
 
 ## 9. 작업 종료 체크리스트
 
