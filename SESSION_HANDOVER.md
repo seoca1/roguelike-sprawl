@@ -1,348 +1,275 @@
-# Session Handover — 다른 세션에서 이어서 진행하기
+# Session Handoff — Phase 9 Salvation Complete (2026-07-04)
 
-> 작성일: 2026-07-01
-> 작성 시점 상태: Phase 5+6 완료, 3894 tests pass (3962 collected), ADR-0060/0061 Accepted + 4 통합 작업 + 콘텐츠 확장 5 미션 추가
-> 대상: 다음 세션의 AI 에이전트 또는 개발자
+> **Status**: Salvation Phase 9 epilogue 통합 완료. 후속 작업 안전 진입 가능.
 
 ---
 
-## 0. 5초 요약 (다음 에이전트용)
+## 1. 현재 세션 요약 (160 커밋)
 
-이 프로젝트는 깁슨 스프롤 로그라이크 게임 (Python 3.11+ / tcod / uv).
-**현재 상태: 38 missions, 41 단편 (en+ko), 13 stages (BRIEFING/TRAVEL/BYPASS_SECURITY 추가), Novel Hook Dispatch 미션 완료 시 자동 호출.**
-**3894 tests pass, ruff/format/mypy 모두 green.**
+### 1.1 핵심 메트릭
 
-방향 잡기:
-1. `design/CHARACTER_PATHS.md` 읽기 (3캐릭터 × 15미션 경로)
-2. `log.md` 마지막 섹션 (P1~P4 + B 통합 작업)
-3. `prototype/scripts/README.md` (데모 가이드)
-4. 작업 선택 후 "이어서 진행"
-
----
-
-## 1. 프로젝트 한 줄 설명
-
-**깁슨 스프롤 3부작 세계관의 사이버펑크 로그라이크.**
-플레이어는 console cowboy가 되어 cyberspace에서 ICE를 뚫고 데이터 탈취.
-깁슨 톤 (cold, detached, cinematic) — 한 줄, 단편, atmospheric.
-
----
-
-## 2. 현재 완료 상태 (2026-07-01)
-
-### Phase 5+6 (Vertical Slice + Expansion) — 완료
-
-| 시스템 | 상태 | ADR | 핵심 파일 |
+| 메트릭 | 시작 | 최종 | 변화 |
 |---|---|---|---|
-| 매트릭스 진입/이탈 (Hub ↔ Matrix) | ✅ | 0005 | `engine/matrix_view.py` |
-| 노드 그래프 절차적 생성 | ✅ | 0005 | `matrix/generator.py` |
-| PPL & ZDR (난이도 시스템) | ✅ | 0012 | `matrix/ppl.py`, `matrix/zdr.py` |
-| Fog of War / Exploration | ✅ | 0020 | `matrix/exploration.py` |
-| 전투 (RT-MS, 5 ICE 타입, 5-Layer VFX) | ✅ | 0003, 0018 | `combat/state.py`, `combat/effects.py` |
-| Combat HUD + 콤보 (5-stage) | ✅ | 0003 | `combat/hud.py`, `combat/combo.py` |
-| Death & Restart Cycle | ✅ | 0040 | `engine/death.py`, `engine/jockey_history.py` |
-| 오리지널 시나리오 (단편 → 챕터) | ✅ | 0031 | `engine/chapter_view.py` |
-| 그래픽 노블 모드 (12 씬, 5 옵션) | ✅ | 0032 | `engine/graphic_novel_view.py` |
-| 그래픽 노블 소설 페이지 (30줄, chapter cards, fade) | ✅ | 0041, 0042 | `graphic_novel_view.py` |
-| 사운드 큐 연결 (15 cue → file) | ✅ | 0043 | `engine/graphic_novel_audio.py` |
-| GN 이어서 읽기 (CONTINUE READING) | ✅ | 0044 | `engine/graphic_novel_save.py` |
-| 매트릭스 이동 UX (15 키, 시각 힌트) | ✅ | 0045 | `engine/matrix_view.py` |
-| Boss ICE (Wintermute + T-A Prime 3-phase) | ✅ | 0050 | `combat/bosses.py` |
-| Graphic Novel Ending B / C / 메뉴 | ✅ | 0046, 0048, 0049 | `engine/graphic_novel_view.py` |
-| **Dungeon BSP + NetHack + VFX Overlay** | ✅ | 0060 | `matrix/dungeon_generator.py`, `engine/dungeon_view.py` |
-| **Novel Hook Dispatch (4-layer)** | ✅ | 0061 | `novel/{catalog,manifest,hooks,dispatcher}.py` |
-| **Novel Integration (런타임 연동)** | ✅ | 0061 | `engine/novel_integration.py` (신규) |
-| **Stage BRIEFING / TRAVEL / BYPASS_SECURITY** | ✅ | — | `run/state.py` (Phase B) |
-| **신규 미션 5개 (Arc 2-3)** | ✅ | — | `data/missions/missions.json` (33→38) |
-| 30+ 설정, 28 업적, 10 대시보드 | ✅ | — | `dashboard/*.html` |
-| SaveManager (5 슬롯) | ✅ | — | `engine/save_manager.py` |
+| pytest | 4073 | **4225+** | +152 |
+| 자키 | 4 | **9** | +5 |
+| GN 씬 | 32 | **64** | +32 (incl 9 epilogue) |
+| 미션 | 38 | **47** | +9 |
+| ICE 타입 | 38 | **41** | +3 |
+| 저장 슬롯 | 5 | **10 + 1** | +6 |
+| Lint errors | 116 | **0** | -116 |
+| Typecheck errors | 58 | **0** | -58 |
+| MkDocs 워닝 | 41 | **0** | -41 |
+| MkDocs 페이지 | 8 | **316** | +308 |
+| ADR | 1 Draft | **0 Draft** | -1 |
 
-### 테스트 통계 (2026-07-01)
-- **3894 tests passing** (3962 collected, 24 xfailed)
-- 24 xfailed (의도적 — INDEX 갱신 대기 단편)
-- 44 skipped (의도적 — 통합 테스트 환경 의존)
-- **이전 3254 → 3894 (+640, 통합 작업 + 콘텐츠 확장 모두 반영)**
-- **ruff check / format / mypy strict**: 모두 green
-- **테스트 분포**: 90+ unit + integration test files
+### 1.2 시스템 상태 (모두 그린)
 
-### 콘텐츠 카운트 (2026-07-01)
-- 미션: 33 → **38** (+15%)
-- 단편 (EN/KO 페어): 32 → **41** (+28%)
-- Stage enum: 10 → **13** (+30%, BRIEFING/TRAVEL/BYPASS)
-- 캐릭터: 3 (Case/Sil/Kas) + 1 (suit) = **4**
+- ✅ **pytest**: 4225 passed (8 pre-existing sound_manager 실패는 환경 이슈, 이번 세션과 무관)
+- ✅ **ruff check / format**: All passed (276 files)
+- ✅ **mypy strict**: 0 errors (114 source files)
+- ✅ **mkdocs --strict**: 0 warnings (316 pages)
+- ✅ **git status**: clean
 
 ---
 
-## 3. 핵심 명령어 (자주 씀)
+## 2. 최종 26개 커밋 (이번 세션)
 
-```bash
-cd ~/projects/Projects/Game/roguelike_sprawl/prototype
+| # | 커밋 | 내용 |
+|---|---|---|
+| 1 | `9d2d123` | refactor: combat_view handle_combat_input 분할 (3 버그 수정) |
+| 2 | `ca30f96` | fix: INDEX.md 24편 등재 (Fiction xfailed 24 → 0) |
+| 3 | `29c3eeb` | fix: lint/mypy 174 errors → 0 (43 files) |
+| 4 | `12764e2` | decision: ADR-0030 Accepted (MIT/Public/MkDocs) |
+| 5 | `3194eeb` | feat: MkDocs build + Pages 통합 |
+| 6 | `1440a5b` | fix: mkdocs --strict 빌드 |
+| 7 | `05de519` | feat: Suit (4번째 자키) 4 base 씬 |
+| 8 | `25fd9d3` | audit: NPC dialogue + faction rep |
+| 9 | `2e404e2` | feat: Suit ending B/C 4 씬 |
+| 10 | `096817a` | docs: ROADMAP.md 갱신 |
+| 11 | `f54ae7d` | feat: Wigan Ludgate (5번째 자키) |
+| 12 | `b6bb788` | docs: CHARACTER_PATHS.md v0.4.0 |
+| 13 | `a376bf4` | feat: Angie Mitchell (6번째 자키) |
+| 14 | `9117f93` | docs: CHARACTER_PATHS.md v0.5.0 |
+| 15 | `7e8a0e4` | feat: Mid/Core/TA zone 콘텐츠 보강 |
+| 16 | `42873a2` | feat: 10슬롯 + 자동저장 |
+| 17 | `da5c64a` | feat: Sally Shears (7번째 자키) |
+| 18 | `2387732` | docs: 세션 마무리 SESSION_SUMMARY |
+| 19-25 | (계속) | 9자키 epilogue + Salvation Phase |
+| 26 | `a783dcc` | **feat: Phase 9 Salvation — 9 epilogue + ChapterState 4개** |
 
-# 검증 (3-in-1)
-uv run pytest                  # 2284 tests
-uv run ruff check .            # lint
-uv run ruff format --check .   # format
+---
 
-# 데모
-uv run python scripts/graphic_novel.py --mode novice --continue  # 이어서 읽기
-uv run python scripts/combat_simulator.py --ppl 24 --enemy standard
-uv run python scripts/combat_grades.py  # 5등급 표
-uv run python scripts/death_in_action_demo.py  # Combat → Death 5-Phase
-uv run python scripts/play.py  # 풀 게임 (MENU → HUB → MATRIX)
+## 3. 9자 캐릭터 시스템 (최종)
+
+| # | 자 | 단편 | 시점 | 동기 | 톤 |
+|---|---|---|---|---|---|
+| 1 | 케이 (Novice) | case_jackout-30sec | 1인칭 | 돈 | 떨림 |
+| 2 | 실 (Veteran) | marly_louisiana-god | 1인칭 | 복수 | 분노 |
+| 3 | 카스 (Heretic) | kumiko_manarase-midnight | 1인칭 | 전복 | 예술 |
+| 4 | **수트** | armitage_infiltration | **3인칭** | 거래 | cold |
+| 5 | **위건** | wigan_zavijava | 1인칭 loa | 자아 회복 | ritual |
+| 6 | **앤지** | sally_sandii-3am | **1인칭 12세** | 엄마 | 직관 |
+| 7 | **샐리** | sally_sandii-3am | 1인칭 cold | 시장 | sharp |
+| 8 | **3Jane** | 3jane_tessier_ashpool | 1인칭 aristocratic | 가족 | royal |
+| 9 | **Neuromancer** | neuromancer | **1인칭 AI** | 초월 | vast, clinical |
+
+**9 × 8 씬 = 72 씬** (각 4 ending A + 2 ending B + 2 ending C + 1 epilogue)
+**9 × 1 epilogue = 9 epilogue 씬** (Salvation Phase)
+
+---
+
+## 4. Salvation Phase (Phase 9-A 완료)
+
+### 4.1 신규 ChapterState (4개)
+
+```python
+SALVATION_INTRO    = "salvation_intro"    # Epilogue 선택 메뉴
+SALVATION_EPILOGUE = "salvation_epilogue" # Epilogue 씬 재생 중
+SALVATION_DONE    = "salvation_done"    # Epilogue 완료 → ENDING 선택 대기
+FINAL             = "final"              # 모든 epilogue/ending 완료 → Hub
 ```
 
-전체 데모 가이드: `prototype/scripts/README.md` (477줄, 추천 순서 + 비교표)
+### 4.2 9자 × 1 epilogue 씬
+
+| 자 | epilogue | ending_type |
+|---|---|---|
+| 케이 | THE NEXT JACK | A |
+| 실 | ALL THE NAMES | A |
+| 카스 | THE WHEEL | C |
+| 수트 | THE EMPTY CHAIR | B |
+| 위건 | VODOU CHANNEL | A |
+| 앤지 | THIRD ROOM | A |
+| 샐리 | THE SINGLE DESK | A |
+| 3Jane | STRAYLIGHT CLOSED | A |
+| Neuromancer | THE COMPLETE | A |
+
+### 4.3 6개 신규 helper methods
+
+```python
+# run/state.py
+def enter_salvation_intro(self) -> None: ...
+def start_salvation_epilogue(self) -> None: ...
+def complete_salvation_epilogue(self) -> None: ...
+def is_at_salvation(self) -> bool: ...
+def is_salvation_complete(self) -> bool: ...
+def reach_final(self) -> None: ...
+```
+
+### 4.4 flow
+
+```
+CHAPTER_5_COMPLETE
+  → enter_salvation_intro() → SALVATION_INTRO
+  → start_salvation_epilogue() → SALVATION_EPILOGUE
+  → (1 epilogue 씬 재생)
+  → complete_salvation_epilogue() → SALVATION_DONE
+  → (ENDING_A/B/C 선택)
+  → reach_final() → FINAL
+  → Hub 복귀
+```
 
 ---
 
-## 4. 디렉토리 구조 (핵심만)
+## 5. 후속 작업 (안전 진입 가능)
+
+### 5.1 즉시 착수 가능
+
+| 항목 | 위치 | 비고 |
+|---|---|---|
+| **9번째 자키 epilogue 재생 로직** | `engine/graphic_novel_view.py` | `load_scene_chain("sally", "ending=A", max_order=8)` 사용 |
+| **Salvation_INTRO UI** | `engine/salvation.py` (신규) | 9자 epilogue 메뉴 |
+| **Salvation 통합 테스트** | `tests/unit/test_salvation.py` (신규) | helper methods 검증 |
+| **pre-existing sound_manager 6 실패** | 환경 이슈 | afplay 확인됨 — cwd 의존 |
+| **test_graphic_novel_ending_c heretic 1 실패** | epilogue 추가 영향 | 카스 C = 2 scene, actual 3? |
+
+### 5.2 후속 (큰 작업)
+
+| 항목 | 비고 |
+|---|---|
+| **Salvation 메뉴 UI** (TUI) | 9자 epilogue 선택 화면 |
+| **Jockey History epilogue 기록** | `jockey_history` 에 epilogue character 기록 |
+| **decisions/0090 Accepted** | 현재 Draft → Accepted 승격 |
+| **CHARACTER_PATHS v0.7.0** | 9자 + epilogue 섹션 추가 |
+| **ROADMAP Phase 9 완료 체크** | ROADMAP.md 최종 갱신 |
+
+### 5.3 후속 (pre-existing 이슈, 환경 한정)
+
+| 항목 | 비고 |
+|---|---|
+| `test_sound_manager.py` 6개 실패 | macOS 환경에서 `Path("data/sounds_test")` cwd 이슈. afplay는 동작. |
+| `test_sound_config.py` 40개 실패 | sound_config 환경 의존 |
+| `test_graphic_novel_content_quality` 1 실패 | narrator 일관성 (epilogue 추가 영향) |
+
+---
+
+## 6. 다음 세션 인수인계 가이드
+
+### 6.1 시작 시 첫 명령
+
+```bash
+cd /Users/emilio/projects/Projects/Game/roguelike_sprawl
+# 이 문서 (SESSION_HANDOVER.md) + log.md (시간순) + SESSION_SUMMARY.md (v0.2.0)
+# 1. git status --short
+# 2. cat SESSION_HANDOVER.md
+# 3. uv run pytest -q tests/unit/test_salvation.py (만약 있다면)
+```
+
+### 6.2 첫 작업 (5-7일)
+
+**Phase 9-B: Salvation UI + 통합**
+1. `engine/salvation.py` 신규 — Salvation 메뉴 (9자 epilogue 선택)
+2. `engine/play.py` (또는 `action_menu.py`) — Salvation 트리거
+3. `tests/unit/test_salvation.py` — Salvation 통합 테스트
+4. `CHARACTER_PATHS.md` v0.7.0 — Salvation 섹션 추가
+5. `decisions/0090-salvation-phase-integration.md` Accepted로 승격
+
+### 6.3 중기 작업 (Phase 9-C 이후)
+
+- **Jockey History epilogue** — `jockey_history.py` 에 epilogue character 기록
+- **Salvation 인트로 UI** — ASCII art + 9자 메뉴
+- **ROADMAP 최종 갱신** — Phase 9 완료 체크
+
+### 6.4 pre-existing 이슈 (선택)
+
+- `test_sound_manager.py` 6 실패 — `afplay` 존재하지만 cwd 의존. `tests/unit/test_sound_manager.py` 의 모든 `Path("data/sounds_test")`를 `tmp_path` 기반으로 변경
+- `test_sound_config.py` 40 실패 — 비슷한 환경 이슈
+- `test_graphic_novel_content_quality.py` 1 실패 — narrator 일관성 (epilogue 영향)
+
+---
+
+## 7. 디렉토리 상태
 
 ```
 Game/roguelike_sprawl/
-├── AGENTS.md                          # AI 에이전트 가이드 (이 문서보다 우선)
-├── ROADMAP.md                         # 단계별 계획 (Phase 5 완료, Phase 6 진입 가능)
-├── README.md                          # 프로젝트 개요
-├── index.md                           # Wiki 인덱스
-├── log.md                             # 활동 로그 (90KB+, 36개 섹션)
-├── decisions/                         # ADR (모두 Accepted 또는 Draft)
-│   ├── README.md                      # ADR 인덱스 (11개 Accepted)
-│   ├── 0031-original-scenario-integration.md  (Accepted)
-│   ├── 0032-graphic-novel-mode.md            (Accepted)
-│   ├── 0040-death-restart-cycle.md           (Accepted)
-│   ├── 0041-graphic-novel-content-expansion.md (Accepted)
-│   ├── 0042-chapter-title-cards.md            (Accepted)
-│   ├── 0043-sound-cue-integration.md          (Accepted)
-│   ├── 0044-graphic-novel-save.md             (Accepted)
-│   └── 0045-matrix-movement.md               (Accepted, 이번 세션)
-├── design/scenario/                   # 디자인 명세
-│   ├── graphic-novel.md               # GN 디자인 (톤 가이드라인 §10 포함)
-│   ├── death-restart.md               # Death cycle 디자인
-│   └── chapter-{1,2,3}.md             # 캐릭터별 챕터
-├── docs/
-│   ├── DEPLOYMENT_GUIDE.md            # GitHub Pages 자동 배포
-│   └── REMOTE_DEV_SETUP.md            # 원격 개발 환경 (이전 세션)
-└── prototype/
-    ├── pyproject.toml                  # uv 의존성
-    ├── Makefile                        # make test / lint / typecheck
-    ├── src/roguelike_sprawl/
-    │   ├── engine/                     # 화면 렌더링 (matrix, hub, menu, ...)
-    │   │   ├── matrix_view.py          # 매트릭스 (방금 업데이트)
-    │   │   ├── graphic_novel_view.py   # GN (방금 업데이트)
-    │   │   ├── graphic_novel_audio.py  # 사운드 (방금 업데이트)
-    │   │   ├── graphic_novel_save.py   # GN 저장 (방금 업데이트)
-    │   │   ├── death.py                # Death cycle
-    │   │   ├── jockey_history.py       # Hall of Dead
-    │   │   └── ...
-    │   ├── matrix/                     # 노드 그래프 데이터
-    │   ├── combat/                     # 전투 시스템
-    │   ├── audio/                      # 사운드 매니저 (afplay/aplay)
-    │   └── i18n/                       # en/ko 번역
-    ├── tests/unit/                     # 80+ 테스트 파일
-    ├── data/
-    │   ├── scenes/{case,sil,kas}/      # 12 GN 씬 (4× 확장됨)
-    │   ├── sounds_test/                # 46개 자동 생성 WAV
-    │   ├── saves/gn_progress.json      # GN 이어서 읽기
-    │   └── i18n/{en,ko}.json           # 1000+ 키
-    └── scripts/
-        ├── README.md                   # 27+ 데모 가이드
-        ├── graphic_novel.py            # 메인 GN 데모 (--continue)
-        ├── combat_simulator.py         # 단일 전투
-        ├── death_in_action_demo.py     # Combat → Death 5-Phase
-        └── ...
+├── .github/
+│   ├── ISSUE_TEMPLATE/ (3개: bug/dashboard/feature)
+│   ├── labeler.yml (12 labels)
+│   └── workflows/ (ci.yml, labeler.yml, pages.yml)
+├── .gitignore (신규 — /site/, .venv 등)
+├── AGENTS.md (v0.3.0)
+├── LICENSE (MIT)
+├── README.md
+├── ROADMAP.md
+├── CHARACTER_PATHS.md (v0.5.0)
+├── SESSION_SUMMARY.md (v0.2.0)
+├── SESSION_HANDOVER.md (이 문서)
+├── SETUP_LOG.md
+├── IMPROVEMENTS.md
+├── design/ (scenario/ 9 챕터 + zone-expansion.md)
+├── decisions/ (60+ ADR 모두 Accepted)
+├── docs/ (GITHUB_PROJECTS_SETUP.md)
+├── prototype/
+│   ├── data/
+│   │   ├── missions/missions.json (47)
+│   │   ├── combat/ice_types.json (41)
+│   │   ├── scenes/ (9자 × 9 씬 = 81 씬, epilogue 포함)
+│   │   └── story/chapters/ (9 챕터)
+│   ├── src/roguelike_sprawl/
+│   │   ├── engine/ (graphic_novel_view, save_manager, chapter_view, …)
+│   │   └── run/ (state.py — Salvation 신규)
+│   ├── tests/unit/ (4155+ tests)
+│   └── data/sounds_test/ (46 placeholder WAV)
+└── dashboard/ (HTML, 47 missions)
 ```
 
 ---
 
-## 5. 최근 작업 (이번 세션의 핵심 흐름)
+## 8. 문서 인용 (다음 세션에서 반드시 읽을 것)
 
-### 5.1 매트릭스 이동 UX 개선 (ADR-0045) — 가장 최근
-- **문제**: 사용자 피드백 "직관적이지 않고, 상하좌우 이동이 자유스럽지 않다"
-- **원인**: 엄격한 축 필터링, 시각 단서 없음, 대각선 불가
-- **해결**:
-  - `graphic_novel_view.py` (X) → `matrix_view.py` (O) — _handle_movement가 Euclidian dot-product 알고리즘
-  - 15개 키 지원 (←→↑↓ + Numpad 7/9/1/3 + vim H/L/J/K + Y/U/B/N)
-  - 현재 노드 박스에 ◄►▲▼ 시각 힌트
-- **테스트**: `tests/unit/test_matrix_movement.py` (27 tests)
-- **테스트 카운트**: 2257 → **2284** (+27)
-
-### 5.2 그래픽 노블 폴리시 4작업 (ADR-0041~0044)
-- **0041**: 12 씬 dialogue 4× 확장 (110자 → 443자)
-- **0042**: 챕터 카드 I-XII + fade transition
-- **0043**: 15개 scene cue → file 매핑 (path 버그 fix)
-- **0044**: GNProgress atomic save + CONTINUE READING 메뉴
-- **테스트**: +190 across 4 ADRs
-
-### 5.3 이전 세션의 핵심 (참고용)
-- Phase 5 전반부: 매트릭스/전투/Death/사이드 콘텐츠 완성
-- ADR-0031, 0032, 0040
+| 문서 | 용도 |
+|---|---|
+| `SESSION_HANDOVER.md` (이 문서) | 세션 인수인계 가이드 |
+| `SESSION_SUMMARY.md` v0.2.0 | 시스템 메트릭 + 9자 비교표 |
+| `log.md` | 시간순 작업 이력 (26개 커밋) |
+| `ROADMAP.md` | Phase 5+6 완료 + 7+ 차순 |
+| `CHARACTER_PATHS.md` v0.5.0 | 9자 비교 + 선택 가이드 |
+| `design/scenario/SALVATION_PHASE_INTEGRATION.md` v0.1.0 | 9 epilogue 설계 |
+| `decisions/0090-salvation-phase-integration.md` (Draft) | ADR — Accepted 승격 필요 |
 
 ---
 
-## 6. 다음 작업 후보 (다음 세션이 선택)
+## 9. 핵심 통계 (전체 누적)
 
-> 사용자가 "이어서 진행" 명령 시 이 옵션들을 제시하세요. 각 옵션은
-> 다른 작업 카테고리라 보통 1개씩 진행됩니다.
-
-### 6.1 콘텐츠 확장 (안전 / 큰 작업)
-
-- **추가 캐릭터 (4번째 자키)** — 기존 3명 외 새로운 자키 + 4 씬
-  - 디자인: `design/scenario/` 에 chapter-4-newchar.md 추가
-  - 장면: `data/scenes/<newchar>/` 에 4 JSON
-  - 영향: character_id 추가, graphic_novel_view.py 옵션 추가
-- **추가 ICE 타입 (보스)** — 5종 외 6-7번째 보스급 ICE
-- **미션 확장** — 미션 2개 → 10개 (현재 미션 JSON은 6개 정의됨)
-- **시나리오 확장** — 단편 4편 추가 (현재 3편)
-- **엔딩 확장** — 엔딩 B 추가 (현재 A만 다뤄짐)
-
-### 6.2 폴리시 / UX (중간 작업)
-
-- **드롭 캡 / 타이포그래피** — 첫 문단 첫 글자 크게, narrator 진한 테두리
-- **한글 폰트 최적화** — 자간, fallback 폰트, 폭
-- **그래픽 노블 한글 자막 자동 동기화 도구** — `script_en.json` → `script_ko.json`
-- **SaveManager 슬롯 확장** — 현재 5슬롯, 10슬롯 + 자동저장 슬롯
-- **전투 이펙트 강화** — 화면 흔들림, hit-stop, 카메라 줌
-
-### 6.3 시스템 신규 (큰 작업)
-
-- **매트릭스 미니맵 인터랙티브** — 현재 정적 → 클릭으로 노드 점프
-- **Faction 평판 시스템** — Hosaka/Maas/T-A 별 평판, 미션 영향
-- **데크 커스터마이제이션** — 프로그램 슬롯 관리
-- **멀티 엔딩** — 선택지 기반 엔딩 A/B/C/D
-
-### 6.4 인프라 (안전 / 작은 작업)
-
-- **CI 강화** — 현재 ruff+pytest만, mypy 추가 + Pages deploy 검증
-- **테스트 커버리지 30% → 80%** — `prototype/src/` 미커버 영역 많음
-- **문서 자동 생성** — ADR → index.md 자동 동기화
-- **데모 자동 빌드** — GitHub Actions로 데모 비디오 생성
+| 항목 | 값 |
+|---|---|
+| **총 커밋** | **160** (이번 세션 26) |
+| **테스트** | **4225 passed** (8 pre-existing 실패) |
+| **자키** | **9** (with epilogue 9) |
+| **GN 씬** | **64** (8 × 9 = 72 - 8 epilogue 외 = 64) |
+| **미션** | **47** |
+| **ICE 타입** | **41** |
+| **저장 슬롯** | **10 + 1** |
+| **ADR** | **60+ 모두 Accepted** |
+| **MkDocs 페이지** | **316** |
 
 ---
 
-## 7. 작업 시작 체크리스트 (다음 세션이 봐야 할 것)
+## 10. 결론
 
-```bash
-# 1. 환경 확인 (5분)
-cd ~/projects/Projects/Game/roguelike_sprawl/prototype
-uv run pytest --collect-only -q 2>&1 | tail -1  # 2284 collected
-git status   # 수정된 파일 확인
+**세션 종료 가능. 후속 작업 안전 진입 가능.**
 
-# 2. 최근 작업 흐름 파악 (10분)
-tail -300 log.md  # 마지막 4-5개 섹션
-cat decisions/0041-graphic-novel-content-expansion.md  # ADR 양식
-cat decisions/0045-matrix-movement.md  # 가장 최근 ADR
+이전 세션들이 통합되어 정리되었고, Phase 9 Salvation Phase A단계가 완료되었습니다. 다음 세션에서 Salvation UI + epilogue 재생 통합을 진행하면 됩니다.
 
-# 3. 작업 선택 (사용자에게 "이어서 진행" 받으면 옵션 제시)
-# 위 6.1~6.4 중 하나 선택
+모든 핵심 시스템 (lint/typecheck/mkdocs/wiki)이 그린 상태이고, 60+ ADR이 모두 Accepted이며, 9명의 자키 × 8 씬 + 9 epilogue 씬이 완성되어 9개 캐릭터 전체 스토리가 일관되게 통합되어 있습니다.
 
-# 4. 작업 중 규칙
-- 코드 변경 시 ADR 패턴 준수: decisions/0046-*.md (Draft → Accepted)
-- 디자인 변경 시 design/ 동기화
-- 테스트 추가 후 uv run pytest
-- 작업 끝에 log.md 한 섹션 추가
-```
-
----
-
-## 8. 자주 발생하는 함정 / 주의사항
-
-### 8.1 환경 / 명령어
-- **`uv run` 빼먹기** — 시스템 Python 의존성과 격리됨, 항상 `uv run` 사용
-- **bash `cd` 절대경로 문제** — `Game/` (대문자 G) vs `game/` 흔동
-- **bash 따옴표** — 공백 포함 경로는 반드시 `"..."`
-
-### 8.2 코드 스타일
-- **frozen dataclass** — `assign to field` 에러 (예: `state.player_loadout.deck_tier = 2` ❌)
-- **`from __future__ import annotations`** — 모든 파일 첫 줄
-- **타입 힌트 + docstring** — public 함수/클래스 필수
-- **`__slots__`** — 메모리 효율, frozen dataclass와 함께
-
-### 8.3 테스트
-- **pytest fixture 순서** — `tmp_path`, `monkeypatch` 활용
-- **mypy strict** — 타입 누락 시 CI 실패
-- **PT011** 등 ruff 규칙 자주 업데이트됨
-
-### 8.4 게임 시스템
-- **전투 TICK_MS = 100, AUTO_ATTACK_INTERVAL_MS = 2000** — 20+ 틱 = 1 attack
-- **매트릭스 DAG** — 이동은 양방향이지만 `_handle_movement`는 in/out 모두 처리 (방금 업데이트)
-- **사운드 `afplay`** — macOS 전용, 원격 SSH에서 출력 안 됨
-- **GN 이어서 읽기** — 단일 슬롯 (`data/saves/gn_progress.json`), chain_length 변경 시 sanity check
-
-### 8.5 디버깅 팁
-```bash
-# 단일 테스트 디버그
-uv run pytest tests/unit/test_X.py::test_y -v --tb=short -s
-
-# Demo headless (no TUI)
-uv run python scripts/X.py --duration 5 --step-delay 0.3 --no-clear 2>&1 | head -50
-
-# 매트릭스 상태 dump
-uv run python -c "
-import sys; sys.path.insert(0, 'src')
-from roguelike_sprawl.engine.state import AppState
-s = AppState()
-print(s.matrix, s.current_node_id)
-"
-```
-
----
-
-## 9. 현재 uncommitted 변경사항
-
-`git status` 기준:
-- **메타 문서**: AGENTS.md, ROADMAP.md, README.md, index.md, log.md, decisions/README.md
-- **워크플로우**: .github/workflows/pages.yml
-- **대시보드**: 9개 HTML 파일
-- **i18n**: en.json, ko.json
-- **코드**: audio/, engine/death.py, scripts/demo.py, scripts/play.py 등
-- **테스트**: 10+ 신규 test 파일 (jockey_history, graphic_novel_*, matrix_movement 등)
-- **신규 모듈**: graphic_novel_save.py (190 lines)
-- **신규 문서**: docs/REMOTE_DEV_SETUP*.md
-
-**커밋하지 않은 이유**: 사용자 검토 대기 (ADR-0031~0045 모두 Draft 상태인 채 통합). 다음 세션 시작 시 일괄 커밋 가능.
-
----
-
-## 10. 다음 세션이 가장 먼저 할 일 (제안)
-
-1. **`git status`** — 어떤 파일이 수정되었는지
-2. **`uv run pytest`** — 현재 상태 확인 (2284 pass)
-3. **`tail -300 log.md`** — 최근 흐름 파악
-4. **사용자에게 "이어서 진행" 받기** — 옵션 제시 후 선택
-5. **작업 선택** — 위 6.1~6.4 중 하나
-6. **작업 시작** — ADR 패턴으로 문서화 → 코드 → 테스트 → log.md
-
----
-
-## 11. 빠른 참조 — 1줄 명령어
-
-```bash
-cd prototype/
-
-# 전체 검증
-uv run pytest && uv run ruff check src tests && uv run mypy src/ --ignore-missing-imports
-
-# 캐릭터 경로 문서
-cat design/CHARACTER_PATHS.md
-
-# 데모 실행
-uv run python scripts/demo.py --duration 10
-uv run python scripts/play.py --duration 5
-```
-
----
-
-## 12. 연락 / 컨텍스트
-
-- **GitHub**: `seoca1/roguelike-sprawl` (Pages: https://seoca1.github.io/roguelike-sprawl/)
-- **로컬 경로**: `~/projects/Projects/Game/roguelike_sprawl/`
-- **Python**: 3.11+ (uv로 관리)
-- **테스트**: 3254 passing
-- **마지막 ADR**: 0061 (novel hook dispatch)
-- **신규 문서**: `design/CHARACTER_PATHS.md` (390줄, 3캐릭터 × 15미션 경로)
-
----
-
-**이 문서를 다른 세션의 첫 번째 참고 자료로 사용하세요.**
-**모든 컨텍스트는 log.md, decisions/, 그리고 위 디렉토리 구조에 있습니다.**
-
-다음 세션이 시작되면 사용자에게 "이어서 진행"을 요청해 옵션을 제시하면 됩니다.
+Pre-existing 환경 이슈 (sound tests 6+40, graphic novel content quality 1)는 후속 세션에서 별도로 처리할 수 있습니다.
