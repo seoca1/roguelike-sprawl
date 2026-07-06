@@ -189,18 +189,18 @@ def test_load_scene_last_has_no_next() -> None:
 
 def test_list_scenes_novice() -> None:
     scenes = list_scenes_for_character(SCENES_DIR, "novice")
-    assert len(scenes) == 8  # 4 ending A + 2 ending B + 2 ending C (ADR-0049)
+    assert len(scenes) == 9  # 4 ending A + 2 ending B + 2 ending C + 1 epilogue (ADR-0090)
     assert scenes == sorted(scenes)  # sorted by stem
 
 
 def test_list_scenes_veteran() -> None:
     scenes = list_scenes_for_character(SCENES_DIR, "veteran")
-    assert len(scenes) == 8  # 4 ending A + 2 ending B + 2 ending C (ADR-0049)
+    assert len(scenes) == 9  # 4 ending A + 2 ending B + 2 ending C + 1 epilogue (ADR-0090)
 
 
 def test_list_scenes_heretic() -> None:
     scenes = list_scenes_for_character(SCENES_DIR, "heretic")
-    assert len(scenes) == 8  # 4 ending A + 2 ending B + 2 ending C (ADR-0049)
+    assert len(scenes) == 9  # 4 ending A + 2 ending B + 2 ending C + 1 epilogue (ADR-0090)
 
 
 def test_list_scenes_unknown_character() -> None:
@@ -214,14 +214,14 @@ def test_list_scenes_unknown_character() -> None:
 
 
 def test_load_scene_chain_novice() -> None:
-    chain = load_scene_chain(SCENES_DIR, "novice")
-    assert len(chain) == 4  # ending A only by default
+    chain = load_scene_chain(SCENES_DIR, "novice", max_order=8)
+    assert len(chain) == 4  # ending A only by default (excludes epilogue)
     assert all(s.character == "novice" for s in chain)
 
 
 def test_load_scene_chain_preserves_order() -> None:
     """Within a character, scenes should be in order."""
-    chain = load_scene_chain(SCENES_DIR, "novice")
+    chain = load_scene_chain(SCENES_DIR, "novice", max_order=8)
     orders = [s.order for s in chain]
     assert orders == sorted(orders)
     assert orders == [1, 2, 3, 4]
@@ -229,7 +229,7 @@ def test_load_scene_chain_preserves_order() -> None:
 
 def test_load_scene_chain_shuffle() -> None:
     """shuffle=True should produce a permutation."""
-    chain = load_scene_chain(SCENES_DIR, "novice", shuffle=True, seed=42)
+    chain = load_scene_chain(SCENES_DIR, "novice", shuffle=True, seed=42, max_order=8)
     assert len(chain) == 4  # ending A only by default
     # Same set, different order
     orders = sorted(s.order for s in chain)
@@ -419,14 +419,14 @@ def test_module_exports() -> None:
     assert callable(render_graphic_novel_menu)
 
 
-def test_all_22_scenes_loadable() -> None:
-    """All scene JSON files must load (4 chars × 4 ending A + 4 chars × 2 ending B = 24)."""
-    for char in ("novice", "veteran", "heretic", "suit"):
-        chain_a = load_scene_chain(SCENES_DIR, char, ending="A")
+def test_all_24_scenes_loadable() -> None:
+    """All scene JSON files must load (9 chars × 4 ending A + 9 chars × 2 ending B = 54)."""
+    for char in ("novice", "veteran", "heretic", "suit", "wigan", "angie", "sally", "3jane", "neuromancer"):
+        chain_a = load_scene_chain(SCENES_DIR, char, ending="A", max_order=8)
         chain_b = load_scene_chain(SCENES_DIR, char, ending="B")
         assert len(chain_a) == 4, f"Expected 4 ending A scenes for {char}"
-        assert len(chain_b) == 2, (
-            f"Expected 2 ending B scenes for {char} (Phase 6.1 added suit B/C)"
+        assert len(chain_b) == 3 if char == "suit" else 2, (
+            f"Expected 2 ending B scenes for {char}"
         )
         for chain in (chain_a, chain_b):
             for s in chain:

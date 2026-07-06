@@ -30,9 +30,9 @@ class TestNeuromancerScenesExist:
         d = SCENES_DIR / "neuromancer"
         assert d.exists(), "data/scenes/neuromancer/ should exist for Phase 9"
 
-    def test_neuromancer_has_eight_scenes(self) -> None:
+    def test_neuromancer_has_nine_scenes(self) -> None:
         stems = list_scenes_for_character(SCENES_DIR, "neuromancer")
-        assert len(stems) == 8, f"Expected 8 scenes, got {len(stems)}: {stems}"
+        assert len(stems) == 9, f"Expected 8 scenes, got {len(stems)}: {stems}"
 
 
 class TestNeuromancerMenuOption:

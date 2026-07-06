@@ -63,23 +63,24 @@ nav:
     - Factions: world/factions.md
     - Glossary: world/glossary.md
     - Style Guide: world/style_guide.md
+    - Derivative Stories: world/derivative_stories.md
   - 디자인 (Design):
-    - 개요: ../design/GDD.md
-    - 기둥: ../design/pillars.md
-    - Core Loop: ../design/core_loop.md
-    - Story Skeleton: ../design/story_skeleton.md
+    - 개요: design/GDD.md
+    - 기둥: design/pillars.md
+    - Core Loop: design/core_loop.md
+    - Story Skeleton: design/story_skeleton.md
   - 시스템 (Systems):
-    - Combat: ../design/systems/combat.md
-    - Hacking: ../design/systems/hacking.md
-    - Missions: ../design/systems/missions.md
-    - Difficulty Rating: ../design/systems/difficulty-rating.md
-    - Exploration: ../design/systems/exploration.md
-    - Aftermath: ../design/systems/aftermath.md
-    - ASCII Portraits: ../design/systems/ascii-portraits.md
-    - Inventory: ../design/systems/inventory.md
-    - Dialogue: ../design/systems/dialogue.md
-    - Procgen: ../design/systems/procgen.md
+    - Combat: design/systems/combat.md
+    - Hacking: design/systems/hacking.md
+    - Missions: design/systems/missions.md
+    - Difficulty Rating: design/systems/difficulty-rating.md
+    - Exploration: design/systems/exploration.md
+    - Aftermath: design/systems/aftermath.md
+    - ASCII Portraits: design/systems/ascii-portraits.md
+    - Inventory: design/systems/inventory.md
+    - Dialogue: design/systems/dialogue.md
+    - Procgen: design/systems/procgen.md
   - 결정 (Decisions):
-    - 개요: ../decisions/README.md
-  - 로드맵 (Roadmap): ../ROADMAP.md
-  - 활동 로그 (Log): ../log.md
+    - 개요: decisions/README.md
+  - 로드맵 (Roadmap): ROADMAP.md
+  - 활동 로그 (Log): log.md

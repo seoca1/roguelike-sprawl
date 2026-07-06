@@ -32,14 +32,14 @@ class TestWiganScenesExist:
         wigan_dir = SCENES_DIR / "wigan"
         assert wigan_dir.exists(), "data/scenes/wigan/ should exist for Phase 7.1"
 
-    def test_wigan_has_eight_scenes(self) -> None:
+    def test_wigan_has_nine_scenes(self) -> None:
         """Wigan character has 4 base + 4 ending = 8 scenes."""
         stems = list_scenes_for_character(SCENES_DIR, "wigan")
-        assert len(stems) == 8, f"Expected 8 wigan scene files, got {len(stems)}: {stems}"
+        assert len(stems) == 9, f"Expected 8 wigan scene files, got {len(stems)}: {stems}"
 
     def test_wigan_scenes_load_ending_a(self) -> None:
         """4 ending A scenes for Wigan."""
-        chain = load_scene_chain(SCENES_DIR, "wigan", ending="A")
+        chain = load_scene_chain(SCENES_DIR, "wigan", ending="A", max_order=8)
         assert len(chain) == 4
         for s in chain:
             assert s.character == "wigan"

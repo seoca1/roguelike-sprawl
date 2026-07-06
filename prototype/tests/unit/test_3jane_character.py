@@ -32,12 +32,12 @@ class Test3JaneScenesExist:
         d = SCENES_DIR / "3jane"
         assert d.exists(), "data/scenes/3jane/ should exist for Phase 9"
 
-    def test_3jane_has_eight_scenes(self) -> None:
+    def test_3jane_has_nine_scenes(self) -> None:
         stems = list_scenes_for_character(SCENES_DIR, "3jane")
-        assert len(stems) == 8, f"Expected 8 scenes, got {len(stems)}: {stems}"
+        assert len(stems) == 9, f"Expected 8 scenes, got {len(stems)}: {stems}"
 
     def test_3jane_scenes_load_ending_a(self) -> None:
-        chain = load_scene_chain(SCENES_DIR, "3jane", ending="A")
+        chain = load_scene_chain(SCENES_DIR, "3jane", ending="A", max_order=8)
         assert len(chain) == 4
         for s in chain:
             assert s.character == "3jane"
@@ -124,7 +124,7 @@ class TestPrologueWith3Jane:
         jane_scenes = [s for s in chain if s.character == "3jane"]
         assert len(jane_scenes) == 4
 
-    def test_prologue_has_8_characters(self) -> None:
+    def test_prologue_has_9_characters(self) -> None:
         from roguelike_sprawl.engine.graphic_novel_view import load_prologue_chain
 
         chain = load_prologue_chain(SCENES_DIR, seed=42)

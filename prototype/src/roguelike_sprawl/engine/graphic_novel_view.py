@@ -289,6 +289,7 @@ def load_scene_chain(
     shuffle: bool = False,
     seed: int | None = None,
     ending: str = "A",
+    max_order: int = 999,
 ) -> list[SceneData]:
     """Load a chain of scenes for a character.
 
@@ -327,7 +328,9 @@ def load_scene_chain(
             continue
         scene_ending = raw.get("ending", "A")
         if scene_ending == ending:
-            filtered_stems.append(stem)
+            order = raw.get("order", 999)
+            if order <= max_order:
+                filtered_stems.append(stem)
 
     if shuffle:
         rng = random.Random(seed)
@@ -343,6 +346,7 @@ def load_prologue_chain(
     *,
     seed: int | None = None,
     ending: str = "A",
+    max_order: int = 8,
 ) -> list[SceneData]:
     """Load the prologue chain: 3 characters × N scenes, characters in random order.
 
@@ -353,6 +357,7 @@ def load_prologue_chain(
         scenes_dir: Path to data/scenes/
         seed: Optional random seed for reproducibility.
         ending: "A" (default) or "B" — which ending set to load.
+        max_order: Include scenes with order <= this value (8 excludes epilogue).
     """
     chars = [
         "novice",
@@ -369,7 +374,7 @@ def load_prologue_chain(
     rng.shuffle(chars)
     chain: list[SceneData] = []
     for char in chars:
-        chain.extend(load_scene_chain(scenes_dir, char, shuffle=False, ending=ending))
+        chain.extend(load_scene_chain(scenes_dir, char, shuffle=False, ending=ending, max_order=max_order))
     return chain
 
 

@@ -81,6 +81,8 @@ class Stage(StrEnum):
     COMPLETE = "complete"  # Run finished, return to hub
     DEATH_RESTART = "death_restart"  # After death, show restart option
     FAILED = "failed"  # Player flatlined
+    # Phase 9: Salvation epilogue (ADR-0090)
+    SALVATION_EPILOGUE = "salvation_epilogue"  # Epilogue scene playing
 
 
 Phase = Stage
@@ -91,7 +93,8 @@ class ChapterState(StrEnum):
 
     Each Chapter may contain multiple Phases. The Arc starts at PROLOGUE,
     then cycles through IN_CHAPTER_N states. After the final chapter,
-    the player reaches an ENDING.
+    the player reaches an ENDING. Phase 9 (Salvation) adds epilogue
+    states for 9-character resolution.
     """
 
     PROLOGUE = "prologue"  # Character intro (cinematic text, no gameplay)
@@ -105,9 +108,14 @@ class ChapterState(StrEnum):
     CHAPTER_4_COMPLETE = "chapter_4_complete"
     IN_CHAPTER_5 = "in_chapter_5"
     CHAPTER_5_COMPLETE = "chapter_5_complete"
+    # Phase 9: Salvation Phase epilogue states (ADR-0090)
+    SALVATION_INTRO = "salvation_intro"  # Epilogue selection menu
+    SALVATION_EPILOGUE = "salvation_epilogue"  # Epilogue scene playing
+    SALVATION_DONE = "salvation_done"  # Epilogue complete, ready for ENDING
     ENDING_A = "ending_a"
     ENDING_B = "ending_b"
     ENDING_C = "ending_c"
+    FINAL = "final"  # All epilogue/ending complete, return to Hub
 
 
 class ObjectiveKind(StrEnum):
@@ -283,6 +291,14 @@ DEFAULT_FLOW: dict[Stage, StageInfo] = {
         objective_kind=ObjectiveKind.NONE,
         hint="Your run ended in cyberspace.",
         next_stage=Stage.DEATH_RESTART,
+    ),
+    # Phase 9: Salvation epilogue (ADR-0090)
+    Stage.SALVATION_EPILOGUE: StageInfo(
+        stage=Stage.SALVATION_EPILOGUE,
+        title="Salvation Epilogue",
+        objective_kind=ObjectiveKind.NONE,
+        hint="Choose an epilogue character to play the final scene.",
+        next_stage=Stage.SALVATION_EPILOGUE,
     ),
 }
 
@@ -669,6 +685,36 @@ class RunState:
             ChapterState.ENDING_B,
             ChapterState.ENDING_C,
         )
+
+    # --- Phase 9: Salvation Phase helpers (ADR-0090) ---
+
+    def enter_salvation_intro(self) -> None:
+        """Transition to SALVATION_INTRO (epilogue selection menu)."""
+        self.chapter_state = ChapterState.SALVATION_INTRO
+
+    def start_salvation_epilogue(self) -> None:
+        """Begin epilogue playback (SALVATION_EPILOGUE)."""
+        self.chapter_state = ChapterState.SALVATION_EPILOGUE
+
+    def complete_salvation_epilogue(self) -> None:
+        """Epilogue complete (SALVATION_DONE), ready to select ending."""
+        self.chapter_state = ChapterState.SALVATION_DONE
+
+    def is_at_salvation(self) -> bool:
+        """Player is in any Salvation state (intro/epilogue/done)."""
+        return self.chapter_state in (
+            ChapterState.SALVATION_INTRO,
+            ChapterState.SALVATION_EPILOGUE,
+            ChapterState.SALVATION_DONE,
+        )
+
+    def is_salvation_complete(self) -> bool:
+        """Epilogue played; player must now choose ENDING_A/B/C."""
+        return self.chapter_state is ChapterState.SALVATION_DONE
+
+    def reach_final(self) -> None:
+        """After ENDING selected, transition to FINAL (Hub return)."""
+        self.chapter_state = ChapterState.FINAL
 
     def advance_phase(self) -> int:
         """Advance to the next phase. Returns the new phase index."""

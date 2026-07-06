@@ -12,13 +12,13 @@
 | --- | --- | --- |
 | **Cyberspace** / **The Matrix** | 데이터의 의식적 환각, 데크로 접속하는 공간 | Neuromancer 1 |
 | **The Matrix** | 위와 동의 | Neuromancer |
-| **Cyberdeck** | 사이버스페이스 접속용 컴퓨터 | Neuromancer |
+| **Cyberdeck** {: #cyberdeck } | 사이버스페이스 접속용 컴퓨터 | Neuromancer |
 | **Console cowboy** / **Hacker** / **Jockey** | 데크 사용자 | Neuromancer |
-| **ICE** | Intrusion Countermeasures Electronics — 시스템 방어선 | Neuromancer |
+| **ICE** {: #ice } | Intrusion Countermeasures Electronics — 시스템 방어선 | Neuromancer |
 | **Black ICE** | 치명적 방어선 | Neuromancer |
-| **Program** | 데크에서 실행되는 공격/방어/유틸리티 소프트웨어 | Neuromancer |
-| **Construct** | ROM에 저장된 AI 인격 | Neuromancer |
-| **Wetware** | 생체 인터페이스, 신경접속 | Neuromancer |
+| **Program** {: #program } | 데크에서 실행되는 공격/방어/유틸리티 소프트웨어 | Neuromancer |
+| **Construct** {: #construct } | ROM에 저장된 AI 인격 | Neuromancer |
+| **Wetware** {: #wetware } | 생체 인터페이스, 신경접속 | Neuromancer |
 | **Biosoftware** | 생체-소프트웨어 하이브리드 | Neuromancer |
 | **Biochip** | 인체 내장형 칩 | Neuromancer |
 | **Biosoft** | 인체 내장 생체-소프트웨어 (Count Zero) | Count Zero |

@@ -153,13 +153,14 @@ class TestLoadStagesStats:
         stats = load_stages_stats(_PROJECTS_ROOT)
         # CONTENT_EXPANSION Phase B added BRIEFING / TRAVEL /
         # BYPASS_SECURITY → 10 → 13 stages.
-        assert stats["stages"] == 13
-        assert stats["stage_enum"] == 13
+        # Phase 9 added SALVATION_EPILOGUE → 13 → 14 stages.
+        assert stats["stages"] == 14
+        assert stats["stage_enum"] == 14
 
     def test_chapter_states_from_source(self, data_dir: Path) -> None:
-        """ChapterState enum: PROLOGUE + 3 ENDING_ + 5 IN_CHAPTER_ + 5 CHAPTER_*_COMPLETE = 14."""
+        """ChapterState enum: PROLOGUE + 3 ENDING_ + 5 IN_CHAPTER_ + 5 CHAPTER_*_COMPLETE + 3 SALVATION + 1 FINAL = 18."""
         stats = load_stages_stats(_PROJECTS_ROOT)
-        assert stats["chapter_states"] == 14
+        assert stats["chapter_states"] == 18
 
     def test_objectives_from_source(self, data_dir: Path) -> None:
         """ObjectiveKind: NPC / DATA / ICE / NONE = 4."""

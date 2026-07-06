@@ -32,12 +32,12 @@ class TestSallyScenesExist:
         sally_dir = SCENES_DIR / "sally"
         assert sally_dir.exists(), "data/scenes/sally/ should exist for Phase 8"
 
-    def test_sally_has_eight_scenes(self) -> None:
+    def test_sally_has_nine_scenes(self) -> None:
         stems = list_scenes_for_character(SCENES_DIR, "sally")
-        assert len(stems) == 8, f"Expected 8 sally scene files, got {len(stems)}: {stems}"
+        assert len(stems) == 9, f"Expected 8 sally scene files, got {len(stems)}: {stems}"
 
     def test_sally_scenes_load_ending_a(self) -> None:
-        chain = load_scene_chain(SCENES_DIR, "sally", ending="A")
+        chain = load_scene_chain(SCENES_DIR, "sally", ending="A", max_order=8)
         assert len(chain) == 4
         for s in chain:
             assert s.character == "sally"

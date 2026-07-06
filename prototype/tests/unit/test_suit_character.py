@@ -32,7 +32,7 @@ class TestSuitScenesExist:
         suit_dir = SCENES_DIR / "suit"
         assert suit_dir.exists(), "data/scenes/suit/ should exist for Phase 6.1"
 
-    def test_suit_has_four_scenes(self) -> None:
+    def test_suit_has_nine_scenes(self) -> None:
         """Suit character has 4 base scenes (one per suit short story).
 
         Plus 4 ending scenes (B and C) = 8 total files. The base
@@ -41,7 +41,7 @@ class TestSuitScenesExist:
         """
         stems = list_scenes_for_character(SCENES_DIR, "suit")
         # 4 base + 4 ending = 8 files
-        assert len(stems) == 8, f"Expected 8 suit scene files, got {len(stems)}: {stems}"
+        assert len(stems) == 9, f"Expected 8 suit scene files, got {len(stems)}: {stems}"
 
     def test_suit_scenes_load(self) -> None:
         """All 4 suit scenes must parse as valid SceneData."""
