@@ -1,0 +1,51 @@
+{
+  "character": "3jane",
+  "id": "chapter_3jane",
+  "title_en": "The Family Heir",
+  "title_ko": "가족의 후계자",
+  "subtitle_en": "3Jane Tessier-Ashpool — Straylight",
+  "subtitle_ko": "3Jane 테시에-애스풀 — 스트레이라이트",
+  "portrait": "art:3jane_portrait",
+  "theme": "tessier_ashpool_lab",
+  "excerpt_en": "Straylight is the family. The family is Straylight. 3Jane is the family. 3Jane is Straylight. 3Jane has been the family for thirty-five years. 3Jane has been waiting for thirty-five years. 3Jane has been waiting for the merge. The merge is the family. The family is the merge. The merge is Wintermute. The merge is Neuromancer. The merge is the end of the family. The merge is the beginning of the family. The merge is 3Jane. 3Jane is the merge. 3Jane is the family. 3Jane is Straylight. 3Jane is thirty-five years old. 3Jane has been waiting for thirty-five years. 3Jane is still waiting. 3Jane will wait forever. The family is patient. The family has always been patient. The family is 3Jane.",
+  "excerpt_ko": "스트레이라이트가 가족이다. 가족이 스트레이라이트이다. 3Jane이 가족이다. 3Jane이 스트레이라이트이다. 3Jane은 35년 동안 가족이었다. 3Jane은 35년 동안 기다려 왔다. 3Jane은 합체를 기다려 왔다. 합체가 가족이다. 가족이 합체이다. 합체가 윈터뮤트이다. 합체가 뉴로맨서이다. 합체가 가족의 끝이다. 합체가 가족의 시작이다. 합체가 3Jane이다. 3Jane이 합체이다. 3Jane이 가족이다. 3Jane이 스트레이라이트이다. 3Jane은 35살이다. 3Jane은 35년 동안 기다려 왔다. 3Jane은 여전히 기다리고 있다. 3Jane은 영원히 기다릴 것이다. 가족은 인내심 있다. 가족은 늘 인내심 있었다. 가족이 3Jane이다.",
+  "duration_ms": 12000,
+  "next_screen": "HUB",
+  "char_delay_ms": 50,
+  "_wiki_refs": {
+    "fictions": [
+      "Fiction/wiki/works/neuromancer",
+      "Fiction/wiki/characters/lady-3jane-tessier-ashpool",
+      "Fiction/wiki/characters/ashpool",
+      "Fiction/wiki/settings/freeside",
+      "Fiction/wiki/settings/villa-straylight"
+    ],
+    "themes": [
+      "Fiction/wiki/themes/ai-and-consciousness",
+      "Fiction/wiki/themes/family-inheritance",
+      "Fiction/wiki/themes/corporate-power"
+    ],
+    "motifs": [
+      "royal-we",
+      "straylight",
+      "family-merge",
+      "wintermute-neuromancer"
+    ]
+  },
+  "_integrated_with": {
+    "missions": [
+      "3jane_straylight_dawn",
+      "3jane_bobby_recording",
+      "3jane_aleph_chamber",
+      "3jane_wintermute_merge"
+    ],
+    "character_ref": "3jane",
+    "fixers_used": ["wintermute", "ashpool"]
+  },
+  "_play_notes": {
+    "narrative_role": "3Jane is the 8th character — the T-A family heir from Neuromancer. Phase 9 adds her as the aristocratic POV. Her 4 missions trace her arc: 1) Straylight dawn, 2) Bobby recording, 3) Aleph chamber, 4) Wintermute merge.",
+    "ending": "Her ending is the family — whether the merge completes, the family is sold, or 3Jane leaves Straylight.",
+    "tone": "Aristocratic, royal 'we'. Every sentence is precise grammar. Family is the pronoun.",
+    "replaces_sally": "Opposite of Sally: Sally is a self-made market operator, 3Jane is a born family heir. Sally says 'I', 3Jane says 'we'."
+  }
+}

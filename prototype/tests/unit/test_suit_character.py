@@ -64,8 +64,8 @@ class TestSuitMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=False)
         keys = [k for k, _ in options]
-        # 8 menu keys + 1 empty BACK key
-        assert len(options) == 9
+        # 9 menu keys + 1 empty BACK key
+        assert len(options) == 10
         # Suit is the 5th option (index 4) when no save
         assert keys[4] == "5"
 
@@ -75,8 +75,8 @@ class TestSuitMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=True)
         keys = [k for k, _ in options]
-        # CONTINUE + 8 menu keys + BACK = 10 options
-        assert len(options) == 10
+        # CONTINUE + 9 menu keys + BACK = 11 options
+        assert len(options) == 11
         # Suit is the 5th menu key (index 5) with save
         assert keys[5] == "6"
 

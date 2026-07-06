@@ -110,6 +110,7 @@ def chapter_for_character(character: str, data_dir: Path) -> ChapterData:
         "wigan": "wigan",
         "angie": "angie",
         "sally": "sally",
+        "3jane": "3jane",
     }
     name = mapping.get(character, "case")
     return load_chapter(data_dir / "story" / "chapters" / f"{name}.json")

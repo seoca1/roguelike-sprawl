@@ -2,6 +2,50 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Phase 9 — 3Jane Tessier-Ashpool (8번째 자키) 통합
+
+- **배경**: ROADMAP 차순. T-A 가족의 후계자. Neuromancer의 Wintermute merge.
+- **디자인**: 1인칭 aristocratic, royal "we", 가족 = 자기
+- **신규 자산**:
+  - `design/scenario/chapter-8-3jane.md` — 8번째 시점 디자인
+  - `data/story/chapters/3jane.json` — chapter + 4 missions
+  - `data/scenes/3jane/` — 8 씬 (4 base + 2 B + 2 C):
+    - 01_straylight, 02_recording, 03_aleph, 04_merge (base, ending A)
+    - 05_integration (B-1), 06_bloodline (B-2)
+    - 07_sale (C-1), 08_severance (C-2)
+- **엔진 통합**:
+  - `char_to_dir`: `"3jane" → "3jane"` (2곳)
+  - `chars` 리스트 (prologue): 8 chars
+  - `GN_MENU_3JANE = "3jane"` 상수
+  - `_character_label`: "3Jane — Family Heir" / "3Jane — 가족의 후계자"
+  - `get_gn_menu_options`: 8번째 옵션 (10 옵션)
+  - `get_gn_menu_key`: 인덱스 (no-save=8, save=9)
+  - `_ENDING_DESCRIPTIONS`: 3개
+  - `chapter_for_character("3jane")` 추가
+- **테스트** (`tests/unit/test_3jane_character.py`, 14 신규):
+  - 8씬 (A 4 + B 2 + C 2)
+  - GN 메뉴 옵션
+  - 캐릭터 라벨
+  - 엔딩 3개
+  - 챕터 로드
+  - 프롤로그 4씬 포함
+  - **8 chars × 4 ending A = 32 scenes**
+- **기존 테스트 갱신**:
+  - test_load_prologue_chain_length: 28 → 32
+  - test_prologue_default_uses_ending_a: 28 → 32
+  - test_prologue_ending_b_explicit: 14 → 16
+  - 모든 메뉴 옵션 테스트 (9 menu + 1 BACK)
+- **디자인 차별화** (8명):
+  - 6명 1인칭 + 수트 3인칭 + **3Jane 1인칭 aristocratic (royal "we")**
+  - 8가지 동기: 돈/복수/전복/거래/자아/엄마/시장/**가족 통합**
+  - 깁슨 톤 8 디멘션: 떨림/분노/예술/cold/ritual/직관/sharp/**aristocratic**
+- **포트레잇 매핑**: portraits.json에 없는 3jane_portrait/wintermute_face → 기존 portrait (armitage_terminal, loa_vendor)
+- **버그 수정**: 3jane scenes 5, 6 ending A → B (다른 캐릭터와 일관)
+- **검증**:
+  - pytest: **4184 passed** (4169 → +15)
+  - ruff check / format: All passed
+  - mypy: 0 errors
+
 ## [2026-07-04] docs | 세션 마무리 — SESSION_SUMMARY.md 작성
 
 - **세션 종료 시점**: Phase 5+6+7+8 통합 완료

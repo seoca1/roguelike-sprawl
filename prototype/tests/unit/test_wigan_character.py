@@ -59,14 +59,14 @@ class TestWiganMenuOption:
         assert GN_MENU_WIGAN == "wigan"
 
     def test_wigan_in_menu_options_without_save(self) -> None:
-        """9 total options: prologue + 6 chars + suit + wigan + sally + back (Phase 8 added sally)."""
+        """10 total options: prologue + 7 chars + suit + wigan + sally + back (Phase 9 added 3jane)."""
         from roguelike_sprawl.i18n import Translator
 
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=False)
         keys = [k for k, _ in options]
-        # 8 menu keys + 1 empty BACK key
-        assert len(options) == 9
+        # 9 menu keys + 1 empty BACK key
+        assert len(options) == 10
         # Wigan is the 6th option (index 5) when no save
         assert keys[5] == "6"
 
@@ -76,8 +76,8 @@ class TestWiganMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=True)
         keys = [k for k, _ in options]
-        # CONTINUE + 8 menu keys + BACK = 10 options
-        assert len(options) == 10
+        # CONTINUE + 9 menu keys + BACK = 11 options
+        assert len(options) == 11
         # Wigan is the 6th menu key (index 6) with save
         assert keys[6] == "7"
 
