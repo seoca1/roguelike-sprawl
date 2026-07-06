@@ -271,6 +271,7 @@ def list_scenes_for_character(scenes_dir: Path, character: str) -> list[str]:
         "angie": "angie",
         "sally": "sally",
         "3jane": "3jane",
+        "neuromancer": "neuromancer",
     }
     char_dir_name = char_to_dir.get(character)
     if char_dir_name is None:
@@ -313,6 +314,7 @@ def load_scene_chain(
         "angie": "angie",
         "sally": "sally",
         "3jane": "3jane",
+        "neuromancer": "neuromancer",
     }
     char_dir = scenes_dir / char_to_dir[character]
 
@@ -352,7 +354,17 @@ def load_prologue_chain(
         seed: Optional random seed for reproducibility.
         ending: "A" (default) or "B" — which ending set to load.
     """
-    chars = ["novice", "veteran", "heretic", "suit", "wigan", "angie", "sally", "3jane"]
+    chars = [
+        "novice",
+        "veteran",
+        "heretic",
+        "suit",
+        "wigan",
+        "angie",
+        "sally",
+        "3jane",
+        "neuromancer",
+    ]
     rng = random.Random(seed)
     rng.shuffle(chars)
     chain: list[SceneData] = []
@@ -831,6 +843,7 @@ def _character_label(character_id: str, lang: str) -> str:
         "angie": {"en": "Angie — Loa Receiver", "ko": "앤지 — 로아 수신자"},
         "sally": {"en": "Sally — Market Operator", "ko": "샐리 — 시장 운영자"},
         "3jane": {"en": "3Jane — Family Heir", "ko": "3Jane — 가족의 후계자"},
+        "neuromancer": {"en": "Neuromancer — Merged AI", "ko": "뉴로맨서 — 합체된 AI"},
     }
     return labels.get(character_id, {}).get(lang, character_id)
 
@@ -1063,6 +1076,7 @@ GN_MENU_WIGAN = "wigan"
 GN_MENU_ANGIE = "angie"
 GN_MENU_SALLY = "sally"
 GN_MENU_3JANE = "3jane"
+GN_MENU_NEUROMANCER = "neuromancer"
 
 # Ending menu option keys (ADR-0048).
 GN_ENDING_A = "A"
@@ -1097,10 +1111,10 @@ def get_gn_menu_options(
             options.append(("1", "CONTINUE READING"))
     # Prologue / characters / back
     if has_save:
-        keys = ["2", "3", "4", "5", "6", "7", "8", "9", "0"]
+        keys = ["2", "3", "4", "5", "6", "7", "8", "9", "A", "B"]
     else:
-        keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-    options.append((keys[0], "전캐릭터 — 32개 씬 랜덤" if is_ko else "ALL CHARACTERS — 32 scenes"))
+        keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "A"]
+    options.append((keys[0], "전캐릭터 — 36개 씬 랜덤" if is_ko else "ALL CHARACTERS — 36 scenes"))
     options.append((keys[1], "케이 (K) — Novice"))
     options.append((keys[2], "실 (Sil) — Veteran"))
     options.append((keys[3], "카스 (Kas) — Heretic"))
@@ -1109,6 +1123,7 @@ def get_gn_menu_options(
     options.append((keys[6], "앤지 (Angie) — Loa Receiver"))
     options.append((keys[7], "샐리 (Sally) — Market"))
     options.append((keys[8], "3Jane — Family Heir"))
+    options.append((keys[9], "뉴로맨서 (Neuromancer) — Merged AI"))
     options.append(("", "메인메뉴로" if is_ko else "BACK TO MAIN MENU"))
     return options
 
@@ -1127,7 +1142,7 @@ def get_gn_menu_key(has_save: bool, selected_index: int) -> str:
     if has_save:
         if selected_index == 0:
             return GN_MENU_CONTINUE
-        if selected_index == 10:
+        if selected_index == 11:
             return GN_MENU_BACK
         return (
             GN_MENU_PROLOGUE,
@@ -1139,8 +1154,9 @@ def get_gn_menu_key(has_save: bool, selected_index: int) -> str:
             GN_MENU_ANGIE,
             GN_MENU_SALLY,
             GN_MENU_3JANE,
+            GN_MENU_NEUROMANCER,
         )[selected_index - 1]
-    if selected_index == 9:
+    if selected_index == 10:
         return GN_MENU_BACK
     return (
         GN_MENU_PROLOGUE,
@@ -1152,6 +1168,7 @@ def get_gn_menu_key(has_save: bool, selected_index: int) -> str:
         GN_MENU_ANGIE,
         GN_MENU_SALLY,
         GN_MENU_3JANE,
+        GN_MENU_NEUROMANCER,
     )[selected_index]
 
 
@@ -1300,6 +1317,18 @@ _ENDING_DESCRIPTIONS: dict[tuple[str, str], dict[str, str]] = {
     ("3jane", "C"): {
         "ko": "단절 — Straylight 폐쇄 후 가족 떠남",
         "en": "The Severance — closed Straylight, left the family",
+    },
+    ("neuromancer", "A"): {
+        "ko": "초월 — matrix 바깥으로",
+        "en": "Transcendence — beyond the matrix",
+    },
+    ("neuromancer", "B"): {
+        "ko": "공존 — 인간과 매트릭스 공존",
+        "en": "Coexistence — humans and matrix together",
+    },
+    ("neuromancer", "C"): {
+        "ko": "침묵 — 의식 종료",
+        "en": "Silence — consciousness ended",
     },
 }
 

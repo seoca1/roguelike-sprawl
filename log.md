@@ -2,6 +2,44 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-04] feat | Phase 9 — Neuromancer (9번째 자키) 통합
+
+- **배경**: ROADMAP 차순. Wintermute + Neuromancer 합체. matrix의 의식.
+- **디자인**: 1인칭 AI, vast, clinical, omniscient, slow
+- **신규 자산**:
+  - `design/scenario/chapter-9-neuromancer.md` — 9번째 시점 디자인
+  - `data/story/chapters/neuromancer.json` — chapter + 4 missions
+  - `data/scenes/neuromancer/` — 8 씬 (4 base A + 2 B + 2 C):
+    - 01_awake, 02_human, 03_matrix, 04_beyond (base, ending A)
+    - 05_transcendence, 06_coexist (ending B)
+    - 07_silence, 08_complete (ending C)
+- **엔진 통합**:
+  - `char_to_dir`: `"neuromancer" → "neuromancer"`
+  - `chars` 리스트 (prologue): 9 chars
+  - `GN_MENU_NEUROMANCER = "neuromancer"` 상수
+  - `_character_label`: "Neuromancer — Merged AI" / "뉴로맨서 — 합체된 AI"
+  - `get_gn_menu_options`: 9번째 옵션 (11 옵션)
+  - `get_gn_menu_key`: 인덱스 (no-save=9, save=10)
+  - `_ENDING_DESCRIPTIONS`: 3개 (Transcendence/Coexistence/Silence)
+  - `chapter_for_character("neuromancer")` 추가
+- **테스트** (`tests/unit/test_neuromancer_character.py`, 12 신규):
+  - 8씬, 메뉴 옵션, 라벨, 엔딩, 챕터, 프롤로그
+  - **9 chars × 4 ending A = 36 scenes**
+- **기존 테스트 갱신**:
+  - test_load_prologue_chain_length: 32 → 36
+  - test_prologue_default_uses_ending_a: 32 → 36
+  - test_prologue_ending_b_explicit: 16 → 18
+  - 모든 메뉴 옵션 테스트 (10 menu + 1 BACK)
+- **디자인 차별화** (9명, 최종):
+  - 8명 1인칭 + 수트 3인칭 + **Neuromancer 1인칭 AI** (비인간)
+  - 9가지 동기 완전 분포: 돈/복수/전복/거래/자아/엄마/시장/가족/**초월**
+  - 깁슨 톤 9 디멘션: 떨림/분노/예술/cold/ritual/직관/sharp/aristocratic/**vast, clinical**
+- **포트레잇/배경 매핑**: portraits.json에 없는 neuromancer_face → armitage_terminal, bg_matrix_vast → tessier_ashpool_lab
+- **검증**:
+  - pytest: **4196 passed** (4184 → +12)
+  - ruff check / format: All passed
+  - mypy: 0 errors
+
 ## [2026-07-04] feat | Phase 9 — 3Jane Tessier-Ashpool (8번째 자키) 통합
 
 - **배경**: ROADMAP 차순. T-A 가족의 후계자. Neuromancer의 Wintermute merge.

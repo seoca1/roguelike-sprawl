@@ -61,8 +61,8 @@ class TestSallyMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=False)
         keys = [k for k, _ in options]
-        # 9 menu keys + 1 empty BACK key
-        assert len(options) == 10
+        # 10 menu keys + 1 empty BACK key
+        assert len(options) == 11
         # Sally is the 8th option (index 7) when no save
         assert keys[7] == "8"
 
@@ -73,7 +73,7 @@ class TestSallyMenuOption:
         options = get_gn_menu_options(t, has_save=True)
         keys = [k for k, _ in options]
         # CONTINUE + 9 menu keys + BACK = 11 options
-        assert len(options) == 11
+        assert len(options) == 12
         # Sally is the 8th menu key (index 8) with save
         assert keys[8] == "9"
 

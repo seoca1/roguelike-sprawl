@@ -68,8 +68,8 @@ class Test3JaneMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=False)
         keys = [k for k, _ in options]
-        # 9 menu keys + 1 empty BACK key
-        assert len(options) == 10
+        # 10 menu keys + 1 empty BACK key
+        assert len(options) == 11
         # 3Jane is the 9th option (index 8) when no save
         assert keys[8] == "9"
 
@@ -79,10 +79,10 @@ class Test3JaneMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=True)
         keys = [k for k, _ in options]
-        # CONTINUE + 9 menu keys + BACK = 11 options
-        assert len(options) == 11
+        # CONTINUE + 10 menu keys + BACK = 12 options
+        assert len(options) == 12
         # 3Jane is the 9th menu key (index 9) with save
-        assert keys[9] == "0"
+        assert keys[9] == "A"
 
     def test_get_menu_key_3jane_index(self) -> None:
         assert get_gn_menu_key(has_save=False, selected_index=8) == GN_MENU_3JANE

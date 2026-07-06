@@ -65,8 +65,8 @@ class TestWiganMenuOption:
         t = Translator("en")
         options = get_gn_menu_options(t, has_save=False)
         keys = [k for k, _ in options]
-        # 9 menu keys + 1 empty BACK key
-        assert len(options) == 10
+        # 10 menu keys + 1 empty BACK key
+        assert len(options) == 11
         # Wigan is the 6th option (index 5) when no save
         assert keys[5] == "6"
 
@@ -77,7 +77,7 @@ class TestWiganMenuOption:
         options = get_gn_menu_options(t, has_save=True)
         keys = [k for k, _ in options]
         # CONTINUE + 9 menu keys + BACK = 11 options
-        assert len(options) == 11
+        assert len(options) == 12
         # Wigan is the 6th menu key (index 6) with save
         assert keys[6] == "7"
 
