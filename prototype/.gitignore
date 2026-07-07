@@ -43,3 +43,4 @@ data/fonts/*.png
 prototype/data/saves/*.json
 !prototype/data/saves/.gitkeep
 prototype/data/saves/*.log
+prototype/data/jockeys/deceased.json
