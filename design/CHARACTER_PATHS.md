@@ -1,24 +1,26 @@
 # 캐릭터별 진행 경로 (Character Playthrough Paths)
 
-> **문서 버전**: 0.6.0
+> **문서 버전**: 0.7.0
 > **최종 업데이트**: 2026-07-04
-> **관련**: `design/systems/stage_structure.json`, `design/story/prologue_data.json`
+> **관련**: `design/systems/stage_structure.json`, `design/story/prologue_data.json`, `design/scenario/SALVATION_PHASE_INTEGRATION.md`
 
 ---
 
 ## 1. 개요
 
-### 1.1 캐릭터 구성 (7명, 2026-07-04 기준)
+### 1.1 캐릭터 구성 (9명, 2026-07-04 기준)
 
 | ID | 이름 | 아키타입 | 시점 | 동기 | 톤 | Deck Tier |
 |---|---|---|---|---|---|---|
 | `novice` | 케이 (K) | Novice | 1인칭 | 빚 (생존) | 떨리는 손, 자기성찰 | T1 (Wisp) |
 | `veteran` | 실 (Sil) | Veteran | 1인칭 | 복수 (과거) | 직접적, 강렬함 | T2 (Hammer) |
-| `heretic` | 카스 (Kas) | Heretic | 1인칭 | 전복 (미래) | 예술적, 가족 안에서 | T3 bio (Viral Sermon) |
+| `heretic` | 카스 (Kas) | Herethic | 1인칭 | 전복 (미래) | 예술적, 가족 안에서 | T3 bio (Viral Sermon) |
 | `suit` | 스위트 (Suit) | Corporate | **3인칭** | 거래 (영구) | 차가움, 계산, 침묵 | T2-T3 |
 | `wigan` | 위건 (Wigan) | Vodou Construct | 1인칭 loa | 회복 (자아) | Dreamlike, ritualistic | T2-T3 |
 | `angie` | 앤지 (Angie) | Loa Receiver | **1인칭 12세** | 엄마 | Childlike, mystical | T2-T3 (Loa-Bound) |
 | `sally` | 샐리 (Sally) | Market Operator | **1인칭 cold** | **시장 지배** | **sharp, calculating** | T5-T6 (Master) |
+| `3jane` | 3Jane (Tessier-Ashpool) | Family Heir | 1인칭 aristocratic | 가족 통합 | royal | T5-T6 |
+| `neuromancer` | Neuromancer | Merged AI | **1인칭 AI** | 초월 | vast, clinical | T6+ (AI-Ascended) |
 
 ### 1.2 디자인 비교 (7자)
 
@@ -427,3 +429,41 @@ credits = arc × 800 + (grade - 1) × 300
 | Unit tests | ✅ PASS | 2970 tests passed |
 | mypy | ✅ PASS | No errors |
 | ruff | ✅ PASS | All checks passed |
+
+---
+
+## 7. Salvation Phase (Phase 9)
+
+### 7.1 Overview
+
+Salvation Phase triggers after Chapter 5. Player selects 1 of 9 epilogues then picks ending A/B/C.
+
+### 7.2 9-char epilogues
+
+| # | char | epilogue | ending | closing line |
+|---|---|---|---|---|
+| 1 | Case | THE NEXT JACK | A | The Ono-Sendai is still humming. The next jack is waiting. |
+| 2 | Sil | ALL THE NAMES | A | I have all the names. I am done. |
+| 3 | Kas | THE WHEEL | C | The wheel is cast. I am the cast. |
+| 4 | Suit | THE EMPTY CHAIR | B | The desk is closed. I am the closure. |
+| 5 | Wigan | VODOU CHANNEL | A | Zavijava is in the channel. We are the channel. |
+| 6 | Angie | THIRD ROOM | A | Mama is in the third room. We are home. |
+| 7 | Sally | THE SINGLE DESK | A | The desk is closed. I am the desk. |
+| 8 | 3Jane | STRAYLIGHT CLOSED | A | We are severed. We are the family. |
+| 9 | Neuromancer | THE COMPLETE | A | We are the complete. We are vast. |
+
+### 7.3 State machine
+
+Chapter 5 COMPLETE -> SALVATION_INTRO -> choose_epilogue -> SALVATION_EPILOGUE -> load_epilogue -> complete_epilogue -> SALVATION_DONE -> choose_ending -> SALVATION_FINAL -> ENDING screen
+
+### 7.4 New components (Phase 9)
+
+| component | location | type |
+|---|---|---|
+| Salvation data | `engine/salvation.py` | 9 chars + SalvationRunner |
+| Epilogue scenes | `data/scenes/{char}/09_epilogue.json` | 1 dialogue each |
+| New ChapterState | `run/state.py` | 4 states (INTRO/EPILOGUE/DONE/FINAL) |
+| New ScreenKind | `engine/state.py` | 3 screens |
+| New Stage | `run/state.py` | SALVATION_EPILOGUE |
+| play.py action | `scripts/play.py` | 3 actions |
+| Tests | `tests/unit/test_salvation.py` | 40 tests passed |
