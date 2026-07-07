@@ -72,7 +72,9 @@ if TYPE_CHECKING:
     from ..run.state import RunState
     from .chapter_cutscene import ChapterCutsceneState
     from .event_story import EventRegistry, EventState
+    from .graphic_novel_view import SceneData
     from .npc_event import NPCState
+    from .salvation import SalvationRunner, SalvationSelection
     from .story_cinematic import CinematicState
 
 
@@ -269,3 +271,10 @@ class AppState:
     colorblind_mode: bool = False  # colorblind-friendly palette toggle
     # Help screen state (Phase 7)
     help_page: int = 0  # current help page index (0-based)
+    # Salvation Phase state (ADR-0090 Phase 9)
+    salvation_runner: SalvationRunner | None = None
+    salvation_selection: SalvationSelection | None = None
+    salvation_scene_data: SceneData | None = None
+    salvation_epilogue_elapsed_ms: float = 0.0
+    salvation_epilogue_typed_chars: int = 0
+    salvation_epilogue_dialogue_index: int = 0

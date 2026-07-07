@@ -194,6 +194,18 @@ def _render(
         from . import settings_view
 
         settings_view.render_settings(console, t, state)
+    elif state.screen is ScreenKind.SALVATION_INTRO:
+        from . import salvation_view
+
+        salvation_view.render_salvation_intro(console, t, state)
+    elif state.screen is ScreenKind.SALVATION_EPILOGUE:
+        from . import salvation_view
+
+        salvation_view.render_salvation_epilogue(console, t, state)
+    elif state.screen is ScreenKind.SALVATION_ENDING:
+        from . import salvation_view
+
+        salvation_view.render_salvation_ending(console, t, state)
 
 
 def _handle_input(
@@ -336,6 +348,18 @@ def _handle_input(
         from . import settings_view
 
         return settings_view.handle_settings_input(event, state)  # type: ignore[arg-type,return-value]
+    if state.screen is ScreenKind.SALVATION_INTRO:
+        from . import salvation_view
+
+        return salvation_view.handle_salvation_intro_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.SALVATION_EPILOGUE:
+        from . import salvation_view
+
+        return salvation_view.handle_salvation_epilogue_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.SALVATION_ENDING:
+        from . import salvation_view
+
+        return salvation_view.handle_salvation_ending_input(event, state)  # type: ignore[arg-type]
     return True
 
 
