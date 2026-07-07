@@ -2,6 +2,13 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-07] docs | MkDocs site build 완료 (--strict, 0 워닝)
+
+- **배경**: Phase 7 마무리 마지막 작업
+- **mkdocs-material[recommended] + pymdown-extensions** 설치 (pip3 --break-system-packages)
+- `mkdocs build --strict` — 성공 (1.99s), INFO 메시지만 (워닝/에러 0)
+- site/ 생성 완료
+
 ## [2026-07-07] feat | Phase 7 — 크래시 리포팅 + mypy 12개 수정
 
 ### Phase 7.4 — mypy 수정 (12 errors → 0)

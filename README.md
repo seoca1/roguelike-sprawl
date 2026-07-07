@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/seoca1/roguelike-sprawl/actions/workflows/ci.yml/badge.svg)](https://github.com/seoca1/roguelike-sprawl/actions)
 [![Pages](https://github.com/seoca1/roguelike-sprawl/actions/workflows/pages.yml/badge.svg)](https://seoca1.github.io/roguelike-sprawl/)
-[![Tests](https://img.shields.io/badge/tests-4169%20passing-brightgreen)]()
+[![Tests](https://img.shields.io/badge/tests-4231%20passing-brightgreen)]()
 [![Lint](https://img.shields.io/badge/lint-ruff-blue)]()
 [![Typecheck](https://img.shields.io/badge/typecheck-mypy%20strict-blue)]()
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue)]()
@@ -26,7 +26,7 @@
 - **47 missions** (5 zones 균형: Surface/Mid/Deep/Core/TA/Freeside)
 - **41 ICE types** (Standard/Watchdog/Black/Goliath/Construct/Construct-proxy 등)
 - **10 manual + 1 auto save slots** (Phase 7.3)
-- **pytest 4169 passed** / ruff 0 errors / mypy strict 0 errors / mkdocs --strict 0 warnings (316 pages)
+- **pytest 4231 passed** / ruff 0 errors / mypy strict 0 errors / mkdocs --strict 0 warnings (316 pages)
 
 ## 디렉토리 구조
 
