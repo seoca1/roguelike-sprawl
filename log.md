@@ -2,6 +2,22 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-07] feat | Arc JSON 6자 생성 — L1 스토리 계층 9자 완전 통합
+
+- **배경**: 연계성 감사에서 발견된 L1 Arc 미구현 6자填补
+- **신규 Arc JSON 6개** (`data/story/arcs/`):
+  - `suit_arc.json` — 5챕터 × 5phase × 3beats (Gibson corporate cold tone)
+  - `wigan_arc.json` — 5챕터 × 5phase × 3beats (Vodou loa channel voice)
+  - `angie_arc.json` — 5챕터 × 5phase × 3beats (childlike Vodou voice)
+  - `sally_arc.json` — 5챕터 × 5phase × 3beats (market transaction voice)
+  - `3jane_arc.json` — 5챕터 × 5phase × 3beats (aristocratic royal "we")
+  - `neuromancer_arc.json` — 5챕터 × 5phase × 3beats (AI omniscient vast)
+- **장표 구조**: 각 Arc = 5챕터 × 3 cutscene (start/mid/end) = 15 scene refs
+- **scene mapping**: 8 narrative scenes (01-08) → 5챕터 × 3 cutscene 구조로 배치
+- **Salvation 연동**: 09_epilogue.json은 chapter cutscene에서 참조하지 않음 (별도 SalvationRunner)
+- **검증**: `get_arc_for_character()` 9자 모두 성공 ✅
+- **테스트**: pytest 4231 passed, ruff 0, mypy 0
+
 ## [2026-07-07] audit | 소설/스토리/스테이지 연계성 검증 — L1 3자 완전, L3 9자 완전, 6자 Arc 미구현
 
 - **배경**: Phase 7 완료 후 스토리/게임플레이 연계성 전체 감사
