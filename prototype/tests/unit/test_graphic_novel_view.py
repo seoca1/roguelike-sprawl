@@ -421,13 +421,21 @@ def test_module_exports() -> None:
 
 def test_all_24_scenes_loadable() -> None:
     """All scene JSON files must load (9 chars × 4 ending A + 9 chars × 2 ending B = 54)."""
-    for char in ("novice", "veteran", "heretic", "suit", "wigan", "angie", "sally", "3jane", "neuromancer"):
+    for char in (
+        "novice",
+        "veteran",
+        "heretic",
+        "suit",
+        "wigan",
+        "angie",
+        "sally",
+        "3jane",
+        "neuromancer",
+    ):
         chain_a = load_scene_chain(SCENES_DIR, char, ending="A", max_order=8)
         chain_b = load_scene_chain(SCENES_DIR, char, ending="B")
         assert len(chain_a) == 4, f"Expected 4 ending A scenes for {char}"
-        assert len(chain_b) == 3 if char == "suit" else 2, (
-            f"Expected 2 ending B scenes for {char}"
-        )
+        assert len(chain_b) == 3 if char == "suit" else 2, f"Expected 2 ending B scenes for {char}"
         for chain in (chain_a, chain_b):
             for s in chain:
                 assert s.dialogue

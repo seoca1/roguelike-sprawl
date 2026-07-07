@@ -108,6 +108,8 @@ class ScreenKind(StrEnum):
     SALVATION_EPILOGUE = "salvation_epilogue"  # Epilogue scene playback (Phase 9)
     SALVATION_ENDING = "salvation_ending"  # Post-epilogue ending choice (Phase 9)
     SAVE_LOAD = "save_load"  # Save/Load slot browser (Hub)
+    HELP = "help"  # Help screen — controls, concepts, how to play
+    SETTINGS = "settings"  # Settings screen — audio, colorblind, keymap (Phase 7)
 
 
 # A grade-1 (1-up) loadout: Ono-Sendai 4 (T1) + Wisp (T1) + Standard (T1).
@@ -262,3 +264,8 @@ class AppState:
     # Death flow options (after DEATH_SUMMARY)
     death_cause: str = "Combat"  # "Combat" / "Black ICE" / "T-A ICE" / "Black ICE breach"
     hall_of_dead_selected: int = 0  # selected index in HALL_OF_DEAD screen
+    # Settings screen state (Phase 7)
+    settings_selected: int = 0  # selected option index in SETTINGS screen
+    colorblind_mode: bool = False  # colorblind-friendly palette toggle
+    # Help screen state (Phase 7)
+    help_page: int = 0  # current help page index (0-based)

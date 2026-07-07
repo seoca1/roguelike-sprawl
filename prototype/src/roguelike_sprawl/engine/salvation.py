@@ -12,8 +12,7 @@ with order: 9 and an ending field.
 
 from __future__ import annotations
 
-import json
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -177,7 +176,11 @@ def format_salvation_menu(lang: str = "en") -> str:
     Returns:
         Formatted menu text with numbered choices.
     """
-    title = "=== SALVATION PHASE \u2014 Epilogue Selection ===" if lang == "en" else "=== \uad6c\uc6d0 \ub2e8\uacc4 \u2014 \uc5d0\ud544\ub85c\uadf8 \uc120\ud0dd ==="
+    title = (
+        "=== SALVATION PHASE \u2014 Epilogue Selection ==="
+        if lang == "en"
+        else "=== \uad6c\uc6d0 \ub2e8\uacc4 \u2014 \uc5d0\ud544\ub85c\uadf8 \uc120\ud0dd ==="
+    )
     lines: list[str] = [title, ""]
     choices = list_available_epilogues(lang)
     for i, (char_id, label) in enumerate(choices, start=1):
@@ -189,7 +192,9 @@ def format_salvation_menu(lang: str = "en") -> str:
     if lang == "en":
         lines.append("Select a character to play their final epilogue (1-9).")
     else:
-        lines.append("\ucd5c\uc885 \uc5d0\ud544\ub85c\uadf8\ub97c \uc7ac\uc0dd\ud558\uc744 \uce90\ub9ad\ud130\ub97c \uc120\ud0dd\ud558\uc138\uc694 (1-9).")
+        lines.append(
+            "\ucd5c\uc885 \uc5d0\ud544\ub85c\uadf8\ub97c \uc7ac\uc0dd\ud558\uc744 \uce90\ub9ad\ud130\ub97c \uc120\ud0dd\ud558\uc138\uc694 (1-9)."
+        )
     return "\n".join(lines)
 
 
@@ -202,7 +207,11 @@ def format_salvation_ending_menu(lang: str = "en") -> str:
     Returns:
         Formatted ending selection menu text.
     """
-    title = "=== SALVATION PHASE \u2014 Ending Selection ===" if lang == "en" else "=== \uad6c\uc6d0 \ub2e8\uacc4 \u2014 \uc5d4\ub529 \uc120\ud0dd ==="
+    title = (
+        "=== SALVATION PHASE \u2014 Ending Selection ==="
+        if lang == "en"
+        else "=== \uad6c\uc6d0 \ub2e8\uacc4 \u2014 \uc5d4\ub529 \uc120\ud0dd ==="
+    )
     lines: list[str] = [title, ""]
     labels = {
         "A": ("New ending", "\uc0c8 \uc5d4\ub529"),
@@ -255,7 +264,7 @@ def get_epilogue_paths(scenes_dir: Path) -> dict[str, Path]:
     for char_id, entry in SALVATION_EPILOGUES.items():
         scene_id = entry["scene_id"]
         if scene_id.startswith("scene_") and scene_id.endswith("_epilogue"):
-            char_dir_name = scene_id[len("scene_"):-len("_epilogue")]
+            char_dir_name = scene_id[len("scene_") : -len("_epilogue")]
         else:
             char_dir_name = char_id
         result[char_id] = scenes_dir / char_dir_name / f"{scene_id}.json"
@@ -270,12 +279,14 @@ SALVATION_STATE_EPILOGUE = "salvation_epilogue"
 SALVATION_STATE_DONE = "salvation_done"
 SALVATION_STATE_FINAL = "final"
 
-VALID_SALVATION_STATES = frozenset({
-    SALVATION_STATE_INTRO,
-    SALVATION_STATE_EPILOGUE,
-    SALVATION_STATE_DONE,
-    SALVATION_STATE_FINAL,
-})
+VALID_SALVATION_STATES = frozenset(
+    {
+        SALVATION_STATE_INTRO,
+        SALVATION_STATE_EPILOGUE,
+        SALVATION_STATE_DONE,
+        SALVATION_STATE_FINAL,
+    }
+)
 
 
 @dataclass
@@ -296,7 +307,7 @@ class SalvationRunner:
 
     state: str = SALVATION_STATE_INTRO
     selection: SalvationSelection | None = None
-    last_scene: "SceneData | None" = None
+    last_scene: SceneData | None = None
 
     def set_state(self, new_state: str) -> None:
         """Transition to a new Salvation state.
@@ -309,8 +320,7 @@ class SalvationRunner:
         """
         if new_state not in VALID_SALVATION_STATES:
             raise ValueError(
-                f"Invalid Salvation state: {new_state!r}. "
-                f"Valid: {sorted(VALID_SALVATION_STATES)}"
+                f"Invalid Salvation state: {new_state!r}. Valid: {sorted(VALID_SALVATION_STATES)}"
             )
         self.state = new_state
 
@@ -326,7 +336,7 @@ class SalvationRunner:
         Raises:
             ValueError: If character_id is invalid.
         """
-        scene_id = validate_epilogue_selection(character_id)
+        validate_epilogue_selection(character_id)
         ending = get_epilogue_ending(character_id)
         self.selection = SalvationSelection(
             character_id=character_id,
@@ -336,7 +346,7 @@ class SalvationRunner:
         self.set_state(SALVATION_STATE_EPILOGUE)
         return self.selection
 
-    def load_epilogue(self, scenes_dir: Path) -> "SceneData":
+    def load_epilogue(self, scenes_dir: Path) -> SceneData:
         """Load the chosen epilogue's SceneData from disk.
 
         Must be called after choose_epilogue().
@@ -392,9 +402,7 @@ class SalvationRunner:
             ValueError: If ending is invalid.
         """
         if ending not in SALVATION_ENDINGS:
-            raise ValueError(
-                f"Invalid ending: {ending!r}. Valid: {SALVATION_ENDINGS}"
-            )
+            raise ValueError(f"Invalid ending: {ending!r}. Valid: {SALVATION_ENDINGS}")
         if self.selection is None:
             raise RuntimeError("No epilogue chosen. Call choose_epilogue() first.")
         self.selection = SalvationSelection(
@@ -415,7 +423,7 @@ class SalvationRunner:
         return self.state
 
 
-def format_epilogue_text(scene_data: "SceneData", lang: str = "en") -> str:
+def format_epilogue_text(scene_data: SceneData, lang: str = "en") -> str:
     """Format an epilogue scene for TUI playback display.
 
     Each epilogue has a single dialogue line (closing monologue).

@@ -153,7 +153,8 @@ def test_handle_menu_key3_continue_with_save(state: AppState) -> None:
 def test_handle_menu_key4_settings(state: AppState) -> None:
     state.screen = ScreenKind.MENU
     handle_menu_input(_key_event(KeySym.N4), state)
-    assert state.message  # placeholder message
+    assert state.screen == ScreenKind.SETTINGS
+    assert state.settings_selected == 0
 
 
 def test_handle_menu_key5_credits(state: AppState) -> None:

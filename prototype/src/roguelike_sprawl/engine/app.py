@@ -38,6 +38,21 @@ def main() -> int:
         )
         return 1
 
+    try:
+        return _main_inner()
+    except Exception as exc:  # pragma: no cover
+        from . import crash_reporter
+
+        crash_reporter.report_crash(exc, None, "main() top-level")
+        sys.stderr.write(
+            f"CRASH: {exc.__class__.__name__}: {exc}\n"
+            f"Crash log: {crash_reporter.crash_report_path()}\n"
+        )
+        return 1
+
+
+def _main_inner() -> int:
+    """Inner main function where crash reporter is not yet active."""
     from .font_loader import load_font
 
     tileset, is_ttf = load_font()
@@ -65,13 +80,25 @@ def main() -> int:
 
         running = True
         while running:
-            _render(root_console, t, portraits, state, _global_prog_registry, _global_ice_registry)
-            context.present(root_console)
+            try:
+                _render(
+                    root_console, t, portraits, state, _global_prog_registry, _global_ice_registry
+                )
+                context.present(root_console)
 
-            for event in tcod.event.wait():
-                if not _handle_input(event, state, _global_prog_registry, _global_ice_registry):
-                    running = False
-                    break
+                for event in tcod.event.wait():
+                    if not _handle_input(event, state, _global_prog_registry, _global_ice_registry):
+                        running = False
+                        break
+            except Exception as exc:  # pragma: no cover
+                from . import crash_reporter
+
+                crash_reporter.report_crash(exc, state, "game loop")
+                sys.stderr.write(
+                    f"CRASH during loop: {exc.__class__.__name__}: {exc}\n"
+                    f"Crash log: {crash_reporter.crash_report_path()}\n"
+                )
+                return 1
 
         return 0
 
@@ -152,6 +179,14 @@ def _render(
         from . import save_load_view
 
         save_load_view.render_save_load(console, state)
+    elif state.screen is ScreenKind.HELP:
+        from . import help_view
+
+        help_view.render_help(console, t, state)
+    elif state.screen is ScreenKind.SETTINGS:
+        from . import settings_view
+
+        settings_view.render_settings(console, t, state)
 
 
 def _handle_input(
@@ -286,6 +321,14 @@ def _handle_input(
         from . import save_load_view
 
         return save_load_view.handle_save_load_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.HELP:
+        from . import help_view
+
+        return help_view.handle_help_input(event, state)  # type: ignore[arg-type,return-value]
+    if state.screen is ScreenKind.SETTINGS:
+        from . import settings_view
+
+        return settings_view.handle_settings_input(event, state)  # type: ignore[arg-type,return-value]
     return True
 
 

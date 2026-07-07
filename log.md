@@ -2,6 +2,81 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-07] feat | Phase 7 — 크래시 리포팅 + mypy 12개 수정
+
+### Phase 7.4 — mypy 수정 (12 errors → 0)
+- `help_view.py`: `event.keysym` → `event.sym` (tcod API 정정)
+- `help_view.py`: `main_r.height` → `main_r.h` (Region attribute)
+- `help_view.py`: `draw_controls` 3rd arg string → list (API 올바르게 사용)
+- `help_view.py`: `draw_footer` left/right kwargs → text positional
+- `settings_view.py`: `main_r.height` → `main_r.h`
+- `settings_view.py`: `draw_controls` 3rd arg string → list
+- `state.py`: `help_page: int = 0` attribute 추가 (Phase 7 Help screen용)
+- **검증**: mypy 0 errors (118 source files)
+
+### Phase 7.3 — 크래시 리포팅
+
+- **배경**: sounds_test 46개 더미 WAV → 실제 cyberpunk 톤 생성
+- **생성 도구**: `scripts/upgrade_sounds.py` (ffmpeg 기반)
+- **사운드 카테고리**:
+  - Combat (12): hit_normal/hit_crit/hit_miss/block/victory/defeat/physical/magic/heal/buff/debuff/stun
+  - UI (5): menu_select/confirm/cancel/error/notification
+  - Movement (10): nav_step/nav_block/jack_in/jack_in_zap/jack_out/jack_out_buzz/data_extract/broadcast_static/broadcast_out/black_ice_roar
+  - Story (3): text_typing/dialogue_advance/event_trigger
+  - Items (3): pickup/equip/cant
+  - Themes (12): chiba/matrix_rain/finn_office/loa_drum/loa_channel/industrial/broadcast/hammer_alert/sense_net/cyberspace/manarase_drone
+- **톤 특성**: ffmpeg lavfi 합성 + distortion/tremolo/bandpass/afade 필터
+- **검증**: ruff check/format — All passed
+- **테스트**: pytest 4231 passed (변동 없음)
+
+## [2026-07-07] feat | Phase 7 — Settings 화면 구현
+
+- **Settings 화면** (Phase 7 옵션):
+  - `engine/settings_view.py` — 5 옵션 (오디오/색맹모드/키맵/해상도/뒤로)
+  - `engine/state.py` — `ScreenKind.SETTINGS`, `settings_selected`, `colorblind_mode` 추가
+  - `engine/menu.py` — N4 키로 Settings 화면 진입
+  - `engine/app.py` — SETTINGS 화면 렌더링/입력 디스패치
+  - `data/i18n/{en,ko}.json` — settings 섹션 (title/subtitle/controls/on/off)
+- **Settings 옵션**:
+  1. Audio Volume (±, 20칸 슬라이더)
+  2. Colorblind Mode (ON/OFF 토글)
+  3. Keymap (도움말 화면 참조)
+  4. Resolution (80x50 표시)
+  5. Back to Menu
+- **테스트**: 26개 (`tests/unit/test_settings.py`)
+- **메뉴 업데이트**: `test_handle_menu_key4_settings` — message → screen 변경
+
+## [2026-07-07] feat | Phase 7 — Help 시스템 / 튜토리얼 온보딩
+
+- **HELP 화면** (Phase 7 온보딩):
+  - `engine/help_view.py` — 5 페이지 도움말 (universal/matrix/combat/concepts/mission flow)
+  - `engine/state.py` — `ScreenKind.HELP` 추가
+  - `engine/menu.py` — 메뉴 옵션 7 (HELP) 추가 + 컨트롤 표시 갱신
+  - `engine/app.py` — HELP 화면 렌더링/입력 디스패치
+  - `data/i18n/{en,ko}.json` — help 섹션 + menu.help 문자열
+- **HELP 페이지** (5 페이지):
+  1. Universal Controls
+  2. Matrix Exploration
+  3. Combat (RT-MS)
+  4. Key Concepts
+  5. Mission Flow
+- **테스트**: 8개 (`tests/unit/test_help.py`)
+- **검증**: pytest 4262 passed (4254 → +8)
+
+## [2026-07-07] decision | ADR-0090 Accepted — Salvation Phase 완료
+
+- **Status 변경**: Draft → **Accepted** (2026-07-07)
+- **구현 현황** (실제 구현은 이미 완료, 확인만):
+  - `ChapterState.SALVATION_INTRO/EPILOGUE/DONE/FINAL` — `run/state.py`
+  - `Stage.SALVATION_EPILOGUE` — `run/state.py`
+  - `SalvationRunner` — `engine/salvation.py` (9자 epilogue 선택/재생/엔딩 선택)
+  - 9개 `09_epilogue.json` 씬 — `data/scenes/{char}/`
+  - 40개 테스트 모두 통과 — `tests/unit/test_salvation.py`
+- **구현 검증**: pytest 4254 passed
+- **NOTION_IMPORT.md 갱신**: v0.5.0 (9자키/72씬/47미션)
+- **Notion 페이지 업데이트**: `38f3e771-fc49-8142-bbcd-c289aa073c7f` (162 블록)
+- **ROADMAP 갱신**: Phase 9 완료, 차순: 튜토리얼/온보딩
+
 ## [2026-07-04] design | Salvation Phase × Stage × Epilogue 연계성 분석
 
 - **분석 문서** (`design/scenario/SALVATION_PHASE_INTEGRATION.md`):

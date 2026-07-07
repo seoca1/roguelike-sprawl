@@ -1,5 +1,5 @@
 {
-  "stage_enum_count": 13,
+  "stage_enum_count": 14,
   "stage_enum_names": [
     "PENDING",
     "BRIEFING",
@@ -13,10 +13,11 @@
     "DEBRIEF",
     "COMPLETE",
     "DEATH_RESTART",
-    "FAILED"
+    "FAILED",
+    "SALVATION_EPILOGUE"
   ],
   "stage_optional": [],
-  "chapter_state_enum_count": 14,
+  "chapter_state_enum_count": 18,
   "chapter_state_enum_names": [
     "PROLOGUE",
     "IN_CHAPTER_1",
@@ -29,9 +30,13 @@
     "CHAPTER_4_COMPLETE",
     "IN_CHAPTER_5",
     "CHAPTER_5_COMPLETE",
+    "SALVATION_INTRO",
+    "SALVATION_EPILOGUE",
+    "SALVATION_DONE",
     "ENDING_A",
     "ENDING_B",
-    "ENDING_C"
+    "ENDING_C",
+    "FINAL"
   ],
   "objective_kind_enum_count": 4,
   "objective_kind_enum_names": [
@@ -41,5 +46,5 @@
     "NONE"
   ],
   "source": "prototype/src/roguelike_sprawl/run/state.py",
-  "_generated_at": "2026-07-02T13:42:44"
+  "_generated_at": "2026-07-07T21:09:15"
 }

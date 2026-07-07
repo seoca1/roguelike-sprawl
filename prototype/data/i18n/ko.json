@@ -11,12 +11,13 @@
     "settings": "Settings",
     "quit": "Quit",
     "phase": "Phase: Main Menu",
-    "controls": "[1] New Run  [2] 그래픽 노블  [3] 이어하기  [4] 설정  [5] 크레딧  [6] 죽은 자키의 전당  [Q] 종료",
+    "controls": "[1] New Run  [2] 그래픽 노블  [3] 이어하기  [4] 설정  [5] 크레딧  [6] 죽은 자키의 전당  [7] 도움말  [Q] 종료",
     "graphic_novel": "그래픽 노블 — 스토리 자동재생",
     "continue": "이어하기",
     "continue_no_save": "이어하기 (세이브 없음)",
     "credits": "크레딧",
     "hall_of_dead": "죽은 자키의 전당",
+    "help": "도움말 — 조작법",
     "graphic_novel_menu_title": "그래픽 노블 모드",
     "graphic_novel_subtitle": "깁슨의 스프롤 3부작을 비주얼 노블로",
     "gn_prologue": "프롤로그 — 3명 랜덤 순서",
@@ -79,5 +80,19 @@
     "tough": "불리",
     "deadly": "치명",
     "futile": "자살행위"
+  },
+  "help": {
+    "title": "도움말 — 조작법 & 개념",
+    "controls": "[←/→] 페이지  [ESC] 메뉴로 돌아가기",
+    "footer": "[ESC] 돌아가기"
+  },
+  "settings": {
+    "title": "설정",
+    "subtitle": "오디오, 디스플레이 및 접근성 옵션",
+    "controls": "[↑/↓] 선택  [←/→] 조정  [ENTER] 토글  [ESC] 뒤로",
+    "footer": "Phase 7 — 설정",
+    "on": "켜기",
+    "off": "끄기",
+    "keymap_value": "도움말 화면 참조"
   }
 }

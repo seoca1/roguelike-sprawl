@@ -62,6 +62,9 @@ from roguelike_sprawl.engine.graphic_novel_view import (
     Portrait,
     SceneData,
 )
+from roguelike_sprawl.engine.salvation import (
+    SalvationRunner,
+)
 from roguelike_sprawl.engine.state import AppState, ScreenKind
 from roguelike_sprawl.engine.story_view import StoryRegistry
 from roguelike_sprawl.i18n import Translator
@@ -71,12 +74,6 @@ from roguelike_sprawl.matrix.ppl import calculate_ppl
 from roguelike_sprawl.matrix.zdr import node_status, node_zdr
 from roguelike_sprawl.missions import JobBoard
 from roguelike_sprawl.run import ChapterState, Stage, ensure_run_state
-from roguelike_sprawl.engine.salvation import (
-    SalvationRunner,
-    format_epilogue_text,
-    format_salvation_ending_menu,
-    format_salvation_menu,
-)
 
 
 def _setup(args: argparse.Namespace) -> tuple[AppState, Translator, StoryRegistry]:
@@ -544,8 +541,6 @@ def _action_character_select(state: AppState, character: str) -> str:
     return ""
 
 
-
-
 def _get_salvation_runner(state: AppState) -> SalvationRunner:
     """Get or create the SalvationRunner on the app state.
 
@@ -575,7 +570,11 @@ def _action_salvation_intro(state: AppState, choice: str) -> str:
         if not choice.isdigit() or not (1 <= int(choice) <= 9):
             return ""
         # Map 1-9 → character_id
-        choices = list(__import__("roguelike_sprawl.engine.salvation", fromlist=["list_available_epilogues"]).list_available_epilogues())
+        choices = list(
+            __import__(
+                "roguelike_sprawl.engine.salvation", fromlist=["list_available_epilogues"]
+            ).list_available_epilogues()
+        )
         if int(choice) > len(choices):
             return ""
         char_id = choices[int(choice) - 1][0]
@@ -599,7 +598,7 @@ def _action_salvation_epilogue(state: AppState) -> str:
             return ""
         runner.complete_epilogue()
         state.screen = ScreenKind.SALVATION_ENDING
-        return f"Auto: epilogue complete → ending menu ({runner.selection.ending if runner.selection else "?"})"
+        return f"Auto: epilogue complete → ending menu ({runner.selection.ending if runner.selection else '?'})"
     return ""
 
 
@@ -627,9 +626,6 @@ def _action_salvation_ending(state: AppState, choice: str) -> str:
         state.ending_elapsed_ms = 0.0
         return f"Auto: Salvation complete → Ending {choice} screen"
     return ""
-
-
-def _action_chapter(state: AppState) -> str:
 
 
 def _action_chapter(state: AppState) -> str:
@@ -766,7 +762,12 @@ def _action_hub(state: AppState) -> str:
             runner = _get_salvation_runner(state)
             # Set up a sensible default epilogue (matches character) for convenience
             char = state.character_id or "novice"
-            if char in __import__("roguelike_sprawl.engine.salvation", fromlist=["SALVATION_EPILOGUES"]).SALVATION_EPILOGUES:
+            if (
+                char
+                in __import__(
+                    "roguelike_sprawl.engine.salvation", fromlist=["SALVATION_EPILOGUES"]
+                ).SALVATION_EPILOGUES
+            ):
                 runner.choose_epilogue(char)
                 state.salvation_runner = runner
             state.salvation_done = True  # mark done to avoid re-entry

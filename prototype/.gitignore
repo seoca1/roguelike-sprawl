@@ -38,3 +38,8 @@ htmlcov/
 # Project specific
 data/fonts/*.png
 !data/fonts/.gitkeep
+
+# Runtime data (never commit)
+prototype/data/saves/*.json
+!prototype/data/saves/.gitkeep
+prototype/data/saves/*.log

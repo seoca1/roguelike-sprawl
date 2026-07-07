@@ -374,7 +374,9 @@ def load_prologue_chain(
     rng.shuffle(chars)
     chain: list[SceneData] = []
     for char in chars:
-        chain.extend(load_scene_chain(scenes_dir, char, shuffle=False, ending=ending, max_order=max_order))
+        chain.extend(
+            load_scene_chain(scenes_dir, char, shuffle=False, ending=ending, max_order=max_order)
+        )
     return chain
 
 

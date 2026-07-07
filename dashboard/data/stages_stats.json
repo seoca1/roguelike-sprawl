@@ -1,9 +1,9 @@
 {
-  "stages": 13,
-  "stage_enum": 13,
-  "transitions": 13,
-  "missions": 38,
-  "chapter_states": 14,
+  "stages": 14,
+  "stage_enum": 14,
+  "transitions": 14,
+  "missions": 47,
+  "chapter_states": 18,
   "objectives": 4,
-  "_generated_at": "2026-07-02T13:42:44"
+  "_generated_at": "2026-07-07T21:09:15"
 }

@@ -1,11 +1,11 @@
 ---
 title: Roguelike Sprawl - 프로젝트 가이드
-date: 2026-07-01
+date: 2026-07-04
 tags: [game, gibson, cyberpunk, python]
-version: 0.4.0
+version: 0.5.0
 ---
 
-# Roguelike Sprawl - 프로젝트 가이드 (v0.4)
+# Roguelike Sprawl - 프로젝트 가이드 (v0.5)
 
 ## 프로젝트 개요
 
@@ -18,37 +18,46 @@ version: 0.4.0
 - **언어**: Python 3.11+ (3.12, 3.14 호환)
 - **엔진**: python-tcod 21+
 - **아키텍처**: ECS-lite (Entity Component System)
-- **테스트**: pytest (3894 passing, 3962 collected, 24 xfailed)
+- **테스트**: pytest (4262 passed, 4306 collected, 44 skipped, 0 xfailed)
 - **린트**: ruff check / format
 - **타입 체크**: mypy strict
 - **의존성**: pyproject.toml + uv
 
-### 콘텐츠 카운트 (2026-07-01)
+### 콘텐츠 카운트 (2026-07-04)
 
 | 항목 | 수량 | 비고 |
 |---|---|---|
-| 미션 | 38 | Arc 1-5 + 4 suit-persona |
+| 미션 | 47 | Arc 1-5 + 9자키 |
 | 단편 (EN+KO 페어) | 41 | Fiction/derivative/sprawl-trilogy/short-stories/ |
 | Stage enum | 13 | PENDING/BRIEFING/TRAVEL/MEET_NPC/EXTRACT_DATA/BYPASS_SECURITY/DEFEAT_ICE/JACK_OUT/REWARD/DEBRIEF/COMPLETE/DEATH_RESTART/FAILED |
-| 캐릭터 아크 | 4 | Case (Novice) / Sil (Veteran) / Kas (Heretic) / Suit |
-| 챕터 (playable) | 6/15 | 9 future |
-| 엔딩 (A/B/C) | 3 | GN 메인 + 6 ending 씬 |
+| 캐릭터 아크 | 9 | 케이/실/카스/수트/위건/앤지/샐리/3Jane/Neuromancer |
+| GN 씬 | 72 | 9자키 × 8 씬 (4 base + 4 ending B/C) |
+| 챕터 (playable) | 9/15 | 9자키 완전 통합 |
+| 엔딩 (A/B/C) | 3 | GN 메인 + 9자키 ending |
+| 세이브 슬롯 | 10 + 1 auto | 10개 수동 + 자동저장 |
+| ICE 타입 | 41 | corporate_guard, archive_sentinel, wintermute_proxy 추가 |
 | 업적 | 28 | dashboard/achievements.html |
 | 설정 | 30+ | dashboard/settings.html |
 | 대시보드 | 11 | index/stages/novel/story/cyberspace/dungeon/combat/equipment/graphic-novel/player/sound |
+| 테스트 | 4196 passed | pytest, 44 skipped, 0 xfailed |
 
 ---
 
 ## 1. 캐릭터별 진행 경로 (4 캐릭터 × 15 미션)
 
-### 1.1 캐릭터 구성
+### 1.1 캐릭터 구성 (9자키)
 
-| ID | 이름 | 아키타입 | Deck Tier | 무기 | 동기 | 단편 매핑 |
-|---|---|---|---|---|---|---|
-| `novice` | 케이 (K) | Novice | T1 | Wisp (T1) | 빚 갚기 (생존) | Case (Neuromancer) |
-| `veteran` | 실 (Sil) | Veteran | T2 | Hammer (T2) | 복수 (T-A) | Marly (Count Zero) |
-| `heretic` | 카스 (Kas) | Heretic | T3 (bio) | Viral Sermon | 시스템 폭로 | Kumiko (MLO) |
-| `suit` | (4-persona) | Corporate | T1-T3 | Variable | 임무 수행 | Armitage / Hosaka / T-A / Wintermute |
+| ID | 이름 | 아키타입 | Deck Tier | 무기 | 동기 | 톤 | 단편 매핑 |
+|---|---|---|---|---|---|---|---|
+| `novice` | 케이 (K) | Novice | T1 | Wisp (T1) | 돈 (생존) | 떨림 | Case (Neuromancer) |
+| `veteran` | 실 (Sil) | Veteran | T2 | Hammer (T2) | 복수 (과거) | 분노 | Marly (Count Zero) |
+| `heretic` | 카스 (Kas) | Heretic | T3 (bio) | Viral Sermon | 전복 (미래) | 예술 | Kumiko (MLO) |
+| `suit` | 스위트 (Suit) | Corporate | T1-T3 | Variable | 거래 (영구) | cold | Armitage / Hosaka / T-A / Wintermute |
+| `wigan` | 위건 (Wigan) | Vodou | T2 | Construct | 자아 회복 | ritual | Wigan Ludgate (CZ) |
+| `angie` | 앤지 (Angie) | Loa | T1 | Loa Chip | 엄마 | 직관 | Angie Mitchell (CZ) |
+| `sally` | 샐리 (Sally) | Market | T3 | Viral | 시장 지배 | sharp | Sally Shears (MLO) |
+| `3jane` | 3Jane | Aristocratic | T4 | T-A Suite | 가족 통합 | royal | 3Jane T-A (MLO) |
+| `neuromancer` | Neuromancer | AI | — | — | 초월 | vast, clinical | Neuromancer (merged AI) |
 
 ### 1.2 Stage Flow (13 stages)
 
@@ -64,7 +73,7 @@ PENDING → BRIEFING → TRAVEL → MEET_NPC → EXTRACT_DATA
 
 **Phase B 추가** (2026-07-01): `BRIEFING` / `TRAVEL` / `BYPASS_SECURITY` (10→13 stages)
 
-### 1.3 미션 Grade 분포 (38 missions)
+### 1.3 미션 Grade 분포 (47 missions)
 
 | Arc | Grade 범위 | 미션 수 | 대표 미션 |
 |-----|-----------|--------|----------|
@@ -74,7 +83,7 @@ PENDING → BRIEFING → TRAVEL → MEET_NPC → EXTRACT_DATA
 | 4 | 4-5 | 7 | aleph_fragment, dixies_offer, ta_defection |
 | 5 | 5-6 | 4 | final_choice, neuromancer_merger, zion_express |
 
-**신규 추가 (2026-07-01)**: `sense_net_infiltration`, `wigan_call`, `hosaka_core`, `straylight_approach`, `maas_heist`
+**Mid/Core/TA zone 확장 (2026-07-04)**: hosaka_corporate_infiltration, sense_net_media_extract, yakuza_loan_shark, ta_payroll_archive, maas_neural_extract, construct_memory_rescue, ta_straylight_archive, ta_3jane_betrayal, ta_wintermute_direct
 
 ### 1.4 보상 공식
 
@@ -202,7 +211,7 @@ prototype/src/roguelike_sprawl/
 
 ## 5. 콘텐츠 확장 계획 (CONTENT_EXPANSION_PLAN.md)
 
-### 5.1 Phase A: 미션 확장 (15→25, 달성: 33→38)
+### 5.1 Phase A: 미션 확장 (15→25, 달성: 38→47)
 
 - ✅ Arc 1 미션 6개 (tutorial_maze, first_contact, data_retrieval, first_jack, watchdog_patrol, ice_run)
 - ✅ Arc 2 미션 11개 (sense_net_infiltration, wigan_call 추가 2026-07-01)
@@ -231,16 +240,23 @@ prototype/src/roguelike_sprawl/
 
 | 번호 | 제목 | 상태 | 날짜 |
 |---|---|---|---|
+| 0030 | GitHub 활용 계획 (MIT/Public/MkDocs) | Accepted | 2026-07-04 |
+| 0031 | Original Scenario Integration | Accepted | 2026-07-04 |
+| 0032 | Graphic Novel Auto-Play Mode | Accepted | 2026-07-04 |
+| 0040 | Death & Restart Cycle | Accepted | 2026-07-04 |
 | 0041-0044 | GN Content/Card/Audio/Save | Accepted | 2026-06-20/21 |
 | 0046 | GN Ending B | Accepted | 2026-06-21 |
 | 0048-0049 | GN Ending Menu + C | Accepted | 2026-06-21 |
 | 0050 | Boss ICE (Wintermute + T-A Prime) | Accepted | 2026-06-21 |
 | 0051 | Mission Story Metadata | Accepted | 2026-06-22 |
-| 0052 | Short Story Expansion Plan | Accepted | 2026-06-22 |
-| 0060 | Dungeon BSP + NetHack + VFX | Accepted | 2026-06-30 |
-| 0061 | Novel Integration (4-layer + runtime) | Accepted | 2026-06-30 |
-| (impl) | Stage BRIEFING/TRAVEL/BYPASS_SECURITY | Implemented | 2026-07-01 |
-| (impl) | CONTENT_EXPANSION Phase A+ (5 신규 미션) | Implemented | 2026-07-01 |
+| 0052 | Short Story Expansion Plan | Accepted | 2026-07-04 |
+| 0060 | Dungeon BSP + NetHack + VFX | Accepted | 2026-07-04 |
+| 0061 | Novel Integration (4-layer + runtime) | Accepted | 2026-07-04 |
+| 0073 | Phase 7.1 Wigan Ludgate | Implemented | 2026-07-04 |
+| 0074 | Phase 7.2 Mid/Core/TA Zone Expansion | Implemented | 2026-07-04 |
+| 0075 | Phase 7.3 Save/Load 10 Slots + Auto | Implemented | 2026-07-04 |
+| 0080-0081 | Phase 8 Sally Shears / Phase 9 3Jane + Neuromancer | Implemented | 2026-07-04 |
+| 0090 | Salvation Phase Integration | **Accepted** | 2026-07-07 |
 
 ---
 
@@ -251,7 +267,7 @@ prototype/src/roguelike_sprawl/
 ```bash
 cd prototype/
 
-# 전체 테스트 (3894 passing, 3962 collected)
+# 전체 테스트 (4262 passed, 4306 collected)
 uv run pytest
 
 # Lint + Format
@@ -288,32 +304,36 @@ python3 tools/build_dashboard.py
 
 ---
 
-## 8. 현재 상태 (2026-07-01)
+## 8. 현재 상태 (2026-07-04)
 
 | 항목 | 상태 |
 |------|------|
-| Unit Tests | ✅ **3894 passed** (3962 collected) |
-| mypy | ✅ No errors (2 source files) |
+| Unit Tests | ✅ **4262 passed** (4306 collected, 44 skipped) |
+| mypy | ✅ 0 errors (114 source files) |
 | ruff | ✅ All passed |
-| 미션 | ✅ **38개** (Arc 1-5 + 4 suit) |
+| mkdocs | ✅ 316 HTML pages, 0 warnings (--strict) |
+| 미션 | ✅ **47개** (5 zones 균형) |
 | 단편 (EN+KO) | ✅ **41 pair** |
-| Stage | ✅ **13개** (Phase B 확장) |
+| Stage | ✅ **13개** (BRIEFING/TRAVEL/BYPASS_SECURITY) |
 | Novel Integration | ✅ 런타임 자동 호출 연동 |
+| 캐릭터 | ✅ **9자키 완전 통합** (72 GN scenes) |
+| 세이브 | ✅ **10슬롯 + 자동저장** |
+| ADR | ✅ **60+ Accepted, 0 Draft** |
 
-### 8.1 신규 통합 작업 (P1~P4 + B, 2026-07-01)
+### 8.1 세션 작업 요약 (2026-07-04, 23 commits)
 
-- **P1**: 테스트 10건 수정 (suit 단편 스텁 + 오타 + stale 정정)
-- **P2**: Novel Dispatcher 미션 트리거 자동 호출 (215 lines)
-- **P3**: KO 번역 한자 잔재 0건 (모든 JSON)
-- **P4**: Stage BRIEFING/TRAVEL/BYPASS_SECURITY 추가
-- **B**: 신규 미션 5개 (Arc 2-3) + 단편 5편 (깁슨 톤)
+- **Phase 7.1**: Wigan Ludgate (5번째 자키) + Angie Mitchell (6번째)
+- **Phase 7.2**: Mid/Core/TA zone 9 신규 미션 + 3 신규 ICE
+- **Phase 7.3**: 세이브/로드 10슬롯 + 자동저장
+- **Phase 8**: Sally Shears (7번째 자키)
+- **Phase 9**: 3Jane Tessier-Ashpool (8번째) + Neuromancer (9번째)
+- **Salvation Phase**: ADR-0090 Draft (9자 × 9 epilogue 씬)
 
-### 8.2 신규 테스트 (2026-07-01)
+### 8.2 발견/수정 사항 (2026-07-04)
 
-- `tests/unit/test_novel_integration.py` (11 tests)
-- `tests/unit/test_stage_expansion.py` (16 tests)
-- `tests/integration/test_expansion_missions.py` (59 tests)
-- **합계: +86 신규**
+- **버그 수정 5건**: matrix_view.current_node → current_node_id, chapter_view KeyError, get_gn_menu_key tuple 누락, ending A→B不一致, 중복 키
+- **인프라 정리**: lint 116→0, mypy 58→0, mkdocs 41→0
+- **GitHub Projects 보드**: 설정 가이드 작성 (ADR-0030 §9 해소)
 
 ---
 
@@ -365,16 +385,21 @@ python Language/_publish/scripts/publish_to_notion.py this-file.md
 
 ### 동기화 체크리스트
 
-- [x] 미션 카운트 38
+- [x] 미션 카운트 47
 - [x] 단편 카운트 41 pair
 - [x] Stage 13개
 - [x] Novel Integration 런타임 연동
-- [x] 테스트 3894 passed
-- [x] ADR 0041-0061 + 2026-07-01 구현 사항
+- [x] 테스트 4262 passed
+- [x] ADR 0030-0090 (60+ Accepted, 0 Draft)
+- [x] 캐릭터 9자키 완전 통합
+- [x] GN 씬 72개 (9자 × 8)
+- [x] 세이브 10슬롯 + 자동저장
+- [x] ICE 41 types
+- [x] lint/mypy/mkdocs 모두 통과
 
 ---
 
-> **버전**: 0.4.0
-> **작성일**: 2026-07-01
-> **이전 버전**: 0.3.0 (2026-06-25, 15 미션)
-> **연관 문서**: `log.md`, `SESSION_HANDOVER.md`, `IMPROVEMENTS.md`, `decisions/README.md`
+> **버전**: 0.5.0
+> **작성일**: 2026-07-04
+> **이전 버전**: 0.4.0 (2026-07-01, 38 미션/4자키)
+> **연관 문서**: `log.md`, `SESSION_SUMMARY.md` (v0.2.0), `ROADMAP.md`, `CHARACTER_PATHS.md` (v0.5.0), `decisions/README.md`

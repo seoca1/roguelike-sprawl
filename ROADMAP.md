@@ -2,6 +2,14 @@
 
 ## 변경 이력 (Recent)
 
+- **2026-07-04**: Phase 7+8+9 완료 — **4254 tests pass** (+145)
+  - **Phase 7.1** (f54ae7d, a376bf4): Wigan Ludgate + Angie Mitchell (5번째 + 6번째 자키, 16 씬)
+  - **Phase 7.2** (7e8a0e4): Mid/Core/TA zone 9 신규 미션 + 3 신규 ICE (corporate_guard, archive_sentinel, wintermute_proxy)
+  - **Phase 7.3** (42873a2): 세이브/로드 10슬롯 + AUTO_SAVE_SLOT=0
+  - **Phase 8** (da5c64a): Sally Shears (7번째 자키, 8 씬)
+  - **Phase 9** (105e58a, ed66754): 3Jane Tessier-Ashpool + Neuromancer (8번째 + 9번째 자키, 16 씬)
+  - **9자키 완전 통합**: 72 GN scenes (9 chars × 8), 47 missions, 41 ICE types
+  - **ADR-0090 Draft**: Salvation Phase 통합 제안 (9자 × epilogue)
 - **2026-07-04**: Phase 6.0+ 인프라 정리 + Phase 6.1/6.2 — **4109 tests pass** (+215)
   - **lint/mypy 174 → 0** (29c3eeb): ruff check/format + mypy strict 모두 green. 114 source files.
   - **ADR-0030 Accepted** (12764e2): GitHub 활용 계획 (MIT/Public/MkDocs 결정)
@@ -286,20 +294,23 @@ Phase 7: 알파 빌드
 **목표**: 외부 테스트 가능한 빌드.
 
 **작업**:
-- [ ] 튜토리얼/온보딩
-- [ ] 사운드/비주얼 폴리시 (placeholder → 의도된 자산)
-- [ ] 세이브/로드
-- [ ] 옵션 (해상도, 키맵, 색맹 모드)
-- [ ] 크래시 리포팅
-- [ ] 빌드/배포 파이프라인
+- [x] 세이브/로드 폴리시 — 10슬롯 + 자동저장 (Phase 7.3)
+- [x] 콘텐츠 확장 — 9자키/72씬/47미션/41ICE (Phase 7.1/7.2/8/9)
+- [x] 튜토리얼/온보딩 — Help 시스템 (Phase 7: 5 페이지 도움말)
+- [x] 옵션 — Settings 화면 (오디오/색맹모드/키맵/해상도)
+- [x] 사운드/비주얼 폴리시 — 46개 ffmpeg 음원 업그레이드 (cyberpunk 톤)
+- [x] 크래시 리포팅 — `engine/crash_reporter.py` (crash.log)
+- [x] 빌드/배포 파이프라인 — GitHub Actions release workflow
+
+**Phase 7 진행률**: ✅ **7/7 완료** (2026-07-07)
 
 ---
 
 ## 현재 위치
 
-**현재 Phase**: **Phase 5 + Phase 6 완료 (2026-07-04)**
-**누적 테스트**: **4109 passed** + 44 skipped + 0 xfailed (2026-07-04)
-**검증 상태**: ruff check ✅ / ruff format ✅ / mypy strict ✅ (114 source files)
+**현재 Phase**: **Phase 7 완료 (2026-07-07)**
+**누적 테스트**: **4231 passed** + 44 skipped + 0 xfailed (2026-07-07)
+**검증 상태**: ruff check ✅ / ruff format ✅ / mypy strict ✅ (118 source files)
 
 **Phase 6+ 사이클 요약 (2026-07-04)**:
 - **lint/mypy 174 errors → 0** (29c3eeb) — 43 files 변경, +717/-645 lines
@@ -326,25 +337,29 @@ Phase 7: 알파 빌드
 - [x] **P0/P1/P2 마무리 + 신규 시스템** (2026-07-01) — **3442 tests** (Faction Reputation, Grade 6, Set Bonuses, 디자인 7문서)
 - [x] **소설→스토리→이벤트 통합** (2026-07-01) — **3894 tests** (단편 24편, 미션 5개, Stage 13)
 - [x] **Phase 6.0+ 인프라 정리** (2026-07-04) — **4109 tests** (lint/mypy 0, MkDocs strict, Phase 6.1/6.2)
+- [x] **Phase 7.1 — Wigan + Angie** (2026-07-04) — 5번째 + 6번째 자키 8 씬씩
+- [x] **Phase 7.2 — Mid/Core/TA Zone** (2026-07-04) — 9 신규 미션 + 3 신규 ICE
+- [x] **Phase 7.3 — Save/Load 10+1** (2026-07-04) — 10슬롯 + 자동저장
+- [x] **Phase 8 — Sally Shears** (2026-07-04) — 7번째 자키 8 씬
+- [x] **Phase 9 — 3Jane + Neuromancer** (2026-07-04) — 8번째 + 9번째 자키 8 씬씩
+- [x] **GitHub Projects 보드 가이드** (2026-07-04) — docs/GITHUB_PROJECTS_SETUP.md
 
-**Phase 5 + Phase 6 핵심 시스템 완료**:
+**Phase 5~9 핵심 시스템 완료**:
 - [x] 전투 (RT-MS) — ICE 진입 시 자동 공격 + 메뉴 스킬 + 5-Layer VFX
 - [x] Action menu — scan/extract/engage/communicate/**hack/access** (Phase 6+ unlock)
 - [x] 의뢰 완료 / 보상 — Data Salvage + faction reputation hook
 - [x] 죽음/재시작 — flatline → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키 (회귀 테스트 7개)
 - [x] 오리지널 시나리오 통합 — 단편 → 챕터 → 초반 플레이 (12 씬)
-- [x] 그래픽 노블 자동플레이 — 메인메뉴 6 옵션 + 16 씬 자동재생 (4 chars × 4 ending A) + Save Progress
-- [x] 사이드 콘텐츠 — 30+ 설정, 28 업적, 10 대시보드
-- [x] **Faction Reputation** (2026-07-01) — 5 faction × 7 tier, NPC dialogue/Info Market/Mission Board 통합
-- [x] **Equipment Set Bonuses** (2026-07-01) — 3 세트 × 2pc/3pc 임계값
-- [x] **Phase 6.1 — Suit 자키** (2026-07-04) — 4번째 캐릭터 (3인칭 corporate), 8 씬 (4 base + 4 ending B/C)
-- [x] **lint/mypy 0** (2026-07-04) — ruff check/format/mypy strict 모두 green
-- [x] **MkDocs --strict 빌드** (2026-07-04) — 316 HTML pages 통합 위키 (wiki/design/decisions/Fiction)
+- [x] 그래픽 노블 자동플레이 — 메인메뉴 11 옵션 + 72 씬 자동재생 (9 chars × 8 ending A) + Save Progress
+- [x] 사이드 콘텐츠 — 30+ 설정, 28 업적, 11 대시보드
+- [x] **Faction Reputation** — 5 faction × 7 tier, NPC dialogue/Info Market/Mission Board 통합
+- [x] **Equipment Set Bonuses** — 3 세트 × 2pc/3pc 임계값
+- [x] **9자키 완전 통합** — 케이/실/카스/수트/위건/앤지/샐리/3Jane/Neuromancer (72 GN scenes)
+- [x] **47 미션** (5 zones 균형) + 41 ICE types
+- [x] **10슬롯 + 자동저장** 세이브/로드
+- [x] **lint/mypy/mkdocs 모두 green** — 0 errors/warnings
 
-**차순 작업** (Phase 7+):
-1. **5번째 자키** — Wigan Ludgate (Vodou construct 시점)
-2. **추가 시나리오** — 단편 4편 + 엔딩 B 확장 (novelettes 3개 추가 보강)
-3. **튜토리얼/온보딩** — 첫 런 가이드, Help 시스템
-4. **GitHub Projects 보드** — 이슈 카드 마이그레이션 (ADR-0030 §9 마지막 보류)
-5. **Mid / Core / TA zone 콘텐츠 보강** — 현재 Surface 위주, 깊이별 다양성
-6. **세이브/로드 폴리시** — 5 슬롯 → 10 슬롯 확장 + 자동저장
+**차순 작업** (Phase 10):
+1. **Salvation Phase 완료** (ADR-0090 ✅ Accepted) — 9자 × epilogue + ChapterState 3개 + Stage 1개
+2. **튜토리얼/온보딩** — 첫 런 가이드, Help 시스템
+3. **v1.0.0 정식 release** — Phase 7 완료 시

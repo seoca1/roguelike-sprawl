@@ -11,12 +11,13 @@
     "settings": "Settings",
     "quit": "Quit",
     "phase": "Phase: Main Menu",
-    "controls": "[1] New Run  [2] Graphic Novel  [3] Continue  [4] Settings  [5] Credits  [6] Hall of Dead  [Q] Quit",
+    "controls": "[1] New Run  [2] Graphic Novel  [3] Continue  [4] Settings  [5] Credits  [6] Hall of Dead  [7] Help  [Q] Quit",
     "graphic_novel": "Graphic Novel — story auto-play",
     "continue": "Continue",
     "continue_no_save": "Continue (no save)",
     "credits": "Credits",
     "hall_of_dead": "Hall of Dead Jockeys",
+    "help": "Help — Controls & Concepts",
     "graphic_novel_menu_title": "GRAPHIC NOVEL MODE",
     "graphic_novel_subtitle": "A visual novel of Gibson's Sprawl trilogy",
     "gn_prologue": "Prologue — 3 characters in random order",
@@ -79,5 +80,19 @@
     "tough": "TOUGH",
     "deadly": "DEADLY",
     "futile": "FUTILE"
+  },
+  "help": {
+    "title": "HELP — Controls & Concepts",
+    "controls": "[←/→] Page  [ESC] Back to menu",
+    "footer": "[ESC] Back"
+  },
+  "settings": {
+    "title": "SETTINGS",
+    "subtitle": "Audio, display, and accessibility options",
+    "controls": "[↑/↓] Select  [←/→] Adjust  [ENTER] Toggle  [ESC] Back",
+    "footer": "Phase 7 — Settings",
+    "on": "ON",
+    "off": "OFF",
+    "keymap_value": "See Help screen"
   }
 }

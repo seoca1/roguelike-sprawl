@@ -1,9 +1,9 @@
 # ADR-0090: Salvation Phase × Stage × Epilogue 통합
 
-> **Status**: Draft
+> **Status**: Accepted
 > **Date**: 2026-07-04
 > **Authors**: Session lead
-> **Deciders**: TBD
+> **Deciders**: AI agent (2026-07-07)
 > **Related**: `design/scenario/SALVATION_PHASE_INTEGRATION.md` (연계성 분석 문서)
 
 ---
@@ -116,6 +116,16 @@ class Stage(StrEnum):
 - ending_type 패턴은 이미 존재 (각 챕터 JSON에 명시)
 - epilogue는 1인칭 (기존 씬 톤과 일관)
 
+### Implementation Results (2026-07-07)
+
+| 항목 | 구현 | 비고 |
+|---|---|---|
+| ChapterState | ✅ SALVATION_INTRO/EPILOGUE/DONE/FINAL | `run/state.py` |
+| Stage | ✅ SALVATION_EPILOGUE | `run/state.py` |
+| SalvationRunner | ✅ `engine/salvation.py` | 9자 epilogue 선택/재생/엔딩 선택 |
+| epilogue 씬 | ✅ 9개 (09_epilogue.json) | case/sil/kas/suit/wigan/angie/sally/3jane/neuromancer |
+| 테스트 | ✅ 40 tests | `tests/unit/test_salvation.py` |
+
 ## 8. Alternatives
 
 ### A. Salvation 없음 (현재 상태 유지)
@@ -156,7 +166,8 @@ class Stage(StrEnum):
 
 ---
 
-**Status**: Draft
-**Next**: Phase 9-A 구현 착수
+**Status**: Accepted
+**Implemented**: 2026-07-07
+**Next**: 튜토리얼/온보딩 (Phase 7 나머지)
 **Owner**: TBD
-**Review**: Phase 9-A 완료 후
+**Review**: Phase 10 완료 후

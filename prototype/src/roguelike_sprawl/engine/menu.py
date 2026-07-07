@@ -27,15 +27,16 @@ from .layout import (
 )
 from .state import AppState, ScreenKind
 
-# Main menu options (1-indexed) — ADR-0032, ADR-0040
+# Main menu options (1-indexed) — ADR-0032, ADR-0040, Phase 7
 OPTION_NEW_RUN = 1
 OPTION_GRAPHIC_NOVEL = 2
 OPTION_CONTINUE = 3
 OPTION_SETTINGS = 4
 OPTION_CREDITS = 5
 OPTION_HALL_OF_DEAD = 6  # Hall of Dead Jockeys (ADR-0040)
+OPTION_HELP = 7  # Help screen (Phase 7: tutorial/onboarding)
 
-MENU_OPTION_COUNT = 6
+MENU_OPTION_COUNT = 7
 
 
 def render_menu(console: tcod.console.Console, t: Translator, state: AppState) -> None:
@@ -54,7 +55,7 @@ def render_menu(console: tcod.console.Console, t: Translator, state: AppState) -
     # Title
     draw_title(console, title_r, title=t("app.title"), subtitle=t("app.subtitle"))
 
-    # Main area: 6 menu options (ADR-0032 + ADR-0040)
+    # Main area: 7 menu options (ADR-0032 + ADR-0040 + Phase 7)
     has_save = getattr(state, "has_save", False)
     options = [
         (OPTION_NEW_RUN, t("menu.new_run")),
@@ -63,6 +64,7 @@ def render_menu(console: tcod.console.Console, t: Translator, state: AppState) -
         (OPTION_SETTINGS, t("menu.settings")),
         (OPTION_CREDITS, t("menu.credits")),
         (OPTION_HALL_OF_DEAD, t("menu.hall_of_dead")),
+        (OPTION_HELP, t("menu.help")),
     ]
     y = main_r.y + 1
     for i, (_key, label) in enumerate(options):
@@ -126,13 +128,18 @@ def handle_menu_input(event: tcod.event.Event, state: AppState) -> bool:
             else:
                 state.message = "No save file. Use NEW RUN."
         elif event.sym is KeySym.N4:
-            state.message = "Settings: (Phase 7+)"
+            state.screen = ScreenKind.SETTINGS
+            state.settings_selected = 0
         elif event.sym is KeySym.N5:
             state.message = "Credits: (Phase 7+)"
         elif event.sym is KeySym.N6:
             # Hall of Dead Jockeys (ADR-0040)
             state.screen = ScreenKind.HALL_OF_DEAD
             state.hall_of_dead_selected = 0
+        elif event.sym is KeySym.N7:
+            # Help screen (Phase 7: tutorial/onboarding)
+            state.screen = ScreenKind.HELP
+            state.help_page = 0
     return True
 
 

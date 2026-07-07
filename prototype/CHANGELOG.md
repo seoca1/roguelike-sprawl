@@ -374,3 +374,170 @@ All notable changes to this project will be documented in this file.
 - **mypy strict**: 0 errors (64 source files)
 - **ruff**: 0 issues
 - **pytest**: 172/172 passing (was 144, +28 new)
+
+---
+
+## [Phase 6] - 2026-06-20 to 2026-06-30
+
+### Added - Content Pipeline (ADR-0031, ADR-0032, ADR-0040-0052)
+
+#### **Graphic Novel Mode** (ADR-0032)
+- 12 scenes (4 characters × 4 scenes) auto-play with typed dialogue
+- Main menu expanded to 5 options: NEW RUN, GRAPHIC NOVEL, CONTINUE, SETTINGS, CREDITS
+- Save progress after graphic novel completion
+- 40 new tests (`test_graphic_novel_view.py`)
+
+#### **Death & Restart Cycle** (ADR-0040)
+- DEATH / DEATH_SUMMARY / HALL_OF_DEAD screens
+- `jockey_history.py` — Hall of Dead Jockeys archive
+- Restart options: New jockey, Same character, Quit
+- 7 regression tests
+
+#### **Scene Transitions** (ADR-0041, ADR-0042)
+- Chapter title cards (Roman numerals I-XII)
+- Fade transitions between scenes
+- 15 sound cue → file mappings (ADR-0043)
+
+#### **Ending B** (ADR-0046) + **Ending C** (ADR-0049)
+- 6 new scenes for alternative endings (Disappear/Erase/Burn)
+- 9 ending combinations per character
+- Save format v1.1.0 → v1.2.0 migration
+
+#### **Sound System** (ADR-0043)
+- `graphic_novel_audio.py` — scene-level sound cue resolver
+- 46 WAV files in `sounds_test/` (combat/UI/movement/story/themes)
+- Per-category volume control (T/E/K/B/V/I keys)
+
+#### **Core Content**
+- 5 factions × 7 reputation tiers
+- NPC greeting system (`npc_greeting.py`)
+- Mission reputation locks + Info Market faction discounts
+- Equipment set bonuses (3 sets × 2pc/3pc thresholds)
+
+### Verified - Phase 6 End
+- **mypy strict**: 0 errors (114 source files)
+- **ruff**: 0 issues
+- **pytest**: 2257/2257 passing (was 172, +2085 new)
+
+---
+
+## [Phase 7] - 2026-07-01 to 2026-07-07
+
+### Added - Alpha Build (Phase 7.1-7.3)
+
+#### **Save/Load Policy Expansion** (Phase 7.3)
+- `MAX_SLOTS = 10` (was 5)
+- `AUTO_SAVE_SLOT = 0` — separate auto-save slot
+- `autosave()`, `has_autosave()`, `list_all()` methods
+- 8 new tests (`test_save_slots_phase73.py`)
+
+#### **Zone Content Expansion** (Phase 7.2)
+- 9 new missions in MID/CORE/TA zones
+- 3 new ICE types: `corporate_guard`, `archive_sentinel`, `wintermute_proxy`
+- 47 total missions (surface 12 / mid 9 / deep 10 / core 7 / freeside 5 / ta 4)
+
+#### **Tutorial / Help System** (Phase 7)
+- `engine/help_view.py` — 5-page help (Universal/Matrix/Combat/Concepts/Mission Flow)
+- `engine/state.py` — `ScreenKind.HELP`, `help_page` attribute
+- N7 key → Help from menu
+
+#### **Settings Screen** (Phase 7)
+- `engine/settings_view.py` — 5 options (Audio/Colorblind/Keymap/Resolution/Back)
+- Audio volume slider (20 steps, ± keys)
+- Colorblind mode toggle
+- `engine/state.py` — `ScreenKind.SETTINGS`, `settings_selected`, `colorblind_mode`
+
+### Added - Alpha Build (Phase 7.4)
+
+#### **Sound Upgrade** (Phase 7.3)
+- `scripts/upgrade_sounds.py` — ffmpeg-based cyberpunk sound generator
+- 46 improved WAV files with distortion/tremolo/bandpass/afade filters
+- Categories: combat (12), UI (5), movement (10), story (3), items (3), themes (12)
+
+#### **Crash Reporter** (Phase 7.3)
+- `engine/crash_reporter.py` — `report_crash(exc, state, message)`
+- Writes to `data/saves/crash.log` with timestamp + stack trace + state snapshot
+- Integrated into `main()` and game loop
+
+#### **Build / Release Pipeline** (Phase 7.4)
+- `.github/workflows/release.yml` — GitHub Actions release workflow
+- Builds wheel + tarball on tag push
+- TestPyPI + PyPI publishing via OIDC (no passwords)
+- Wheel verification step
+
+### Fixed - Phase 7
+- `help_view.py`: `event.keysym` → `event.sym`, `main_r.height` → `main_r.h`
+- `settings_view.py`: `main_r.height` → `main_r.h`, `draw_controls` API correct usage
+- `play.py`: duplicate function definition, f-string quote conflict
+
+### Verified - Phase 7 End
+- **mypy strict**: 0 errors (118 source files)
+- **ruff**: 0 issues
+- **pytest**: 4231/4231 passing (was 2257, +1974 new)
+
+---
+
+## [Phase 8] - 2026-07-04
+
+### Added - Sally Shears (7th Jockey)
+- `data/scenes/sally/` — 8 scenes (4 base + 4 ending)
+- Character label: "Sally — Market Operator" / "샐리 — 시장 운영자"
+- 1st-person cold operator perspective
+- 14 new tests (`test_sally_character.py`)
+
+### Verified
+- **pytest**: 4169/4169 passing (+14 new)
+
+---
+
+## [Phase 9] - 2026-07-04
+
+### Added - 3Jane Tessier-Ashpool + Neuromancer (8th + 9th Jockeys)
+
+#### **3Jane** (8th Jockey)
+- `data/scenes/3jane/` — 8 scenes (4 base + 4 ending)
+- Character label: "3Jane — Family Heir" / "3Jane — 가족의 후계자"
+- 1st-person aristocratic perspective (royal "we")
+- 14 new tests (`test_3jane_character.py`)
+
+#### **Neuromancer** (9th Jockey)
+- `data/scenes/neuromancer/` — 8 scenes (4 base + 4 ending)
+- Character label: "Neuromancer — Merged AI" / "뉴로맨서 — 합체된 AI"
+- 1st-person AI perspective (vast, clinical, omniscient)
+- 12 new tests (`test_neuromancer_character.py`)
+
+### Added - Salvation Phase Integration (ADR-0090)
+- `ChapterState.SALVATION_INTRO / EPILOGUE / DONE / FINAL`
+- `Stage.SALVATION_EPILOGUE`
+- `engine/salvation.py` — SalvationRunner (9-character epilogue selection/playback/ending)
+- 9 × `09_epilogue.json` scene files
+- 40 tests (`test_salvation.py`)
+
+### Verified - Phase 9 End
+- **pytest**: 4196/4196 passing (+27 new since Phase 8)
+- **9 characters × 8 scenes = 72 GN scenes total**
+
+---
+
+## [Phase 10] - 2026-07-07
+
+### Added - Phase 7 Completion
+
+#### **All Phase 7 Items Done** (7/7)
+- Save/Load policy (10 slots + auto) ✅
+- Content expansion (9 chars / 72 scenes / 47 missions / 41 ICE) ✅
+- Tutorial / Help system ✅
+- Settings screen ✅
+- Sound/Visual policy (ffmpeg cyberpunk sounds) ✅
+- Crash reporting (crash.log) ✅
+- Build/Deploy pipeline (GitHub Actions release workflow) ✅
+
+### Final Metrics
+- **9 characters** (Case/Sil/Kas/Suit/Wigan/Angie/Sally/3Jane/Neuromancer)
+- **72 graphic novel scenes** (9 chars × 8 scenes)
+- **47 missions** (5 zones balanced)
+- **41 ICE types**
+- **10 manual + 1 auto save slots**
+- **4231 tests passing**
+- **mypy strict**: 0 errors | **ruff**: 0 issues | **mkdocs --strict**: 0 warnings
+- **60+ ADRs** all Accepted

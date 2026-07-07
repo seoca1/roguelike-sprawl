@@ -114,7 +114,9 @@ class TestFormatSalvationMenu:
     def test_english_contains_all_characters(self) -> None:
         menu = format_salvation_menu("en")
         for char_id in SALVATION_EPILOGUES:
-            assert char_id.upper() in menu.upper() or SALVATION_EPILOGUES[char_id]["name_en"] in menu
+            assert (
+                char_id.upper() in menu.upper() or SALVATION_EPILOGUES[char_id]["name_en"] in menu
+            )
 
     def test_korean_contains_korean_names(self) -> None:
         menu = format_salvation_menu("ko")
@@ -188,8 +190,10 @@ class TestSalvationSelection:
         assert s.selected_at == 1
 
     def test_frozen(self) -> None:
+        from dataclasses import FrozenInstanceError
+
         s = SalvationSelection(character_id="case", ending="A", selected_at=1)
-        with pytest.raises(Exception):
+        with pytest.raises(FrozenInstanceError):
             s.character_id = "sally"  # type: ignore[misc]
 
 
@@ -349,12 +353,10 @@ class TestFormatEpilogueText:
 
     def test_format_empty_dialogue(self) -> None:
         """When dialogue is empty, return placeholder."""
-        from dataclasses import replace
-
-        from roguelike_sprawl.engine.salvation import format_epilogue_text
 
         # Create a fake scene with empty dialogue
         from roguelike_sprawl.engine.graphic_novel_view import SceneData
+        from roguelike_sprawl.engine.salvation import format_epilogue_text
 
         scene = SceneData(
             id="fake",

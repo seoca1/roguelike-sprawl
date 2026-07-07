@@ -1,5 +1,5 @@
 {
-  "ice_types_total": 38,
+  "ice_types_total": 41,
   "ice_types_grades": 0,
   "ice_grades_list": [
     "standard",
@@ -39,7 +39,10 @@
     "surveillance",
     "wintermute",
     "zion_defense",
-    "loa"
+    "loa",
+    "corporate_guard",
+    "archive_sentinel",
+    "wintermute_proxy"
   ],
   "skill_effects_total": 14,
   "skill_effect_animations_total": 15,
@@ -47,5 +50,5 @@
   "combat_mode": "RT-MS",
   "ppl_version": "v1",
   "zdr_version": "v1",
-  "_generated_at": "2026-07-02T13:42:44"
+  "_generated_at": "2026-07-07T21:09:15"
 }
