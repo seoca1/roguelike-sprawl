@@ -1,6 +1,6 @@
 # ADR-0102: v1.0.0 Release Decision
 
-**상태**: Draft
+**상태**: Accepted
 **날짜**: 2026-07-08
 **결정자**: 사용자
 **우선순위**: P2
@@ -75,18 +75,21 @@ Phase 7 완료 상태 — 4146 테스트 통과, 9자키/72씬/47미션/41 ICE, 
 ## 사용자 결정 (Decision)
 
 ### 버전
-[ ] Option 1: 1.0.0a1 (현재 빌드 그대로)
-[ ] Option 2: 1.0.0b1 (beta로 격상)
-[ ] Option 3: 1.0.0 (final)
-[ ] Option 4: 1.0.0a2 (증강 alpha)
-[ ] 기타: ___
+- **Selected**: Option 2: 1.0.0b1 (beta로 격상)
 
 ### Release Workflow
-[ ] A: 자동 (태그 트리거)
-[ ] B: 수동 (workflow_dispatch) — **권장**
+- **Selected**: Option B: 수동 (workflow_dispatch) — 사용자가 수동 트리거
 
 ### PyPI Token
-[ ] PYPI_API_TOKEN repository secret 추가 완료
+- **Pending**: PYPI_API_TOKEN repository secret 추가 필요 (아직 미설정)
+
+## 결과 (Consequences)
+
+- `pyproject.toml` version은 release.yml workflow_dispatch가 동적으로 업데이트 (1.0.0b1로 빌드 시)
+- `Development Status :: 4 - Beta` classifier로 설정됨
+- PyPI 업로드는 workflow_dispatch 트리거 후 수동 실행
+- GitHub tag `v1.0.0b1` 자동 생성됨
+- `--prelease` 플래그로 PyPI에 betaとして 업로드
 
 ## 결과 (Consequences)
 

@@ -9,14 +9,15 @@ LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YY
 - **수정**: 2개 cp 라인 제거 (REORGANIZE_PLAN에서 이미 삭제된 파일)
 - **커밋**: `801d960`
 
-### Part B — ADR-0102 v1.0.0 Release Decision (Draft)
+### Part B — ADR-0102 v1.0.0 Release Decision
 - **위치**: `decisions/0102-v1-release-decision.md`
-- **내용**:
-  - 4개 버전 옵션: 1.0.0a1 (현재 빌드)/1.0.0b1 (beta)/1.0.0 (final)/1.0.0a2 (증강 alpha)
-  - **추천**: Option 1 (1.0.0a1) 또는 Option 2 (1.0.0b1)
-  - Release workflow 옵션: A (자동 태그 트리거) / B (수동 workflow_dispatch) — **B 권장**
-  - PyPI_API_TOKEN secret 필요
-- **결정 대기**: 사용자 선택 필요
+- **결정**:
+  - **버전**: Option 2 — 1.0.0b1 (beta로 격상)
+  - **Workflow**: Option B — 수동 workflow_dispatch
+  - **Status**: Accepted
+  - **PyPI Token**: 미설정 — 사용자가 별도 추가 필요
+- **관련 파일**: `.github/workflows/release.yml` (이미 작성됨, 1.0.0b1 선택 시 자동 적용)
+- **다음 단계**: 사용자가 GitHub repo에 PYPI_API_TOKEN secret 추가 → workflow_dispatch로 릴리즈 트리거
 
 ### Part C — PyPI Release Workflow (신규)
 - **위치**: `.github/workflows/release.yml`
@@ -4213,3 +4214,18 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 5. 단편 4편 + 엔딩 B 확장
 
 **상세**: [`IMPROVEMENTS.md`](./IMPROVEMENTS.md), [`ROADMAP.md`](./ROADMAP.md)
+
+
+## 2026-07-08
+
+**Session:** derivative_stories.md 테이블 현실 동기화
+
+**Changes:**
+- derivative_stories.md 테이블 23 entries → 47 entries로 전면 갱신
+- missions.json의 47개 미션/36개 story.source 전부 실제 파일 매핑 확인
+- 13개 누락 단편 추가 (06-29, 07-01 시리즈)
+- aleph_fragment source 오표기 수정: alelh_fragment → wigan_zavijava
+- 미작성 단편: 3개 → 2개 (mollys_razor, ta_heist만 미작성)
+- Suit 캐릭터 시나리오 테이블 추가 (5개 미션)
+- 72개 story 파일 링크 무결성 확인 (0 broken)
+- Ficton wiki ↔ roguelike_sprawl cross-link 검증 완료
