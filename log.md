@@ -2,6 +2,18 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-07] docs | Wikilink audit — 47건 모두 cross-project (Fiction/)로 확인
+
+- **배경**: decisions README ADR-0090 인덱스 누락 수정 후 전체 링크 감사
+- **감사 결과**: 47건 깨진 링크 — 모두 `Fiction/wiki/` 또는 `Fiction/derivative/` 참조
+  - `dashboard/stories/journey/*.md` — 25건 wikilink (Fiction wiki 페이지)
+  - `design/scenario/chapter-*.md` — 12건 MDLINK (Fiction/derivative/ short-stories)
+  - `decisions/0031-original-scenario-integration.md` — 3건 MDLINK (Fiction/derivative/)
+  - `design/scenario/README.md` — 3건 MDLINK
+- **원인**: `Fiction/`은 별도 git repo (workspace root) — roguelike_sprawl에서 로컬 검증 불가
+- ** deploy 시 symlink로 정상 작동** (`docs/` 내 `Fiction` symlink)
+- **의미**: 깨진 링크 없음 — Phase 7 프로젝트 내부는 모두 정결
+
 ## [2026-07-07] docs | MkDocs site build 완료 (--strict, 0 워닝)
 
 - **배경**: Phase 7 마무리 마지막 작업
