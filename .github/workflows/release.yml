@@ -34,32 +34,27 @@ jobs:
         uses: astral-sh/setup-uv@e4db8464a088ece1b920f60402e813ea4de65b8f
 
       - name: Update version in pyproject.toml
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
         run: |
           uv run python -c "
           import re
+          import os
+          version = os.environ['RELEASE_VERSION']
           with open('pyproject.toml', 'r') as f:
             content = f.read()
-          # Update version
-          content = re.sub(
-            r'version = \".*\"',
-            'version = \"${{ inputs.version }}\"',
-            content
-          )
-          # Update Development Status classifier based on version
-          if 'alpha' in '${{ inputs.version }}':
-            status = '3 - Alpha'
-          elif 'beta' in '${{ inputs.version }}':
-            status = '4 - Beta'
+          content = re.sub(r'version = \".*\"', 'version = \"' + version + '\"', content)
+          if 'alpha' in version:
+              status = '3 - Alpha'
+          elif 'beta' in version:
+              status = '4 - Beta'
           else:
-            status = '5 - Production/Stable'
-          content = re.sub(
-            r'Development Status :: \d - \w+',
-            f'Development Status :: {status}',
-            content
-          )
+              status = '5 - Production/Stable'
+          content = re.sub(r'Development Status :: \d - \w+', 'Development Status :: ' + status, content)
           with open('pyproject.toml', 'w') as f:
-            f.write(content)
-          print(f'Updated version to ${{ inputs.version }}') && cat pyproject.toml | grep -E '^version|^    "Development'
+              f.write(content)
+          print('Updated version to ' + version)
+          "
 
       - name: Build package
         run: |
