@@ -1,9 +1,9 @@
-# Session Summary — 2026-07-08 (v0.5.0)
+# Session Summary — 2026-07-08 (v0.6.0)
 
 > **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: Dashboard 재조직화 + Fiction 메타데이터 백필 + v1.0.0 release prep
+> **세션 범위**: Salvation Phase mypy fixes + ADR-0102 Accepted + v1.0.0b1 release prep
 > **테스트**: 4146 passed (39 skipped, 0 failed)
-> **변경 파일**: ~35 files
+> **변경 파일**: 5 files
 
 ---
 
@@ -38,16 +38,23 @@
 ### E. Fiction Hanja 수정 (이전 세션)
 - 한자 혼용 제거: `library.html` + `short-stories/` 19개 파일
 
-### F. v1.0.0 Release Prep (신규)
-- **ADR-0102** (`decisions/0102-v1-release-decision.md`) — 4개 버전 옵션 (1.0.0a1/1.0.0b1/1.0.0/1.0.0a2)
-  - **추천**: Option 1 (1.0.0a1) 또는 Option 2 (1.0.0b1 — beta 격상)
-  - **결정 대기**: 사용자 선택 필요
+### F. v1.0.0 Release Prep 완료
+- **ADR-0102** (`decisions/0102-v1-release-decision.md`) — **Accepted**
+  - **결정**: 1.0.0b1 (beta로 격상) + 수동 workflow_dispatch
+  - **PyPI Token**: 미설정 — 사용자가 GitHub repo에 직접 추가 필요
 - **Release Workflow** (`.github/workflows/release.yml`) — workflow_dispatch 기반 수동 trig
   - version 입력 (1.0.0a1/1.0.0b1/1.0.0)
   - `uv build` + `uv publish --token ${{ secrets.PYPI_API_TOKEN }}`
   - GitHub 태그 자동 생성
-- **pages.yml fix** — 삭제된 파일 참조 제거 (`novel.html`, `story_read.html`)
-- **커밋**: `801d960`
+
+### G. Salvation Phase mypy 수정 완료 (신규)
+- **ADR-0090** Salvation Phase 통합 — mypy strict 에러 19→0 수정
+  - `AppState`에 `salvation_runner`, `salvation_selection`, `salvation_scene_data` 필드 추가
+  - `state.run` → `state.run_state` 수정 (4곳)
+  - `KeySym.a/b/c` → `KeySym.N1/N2/N3` 수정 (tcod에 letter key 상성 없음)
+  - `config` import 경로 수정 (`from .. import config` → `from . import config`)
+  - `RunState | None` 할당 에러 → 명시적 None 체크 추가
+  - 커밋: `49b4cd6`
 
 ---
 
@@ -84,11 +91,10 @@
 ## 4. 다음 세션 인수인계
 
 ### 즉시 착수 가능
-1. ⏳ **v1.0.0 release decision** — ADR-0102 Draft 상태, 사용자 결정 대기
-   - 버전 선택: 1.0.0a1 (현재 빌드) / 1.0.0b1 (beta) / 1.0.0 (final)
-   - Release workflow (`release.yml`) 준비 완료
+1. ⏳ **v1.0.0 release** — ADR-0102 Accepted (1.0.0b1, manual dispatch)
+   - `PYPI_API_TOKEN` secret 추가 필요 → GitHub repo Settings → Secrets → Actions
+   - 추가 후: Actions tab → "Release to PyPI" → Run workflow → select 1.0.0b1
 2. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
-3. ⏳ **PyPI secret 추가** — `PYPI_API_TOKEN` in repository secrets (release.yml 필요)
 
 ### 중장기 작업
 4. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
@@ -118,15 +124,16 @@
 
 | 커밋 | 설명 |
 |---|---|
+| `49b4cd6` | feat(salvation): fix mypy errors and type issues in Salvation Phase integration |
+| `2afa9d3` | docs(adr): ADR-0102 Accepted — 1.0.0b1, manual dispatch, PyPI token pending user |
 | `801d960` | feat: v1.0.0 release prep — pages.yml fix, release workflow, ADR-0102 draft |
 | `ca28eea` | docs: commit 0101-fiction-metadata-backfill.md (fully resolved) |
 | `7993072` | refactor(dashboard): story→missions, stories→library rename + stats JSON cleanup |
 | `50d86eb` | docs: log.md — Hanja fix entry (2026-07-08) |
-| `eefea56` | fix(library): remove Hanja/Chinese char corruption from fiction story descriptions |
 
 ---
 
 **세션 종료 시간**: 2026-07-08
 **최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4146 ✅
-**이 문서 버전**: v0.5.0
-**이전 버전**: v0.4.0 (2026-07-08)
+**이 문서 버전**: v0.6.0
+**이전 버전**: v0.5.0 (2026-07-08)
