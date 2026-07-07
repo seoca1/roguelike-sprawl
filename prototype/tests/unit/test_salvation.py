@@ -191,3 +191,214 @@ class TestSalvationSelection:
         s = SalvationSelection(character_id="case", ending="A", selected_at=1)
         with pytest.raises(Exception):
             s.character_id = "sally"  # type: ignore[misc]
+
+
+class TestSalvationRunner:
+    """SalvationRunner state machine."""
+
+    def test_initial_state(self) -> None:
+        from roguelike_sprawl.engine.salvation import (
+            SALVATION_STATE_INTRO,
+            SalvationRunner,
+        )
+
+        r = SalvationRunner()
+        assert r.state == SALVATION_STATE_INTRO
+        assert r.selection is None
+        assert r.last_scene is None
+
+    def test_choose_epilogue_transitions(self) -> None:
+        from roguelike_sprawl.engine.salvation import (
+            SALVATION_STATE_EPILOGUE,
+            SalvationRunner,
+        )
+
+        r = SalvationRunner()
+        sel = r.choose_epilogue("case")
+        assert sel.character_id == "case"
+        assert sel.ending == "A"
+        assert sel.selected_at == 1
+        assert r.state == SALVATION_STATE_EPILOGUE
+        assert r.selection is sel
+
+    def test_choose_epilogue_invalid_raises(self) -> None:
+        import pytest
+
+        from roguelike_sprawl.engine.salvation import SalvationRunner
+
+        r = SalvationRunner()
+        with pytest.raises(ValueError, match="Invalid epilogue character"):
+            r.choose_epilogue("nonexistent")
+
+    def test_set_state_validates(self) -> None:
+        import pytest
+
+        from roguelike_sprawl.engine.salvation import SalvationRunner
+
+        r = SalvationRunner()
+        with pytest.raises(ValueError, match="Invalid Salvation state"):
+            r.set_state("invalid")
+
+    def test_load_epilogue_requires_choice(self) -> None:
+        import pytest
+
+        from roguelike_sprawl.engine.salvation import SalvationRunner
+
+        r = SalvationRunner()
+        with pytest.raises(RuntimeError, match="No epilogue chosen"):
+            r.load_epilogue(Path("data/scenes"))
+
+    def test_load_epilogue_loads_scene(self) -> None:
+        from roguelike_sprawl.engine.salvation import SalvationRunner
+
+        r = SalvationRunner()
+        r.choose_epilogue("neuromancer")
+        scene = r.load_epilogue(Path("data/scenes"))
+        assert scene.character == "neuromancer"
+        assert scene.order == 9
+        assert r.last_scene is scene
+
+    def test_complete_epilogue_transitions_to_done(self) -> None:
+        from roguelike_sprawl.engine.salvation import (
+            SALVATION_STATE_DONE,
+            SalvationRunner,
+        )
+
+        r = SalvationRunner()
+        r.choose_epilogue("kas")
+        r.complete_epilogue()
+        assert r.state == SALVATION_STATE_DONE
+        assert r.selection.selected_at == 2
+
+    def test_complete_epilogue_requires_choice(self) -> None:
+        import pytest
+
+        from roguelike_sprawl.engine.salvation import SalvationRunner
+
+        r = SalvationRunner()
+        with pytest.raises(RuntimeError, match="No epilogue chosen"):
+            r.complete_epilogue()
+
+    def test_choose_ending_invalid_raises(self) -> None:
+        import pytest
+
+        from roguelike_sprawl.engine.salvation import SalvationRunner
+
+        r = SalvationRunner()
+        r.choose_epilogue("case")
+        r.complete_epilogue()
+        with pytest.raises(ValueError, match="Invalid ending"):
+            r.choose_ending("D")
+
+    def test_choose_ending_transitions_to_final(self) -> None:
+        from roguelike_sprawl.engine.salvation import (
+            SALVATION_STATE_FINAL,
+            SalvationRunner,
+        )
+
+        r = SalvationRunner()
+        r.choose_epilogue("case")
+        r.complete_epilogue()
+        r.choose_ending("B")
+        assert r.state == SALVATION_STATE_FINAL
+        assert r.selection.ending == "B"
+        assert r.selection.selected_at == 3
+
+    def test_get_state_code_returns_current_state(self) -> None:
+        from roguelike_sprawl.engine.salvation import SalvationRunner
+
+        r = SalvationRunner()
+        assert r.get_state_code() == "salvation_intro"
+        r.choose_epilogue("case")
+        assert r.get_state_code() == "salvation_epilogue"
+        r.complete_epilogue()
+        assert r.get_state_code() == "salvation_done"
+        r.choose_ending("A")
+        assert r.get_state_code() == "final"
+
+    def test_full_flow_ending_preserved_from_epilogue(self) -> None:
+        """Choose epilogue, ending defaults to epilogue's tag, then override."""
+        from roguelike_sprawl.engine.salvation import SalvationRunner
+
+        # Kas has ending C
+        r = SalvationRunner()
+        r.choose_epilogue("kas")
+        assert r.selection.ending == "C"
+        r.complete_epilogue()
+        # Player overrides with A
+        r.choose_ending("A")
+        assert r.selection.ending == "A"
+
+
+class TestFormatEpilogueText:
+    """format_epilogue_text TUI display helper."""
+
+    def test_format_with_scene_data(self) -> None:
+        from roguelike_sprawl.engine.salvation import (
+            SalvationRunner,
+            format_epilogue_text,
+        )
+
+        r = SalvationRunner()
+        r.choose_epilogue("case")
+        r.load_epilogue(Path("data/scenes"))
+        text = format_epilogue_text(r.last_scene, lang="en")
+        assert "=== THE NEXT JACK ===" in text
+        assert "[narrator]" in text
+        assert "Ono-Sendai" in text
+
+    def test_format_empty_dialogue(self) -> None:
+        """When dialogue is empty, return placeholder."""
+        from dataclasses import replace
+
+        from roguelike_sprawl.engine.salvation import format_epilogue_text
+
+        # Create a fake scene with empty dialogue
+        from roguelike_sprawl.engine.graphic_novel_view import SceneData
+
+        scene = SceneData(
+            id="fake",
+            character="case",
+            order=9,
+            title_en="FAKE",
+            title_ko="가짜",
+            background_id="bg_chat_room",
+            portrait_left=None,
+            portrait_right=None,
+            dialogue=(),
+            next_scene=None,
+        )
+        text = format_epilogue_text(scene, lang="en")
+        assert "Empty epilogue" in text
+
+    def test_format_korean(self) -> None:
+        from roguelike_sprawl.engine.salvation import (
+            SalvationRunner,
+            format_epilogue_text,
+        )
+
+        r = SalvationRunner()
+        r.choose_epilogue("neuromancer")
+        r.load_epilogue(Path("data/scenes"))
+        text = format_epilogue_text(r.last_scene, lang="ko")
+        assert "완성" in text  # Korean title
+        assert "완성이다" in text  # Korean dialogue text
+        assert "매트릭스" in text  # 매트릭스
+
+
+class TestSalvationStates:
+    """Salvation state constants and validation."""
+
+    def test_valid_states_frozenset(self) -> None:
+        from roguelike_sprawl.engine.salvation import (
+            SALVATION_STATE_DONE,
+            SALVATION_STATE_EPILOGUE,
+            SALVATION_STATE_FINAL,
+            SALVATION_STATE_INTRO,
+            VALID_SALVATION_STATES,
+        )
+
+        assert SALVATION_STATE_INTRO in VALID_SALVATION_STATES
+        assert SALVATION_STATE_EPILOGUE in VALID_SALVATION_STATES
+        assert SALVATION_STATE_DONE in VALID_SALVATION_STATES
+        assert SALVATION_STATE_FINAL in VALID_SALVATION_STATES
