@@ -2,6 +2,24 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | BGM 시스템 — theme filenames fix, screen별 BGM, dashboard player, minimax generator
+
+- **BUG FIX**: `theme.py` THEMES dict 파일명 오류 — `*_theme.wav` → `theme_*.wav` (12개 전부)
+- **Screen BGM**: `app.py`에 `update_screen_theme()` hook, 20개 ScreenKind → 12개 테마 매핑
+  - MENU/HUB/SAVED_SLOT → finn_office
+  - MATRIX/CINEMATIC → matrix_rain
+  - COMBAT → industrial
+  - NPC/REWARD → chiba
+  - DEATH → hammer_alert
+  - STORY/EVENT/GRAPHIC_NOVEL_ENDING → broadcast
+  - JACK_OUT → loa_drum
+  - DEATH_SUMMARY → loa_drum_fade
+  - HALL_OF_DEAD → loa_channel
+- **Dashboard BGM Player**: `sound.html`에 12개 테마 즉시 재생 UI (play/stop/volume slider)
+- **WAV 배포**: `dashboard/sounds/` 12개 theme_*.wav 복사, `pages.yml` 갱신
+- **Minimax API**: `minimax_music.py` — 12개 사이버펑크 BGM용 프롬프트, `MINIMAX_API_KEY` 환경변수 사용
+- **테스트**: pytest 4239 pass, ruff clean, mypy strict green ✅
+
 ## [2026-07-07] feat | Arc JSON 6자 생성 — L1 스토리 계층 9자 완전 통합
 
 - **배경**: 연계성 감사에서 발견된 L1 Arc 미구현 6자填补
