@@ -157,9 +157,9 @@ def test_top_nav_consistent() -> None:
     html = DASH.read_text(encoding="utf-8")
     for link in [
         "index.html",
-        "story.html",
+        "missions.html",
         "stages.html",
-        "stories.html",
+        "library.html",
         "sound.html",
         "combat.html",
         "equipment.html",

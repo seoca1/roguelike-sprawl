@@ -553,7 +553,7 @@ def test_novel_in_index(novel_path: Path) -> None:
 
 def test_novel_dashboard_link() -> None:
     """stories.html이 단편 HTML 경로를 참조해야 한다."""
-    dash = REPO_ROOT / "dashboard" / "stories.html"
+    dash = REPO_ROOT / "dashboard" / "library.html"
     if not dash.exists():
         pytest.skip("dashboard/stories.html not present")
     html = dash.read_text(encoding="utf-8")

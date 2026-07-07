@@ -189,12 +189,13 @@ class TestCorrectCopyPresent:
         )
 
     def test_novel_html_meta_description_has_catalog_count(self, facts: dict) -> None:
-        text = (DASHBOARD / "novel.html").read_text(encoding="utf-8")
+        # novel.html is now a redirect; content moved to library.html
+        text = (DASHBOARD / "library.html").read_text(encoding="utf-8")
         m = re.search(r'<meta\s+name="description"\s+content="([^"]+)"', text)
-        assert m
+        assert m, "library.html must have a meta description"
         desc = m.group(1)
         assert f"{facts['gn_scenes_total']}" in desc or f"{facts['gn_scenes_total']} " in desc, (
-            f"novel.html should reference {facts['gn_scenes_total']} stories or entries"
+            f"library.html should reference {facts['gn_scenes_total']} GN scenes"
         )
 
 

@@ -93,10 +93,16 @@ def load_combat_stats(repo: Path) -> dict[str, object]:
     return out
 
 
-def load_novel_stats(repo: Path) -> dict[str, object]:
-    """Pull Novel catalog + manifest counts via the novel subpackage."""
+def load_library_stats(repo: Path) -> dict[str, object]:
+    """Pull Derivative Library catalog + manifest counts (short stories + novelettes).
+
+    Short stories and novelettes are counted and catalogued separately.
+    """
     out: dict[str, object] = {
-        "catalog_entries": 0,
+        "short_stories_en": 0,
+        "short_stories_ko": 0,
+        "novelettes_en": 0,
+        "novelettes_ko": 0,
         "hook_kinds": 6,
         "hook_kind_names": [
             "narrative", "excerpt", "event",
@@ -105,42 +111,25 @@ def load_novel_stats(repo: Path) -> dict[str, object]:
         "layers": 4,
         "tests_passing": 39,
         "code_lines_approx": 900,
-        "short_stories_en": 0,
-        "short_stories_ko": 0,
         "_generated_at": "",
     }
-    short_stories = (
-        repo.parent / "Fiction" / "derivative" / "sprawl-trilogy" / "short-stories"
-    )
-    if not short_stories.exists():
-        for candidate in [
-            repo / "Fiction" / "derivative" / "sprawl-trilogy" / "short-stories",
-            Path("/Users/emilio/projects/Projects/Fiction") / "derivative"
-            / "sprawl-trilogy" / "short-stories",
-        ]:
-            if candidate.exists():
-                short_stories = candidate
-                break
-    if short_stories.exists():
-        md_files = list(short_stories.glob("*.md"))
-        out["short_stories_en"] = sum(1 for f in md_files if f.name.endswith(".ko.md"))
-        out["short_stories_ko"] = sum(1 for f in md_files if f.name.endswith(".ko.md"))
-        # That counted incorrectly; redo with simpler logic:
-        out["short_stories_en"] = sum(1 for f in md_files if not f.name.endswith(".ko.md"))
-        out["short_stories_ko"] = sum(1 for f in md_files if f.name.endswith(".ko.md"))
-        stems = set()
+
+    def _scan_dir(dir_path: Path) -> tuple[set[str], dict[str, dict[str, str]]]:
+        """Scan a derivative subdirectory for EN/KO pairs. Returns (stems, titles)."""
+        if not dir_path.exists():
+            return set(), {}
+        md_files = list(dir_path.glob("*.md"))
+        stems: set[str] = set()
         per_stem_titles: dict[str, dict[str, str]] = {}
         for f in md_files:
             name = f.name
             is_ko = name.endswith(".ko.md")
-            # strip the date prefix + suffix to leave just the stem.
             stem = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", name)
             if is_ko:
                 stem = stem[:-len(".ko.md")]
             else:
                 stem = stem[:-len(".md")]
             stems.add(stem)
-            # Best-effort title — first markdown heading or filename stem.
             title = stem.replace("_", " ").title()
             try:
                 head = f.read_text(encoding="utf-8").splitlines()[:6]
@@ -152,28 +141,62 @@ def load_novel_stats(repo: Path) -> dict[str, object]:
                 pass
             slot = per_stem_titles.setdefault(stem, {})
             slot["ko" if is_ko else "en"] = title
-        out["catalog_entries"] = len(stems)
-        # Build a per-entry list (alphabetical) so the dashboard can
-        # render an index without re-running the parser in JS.
-        out["catalog_entries_list"] = [
-            {
-                "stem": s,
-                "title_en": per_stem_titles.get(s, {}).get("en", s.replace("_", " ").title()),
-                "title_ko": per_stem_titles.get(s, {}).get("ko", ""),
-            }
-            for s in sorted(stems)
-        ]
+        return stems, per_stem_titles
+
+    base = repo.parent / "Fiction" / "derivative" / "sprawl-trilogy"
+    short_dir = base / "short-stories"
+    novel_dir = base / "novelettes"
+
+    # Fallback paths
+    if not short_dir.exists():
+        for cand in [
+            repo / "Fiction" / "derivative" / "sprawl-trilogy" / "short-stories",
+            Path("/Users/emilio/projects/Projects/Fiction") / "derivative" / "sprawl-trilogy" / "short-stories",
+        ]:
+            if cand.exists():
+                short_dir = cand
+                break
+    if not novel_dir.exists():
+        for cand in [
+            repo / "Fiction" / "derivative" / "sprawl-trilogy" / "novelettes",
+            Path("/Users/emilio/projects/Projects/Fiction") / "derivative" / "sprawl-trilogy" / "novelettes",
+        ]:
+            if cand.exists():
+                novel_dir = cand
+                break
+
+    short_stems, short_titles = _scan_dir(short_dir)
+    novel_stems, novel_titles = _scan_dir(novel_dir)
+
+    out["short_stories_en"] = sum(1 for f in short_dir.glob("*.md") if not f.name.endswith(".ko.md")) if short_dir.exists() else 0
+    out["short_stories_ko"] = sum(1 for f in short_dir.glob("*.ko.md")) if short_dir.exists() else 0
+    out["novelettes_en"] = sum(1 for f in novel_dir.glob("*.md") if not f.name.endswith(".ko.md")) if novel_dir.exists() else 0
+    out["novelettes_ko"] = sum(1 for f in novel_dir.glob("*.ko.md")) if novel_dir.exists() else 0
+
+    # Combined catalog
+    all_stems = short_stems | novel_stems
+    all_titles = {**short_titles, **novel_titles}
+    out["catalog_entries"] = len(all_stems)
+    out["catalog_entries_list"] = [
+        {
+            "stem": s,
+            "type": "novelette" if s in novel_stems else "short_story",
+            "title_en": all_titles.get(s, {}).get("en", s.replace("_", " ").title()),
+            "title_ko": all_titles.get(s, {}).get("ko", ""),
+        }
+        for s in sorted(all_stems)
+    ]
     return out
 
 
-def load_story_stats(repo: Path) -> dict[str, object]:
+def load_mission_stats(repo: Path) -> dict[str, object]:
     """Pull mission / chapter / character / event / reaction counts.
 
     Wires metadata → novel → story events → stages into the
     dashboard so the HTML stat-pills stay in lockstep with the
     actual disk state.
 
-    Stat keys (each consumed by ``dashboard/story.html``):
+    Stat keys (each consumed by ``dashboard/missions.html``):
       - missions: int — total missions in missions.json
       - stories / html_files / en_files / ko_files / complete_pairs:
         short-stories catalogue
@@ -780,8 +803,8 @@ def _stamp(d: dict[str, object]) -> None:
 
 TARGETS = {
     "combat_stats.json": load_combat_stats,
-    "novel_stats.json": load_novel_stats,
-    "story_stats.json": load_story_stats,
+    "library_stats.json": load_library_stats,
+    "mission_stats.json": load_mission_stats,
     "event_dialogues_stats.json": load_event_dialogues_stats,
     "stages_stats.json": load_stages_stats,
     "cyberspace_stats.json": load_cyberspace_stats,

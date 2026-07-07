@@ -1,7 +1,7 @@
 """Tests for the build_dashboard metadata pipeline.
 
 Covers the metadata → novel → story events → stages wiring:
-- load_story_stats: mission / chapters / aftermath / reactions /
+- load_mission_stats: mission / chapters / aftermath / reactions /
   event_triggers / total_rewards fields
 - load_event_dialogues_stats: npcs / dialogues / lines / characters
 - load_stages_stats: stages / stage_enum / chapter_states / objectives
@@ -29,7 +29,7 @@ _spec.loader.exec_module(build_dashboard)
 _collect_event_trigger_names = build_dashboard._collect_event_trigger_names
 load_event_dialogues_stats = build_dashboard.load_event_dialogues_stats
 load_stages_stats = build_dashboard.load_stages_stats
-load_story_stats = build_dashboard.load_story_stats
+load_mission_stats = build_dashboard.load_mission_stats
 
 
 # Resolve REPO at runtime: try the test file's own tree first, then
@@ -54,13 +54,13 @@ def data_dir() -> Path:
 
 
 # ============================================================================
-# load_story_stats
+# load_mission_stats
 # ============================================================================
 
 
 class TestLoadStoryStats:
     def test_basic_fields_present(self, data_dir: Path) -> None:
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         # Legacy fields
         assert stats["missions"] >= 25  # real game has 29+
         assert stats["arcs"] == 4  # case/sil/kas/suit
@@ -68,17 +68,17 @@ class TestLoadStoryStats:
 
     def test_aftermath_events_count(self, data_dir: Path) -> None:
         """Phase 6+ content expansion: 12 aftermath events in data."""
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         # Should be ≥12 (Phase 6+ expansion added 7 new events).
         assert stats["aftermath_events"] >= 12
 
     def test_reactions_count(self, data_dir: Path) -> None:
         """Phase 6+ content expansion: 25 reactions."""
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         assert stats["reactions"] >= 18  # 10 original + 15 new
 
     def test_reaction_characters_populated(self, data_dir: Path) -> None:
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         chars = stats["reaction_characters"]
         # New characters (3jane, sally) should appear after expansion.
         assert "3jane" in chars
@@ -90,7 +90,7 @@ class TestLoadStoryStats:
 
     def test_event_triggers_from_source(self, data_dir: Path) -> None:
         """Event trigger names parsed from event_story.py source."""
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         triggers = stats["event_triggers"]
         # Phase 6+ added 4 new triggers.
         assert "chapter_complete" in triggers
@@ -103,13 +103,13 @@ class TestLoadStoryStats:
 
     def test_total_rewards(self, data_dir: Path) -> None:
         """Sum of all StoryReward items across all aftermath events."""
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         # At least 1 reward per event (12 events × 1+ = ≥12).
         assert stats["total_rewards"] >= 12
 
     def test_hub_visit_events_count(self, data_dir: Path) -> None:
         """atmosphere_hub_first_visit uses hub_visited trigger."""
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         # at least 1 hub_visited event (the one added in Phase 6+).
         assert stats["hub_visit_events"] >= 1
 
@@ -169,7 +169,7 @@ class TestLoadStagesStats:
 
     def test_missions_mirrors_story(self, data_dir: Path) -> None:
         stats = load_stages_stats(_PROJECTS_ROOT)
-        story = load_story_stats(_PROJECTS_ROOT)
+        story = load_mission_stats(_PROJECTS_ROOT)
         assert stats["missions"] == story["missions"]
 
 
@@ -227,7 +227,7 @@ class TestDataIndexRegistry:
             pytest.skip("data_index.json not generated yet")
         data = json.loads(idx_path.read_text(encoding="utf-8"))
         outputs = data.get("outputs", {})
-        assert "story_stats.json" in outputs
+        assert "mission_stats.json" in outputs
         assert "event_dialogues_stats.json" in outputs
         assert "stages_stats.json" in outputs
 
@@ -256,7 +256,7 @@ class TestMetadataPipeline:
         if not aftermath_p.exists():
             pytest.skip("aftermath.json not available")
         data = json.loads(aftermath_p.read_text(encoding="utf-8"))
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         assert stats["aftermath_events"] == len(data)
 
     def test_reaction_count_matches_data(self, data_dir: Path) -> None:
@@ -264,7 +264,7 @@ class TestMetadataPipeline:
         if not reactions_p.exists():
             pytest.skip("reactions.json not available")
         data = json.loads(reactions_p.read_text(encoding="utf-8"))
-        stats = load_story_stats(REPO)
+        stats = load_mission_stats(REPO)
         assert stats["reactions"] == len(data)
 
     def test_event_dialogue_count_matches_data(self, data_dir: Path) -> None:
@@ -286,7 +286,7 @@ class TestMetadataPipeline:
         assert "stages_stats.json" in html
 
     def test_story_html_loads_event_dialogues_stats(self) -> None:
-        story = REPO / "dashboard" / "story.html"
+        story = REPO / "dashboard" / "missions.html"
         if not story.exists():
             pytest.skip("story.html not available")
         html = story.read_text(encoding="utf-8")

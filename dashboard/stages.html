@@ -222,11 +222,11 @@
   <span class="sep">|</span>
   <a href="index.html">◀ Roguelike</a>
   <span class="sep">|</span>
-  <a href="story.html">📖 Story</a>
+  <a href="missions.html">📖 Story</a>
   <span class="sep">|</span>
   <span class="current">⏱ Stages</span>
   <span class="sep">|</span>
-  <a href="stories.html">📚 Short Stories</a>
+  <a href="library.html">📚 Short Stories</a>
   <a href="graphic-novel.html">Graphic Novel</a>
   <span class="sep">|</span>
   <a href="sound.html">🔊 Sound</a>
@@ -795,13 +795,13 @@
 
 <script>
 /* Auto-sync stage counts from build_dashboard.py output
-   (story_stats.json already drives missions; this file just
+   (mission_stats.json already drives missions; this file just
    reads the same key so build_dashboard's generators stay
    compatible across pages).  When the fetch fails the static
    fallback numbers stay visible.
    run_stats.json adds the Stage enum + ChapterState enum
    counts so the dashboard reflects the actual Python code. */
-fetch('data/story_stats.json').then(r => r.ok ? r.json() : null)
+fetch('data/mission_stats.json').then(r => r.ok ? r.json() : null)
   .then(stats => {
     if (!stats) return;
     const set = (key, value) => {

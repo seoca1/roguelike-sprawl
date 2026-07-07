@@ -12,7 +12,7 @@ Catches the class of bugs that motivated the v0.4 dashboard audit:
    must have a non-placeholder title (no "Untitled").
 4. **Mission source ↔ dashboard coverage** — every
    ``missions.json`` story source must have a corresponding
-   dashboard card in ``stories.html``.
+   dashboard card in ``library.html``.
 
 Run from the prototype directory::
 
@@ -115,14 +115,14 @@ def check_mission_coverage() -> list[str]:
         # source, so orphans are reported.
         errors.append(f"  orphan page (no mission source): {stem}")
 
-    # Mission sources that have no card in stories.html.
-    stories_html = (DASHBOARD / "stories.html").read_text(encoding="utf-8")
+    # Mission sources that have no card in library.html.
+    library_html = (DASHBOARD / "library.html").read_text(encoding="utf-8")
     cards = set()
-    for href in re.findall(r'href="stories/short-stories/([^"]+)"', stories_html):
+    for href in re.findall(r'href="stories/short-stories/([^"]+)"', library_html):
         cards.add(href.replace("_en.html", "").replace("_ko.html", ""))
     missing = sorted(sources - cards)
     for stem in missing:
-        errors.append(f"  mission source without stories.html card: {stem}")
+        errors.append(f"  mission source without library.html card: {stem}")
     return errors
 
 

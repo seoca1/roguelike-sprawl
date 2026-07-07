@@ -15,7 +15,7 @@ from pathlib import Path
 
 DASHBOARD = Path(__file__).parent.parent.parent.parent / "dashboard"
 INDEX = DASHBOARD / "index.html"
-STORY = DASHBOARD / "story.html"
+STORY = DASHBOARD / "missions.html"
 STAGES = DASHBOARD / "stages.html"
 DATA = DASHBOARD.parent / "design" / "systems" / "stage_structure.json"
 
@@ -99,7 +99,7 @@ class TestTopIndexPage:
 
     def test_index_references_story(self) -> None:
         html = INDEX.read_text(encoding="utf-8")
-        assert 'href="story.html"' in html
+        assert 'href="missions.html"' in html
 
     def test_index_references_stages(self) -> None:
         html = INDEX.read_text(encoding="utf-8")
@@ -207,7 +207,7 @@ class TestNavigation:
 
     def test_all_dashboards_linked_from_index(self) -> None:
         html = INDEX.read_text(encoding="utf-8")
-        for dash in ("story.html", "stages.html"):
+        for dash in ("missions.html", "stages.html"):
             assert dash in html, f"Top page should link to {dash}"
 
     def test_sub_dashboards_have_top_nav(self) -> None:

@@ -243,7 +243,7 @@ class TestDashboardIntegration:
         # root (parent of prototype/).
         from pathlib import Path as _Path
 
-        stats = mod.load_story_stats(_Path(projects_root))
+        stats = mod.load_mission_stats(_Path(projects_root))
         # CONTENT_EXPANSION Phase A+: 33 → 38 missions (5 new Arc 2-3)
         assert stats["missions"] == 47
         assert stats["chapters"] == 4

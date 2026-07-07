@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-DASHBOARD = Path(__file__).parent.parent.parent.parent / "dashboard" / "story.html"
+DASHBOARD = Path(__file__).parent.parent.parent.parent / "dashboard" / "missions.html"
 DATA = Path(__file__).parent.parent.parent.parent / "design" / "story" / "prologue_data.json"
 
 

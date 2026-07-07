@@ -156,9 +156,9 @@ def test_top_nav_consistent() -> None:
     # Should have 9 nav links + Achievements current
     for link in [
         "index.html",
-        "story.html",
+        "missions.html",
         "stages.html",
-        "stories.html",
+        "library.html",
         "sound.html",
         "combat.html",
         "equipment.html",

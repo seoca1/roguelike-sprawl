@@ -26,7 +26,7 @@ TOP_HUB = DEV_ROOT / "dashboard" / "index.html"
 
 # Roguelike dashboards: always repo-relative
 ROGUE_DASH = REPO_ROOT / "dashboard" / "index.html"
-ROGUE_STORY = REPO_ROOT / "dashboard" / "story.html"
+ROGUE_STORY = REPO_ROOT / "dashboard" / "missions.html"
 ROGUE_STAGES = REPO_ROOT / "dashboard" / "stages.html"
 
 # Typing dashboard: only in dev workspace
@@ -120,9 +120,9 @@ class TestRoguelikeSubmenu:
     def test_submenu_has_sub_dashboards(self) -> None:
         """Submenu links to story, stages, stories dashboards (always present)."""
         html = ROGUE_DASH.read_text(encoding="utf-8")
-        assert 'href="story.html"' in html
+        assert 'href="missions.html"' in html
         assert 'href="stages.html"' in html
-        assert 'href="stories.html"' in html
+        assert 'href="library.html"' in html
 
     def test_submenu_has_stories_card(self) -> None:
         """Submenu has a 'Short Stories' card."""
@@ -189,7 +189,7 @@ class TestNavigation:
 
     def test_submenu_to_sub_dashboards(self) -> None:
         sub = ROGUE_DASH.read_text(encoding="utf-8")
-        assert 'href="story.html"' in sub
+        assert 'href="missions.html"' in sub
         assert 'href="stages.html"' in sub
 
     def test_sub_dashboards_back_to_submenu(self) -> None:

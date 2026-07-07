@@ -23,9 +23,9 @@ DASH = REPO_ROOT / "dashboard"
 
 DASHBOARDS = [
     "index.html",
-    "story.html",
+    "missions.html",
     "stages.html",
-    "stories.html",
+    "library.html",
     "sound.html",
     "combat.html",
     "equipment.html",

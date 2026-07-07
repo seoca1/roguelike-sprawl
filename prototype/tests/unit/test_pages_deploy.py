@@ -25,9 +25,11 @@ DASHBOARD_DIR = REPO_ROOT / "dashboard"
 
 DASHBOARD_HTML_FILES = [
     "index.html",
-    "story.html",
+    "missions.html",
     "stages.html",
-    "stories.html",
+    "library.html",
+    "novel.html",          # redirect to library.html#hook-dispatch
+    "story_read.html",      # redirect to missions.html
     "sound.html",
     "combat.html",
     "equipment.html",
@@ -132,11 +134,10 @@ def test_index_links_to_graphic_novel() -> None:
 def test_all_game_dashboards_link_to_graphic_novel() -> None:
     """All game dashboards should also link to graphic-novel.html.
 
-    Note: stories.html is the Short Stories dashboard (Fiction derivative)
-    and has different content/structure, so it's not required to have
-    the game nav.
+    Note: library.html is the Derivative Library (Fiction derivative);
+    novel.html and story_read.html are redirects to library.html/missions.html.
     """
-    skip = {"graphic-novel.html", "stories.html"}
+    skip = {"graphic-novel.html", "library.html", "novel.html", "story_read.html"}
     for filename in DASHBOARD_HTML_FILES:
         if filename in skip:
             continue

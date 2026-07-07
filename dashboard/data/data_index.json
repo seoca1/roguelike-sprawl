@@ -2,8 +2,8 @@
   "repo": "/Users/emilio/projects/Projects/Game/roguelike_sprawl",
   "outputs": {
     "combat_stats.json": "dashboard/data/combat_stats.json",
-    "novel_stats.json": "dashboard/data/novel_stats.json",
-    "story_stats.json": "dashboard/data/story_stats.json",
+    "library_stats.json": "dashboard/data/library_stats.json",
+    "mission_stats.json": "dashboard/data/mission_stats.json",
     "event_dialogues_stats.json": "dashboard/data/event_dialogues_stats.json",
     "stages_stats.json": "dashboard/data/stages_stats.json",
     "cyberspace_stats.json": "dashboard/data/cyberspace_stats.json",
@@ -14,5 +14,5 @@
   },
   "errors": [],
   "index_path": "dashboard/data/data_index.json",
-  "_generated_at": "2026-07-07T23:04:56"
+  "_generated_at": "2026-07-08T00:46:14"
 }

@@ -1,0 +1,256 @@
+{
+  "short_stories_en": 41,
+  "short_stories_ko": 41,
+  "novelettes_en": 3,
+  "novelettes_ko": 3,
+  "hook_kinds": 6,
+  "hook_kind_names": [
+    "narrative",
+    "excerpt",
+    "event",
+    "combat",
+    "item",
+    "cinematic"
+  ],
+  "layers": 4,
+  "tests_passing": 39,
+  "code_lines_approx": 900,
+  "_generated_at": "2026-07-08T00:46:14",
+  "catalog_entries": 39,
+  "catalog_entries_list": [
+    {
+      "stem": "aleph_fragment",
+      "type": "novelette",
+      "title_en": "Aleph Fragment",
+      "title_ko": "Aleph Fragment"
+    },
+    {
+      "stem": "armitage_infiltration",
+      "type": "short_story",
+      "title_en": "Armitage Infiltration",
+      "title_ko": "Armitage Infiltration"
+    },
+    {
+      "stem": "black_ice_dream",
+      "type": "short_story",
+      "title_en": "Black Ice Dream",
+      "title_ko": "Black Ice Dream"
+    },
+    {
+      "stem": "case_jackout-30sec",
+      "type": "short_story",
+      "title_en": "Case Jackout-30Sec",
+      "title_ko": "Case Jackout-30Sec"
+    },
+    {
+      "stem": "data_retrieval",
+      "type": "short_story",
+      "title_en": "Data Retrieval",
+      "title_ko": "Data Retrieval"
+    },
+    {
+      "stem": "dixies_choice",
+      "type": "short_story",
+      "title_en": "Dixies Choice",
+      "title_ko": "Dixies Choice"
+    },
+    {
+      "stem": "dixies_last_run",
+      "type": "short_story",
+      "title_en": "Dixies Last Run",
+      "title_ko": "Dixies Last Run"
+    },
+    {
+      "stem": "first_contact",
+      "type": "short_story",
+      "title_en": "First Contact",
+      "title_ko": "First Contact"
+    },
+    {
+      "stem": "first_trace",
+      "type": "short_story",
+      "title_en": "First Trace",
+      "title_ko": "First Trace"
+    },
+    {
+      "stem": "flatline_again",
+      "type": "short_story",
+      "title_en": "Flatline Again",
+      "title_ko": "Flatline Again"
+    },
+    {
+      "stem": "hosaka_core",
+      "type": "short_story",
+      "title_en": "Hosaka Core",
+      "title_ko": "Hosaka Core"
+    },
+    {
+      "stem": "hosaka_extraction",
+      "type": "short_story",
+      "title_en": "Hosaka Extraction",
+      "title_ko": "Hosaka Extraction"
+    },
+    {
+      "stem": "ice_run",
+      "type": "short_story",
+      "title_en": "Ice Run",
+      "title_ko": "Ice Run"
+    },
+    {
+      "stem": "kumiko_manarase-midnight",
+      "type": "short_story",
+      "title_en": "Kumiko Manarase-Midnight",
+      "title_ko": "Kumiko Manarase-Midnight"
+    },
+    {
+      "stem": "loa_voodoo_contact",
+      "type": "short_story",
+      "title_en": "Loa Voodoo Contact",
+      "title_ko": "Loa Voodoo Contact"
+    },
+    {
+      "stem": "maas_heist",
+      "type": "short_story",
+      "title_en": "Maas Heist",
+      "title_ko": "Maas Heist"
+    },
+    {
+      "stem": "marly_louisiana-god",
+      "type": "short_story",
+      "title_en": "Marly Louisiana-God",
+      "title_ko": "Marly Louisiana-God"
+    },
+    {
+      "stem": "matrix_revelation",
+      "type": "short_story",
+      "title_en": "Matrix Revelation",
+      "title_ko": "Matrix Revelation"
+    },
+    {
+      "stem": "mollys_market",
+      "type": "short_story",
+      "title_en": "Mollys Market",
+      "title_ko": "Mollys Market"
+    },
+    {
+      "stem": "mollys_razor",
+      "type": "novelette",
+      "title_en": "Mollys Razor",
+      "title_ko": "Mollys Razor"
+    },
+    {
+      "stem": "neuromancer_merger",
+      "type": "short_story",
+      "title_en": "Neuromancer Merger",
+      "title_ko": "Neuromancer Merger"
+    },
+    {
+      "stem": "neuromancer_whisper",
+      "type": "short_story",
+      "title_en": "Neuromancer Whisper",
+      "title_ko": "Neuromancer Whisper"
+    },
+    {
+      "stem": "sally_returns",
+      "type": "short_story",
+      "title_en": "Sally Returns",
+      "title_ko": "Sally Returns"
+    },
+    {
+      "stem": "sally_sandii-3am",
+      "type": "short_story",
+      "title_en": "Sally Sandii-3Am",
+      "title_ko": "Sally Sandii-3Am"
+    },
+    {
+      "stem": "sense_net_infiltration",
+      "type": "short_story",
+      "title_en": "Sense Net Infiltration",
+      "title_ko": "Sense Net Infiltration"
+    },
+    {
+      "stem": "sense_net_trace",
+      "type": "short_story",
+      "title_en": "Sense Net Trace",
+      "title_ko": "Sense Net Trace"
+    },
+    {
+      "stem": "straylight_approach",
+      "type": "short_story",
+      "title_en": "Straylight Approach",
+      "title_ko": "Straylight Approach"
+    },
+    {
+      "stem": "ta_defection",
+      "type": "short_story",
+      "title_en": "Ta Defection",
+      "title_ko": "Ta Defection"
+    },
+    {
+      "stem": "ta_heist",
+      "type": "novelette",
+      "title_en": "Ta Heist",
+      "title_ko": "Ta Heist"
+    },
+    {
+      "stem": "the_choice",
+      "type": "short_story",
+      "title_en": "The Choice",
+      "title_ko": "The Choice"
+    },
+    {
+      "stem": "tutorial_maze",
+      "type": "short_story",
+      "title_en": "Tutorial Maze",
+      "title_ko": "Tutorial Maze"
+    },
+    {
+      "stem": "vegas_stakeout",
+      "type": "short_story",
+      "title_en": "Vegas Stakeout",
+      "title_ko": "Vegas Stakeout"
+    },
+    {
+      "stem": "watchdog_patrol",
+      "type": "short_story",
+      "title_en": "Watchdog Patrol",
+      "title_ko": "Watchdog Patrol"
+    },
+    {
+      "stem": "wigan_call",
+      "type": "short_story",
+      "title_en": "Wigan Call",
+      "title_ko": "Wigan Call"
+    },
+    {
+      "stem": "wigan_zavijava",
+      "type": "short_story",
+      "title_en": "Wigan Zavijava",
+      "title_ko": "Wigan Zavijava"
+    },
+    {
+      "stem": "winter_infiltrate",
+      "type": "short_story",
+      "title_en": "Winter Infiltrate",
+      "title_ko": "Winter Infiltrate"
+    },
+    {
+      "stem": "wintermute_negotiation",
+      "type": "short_story",
+      "title_en": "Wintermute Negotiation",
+      "title_ko": "Wintermute Negotiation"
+    },
+    {
+      "stem": "yakuza_deal",
+      "type": "short_story",
+      "title_en": "Yakuza Deal",
+      "title_ko": "Yakuza Deal"
+    },
+    {
+      "stem": "zion_express",
+      "type": "short_story",
+      "title_en": "Zion Express",
+      "title_ko": "Zion Express"
+    }
+  ]
+}

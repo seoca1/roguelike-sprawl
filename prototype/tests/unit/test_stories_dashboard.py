@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-DASHBOARD = Path(__file__).parent.parent.parent.parent / "dashboard" / "stories.html"
+DASHBOARD = Path(__file__).parent.parent.parent.parent / "dashboard" / "library.html"
 
 
 class TestStoriesDashboardStructure:
