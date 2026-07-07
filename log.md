@@ -14,6 +14,15 @@ LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YY
 - ** deploy 시 symlink로 정상 작동** (`docs/` 내 `Fiction` symlink)
 - **의미**: 깨진 링크 없음 — Phase 7 프로젝트 내부는 모두 정결
 
+## [2026-07-07] build | Wheel verification — `uv build` 성공 (1.0.0a1)
+
+- **배경**: GitHub release 태그 전 로컬 빌드 검증
+- **산출물**:
+  - `dist/roguelike_sprawl-1.0.0a1-py3-none-any.whl` (340K, 122 files)
+  - `dist/roguelike_sprawl-1.0.0a1.tar.gz` (3.6M)
+- **METADATA 검증**: version=1.0.0a1, License=MIT, Python>=3.11, tcod>=16.0, pyyaml
+- **의미**: PyPI 업로드 준비 완료
+
 ## [2026-07-07] docs | MkDocs site build 완료 (--strict, 0 워닝)
 
 - **배경**: Phase 7 마무리 마지막 작업
