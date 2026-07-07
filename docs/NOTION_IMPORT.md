@@ -1,11 +1,11 @@
 ---
 title: Roguelike Sprawl - 프로젝트 가이드
-date: 2026-07-04
+date: 2026-07-07
 tags: [game, gibson, cyberpunk, python]
-version: 0.5.0
+version: 0.6.0
 ---
 
-# Roguelike Sprawl - 프로젝트 가이드 (v0.5)
+# Roguelike Sprawl - 프로젝트 가이드 (v0.6)
 
 ## 프로젝트 개요
 
@@ -18,12 +18,12 @@ version: 0.5.0
 - **언어**: Python 3.11+ (3.12, 3.14 호환)
 - **엔진**: python-tcod 21+
 - **아키텍처**: ECS-lite (Entity Component System)
-- **테스트**: pytest (4262 passed, 4306 collected, 44 skipped, 0 xfailed)
+- **테스트**: pytest (4231 passed, 44 skipped, 0 xfailed)
 - **린트**: ruff check / format
 - **타입 체크**: mypy strict
 - **의존성**: pyproject.toml + uv
 
-### 콘텐츠 카운트 (2026-07-04)
+### 콘텐츠 카운트 (2026-07-07)
 
 | 항목 | 수량 | 비고 |
 |---|---|---|
@@ -32,14 +32,16 @@ version: 0.5.0
 | Stage enum | 13 | PENDING/BRIEFING/TRAVEL/MEET_NPC/EXTRACT_DATA/BYPASS_SECURITY/DEFEAT_ICE/JACK_OUT/REWARD/DEBRIEF/COMPLETE/DEATH_RESTART/FAILED |
 | 캐릭터 아크 | 9 | 케이/실/카스/수트/위건/앤지/샐리/3Jane/Neuromancer |
 | GN 씬 | 72 | 9자키 × 8 씬 (4 base + 4 ending B/C) |
-| 챕터 (playable) | 9/15 | 9자키 완전 통합 |
+| 챕터 (playable) | 9/9 | 9자키 × 5챕터 완전 통합 (Arc JSON L1 계층 완성) |
 | 엔딩 (A/B/C) | 3 | GN 메인 + 9자키 ending |
 | 세이브 슬롯 | 10 + 1 auto | 10개 수동 + 자동저장 |
 | ICE 타입 | 41 | corporate_guard, archive_sentinel, wintermute_proxy 추가 |
 | 업적 | 28 | dashboard/achievements.html |
 | 설정 | 30+ | dashboard/settings.html |
 | 대시보드 | 11 | index/stages/novel/story/cyberspace/dungeon/combat/equipment/graphic-novel/player/sound |
-| 테스트 | 4196 passed | pytest, 44 skipped, 0 xfailed |
+| 테스트 | 4231 passed | pytest, 44 skipped, 0 xfailed |
+| Arc JSON | 9자 전부 | 5챕터 × 5phase × 3beats = 75 beats/자 |
+| 소설/스토리 연계 | ✅ 완전 | L1→L3 45 cutscene refs 전부 해결, Salvation 완전 연동 |
 
 ---
 
@@ -304,32 +306,46 @@ python3 tools/build_dashboard.py
 
 ---
 
-## 8. 현재 상태 (2026-07-04)
+## 8. 현재 상태 (2026-07-07)
 
 | 항목 | 상태 |
 |------|------|
-| Unit Tests | ✅ **4262 passed** (4306 collected, 44 skipped) |
-| mypy | ✅ 0 errors (114 source files) |
+| Unit Tests | ✅ **4231 passed** (44 skipped) |
+| mypy | ✅ 0 errors (118 source files) |
 | ruff | ✅ All passed |
 | mkdocs | ✅ 316 HTML pages, 0 warnings (--strict) |
 | 미션 | ✅ **47개** (5 zones 균형) |
 | 단편 (EN+KO) | ✅ **41 pair** |
-| Stage | ✅ **13개** (BRIEFING/TRAVEL/BYPASS_SECURITY) |
+| Stage | ✅ **14개** (+SALVATION_EPILOGUE) |
 | Novel Integration | ✅ 런타임 자동 호출 연동 |
-| 캐릭터 | ✅ **9자키 완전 통합** (72 GN scenes) |
+| 캐릭터 | ✅ **9자키 완전 통합** (72 GN scenes + 9 epilogue) |
+| Arc JSON (L1 계층) | ✅ **9자 전부** (5챕터 × 5phase × 3beats) |
+| 소설/스토리 연계 | ✅ **L1→L3 45 cutscene 전부 해결** |
+| Salvation Phase | ✅ Stage.SALVATION_EPILOGUE + ChapterState 4개 + Runner |
 | 세이브 | ✅ **10슬롯 + 자동저장** |
-| ADR | ✅ **60+ Accepted, 0 Draft** |
+| ADR | ✅ **61+ Accepted, 0 Draft** (ADR-0090 추가) |
+| 빌드 | ✅ **wheel 1.0.0a1** 빌드/검증 완료 |
 
-### 8.1 세션 작업 요약 (2026-07-04, 23 commits)
+### 8.1 세션 작업 요약 (2026-07-07, 12 commits)
 
-- **Phase 7.1**: Wigan Ludgate (5번째 자키) + Angie Mitchell (6번째)
-- **Phase 7.2**: Mid/Core/TA zone 9 신규 미션 + 3 신규 ICE
-- **Phase 7.3**: 세이브/로드 10슬롯 + 자동저장
-- **Phase 8**: Sally Shears (7번째 자키)
-- **Phase 9**: 3Jane Tessier-Ashpool (8번째) + Neuromancer (9번째)
-- **Salvation Phase**: ADR-0090 Draft (9자 × 9 epilogue 씬)
+- **Phase 7 마무리**: Help/Settings/Sound/Crash/Build/mypy 7/7 완료
+- **Arc JSON 6자 생성**: suit/wigan/angie/sally/3jane/neuromancer Arc JSON 작성 (각 5챕터 × 5phase × 3beats)
+- **소설/스토리 연계성 감사**: L1→L3 컷신 45개 전부 해결, Salvation 완전 연동 확인
+- **ADR-0090 인덱스 추가**: decisions README에 Salvation Phase 등재
+- **Wikilink 감사**: 47개 모두 cross-project (Fiction/)로 확인
+- **Wheel 빌드 검증**: 1.0.0a1 (340K wheel, 122 files, metadata 검증 완료)
+- **MkDocs 빌드**: --strict 통과 (1.99s, 0 warnings)
+- **Salvation Phase**: ADR-0090 Accepted — Stage.SALVATION_EPILOGUE + ChapterState 4개 + SalvationRunner
 
-### 8.2 발견/수정 사항 (2026-07-04)
+### 8.2 발견/수정 사항 (2026-07-07)
+
+- **Arc JSON 미구현 6자 발견**: suit/wigan/angie/sally/3jane/neuromancer — `get_arc_for_character()` FileNotFoundError
+- **Arc JSON 6자 작성**: 각 5챕터 × 5phase × 3beats, Gibson 톤 캐릭터 voice 유지
+- **Arc JSON 포맷 불일치**: subagent가 simplified 포맷 생성 → `phase_id`/`phase_index`/`beats[]` 구조로 수동 fixing
+- ** Wheel 빌드 검증**: metadata version=1.0.0a1, 122 files, MIT license, Python>=3.11 확인
+- **MkDocs 빌드**: --strict 통과, 316 HTML pages, 0 warnings
+
+### 8.3 발견/수정 사항 (2026-07-04)
 
 - **버그 수정 5건**: matrix_view.current_node → current_node_id, chapter_view KeyError, get_gn_menu_key tuple 누락, ending A→B不一致, 중복 키
 - **인프라 정리**: lint 116→0, mypy 58→0, mkdocs 41→0
@@ -387,19 +403,23 @@ python Language/_publish/scripts/publish_to_notion.py this-file.md
 
 - [x] 미션 카운트 47
 - [x] 단편 카운트 41 pair
-- [x] Stage 13개
+- [x] Stage 14개 (SALVATION_EPILOGUE 추가)
 - [x] Novel Integration 런타임 연동
-- [x] 테스트 4262 passed
-- [x] ADR 0030-0090 (60+ Accepted, 0 Draft)
+- [x] 테스트 4231 passed
+- [x] ADR 0030-0090 (61+ Accepted, 0 Draft)
 - [x] 캐릭터 9자키 완전 통합
-- [x] GN 씬 72개 (9자 × 8)
+- [x] GN 씬 72개 (9자 × 8) + 9 epilogue 씬
+- [x] Arc JSON 9자 전부 (L1 스토리 완전)
+- [x] 소설/스토리 연계 L1→L3 전부 해결
+- [x] Salvation Phase 완전 구현
 - [x] 세이브 10슬롯 + 자동저장
 - [x] ICE 41 types
 - [x] lint/mypy/mkdocs 모두 통과
+- [x] wheel 1.0.0a1 빌드/검증 완료
 
 ---
 
-> **버전**: 0.5.0
-> **작성일**: 2026-07-04
-> **이전 버전**: 0.4.0 (2026-07-01, 38 미션/4자키)
+> **버전**: 0.6.0
+> **작성일**: 2026-07-07
+> **이전 버전**: 0.5.0 (2026-07-04, Phase 7+8+9 완료)
 > **연관 문서**: `log.md`, `SESSION_SUMMARY.md` (v0.2.0), `ROADMAP.md`, `CHARACTER_PATHS.md` (v0.5.0), `decisions/README.md`

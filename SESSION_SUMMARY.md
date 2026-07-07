@@ -1,4 +1,4 @@
-# Session Summary — 2026-07-07 (v0.3.0)
+# Session Summary — 2026-07-07 (v0.3.1)
 
 > **세션 ID**: roguelike_sprawl-2026-07-07
 > **세션 범위**: Phase 7 마무리 — 음원/크래시/빌드/mypy/CHANGELOG
@@ -118,11 +118,13 @@
 | 커밋 수 | 누적 |
 | 테스트 통과 | **4231** |
 | 자키 수 | **9** |
-| GN 씬 수 | **72** |
+| GN 씬 수 | **72 + 9 epilogue** |
+| Arc JSON | **9자 전부 (L1 완전)** |
+| 소설/스토리 연계 | **L1→L3 45 cutscene 전부 해결** |
 | 미션 수 | **47** |
 | ICE 타입 | **41** |
 | 저장 슬롯 | **10 + 1** |
-| ADR | **60+ 모두 Accepted** |
+| ADR | **61+ 모두 Accepted** |
 | Lint errors | **0** |
 | Typecheck errors | **0** |
 
@@ -130,5 +132,8 @@
 
 **세션 종료 시간**: 2026-07-07
 **최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4231 ✅
-**이 문서 버전**: v0.3.0
+**Arc JSON**: 6자 신규 생성 (suit/wigan/angie/sally/3jane/neuromancer) — L1 스토리 9자 완전
+**소설/스토리 연계**: 감사 완료 — L1→L3 전부 해결, Salvation 완전 연동
+**NOTION_IMPORT.md**: v0.5.0 → v0.6.0 갱신
+**이 문서 버전**: v0.3.1
 **이전 버전**: v0.2.0 (2026-07-04)
