@@ -2,6 +2,39 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | v1.0.0 release prep — ADR-0102 draft + release workflow + pages.yml fix
+
+### Part A — pages.yml stale file references fix
+- **문제**: `pages.yml`가 삭제된 파일 참조 (`novel.html`, `story_read.html`)
+- **수정**: 2개 cp 라인 제거 (REORGANIZE_PLAN에서 이미 삭제된 파일)
+- **커밋**: `801d960`
+
+### Part B — ADR-0102 v1.0.0 Release Decision (Draft)
+- **위치**: `decisions/0102-v1-release-decision.md`
+- **내용**:
+  - 4개 버전 옵션: 1.0.0a1 (현재 빌드)/1.0.0b1 (beta)/1.0.0 (final)/1.0.0a2 (증강 alpha)
+  - **추천**: Option 1 (1.0.0a1) 또는 Option 2 (1.0.0b1)
+  - Release workflow 옵션: A (자동 태그 트리거) / B (수동 workflow_dispatch) — **B 권장**
+  - PyPI_API_TOKEN secret 필요
+- **결정 대기**: 사용자 선택 필요
+
+### Part C — PyPI Release Workflow (신규)
+- **위치**: `.github/workflows/release.yml`
+- **트리거**: workflow_dispatch (수동)
+- **입력**: version (1.0.0a1 / 1.0.0b1 / 1.0.0)
+- **동작**:
+  1. pyproject.toml version/classifier 자동 갱신
+  2. `uv build`
+  3. PyPI 업로드 (`uv publish --token ${{ secrets.PYPI_API_TOKEN }}`)
+  4. GitHub 태그 생성 (`v{version}`)
+- **조건**: `PYPI_API_TOKEN` repository secret 필요
+
+### 검증
+- pytest **4146 passed** (39 skipped, 1 warning)
+- ruff check/format: All passed
+- mypy strict: 0 errors (119 source files)
+- **커밋**: `801d960`
+
 ## [2026-07-08] refactor | Dashboard 파일 통폐합 + stats JSON 정리
 
 ### Part A — 파일 통폐합 (REORGANIZE_PLAN.md Phase A/B)

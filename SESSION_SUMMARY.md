@@ -1,9 +1,9 @@
-# Session Summary — 2026-07-08 (v0.4.0)
+# Session Summary — 2026-07-08 (v0.5.0)
 
 > **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: Dashboard 재조직화 + Fiction 메타데이터 백필 완료
+> **세션 범위**: Dashboard 재조직화 + Fiction 메타데이터 백필 + v1.0.0 release prep
 > **테스트**: 4146 passed (39 skipped, 0 failed)
-> **변경 파일**: ~30 files, +96/-2854 lines
+> **변경 파일**: ~35 files
 
 ---
 
@@ -38,6 +38,17 @@
 ### E. Fiction Hanja 수정 (이전 세션)
 - 한자 혼용 제거: `library.html` + `short-stories/` 19개 파일
 
+### F. v1.0.0 Release Prep (신규)
+- **ADR-0102** (`decisions/0102-v1-release-decision.md`) — 4개 버전 옵션 (1.0.0a1/1.0.0b1/1.0.0/1.0.0a2)
+  - **추천**: Option 1 (1.0.0a1) 또는 Option 2 (1.0.0b1 — beta 격상)
+  - **결정 대기**: 사용자 선택 필요
+- **Release Workflow** (`.github/workflows/release.yml`) — workflow_dispatch 기반 수동 trig
+  - version 입력 (1.0.0a1/1.0.0b1/1.0.0)
+  - `uv build` + `uv publish --token ${{ secrets.PYPI_API_TOKEN }}`
+  - GitHub 태그 자동 생성
+- **pages.yml fix** — 삭제된 파일 참조 제거 (`novel.html`, `story_read.html`)
+- **커밋**: `801d960`
+
 ---
 
 ## 2. 시스템 상태 매트릭스 (최종)
@@ -47,7 +58,7 @@
 | pytest | **4146 passed** (39 skipped) |
 | ruff check | **All passed** |
 | ruff format | **All passed** |
-| mypy strict | **0 errors** (118 source files) |
+| mypy strict | **0 errors** (119 source files) |
 | dashboard tests | **623 passed** |
 
 ---
@@ -73,9 +84,11 @@
 ## 4. 다음 세션 인수인계
 
 ### 즉시 착수 가능
-1. **v1.0.0 release decision** — 버전 번호, PyPI secret 설정, release workflow 활성화
-2. **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
-3. **PyPI secret 추가** — `PYPI_API_TOKEN` in repository secrets
+1. ⏳ **v1.0.0 release decision** — ADR-0102 Draft 상태, 사용자 결정 대기
+   - 버전 선택: 1.0.0a1 (현재 빌드) / 1.0.0b1 (beta) / 1.0.0 (final)
+   - Release workflow (`release.yml`) 준비 완료
+2. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
+3. ⏳ **PyPI secret 추가** — `PYPI_API_TOKEN` in repository secrets (release.yml 필요)
 
 ### 중장기 작업
 4. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
@@ -105,6 +118,7 @@
 
 | 커밋 | 설명 |
 |---|---|
+| `801d960` | feat: v1.0.0 release prep — pages.yml fix, release workflow, ADR-0102 draft |
 | `ca28eea` | docs: commit 0101-fiction-metadata-backfill.md (fully resolved) |
 | `7993072` | refactor(dashboard): story→missions, stories→library rename + stats JSON cleanup |
 | `50d86eb` | docs: log.md — Hanja fix entry (2026-07-08) |
@@ -114,5 +128,5 @@
 
 **세션 종료 시간**: 2026-07-08
 **최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4146 ✅
-**이 문서 버전**: v0.4.0
-**이전 버전**: v0.3.1 (2026-07-07)
+**이 문서 버전**: v0.5.0
+**이전 버전**: v0.4.0 (2026-07-08)
