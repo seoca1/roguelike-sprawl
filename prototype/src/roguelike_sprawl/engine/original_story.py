@@ -14,7 +14,12 @@ References:
 
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 from .npc_event import ChoiceEffect, DialogueChoice, DialogueLine, NPCEvent
+
+if TYPE_CHECKING:
+    from ..audio.config import SoundConfig
 
 CHAPTER_INFO: dict[str, dict[str, str]] = {
     "novice": {
@@ -340,12 +345,41 @@ def get_ending_description(character: str, ending: str) -> str:
     return endings.get((character, ending), "Unknown ending")
 
 
-# Theme for each original story scene (background music)
+# Theme for each original story scene / game screen (background music)
+# Maps screen_kind (ScreenKind value) → theme name
 SCENE_THEMES: dict[str, str] = {
-    "character_select": "finn_office",  # The Finn's underground office
-    "prologue_novice": "matrix_rain",  # Standard cyberspace
-    "prologue_veteran": "cyberspace",  # Deeper cyberspace
-    "prologue_heretic": "sense_net",  # Corporate fortress / Tessier-Ashpool
+    # Screens
+    "menu": "finn_office",
+    "character_select": "finn_office",
+    "hub": "finn_office",
+    "cyberspace_browser": "finn_office",
+    "cyberspace_map": "finn_office",
+    "matrix": "matrix_rain",
+    "combat": "industrial",
+    "cinematic": "matrix_rain",
+    "story": "broadcast",
+    "event": "broadcast",
+    "npc": "chiba",
+    "death": "hammer_alert",
+    "death_summary": "loa_drum_fade",
+    "hall_of_dead": "loa_channel",
+    "jack_out": "loa_drum",
+    "reward": "chiba",
+    "debrief": "finn_office",
+    "settings": "finn_office",
+    "help": "finn_office",
+    "save_load": "finn_office",
+    # Original story prologues
+    "prologue_novice": "matrix_rain",
+    "prologue_veteran": "cyberspace",
+    "prologue_heretic": "sense_net",
+    # Graphic novel
+    "graphic_novel_menu": "finn_office",
+    "graphic_novel": "sense_net",
+    "saved_progress": "broadcast",
+    "graphic_novel_ending_menu": "broadcast",
+    "chapter": "chiba",
+    "save_slot_select": "finn_office",
 }
 
 
@@ -355,3 +389,26 @@ def get_theme_for_scene_id(scene_id: str) -> str:
     Returns the default 'matrix_rain' if scene_id is unknown.
     """
     return SCENE_THEMES.get(scene_id, "matrix_rain")
+
+
+_screen_theme_tracker: str | None = None
+
+
+def update_screen_theme(screen_name: str, config: SoundConfig | None = None) -> None:
+    """Play the appropriate BGM theme when screen changes.
+
+    Called from app.py _render() on every screen transition.
+    Uses a module-level tracker to avoid re-triggering the same theme.
+    """
+    global _screen_theme_tracker
+    if _screen_theme_tracker == screen_name:
+        return
+    _screen_theme_tracker = screen_name
+    if config is None:
+        return
+    theme_name = get_theme_for_scene_id(screen_name)
+    try:
+        from ..audio import play_theme as _play_theme
+        _play_theme(theme_name, config)
+    except Exception:
+        pass

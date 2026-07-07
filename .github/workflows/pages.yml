@@ -61,6 +61,7 @@ jobs:
           cp dashboard/settings.html _pages/settings.html
           cp dashboard/graphic-novel.html _pages/graphic-novel.html
           cp dashboard/favicon.svg _pages/favicon.svg
+          cp -r dashboard/sounds/ _pages/sounds/
           cp -r dashboard/stories/ _pages/stories/
           cp -r dashboard/data/ _pages/data/
           cp -r design/ _pages/design/

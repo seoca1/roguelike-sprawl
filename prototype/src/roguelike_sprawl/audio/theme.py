@@ -46,12 +46,20 @@ def _log_warning(message: str, context: str = "") -> None:
 
 
 # Theme name → file path (relative to sounds_dir)
+# NOTE: filenames use "theme_" prefix (e.g. theme_matrix_rain.wav), not "_theme" suffix
 THEMES: dict[str, str] = {
-    "matrix_rain": "matrix_rain_theme.wav",
-    "cyberspace": "cyberspace_theme.wav",
-    "chiba": "chiba_theme.wav",
-    "sense_net": "sense_net_theme.wav",
-    "finn_office": "finn_office_theme.wav",
+    "matrix_rain": "theme_matrix_rain.wav",
+    "cyberspace": "theme_cyberspace.wav",
+    "chiba": "theme_chiba.wav",
+    "sense_net": "theme_sense_net.wav",
+    "finn_office": "theme_finn_office.wav",
+    "loa_drum": "theme_loa_drum.wav",
+    "loa_drum_fade": "theme_loa_drum_fade.wav",
+    "loa_channel": "theme_loa_channel.wav",
+    "manarase_drone": "theme_manarase_drone.wav",
+    "industrial": "theme_industrial.wav",
+    "broadcast": "theme_broadcast.wav",
+    "hammer_alert": "theme_hammer_alert.wav",
 }
 
 # Default theme (when nothing is playing)

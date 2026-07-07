@@ -129,6 +129,12 @@ def _render(
 ) -> None:
     """Render the current screen. ``portraits`` is reserved for later use."""
     _ = portraits
+    # BGM: play appropriate theme for the current screen
+    try:
+        from . import original_story
+        original_story.update_screen_theme(state.screen.value, state.sound_config)
+    except Exception:
+        pass
     if state.screen is ScreenKind.MENU:
         menu_screen.render_menu(console, t, state)
     elif state.screen is ScreenKind.HUB:

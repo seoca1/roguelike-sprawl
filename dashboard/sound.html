@@ -202,9 +202,9 @@
 
 <h1>🔊 Sound Dashboard</h1>
 <div class="subtitle">
-  6 카테고리 · 46 사운드 · 5 테마 · 키 바인딩 8개 · 기본 볼륨 0.2
+  6 카테고리 · 46 사운드 · 12 BGM 테마 · 키 바인딩 8개 · 기본 볼륨 0.2
   <br>
-  <code>src/roguelike_sprawl/audio/</code> · <code>data/sounds_test/</code>
+  <code>src/roguelike_sprawl/audio/</code> · <code>sounds/</code> (deploy) · <code>data/sounds_test/</code> (source)
 </div>
 
 <!-- Stats -->
@@ -223,7 +223,7 @@
     </div>
     <div class="stat-item">
       <div class="label">Themes</div>
-      <div class="value" data-stat="themes">5</div>
+      <div class="value" data-stat="themes">12</div>
       <div class="sub">background music</div>
     </div>
     <div class="stat-item">
@@ -287,32 +287,183 @@
 </div>
 
 <!-- Themes -->
-<h2>🎵 Themes (5)</h2>
-<div class="theme-grid" data-themes>
+<h2>🎵 Themes (5 + 7 ambient)</h2>
+<p style="color:#8a9aa8;font-size:13px;margin-bottom:16px;">아래에서 직접 들어보세요. WAV 파일은 <code>sounds/</code> 디렉토리에 있습니다.</p>
+
+<!-- BGM Player -->
+<div id="bgm-player" style="background:#0d1420;border:1px solid #2a3540;border-radius:8px;padding:20px;margin-bottom:24px;">
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+    <div id="now-playing" style="flex:1;color:#ffaa55;font-size:14px;font-weight:600;">🎧 BGM 미리듣기</div>
+    <button onclick="stopAll()" style="background:#1a2530;border:1px solid #2a3540;color:#c5d4e3;padding:6px 14px;border-radius:4px;cursor:pointer;font-size:12px;">■ Stop</button>
+    <input type="range" id="bgm-volume" min="0" max="100" value="60" oninput="setVolume(this.value)" style="width:80px;">
+    <span id="vol-label" style="color:#6a7888;font-size:11px;width:30px;">60%</span>
+  </div>
+  <div class="theme-grid" id="theme-buttons" style="grid-template-columns:repeat(auto-fit,minmax(160px,1fr));">
+  </div>
+</div>
+
+<script>
+const THEMES = [
+  { id: "matrix_rain",   file: "theme_matrix_rain.wav",   label: "Matrix Rain",   desc: "매트릭스 진입 · 비 · 데이터" },
+  { id: "cyberspace",    file: "theme_cyberspace.wav",       label: "Cyberspace",    desc: "깊은 매트릭스 · ICE 영역" },
+  { id: "chiba",         file: "theme_chiba.wav",           label: "Chiba",         desc: "Chiba City · 네온 거리" },
+  { id: "sense_net",     file: "theme_sense_net.wav",       label: "Sense/Net",     desc: "T-A 기업 영역" },
+  { id: "finn_office",   file: "theme_finn_office.wav",     label: "Finn's Office", desc: "브리핑 · 의뢰" },
+  { id: "industrial",    file: "theme_industrial.wav",      label: "Industrial",    desc: "전투 BGM" },
+  { id: "broadcast",     file: "theme_broadcast.wav",       label: "Broadcast",     desc: "스토리 · 이벤트" },
+  { id: "loa_drum",      file: "theme_loa_drum.wav",        label: "Loa Drum",      desc: "잭-아웃 드럼" },
+  { id: "loa_drum_fade", file: "theme_loa_drum_fade.wav",   label: "Loa Fade",      desc: "Death Summary" },
+  { id: "loa_channel",   file: "theme_loa_channel.wav",     label: "Loa Channel",   desc: "Hall of Dead" },
+  { id: "manarase_drone",file: "theme_manarase_drone.wav",  label: "Manarase Drone",desc: "엔딩 크레딧" },
+  { id: "hammer_alert",  file: "theme_hammer_alert.wav",    label: "Hammer Alert",  desc: "Death screen" },
+];
+let currentAudio = null;
+let currentThemeId = null;
+const SOUNDS_BASE = "sounds/";
+
+function buildButtons() {
+  const grid = document.getElementById("theme-buttons");
+  THEMES.forEach(t => {
+    const btn = document.createElement("button");
+    btn.id = "btn-" + t.id;
+    btn.className = "theme-play-btn";
+    btn.innerHTML = "<div class=\"t-label\">" + t.label + "</div><div class=\"t-desc\">" + t.desc + "</div>";
+    btn.style.cssText = "background:#131a23;border:1px solid #2a3540;border-radius:6px;padding:12px;cursor:pointer;text-align:left;color:#c5d4e3;transition:border-color 0.15s,background 0.15s;";
+    btn.onmouseover = () => { btn.style.borderColor = "#66ffcc"; btn.style.background = "#1a2530"; };
+    btn.onmouseout = () => {
+      if (currentThemeId === t.id) { btn.style.borderColor = "#ffaa55"; btn.style.background = "#1a1200"; }
+      else { btn.style.borderColor = "#2a3540"; btn.style.background = "#131a23"; }
+    };
+    btn.onclick = () => playTheme(t);
+    grid.appendChild(btn);
+  });
+}
+
+function playTheme(t) {
+  if (currentThemeId === t.id && currentAudio && !currentAudio.paused) {
+    currentAudio.pause();
+    currentAudio = null;
+    currentThemeId = null;
+    document.getElementById("now-playing").textContent = "🎧 BGM 미리듣기";
+    updateButtons(null);
+    return;
+  }
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  const a = new Audio(SOUNDS_BASE + t.file);
+  a.volume = (document.getElementById("bgm-volume").value / 100);
+  a.loop = true;
+  a.play().catch(e => {
+    document.getElementById("now-playing").textContent = "⚠ 파일 없음: " + t.file;
+  });
+  currentAudio = a;
+  currentThemeId = t.id;
+  document.getElementById("now-playing").textContent = "▶ " + t.label + " — " + t.desc;
+  updateButtons(t.id);
+  a.onerror = () => {
+    document.getElementById("now-playing").textContent = "⚠ 파일 없음: " + t.file;
+    currentAudio = null; currentThemeId = null;
+    updateButtons(null);
+  };
+}
+
+function stopAll() {
+  if (currentAudio) { currentAudio.pause(); currentAudio.src = ""; currentAudio = null; }
+  currentThemeId = null;
+  document.getElementById("now-playing").textContent = "🎧 BGM 미리듣기";
+  updateButtons(null);
+}
+
+function setVolume(v) {
+  document.getElementById("vol-label").textContent = v + "%";
+  if (currentAudio) currentAudio.volume = v / 100;
+}
+
+function updateButtons(activeId) {
+  THEMES.forEach(t => {
+    const btn = document.getElementById("btn-" + t.id);
+    if (!btn) return;
+    if (t.id === activeId) {
+      btn.style.borderColor = "#ffaa55";
+      btn.style.background = "#1a1200";
+      btn.style.boxShadow = "0 0 8px #ffaa5533";
+    } else {
+      btn.style.borderColor = "#2a3540";
+      btn.style.background = "#131a23";
+      btn.style.boxShadow = "none";
+    }
+  });
+}
+
+buildButtons();
+</script>
+
+<style>
+.theme-play-btn { display: block; width: 100%; }
+.theme-play-btn .t-label { color: #ffaa55; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.theme-play-btn .t-desc { color: #6a7888; font-size: 11px; }
+</style>
+
+<!-- Theme list (reference) -->
+<div class="theme-grid" data-themes style="margin-top:8px;">
   <div class="theme-card">
     <h3>matrix_rain</h3>
-    <div class="file">matrix_rain.wav</div>
+    <div class="file">theme_matrix_rain.wav</div>
     <div class="desc">Neuromancer의 매트릭스 진입 시. 비, 데이터, 의식의 시작.</div>
   </div>
   <div class="theme-card">
     <h3>cyberspace</h3>
-    <div class="file">cyberspace.wav</div>
+    <div class="file">theme_cyberspace.wav</div>
     <div class="desc">깊은 매트릭스 탐험. 데이터 노드, ICE 영역.</div>
   </div>
   <div class="theme-card">
     <h3>chiba</h3>
-    <div class="file">chiba.wav</div>
+    <div class="file">theme_chiba.wav</div>
     <div class="desc">Chiba City. 비, 네온, 콘솔 카우보이의 거리.</div>
   </div>
   <div class="theme-card">
     <h3>sense_net</h3>
-    <div class="file">sense_net.wav</div>
+    <div class="file">theme_sense_net.wav</div>
     <div class="desc">Tessier-Ashpool / Sense/Net 영역. 기업, 의식체.</div>
   </div>
   <div class="theme-card">
     <h3>finn_office</h3>
-    <div class="file">finn_office.wav</div>
+    <div class="file">theme_finn_office.wav</div>
     <div class="desc">더 핀의 사무실. 브리핑, 의뢰.</div>
+  </div>
+  <div class="theme-card">
+    <h3>industrial</h3>
+    <div class="file">theme_industrial.wav</div>
+    <div class="desc">전투 모드.</div>
+  </div>
+  <div class="theme-card">
+    <h3>broadcast</h3>
+    <div class="file">theme_broadcast.wav</div>
+    <div class="desc">스토리/이벤트 화면.</div>
+  </div>
+  <div class="theme-card">
+    <h3>loa_drum</h3>
+    <div class="file">theme_loa_drum.wav</div>
+    <div class="desc">잭-아웃 애니메이션.</div>
+  </div>
+  <div class="theme-card">
+    <h3>loa_drum_fade</h3>
+    <div class="file">theme_loa_drum_fade.wav</div>
+    <div class="desc">Death Summary.</div>
+  </div>
+  <div class="theme-card">
+    <h3>loa_channel</h3>
+    <div class="file">theme_loa_channel.wav</div>
+    <div class="desc">Hall of Dead.</div>
+  </div>
+  <div class="theme-card">
+    <h3>manarase_drone</h3>
+    <div class="file">theme_manarase_drone.wav</div>
+    <div class="desc">엔딩 크레딧.</div>
+  </div>
+  <div class="theme-card">
+    <h3>hammer_alert</h3>
+    <div class="file">theme_hammer_alert.wav</div>
+    <div class="desc">Death screen (flatline).</div>
   </div>
 </div>
 
@@ -584,7 +735,7 @@
 
 <div class="footer">
   Roguelike Sprawl — Sound Dashboard<br>
-  <code>src/roguelike_sprawl/audio/</code> · <code>data/sounds_test/</code> · 46 sounds · 5 themes
+  <code>src/roguelike_sprawl/audio/</code> · <code>sounds/</code> · 46 sounds · 12 themes
 </div>
 
 </body>
