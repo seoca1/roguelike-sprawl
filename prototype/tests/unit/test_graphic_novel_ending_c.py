@@ -296,15 +296,15 @@ class TestSaveInvalidEnding:
 
 class TestLoadSceneChainEndingC:
     def test_novice_chain_c_has_2_scenes(self) -> None:
-        chain = load_scene_chain(SCENES_DIR, "novice", ending="C")
+        chain = load_scene_chain(SCENES_DIR, "novice", ending="C", max_order=8)
         assert len(chain) == 2
 
     def test_veteran_chain_c_has_2_scenes(self) -> None:
-        chain = load_scene_chain(SCENES_DIR, "veteran", ending="C")
+        chain = load_scene_chain(SCENES_DIR, "veteran", ending="C", max_order=8)
         assert len(chain) == 2
 
     def test_heretic_chain_c_has_2_scenes(self) -> None:
-        chain = load_scene_chain(SCENES_DIR, "heretic", ending="C")
+        chain = load_scene_chain(SCENES_DIR, "heretic", ending="C", max_order=8)
         assert len(chain) == 2
 
     def test_chain_c_excludes_ending_a_scenes(self) -> None:
