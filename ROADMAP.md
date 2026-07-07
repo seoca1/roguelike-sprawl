@@ -343,6 +343,7 @@ Phase 7: 알파 빌드
 - [x] **Phase 8 — Sally Shears** (2026-07-04) — 7번째 자키 8 씬
 - [x] **Phase 9 — 3Jane + Neuromancer** (2026-07-04) — 8번째 + 9번째 자키 8 씬씩
 - [x] **GitHub Projects 보드 가이드** (2026-07-04) — docs/GITHUB_PROJECTS_SETUP.md
+- [x] **Phase 7 완료 (2026-07-07) — 7/7** — Help/Settings/Sound/Crash/Build/mypy — **4231 tests**
 
 **Phase 5~9 핵심 시스템 완료**:
 - [x] 전투 (RT-MS) — ICE 진입 시 자동 공격 + 메뉴 스킬 + 5-Layer VFX
