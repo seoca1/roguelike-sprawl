@@ -2,6 +2,7 @@
 
 ## 변경 이력 (Recent)
 
+- **2026-07-07**: Phase 7 완료 — **4231 tests pass** — Help/Settings/Sound/Crash/Build/mypy 7/7 완료
 - **2026-07-04**: Phase 7+8+9 완료 — **4254 tests pass** (+145)
   - **Phase 7.1** (f54ae7d, a376bf4): Wigan Ludgate + Angie Mitchell (5번째 + 6번째 자키, 16 씬)
   - **Phase 7.2** (7e8a0e4): Mid/Core/TA zone 9 신규 미션 + 3 신규 ICE (corporate_guard, archive_sentinel, wintermute_proxy)
@@ -360,7 +361,7 @@ Phase 7: 알파 빌드
 - [x] **10슬롯 + 자동저장** 세이브/로드
 - [x] **lint/mypy/mkdocs 모두 green** — 0 errors/warnings
 
-**차순 작업** (Phase 10):
-1. **Salvation Phase 완료** (ADR-0090 ✅ Accepted) — 9자 × epilogue + ChapterState 3개 + Stage 1개
-2. **튜토리얼/온보딩** — 첫 런 가이드, Help 시스템
-3. **v1.0.0 정식 release** — Phase 7 완료 시
+**차순 작업** (Phase 10 완료):
+1. ✅ **Salvation Phase 완료** (ADR-0090 ✅) — 9자 × epilogue + ChapterState 3개 + Stage 1개
+2. ✅ **튜토리얼/온보딩** — Help 시스템 (Phase 7)
+3. ⏳ **v1.0.0-alpha.1 release** — GitHub에서 수동 생성 필요
