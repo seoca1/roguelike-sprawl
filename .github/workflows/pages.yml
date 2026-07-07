@@ -19,7 +19,7 @@ jobs:
     name: Deploy to gh-pages branch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
         with:
           fetch-depth: 0
 
@@ -71,7 +71,7 @@ jobs:
           find _pages -type f | sort
 
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@329bcc8f12caed2cefe5a5b80781499a6f3b361b
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_pages
@@ -82,7 +82,7 @@ jobs:
           commit_message: "deploy: dashboard + wiki ${{ github.sha }}"
 
       - name: Enable Pages (gh-pages branch)
-        uses: actions/github-script@v7
+        uses: actions/github-script@f28e40c7f34bde8b3046d885e986cb6290c5673b
         with:
           script: |
             try {
