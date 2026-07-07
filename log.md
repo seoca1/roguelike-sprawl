@@ -2,6 +2,42 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-07] audit | 소설/스토리/스테이지 연계성 검증 — L1 3자 완전, L3 9자 완전, 6자 Arc 미구현
+
+- **배경**: Phase 7 완료 후 스토리/게임플레이 연계성 전체 감사
+- **검증 결과**:
+
+#### L1 Arc → Scene (3자 완전 ✅ | 6자 미구현 ❌)
+- case_arc/sil_arc/kas_arc: 3arc × 5챕터 = 15챕터 ✅
+- 15챕터 × 3 cutscene (start/mid/end) = **45 cutscene refs: 45/45 모두 해결** ✅
+- 해결 매커니즘: `id` 필드 fallback (`load_scene` Fallback 2)
+- **6자 (suit/wigan/angie/sally/3jane/neuromancer): Arc JSON 부재** ❌
+  - `get_arc_for_character()` → `FileNotFoundError`
+
+#### L3 Scene 파일 (9자 완전 ✅)
+- 9자 × 9 씬 = **81 scene files 모두 존재 + 로드 가능** ✅
+- `09_epilogue.json`: 9자 모두 존재 ✅
+
+#### Salvation (ADR-0090 — 완전 구현 ✅)
+- `Stage.SALVATION_EPILOGUE` ✅
+- `ChapterState.SALVATION_INTRO/EPILOGUE/DONE + FINAL` ✅
+- `SalvationRunner` 클래스 ✅
+- `SALVATION_EPILOGUES` 9개 entries ✅
+- 9개 epilogue scene_id 모두 해결 ✅
+
+#### game_action ↔ Stage (68:14, 문서화된 제한 🟡)
+- `game_action`: 68개 narrative descriptor (e.g., `wake_up`, `jack_in`)
+- `Stage`: 14개 enum values
+- **1:1 매핑 없음** — 의도된 설계 (SALVATION_PHASE_INTEGRATION.md §6.2 문서화)
+- `game_action`은 narrative trigger, Stage는 gameplay state
+
+#### Mission → Character (간접 매핑 🟡)
+- `missions.json`: `arc` 필드 (1-5), `character_ref` 미사용
+- `mission_mapper.py`: keyword 기반 mission→RoomType 매핑
+- 47 미션 모두 로드 가능 ✅
+
+- **의미**: 3자(case/sil/kas)의 Arc→Scene→Beat→game_action chain 완전. 6자(신규캐릭터)의 경우 GN scene만 존재, Arc/L1 스토리 계층 미구현.
+
 ## [2026-07-07] docs | Wikilink audit — 47건 모두 cross-project (Fiction/)로 확인
 
 - **배경**: decisions README ADR-0090 인덱스 누락 수정 후 전체 링크 감사
