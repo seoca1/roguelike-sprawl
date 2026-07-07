@@ -22,17 +22,20 @@
     "5": 8
   },
   "ice_unique_count": 41,
-  "stage_count": 13,
+  "stage_count": 14,
   "sound_wav_count": 46,
   "gn_scenes_by_char": {
-    "angie": 8,
-    "case": 8,
-    "kas": 8,
-    "sil": 8,
-    "suit": 8,
-    "wigan": 8
+    "3jane": 9,
+    "angie": 9,
+    "case": 9,
+    "kas": 9,
+    "neuromancer": 9,
+    "sally": 9,
+    "sil": 9,
+    "suit": 9,
+    "wigan": 9
   },
-  "gn_scenes_total": 48,
+  "gn_scenes_total": 81,
   "program_count": 9,
   "ending_combinations": 9,
   "cyberspace_worlds": 2,
@@ -40,6 +43,6 @@
   "cyberspace_sectors_total": 8,
   "cyberspace_servers_total": 184,
   "skill_effect_count": 15,
-  "test_count_collected": 2587,
-  "_generated_at": "2026-07-04T13:30:17+00:00"
+  "test_count_collected": 2666,
+  "_generated_at": "2026-07-07T14:11:09+00:00"
 }
