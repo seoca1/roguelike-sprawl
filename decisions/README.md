@@ -50,6 +50,7 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | 0052 | Short Story Expansion Plan (단편 3편 보강) | **Accepted** | 2026-06-22 | P2 |
 | 0060 | Dungeon Exploration Redesign (NetHack + VFX) | **Accepted** | 2026-06-30 | P2 |
 | 0061 | Novel Integration Architecture (Hook 디스패치) | **Accepted** | 2026-06-30 | P2 |
+| 0090 | Salvation Phase Integration (9자 × epilogue + ChapterState 3개 + Stage 1개) | **Accepted** | 2026-07-07 | P2 |
 
 ### 2026-07-01 통합 작업 (P1~P4 + B)
 
@@ -124,6 +125,7 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | Story Expansion (0052) | 단편 17→35+ 확장 + frontmatter 강화 (wiki_references, game_integration, character_ref) |
 | Dungeon (0060) | NetHack BSP 미로 + 4 VFX spawner + Mission→Room 매핑 (29 미션) + ECS 통합 |
 | Novel Integration (0061) | 4-layer Hook 디스패치 (catalog/hooks/manifest/dispatcher) + 런타임 자동 호출 (`engine/novel_integration.py`) |
+| Salvation (0090) | 9자 × epilogue 씬 + SalvationRunner + ChapterState SALVATION_INTRO/EPILOGUE/DONE/FINAL + Stage SALVATION_EPILOGUE |
 
 ## 결정 절차 (참고용)
 
