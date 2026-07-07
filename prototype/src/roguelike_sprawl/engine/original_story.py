@@ -409,6 +409,7 @@ def update_screen_theme(screen_name: str, config: SoundConfig | None = None) -> 
     theme_name = get_theme_for_scene_id(screen_name)
     try:
         from ..audio import play_theme as _play_theme
+
         _play_theme(theme_name, config)
     except Exception:
         pass

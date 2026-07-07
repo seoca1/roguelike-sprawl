@@ -132,6 +132,7 @@ def _render(
     # BGM: play appropriate theme for the current screen
     try:
         from . import original_story
+
         original_story.update_screen_theme(state.screen.value, state.sound_config)
     except Exception:
         pass

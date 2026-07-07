@@ -1,0 +1,98 @@
+name: Release to PyPI
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to release (e.g., 1.0.0a1, 1.0.0b1, 1.0.0)'
+        required: true
+        type: choice
+        options:
+          - 1.0.0a1
+          - 1.0.0b1
+          - 1.0.0
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build and Publish to PyPI
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/project/roguelike-sprawl/
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Update version in pyproject.toml
+        run: |
+          uv run python -c "
+          import re
+          with open('pyproject.toml', 'r') as f:
+            content = f.read()
+          # Update version
+          content = re.sub(
+            r'version = \".*\"',
+            'version = \"${{ inputs.version }}\"',
+            content
+          )
+          # Update Development Status classifier based on version
+          if 'alpha' in '${{ inputs.version }}':
+            status = '3 - Alpha'
+          elif 'beta' in '${{ inputs.version }}':
+            status = '4 - Beta'
+          else:
+            status = '5 - Production/Stable'
+          content = re.sub(
+            r'Development Status :: \d - \w+',
+            f'Development Status :: {status}',
+            content
+          )
+          with open('pyproject.toml', 'w') as f:
+            f.write(content)
+          print(f'Updated version to ${{ inputs.version }}')
+          cat pyproject.toml | grep -E '^version|^    \"Development'
+          "
+
+      - name: Build package
+        run: |
+          cd prototype
+          uv build
+
+      - name: Publish to PyPI
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: prototype/dist/*
+
+      - name: Publish to PyPI (production)
+        if: inputs.version == '1.0.0'
+        run: |
+          cd prototype
+          uv publish --token ${{ secrets.PYPI_API_TOKEN }}
+        env:
+          UV_SYSTEM_PYTHON: 1
+
+      - name: Publish to PyPI (pre-release)
+        if: inputs.version != '1.0.0'
+        run: |
+          cd prototype
+          uv publish --token ${{ secrets.PYPI_API_TOKEN }} --prelease
+        env:
+          UV_SYSTEM_PYTHON: 1
+
+      - name: Create GitHub Tag
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git tag "v${{ inputs.version }}" -m "Release v${{ inputs.version }}"
+          git push origin "v${{ inputs.version }}"

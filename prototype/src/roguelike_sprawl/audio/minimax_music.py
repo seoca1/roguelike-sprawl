@@ -8,6 +8,7 @@ Usage:
     audio_bytes = generate_theme_bgm("matrix_rain")
     (Path("sounds") / "theme_matrix_rain.wav").write_bytes(audio_bytes)
 """
+
 from __future__ import annotations
 
 import os
@@ -147,6 +148,7 @@ def generate_music(prompt: str, duration_seconds: int = 30) -> bytes | None:
                     return bytes(audio_resp.content)
             elif result.get("data", {}).get("audio_base64"):
                 import base64
+
                 return base64.b64decode(result["data"]["audio_base64"])
             else:
                 print(f"[minimax_music] Unexpected response: {result}")
@@ -186,7 +188,9 @@ def generate_theme_bgm(theme_id: str, output_path: Path, duration_seconds: int =
     return True
 
 
-def generate_all_themes(output_dir: Path = Path("sounds"), duration_seconds: int = 30) -> dict[str, bool]:
+def generate_all_themes(
+    output_dir: Path = Path("sounds"), duration_seconds: int = 30
+) -> dict[str, bool]:
     """Generate all 12 BGM themes.
 
     Args:
@@ -210,6 +214,7 @@ def generate_all_themes(output_dir: Path = Path("sounds"), duration_seconds: int
 
 if __name__ == "__main__":
     import sys
+
     output = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("sounds")
     results = generate_all_themes(output_dir=output)
     print("\n--- Summary ---")

@@ -51,8 +51,6 @@ jobs:
           cp dashboard/missions.html _pages/missions.html
           cp dashboard/stages.html _pages/stages.html
           cp dashboard/library.html _pages/library.html
-          cp dashboard/novel.html _pages/novel.html
-          cp dashboard/story_read.html _pages/story_read.html
           cp dashboard/sound.html _pages/sound.html
           cp dashboard/combat.html _pages/combat.html
           cp dashboard/equipment.html _pages/equipment.html
