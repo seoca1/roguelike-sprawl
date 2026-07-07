@@ -104,6 +104,9 @@ class ScreenKind(StrEnum):
     DEBRIEF = "debrief"  # Optional narrative between REWARD and COMPLETE
     ENDING = "ending"  # Ending A/B display (ADR-0031)
     ARC_PHASE = "arc_phase"  # Arc phase with beats (Story → Stage → Event pipeline)
+    SALVATION_INTRO = "salvation_intro"  # Epilogue character selection (Phase 9)
+    SALVATION_EPILOGUE = "salvation_epilogue"  # Epilogue scene playback (Phase 9)
+    SALVATION_ENDING = "salvation_ending"  # Post-epilogue ending choice (Phase 9)
     SAVE_LOAD = "save_load"  # Save/Load slot browser (Hub)
 
 

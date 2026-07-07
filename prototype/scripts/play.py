@@ -71,6 +71,12 @@ from roguelike_sprawl.matrix.ppl import calculate_ppl
 from roguelike_sprawl.matrix.zdr import node_status, node_zdr
 from roguelike_sprawl.missions import JobBoard
 from roguelike_sprawl.run import ChapterState, Stage, ensure_run_state
+from roguelike_sprawl.engine.salvation import (
+    SalvationRunner,
+    format_epilogue_text,
+    format_salvation_ending_menu,
+    format_salvation_menu,
+)
 
 
 def _setup(args: argparse.Namespace) -> tuple[AppState, Translator, StoryRegistry]:
@@ -538,6 +544,94 @@ def _action_character_select(state: AppState, character: str) -> str:
     return ""
 
 
+
+
+def _get_salvation_runner(state: AppState) -> SalvationRunner:
+    """Get or create the SalvationRunner on the app state.
+
+    Lazily initializes on first access; persists for the run.
+    """
+    runner = getattr(state, "salvation_runner", None)
+    if runner is None:
+        runner = SalvationRunner()
+        state.salvation_runner = runner
+    return runner
+
+
+def _action_salvation_intro(state: AppState, choice: str) -> str:
+    """SALVATION_INTRO: select an epilogue character (1-9) or go to menu.
+
+    Args:
+        state: App state.
+        choice: "1"-"9" (character index) | "back" (return to MENU)
+
+    Phase 9-B: triggers SalvationRunner.choose_epilogue() and transitions
+    to SALVATION_EPILOGUE state on the AppState.
+    """
+    if state.screen is ScreenKind.SALVATION_INTRO:
+        if choice == "back":
+            state.screen = ScreenKind.MENU
+            return "Auto: Salvation intro → Main Menu"
+        if not choice.isdigit() or not (1 <= int(choice) <= 9):
+            return ""
+        # Map 1-9 → character_id
+        choices = list(__import__("roguelike_sprawl.engine.salvation", fromlist=["list_available_epilogues"]).list_available_epilogues())
+        if int(choice) > len(choices):
+            return ""
+        char_id = choices[int(choice) - 1][0]
+        runner = _get_salvation_runner(state)
+        runner.choose_epilogue(char_id)
+        state.salvation_runner = runner
+        state.screen = ScreenKind.SALVATION_EPILOGUE
+        return f"Auto: selected epilogue [{choice}] {char_id} → playing"
+    return ""
+
+
+def _action_salvation_epilogue(state: AppState) -> str:
+    """SALVATION_EPILOGUE: advance epilogue playback (auto-completed).
+
+    Phase 9-B: when epilogue is shown (here: instant for demo),
+    transition to SALVATION_ENDING for the final ending choice.
+    """
+    if state.screen is ScreenKind.SALVATION_EPILOGUE:
+        runner = _get_salvation_runner(state)
+        if runner.state == "salvation_intro":
+            return ""
+        runner.complete_epilogue()
+        state.screen = ScreenKind.SALVATION_ENDING
+        return f"Auto: epilogue complete → ending menu ({runner.selection.ending if runner.selection else "?"})"
+    return ""
+
+
+def _action_salvation_ending(state: AppState, choice: str) -> str:
+    """SALVATION_ENDING: select final ending A/B/C, transition to ENDING screen.
+
+    Args:
+        state: App state.
+        choice: "A" | "B" | "C" | "back"
+    """
+    if state.screen is ScreenKind.SALVATION_ENDING:
+        if choice == "back":
+            state.screen = ScreenKind.SALVATION_INTRO
+            return "Auto: ending menu → back to epilogue menu"
+        if choice not in ("A", "B", "C"):
+            return ""
+        runner = _get_salvation_runner(state)
+        runner.choose_ending(choice)
+        # Map SalvationRunner ending → existing ENDING_* ChapterState
+        if runner.selection is None:
+            return ""
+        ending_lower = runner.selection.ending.lower()
+        state.run_state.chapter_state = ChapterState(f"ending_{ending_lower}")
+        state.screen = ScreenKind.ENDING
+        state.ending_elapsed_ms = 0.0
+        return f"Auto: Salvation complete → Ending {choice} screen"
+    return ""
+
+
+def _action_chapter(state: AppState) -> str:
+
+
 def _action_chapter(state: AppState) -> str:
     """CHAPTER → ARC_PHASE: complete chapter intro, begin story phases."""
     if state.screen is ScreenKind.CHAPTER:
@@ -666,6 +760,18 @@ def _action_hub(state: AppState) -> str:
                 state.chapter_cutscenes_seen = chapter_cutscenes_seen | {2}
                 title = ch5.cutscene_end.title_en
                 return f"Auto: cutscene_end ({title})"
+        # Phase 9-B: trigger Salvation Phase before final ending
+        # (only once — guarded by epilogue_played flag)
+        if not getattr(state, "salvation_done", False):
+            runner = _get_salvation_runner(state)
+            # Set up a sensible default epilogue (matches character) for convenience
+            char = state.character_id or "novice"
+            if char in __import__("roguelike_sprawl.engine.salvation", fromlist=["SALVATION_EPILOGUES"]).SALVATION_EPILOGUES:
+                runner.choose_epilogue(char)
+                state.salvation_runner = runner
+            state.salvation_done = True  # mark done to avoid re-entry
+            state.screen = ScreenKind.SALVATION_INTRO
+            return f"Auto: Chapter 5 complete → Salvation intro ({char})"
         ending_type = (ch5.ending_type if ch5 else "A").upper()
         rs.chapter_state = ChapterState(f"ending_{ending_type.lower()}")
         state.screen = ScreenKind.ENDING
@@ -1067,6 +1173,16 @@ def main() -> int:
                 # ADR-0048: pick ending B/C if requested via --ending CLI
                 target_ending = getattr(args, "ending", "A") or "A"
                 narration = _action_graphic_novel_ending_menu(state, target_ending)
+            elif state.screen is ScreenKind.SALVATION_INTRO:
+                # Auto-pick first option or go back based on arg
+                pick = getattr(args, "salvation_pick", "1")
+                narration = _action_salvation_intro(state, pick)
+            elif state.screen is ScreenKind.SALVATION_EPILOGUE:
+                # Auto-complete epilogue immediately (demo)
+                narration = _action_salvation_epilogue(state)
+            elif state.screen is ScreenKind.SALVATION_ENDING:
+                ending = getattr(args, "salvation_ending", "A")
+                narration = _action_salvation_ending(state, ending)
             elif state.screen is ScreenKind.SAVED_PROGRESS:
                 narration = _action_saved_progress(state, "menu")
             elif state.screen is ScreenKind.CHARACTER_SELECT:
