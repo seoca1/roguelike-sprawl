@@ -2,6 +2,17 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] fix | Fiction 단편 한자 혼용 제거 — library.html.description 정화
+
+- **문제**: Fiction/derivative/sprawl-trilogy/short-stories/.ko.md 파일 15개 + .md 파일 4개에서 LLM 번역 시 한자(运行/支配/报酬/永远等) 혼용
+- **수정**: 한자→한국어 일괄 치환 (46건)
+  - 运行→작동, 支配→지배, 报酬→보수, 永远→영원, 彼女→그녀, 彼→그
+  - 赶来→뛰어오고, 传来→도착하는, 永久→영원히, 做到→할 수 없음
+  - Japanese 혼입 문장 정화 (は/が/を → 한국어 조사의 часть)
+- **대시보드**: `library.html` 하드코딩된 설명에서 한자 제거 (12→0건)
+- **Fiction wiki**: `/Users/emilio/projects/Projects/Fiction/derivative/sprawl-trilogy/short-stories/` 원본 정화 (git 추적 안 됨)
+- **테스트**: 4239 pass ✅
+
 ## [2026-07-08] feat | BGM 시스템 — theme filenames fix, screen별 BGM, dashboard player, minimax generator
 
 - **BUG FIX**: `theme.py` THEMES dict 파일명 오류 — `*_theme.wav` → `theme_*.wav` (12개 전부)
