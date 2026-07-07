@@ -37,7 +37,7 @@ jobs:
         env:
           RELEASE_VERSION: ${{ inputs.version }}
         run: |
-          uv run python -c "
+          cd prototype && uv run python -c "
           import re
           import os
           version = os.environ['RELEASE_VERSION']
