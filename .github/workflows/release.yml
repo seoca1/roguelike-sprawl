@@ -60,8 +60,8 @@ jobs:
           with open('pyproject.toml', 'w') as f:
             f.write(content)
           print(f'Updated version to ${{ inputs.version }}')
-          cat pyproject.toml | grep -E '^version|^    \"Development'
           "
+        cat pyproject.toml | grep -E '^version|^    "Development'
 
       - name: Build package
         run: |
