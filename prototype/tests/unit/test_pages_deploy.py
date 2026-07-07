@@ -28,8 +28,6 @@ DASHBOARD_HTML_FILES = [
     "missions.html",
     "stages.html",
     "library.html",
-    "novel.html",          # redirect to library.html#hook-dispatch
-    "story_read.html",      # redirect to missions.html
     "sound.html",
     "combat.html",
     "equipment.html",
@@ -134,10 +132,9 @@ def test_index_links_to_graphic_novel() -> None:
 def test_all_game_dashboards_link_to_graphic_novel() -> None:
     """All game dashboards should also link to graphic-novel.html.
 
-    Note: library.html is the Derivative Library (Fiction derivative);
-    novel.html and story_read.html are redirects to library.html/missions.html.
+    Note: library.html is the Derivative Library (Fiction derivative).
     """
-    skip = {"graphic-novel.html", "library.html", "novel.html", "story_read.html"}
+    skip = {"graphic-novel.html", "library.html"}
     for filename in DASHBOARD_HTML_FILES:
         if filename in skip:
             continue

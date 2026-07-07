@@ -1,9 +1,9 @@
 {
   "missions": 47,
   "stories": 36,
-  "html_files": 82,
-  "en_files": 41,
-  "ko_files": 41,
+  "html_files": 72,
+  "en_files": 36,
+  "ko_files": 36,
   "en_only": 0,
   "ko_only": 0,
   "complete_pairs": 36,
@@ -40,5 +40,5 @@
   ],
   "total_rewards": 24,
   "hub_visit_events": 1,
-  "_generated_at": "2026-07-08T01:48:03"
+  "_generated_at": "2026-07-08T02:51:29"
 }

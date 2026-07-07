@@ -2,6 +2,49 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] refactor | Dashboard 파일 통폐합 + stats JSON 정리
+
+### Part A — 파일 통폐합 (REORGANIZE_PLAN.md Phase A/B)
+- `story.html` 삭제 → `missions.html` (새 정식 이름, 동일 콘텐츠)
+- `stories.html` 삭제 → `library.html` (새 정식 이름, 동일 콘텐츠)
+- `novel.html` 삭제 → 리다이렉트 스텁 제거 (콘텐츠는 이미 `library.html`에 통합됨)
+- `story_read.html` 삭제 → `stories/episode-reader.html` (새 정식 이름)
+- Journey nav links 갱신 (3파일): `../../stories.html` → `../../library.html`
+- `test_pages_deploy.py` 갱신: `novel.html`, `story_read.html` 제거
+- `library.html` 주석 정화
+
+### Part B — Stats JSON 정리
+- `story_stats.json` 삭제 → `mission_stats.json` (이전 존재, 내용 동일)
+- `novel_stats.json` 삭제 → `library_stats.json` (이전 존재, 내용 풍부)
+- `build_dashboard.py` 코멘트 갱신: old filenames 참조 제거
+- `build_dashboard.py` 실행 확인 — 10 stats JSON 정상 생성
+
+### Part C — Journey 카드 정리 (REORGANIZE_PLAN.md §7 Q1)
+- `library.html` journey 카드: 3개 개별 카드 → 1개 통합 카드
+- href: `stories/journey/{novice,veteran,heran}.html` → `stories/journey.html` (tabbed viewer)
+- 카피: "3 characters" → "케이·실·카스" (stale pattern 회피)
+
+### REORGANIZE_PLAN.md Status 섹션 추가
+- 완료 항목 추적 (9건 완료)
+- journeys/journey decision resolved (keep as-is, journey.html is canonical)
+
+### 검증
+- pytest 4146 passed (623 dashboard tests), ruff/mypy green
+
+- **REORGANIZE_PLAN.md** Phase A/B 실행:
+  - `story.html` 삭제 → `missions.html` (새 정식 이름, 동일 콘텐츠)
+  - `stories.html` 삭제 → `library.html` (새 정식 이름, 동일 콘텐츠)
+  - `novel.html` 삭제 → 리다이렉트 스텁 제거 (콘텐츠는 이미 `library.html`에 통합됨)
+  - `story_read.html` 삭제 → `stories/episode-reader.html` (새 정식 이름)
+- **Journey nav 링크 갱신** (3파일): `../../stories.html` → `../../library.html`
+  - `stories/journey/novice.html`, `veteran.html`, `heretic.html`
+- **test_pages_deploy.py 갱신**:
+  - `DASHBOARD_HTML_FILES`에서 `novel.html`, `story_read.html` 제거
+  - `skip` set에서 동일 항목 제거
+- **library.html 주석 정화**: "stories.html's stat-id naming" → "library.html's"
+- **REORGANIZE_PLAN.md** Status 섹션 추가 (완료/미완료 추적)
+- **검증**: pytest 4146 passed (623 dashboard tests), ruff/mypy clean
+
 ## [2026-07-08] fix | Fiction 단편 한자 혼용 제거 — library.html.description 정화
 
 - **문제**: Fiction/derivative/sprawl-trilogy/short-stories/.ko.md 파일 15개 + .md 파일 4개에서 LLM 번역 시 한자(运行/支配/报酬/永远等) 혼용

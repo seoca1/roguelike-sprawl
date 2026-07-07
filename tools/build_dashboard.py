@@ -11,8 +11,8 @@ under ``dashboard/data/`` that the static dashboard HTML pages can
 Outputs (overwritten in place):
 
     dashboard/data/combat_stats.json   — ICE, effects, programs, mode, PPL/ZDR
-    dashboard/data/novel_stats.json    — catalog size, hook kinds, layers, tests
-    dashboard/data/story_stats.json    — arcs, chapters, characters, missions
+    dashboard/data/library_stats.json  — catalog size, hook kinds, layers, tests
+    dashboard/data/mission_stats.json  — arcs, chapters, characters, missions
     dashboard/data/journey_stats.json  — novice/veteran/heretic totals
     dashboard/data/data_index.json     — index of all available JSON files
 

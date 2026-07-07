@@ -286,37 +286,15 @@
     게임의 실제 미션/아크/챕터/엔딩 데이터를 기반으로 한 캐릭터별 진행 스토리. 파생 소설과는 별개.
   </p>
   <div class="journey-grid">
-    <a class="journey-card journey-novice" href="stories/journey/novice.html">
-      <div class="journey-label">NOVICE</div>
-      <div class="journey-name">케이 (K)</div>
-      <div class="journey-origin">Case · Neuromancer · 돈</div>
-      <div class="journey-stats">
-        <span>10 미션</span> · <span>5 챕터</span> · <span>20,050cr</span>
+    <a class="journey-card" href="stories/journey.html">
+      <div class="journey-label">🎮 CHARACTER JOURNEYS</div>
+      <div class="journey-name">케이 · 실 · 카스</div>
+      <div class="journey-origin">Case · Marly · Kumiko</div>
+        <div class="journey-stats">
+        <span>케이·실·카스</span> · <span>tabbed viewer</span>
       </div>
       <div class="journey-endings">
-        A: Burn and Run · B: The Flatline
-      </div>
-    </a>
-    <a class="journey-card journey-veteran" href="stories/journey/veteran.html">
-      <div class="journey-label">VETERAN</div>
-      <div class="journey-name">실 (Sil)</div>
-      <div class="journey-origin">Marly · Count Zero · 복수</div>
-      <div class="journey-stats">
-        <span>11 미션</span> · <span>5 챕터</span> · <span>27,500cr</span>
-      </div>
-      <div class="journey-endings">
-        A: Whistleblower · B: Business
-      </div>
-    </a>
-    <a class="journey-card journey-heretic" href="stories/journey/heretic.html">
-      <div class="journey-label">HERETIC</div>
-      <div class="journey-name">카스 (Kas)</div>
-      <div class="journey-origin">Kumiko · MLO · 전복</div>
-      <div class="journey-stats">
-        <span>8 미션</span> · <span>5 챕터</span> · <span>20,100cr</span>
-      </div>
-      <div class="journey-endings">
-        A: Declaration · B: Absorption
+        29 미션 · 15 챕터 · 3 endings each
       </div>
     </a>
   </div>
@@ -1099,7 +1077,7 @@
 <script>
 /* Auto-sync stats from build_dashboard.py output (mission_stats.json).
    When the file is missing the static fallback values stay visible.
-   Note: stories.html's stat-id naming follows the original layout
+   Note: library.html's stat-id naming follows the original layout
    (stories/chars/refs/quotes/chars-game) — build_dashboard.py maps
    those keys onto the more accurate counts. */
 fetch('data/mission_stats.json').then(r => r.ok ? r.json() : null)

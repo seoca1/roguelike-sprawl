@@ -1,6 +1,6 @@
 {
-  "short_stories_en": 41,
-  "short_stories_ko": 41,
+  "short_stories_en": 36,
+  "short_stories_ko": 36,
   "novelettes_en": 3,
   "novelettes_ko": 3,
   "hook_kinds": 6,
@@ -15,7 +15,7 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-08T01:48:03",
+  "_generated_at": "2026-07-08T02:51:29",
   "catalog_entries": 39,
   "catalog_entries_list": [
     {

@@ -1,5 +1,26 @@
 # Dashboard Reorganization — Taxonomy & Structure Plan
 
+## Status (2026-07-08)
+
+### Completed
+- [x] `story.html` deleted — `missions.html` (new canonical, same content)
+- [x] `stories.html` deleted — `library.html` (new canonical, same content)
+- [x] `novel.html` deleted — redirect to `library.html#hook-dispatch` (stub removed)
+- [x] `story_read.html` deleted — `stories/episode-reader.html` (already moved)
+- [x] `stories/journey/*.html` nav links updated: `../../stories.html` → `../../library.html`
+- [x] `test_pages_deploy.py` updated: removed `novel.html`, `story_read.html` from `DASHBOARD_HTML_FILES`
+- [x] `library.html` comment cleaned: "stories.html's" → "library.html's"
+
+### Pending (Decisions from §7 still open)
+- [x] `stories/journey/` — Decision: keep as-is. `stories/journey.html` is the canonical tabbed viewer; `journey/` subdirectory is legacy orphaned content. `library.html` journey cards updated to link to `journey.html`. (Open question 1 — resolved)
+
+### Completed (Decisions from §7 — auto-resolved)
+- [x] Statistics JSON filenames — `story_stats.json` and `novel_stats.json` were stale; `mission_stats.json` and `library_stats.json` already existed with richer content (build_dashboard.py already used new names)
+- [x] Deleted stale `story_stats.json`, `novel_stats.json` (replaced by `mission_stats.json`, `library_stats.json`)
+- [x] `build_dashboard.py` comment updated: old filenames removed
+
+---
+
 ## 1. 문제 인식: Concept Overloading
 
 현재 dashboard 페이지 이름과 실제 콘텐츠가 일치하지 않는다. 핵심 혼란:
