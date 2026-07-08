@@ -2,6 +2,22 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | Hub M키 CYBERSPACE_MAP + character select arc 로딩
+
+### 수정 내용
+1. **hub.py**: Hub에서 `M` 키로 CYBERSPACE_MAP 접근 (`_ensure_world_map`으로 world_map lazily 로딩)
+2. **hub.py**: `_ensure_world_map` 헬퍼 함수 추가 + `_start_mission`에서 재사용
+3. **menu.py**: `_load_chapter`에서 `get_arc_for_character`로 arc 데이터도 함께 로딩 (`state.current_arc`)
+4. **ARC_PHASE 전환 로직**: CHAPTER 완료 시 다음 화면이 HUB 대신 ARC_PHASE가 되도록 구현 필요 (아직 미완료)
+
+### 미해결
+- CHAPTER→ARC_PHASE 전환: `app.py` 게임 루프의 CHAPTER 완료 처리 부분 수정 필요
+
+### 결과
+- mypy: 0 errors, pytest: 4143 passed
+
+---
+
 ## [2026-07-08] feat | CYBERSPACE_MAP + ARC_PHASE 완전 구현
 
 ### 수정 내용
@@ -9,10 +25,6 @@ LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YY
 2. **ARC_PHASE**: `phase_view.render_arc_phase` 사용, 비트 자동 진행 타이핑 효과, 게임 루프 틱 (`phase_elapsed_ms`), SPACE/ENTER=다음 비트, S=스킵
 3. **`_advance_arc_phase`**: 비트/페이즈/챕터 자동 진행, 완료 시 MENU 전환
 4. **`state.py`**: `current_arc: object` → `ArcData | None` 타입 수정
-
-### 미해결
-- ARC_PHASE:CHAPTER→ARC_PHASE 전환 트리거 없음 (게임 플로우 미정의)
-- CYBERSPACE_MAP: Hub에서 접근 불가 (M 키 미구현, world_map 미로딩)
 
 ### 결과
 - mypy: 0 errors, pytest: 4143 passed

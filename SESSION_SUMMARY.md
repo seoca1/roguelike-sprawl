@@ -1,9 +1,9 @@
-# Session Summary — 2026-07-08 (v0.7.5)
+# Session Summary — 2026-07-08 (v0.7.6)
 
 > **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: CYBERSPACE_MAP + ARC_PHASE 완전 구현
+> **세션 범위**: CYBERSPACE_MAP Hub 접근 + ARC_PHASE 전환 로직
 > **테스트**: 4143 passed (39 skipped, 3 integration pre-existing failures)
-> **변경 파일**: 3 files (app.py, state.py, menu.py)
+> **변경 파일**: 3 files (app.py, state.py, menu.py, hub.py)
 
 ---
 
@@ -62,14 +62,13 @@
 
 ### 즉시 착수 가능
 1. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
-2. **ARC_PHASE game flow**: CHAPTER 완료 후 ARC_PHASE로 전환하는 로직 (`menu.py`의 `handle_character_select_input`에서 `current_arc` 로딩)
-3. **CYBERSPACE_MAP from Hub**: Hub에 `M` 키로 CYBERSPACE_MAP 접근 (현재 world_map 미로딩)
+2. **ARC_PHASE game flow**: CHAPTER 완료 시 ARC_PHASE로 자동 전환 (`app.py` 게임 루프의 CHAPTER 완료 처리 부분 수정 필요)
+3. **모든 화면 완전 구현 완료** — 게임 루프에서 접근 가능
 
-### 이 세션 작업 내용 (v0.7.5)
-1. **CYBERSPACE_MAP**: world hierarchy 트리 뷰 렌더 (`_render_cyberspace_map`), ESC→MENU
-2. **ARC_PHASE**: `phase_view.render_arc_phase` 사용, 비트 자동 진행 타이핑, SPACE/ENTER/S 입력 처리, 게임 루프 틱
-3. **state.py**: `current_arc: object` → `ArcData | None` 타입 수정
-4. **이전 세션**: EVENT/STORY/CYBERSPACE_BROWSER 완전 구현, CHAPTER 버그 수정
+### 이 세션 작업 내용 (v0.7.6)
+1. **hub.py**: Hub에서 `M` 키로 CYBERSPACE_MAP 접근 (`_ensure_world_map`으로 world_map lazily 로딩)
+2. **menu.py**: `_load_chapter`에서 arc 데이터도 함께 로딩 (`get_arc_for_character`)
+3. **이전 세션**: CYBERSPACE_MAP 트리 뷰, ARC_PHASE phase_view 연동, CHAPTER 버그 수정
 
 ### 중장기 작업
 4. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
@@ -99,6 +98,7 @@
 
 | 커밋 | 설명 |
 |---|---|
+| `0dd077e` | feat(hub+menu): Hub M key→CYBERSPACE_MAP, character select loads arc data |
 | `d7120c5` | feat(app): implement CYBERSPACE_MAP and ARC_PHASE screens with full render/input |
 | `b7cc7d2` | fix(menu): load chapter data on character select (CHAPTER screen was broken) |
 | `e522962` | feat(app): implement EVENT/STORY/CYBERSPACE_BROWSER screens, add stubs for remaining |
@@ -112,5 +112,5 @@
 
 **세션 종료 시간**: 2026-07-08
 **최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4143 ✅
-**이 문서 버전**: v0.7.5
-**이전 버전**: v0.7.4 (2026-07-08)
+**이 문서 버전**: v0.7.6
+**이전 버전**: v0.7.5 (2026-07-08)
