@@ -1,9 +1,9 @@
-# Session Summary — 2026-07-08 (v0.7.6)
+# Session Summary — 2026-07-08 (v0.7.7)
 
 > **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: CYBERSPACE_MAP Hub 접근 + ARC_PHASE 전환 로직
+> **세션 범위**: 모든 화면 완전 구현 + CHAPTER→ARC_PHASE 전환 완료
 > **테스트**: 4143 passed (39 skipped, 3 integration pre-existing failures)
-> **변경 파일**: 3 files (app.py, state.py, menu.py, hub.py)
+> **변경 파일**: 1 file (app.py)
 
 ---
 
@@ -62,13 +62,12 @@
 
 ### 즉시 착수 가능
 1. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
-2. **ARC_PHASE game flow**: CHAPTER 완료 시 ARC_PHASE로 자동 전환 (`app.py` 게임 루프의 CHAPTER 완료 처리 부분 수정 필요)
-3. **모든 화면 완전 구현 완료** — 게임 루프에서 접근 가능
+2. **모든 화면 완전 구현 완료** — 전체 게임 플로우 연결됨
 
-### 이 세션 작업 내용 (v0.7.6)
-1. **hub.py**: Hub에서 `M` 키로 CYBERSPACE_MAP 접근 (`_ensure_world_map`으로 world_map lazily 로딩)
-2. **menu.py**: `_load_chapter`에서 arc 데이터도 함께 로딩 (`get_arc_for_character`)
-3. **이전 세션**: CYBERSPACE_MAP 트리 뷰, ARC_PHASE phase_view 연동, CHAPTER 버그 수정
+### 이 세션 작업 내용 (v0.7.7)
+1. **app.py**: CHAPTER 완료 시 `current_arc`가 있으면 ARC_PHASE로 전환 (없으면 HUB)
+2. **app.py**: ARC_PHASE 비트 자동 진행 — 타이핑 완료 + 500ms 경과 시 자동 다음 비트
+3. **이전 세션**: Hub M키, CYBERSPACE_MAP, ARC_PHASE phase_view 연동, CHAPTER 버그 수정
 
 ### 중장기 작업
 4. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
@@ -98,6 +97,7 @@
 
 | 커밋 | 설명 |
 |---|---|
+| `38ccc74` | feat(app): CHAPTER→ARC_PHASE transition when arc loaded, ARC_PHASE auto-advance beats |
 | `0dd077e` | feat(hub+menu): Hub M key→CYBERSPACE_MAP, character select loads arc data |
 | `d7120c5` | feat(app): implement CYBERSPACE_MAP and ARC_PHASE screens with full render/input |
 | `b7cc7d2` | fix(menu): load chapter data on character select (CHAPTER screen was broken) |
@@ -112,5 +112,5 @@
 
 **세션 종료 시간**: 2026-07-08
 **최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4143 ✅
-**이 문서 버전**: v0.7.6
-**이전 버전**: v0.7.5 (2026-07-08)
+**이 문서 버전**: v0.7.7
+**이전 버전**: v0.7.6 (2026-07-08)

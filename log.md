@@ -2,16 +2,24 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | CHAPTER→ARC_PHASE 전환 + ARC_PHASE 비트 자동 진행
+
+### 수정 내용
+1. **app.py**: CHAPTER 완료 시 `current_arc`가 있으면 ARC_PHASE로 자동 전환 (없으면 HUB)
+2. **app.py**: ARC_PHASE 비트 자동 진행 — 타이핑 완료 + 500ms 경과 시 `_advance_arc_phase` 호출
+3. 모든 화면 완전 구현 완료 — 전체 게임 루프 연결
+
+### 결과
+- mypy: 0 errors, pytest: 4143 passed
+
+---
+
 ## [2026-07-08] feat | Hub M키 CYBERSPACE_MAP + character select arc 로딩
 
 ### 수정 내용
 1. **hub.py**: Hub에서 `M` 키로 CYBERSPACE_MAP 접근 (`_ensure_world_map`으로 world_map lazily 로딩)
 2. **hub.py**: `_ensure_world_map` 헬퍼 함수 추가 + `_start_mission`에서 재사용
 3. **menu.py**: `_load_chapter`에서 `get_arc_for_character`로 arc 데이터도 함께 로딩 (`state.current_arc`)
-4. **ARC_PHASE 전환 로직**: CHAPTER 완료 시 다음 화면이 HUB 대신 ARC_PHASE가 되도록 구현 필요 (아직 미완료)
-
-### 미해결
-- CHAPTER→ARC_PHASE 전환: `app.py` 게임 루프의 CHAPTER 완료 처리 부분 수정 필요
 
 ### 결과
 - mypy: 0 errors, pytest: 4143 passed
