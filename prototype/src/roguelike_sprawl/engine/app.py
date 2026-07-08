@@ -92,7 +92,9 @@ def _main_inner() -> int:
                         scenes = state.gn_scenes
                         if scenes and 0 <= state.gn_scene_index < len(scenes):
                             scene = scenes[state.gn_scene_index]
-                            if scene.dialogue and 0 <= state.gn_dialogue_index < len(scene.dialogue):
+                            if scene.dialogue and 0 <= state.gn_dialogue_index < len(
+                                scene.dialogue
+                            ):
                                 dialogue = scene.dialogue[state.gn_dialogue_index]
                                 if state.gn_elapsed_ms >= dialogue.duration_ms:
                                     if state.gn_dialogue_index < len(scene.dialogue) - 1:
@@ -190,6 +192,7 @@ def _render(
                 if scene.background_id:
                     try:
                         from . import config
+
                         bg = load_background(config.DATA_DIR / "art", scene.background_id)
                     except Exception:
                         pass
@@ -209,8 +212,17 @@ def _render(
                     dialogue.duration_ms, state.gn_elapsed_ms, len(dialogue.text_en)
                 )
                 gn_view.render_scene(
-                    console, scene, dialogue, bg, p_l, p_r, t, typed,
-                    state.gn_scene_index, len(scenes), paused=state.gn_paused,
+                    console,
+                    scene,
+                    dialogue,
+                    bg,
+                    p_l,
+                    p_r,
+                    t,
+                    typed,
+                    state.gn_scene_index,
+                    len(scenes),
+                    paused=state.gn_paused,
                 )
             else:
                 console.clear(bg=(0, 0, 0))
@@ -269,17 +281,43 @@ def _render(
             console.print(x=2, y=2, string="=== NO NPC STATE ===", fg=(255, 0, 0))
     elif state.screen is ScreenKind.ENDING:
         menu_screen.render_ending(console, t, state)
-    elif state.screen in (
-        ScreenKind.GRAPHIC_NOVEL_ENDING_MENU,
-        ScreenKind.SAVE_SLOT_SELECT,
-        ScreenKind.EVENT,
-        ScreenKind.STORY,
-        ScreenKind.ARC_PHASE,
-        ScreenKind.CYBERSPACE_BROWSER,
-        ScreenKind.CYBERSPACE_MAP,
-    ):
+    elif state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
+        from . import graphic_novel_view as gn_view
+
+        gn_view.render_graphic_novel_ending_menu(
+            console, t, state.gn_mode, state.menu_selected_index
+        )
+    elif state.screen is ScreenKind.SAVE_SLOT_SELECT:
+        from . import save_load_view
+
+        save_load_view.render_save_load(console, state)
+    elif state.screen is ScreenKind.EVENT:
+        from . import event_view
+
+        if state.active_event is not None:
+            event_view.render_event_story(console, t, state, state.active_event)
+        else:
+            console.clear(bg=(0, 0, 0))
+            console.print(x=2, y=2, string="=== NO ACTIVE EVENT ===", fg=(255, 0, 0))
+    elif state.screen is ScreenKind.STORY:
+        from . import config as config_mod
+        from . import story_view as story_screen
+
+        registry = story_screen.StoryRegistry.load(config_mod.DATA_DIR)
+        story_screen.render_story(console, state, registry, state.story_aftermath_id)
+    elif state.screen is ScreenKind.ARC_PHASE:
         console.clear(bg=(0, 0, 0))
-        msg = f"[{state.screen.value.upper()}] — not yet implemented"
+        msg = "[ARC_PHASE] — not yet fully implemented"
+        console.print(x=2, y=2, string=msg, fg=(180, 180, 100))
+        hint = "[ESC] Return to menu"
+        console.print(x=2, y=4, string=hint, fg=(128, 128, 128))
+    elif state.screen is ScreenKind.CYBERSPACE_BROWSER:
+        from . import cyberspace_browser as cb_screen
+
+        cb_screen.render_cyberspace_browser(console, t, state)
+    elif state.screen is ScreenKind.CYBERSPACE_MAP:
+        console.clear(bg=(0, 0, 0))
+        msg = "[CYBERSPACE_MAP] — not yet implemented"
         console.print(x=2, y=2, string=msg, fg=(180, 180, 100))
         hint = "[ESC] Return to menu"
         console.print(x=2, y=4, string=hint, fg=(128, 128, 128))
@@ -502,15 +540,41 @@ def _handle_input(
     if state.screen is ScreenKind.ENDING:
         menu_screen.handle_ending_input(event, state)
         return True
-    if state.screen in (
-        ScreenKind.GRAPHIC_NOVEL_ENDING_MENU,
-        ScreenKind.SAVE_SLOT_SELECT,
-        ScreenKind.EVENT,
-        ScreenKind.STORY,
-        ScreenKind.ARC_PHASE,
-        ScreenKind.CYBERSPACE_BROWSER,
-        ScreenKind.CYBERSPACE_MAP,
-    ):
+    if state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
+        import tcod.event
+
+        if isinstance(event, tcod.event.KeyDown):
+            if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+                state.screen = ScreenKind.MENU
+                return True
+        return True
+    if state.screen is ScreenKind.SAVE_SLOT_SELECT:
+        from . import save_load_view
+
+        return save_load_view.handle_save_load_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.EVENT:
+        from . import event_view
+
+        if state.active_event is not None:
+            return event_view.handle_event_input(event, state, state.active_event)  # type: ignore[arg-type]
+        return True
+    if state.screen is ScreenKind.STORY:
+        from . import story_view as story_screen
+
+        return story_screen.handle_story_input(event, state)
+    if state.screen is ScreenKind.ARC_PHASE:
+        import tcod.event
+
+        if isinstance(event, tcod.event.KeyDown):
+            if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+                state.screen = ScreenKind.MENU
+                return True
+        return True
+    if state.screen is ScreenKind.CYBERSPACE_BROWSER:
+        from . import cyberspace_browser as cb_screen
+
+        return cb_screen.handle_browser_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.CYBERSPACE_MAP:
         import tcod.event
 
         if isinstance(event, tcod.event.KeyDown):
