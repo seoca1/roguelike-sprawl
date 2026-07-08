@@ -1,9 +1,9 @@
-# Session Summary — 2026-07-08 (v0.7.8)
+# Session Summary — 2026-07-08 (v0.7.9)
 
 > **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: demo.py 갱신 + 모든 화면 완전 구현
-> **테스트**: 4143 passed (39 skipped, 3 integration pre-existing failures)
-> **변경 파일**: 1 file (scripts/demo.py)
+> **세션 범위**: ARC_PHASE auto-advance 버그 수정 + demo.py 갱신
+> **테스트**: 4146 passed (39 skipped, 3 integration pre-existing failures)
+> **변경 파일**: 2 files (app.py, scripts/demo.py)
 
 ---
 
@@ -64,11 +64,13 @@
 1. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
 2. **모든 화면 완전 구현 완료** — 전체 게임 플로우 연결됨
 
-### 이 세션 작업 내용 (v0.7.8)
-1. **demo.py**: 새로운 화면 렌더 + 전이 추가
-   - `render_frame`: ARC_PHASE, CYBERSPACE_BROWSER, CYBERSPACE_MAP, NPC, EVENT, STORY 렌더
-   - `_step_auto`: CHARACTER_SELECT→arc 로딩, CHAPTER→ARC_PHASE, ARC_PHASE 비트 자동 진행, CYBERSPACE_MAP
-2. **이전 세션**: CHAPTER→ARC_PHASE 전환, Hub M키, CYBERSPACE_MAP 구현
+### 이 세션 작업 내용 (v0.7.9)
+1. **ARC_PHASE auto-advance 버그 수정 (app.py)**:
+   - 기존: `typed >= len(text) and phase_elapsed_ms >= 500` → 500ms에서 typed=16 vs 302글자라 작동 안 함
+   - 수정: `phase_elapsed_ms >= len(text)*30 + 50` → 타이핑 완료 후 50ms만 대기
+   - phase 마지막 beat 후 SPACE로 진행 안 되던 버그 → `else: phase_elapsed_ms += delta_s*1000` 추가
+2. **demo.py 갱신**: ARC_PHASE, CYBERSPACE_MAP, NPC, EVENT, STORY 렌더 + 전환
+3. **이전 세션**: CHAPTER→ARC_PHASE 전환, Hub M키, CYBERSPACE_MAP 구현
 
 ### 중장기 작업
 4. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
@@ -98,6 +100,7 @@
 
 | 커밋 | 설명 |
 |---|---|
+| `44dbfbf` | fix(app): ARC_PHASE auto-advance timing and phase completion bug |
 | `5fc98dc` | feat(demo): add ARC_PHASE/CYBERSPACE_MAP/NPC/EVENT/STORY render + transitions |
 | `38ccc74` | feat(app): CHAPTER→ARC_PHASE transition when arc loaded, ARC_PHASE auto-advance beats |
 | `0dd077e` | feat(hub+menu): Hub M key→CYBERSPACE_MAP, character select loads arc data |
@@ -113,6 +116,6 @@
 ---
 
 **세션 종료 시간**: 2026-07-08
-**최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4143 ✅
-**이 문서 버전**: v0.7.8
-**이전 버전**: v0.7.7 (2026-07-08)
+**최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4146 ✅
+**이 문서 버전**: v0.7.9
+**이전 버전**: v0.7.8 (2026-07-08)

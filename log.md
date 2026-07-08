@@ -13,8 +13,26 @@ LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YY
 6. **demo.py 갱신**: 모든 화면 렌더 + 전환 추가 (ARC_PHASE, CYBERSPACE_MAP, NPC, EVENT, STORY)
 
 ### 결과
-- mypy: 0 errors, pytest: 4143 passed
-- Demo 검증: MENU→CHARACTER_SELECT→CHAPTER→ARC_PHASE 정상 작동 확인
+- mypy: 0 errors, pytest: 4146 passed
+
+---
+
+## [2026-07-08] fix | ARC_PHASE auto-advance 타이밍 버그
+
+### 문제
+사용자 보고: "게임 스테이지 바꾼 후 전투도 벌어지지 않고 진행이 안됨"
+
+### 버그 1: auto-advance 조건 오류
+- 기존: `typed >= len(text) and phase_elapsed_ms >= 500`
+- 문제: 500ms에서 typed=16인데 len(text)=302 → 조건 성립 안 함
+- 수정: `phase_elapsed_ms >= len(text)*30 + 50` (타이핑 완료 후 50ms)
+
+### 버그 2: phase 마지막 beat 후 진행 안 됨
+- 문제: `beat_index >= len(beats)`일 때 `else` branch 없어서 `phase_elapsed_ms` 증가 안 함
+- 수정: `else: phase_elapsed_ms += delta_s*1000` 추가
+
+### 결과
+- mypy: 0 errors, pytest: 4146 passed
 
 ---
 
