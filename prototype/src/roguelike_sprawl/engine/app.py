@@ -141,6 +141,11 @@ def _render(
         pass
     if state.screen is ScreenKind.MENU:
         menu_screen.render_menu(console, t, state)
+    elif state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
+        from . import graphic_novel_view
+
+        has_save = getattr(state, "has_save", False)
+        graphic_novel_view.render_graphic_novel_menu(console, t, state.gn_menu_selected, has_save)
     elif state.screen is ScreenKind.HUB:
         hub_screen.render_hub(console, t, state)
     elif state.screen is ScreenKind.MATRIX:
@@ -173,6 +178,10 @@ def _render(
         from . import death as death_screen
 
         death_screen.render_death_screen(console, state)
+    elif state.screen is ScreenKind.HALL_OF_DEAD:
+        from . import death as death_screen
+
+        death_screen.render_hall_of_dead_screen(console, state)
     elif state.screen is ScreenKind.JACK_OUT:
         from . import jack_out_view
 
@@ -291,6 +300,8 @@ def _handle_input(
 
     if state.screen is ScreenKind.MENU:
         return menu_screen.handle_menu_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
+        return menu_screen.handle_graphic_novel_menu_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.HUB:
         return hub_screen.handle_hub_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.MATRIX:
@@ -327,6 +338,10 @@ def _handle_input(
         from . import death as death_screen
 
         return death_screen.handle_death_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.HALL_OF_DEAD:
+        from . import death as death_screen
+
+        return death_screen.handle_hall_of_dead_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.JACK_OUT:
         from . import jack_out_view
 

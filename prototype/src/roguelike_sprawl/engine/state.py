@@ -251,6 +251,7 @@ class AppState:
     ending_elapsed_ms: float = 0.0  # Auto-return from ENDING screen
     # Graphic novel state (ADR-0032)
     gn_scene_index: int = 0  # current scene in chain
+    gn_menu_selected: int = 0  # selected index in GRAPHIC_NOVEL_MENU
     gn_dialogue_index: int = 0  # current dialogue in scene
     gn_elapsed_ms: float = 0.0  # time in current dialogue
     gn_paused: bool = False

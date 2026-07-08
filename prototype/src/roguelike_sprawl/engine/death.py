@@ -558,27 +558,26 @@ def handle_death_summary_input(
 def handle_hall_of_dead_input(
     event: tcod.event.Event,
     state: AppState,
-) -> str:
+) -> bool:
     """Handle input on HALL_OF_DEAD screen.
 
-    Returns:
-        "" if no action, otherwise:
-        - "up" / "down" / "back" (navigation)
+    Arrow keys (↑↓) or K/J navigate; Enter/Space shows detail; ESC/Q returns to DEATH_SUMMARY.
     """
     import tcod.event
 
-    if not isinstance(event, tcod.event.KeyDown):
-        return ""
-
-    if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
-        return "back"
-    if event.sym in (tcod.event.KeySym.UP, tcod.event.KeySym.K):
-        return "up"
-    if event.sym in (tcod.event.KeySym.DOWN, tcod.event.KeySym.J):
-        return "down"
-    if event.sym in (tcod.event.KeySym.RETURN, tcod.event.KeySym.SPACE):
-        return "detail"
-    return ""
+    if isinstance(event, tcod.event.KeyDown):
+        if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+            state.screen = ScreenKind.DEATH_SUMMARY
+            return True
+        if event.sym in (tcod.event.KeySym.UP, tcod.event.KeySym.K):
+            state.hall_of_dead_selected = max(0, state.hall_of_dead_selected - 1)
+            return True
+        if event.sym in (tcod.event.KeySym.DOWN, tcod.event.KeySym.J):
+            state.hall_of_dead_selected += 1
+            return True
+        if event.sym in (tcod.event.KeySym.RETURN, tcod.event.KeySym.SPACE):
+            return True
+    return True
 
 
 def handle_death_summary_choice(

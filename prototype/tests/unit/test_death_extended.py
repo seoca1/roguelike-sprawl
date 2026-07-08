@@ -234,27 +234,30 @@ def test_handle_death_summary_input_unknown() -> None:
 
 
 def test_handle_hall_of_dead_input_up() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.HALL_OF_DEAD, hall_of_dead_selected=5)
     result = handle_hall_of_dead_input(_make_event(KeySym.UP), state)
-    assert result == "up"
+    assert result is True
+    assert state.hall_of_dead_selected == 4
 
 
 def test_handle_hall_of_dead_input_down() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.HALL_OF_DEAD, hall_of_dead_selected=5)
     result = handle_hall_of_dead_input(_make_event(KeySym.DOWN), state)
-    assert result == "down"
+    assert result is True
+    assert state.hall_of_dead_selected == 6
 
 
 def test_handle_hall_of_dead_input_escape() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.HALL_OF_DEAD, hall_of_dead_selected=5)
     result = handle_hall_of_dead_input(_make_event(KeySym.ESCAPE), state)
-    assert result == "back"
+    assert result is True
+    assert state.screen == ScreenKind.DEATH_SUMMARY
 
 
 def test_handle_hall_of_dead_input_enter() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.HALL_OF_DEAD, hall_of_dead_selected=5)
     result = handle_hall_of_dead_input(_make_event(KeySym.RETURN), state)
-    assert result == "detail"
+    assert result is True
 
 
 # ----------------------------------------------------------------------------

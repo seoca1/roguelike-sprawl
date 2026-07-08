@@ -176,35 +176,113 @@ def handle_menu_input(event: tcod.event.Event, state: AppState) -> bool:
     return True
 
 
+GN_MENU_OPTION_COUNT = 11
+
+
 def handle_graphic_novel_menu_input(
     event: tcod.event.Event,
     state: AppState,
-) -> str:
+) -> bool:
     """Handle input on the GRAPHIC_NOVEL_MENU screen.
 
-    Returns the selected mode:
-        - "prologue" | "novice" | "veteran" | "heretic" | "back"
-        - "" if no action
-
-    ADR-0048: Selecting a character (N2-N4) returns the character name to
-    transition to GRAPHIC_NOVEL_ENDING_MENU. PROLOGUE (N1) and BACK (N5/ESC)
-    skip the ending selection (prologue always uses ending A).
+    Arrow keys (↑↓) or WASD navigate; Enter/Space confirms.
+    Number keys (1-9, 0, A) also work for direct jumps.
     """
-    if not isinstance(event, KeyDown):
-        return ""
-    if event.sym in (KeySym.ESCAPE, KeySym.Q):
-        return "back"
-    if event.sym is KeySym.N1:
-        return "prologue"
-    if event.sym is KeySym.N2:
-        return "novice"
-    if event.sym is KeySym.N3:
-        return "veteran"
-    if event.sym is KeySym.N4:
-        return "heretic"
-    if event.sym is KeySym.N5:
-        return "back"
-    return ""
+    if isinstance(event, KeyDown):
+        if event.sym in (KeySym.ESCAPE, KeySym.Q):
+            state.screen = ScreenKind.MENU
+            return True
+        if event.sym in (KeySym.UP, KeySym.W):
+            state.gn_menu_selected = (state.gn_menu_selected - 1) % GN_MENU_OPTION_COUNT
+            return True
+        if event.sym in (KeySym.DOWN, KeySym.S):
+            state.gn_menu_selected = (state.gn_menu_selected + 1) % GN_MENU_OPTION_COUNT
+            return True
+        if event.sym in (KeySym.RETURN, KeySym.KP_ENTER, KeySym.SPACE):
+            _apply_gn_menu_selection(state)
+            return True
+        key_map = {
+            KeySym.N1: 0,
+            KeySym.N2: 1,
+            KeySym.N3: 2,
+            KeySym.N4: 3,
+            KeySym.N5: 10,
+            KeySym.N6: 5,
+            KeySym.N7: 6,
+            KeySym.N8: 7,
+            KeySym.N9: 8,
+            KeySym.N0: 9,
+            KeySym.A: 9,
+        }
+        if event.sym in key_map:
+            state.gn_menu_selected = key_map[event.sym]
+            _apply_gn_menu_selection(state)
+            return True
+    return True
+
+
+def _apply_gn_menu_selection(state: AppState) -> None:
+    """Apply the GRAPHIC_NOVEL_MENU selection based on gn_menu_selected."""
+    from .graphic_novel_view import (
+        GN_MENU_3JANE,
+        GN_MENU_ANGIE,
+        GN_MENU_BACK,
+        GN_MENU_CONTINUE,
+        GN_MENU_HERETIC,
+        GN_MENU_NEUROMANCER,
+        GN_MENU_NOVICE,
+        GN_MENU_PROLOGUE,
+        GN_MENU_SALLY,
+        GN_MENU_SUIT,
+        GN_MENU_VETERAN,
+        GN_MENU_WIGAN,
+    )
+
+    has_save = getattr(state, "has_save", False)
+    idx = state.gn_menu_selected
+    if has_save:
+        mapping = [
+            GN_MENU_CONTINUE,
+            GN_MENU_PROLOGUE,
+            GN_MENU_NOVICE,
+            GN_MENU_VETERAN,
+            GN_MENU_HERETIC,
+            GN_MENU_SUIT,
+            GN_MENU_WIGAN,
+            GN_MENU_ANGIE,
+            GN_MENU_SALLY,
+            GN_MENU_3JANE,
+            GN_MENU_NEUROMANCER,
+        ]
+    else:
+        mapping = [
+            GN_MENU_PROLOGUE,
+            GN_MENU_NOVICE,
+            GN_MENU_VETERAN,
+            GN_MENU_HERETIC,
+            GN_MENU_SUIT,
+            GN_MENU_WIGAN,
+            GN_MENU_ANGIE,
+            GN_MENU_SALLY,
+            GN_MENU_3JANE,
+            GN_MENU_NEUROMANCER,
+        ]
+    if idx == len(mapping):
+        state.screen = ScreenKind.MENU
+        return
+    mode = mapping[idx]
+    if mode == GN_MENU_BACK:
+        state.screen = ScreenKind.MENU
+        return
+    if mode == GN_MENU_CONTINUE:
+        state.screen = ScreenKind.SAVED_PROGRESS
+        return
+    state.gn_mode = mode
+    state.screen = ScreenKind.GRAPHIC_NOVEL
+    state.gn_scene_index = 0
+    state.gn_dialogue_index = 0
+    state.gn_elapsed_ms = 0.0
+    state.gn_scene_chain = []
 
 
 def handle_graphic_novel_ending_menu_input(

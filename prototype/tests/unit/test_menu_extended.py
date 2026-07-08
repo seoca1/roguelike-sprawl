@@ -194,38 +194,56 @@ def test_handle_menu_graphic_novel_resets_state(state: AppState) -> None:
 
 
 def test_gn_menu_prologue(state: AppState) -> None:
+    state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
     result = handle_graphic_novel_menu_input(_key_event(KeySym.N1), state)
-    assert result == "prologue"
+    assert result is True
+    assert state.screen == ScreenKind.GRAPHIC_NOVEL
+    assert state.gn_mode == "prologue"
 
 
 def test_gn_menu_novice(state: AppState) -> None:
+    state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
     result = handle_graphic_novel_menu_input(_key_event(KeySym.N2), state)
-    assert result == "novice"
+    assert result is True
+    assert state.screen == ScreenKind.GRAPHIC_NOVEL
+    assert state.gn_mode == "novice"
 
 
 def test_gn_menu_veteran(state: AppState) -> None:
+    state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
     result = handle_graphic_novel_menu_input(_key_event(KeySym.N3), state)
-    assert result == "veteran"
+    assert result is True
+    assert state.screen == ScreenKind.GRAPHIC_NOVEL
+    assert state.gn_mode == "veteran"
 
 
 def test_gn_menu_heretic(state: AppState) -> None:
+    state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
     result = handle_graphic_novel_menu_input(_key_event(KeySym.N4), state)
-    assert result == "heretic"
+    assert result is True
+    assert state.screen == ScreenKind.GRAPHIC_NOVEL
+    assert state.gn_mode == "heretic"
 
 
 def test_gn_menu_back(state: AppState) -> None:
+    state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
     result = handle_graphic_novel_menu_input(_key_event(KeySym.N5), state)
-    assert result == "back"
+    assert result is True
+    assert state.screen == ScreenKind.MENU
 
 
 def test_gn_menu_escape_back(state: AppState) -> None:
+    state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
     result = handle_graphic_novel_menu_input(_key_event(KeySym.ESCAPE), state)
-    assert result == "back"
+    assert result is True
+    assert state.screen == ScreenKind.MENU
 
 
 def test_gn_menu_unknown_key(state: AppState) -> None:
-    result = handle_graphic_novel_menu_input(_key_event(KeySym.A), state)
-    assert result == ""
+    state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
+    result = handle_graphic_novel_menu_input(_key_event(KeySym.B), state)
+    assert result is True
+    assert state.screen == ScreenKind.GRAPHIC_NOVEL_MENU
 
 
 # ----------------------------------------------------------------------------
