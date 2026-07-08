@@ -152,4 +152,4 @@ def handle_help_input(
             state.help_page = (page + 1) % total
             return state
 
-    return None
+    return state
