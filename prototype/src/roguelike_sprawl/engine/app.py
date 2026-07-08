@@ -153,7 +153,8 @@ def _main_inner() -> int:
                     if isinstance(event, tcod.event.WindowEvent) and event.type == "WindowClose":
                         running = False
                         break
-                    if not _handle_input(event, state, _global_prog_registry, _global_ice_registry):
+                    result = _handle_input(event, state, _global_prog_registry, _global_ice_registry)
+                    if not result:
                         running = False
                         break
             except Exception as exc:  # pragma: no cover

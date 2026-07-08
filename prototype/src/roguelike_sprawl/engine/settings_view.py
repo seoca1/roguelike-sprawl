@@ -118,7 +118,7 @@ def handle_settings_input(
 ) -> AppState | None:
     """Handle input on the settings screen. Returns updated state or None."""
     if not isinstance(event, KeyDown):
-        return None
+        return state
 
     selected = getattr(state, "settings_selected", 0)
     max_options = len(SETTINGS_OPTIONS)

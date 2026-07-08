@@ -197,9 +197,9 @@ class TestHandleSettingsInput:
         finally:
             _set_volume(original)
 
-    def test_non_key_event_returns_none(self, settings_state: AppState) -> None:
+    def test_non_key_event_returns_state(self, settings_state: AppState) -> None:
         class FakeEvent:
             pass
 
         result = handle_settings_input(FakeEvent(), settings_state)
-        assert result is None
+        assert result is settings_state
