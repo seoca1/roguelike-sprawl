@@ -6,6 +6,7 @@ Phase 5: screen state machine (Menu → Hub → Matrix → back).
 from __future__ import annotations
 
 import sys
+import time
 
 import tcod.console
 import tcod.context
@@ -79,8 +80,31 @@ def _main_inner() -> int:
         root_console = tcod.console.Console(config.SCREEN_WIDTH, config.SCREEN_HEIGHT, order="F")
 
         running = True
+        last_time = time.monotonic()
         while running:
             try:
+                now = time.monotonic()
+                delta_s = now - last_time
+                last_time = now
+                if state.screen is ScreenKind.GRAPHIC_NOVEL and state.gn_scenes:
+                    state.gn_elapsed_ms += delta_s * 1000
+                    if not state.gn_paused:
+                        scenes = state.gn_scenes
+                        if scenes and 0 <= state.gn_scene_index < len(scenes):
+                            scene = scenes[state.gn_scene_index]
+                            if scene.dialogue and 0 <= state.gn_dialogue_index < len(scene.dialogue):
+                                dialogue = scene.dialogue[state.gn_dialogue_index]
+                                if state.gn_elapsed_ms >= dialogue.duration_ms:
+                                    if state.gn_dialogue_index < len(scene.dialogue) - 1:
+                                        state.gn_dialogue_index += 1
+                                        state.gn_elapsed_ms = 0.0
+                                    elif state.gn_scene_index < len(scenes) - 1:
+                                        state.gn_scene_index += 1
+                                        state.gn_dialogue_index = 0
+                                        state.gn_elapsed_ms = 0.0
+                                    else:
+                                        state.screen = ScreenKind.MENU
+
                 _render(
                     root_console, t, portraits, state, _global_prog_registry, _global_ice_registry
                 )
@@ -146,6 +170,47 @@ def _render(
 
         has_save = getattr(state, "has_save", False)
         graphic_novel_view.render_graphic_novel_menu(console, t, state.gn_menu_selected, has_save)
+    elif state.screen is ScreenKind.GRAPHIC_NOVEL:
+        from . import graphic_novel_view as gn_view
+        from .graphic_novel_view import load_background, load_portrait
+
+        scenes = state.gn_scenes
+        if scenes and 0 <= state.gn_scene_index < len(scenes):
+            scene = scenes[state.gn_scene_index]
+            if scene.dialogue and 0 <= state.gn_dialogue_index < len(scene.dialogue):
+                dialogue = scene.dialogue[state.gn_dialogue_index]
+                bg = None
+                if scene.background_id:
+                    try:
+                        from . import config
+                        bg = load_background(config.DATA_DIR / "art", scene.background_id)
+                    except Exception:
+                        pass
+                p_l = None
+                p_r = None
+                if scene.portrait_left:
+                    try:
+                        p_l = load_portrait(config.DATA_DIR / "portraits", scene.portrait_left)
+                    except Exception:
+                        pass
+                if scene.portrait_right:
+                    try:
+                        p_r = load_portrait(config.DATA_DIR / "portraits", scene.portrait_right)
+                    except Exception:
+                        pass
+                typed = gn_view.dialogue_typed_chars(
+                    dialogue.duration_ms, state.gn_elapsed_ms, len(dialogue.text_en)
+                )
+                gn_view.render_scene(
+                    console, scene, dialogue, bg, p_l, p_r, t, typed,
+                    state.gn_scene_index, len(scenes), paused=state.gn_paused,
+                )
+            else:
+                console.clear(bg=(0, 0, 0))
+                console.print(x=2, y=2, string="=== NO DIALOGUE ===", fg=(255, 0, 0))
+        else:
+            console.clear(bg=(0, 0, 0))
+            console.print(x=2, y=2, string="=== NO SCENES LOADED ===", fg=(255, 0, 0))
     elif state.screen is ScreenKind.HUB:
         hub_screen.render_hub(console, t, state)
     elif state.screen is ScreenKind.MATRIX:
@@ -302,6 +367,40 @@ def _handle_input(
         return menu_screen.handle_menu_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
         return menu_screen.handle_graphic_novel_menu_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.GRAPHIC_NOVEL:
+        action = menu_screen.handle_graphic_novel_input(event, state)  # type: ignore[arg-type]
+        if action == "menu":
+            state.screen = ScreenKind.MENU
+            return True
+        if action == "next":
+            scenes = state.gn_scenes
+            if scenes and 0 <= state.gn_scene_index < len(scenes):
+                scene = scenes[state.gn_scene_index]
+                if scene.dialogue and state.gn_dialogue_index < len(scene.dialogue) - 1:
+                    state.gn_dialogue_index += 1
+                    state.gn_elapsed_ms = 0.0
+                elif state.gn_scene_index < len(scenes) - 1:
+                    state.gn_scene_index += 1
+                    state.gn_dialogue_index = 0
+                    state.gn_elapsed_ms = 0.0
+                else:
+                    state.screen = ScreenKind.MENU
+            else:
+                state.screen = ScreenKind.MENU
+            return True
+        if action == "skip":
+            scenes = state.gn_scenes
+            if scenes and state.gn_scene_index < len(scenes) - 1:
+                state.gn_scene_index += 1
+                state.gn_dialogue_index = 0
+                state.gn_elapsed_ms = 0.0
+            else:
+                state.screen = ScreenKind.MENU
+            return True
+        if action == "pause":
+            state.gn_paused = not state.gn_paused
+            return True
+        return True
     if state.screen is ScreenKind.HUB:
         return hub_screen.handle_hub_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.MATRIX:

@@ -253,6 +253,7 @@ class AppState:
     gn_scene_index: int = 0  # current scene in chain
     gn_menu_selected: int = 0  # selected index in GRAPHIC_NOVEL_MENU
     gn_dialogue_index: int = 0  # current dialogue in scene
+    gn_scenes: list[SceneData] = field(default_factory=list)  # list[SceneData] — loaded scenes
     gn_elapsed_ms: float = 0.0  # time in current dialogue
     gn_paused: bool = False
     gn_typed_chars: int = 0  # typing progress in current dialogue

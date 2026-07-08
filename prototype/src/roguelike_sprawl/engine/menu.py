@@ -283,6 +283,14 @@ def _apply_gn_menu_selection(state: AppState) -> None:
     state.gn_dialogue_index = 0
     state.gn_elapsed_ms = 0.0
     state.gn_scene_chain = []
+    from . import config
+    from .graphic_novel_view import load_prologue_chain, load_scene_chain
+
+    scenes_dir = config.DATA_DIR / "scenes"
+    if mode == "prologue":
+        state.gn_scenes = load_prologue_chain(scenes_dir, seed=42, ending="A")
+    else:
+        state.gn_scenes = load_scene_chain(scenes_dir, mode, ending="A")
 
 
 def handle_graphic_novel_ending_menu_input(
