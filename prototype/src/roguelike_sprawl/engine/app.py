@@ -112,7 +112,15 @@ def _main_inner() -> int:
                     typed = int(state.chapter_elapsed_ms / cd.char_delay_ms)
                     state.chapter_typed_chars = min(typed, len(cd.excerpt_en))
                     if state.chapter_elapsed_ms >= cd.duration_ms:
-                        state.screen = ScreenKind.HUB
+                        if state.current_arc is not None:
+                            state.current_chapter_index = 0
+                            state.current_phase_index = 0
+                            state.current_beat_index = 0
+                            state.phase_elapsed_ms = 0.0
+                            state.phase_typed_chars = 0
+                            state.screen = ScreenKind.ARC_PHASE
+                        else:
+                            state.screen = ScreenKind.HUB
 
                 if state.screen is ScreenKind.ARC_PHASE and state.current_arc is not None:
                     state.phase_elapsed_ms += delta_s * 1000
@@ -126,6 +134,10 @@ def _main_inner() -> int:
                                 text = beat.text_en
                                 typed = int(state.phase_elapsed_ms / 30)
                                 state.phase_typed_chars = min(typed, len(text))
+                                if typed >= len(text) and state.phase_elapsed_ms >= 500:
+                                    state.phase_elapsed_ms = 0.0
+                                    state.phase_typed_chars = 0
+                                    _advance_arc_phase(state)
 
                 _render(
                     root_console, t, portraits, state, _global_prog_registry, _global_ice_registry
