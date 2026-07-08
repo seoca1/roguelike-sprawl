@@ -2,6 +2,35 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] fix | Settings screen crash + dashboard 9 자키 반영
+
+### 수정 내용
+1. **Settings crash fix**: `engine/settings_view.py` — `handle_settings_input`가 KeyUp 이벤트에서 `None` 반환 → `return state`로 수정.同类로 `handle_help_input`은 이미 correct.
+2. **Dashboard meta update**: `dashboard/missions.html` — og:description, twitter:description, meta description 모두 "3 주인공(케이/실/카스)" → "9 자키 (Gibson 3캐릭터 기반)"로 갱신
+
+### 검증 결과
+- mypy: 0 errors
+- pytest: 4146 passed
+- dashboard build: 12 stats files generated
+- `index.html` Story Dashboard card: "9 자키" (already correct)
+- `graphic-novel.html`: 81 scenes, 9 chars (correct)
+- `character_stats.json`: 3 characters (canonical arc prototypes — intentional)
+- `play_game.json`: 3 characters (playable demo — intentional)
+- `prototype/data/scenes/`: 9 jockeys × 9 scenes = 81 total
+
+### 영향
+- `missions.html` meta description (3곳)
+- `prototype/src/roguelike_sprawl/engine/settings_view.py`
+- `prototype/src/roguelike_sprawl/engine/app.py` (DEBUG statements removed)
+- `prototype/src/roguelike_sprawl/engine/layout.py` (clear_region bounds check)
+- `prototype/tests/unit/test_settings.py` (test updated)
+
+### 다음 작업 (미완료)
+- `build_dashboard.py`: `prototype/data/scenes/` 9 jockeys에서 character_stats.json 생성하도록 확장
+- `dashboard/play.html`: "3개 캐릭터" → "3 canonical + 6 extension jockeys" 또는 similar
+
+---
+
 ## [2026-07-08] verify | dashboard stats 확인 + 문서 일부 업데이트
 
 ### 작업 내용
