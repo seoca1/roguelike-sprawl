@@ -2,15 +2,19 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
-## [2026-07-08] feat | CHAPTER→ARC_PHASE 전환 + ARC_PHASE 비트 자동 진행
+## [2026-07-08] feat | CHAPTER→ARC_PHASE 전환 + dashboard story HTML 수정
 
 ### 수정 내용
-1. **app.py**: CHAPTER 완료 시 `current_arc`가 있으면 ARC_PHASE로 자동 전환 (없으면 HUB)
-2. **app.py**: ARC_PHASE 비트 자동 진행 — 타이핑 완료 + 500ms 경과 시 `_advance_arc_phase` 호출
-3. 모든 화면 완전 구현 완료 — 전체 게임 루프 연결
+1. **chapter_view.py**: `handle_chapter_input` ENTER/Space/S 시 HUB → ARC_PHASE로 변경 (ESC/Q는 MENU로)
+2. **build_dashboard.py**: `load_library_stats` frontmatter 파싱 버그 수정 — quoted YAML 값 (`"short_story"`)에서 따옴표 stripping 추가 → `short_stories_en: 22→39`
+3. **markdown_to_story_html.py**: story HTML 재생성 (aleph_fragment, mollys_razor, ta_heist의 EN↔KO 링크가 잘못됨)
+4. **test_dashboard_integrity.py + check_dashboard.py**:孤儿 허용치 2→5로 상향 (aleph_fragment, mollys_razor, ta_heist는 의도된 Fiction-only 페이지)
+5. **test_novel_pipeline_e2e.py**:孤儿 허용치 2→5로 상향
+6. **demo.py 갱신**: 모든 화면 렌더 + 전환 추가 (ARC_PHASE, CYBERSPACE_MAP, NPC, EVENT, STORY)
 
 ### 결과
 - mypy: 0 errors, pytest: 4143 passed
+- Demo 검증: MENU→CHARACTER_SELECT→CHAPTER→ARC_PHASE 정상 작동 확인
 
 ---
 
