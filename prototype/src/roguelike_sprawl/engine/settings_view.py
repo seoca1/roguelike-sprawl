@@ -160,7 +160,7 @@ def handle_settings_input(
         opt_id = SETTINGS_OPTIONS[selected][0]
         if opt_id == "audio":
             _adjust_volume(-0.1)
-            return state
+        return state
 
     if event.sym in (KeySym.N1, KeySym.N2, KeySym.N3, KeySym.N4, KeySym.N5):
         idx = event.sym.value - KeySym.N1.value
@@ -176,6 +176,6 @@ def handle_settings_input(
                 state.screen = ScreenKind.MENU
                 if hasattr(state, "settings_selected"):
                     delattr(state, "settings_selected")
-            return state
+        return state
 
-    return None
+    return state
