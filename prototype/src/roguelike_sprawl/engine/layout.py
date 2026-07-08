@@ -104,8 +104,8 @@ def make_shell(width: int = SCREEN_WIDTH, height: int = SCREEN_HEIGHT) -> dict[R
 
 def clear_region(console: tcod.console.Console, region: Region) -> None:
     """Clear a region by writing spaces."""
-    for y in range(region.y, region.y2 + 1):
-        for x in range(region.x, region.x2 + 1):
+    for y in range(region.y, min(region.y2 + 1, console.height)):
+        for x in range(region.x, min(region.x2 + 1, console.width)):
             console.print(x=x, y=y, string=" ", fg=(0, 0, 0))
 
 
