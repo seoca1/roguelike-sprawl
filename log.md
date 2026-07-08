@@ -2,6 +2,38 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | v1.0.0b1 PyPI Release 성공 — Salvation Phase mypy 수정
+
+### Part A — v1.0.0b1 PyPI Release
+- **PyPI**: https://pypi.org/project/roguelike-sprawl/1.0.0b1/
+- **GitHub Tag**: `v1.0.0b1` 생성됨
+- **workflow_dispatch 실행**: `gh workflow run release.yml --field version=1.0.0b1`
+- **수정된 버그** (5개):
+  1. env var 방식 사용 (`RELEASE_VERSION`) — `${{ }}` shell interpolation 문제
+  2. `cd prototype` 추가 — pyproject.toml 경로 문제
+  3. `uv publish --prelease` → `--prelease` 제거 (uv에 해당 옵션 없음)
+  4. YAML block scalar — `cat` 명령 Python 문자열 밖으로 이동
+  5. `&&` 사용으로 단일 run 블록으로 결합
+- **Actions SHA 핀ning**: 8개 액션 full-length SHA로 핀ning (4 workflow 파일)
+
+### Part B — ADR-0102 Accepted — v1.0.0b1
+- **결정**: Option 2 — 1.0.0b1 (beta) + 수동 workflow_dispatch
+- **ADR 파일**: `decisions/0102-v1-release-decision.md` (Status: Accepted)
+
+### Part C — ADR-0090 Salvation Phase mypy 수정
+- **문제**: mypy strict mode 19 errors — `AppState`에 salvation 필드 없음, `state.run` 오타, `KeySym.a/b/c`不存在
+- **수정**:
+  - `AppState`에 `salvation_runner`, `salvation_selection`, `salvation_scene_data`, `salvation_epilogue_*` 필드 추가
+  - `state.run` → `state.run_state` (4곳)
+  - `KeySym.a/b/c` → `KeySym.N1/N2/N3`
+  - `from .. import config` → `from . import config`
+  - `RunState | None` → 명시적 None 체크
+  - `TYPE_CHECKING` imports 추가
+- **결과**: mypy 0 errors
+- **테스트**: 4146 passed
+
+---
+
 ## [2026-07-08] feat | v1.0.0 release prep — ADR-0102 draft + release workflow + pages.yml fix
 
 ### Part A — pages.yml stale file references fix
