@@ -2,6 +2,23 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | CYBERSPACE_MAP + ARC_PHASE 완전 구현
+
+### 수정 내용
+1. **CYBERSPACE_MAP**: world hierarchy 트리 뷰 렌더 (`_render_cyberspace_map`), ESC→MENU, world_map 없으면 "NO WORLD DATA" 표시
+2. **ARC_PHASE**: `phase_view.render_arc_phase` 사용, 비트 자동 진행 타이핑 효과, 게임 루프 틱 (`phase_elapsed_ms`), SPACE/ENTER=다음 비트, S=스킵
+3. **`_advance_arc_phase`**: 비트/페이즈/챕터 자동 진행, 완료 시 MENU 전환
+4. **`state.py`**: `current_arc: object` → `ArcData | None` 타입 수정
+
+### 미해결
+- ARC_PHASE:CHAPTER→ARC_PHASE 전환 트리거 없음 (게임 플로우 미정의)
+- CYBERSPACE_MAP: Hub에서 접근 불가 (M 키 미구현, world_map 미로딩)
+
+### 결과
+- mypy: 0 errors, pytest: 4143 passed
+
+---
+
 ## [2026-07-08] fix | CHAPTER 화면 버그 수정 — character select가 chapter_data를 로드하지 않던 문제
 
 ### 수정 내용
