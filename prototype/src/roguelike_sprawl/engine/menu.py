@@ -412,3 +412,115 @@ def handle_save_slot_select_input(
         if state.gn_save_slot_selected:
             return f"delete_{state.gn_save_slot_selected}"
     return ""
+
+
+CHARACTER_OPTIONS = [
+    ("케이 (K)", "novice", "Case — Neuromancer trilogy protagonist"),
+    ("실 (Sil)", "veteran", "Molly's crew — Count Zero"),
+    ("카스 (Kas)", "heretic", "Wintermute's ally — Mona Lisa Overdrive"),
+]
+
+
+def render_character_select(console: tcod.console.Console, t: Translator, state: AppState) -> None:
+    """Render the CHARACTER_SELECT screen — choose jockey (ADR-0031)."""
+    console.clear()
+    width = console.width
+
+    title = "자키 선택" if t.lang == "ko" else "Choose Your Jockey"
+    console.print(0, 0, "═" * width)
+    console.print((width - len(title)) // 2, 0, f" {title} ")
+    console.print(0, 1, "─" * width)
+
+    hint = "The Finn's offer: simple data extraction run. ICE is light."
+    if t.lang == "ko":
+        hint = "더 핀의 제안:简单的 데이터 추출 미션. ICE는 가벼울 거야."
+    console.print((width - len(hint)) // 2, 3, hint, fg=(180, 180, 100))
+
+    selected = getattr(state, "character_select_index", 0)
+    y = 6
+    for i, (name, char_id, desc) in enumerate(CHARACTER_OPTIONS):
+        marker = "▸ " if i == selected else "  "
+        fg = (255, 255, 0) if i == selected else (200, 200, 200)
+        console.print(x=4, y=y + i * 4, string=f"{marker}[{i + 1}] {name}", fg=fg)
+        console.print(x=6, y=y + i * 4 + 1, string=desc, fg=(128, 128, 128))
+        console.print(x=6, y=y + i * 4 + 2, string="─" * 50, fg=(60, 60, 60))
+
+    footer_hint = "[↑↓] Navigate  [Enter] Confirm  [ESC] Back"
+    if t.lang == "ko":
+        footer_hint = "[↑↓] 이동  [Enter] 확인  [ESC] 뒤로"
+    console.print(0, console.height - 1, "═" * width)
+    console.print((width - len(footer_hint)) // 2, console.height - 1, f" {footer_hint} ")
+
+
+def handle_character_select_input(event: object, state: AppState) -> bool:
+    """Handle input on CHARACTER_SELECT screen. Arrow keys navigate, Enter confirms."""
+    import tcod.event
+
+    if isinstance(event, tcod.event.KeyDown):
+        if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+            state.screen = ScreenKind.MENU
+            return True
+        if event.sym in (tcod.event.KeySym.UP, tcod.event.KeySym.W):
+            state.character_select_index = (state.character_select_index - 1) % 3
+            return True
+        if event.sym in (tcod.event.KeySym.DOWN, tcod.event.KeySym.S):
+            state.character_select_index = (state.character_select_index + 1) % 3
+            return True
+        if event.sym in (tcod.event.KeySym.RETURN, tcod.event.KeySym.KP_ENTER, tcod.event.KeySym.SPACE):
+            idx = state.character_select_index
+            char_id = CHARACTER_OPTIONS[idx][1]
+            state.character_id = char_id
+            state.chapter_id = f"chapter_{char_id}"
+            state.screen = ScreenKind.CHAPTER
+            return True
+        if event.sym in (tcod.event.KeySym.N1, tcod.event.KeySym.N2, tcod.event.KeySym.N3):
+            idx = int(event.sym.name[1]) - 1
+            state.character_select_index = idx
+            char_id = CHARACTER_OPTIONS[idx][1]
+            state.character_id = char_id
+            state.chapter_id = f"chapter_{char_id}"
+            state.screen = ScreenKind.CHAPTER
+            return True
+    return True
+
+
+def render_ending(console: tcod.console.Console, t: Translator, state: AppState) -> None:
+    """Render the ENDING screen (ADR-0031)."""
+    console.clear()
+    width = console.width
+    height = console.height
+
+    title = "ENDING" if state.ending_choice else "PENDING"
+    console.print(0, 0, "═" * width)
+    console.print((width - len(title)) // 2, 0, f" {title} ")
+    console.print(0, 1, "─" * width)
+
+    if state.ending_choice == "A":
+        msg_ko = "엔딩 A — 더 핀의 제안을 받아들였다"
+        msg_en = "Ending A — You accepted The Finn's offer"
+    elif state.ending_choice == "B":
+        msg_ko = "엔딩 B — 더 핀의 제안을 거절했다"
+        msg_en = "Ending B — You declined The Finn's offer"
+    elif state.ending_choice == "C":
+        msg_ko = "엔딩 C — 모든 것을 지웠다"
+        msg_en = "Ending C — You erased everything"
+    else:
+        msg_ko = "엔딩이 아직 결정되지 않았다"
+        msg_en = "Ending not yet determined"
+
+    msg = msg_ko if t.lang == "ko" else msg_en
+    console.print((width - len(msg)) // 2, height // 2 - 2, msg, fg=(255, 255, 0))
+    hint = "[ESC] Return to menu"
+    console.print(0, height - 1, "═" * width)
+    console.print((width - len(hint)) // 2, height - 1, f" {hint} ")
+
+
+def handle_ending_input(event: object, state: AppState) -> bool:
+    """Handle input on ENDING screen."""
+    import tcod.event
+
+    if isinstance(event, tcod.event.KeyDown):
+        if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+            state.screen = ScreenKind.MENU
+            return True
+    return True

@@ -233,6 +233,31 @@ def render_chapter(
     console.print(0, height - 1, "═" * width)
 
 
+def handle_chapter_input(event: object, state: object) -> bool:
+    """Handle input on the CHAPTER screen.
+
+    ENTER/Space: advance to HUB immediately.
+    ESC/Q: cancel and return to menu.
+    S: skip chapter (same effect as ENTER).
+    """
+    import tcod.event
+    from .state import ScreenKind
+
+    if isinstance(event, tcod.event.KeyDown):
+        if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+            state.screen = ScreenKind.HUB  # type: ignore
+            return True
+        if event.sym in (
+            tcod.event.KeySym.RETURN,
+            tcod.event.KeySym.KP_ENTER,
+            tcod.event.KeySym.SPACE,
+            tcod.event.KeySym.S,
+        ):
+            state.screen = ScreenKind.HUB  # type: ignore
+            return True
+    return True
+
+
 def _console_to_text(console: tcod.console.Console) -> str:
     """Convert a tcod console buffer to plain text (one char per cell).
 

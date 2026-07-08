@@ -71,6 +71,7 @@ if TYPE_CHECKING:
     from ..cyberspace.world import WorldMap
     from ..run.state import RunState
     from .chapter_cutscene import ChapterCutsceneState
+    from .chapter_view import ChapterData
     from .event_story import EventRegistry, EventState
     from .graphic_novel_view import SceneData
     from .npc_event import NPCState
@@ -142,6 +143,7 @@ class AppState:
     dungeon_mode: bool = False
     hub_selected_index: int = 0
     menu_selected_index: int = 0
+    character_select_index: int = 0
     message: str = ""
     # Fog of war / exploration state (ADR-0020). None until a matrix
     # is loaded. Owned by the matrix screen.
@@ -238,6 +240,7 @@ class AppState:
     chapter_elapsed_ms: float = 0.0
     chapter_typed_chars: int = 0
     chapter_portrait: str = "art:case"
+    chapter_data: ChapterData | None = None  # loaded chapter for current character
     ending_choice: str = ""  # "A" | "B" | "" (pending)
     # Chapter cutscene state (for chapter-internal cutscene playback)
     chapter_cutscene_state: ChapterCutsceneState | None = None

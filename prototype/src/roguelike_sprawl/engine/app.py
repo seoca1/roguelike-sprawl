@@ -104,6 +104,13 @@ def _main_inner() -> int:
                                         state.gn_elapsed_ms = 0.0
                                     else:
                                         state.screen = ScreenKind.MENU
+                if state.screen is ScreenKind.CHAPTER and state.chapter_data:
+                    state.chapter_elapsed_ms += delta_s * 1000
+                    cd = state.chapter_data
+                    typed = int(state.chapter_elapsed_ms / cd.char_delay_ms)
+                    state.chapter_typed_chars = min(typed, len(cd.excerpt_en))
+                    if state.chapter_elapsed_ms >= cd.duration_ms:
+                        state.screen = ScreenKind.HUB
 
                 _render(
                     root_console, t, portraits, state, _global_prog_registry, _global_ice_registry
@@ -252,15 +259,21 @@ def _render(
                 console.print(4, y + i * 2, opt)
     elif state.screen is ScreenKind.HUB:
         hub_screen.render_hub(console, t, state)
+    elif state.screen is ScreenKind.NPC:
+        from . import npc_view
+
+        if state.npc_state is not None:
+            npc_view.render_npc(console, t, state, state.npc_state)
+        else:
+            console.clear(bg=(0, 0, 0))
+            console.print(x=2, y=2, string="=== NO NPC STATE ===", fg=(255, 0, 0))
+    elif state.screen is ScreenKind.ENDING:
+        menu_screen.render_ending(console, t, state)
     elif state.screen in (
-        ScreenKind.CHARACTER_SELECT,
-        ScreenKind.CHAPTER,
         ScreenKind.GRAPHIC_NOVEL_ENDING_MENU,
         ScreenKind.SAVE_SLOT_SELECT,
-        ScreenKind.NPC,
         ScreenKind.EVENT,
         ScreenKind.STORY,
-        ScreenKind.ENDING,
         ScreenKind.ARC_PHASE,
         ScreenKind.CYBERSPACE_BROWSER,
         ScreenKind.CYBERSPACE_MAP,
@@ -270,6 +283,18 @@ def _render(
         console.print(x=2, y=2, string=msg, fg=(180, 180, 100))
         hint = "[ESC] Return to menu"
         console.print(x=2, y=4, string=hint, fg=(128, 128, 128))
+    elif state.screen is ScreenKind.CHARACTER_SELECT:
+        menu_screen.render_character_select(console, t, state)
+    elif state.screen is ScreenKind.CHAPTER:
+        from . import chapter_view
+
+        if state.chapter_data:
+            chapter_view.render_chapter(
+                console, state.chapter_data, t, state.chapter_typed_chars, state.chapter_elapsed_ms
+            )
+        else:
+            console.clear(bg=(0, 0, 0))
+            console.print(x=2, y=2, string="=== NO CHAPTER DATA ===", fg=(255, 0, 0))
     elif state.screen is ScreenKind.MATRIX:
         if state.dungeon_mode:
             # ADR-0060 Phase 1: NetHack-style 2D room grid
@@ -466,15 +491,22 @@ def _handle_input(
         return menu_screen.handle_saved_progress_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.HUB:
         return hub_screen.handle_hub_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.CHAPTER:
+        from . import chapter_view
+
+        chapter_view.handle_chapter_input(event, state)
+        return True
+    if state.screen is ScreenKind.CHARACTER_SELECT:
+        menu_screen.handle_character_select_input(event, state)
+        return True
+    if state.screen is ScreenKind.ENDING:
+        menu_screen.handle_ending_input(event, state)
+        return True
     if state.screen in (
-        ScreenKind.CHARACTER_SELECT,
-        ScreenKind.CHAPTER,
         ScreenKind.GRAPHIC_NOVEL_ENDING_MENU,
         ScreenKind.SAVE_SLOT_SELECT,
-        ScreenKind.NPC,
         ScreenKind.EVENT,
         ScreenKind.STORY,
-        ScreenKind.ENDING,
         ScreenKind.ARC_PHASE,
         ScreenKind.CYBERSPACE_BROWSER,
         ScreenKind.CYBERSPACE_MAP,
@@ -485,6 +517,12 @@ def _handle_input(
             if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
                 state.screen = ScreenKind.MENU
                 return True
+        return True
+    if state.screen is ScreenKind.NPC:
+        from . import npc_view
+
+        if state.npc_state is not None:
+            npc_view.handle_npc_input(event, state, state.npc_state)  # type: ignore[arg-type]
         return True
     if state.screen is ScreenKind.MATRIX:
         # ADR-0060 Phase 1: `D` key toggles NetHack-style dungeon view
