@@ -87,6 +87,9 @@ def _main_inner() -> int:
                 context.present(root_console)
 
                 for event in tcod.event.wait():
+                    if isinstance(event, tcod.event.WindowEvent) and event.type == "WindowClose":
+                        running = False
+                        break
                     if not _handle_input(event, state, _global_prog_registry, _global_ice_registry):
                         running = False
                         break
