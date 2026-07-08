@@ -1,9 +1,9 @@
-# Session Summary — 2026-07-08 (v0.7.3)
+# Session Summary — 2026-07-08 (v0.7.4)
 
 > **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: EVENT/STORY/CYBERSPACE_BROWSER 완전 구현 + 4개 스텁
+> **세션 범위**: 모든 화면 렌더/입력 디스패치 완료 (ARC_PHASE/CYBERSPACE_MAP 스텁)
 > **테스트**: 4143 passed (39 skipped, 3 integration pre-existing failures)
-> **변경 파일**: 1 file (app.py)
+> **변경 파일**: 2 files (app.py, menu.py)
 
 ---
 
@@ -62,8 +62,14 @@
 
 ### 즉시 착수 가능
 1. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
-2. **ARC_PHASE**: PhaseData + 상태 로딩 필요 (현재 스텁)
-3. **CYBERSPACE_MAP**: 아직 미구현 (스텁)
+2. **ARC_PHASE**: chapter JSON에 phases가 없음 → arcs JSON 로딩 필요 (현재 스텁)
+3. **CYBERSPACE_MAP**: view 모듈 없음 + 게임 플로우에 미연결 (현재 스텁)
+
+### 이 세션 작업 내용 (v0.7.4)
+1. **app.py**: EVENT, STORY, CYBERSPACE_BROWSER 완전 구현 (렌더+입력)
+2. **app.py**: GRAPHIC_NOVEL_ENDING_MENU, SAVE_SLOT_SELECT 스텁 → 실제 핸들러 연결
+3. **menu.py**: CHAPTER 화면 버그 수정 — `handle_character_select_input`가 `chapter_data`를 로드하지 않던 문제 해결
+4. **app.py**: ARC_PHASE, CYBERSPACE_MAP 스텁 유지 (실제 데이터/플로우 없음)
 
 ### 중장기 작업
 4. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
@@ -93,6 +99,7 @@
 
 | 커밋 | 설명 |
 |---|---|
+| `b7cc7d2` | fix(menu): load chapter data on character select (CHAPTER screen was broken) |
 | `e522962` | feat(app): implement EVENT/STORY/CYBERSPACE_BROWSER screens, add stubs for remaining |
 | `6dff8bd` | feat(app): implement CHAPTER, CHARACTER_SELECT, NPC, ENDING screens |
 | `b4978ed` | feat(app): implement SAVED_PROGRESS + DEATH_SUMMARY screens, add stub handlers |
@@ -104,5 +111,5 @@
 
 **세션 종료 시간**: 2026-07-08
 **최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4143 ✅
-**이 문서 버전**: v0.7.3
-**이전 버전**: v0.7.2 (2026-07-08)
+**이 문서 버전**: v0.7.4
+**이전 버전**: v0.7.3 (2026-07-08)

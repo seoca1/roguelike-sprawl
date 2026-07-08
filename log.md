@@ -2,6 +2,22 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] fix | CHAPTER 화면 버그 수정 — character select가 chapter_data를 로드하지 않던 문제
+
+### 수정 내용
+1. **menu.py**: `handle_character_select_input` 수정 — 선택된 캐릭터의 chapter JSON 파일을 로드하여 `state.chapter_data`에 저장
+2. `_CHARACTER_TO_CHAPTER_FILE` 맵핑 추가: novice→case.json, veteran→sil.json, heretic→kas.json
+3. `_load_chapter` 헬퍼 함수 추가 (config.DATA_DIR / "story" / "chapters" 경로 사용)
+4. `chapter_elapsed_ms`, `chapter_typed_chars` 초기화
+
+### 원인
+`handle_character_select_input`가 `state.chapter_id`만 설정하고 실제 JSON 파일을 로드하지 않았음 → CHAPTER 화면이 항상 "NO CHAPTER DATA" 표시
+
+### 결과
+- mypy: 0 errors, pytest: 4143 passed
+
+---
+
 ## [2026-07-08] feat | EVENT/STORY/CYBERSPACE_BROWSER 완전 구현 + 4개 스텁
 
 ### 수정 내용
@@ -10,8 +26,8 @@ LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YY
 3. **CYBERSPACE_BROWSER**: cyberspace_browser.render_cyberspace_browser + handle_browser_input 연결
 4. **GRAPHIC_NOVEL_ENDING_MENU**: render_graphic_novel_ending_menu 사용 (ESC→MENU 스텁)
 5. **SAVE_SLOT_SELECT**: save_load_view.render_save_load + handle_save_load_input 사용
-6. **ARC_PHASE**: 스텁 (ESC→MENU)
-7. **CYBERSPACE_MAP**: 스텁 (ESC→MENU)
+6. **ARC_PHASE**: 스텁 (ESC→MENU) — chapter JSON에 phases가 없어서 실제 구현 불가
+7. **CYBERSPACE_MAP**: 스텁 (ESC→MENU) — view 모듈 없음 + 게임 플로우에 미연결
 
 ### 결과
 - mypy: 0 errors, pytest: 4143 passed
