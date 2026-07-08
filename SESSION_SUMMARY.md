@@ -17,6 +17,12 @@
 - `RunState | None` 할당 에러 → 명시적 None 체크
 - **커밋**: `49b4cd6`
 
+### C. macOS WindowClose 이벤트 처리 수정
+- **문제**: macOS에서 창 닫기(X) 버튼 클릭 시 창이 닫히지 않음
+- **원인**: `tcod.event.wait()`가 `WindowClose` 이벤트(type=528)를 반환하지만 게임이 이를 처리하지 않음
+- **수정**: `app.py` 메인 루프에 `WindowClose` 체크 추가
+- **커밋**: `2aabcd2`
+
 ### B. ADR-0102 Accepted — v1.0.0b1 Release
 - **결정**: 1.0.0b1 (beta) + 수동 workflow_dispatch
 - **PyPI Token**: 실제 토큰 설정 완료

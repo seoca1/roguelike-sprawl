@@ -2,6 +2,22 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] fix | macOS WindowClose 이벤트 처리 — 창 닫기 버튼 수정
+
+### 문제
+- macOS에서 `make run` 실행 시 창이 정상 표시되지만 닫기(X) 버튼이 작동하지 않음
+- 창에 입력도 안 먹음 (창 포커스 문제로 보였으나 실제는 `WindowClose` 미처리)
+
+### 원인
+- `tcod.event.wait()`가 `WindowEvent(type='WindowClose')`를 반환하지만, 게임의 메인 루프가 이를 무시함
+- `_handle_input`은 `WindowClose` 이벤트에 대해 `True`를 반환하여 창이 닫히지 않음
+
+### 수정
+- `app.py` 메인 루프: `WindowClose` 이벤트 체크 추가 → `running = False` 설정
+- `2aabcd2`로 커밋 및 푸시
+
+---
+
 ## [2026-07-08] feat | v1.0.0b1 PyPI Release 성공 — Salvation Phase mypy 수정
 
 ### Part A — v1.0.0b1 PyPI Release
