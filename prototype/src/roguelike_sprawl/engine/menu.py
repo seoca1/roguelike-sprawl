@@ -428,9 +428,10 @@ _CHARACTER_TO_CHAPTER_FILE = {
 
 
 def _load_chapter(state: AppState, char_id: str) -> None:
-    """Load chapter JSON for the given character ID into state."""
+    """Load chapter and arc JSON for the given character ID into state."""
     from . import config as config_mod
     from .chapter_view import load_chapter
+    from .chapter_cutscene import get_arc_for_character
 
     filename = _CHARACTER_TO_CHAPTER_FILE.get(char_id)
     if filename is None:
@@ -440,8 +441,19 @@ def _load_chapter(state: AppState, char_id: str) -> None:
         state.chapter_data = load_chapter(chapter_path)
     except FileNotFoundError:
         state.chapter_data = None
+
+    try:
+        state.current_arc = get_arc_for_character(config_mod.DATA_DIR, char_id)
+    except Exception:
+        state.current_arc = None
+
     state.chapter_elapsed_ms = 0.0
     state.chapter_typed_chars = 0
+    state.current_chapter_index = 0
+    state.current_phase_index = 0
+    state.current_beat_index = 0
+    state.phase_elapsed_ms = 0.0
+    state.phase_typed_chars = 0
 
 
 def render_character_select(console: tcod.console.Console, t: Translator, state: AppState) -> None:

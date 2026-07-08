@@ -606,12 +606,27 @@ def handle_hub_input(event: tcod.event.Event, state: AppState) -> bool:
 
             enter_save_load(state)
             return True
+        # M: open cyberspace map
+        if event.sym is KeySym.M:
+            _ensure_world_map(state)
+            state.screen = ScreenKind.CYBERSPACE_MAP
+            return True
         if event.sym in (KeySym.N1, KeySym.N2, KeySym.N3, KeySym.N4, KeySym.N5):
             available = state.job_board.available_for(state.player_grade)
             idx = int(event.sym.name[1:]) - 1
             if 0 <= idx < len(available):
                 _start_mission(state, available[idx])
     return True
+
+
+def _ensure_world_map(state: AppState) -> None:
+    """Load world map if not already loaded."""
+    if not hasattr(state, "world_map") or state.world_map is None:
+        from . import config as config_mod
+        from ..cyberspace.registry import WorldRegistry
+
+        registry = WorldRegistry.load(config_mod.DATA_DIR / "cyberspace" / "worlds.json")
+        state.world_map = registry.world_map
 
 
 def _start_mission(state: AppState, mission: Mission) -> None:
@@ -621,11 +636,8 @@ def _start_mission(state: AppState, mission: Mission) -> None:
     state.current_mission = mission
 
     # Load world map if not loaded
-    if not hasattr(state, "world_map") or state.world_map is None:
-        from . import config
-
-        registry = WorldRegistry.load(config.DATA_DIR / "cyberspace" / "worlds.json")
-        state.world_map = registry.world_map
+    _ensure_world_map(state)
+    assert state.world_map is not None
 
     # Find the server for this mission
     registry = WorldRegistry(state.world_map)
