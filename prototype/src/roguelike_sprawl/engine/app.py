@@ -114,6 +114,19 @@ def _main_inner() -> int:
                     if state.chapter_elapsed_ms >= cd.duration_ms:
                         state.screen = ScreenKind.HUB
 
+                if state.screen is ScreenKind.ARC_PHASE and state.current_arc is not None:
+                    state.phase_elapsed_ms += delta_s * 1000
+                    arc = state.current_arc
+                    if state.current_chapter_index < len(arc.chapters):
+                        chapter = arc.chapters[state.current_chapter_index]
+                        if state.current_phase_index < len(chapter.phases):
+                            phase = chapter.phases[state.current_phase_index]
+                            if phase.beats and state.current_beat_index < len(phase.beats):
+                                beat = phase.beats[state.current_beat_index]
+                                text = beat.text_en
+                                typed = int(state.phase_elapsed_ms / 30)
+                                state.phase_typed_chars = min(typed, len(text))
+
                 _render(
                     root_console, t, portraits, state, _global_prog_registry, _global_ice_registry
                 )
@@ -153,6 +166,99 @@ def _maybe_spawn_jackin_glitch(state: AppState) -> None:
     except ImportError:
         # Combat effects not loaded yet; fall back to a status hint only.
         state.status_messages.append(">>> Jacking into the matrix...")
+
+
+def _render_cyberspace_map(console: tcod.console.Console, t: Translator, state: AppState) -> None:
+    """Render CYBERSPACE_MAP as a tree view of worlds/sectors/servers."""
+    console.clear(bg=(0, 0, 0))
+    width = console.width
+
+    title = "CYBERSPACE — World Map"
+    console.print(0, 0, "═" * width)
+    console.print((width - len(title)) // 2, 0, f" {title} ")
+    console.print(0, 1, "─" * width)
+
+    wm = state.world_map
+    if wm is None:
+        return
+
+    y = 3
+    for world_id, world in wm.worlds.items():
+        marker = "▸ " if world_id == wm.current_world else "  "
+        console.print(x=2, y=y, string=f"{marker}WORLD: {world.name}", fg=(255, 255, 0))
+        y += 1
+        for sector_id, sector in world.sectors.items():
+            s_marker = "→ " if sector_id == wm.current_sector else "  "
+            server_count = len(sector.servers)
+            console.print(
+                x=6, y=y, string=f"{s_marker}SECTOR: {sector.name} [{server_count} servers]", fg=(180, 180, 100)
+            )
+            y += 1
+            for server in sector.servers[:5]:
+                sv_marker = "• " if server.id == wm.current_server else "  "
+                console.print(x=10, y=y, string=f"{sv_marker}{server.name}", fg=(200, 200, 200))
+                y += 1
+            if len(sector.servers) > 5:
+                console.print(x=10, y=y, string=f"  ... and {len(sector.servers) - 5} more", fg=(100, 100, 100))
+                y += 1
+        y += 1
+
+    console.print(0, console.height - 1, "═" * width)
+    console.print(x=2, y=console.height - 1, string="[ESC] Back to Hub", fg=(128, 128, 128))
+
+
+def _render_arc_phase(
+    console: tcod.console.Console,
+    phase: object,
+    beat_index: int,
+    typed_chars: int,
+    beat_elapsed_ms: float,
+    phase_elapsed_ms: float,
+    translator: Translator,
+) -> None:
+    """Render an arc phase using phase_view.render_arc_phase."""
+    from typing import cast
+
+    from . import phase_view
+    from .chapter_cutscene import PhaseData
+
+    phase_view.render_arc_phase(
+        console, cast(PhaseData, phase), beat_index, typed_chars, beat_elapsed_ms, phase_elapsed_ms, translator
+    )
+
+
+def _advance_arc_phase(state: AppState) -> None:
+    """Advance to the next beat, phase, or chapter in ARC_PHASE."""
+    arc = state.current_arc
+    if arc is None:
+        state.screen = ScreenKind.MENU
+        return
+
+    if state.current_chapter_index >= len(arc.chapters):
+        state.screen = ScreenKind.MENU
+        return
+
+    chapter = arc.chapters[state.current_chapter_index]
+    if state.current_phase_index >= len(chapter.phases):
+        state.current_chapter_index += 1
+        state.current_phase_index = 0
+        state.current_beat_index = 0
+        state.phase_elapsed_ms = 0.0
+        state.phase_typed_chars = 0
+        if state.current_chapter_index >= len(arc.chapters):
+            state.screen = ScreenKind.MENU
+        return
+
+    phase = chapter.phases[state.current_phase_index]
+    if state.current_beat_index >= len(phase.beats):
+        state.current_phase_index += 1
+        state.current_beat_index = 0
+        state.phase_elapsed_ms = 0.0
+        state.phase_typed_chars = 0
+        return
+
+    state.current_beat_index += 1
+    state.phase_typed_chars = 0
 
 
 def _render(
@@ -306,21 +412,37 @@ def _render(
         registry = story_screen.StoryRegistry.load(config_mod.DATA_DIR)
         story_screen.render_story(console, state, registry, state.story_aftermath_id)
     elif state.screen is ScreenKind.ARC_PHASE:
-        console.clear(bg=(0, 0, 0))
-        msg = "[ARC_PHASE] — not yet fully implemented"
-        console.print(x=2, y=2, string=msg, fg=(180, 180, 100))
-        hint = "[ESC] Return to menu"
-        console.print(x=2, y=4, string=hint, fg=(128, 128, 128))
+        if state.current_arc is None:
+            console.clear(bg=(0, 0, 0))
+            console.print(x=2, y=2, string="=== NO ARC DATA ===", fg=(255, 0, 0))
+            console.print(x=2, y=4, string="Play through CHAPTER first.", fg=(128, 128, 128))
+        else:
+            arc = state.current_arc
+            if state.current_chapter_index < len(arc.chapters):
+                chapter = arc.chapters[state.current_chapter_index]
+                if state.current_phase_index < len(chapter.phases):
+                    phase = chapter.phases[state.current_phase_index]
+                    _render_arc_phase(
+                        console, phase, state.current_beat_index,
+                        state.phase_typed_chars, 0.0, state.phase_elapsed_ms, t
+                    )
+                else:
+                    console.clear(bg=(0, 0, 0))
+                    console.print(x=2, y=2, string="Arc complete.", fg=(180, 180, 100))
+            else:
+                console.clear(bg=(0, 0, 0))
+                console.print(x=2, y=2, string="All arcs complete.", fg=(180, 180, 100))
     elif state.screen is ScreenKind.CYBERSPACE_BROWSER:
         from . import cyberspace_browser as cb_screen
 
         cb_screen.render_cyberspace_browser(console, t, state)
     elif state.screen is ScreenKind.CYBERSPACE_MAP:
-        console.clear(bg=(0, 0, 0))
-        msg = "[CYBERSPACE_MAP] — not yet implemented"
-        console.print(x=2, y=2, string=msg, fg=(180, 180, 100))
-        hint = "[ESC] Return to menu"
-        console.print(x=2, y=4, string=hint, fg=(128, 128, 128))
+        if not hasattr(state, "world_map") or state.world_map is None:
+            console.clear(bg=(0, 0, 0))
+            console.print(x=2, y=2, string="=== NO WORLD DATA ===", fg=(255, 0, 0))
+            console.print(x=2, y=4, string="Start a mission from the Hub first.", fg=(128, 128, 128))
+        else:
+            _render_cyberspace_map(console, t, state)
     elif state.screen is ScreenKind.CHARACTER_SELECT:
         menu_screen.render_character_select(console, t, state)
     elif state.screen is ScreenKind.CHAPTER:
@@ -568,6 +690,14 @@ def _handle_input(
         if isinstance(event, tcod.event.KeyDown):
             if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
                 state.screen = ScreenKind.MENU
+                return True
+            if event.sym in (tcod.event.KeySym.SPACE, tcod.event.KeySym.RETURN, tcod.event.KeySym.RIGHT):
+                _advance_arc_phase(state)
+                return True
+            if event.sym in (tcod.event.KeySym.S,):
+                state.phase_elapsed_ms = float("inf")
+                state.phase_typed_chars = 9999
+                _advance_arc_phase(state)
                 return True
         return True
     if state.screen is ScreenKind.CYBERSPACE_BROWSER:

@@ -70,7 +70,7 @@ if TYPE_CHECKING:
     from ..audio import SoundConfig
     from ..cyberspace.world import WorldMap
     from ..run.state import RunState
-    from .chapter_cutscene import ChapterCutsceneState
+    from .chapter_cutscene import ArcData, ChapterCutsceneState
     from .chapter_view import ChapterData
     from .event_story import EventRegistry, EventState
     from .graphic_novel_view import SceneData
@@ -245,7 +245,7 @@ class AppState:
     # Chapter cutscene state (for chapter-internal cutscene playback)
     chapter_cutscene_state: ChapterCutsceneState | None = None
     # Arc phase state (for Story → Stage → Event pipeline)
-    current_arc: object = None  # ArcData
+    current_arc: ArcData | None = None  # ArcData
     current_chapter_index: int = 0
     current_phase_index: int = 0
     current_beat_index: int = 0
