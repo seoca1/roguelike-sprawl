@@ -2,6 +2,19 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | CHAPTER, CHARACTER_SELECT, NPC, ENDING 화면 완전 구현
+
+### 수정 내용
+1. **CHAPTER**: chapter_view.render_chapter 사용, handle_chapter_input (ENTER/Space/S=skip, ESC/Q=back), chapter_elapsed_ms 실시간 시계
+2. **CHARACTER_SELECT**: 3 jockey (K/Sil/Kas) 선택 화면, ↑↓ 네비게이션, Enter/N1-N3确认, 선택 후 chapter 로딩
+3. **NPC**: 기존 render_npc + handle_npc_input 연결 (npc_state 가드 포함)
+4. **ENDING**: render_ending (엔딩 A/B/C 표시), handle_ending_input (ESC→MENU)
+5. **이벤트 루프**: delta_s 기반으로 chapter_elapsed_ms 자동 증가
+
+### 결과
+- mypy: 0 errors, pytest: 4143 passed
+- 이제 메인 메뉴에서 New Run → 캐릭터 선택 → CHAPTER → HUB 플로우 완전 동작
+
 ## [2026-07-08] feat | 메인 메뉴 방향키 네비게이션 + 화면 디스패치 완전 구현
 
 ### 문제
