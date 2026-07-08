@@ -420,6 +420,29 @@ CHARACTER_OPTIONS = [
     ("카스 (Kas)", "heretic", "Wintermute's ally — Mona Lisa Overdrive"),
 ]
 
+_CHARACTER_TO_CHAPTER_FILE = {
+    "novice": "case.json",
+    "veteran": "sil.json",
+    "heretic": "kas.json",
+}
+
+
+def _load_chapter(state: AppState, char_id: str) -> None:
+    """Load chapter JSON for the given character ID into state."""
+    from . import config as config_mod
+    from .chapter_view import load_chapter
+
+    filename = _CHARACTER_TO_CHAPTER_FILE.get(char_id)
+    if filename is None:
+        return
+    chapter_path = config_mod.DATA_DIR / "story" / "chapters" / filename
+    try:
+        state.chapter_data = load_chapter(chapter_path)
+    except FileNotFoundError:
+        state.chapter_data = None
+    state.chapter_elapsed_ms = 0.0
+    state.chapter_typed_chars = 0
+
 
 def render_character_select(console: tcod.console.Console, t: Translator, state: AppState) -> None:
     """Render the CHARACTER_SELECT screen — choose jockey (ADR-0031)."""
@@ -466,11 +489,16 @@ def handle_character_select_input(event: object, state: AppState) -> bool:
         if event.sym in (tcod.event.KeySym.DOWN, tcod.event.KeySym.S):
             state.character_select_index = (state.character_select_index + 1) % 3
             return True
-        if event.sym in (tcod.event.KeySym.RETURN, tcod.event.KeySym.KP_ENTER, tcod.event.KeySym.SPACE):
+        if event.sym in (
+            tcod.event.KeySym.RETURN,
+            tcod.event.KeySym.KP_ENTER,
+            tcod.event.KeySym.SPACE,
+        ):
             idx = state.character_select_index
             char_id = CHARACTER_OPTIONS[idx][1]
             state.character_id = char_id
             state.chapter_id = f"chapter_{char_id}"
+            _load_chapter(state, char_id)
             state.screen = ScreenKind.CHAPTER
             return True
         if event.sym in (tcod.event.KeySym.N1, tcod.event.KeySym.N2, tcod.event.KeySym.N3):
@@ -479,6 +507,7 @@ def handle_character_select_input(event: object, state: AppState) -> bool:
             char_id = CHARACTER_OPTIONS[idx][1]
             state.character_id = char_id
             state.chapter_id = f"chapter_{char_id}"
+            _load_chapter(state, char_id)
             state.screen = ScreenKind.CHAPTER
             return True
     return True
