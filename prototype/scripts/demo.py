@@ -28,6 +28,7 @@ import tcod.console
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 from roguelike_sprawl.engine import hub, matrix_view, menu
+from roguelike_sprawl.engine.chapter_cutscene import get_arc_for_character
 from roguelike_sprawl.engine.chapter_view import chapter_for_character, tick_chapter
 from roguelike_sprawl.engine.graphic_novel_view import (
     Background,
@@ -195,6 +196,67 @@ def render_frame(
         )
     elif state.screen is ScreenKind.HUB:
         hub.render_hub(console, t, state)
+    elif state.screen is ScreenKind.CYBERSPACE_BROWSER and data_dir is not None:
+        from roguelike_sprawl.engine import cyberspace_browser as cb_screen
+
+        cb_screen.render_cyberspace_browser(console, t, state)
+    elif state.screen is ScreenKind.CYBERSPACE_MAP:
+        console.clear()
+        console.print(2, 2, "═══ CYBERSPACE MAP ═══")
+        if state.world_map:
+            y = 4
+            for world_id, world in state.world_map.worlds.items():
+                m = "▸ " if world_id == state.world_map.current_world else "  "
+                console.print(2, y, f"{m}WORLD: {world.name}")
+                y += 1
+                for sector_id, sector in world.sectors.items():
+                    sm = "→ " if sector_id == state.world_map.current_sector else "  "
+                    console.print(4, y, f"{sm}SECTOR: {sector.name} [{len(sector.servers)} servers]")
+                    y += 1
+                    for srv in sector.servers[:3]:
+                        vm = "• " if srv.id == state.world_map.current_server else "  "
+                        console.print(6, y, f"{vm}{srv.name}")
+                        y += 1
+                    if len(sector.servers) > 3:
+                        console.print(6, y, f"  ... and {len(sector.servers) - 3} more")
+                        y += 1
+                y += 1
+        else:
+            console.print(2, 4, "No world map loaded.")
+        console.print(2, console.height - 3, "[ESC] Back to Hub")
+    elif state.screen is ScreenKind.ARC_PHASE and state.current_arc is not None:
+        from roguelike_sprawl.engine import phase_view
+
+        arc = state.current_arc
+        if state.current_chapter_index < len(arc.chapters):
+            chapter = arc.chapters[state.current_chapter_index]
+            if state.current_phase_index < len(chapter.phases):
+                phase = chapter.phases[state.current_phase_index]
+                phase_view.render_arc_phase(
+                    console, phase, state.current_beat_index,
+                    state.phase_typed_chars, 0.0, state.phase_elapsed_ms, t
+                )
+    elif state.screen is ScreenKind.NPC:
+        from roguelike_sprawl.engine import npc_view
+
+        if state.npc_state is not None:
+            npc_view.render_npc(console, t, state, state.npc_state)
+        else:
+            console.clear()
+            console.print(2, 2, "=== NO NPC STATE ===")
+    elif state.screen is ScreenKind.EVENT:
+        from roguelike_sprawl.engine import event_view
+
+        if state.active_event is not None:
+            event_view.render_event_story(console, t, state, state.active_event)
+        else:
+            console.clear()
+            console.print(2, 2, "=== NO ACTIVE EVENT ===")
+    elif state.screen is ScreenKind.STORY and data_dir is not None:
+        from roguelike_sprawl.engine import story_view as story_screen
+
+        registry = story_screen.StoryRegistry.load(data_dir)
+        story_screen.render_story(console, state, registry, state.story_aftermath_id)
     elif state.screen is ScreenKind.MATRIX and state.matrix is not None:
         layout = matrix_view.get_layout(state.matrix)
         matrix_view.render_matrix(console, t, state, layout)
@@ -226,6 +288,7 @@ def _step_auto(
     missions: list[Mission],
     visited: set[str],
     mission_idx: list[int],
+    data_dir: Path | None = None,
 ) -> str:
     """Advance the state by one auto-step. Returns narration."""
     if state.screen is ScreenKind.MENU:
@@ -276,15 +339,76 @@ def _step_auto(
         state.chapter_id = f"chapter_{state.character_id}"
         state.chapter_elapsed_ms = 0.0
         state.chapter_typed_chars = 0
+        # Load arc data (same as _load_chapter in menu.py)
+        try:
+            from roguelike_sprawl.engine import config as config_mod
+            state.current_arc = get_arc_for_character(config_mod.DATA_DIR, state.character_id)
+        except Exception:
+            state.current_arc = None
+        state.current_chapter_index = 0
+        state.current_phase_index = 0
+        state.current_beat_index = 0
+        state.phase_elapsed_ms = 0.0
+        state.phase_typed_chars = 0
         state.screen = ScreenKind.CHAPTER
         return f"Auto: selected {state.character_id}. → Chapter."
 
     if state.screen is ScreenKind.CHAPTER:
-        # Auto-skip chapter after 2s of display
+        # Auto-skip chapter after 2s of display → ARC_PHASE (if arc) or HUB
         if state.chapter_elapsed_ms > 2000:
+            if state.current_arc is not None:
+                state.current_chapter_index = 0
+                state.current_phase_index = 0
+                state.current_beat_index = 0
+                state.phase_elapsed_ms = 0.0
+                state.phase_typed_chars = 0
+                state.screen = ScreenKind.ARC_PHASE
+                return "Auto: Chapter done. → Arc Phase."
             state.screen = ScreenKind.HUB
             return "Auto: Chapter done. → Hub."
         return f"Auto: chapter typing... ({state.chapter_typed_chars} chars)"
+
+    if state.screen is ScreenKind.ARC_PHASE:
+        # Auto-advance through beats/phases
+        arc = state.current_arc
+        if arc is None:
+            state.screen = ScreenKind.HUB
+            return "Auto: No arc. → Hub."
+        if state.current_chapter_index >= len(arc.chapters):
+            state.screen = ScreenKind.HUB
+            return "Auto: Arc complete. → Hub."
+        chapter = arc.chapters[state.current_chapter_index]
+        if state.current_phase_index >= len(chapter.phases):
+            state.current_chapter_index += 1
+            state.current_phase_index = 0
+            state.current_beat_index = 0
+            state.phase_elapsed_ms = 0.0
+            state.phase_typed_chars = 0
+            if state.current_chapter_index >= len(arc.chapters):
+                state.screen = ScreenKind.HUB
+                return "Auto: All chapters done. → Hub."
+            return f"Auto: Chapter {state.current_chapter_index}."
+        phase = chapter.phases[state.current_phase_index]
+        if state.current_beat_index >= len(phase.beats):
+            state.current_phase_index += 1
+            state.current_beat_index = 0
+            state.phase_elapsed_ms = 0.0
+            state.phase_typed_chars = 0
+            return f"Auto: Phase {state.current_phase_index} done."
+        # Tick beat typing
+        if phase.beats:
+            beat = phase.beats[state.current_beat_index]
+            text = beat.text_en
+            typed = int(state.phase_elapsed_ms / 30)
+            state.phase_typed_chars = min(typed, len(text))
+            if typed >= len(text) and state.phase_elapsed_ms >= 500:
+                state.current_beat_index += 1
+                state.phase_elapsed_ms = 0.0
+                state.phase_typed_chars = 0
+                return f"Auto: beat {state.current_beat_index}/{len(phase.beats)}."
+        state.phase_elapsed_ms += 100
+        return (f"Auto: arc ch{state.current_chapter_index} ph{state.current_phase_index} "
+                f"beat{state.current_beat_index}")
 
     if state.screen is ScreenKind.HUB:
         if not missions:
@@ -302,6 +426,17 @@ def _step_auto(
         state.screen = ScreenKind.MATRIX
         mission_idx[0] += 1
         return f"Auto: selected {m.title!r}. Jacking in..."
+
+    if state.screen is ScreenKind.CYBERSPACE_MAP:
+        # Demo: after showing map, return to Hub
+        if not hasattr(state, "_cyberspace_map_steps"):
+            state._cyberspace_map_steps = 0
+        state._cyberspace_map_steps += 1
+        if state._cyberspace_map_steps > 2:
+            state._cyberspace_map_steps = 0
+            state.screen = ScreenKind.HUB
+            return "Auto: Map viewed. → Hub."
+        return f"Auto: viewing cyberspace map... ({state._cyberspace_map_steps})"
 
     if state.screen is ScreenKind.MATRIX:
         assert state.matrix is not None
@@ -393,7 +528,7 @@ def main() -> int:
 
     while time.monotonic() - start < args.duration:
         elapsed = time.monotonic() - start
-        narration = _step_auto(state, missions, visited, mission_idx)
+        narration = _step_auto(state, missions, visited, mission_idx, data_dir)
         render_frame(console, state, t, data_dir)
         print_frame(console, state, step, elapsed, narration, clear=not args.no_clear)
         step += 1
