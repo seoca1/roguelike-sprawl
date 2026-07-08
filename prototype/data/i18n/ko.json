@@ -11,7 +11,7 @@
     "settings": "Settings",
     "quit": "Quit",
     "phase": "Phase: Main Menu",
-    "controls": "[1] New Run  [2] 그래픽 노블  [3] 이어하기  [4] 설정  [5] 크레딧  [6] 죽은 자키의 전당  [7] 도움말  [Q] 종료",
+    "controls": "[↑↓] 이동  [Enter] 확인  [1-7] 바로가기  [Q] 종료",
     "graphic_novel": "그래픽 노블 — 스토리 자동재생",
     "continue": "이어하기",
     "continue_no_save": "이어하기 (세이브 없음)",
@@ -94,5 +94,16 @@
     "on": "켜기",
     "off": "끄기",
     "keymap_value": "도움말 화면 참조"
+  },
+  "salvation": {
+    "title": "=== 구원 단계 — 에필로그 선택 ===",
+    "intro_controls": "[1-9] 선택   [ENTER] 확인   [ESC] 뒤로",
+    "epilogue_title": "=== 에필로그 ===",
+    "epilogue_controls": "[ENTER/SPACE] 진행   [S] 씬 건너뛰기   [ESC] 종료",
+    "ending_title": "=== 구원 단계 — 결말 선택 ===",
+    "ending_controls": "[A] 결말 A   [B] 결말 B   [C] 결말 C   [ESC] 뒤로",
+    "ending_a_desc": "새로운 시작이 기다리고 있다",
+    "ending_b_desc": "다른 길이 앞을 향한다",
+    "ending_c_desc": "세 번째 탈출구"
   }
 }

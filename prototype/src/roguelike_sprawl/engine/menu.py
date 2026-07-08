@@ -67,14 +67,17 @@ def render_menu(console: tcod.console.Console, t: Translator, state: AppState) -
         (OPTION_HELP, t("menu.help")),
     ]
     y = main_r.y + 1
+    selected = getattr(state, "menu_selected_index", 0)
     for i, (_key, label) in enumerate(options):
         # Dim disabled options (e.g. Continue when no save)
         dim = i + 1 == OPTION_CONTINUE and not has_save
-        fg = (100, 100, 100) if dim else (200, 200, 200)
+        is_selected = i == selected
+        marker = "▸ " if is_selected else "  "
+        fg = (100, 100, 100) if dim else ((255, 255, 0) if is_selected else (200, 200, 200))
         console.print(
             x=main_r.x + 4,
             y=y + i * 2,
-            string=f"[{i + 1}] {label}",
+            string=f"{marker}{label}",
             fg=fg,
         )
 
@@ -100,46 +103,76 @@ def render_menu(console: tcod.console.Console, t: Translator, state: AppState) -
     )
 
 
+def _select_menu_option(state: AppState, index: int) -> None:
+    """Execute the menu action for the given 0-based option index."""
+    has_save = getattr(state, "has_save", False)
+    if index == 0:
+        state.screen = ScreenKind.CHARACTER_SELECT
+    elif index == 1:
+        state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
+        state.gn_scene_chain = []
+        state.gn_scene_index = 0
+        state.gn_dialogue_index = 0
+        state.gn_elapsed_ms = 0.0
+        state.gn_paused = False
+    elif index == 2:
+        if has_save:
+            state.screen = ScreenKind.HUB
+            state.message = "Loading save..."
+        else:
+            state.message = "No save file. Use NEW RUN."
+    elif index == 3:
+        state.screen = ScreenKind.SETTINGS
+        state.settings_selected = 0
+    elif index == 4:
+        state.message = "Credits: (Phase 7+)"
+    elif index == 5:
+        state.screen = ScreenKind.HALL_OF_DEAD
+        state.hall_of_dead_selected = 0
+    elif index == 6:
+        state.screen = ScreenKind.HELP
+        state.help_page = 0
+
+
 def handle_menu_input(event: tcod.event.Event, state: AppState) -> bool:
     """Handle input on the menu screen. Returns False to quit.
 
-    ADR-0032: 5 menu options.
-    ADR-0040: 6 menu options (added Hall of Dead Jockeys).
+    Arrow keys (↑↓) navigate, Enter/Space confirms.
+    Number keys (1-7) also work.
     """
     if isinstance(event, KeyDown):
         if event.sym in (KeySym.ESCAPE, KeySym.Q):
             return False
+        if event.sym in (KeySym.UP, KeySym.W):
+            state.menu_selected_index = (state.menu_selected_index - 1) % MENU_OPTION_COUNT
+            return True
+        if event.sym in (KeySym.DOWN, KeySym.S):
+            state.menu_selected_index = (state.menu_selected_index + 1) % MENU_OPTION_COUNT
+            return True
+        if event.sym in (KeySym.RETURN, KeySym.KP_ENTER, KeySym.SPACE):
+            _select_menu_option(state, state.menu_selected_index)
+            return True
         if event.sym is KeySym.N1:
-            # NEW RUN: skip character select → character pick → chapter
-            state.screen = ScreenKind.CHARACTER_SELECT
+            state.menu_selected_index = 0
+            _select_menu_option(state, 0)
         elif event.sym is KeySym.N2:
-            # GRAPHIC NOVEL: enter graphic novel menu (ADR-0032)
-            state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
-            state.gn_scene_chain = []
-            state.gn_scene_index = 0
-            state.gn_dialogue_index = 0
-            state.gn_elapsed_ms = 0.0
-            state.gn_paused = False
+            state.menu_selected_index = 1
+            _select_menu_option(state, 1)
         elif event.sym is KeySym.N3:
-            # CONTINUE: load latest save → HUB (or message if no save)
-            if getattr(state, "has_save", False):
-                state.screen = ScreenKind.HUB
-                state.message = "Loading save..."
-            else:
-                state.message = "No save file. Use NEW RUN."
+            state.menu_selected_index = 2
+            _select_menu_option(state, 2)
         elif event.sym is KeySym.N4:
-            state.screen = ScreenKind.SETTINGS
-            state.settings_selected = 0
+            state.menu_selected_index = 3
+            _select_menu_option(state, 3)
         elif event.sym is KeySym.N5:
-            state.message = "Credits: (Phase 7+)"
+            state.menu_selected_index = 4
+            _select_menu_option(state, 4)
         elif event.sym is KeySym.N6:
-            # Hall of Dead Jockeys (ADR-0040)
-            state.screen = ScreenKind.HALL_OF_DEAD
-            state.hall_of_dead_selected = 0
+            state.menu_selected_index = 5
+            _select_menu_option(state, 5)
         elif event.sym is KeySym.N7:
-            # Help screen (Phase 7: tutorial/onboarding)
-            state.screen = ScreenKind.HELP
-            state.help_page = 0
+            state.menu_selected_index = 6
+            _select_menu_option(state, 6)
     return True
 
 

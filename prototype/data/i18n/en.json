@@ -11,7 +11,7 @@
     "settings": "Settings",
     "quit": "Quit",
     "phase": "Phase: Main Menu",
-    "controls": "[1] New Run  [2] Graphic Novel  [3] Continue  [4] Settings  [5] Credits  [6] Hall of Dead  [7] Help  [Q] Quit",
+    "controls": "[↑↓] Navigate  [Enter] Confirm  [1-7] Jump to option  [Q] Quit",
     "graphic_novel": "Graphic Novel — story auto-play",
     "continue": "Continue",
     "continue_no_save": "Continue (no save)",
@@ -94,5 +94,16 @@
     "on": "ON",
     "off": "OFF",
     "keymap_value": "See Help screen"
+  },
+  "salvation": {
+    "title": "=== SALVATION PHASE — Epilogue Selection ===",
+    "intro_controls": "[1-9] Select   [ENTER] Confirm   [ESC] Back",
+    "epilogue_title": "=== EPILOGUE ===",
+    "epilogue_controls": "[ENTER/SPACE] Advance   [S] Skip scene   [ESC] Quit",
+    "ending_title": "=== SALVATION PHASE — Ending Selection ===",
+    "ending_controls": "[A] Ending A   [B] Ending B   [C] Ending C   [ESC] Back",
+    "ending_a_desc": "A new beginning awaits",
+    "ending_b_desc": "The other path forward",
+    "ending_c_desc": "The third way out"
   }
 }

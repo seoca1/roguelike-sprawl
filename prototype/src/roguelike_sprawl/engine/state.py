@@ -141,6 +141,7 @@ class AppState:
     # of the abstract node graph (matrix_view). Toggle via `D` key.
     dungeon_mode: bool = False
     hub_selected_index: int = 0
+    menu_selected_index: int = 0
     message: str = ""
     # Fog of war / exploration state (ADR-0020). None until a matrix
     # is loaded. Owned by the matrix screen.
