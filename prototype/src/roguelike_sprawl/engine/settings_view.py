@@ -151,6 +151,10 @@ def handle_settings_input(
             if hasattr(state, "settings_selected"):
                 delattr(state, "settings_selected")
             return state
+        elif opt_id == "keymap":
+            return state
+        elif opt_id == "resolution":
+            return state
 
     if event.sym in (KeySym.LEFT, KeySym.MINUS, KeySym.KP_MINUS):
         opt_id = SETTINGS_OPTIONS[selected][0]
