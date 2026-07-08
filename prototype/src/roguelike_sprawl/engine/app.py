@@ -123,21 +123,26 @@ def _main_inner() -> int:
                             state.screen = ScreenKind.HUB
 
                 if state.screen is ScreenKind.ARC_PHASE and state.current_arc is not None:
-                    state.phase_elapsed_ms += delta_s * 1000
                     arc = state.current_arc
                     if state.current_chapter_index < len(arc.chapters):
                         chapter = arc.chapters[state.current_chapter_index]
                         if state.current_phase_index < len(chapter.phases):
                             phase = chapter.phases[state.current_phase_index]
-                            if phase.beats and state.current_beat_index < len(phase.beats):
-                                beat = phase.beats[state.current_beat_index]
-                                text = beat.text_en
-                                typed = int(state.phase_elapsed_ms / 30)
-                                state.phase_typed_chars = min(typed, len(text))
-                                if typed >= len(text) and state.phase_elapsed_ms >= 500:
-                                    state.phase_elapsed_ms = 0.0
-                                    state.phase_typed_chars = 0
-                                    _advance_arc_phase(state)
+                            if phase.beats:
+                                if state.current_beat_index < len(phase.beats):
+                                    state.phase_elapsed_ms += delta_s * 1000
+                                    beat = phase.beats[state.current_beat_index]
+                                    text = beat.text_en
+                                    typed = int(state.phase_elapsed_ms / 30)
+                                    state.phase_typed_chars = min(typed, len(text))
+                                    typecomplete_ms = len(text) * 30
+                                    if state.phase_elapsed_ms >= typecomplete_ms + 50:
+                                        state.phase_elapsed_ms = 0.0
+                                        state.phase_typed_chars = 0
+                                        _advance_arc_phase(state)
+                                else:
+                                    # All beats done — accumulate elapsed time so SPACE advances
+                                    state.phase_elapsed_ms += delta_s * 1000
 
                 _render(
                     root_console, t, portraits, state, _global_prog_registry, _global_ice_registry
