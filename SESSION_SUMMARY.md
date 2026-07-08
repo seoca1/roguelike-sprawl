@@ -1,9 +1,9 @@
-# Session Summary — 2026-07-08 (v0.7.2)
+# Session Summary — 2026-07-08 (v0.7.3)
 
 > **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: CHAPTER/CHARACTER_SELECT/NPC/ENDING 화면 완전 구현
+> **세션 범위**: EVENT/STORY/CYBERSPACE_BROWSER 완전 구현 + 4개 스텁
 > **테스트**: 4143 passed (39 skipped, 3 integration pre-existing failures)
-> **변경 파일**: 4 files
+> **변경 파일**: 1 file (app.py)
 
 ---
 
@@ -62,8 +62,8 @@
 
 ### 즉시 착수 가능
 1. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
-2. **EVENT/STORY/ARC_PHASE**: 기존 render 함수는 있으나 입력 핸들러 없음 (ESC→MENU 스텁만)
-3. **CYBERSPACE_BROWSER/MAP**: 기존 render 함수는 있으나 입력 핸들러 없음
+2. **ARC_PHASE**: PhaseData + 상태 로딩 필요 (현재 스텁)
+3. **CYBERSPACE_MAP**: 아직 미구현 (스텁)
 
 ### 중장기 작업
 4. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
@@ -93,16 +93,16 @@
 
 | 커밋 | 설명 |
 |---|---|
+| `e522962` | feat(app): implement EVENT/STORY/CYBERSPACE_BROWSER screens, add stubs for remaining |
 | `6dff8bd` | feat(app): implement CHAPTER, CHARACTER_SELECT, NPC, ENDING screens |
 | `b4978ed` | feat(app): implement SAVED_PROGRESS + DEATH_SUMMARY screens, add stub handlers |
 | `1251a22` | feat(graphic_novel): implement GRAPHIC_NOVEL screen in game loop |
 | `6152f11` | fix(menu+app): add missing screen dispatches for GRAPHIC_NOVEL_MENU and HALL_OF_DEAD |
 | `4a5efbe` | feat(menu): arrow key navigation + cursor indicator |
-| `65295cf` | fix(menu): New Run → HUB (CHARACTER_SELECT not yet implemented) |
 
 ---
 
 **세션 종료 시간**: 2026-07-08
 **최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4143 ✅
-**이 문서 버전**: v0.7.2
-**이전 버전**: v0.7.1 (2026-07-08)
+**이 문서 버전**: v0.7.3
+**이전 버전**: v0.7.2 (2026-07-08)

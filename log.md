@@ -2,6 +2,22 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | EVENT/STORY/CYBERSPACE_BROWSER 완전 구현 + 4개 스텁
+
+### 수정 내용
+1. **EVENT**: event_view.render_event_story + handle_event_input 연결 (active_event 사용)
+2. **STORY**: story_view.render_story + handle_story_input 연결 (StoryRegistry 로딩)
+3. **CYBERSPACE_BROWSER**: cyberspace_browser.render_cyberspace_browser + handle_browser_input 연결
+4. **GRAPHIC_NOVEL_ENDING_MENU**: render_graphic_novel_ending_menu 사용 (ESC→MENU 스텁)
+5. **SAVE_SLOT_SELECT**: save_load_view.render_save_load + handle_save_load_input 사용
+6. **ARC_PHASE**: 스텁 (ESC→MENU)
+7. **CYBERSPACE_MAP**: 스텁 (ESC→MENU)
+
+### 결과
+- mypy: 0 errors, pytest: 4143 passed
+
+---
+
 ## [2026-07-08] feat | CHAPTER, CHARACTER_SELECT, NPC, ENDING 화면 완전 구현
 
 ### 수정 내용
