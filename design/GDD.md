@@ -51,82 +51,119 @@
 
 ## 4. Core Systems
 
-자세한 명세는 `systems/` 참조.
+자세한 명세는 `systems/` 참조. 모든 시스템이 문서화됨 (2026-07-08 기준).
 
-| 시스템 | 문서 | 상태 |
-| --- | --- | --- |
-| 전투 | `systems/combat.md` | **작성됨 (ADR-0003 + ADR-0014)** |
-| 사이버스페이스 / 해킹 | `systems/hacking.md` | 미작성 |
-| 미션 | `systems/missions.md` | 미작성 |
-| 진행 | `systems/progression.md` | 미작성 |
-| 경제 | `systems/economy.md` | 미작성 |
-| 인벤토리 | `systems/inventory.md` | 미작성 |
-| 대화 | `systems/dialogue.md` | 미작성 |
-| 절차적 생성 | `systems/procgen.md` | 미작성 |
-| **Story Archive** | `systems/story-archive.md` | 미작성 (ADR-0009) |
-| **i18n** | `systems/i18n.md` | 미작성 (ADR-0010) |
-| **Combat** | `systems/combat.md` | **작성됨 (ADR-0003 + ADR-0014)** |
-| **Crafting** | `systems/crafting.md` | **작성됨 (ADR-0015)** |
-| **Jockey Avatar** | `systems/avatar.md` | **작성됨 (ADR-0016)** |
-| **Missions** | `systems/missions.md` | **작성됨 (ADR-0017)** |
-| **Animations** | `systems/animations.md` | **작성됨 (ADR-0018)** |
-| **Aftermath & Subtitles** | `systems/aftermath.md` | **작성됨 (ADR-0019)** |
-| **ASCII Portraits** | `systems/ascii-portraits.md` | **작성됨** (ADR-0011) |
-| **Difficulty Rating (PPL & ZDR)** | `systems/difficulty-rating.md` | **작성됨** (ADR-0012) |
-| **Story Events** | `systems/story-events.md` | **작성됨** (ADR-0013) |
-| **Plot Skeleton** | `story_skeleton.md` | **작성됨** (5 arcs + 4+ endings + 이벤트) |
+| 시스템 | 문서 | 상태 | ADR |
+| --- | --- | --- | --- |
+| 전투 (RT-MS) | `systems/combat.md` | **완료** | ADR-0003, ADR-0014 |
+| 사이버스페이스 / 해킹 | `systems/hacking.md` | **완료** | ADR-0005 |
+| 미션 | `systems/missions.md` | **완료** | ADR-0017 |
+| 진행 (메타) | `systems/progression.md` | **완료** | ADR-0008 |
+| 경제 (재화) | `systems/economy.md` | **완료** | — |
+| 인벤토리 / 장비 | `systems/inventory.md` | **완료** | — |
+| 대화 / NPC | `systems/dialogue.md` | **완료** | — |
+| 절차적 생성 | `systems/procgen.md` | **완료** | ADR-0005 |
+| Story Archive | `systems/story-archive.md` | **완료** | ADR-0009 |
+| i18n | `systems/i18n.md` | **완료** | ADR-0010 |
+| Crafting | `systems/crafting.md` | **완료** | ADR-0015 |
+| Jockey Avatar | `systems/avatar.md` | **완료** | ADR-0016 |
+| Animations | `systems/animations.md` | **완료** | ADR-0018 |
+| Aftermath & Subtitles | `systems/aftermath.md` | **완료** | ADR-0019 |
+| ASCII Portraits | `systems/ascii-portraits.md` | **완료** | ADR-0011 |
+| Difficulty Rating (PPL & ZDR) | `systems/difficulty-rating.md` | **완료** | ADR-0012 |
+| Story Events | `systems/story-events.md` | **완료** | ADR-0013 |
+| 탐험 / Fog of War | `systems/exploration.md` | **완료** | ADR-0020 |
+| Grade Progression | `systems/grade-progression.md` | **완료** | — |
+| Plot Skeleton | `story_skeleton.md` | **완료** | ADR-0031 |
 
 ## 5. Content Pillars
 
-### 의뢰 유형 (예정)
+### 의뢰 유형 (구현됨)
 
-- **Data Extraction** — 파일 탈취 (가장 흔함)
-- **ICE Bypass** — 특정 시스템의 방어선 뚫기
-- **Black Ops** — 다른 자키 해킹 / 제거
-- **Construct Retrieval** — AI construct 추출
-- **Sabotage** — 시스템 파괴
-- **Surveillance** — 정보 수집
-- **Counter-Intelligence** — 다른 자키의 흔적 지우기
+| 유형 | 설명 | 구현 |
+|------|------|------|
+| **Data Extraction** | 파일/데이터 탈취 (가장 흔함) | ✅ |
+| **Sabotage** | 시스템 파괴 | ✅ |
+| **Construct Retrieval** | AI construct 추출 | ✅ |
+| **Surveillance** | 정보 수집 | ✅ |
+| **Black Ops** | 다른 자키 해킹/제거 | ✅ (limited) |
+| **ICE Bypass** | 방어선 뚫기 | ✅ |
+| **Counter-Intelligence** | 흔적 지우기 | ✅ |
 
-### 적 유형 (예정)
+실제 미션 예시: `missions.json` (47 missions, 5 zones 균형)
 
-- **ICE** — 다양한 종류 (예: probe, watchdog, bulldog, asp)
-- **Black ICE** — 치명적
-- **Worms / Viruses** — 감염
-- **Hostile Deckers** — 다른 자키
-- **AIs / Constructs** — 알 수 없는 construct (보스급)
+### 적 유형 (구현됨)
 
-### 의뢰인 (예정)
+| 유형 | 설명 | 구현 |
+|------|------|------|
+| **ICE** | probe, watchdog, bulldog, asp, hellhound 등 41 types | ✅ |
+| **Black ICE** | 치명적, trace 진행 | ✅ |
+| **Boss ICE** | Wintermute, T-A Prime 3-phase | ✅ (ADR-0050) |
+| **Hostile Deckers** | NPC 자키 (limited) | ✅ |
+| **AIs / Constructs** | 보스급 (Dixie, Loa) | ✅ |
 
-- **Fixer** (The Finn 류) — 중개인
-- **Corporate** (T-A, Hosaka, Maas) — 기업
-- **Yakuza** — 일본 마피아
-- **Panther Moderns** — 자키 게릴라
-- **Lo Teks** — 궤도 난민
-- **Construct** — AI 의뢰 (드물게)
+### 의뢰인/세력 (구현됨)
+
+| 세력 | 설명 | 구현 |
+|------|------|------|
+| **The Finn** | Fixer — 주요 중개인 | ✅ |
+| **Tessier-Ashpool (T-A)** | corporate, Deep zone | ✅ |
+| **Hosaka** | corporate, Core zone | ✅ |
+| **Sense/Net** | corporate, Surface/Mid zone | ✅ |
+| **Yakuza** | 일본 마피아, Mid zone | ✅ |
+| **Lo Teks** | 궤도 난민 | ✅ |
+| **Panther Moderns** | 자키 게릴라 | ✅ (limited) |
 
 ## 6. 결정된 사항 (Decided)
 
-### 모든 핵심 결정 완료 (10/10)
-- **ADR-0001**: libtcod + Python ✓
-- **ADR-0002**: Pure ASCII ✓
-- **ADR-0003**: AP 턴 전투 ✓
-- **ADR-0004**: ECS-lite + 데이터 주도 ✓
-- **ADR-0005**: 노드 그래프 ✓
-- **ADR-0006**: 하이브리드 (unlock만 메타) ✓
-- **ADR-0007**: macOS + Windows ✓
-- **ADR-0008**: 런 내 스탯 고정 + 자키 등급 (메타) ✓
-- **ADR-0009**: Story/News 시스템 ✓ — meatspace 미표시, Story Archive
-- **ADR-0010**: i18n + Content Pipeline ✓ — en 1차 + ko 보조, 데이터 주도, plot bones 사전 정의
-- **ADR-0011**: ASCII Portraits ✓ — Pure ASCII 보강, 인물/객체 시각 식별, cyberspace only
-- **ADR-0012**: Difficulty Rating (PPL & ZDR) ✓ — 명시적 숫자, soft difficulty, 회피 가능
-- **ADR-0013**: Story Events ✓ — 소설 스토리 부가 콘텐츠, 아이템/program/construct 보상
-- **ADR-0014**: Data Salvage ✓ — 전투 승리 보상 (HEAL 20%, FRAG/CRED Phase 6+)
-- **ADR-0015**: Material & Crafting ✓ — 5 raw → 4 components → program/item/construct (3-tier)
-- **ADR-0016**: Jockey Avatar ✓ — 스틱 피규어, 부위별 stat 표현
-- **ADR-0017**: Mission-Material Integration ✓ — 6 미션 타입, Hub 4-패널, Recipe 트리 뷰
-- **ADR-0018**: Combat Animation ✓ — Normal 240ms gray vs Skill 600ms color, 깁슨 톤 글리치
-- **ADR-0019**: Combat Aftermath & Subtitles ✓ — 후일담 4 importance + 소설 인물 7명 반응 + 한글 자막
+### 핵심 결정 (ADR-0001 ~ ADR-0020)
+
+| ADR | 제목 | 상태 |
+|-----|------|------|
+| ADR-0001 | 엔진/프레임워크 (libtcod + Python) | **Accepted** |
+| ADR-0002 | 비주얼 스타일 (Pure ASCII) | **Accepted** |
+| ADR-0003 | 전투 시스템 (RT-MS) | **Accepted** |
+| ADR-0004 | 코드 아키텍처 (ECS-lite) | **Accepted** |
+| ADR-0005 | 사이버스페이스 표현 (노드 그래프) | **Accepted** |
+| ADR-0006 | 런 구조 (로그라이크 vs 로그라이트) | **Accepted** |
+| ADR-0007 | 플랫폼 타겟 (macOS + Windows) | **Accepted** |
+| ADR-0008 | 진행 / 레벨업 시스템 | **Accepted** |
+| ADR-0009 | Story / News 전달 시스템 | **Accepted** |
+| ADR-0010 | i18n + Content Pipeline | **Accepted** |
+| ADR-0011 | ASCII Portraits | **Accepted** |
+| ADR-0012 | Combat Difficulty (PPL & ZDR) | **Accepted** |
+| ADR-0013 | Story Events System | **Accepted** |
+| ADR-0014 | Data Salvage (전투 보상) | **Accepted** |
+| ADR-0015 | Material & Crafting System | **Accepted** |
+| ADR-0016 | Jockey Avatar | **Accepted** |
+| ADR-0017 | Mission-Material Integration | **Accepted** |
+| ADR-0018 | Combat Animation | **Accepted** |
+| ADR-0019 | Combat Aftermath & Subtitles | **Accepted** |
+| ADR-0020 | Fog of War + Exploration | **Accepted** |
+
+### Phase 6~7 결정 (ADR-0030 ~ ADR-0061)
+
+| ADR | 제목 | 상태 |
+|-----|------|------|
+| ADR-0030 | GitHub Utilization Plan | **Accepted** |
+| ADR-0031 | Original Scenario Integration | **Accepted** |
+| ADR-0032 | Graphic Novel Auto-Play Mode | **Accepted** |
+| ADR-0040 | Death & Restart Cycle | **Accepted** |
+| ADR-0041~0044 | Graphic Novel Content Expansion | **Accepted** |
+| ADR-0046~0049 | Graphic Novel Endings + Saves | **Accepted** |
+| ADR-0050 | Boss ICE System (Wintermute + T-A) | **Accepted** |
+| ADR-0051 | Mission Story Metadata | **Accepted** |
+| ADR-0052 | Short Story Expansion Plan | **Accepted** |
+| ADR-0060 | Dungeon Exploration Redesign | **Accepted** |
+| ADR-0061 | Novel Integration Architecture | **Accepted** |
+
+### Phase 8~10 결정 (ADR-0090 ~ ADR-0102)
+
+| ADR | 제목 | 상태 |
+|-----|------|------|
+| ADR-0090 | Salvation Phase Integration | **Accepted** |
+| ADR-0101 | Fiction Metadata Backfill | **Accepted** |
+| ADR-0102 | v1.0.0-beta.1 Release | **Accepted** |
 
 자세한 것은 `decisions/README.md` 참조.
 
@@ -146,20 +183,16 @@
 - **Pillar 5 (The Style)**: 깁슨 톤 + ASCII + mediated world + 다국어
 - **콘텐츠**: 데이터 주도, 초반 우선, plot bones 사전 정의
 
-### 추가 미해결 디자인 질문 (Phase 4 이후 결정)
-- 매트릭스의 노드 그래프 깊이 / 구조 (구체적 수치)
-- 알람 / trace 메카닉의 구체적 수치
-- 한 런의 길이: 30분, 60분, 90분?
-- 의뢰 난이도 시스템
-- 자키 등급 상승 조건 (정확한 수치)
-- unlock 트리 디자인
-- 노드 그래프 절차적 생성 알고리즘
-- **Story Archive**: 카테고리, 검색, 시간 이벤트 시스템
-- **Hub 표현**: 텍스트 메뉴 vs 작은 노드 그래프
-- **Construct 대화**: Dixie 류 동료 시스템
-- **한국어 톤 가이드**: 깁슨 톤의 한국어 차용
-- **엔딩 발동 조건**: 정확한 world state 트리거
-- **Arc trigger**: 자키 등급 / unlock / 선택
+### 미해결 / 열린 질문 (2026-07-08 기준)
+
+| 질문 | 상태 | 비고 |
+|------|------|------|
+| 한 런의 목표 길이 (30/60/90분) | ⏳ 열린 질문 | 플레이어 피드백 필요 |
+| 한국어 톤 가이드 (깁슨 한국어 차용) | ⏳ 열린 질문 | ADR-0010 참조 |
+| Arc trigger 조건 (등급/unlock/선택) | ✅ 해결 (ADR-0031) | 챕터 JSON + arc 데이터로 구현 |
+| Hub 표현 | ✅ 해결 | 텍스트 메뉴 + cyberspace construct |
+| Story Archive 카테고리/검색 | ✅ 해결 (ADR-0009) | 4 카테고리 + StoryEvents로 확장 |
+| Construct 동료 시스템 | ✅ 해결 (limited) | Dixie Flatline dialogue만 구현 |
 
 ## 7. Living Spec
 

@@ -1,7 +1,7 @@
 # Chapter 8: 3Jane Tessier-Ashpool (3Jane, Family Heir)
 
 > **이 문서는 [`../scenario/README.md`](../scenario/README.md)의 Chapter 8 명세.**
-> 캐릭터: **3Jane 테시에-애스풀 (3Jane Tessier-Ashpool)** · 동기: 가족 통합 · 단편: [3Jane Tessier-Ashpool](../../Fiction/wiki/characters/lady-3jane-tessier-ashpool)
+> 캐릭터: **3Jane 테시에-애스풀 (3Jane Tessier-Ashpool)** · 동기: 가족 통합 · 단편: [3Jane Tessier-Ashpool](../../../../Fiction/wiki/characters/lady-3jane-tessier-ashpool)
 
 ## 1. 캐릭터 프로필
 

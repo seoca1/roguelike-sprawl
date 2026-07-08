@@ -236,16 +236,17 @@ def render_chapter(
 def handle_chapter_input(event: object, state: object) -> bool:
     """Handle input on the CHAPTER screen.
 
-    ENTER/Space: advance to HUB immediately.
+    ENTER/Space: advance to ARC_PHASE (chapter arc beats).
     ESC/Q: cancel and return to menu.
     S: skip chapter (same effect as ENTER).
     """
     import tcod.event
+
     from .state import ScreenKind
 
     if isinstance(event, tcod.event.KeyDown):
         if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
-            state.screen = ScreenKind.HUB  # type: ignore
+            state.screen = ScreenKind.MENU  # type: ignore
             return True
         if event.sym in (
             tcod.event.KeySym.RETURN,
@@ -253,7 +254,7 @@ def handle_chapter_input(event: object, state: object) -> bool:
             tcod.event.KeySym.SPACE,
             tcod.event.KeySym.S,
         ):
-            state.screen = ScreenKind.HUB  # type: ignore
+            state.screen = ScreenKind.ARC_PHASE  # type: ignore
             return True
     return True
 

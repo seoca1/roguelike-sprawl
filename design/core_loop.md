@@ -141,20 +141,20 @@
 - **black ICE 치명타** (HP 큰 손실 또는 즉시 flatline)
 - **의뢰 시간 초과** (옵션)
 
-## 알람 / Trace 메카닉 (예정)
+## 알람 / Trace 메카닉 (구현됨)
 
-매트릭스 안에서 시간을 지날수록 위험 증가:
+매트릭스 안에서 시간을 지날수록 위험 증가 (6단계 알람):
 
-- **알람 레벨 0** — 평온, 시스템 인지 X
-- **알람 레벨 1** — 인지, 기본 ICE 배치
-- **알람 레벨 2** — 정찰, watchdog 배치
-- **알람 레벨 3** — 추적, hellhound 배치
-- **알람 레벨 4** — black ICE, trace 진행
-- **알람 레벨 5** — trace 완료, flatline 임박
+| 레벨 | 상태 | ICE 배치 |
+|------|------|----------|
+| 0 | 평온 | 없음 |
+| 1 | 인지 | 기본 ICE |
+| 2 | 정찰 | watchdog |
+| 3 | 추적 | hellhound |
+| 4 | Black ICE | trace 진행 |
+| 5 | Trace 완료 | flatline 임박 |
 
-플레이어는 알람이 오르기 전에 미션을 끝내거나, 추적을 끊어야 한다.
-
-알람은 ZDR (Zone Difficulty Rating)의 alarm_modifier에 영향 (ADR-0012).
+알람은 ZDR의 alarm_modifier에 영향 (ADR-0012).
 
 ## PPL & ZDR (Difficulty Visibility, ADR-0012)
 
@@ -187,16 +187,21 @@ Combat 진입 전 / 중, 플레이어는 두 숫자로 위험을 파악:
 - **FUTILE zone**: 강력 경고, 권장 X
 - **보상 곡선**: 위험한 zone = 더 큰 보상
 
-## Open Questions
+## Open Questions (2026-07-08 기준)
 
-- **Hub의 표현**: 텍스트 메뉴로만? 또는 cyberspace 안의 작은 노드 그래프 (픽서 construct가 노드)?
-- **메타 진행 형태**: 영구 unlock? 단순한 다음 런 장비? construct 수집?
-- **시간 시스템**: 매트릭스 안에서 실시간 카운트다운? 턴? AP?
-- **다중 의뢰**: 한 런 = 한 의뢰, 또는 여러 의뢰?
-- **엔드 콘텐츠**: 한 번 클리어하면? T-A 결산? 무한 모드?
-- **Pillar 4의 경계**: construct는 메타 진행인가 런 내인가?
-- **Story Archive (ADR-0009)**:
-  - 카테고리 디자인 (briefing / result / world / faction / construct)
-  - 검색 / 필터링
-  - 시간 이벤트 (런 사이 시간 흐름 중 새로운 story 추가)
-  - Story 작성 가이드 (톤, 길이)
+아래 질문들은 Phase 7 완료 시점에서 아직 열린 것들:
+
+| 질문 | 상태 | 비고 |
+|------|------|------|
+| 한 런의 목표 길이 (30/60/90분) | ⏳ 열린 질문 | 플레이어 피드백 필요 |
+| Construct 동료 시스템 (Dixie 류) | ⏳ 열린 질문 | dialogue만 구현, 실제 동료 아님 |
+| 엔드 게임: T-A 결산 이후 | ⏳ 열린 질문 | Salvation Phase (ADR-0090) 일부 구현 |
+| 무한 모드 / New Game+ | ⏳ 열린 질문 | Phase 10 이후 고려 |
+
+**이미 해결된 질문들**:
+- ✅ Hub 표현 → 텍스트 메뉴 (cyberspace construct)
+- ✅ 메타 진행 → unlock 중심 (ADR-0008)
+- ✅ 시간 시스템 → 실시간 + RT-MS combat
+- ✅ 다중 의뢰 → 한 런 = 한 의뢰 (Pillar 1)
+- ✅ Pillar 4 경계 → unlock은 메타, 평가는 런 내
+- ✅ Story Archive → 4 카테고리 + StoryEvents (ADR-0009)

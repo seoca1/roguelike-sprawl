@@ -14,6 +14,8 @@ Outputs (overwritten in place):
     dashboard/data/library_stats.json  — catalog size, hook kinds, layers, tests
     dashboard/data/mission_stats.json  — arcs, chapters, characters, missions
     dashboard/data/journey_stats.json  — novice/veteran/heretic totals
+    dashboard/data/design_system.json   — 5 pillars, anti-patterns, PPL/ZDR, tiers, world hierarchy
+    dashboard/data/faction_stats.json   — 5 factions, reputation tiers, mechanics
     dashboard/data/data_index.json     — index of all available JSON files
 
 The generator is intentionally pure-stdlib so it works under both
@@ -114,13 +116,18 @@ def load_library_stats(repo: Path) -> dict[str, object]:
         "_generated_at": "",
     }
 
-    def _scan_dir(dir_path: Path) -> tuple[set[str], dict[str, dict[str, str]]]:
-        """Scan a derivative subdirectory for EN/KO pairs. Returns (stems, titles)."""
+    def _scan_dir(dir_path: Path) -> tuple[set[str], dict[str, dict[str, str]], dict[str, str]]:
+        """Scan a derivative subdirectory for EN/KO pairs.
+
+        Returns (stems, titles, derivative_types).
+        derivative_types maps stem -> 'short_story' or 'novelette' (from frontmatter).
+        """
         if not dir_path.exists():
-            return set(), {}
+            return set(), {}, {}
         md_files = list(dir_path.glob("*.md"))
         stems: set[str] = set()
         per_stem_titles: dict[str, dict[str, str]] = {}
+        derivative_types: dict[str, str] = {}
         for f in md_files:
             name = f.name
             is_ko = name.endswith(".ko.md")
@@ -131,9 +138,24 @@ def load_library_stats(repo: Path) -> dict[str, object]:
                 stem = stem[:-len(".md")]
             stems.add(stem)
             title = stem.replace("_", " ").title()
+            dtype = "short_story"  # default
             try:
-                head = f.read_text(encoding="utf-8").splitlines()[:6]
-                for line in head:
+                text = f.read_text(encoding="utf-8")
+                lines = text.splitlines()
+                head = lines[:200]
+                fm_text = ""
+                if head and head[0] == "---":
+                    fm_lines = []
+                    for line in head[1:]:
+                        if line == "---":
+                            break
+                        fm_lines.append(line)
+                    fm_text = "\n".join(fm_lines)
+                fm_match = re.search(r"derivative_type:\s*(\S+)", fm_text)
+                if fm_match:
+                    dtype = fm_match.group(1).strip().strip('"')
+                # Extract title from first # heading
+                for line in text.splitlines()[1:]:
                     if line.startswith("# "):
                         title = line[2:].strip()
                         break
@@ -141,7 +163,8 @@ def load_library_stats(repo: Path) -> dict[str, object]:
                 pass
             slot = per_stem_titles.setdefault(stem, {})
             slot["ko" if is_ko else "en"] = title
-        return stems, per_stem_titles
+            derivative_types[stem] = dtype
+        return stems, per_stem_titles, derivative_types
 
     base = repo.parent / "Fiction" / "derivative" / "sprawl-trilogy"
     short_dir = base / "short-stories"
@@ -165,22 +188,43 @@ def load_library_stats(repo: Path) -> dict[str, object]:
                 novel_dir = cand
                 break
 
-    short_stems, short_titles = _scan_dir(short_dir)
-    novel_stems, novel_titles = _scan_dir(novel_dir)
+    short_stems, short_titles, short_dtypes = _scan_dir(short_dir)
+    novel_stems, novel_titles, novel_dtypes = _scan_dir(novel_dir)
 
-    out["short_stories_en"] = sum(1 for f in short_dir.glob("*.md") if not f.name.endswith(".ko.md")) if short_dir.exists() else 0
-    out["short_stories_ko"] = sum(1 for f in short_dir.glob("*.ko.md")) if short_dir.exists() else 0
-    out["novelettes_en"] = sum(1 for f in novel_dir.glob("*.md") if not f.name.endswith(".ko.md")) if novel_dir.exists() else 0
-    out["novelettes_ko"] = sum(1 for f in novel_dir.glob("*.ko.md")) if novel_dir.exists() else 0
+    # Use frontmatter derivative_type as source of truth, not directory name
+    all_dtypes = {**short_dtypes, **novel_dtypes}
 
-    # Combined catalog
+    en_stems = set()
+    ko_stems = set()
+    for f in (list(short_dir.glob("*.md") if short_dir.exists() else []) +
+               list(novel_dir.glob("*.md") if novel_dir.exists() else [])):
+        is_ko = ".ko." in f.name
+        stem = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", f.name)
+        stem = re.sub(r"\.ko\.md$", "", stem) if is_ko else re.sub(r"\.md$", "", stem)
+        if is_ko:
+            ko_stems.add(stem)
+        else:
+            en_stems.add(stem)
+
+    # Count by derivative_type (from frontmatter), not directory
+    novel_en = sum(1 for s in en_stems if all_dtypes.get(s) == "novelette")
+    novel_ko = sum(1 for s in ko_stems if all_dtypes.get(s) == "novelette")
+    short_en = sum(1 for s in en_stems if all_dtypes.get(s) == "short_story")
+    short_ko = sum(1 for s in ko_stems if all_dtypes.get(s) == "short_story")
+
+    out["short_stories_en"] = short_en
+    out["short_stories_ko"] = short_ko
+    out["novelettes_en"] = novel_en
+    out["novelettes_ko"] = novel_ko
+
+    # Combined catalog — use frontmatter type
     all_stems = short_stems | novel_stems
     all_titles = {**short_titles, **novel_titles}
     out["catalog_entries"] = len(all_stems)
     out["catalog_entries_list"] = [
         {
             "stem": s,
-            "type": "novelette" if s in novel_stems else "short_story",
+            "type": all_dtypes.get(s, "short_story"),
             "title_en": all_titles.get(s, {}).get("en", s.replace("_", " ").title()),
             "title_ko": all_titles.get(s, {}).get("ko", ""),
         }
@@ -793,6 +837,330 @@ def load_journey_stats(repo: Path) -> dict[str, object]:
     return out
 
 
+def load_faction_stats(repo: Path) -> dict[str, object]:
+    """Extract faction system data from source.
+
+    Sources:
+    - matrix/node.py: Faction enum (5 factions)
+    - run/reputation.py: tier thresholds and mechanics
+    """
+    out: dict[str, object] = {
+        "factions": [],
+        "tier_thresholds": [],
+        "max_delta_per_event": 25,
+        "_generated_at": "",
+    }
+
+    # Faction enum from matrix/node.py
+    nk = repo / "prototype" / "src" / "roguelike_sprawl" / "matrix" / "node.py"
+    if nk.exists():
+        try:
+            src = nk.read_text(encoding="utf-8")
+            m = re.search(
+                r"class\s+Faction\s*\([^)]+\):.*?(?=^class\s|\Z)",
+                src, re.S | re.M,
+            )
+            if m:
+                faction_re = re.compile(
+                    r"^\s+([A-Z_][A-Z0-9_]*)\s*=\s*\"([a-z_]+)\"",
+                    re.M,
+                )
+                for name, val in faction_re.findall(m.group(0)):
+                    out["factions"].append({"name": name, "id": val})
+        except OSError:
+            pass
+
+    # Tier thresholds and mechanics from run/reputation.py
+    rp = repo / "prototype" / "src" / "roguelike_sprawl" / "run" / "reputation.py"
+    if rp.exists():
+        try:
+            src = rp.read_text(encoding="utf-8")
+            # Tier thresholds
+            m = re.search(
+                r"TIER_THRESHOLDS\s*:\s*list\[tuple\[int,\s*str\]\]\s*=\s*\[(.*?)\]",
+                src, re.S,
+            )
+            if m:
+                tier_re = re.compile(r"\(\s*(-?\d+)\s*,\s*\"([A-Z_]+)\"\s*\)")
+                for threshold, label in tier_re.findall(m.group(1)):
+                    out["tier_thresholds"].append({
+                        "threshold": int(threshold),
+                        "label": label,
+                    })
+            m2 = re.search(r"MAX_DELTA_PER_EVENT\s*=\s*(\d+)", src)
+            if m2:
+                out["max_delta_per_event"] = int(m2.group(1))
+        except OSError:
+            pass
+
+    return out
+
+
+def load_design_system(repo: Path) -> dict[str, object]:
+    """Build design_system.json from canonical game data + design docs.
+
+    Aggregates:
+    - 5 Design Pillars (from design/pillars.md)
+    - Anti-patterns list
+    - PPL/ZDR difficulty system
+    - Tier system (T1-T6, 9 programs)
+    - Mission distributions (by pillar / arc / zone / grade range)
+    - World hierarchy (2 worlds / 4 sectors / 6 servers)
+    - Alarm system (6 levels)
+    """
+    out: dict[str, object] = {
+        "design_pillars": [
+            {
+                "id": 1,
+                "name": "The Run",
+                "tagline_ko": "한 번의 침투, 명확한 끝",
+                "tagline_en": "One run, one job, one clear ending",
+                "color": "#66ffcc",
+                "mechanics_ko": ["job 단위 진행", "PPL/ZDR 난이도 명시", "Story Events"],
+                "anti_these_ko": ["무한 진행 모드", "일일 미션", "강제 진입"],
+            },
+            {
+                "id": 2,
+                "name": "The Matrix",
+                "tagline_ko": "사이버스페이스가 유일한 시각적 공간",
+                "tagline_en": "Cyberspace is the only visual space",
+                "color": "#00ccff",
+                "mechanics_ko": ["meatspace 절대 시각화 안함", "ASCII portrait는 cyberspace 안의 존재만"],
+                "anti_these_ko": ["meatspace 메인 게임", "현실 세계 직접 묘사"],
+            },
+            {
+                "id": 3,
+                "name": "The Flatline",
+                "tagline_ko": "죽음에 진짜 무게",
+                "tagline_en": "Death has real weight",
+                "color": "#ff5555",
+                "mechanics_ko": ["평시 캐릭터 Loss", "리스폰 없음", "메타 진행은 공격적이지 않음"],
+                "anti_these_ko": ["리스폰/부활", "가벼운 죽음 페널티", "death = positive"],
+            },
+            {
+                "id": 4,
+                "name": "The Build",
+                "tagline_ko": "런 사이 진행은 더 좋은 도구로",
+                "tagline_en": "Between runs, better tools",
+                "color": "#ffaa55",
+                "mechanics_ko": ["레벨업 = 아이템/장비 티어 (T1-T6)", "combat 강도는 program tier에 비례"],
+                "anti_these_ko": ["스탯 누적", "XP/레벨 시스템", "지속적 난이도 하락"],
+            },
+            {
+                "id": 5,
+                "name": "The Style",
+                "tagline_ko": "사이버펑크 미학 — 네온, 크롬, 가죽",
+                "tagline_en": "Cyberpunk aesthetics — neon, chrome, leather",
+                "color": "#9b59b6",
+                "mechanics_ko": ["깁슨 톤 정확히", "거칠고 비관적", "mediated world"],
+                "anti_these_ko": ["미니멀/유토피아 미래", "Cyberpunk 2077 톤", "화려한 비주얼"],
+            },
+        ],
+        "anti_patterns": [
+            {"id": "AP-1", "name": "Loot Grind", "desc_ko": "무한히 강한 적 = 무한히 좋은 loot"},
+            {"id": "AP-2", "name": "Multiplayer/Social", "desc_ko": "1인칭 솔로 경험"},
+            {"id": "AP-3", "name": "Skins/Cosmetics", "desc_ko": "시각적 다양성보다 의미"},
+            {"id": "AP-4", "name": "Daily Login", "desc_ko": "게임이 사용자 시간을 빼앗지 않음"},
+            {"id": "AP-5", "name": "Infinite Scaling", "desc_ko": "적이 계속 강해지는 시스템"},
+            {"id": "AP-6", "name": "Prestige", "desc_ko": "반복 플레이를 위한 인위적 시스템"},
+            {"id": "AP-7", "name": "Mobile/F2P", "desc_ko": "PC/Mac 솔로 게임"},
+        ],
+        "core_loop": {
+            "macro_ko": "Hub → Run(매트릭스 진입) → Extraction/Death → Result → Hub",
+            "stages": [
+                "PENDING", "BRIEFING", "TRAVEL", "MEET_NPC", "EXTRACT_DATA",
+                "BYPASS_SECURITY", "DEFEAT_ICE", "JACK_OUT", "REWARD",
+                "DEBRIEF", "COMPLETE", "DEATH_RESTART", "FAILED", "SALVATION_EPILOGUE",
+            ],
+            "micro_ko": "Navigation → Node 발견 → Decision → Action → Combat(RT-MS) → State Update",
+            "alarm_levels": [0, 1, 2, 3, 4, 5],
+            "combat": {
+                "name": "RT-MS (Real-Time Missile Storm)",
+                "desc_ko": "실시간 자동 공격 + 메뉴 스킬",
+                "tick_rate": "1 attack / 2초, 양쪽 동시",
+                "skill_count": 14,
+                "skill_effect_animations": 15,
+                "ice_types": 41,
+                "programs_count": 9,
+            },
+        },
+        "difficulty_system": {
+            "ppl_zdr": {
+                "desc_ko": "전투 전/중 위험 명시화 시스템",
+                "ppl_desc_ko": "Player Power Level — 자키의 현재 힘 (데크/프로그램 티어 합산)",
+                "zdr_desc_ko": "Zone Difficulty Rating — 현재 zone의 위험",
+                "status": [
+                    {"name": "SAFE", "ratio": "PPL > ZDR*1.5", "color": "#66ffcc"},
+                    {"name": "MATCH", "ratio": "ZDR*0.8 < PPL <= ZDR*1.5", "color": "#00ccff"},
+                    {"name": "TOUGH", "ratio": "ZDR*0.5 < PPL <= ZDR*0.8", "color": "#ffaa55"},
+                    {"name": "DEADLY", "ratio": "ZDR*0.25 < PPL <= ZDR*0.5", "color": "#ff5555"},
+                    {"name": "FUTILE", "ratio": "PPL <= ZDR*0.25", "color": "#ff0000"},
+                ],
+            },
+            "grade_progression": {"grades": [1, 2, 3, 4, 5, 6], "max_tier": 6},
+        },
+        "tier_system": {
+            "max_tier": 6,
+            "programs_count": 9,
+            "program_tiers": {},
+        },
+        "mission_distribution": {
+            "by_pillar": {},
+            "by_arc": {},
+            "by_zone": {},
+            "by_grade_range": {},
+        },
+        "world_hierarchy": {
+            "worlds": [],
+            "world_count": 0,
+            "sector_count": 0,
+            "server_count": 0,
+            "zone_depths": 0,
+        },
+        "alarm_system": {
+            "levels": [
+                {"level": 0, "name_ko": "평온", "ice_ko": "없음", "risk_ko": "없음"},
+                {"level": 1, "name_ko": "인지", "ice_ko": "기본 배치", "risk_ko": "낮음"},
+                {"level": 2, "name_ko": "정찰", "ice_ko": "watchdog", "risk_ko": "중간"},
+                {"level": 3, "name_ko": "추적", "ice_ko": "hellhound", "risk_ko": "높음"},
+                {"level": 4, "name_ko": "黑色ICE", "ice_ko": "black ICE, trace 진행", "risk_ko": "매우 높음"},
+                {"level": 5, "name_ko": "trace 완료", "ice_ko": "flatline 임박", "risk_ko": "치명적"},
+            ],
+        },
+        "_source_files": [
+            "design/pillars.md",
+            "design/core_loop.md",
+            "prototype/data/missions/missions.json",
+            "prototype/data/programs/programs.json",
+            "prototype/data/cyberspace/worlds.json",
+        ],
+    }
+
+    # Tier system from programs
+    prog_paths = [
+        repo / "prototype" / "data" / "programs.json",
+        repo / "prototype" / "data" / "programs" / "programs.json",
+    ]
+    for pp in prog_paths:
+        if pp.exists():
+            try:
+                pd = json.loads(pp.read_text(encoding="utf-8"))
+                if isinstance(pd, dict):
+                    tier_map: dict[int, list[str]] = {}
+                    for pname, pinfo in pd.items():
+                        if isinstance(pinfo, dict):
+                            t = pinfo.get("tier", 0)
+                            tier_map.setdefault(t, []).append(pname)
+                    out["tier_system"]["program_tiers"] = {
+                        f"T{k}": v for k, v in sorted(tier_map.items())
+                    }
+            except (json.JSONDecodeError, OSError):
+                pass
+            break
+
+    # Mission distributions
+    mp = repo / "prototype" / "data" / "missions" / "missions.json"
+    if mp.exists():
+        try:
+            md = json.loads(mp.read_text(encoding="utf-8"))
+            if isinstance(md, dict):
+                by_pillar: dict[str, int] = {}
+                by_arc: dict[int, int] = {}
+                by_zone: dict[str, int] = {}
+                by_grade: dict[str, int] = {}
+                for _k, v in md.items():
+                    if not isinstance(v, dict):
+                        continue
+                    story = v.get("story", {})
+                    pillar = (
+                        story.get("pillar", "unknown")
+                        if isinstance(story, dict) else "unknown"
+                    )
+                    arc = v.get("arc", 0)
+                    zone = v.get("zone", "unknown")
+                    g_min = v.get("grade_min", 0)
+                    g_max = v.get("grade_max", 0)
+                    by_pillar[pillar] = by_pillar.get(pillar, 0) + 1
+                    by_arc[arc] = by_arc.get(arc, 0) + 1
+                    by_zone[zone] = by_zone.get(zone, 0) + 1
+                    gk = f"grade_{g_min}-{g_max}"
+                    by_grade[gk] = by_grade.get(gk, 0) + 1
+                out["mission_distribution"]["by_pillar"] = by_pillar
+                out["mission_distribution"]["by_arc"] = {
+                    str(k): v for k, v in sorted(by_arc.items())
+                }
+                out["mission_distribution"]["by_zone"] = dict(sorted(by_zone.items()))
+                out["mission_distribution"]["by_grade_range"] = dict(
+                    sorted(by_grade.items())
+                )
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # World hierarchy
+    wp = repo / "prototype" / "data" / "cyberspace" / "worlds.json"
+    if wp.exists():
+        try:
+            wd = json.loads(wp.read_text(encoding="utf-8"))
+            if isinstance(wd, dict):
+                worlds = wd.get("worlds", {})
+                if isinstance(worlds, dict):
+                    out["world_hierarchy"]["world_count"] = len(worlds)
+                    out["world_hierarchy"]["world_names"] = [
+                        w.get("name", k) for k, w in worlds.items()
+                        if isinstance(w, dict)
+                    ]
+                    world_list: list[dict[str, object]] = []
+                    sector_count = 0
+                    server_count = 0
+                    for wid, winfo in worlds.items():
+                        if not isinstance(winfo, dict):
+                            continue
+                        sectors = winfo.get("sectors", {})
+                        if not isinstance(sectors, dict):
+                            continue
+                        sector_list: list[dict[str, object]] = []
+                        for sid, sinfo in sectors.items():
+                            if not isinstance(sinfo, dict):
+                                continue
+                            servers = sinfo.get("servers", [])
+                            sector_list.append({
+                                "id": sid,
+                                "name": sinfo.get("name", sid),
+                                "server_count": len(servers),
+                            })
+                            server_count += len(servers)
+                            sector_count += 1
+                        world_list.append({
+                            "id": wid,
+                            "name": winfo.get("name", wid),
+                            "sectors": sector_list,
+                        })
+                    out["world_hierarchy"]["worlds"] = world_list
+                    out["world_hierarchy"]["sector_count"] = sector_count
+                    out["world_hierarchy"]["server_count"] = server_count
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    # Zone depths from matrix/node.py
+    nk = repo / "prototype" / "src" / "roguelike_sprawl" / "matrix" / "node.py"
+    if nk.exists():
+        try:
+            src = nk.read_text(encoding="utf-8")
+            m = re.search(
+                r"class\s+ZoneDepth\s*\(\s*StrEnum\s*\):.*?(?=\n\nclass |\Z)",
+                src, re.S,
+            )
+            if m:
+                cnt = len(re.findall(
+                    r"^\s+[A-Z_]+\s*=\s*\"[a-z_]+\"", m.group(0), re.M
+                ))
+                out["world_hierarchy"]["zone_depths"] = cnt
+        except OSError:
+            pass
+
+    return out
+
+
 # ---------------------------------------------------------------------------
 # Driver
 # ---------------------------------------------------------------------------
@@ -812,6 +1180,8 @@ TARGETS = {
     "index_stats.json": load_index_stats,
     "character_stats.json": load_character_stats,
     "run_stats.json": load_run_stats,
+    "design_system.json": load_design_system,
+    "faction_stats.json": load_faction_stats,
 }
 
 

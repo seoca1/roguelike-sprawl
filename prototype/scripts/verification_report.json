@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-06-23T16:07:06.676409",
+  "timestamp": "2026-07-08T12:16:50.143768",
   "story_data": {
     "status": "PASS",
     "stories": {
@@ -8,7 +8,7 @@
         "beats": 103,
         "combats": 8,
         "en_chars": 23272,
-        "ko_chars": 11901,
+        "ko_chars": 11956,
         "ch5_complete": true
       },
       "sil": {
@@ -16,7 +16,7 @@
         "beats": 99,
         "combats": 12,
         "en_chars": 24549,
-        "ko_chars": 11560,
+        "ko_chars": 11630,
         "ch5_complete": true
       },
       "kas": {
@@ -24,7 +24,7 @@
         "beats": 100,
         "combats": 11,
         "en_chars": 19902,
-        "ko_chars": 10543,
+        "ko_chars": 10551,
         "ch5_complete": true
       }
     }
@@ -106,7 +106,7 @@
   },
   "combat_system": {
     "status": "PASS",
-    "ice_types": 29,
+    "ice_types": 41,
     "registry_functions": [
       "def __init__(self, skills: dict[str, Skill]) -> None:",
       "def load(cls, path: Path) -> ProgramRegistry:",
@@ -114,6 +114,10 @@
       "def __iter__(self) -> Iterator[Skill]:",
       "def __len__(self) -> int:",
       "def _default_skills() -> dict[str, Skill]:",
+      "def _default_offensive_skills() -> dict[str, Skill]:",
+      "def _default_defensive_skills() -> dict[str, Skill]:",
+      "def _default_heal_regen_skills() -> dict[str, Skill]:",
+      "def _default_buff_debuff_skills() -> dict[str, Skill]:",
       "def __init__(self, ice: dict[str, dict[str, int | str]]) -> None:",
       "def load(cls, path: Path) -> IceRegistry:",
       "def get(self, ice_id: str) -> dict[str, int | str] | None:",

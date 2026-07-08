@@ -138,7 +138,6 @@ def handle_salvation_intro_input(
         if event.sym is KeySym.RETURN or event.sym is KeySym.SPACE:
             confirmed_runner: SalvationRunner | None = getattr(state, "salvation_runner", None)
             if confirmed_runner and confirmed_runner.selection:
-
                 rs: RunState | None = state.run_state
                 if rs is None:
                     state.status_messages.append("Error: No active run state.")
@@ -260,7 +259,6 @@ def handle_salvation_epilogue_input(
         if event.sym in (KeySym.RETURN, KeySym.SPACE, KeySym.RIGHT):
             runner: SalvationRunner | None = getattr(state, "salvation_runner", None)
             if runner and runner.selection:
-
                 rs: RunState | None = state.run_state
                 if rs is None:
                     state.status_messages.append("Error: No active run state.")
@@ -295,7 +293,6 @@ def handle_salvation_epilogue_input(
         if event.sym is KeySym.S:
             runner = getattr(state, "salvation_runner", None)
             if runner:
-
                 rs2: RunState | None = state.run_state
                 if rs2 is None:
                     state.status_messages.append("Error: No active run state.")
@@ -398,7 +395,6 @@ def handle_salvation_ending_input(
 
         runner: SalvationRunner | None = getattr(state, "salvation_runner", None)
         if runner and runner.selection:
-
             rs: RunState | None = state.run_state
             if rs is None:
                 state.status_messages.append("Error: No active run state.")

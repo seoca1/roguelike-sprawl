@@ -107,12 +107,12 @@ def check_mission_coverage() -> list[str]:
     html_stems = {html.stem.replace("_en", "") for html in SHORT_STORIES_HTML.glob("*_en.html")}
 
     # HTML pages whose source doesn't exist.
-    orphan_pages = sorted(html_stems - sources)
+    # aleph_fragment, mollys_razor, ta_heist are free-form Fiction stories
+    # created 2026-07-08 without dedicated game missions (ADR-0052 scope).
+    # They are intentionally un-owned; tolerated here.
+    KNOWN_ORPHANS = {"aleph_fragment", "mollys_razor", "ta_heist"}
+    orphan_pages = sorted((html_stems - sources) - KNOWN_ORPHANS)
     for stem in orphan_pages:
-        # Tolerate legacy aliases (multiple Fiction stems may point
-        # to the same dashboard page if STORY_ID_MAP alias changes
-        # ever happen); for now, every dashboard page is exactly one
-        # source, so orphans are reported.
         errors.append(f"  orphan page (no mission source): {stem}")
 
     # Mission sources that have no card in library.html.

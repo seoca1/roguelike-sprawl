@@ -2,6 +2,20 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] verify | dashboard stats 확인 + 문서 일부 업데이트
+
+### 작업 내용
+1. **build_dashboard.py 실행**: 12개 stats 파일 전부 재생성 (2026-07-08T14:23:07)
+2. **stats 확인**: mission_stats (47 missions, 39 stories, 4 arcs, 4 chars), library_stats, design_system.json 전부 정상
+3. **pytest 실행**: 4106 passed, 39 skipped, 3 pre-existing failures (test_salvation.py — data/scenes 미존재)
+4. **chapter-progress.md**: 헤더 note 업데이트 (6자키 표 미존재 안내)
+5. **PROGRESS_DASHBOARD.md**: Phase 헤더 갱신 (Phase 4 historical → Phase 7), 요약 테이블 업데이트 (6/15→31/45 플레이어블, 2706→4106 tests), 테스트 상태 갱신
+
+### 결과
+- Fiction + roguelike_sprawl broken links: 0
+
+---
+
 ## [2026-07-08] feat | CHAPTER→ARC_PHASE 전환 + dashboard story HTML 수정
 
 ### 수정 내용

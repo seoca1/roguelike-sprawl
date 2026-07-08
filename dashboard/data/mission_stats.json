@@ -1,14 +1,14 @@
 {
   "missions": 47,
-  "stories": 36,
-  "html_files": 72,
-  "en_files": 36,
-  "ko_files": 36,
+  "stories": 39,
+  "html_files": 78,
+  "en_files": 39,
+  "ko_files": 39,
   "en_only": 0,
   "ko_only": 0,
-  "complete_pairs": 36,
-  "quotes": 36,
-  "references": 36,
+  "complete_pairs": 39,
+  "quotes": 39,
+  "references": 39,
   "arcs": 4,
   "chapters": 4,
   "characters": [
@@ -40,5 +40,5 @@
   ],
   "total_rewards": 24,
   "hub_visit_events": 1,
-  "_generated_at": "2026-07-08T02:51:29"
+  "_generated_at": "2026-07-08T14:23:07"
 }

@@ -2,15 +2,16 @@
 
 ## 변경 이력 (Recent)
 
-- **2026-07-07**: Phase 7 완료 — **4231 tests pass** — Help/Settings/Sound/Crash/Build/mypy 7/7 완료
-- **2026-07-04**: Phase 7+8+9 완료 — **4254 tests pass** (+145)
+- **2026-07-08**: CHAPTER→ARC_PHASE 전환 완료 + library_stats.json + dashboard HTML 수정 — **4146 tests pass**
+- **2026-07-07**: Phase 7 완료 (ADR-0090 Accepted) — **4146 tests pass** — Help/Settings/Sound/Crash/Build/mypy 7/7 완료
+- **2026-07-04**: Phase 6.1/6.2/7.1/7.2/7.3/8/9 완료 — **4254 tests pass** (+145)
   - **Phase 7.1** (f54ae7d, a376bf4): Wigan Ludgate + Angie Mitchell (5번째 + 6번째 자키, 16 씬)
   - **Phase 7.2** (7e8a0e4): Mid/Core/TA zone 9 신규 미션 + 3 신규 ICE (corporate_guard, archive_sentinel, wintermute_proxy)
   - **Phase 7.3** (42873a2): 세이브/로드 10슬롯 + AUTO_SAVE_SLOT=0
   - **Phase 8** (da5c64a): Sally Shears (7번째 자키, 8 씬)
   - **Phase 9** (105e58a, ed66754): 3Jane Tessier-Ashpool + Neuromancer (8번째 + 9번째 자키, 16 씬)
   - **9자키 완전 통합**: 72 GN scenes (9 chars × 8), 47 missions, 41 ICE types
-  - **ADR-0090 Draft**: Salvation Phase 통합 제안 (9자 × epilogue)
+  - **ADR-0090 Accepted** (2026-07-07): Salvation Phase 통합
 - **2026-07-04**: Phase 6.0+ 인프라 정리 + Phase 6.1/6.2 — **4109 tests pass** (+215)
   - **lint/mypy 174 → 0** (29c3eeb): ruff check/format + mypy strict 모두 green. 114 source files.
   - **ADR-0030 Accepted** (12764e2): GitHub 활용 계획 (MIT/Public/MkDocs 결정)
@@ -309,9 +310,9 @@ Phase 7: 알파 빌드
 
 ## 현재 위치
 
-**현재 Phase**: **Phase 7 완료 (2026-07-07)**
-**누적 테스트**: **4231 passed** + 44 skipped + 0 xfailed (2026-07-07)
-**검증 상태**: ruff check ✅ / ruff format ✅ / mypy strict ✅ (118 source files)
+**현재 Phase**: **Phase 7 완료 (2026-07-07), Phase 10 작업 중**
+**누적 테스트**: **4146 passed** + 39 skipped + 0 xfailed (2026-07-08)
+**검증 상태**: ruff check ✅ / ruff format ✅ / mypy strict ✅ (120 source files)
 
 **Phase 6+ 사이클 요약 (2026-07-04)**:
 - **lint/mypy 174 errors → 0** (29c3eeb) — 43 files 변경, +717/-645 lines

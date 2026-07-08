@@ -12,7 +12,7 @@
 - 🌐 **세계관 위키** — 사이버스페이스, Faction, Glossary, Style Guide
 - ⚙️ **디자인 노트** — GDD, Pillars, 시스템 명세
 - 📋 **결정 기록** — 60+ ADR (libtcod, RT-MS 전투, Faction Reputation 등)
-- 🗺️ **로드맵** — Phase 1~7 진행 상황
+- 🗺️ **로드맵** — Phase 1~10 (Phase 7 완료, Phase 10 작업 중)
 
 ## 라이선스
 

@@ -217,9 +217,10 @@ class TestTripleMapping:
         mission_stems = set(mission_sources.values())
         orphans = sorted(_dashboard_en_stems() - mission_stems)
         # Some dashboard pages are intentionally un-owned (e.g. free-form Fiction
-        # stories that no mission points at).  Tolerate a few but fail loudly
-        # if the set grows.
-        assert len(orphans) <= 2, f"Excess orphan dashboard pages (no mission source): {orphans}"
+        # stories that no mission points at).  aleph_fragment, mollys_razor,
+        # ta_heist added 2026-07-08 as free-form Fiction without missions.
+        # Tolerate up to 5 orphans but fail loudly if more appear.
+        assert len(orphans) <= 5, f"Excess orphan dashboard pages (no mission source): {orphans}"
 
     def test_three_way_intersection(self, mission_sources: dict[str, str]) -> None:
         """The intersection of mission × fiction × dashboard should equal

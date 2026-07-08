@@ -1,8 +1,8 @@
 {
-  "short_stories_en": 36,
-  "short_stories_ko": 36,
-  "novelettes_en": 3,
-  "novelettes_ko": 3,
+  "short_stories_en": 39,
+  "short_stories_ko": 39,
+  "novelettes_en": 0,
+  "novelettes_ko": 0,
   "hook_kinds": 6,
   "hook_kind_names": [
     "narrative",
@@ -15,56 +15,56 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-08T02:51:29",
+  "_generated_at": "2026-07-08T14:23:07",
   "catalog_entries": 39,
   "catalog_entries_list": [
     {
       "stem": "aleph_fragment",
-      "type": "novelette",
-      "title_en": "Aleph Fragment",
-      "title_ko": "Aleph Fragment"
+      "type": "short_story",
+      "title_en": "Aleph's Fragment",
+      "title_ko": "알레프의 파편"
     },
     {
       "stem": "armitage_infiltration",
       "type": "short_story",
       "title_en": "Armitage Infiltration",
-      "title_ko": "Armitage Infiltration"
+      "title_ko": "아미티지 침투"
     },
     {
       "stem": "black_ice_dream",
       "type": "short_story",
       "title_en": "Black Ice Dream",
-      "title_ko": "Black Ice Dream"
+      "title_ko": "블랙 아이스 드림"
     },
     {
       "stem": "case_jackout-30sec",
       "type": "short_story",
-      "title_en": "Case Jackout-30Sec",
-      "title_ko": "Case Jackout-30Sec"
+      "title_en": "Jack-Out",
+      "title_ko": "잭아웃"
     },
     {
       "stem": "data_retrieval",
       "type": "short_story",
       "title_en": "Data Retrieval",
-      "title_ko": "Data Retrieval"
+      "title_ko": "데이터 회수"
     },
     {
       "stem": "dixies_choice",
       "type": "short_story",
-      "title_en": "Dixies Choice",
-      "title_ko": "Dixies Choice"
+      "title_en": "Dixie's Choice",
+      "title_ko": "디지의 선택"
     },
     {
       "stem": "dixies_last_run",
       "type": "short_story",
-      "title_en": "Dixies Last Run",
-      "title_ko": "Dixies Last Run"
+      "title_en": "Dixie's Last Run",
+      "title_ko": "딕시의 마지막 달림"
     },
     {
       "stem": "first_contact",
       "type": "short_story",
       "title_en": "First Contact",
-      "title_ko": "First Contact"
+      "title_ko": "퍼스트 컨택트"
     },
     {
       "stem": "first_trace",
@@ -76,181 +76,181 @@
       "stem": "flatline_again",
       "type": "short_story",
       "title_en": "Flatline Again",
-      "title_ko": "Flatline Again"
+      "title_ko": "플랫라인 Again"
     },
     {
       "stem": "hosaka_core",
       "type": "short_story",
       "title_en": "Hosaka Core",
-      "title_ko": "Hosaka Core"
+      "title_ko": "Hosaka Core (한국어 번역)"
     },
     {
       "stem": "hosaka_extraction",
       "type": "short_story",
       "title_en": "Hosaka Extraction",
-      "title_ko": "Hosaka Extraction"
+      "title_ko": "호사카 추출"
     },
     {
       "stem": "ice_run",
       "type": "short_story",
       "title_en": "Ice Run",
-      "title_ko": "Ice Run"
+      "title_ko": "얼음 달콤"
     },
     {
       "stem": "kumiko_manarase-midnight",
       "type": "short_story",
-      "title_en": "Kumiko Manarase-Midnight",
-      "title_ko": "Kumiko Manarase-Midnight"
+      "title_en": "Manarase at Midnight",
+      "title_ko": "자정의 매나리사"
     },
     {
       "stem": "loa_voodoo_contact",
       "type": "short_story",
       "title_en": "Loa Voodoo Contact",
-      "title_ko": "Loa Voodoo Contact"
+      "title_ko": "부두 로아 연락"
     },
     {
       "stem": "maas_heist",
       "type": "short_story",
-      "title_en": "Maas Heist",
-      "title_ko": "Maas Heist"
+      "title_en": "Maas Biolabs Heist",
+      "title_ko": "Maas Biolabs Heist (한국어 번역)"
     },
     {
       "stem": "marly_louisiana-god",
       "type": "short_story",
-      "title_en": "Marly Louisiana-God",
-      "title_ko": "Marly Louisiana-God"
+      "title_en": "The Louisiana God",
+      "title_ko": "루이지아나의 신"
     },
     {
       "stem": "matrix_revelation",
       "type": "short_story",
       "title_en": "Matrix Revelation",
-      "title_ko": "Matrix Revelation"
+      "title_ko": "매트릭스 계시"
     },
     {
       "stem": "mollys_market",
       "type": "short_story",
-      "title_en": "Mollys Market",
-      "title_ko": "Mollys Market"
+      "title_en": "Molly's Market",
+      "title_ko": "몰리의 마켓"
     },
     {
       "stem": "mollys_razor",
-      "type": "novelette",
-      "title_en": "Mollys Razor",
-      "title_ko": "Mollys Razor"
+      "type": "short_story",
+      "title_en": "Molly's Razor",
+      "title_ko": "몰리의 면도칼"
     },
     {
       "stem": "neuromancer_merger",
       "type": "short_story",
       "title_en": "Neuromancer Merger",
-      "title_ko": "Neuromancer Merger"
+      "title_ko": "뉴로맨서 합병"
     },
     {
       "stem": "neuromancer_whisper",
       "type": "short_story",
       "title_en": "Neuromancer Whisper",
-      "title_ko": "Neuromancer Whisper"
+      "title_ko": "뉴로맨서 속삭임"
     },
     {
       "stem": "sally_returns",
       "type": "short_story",
       "title_en": "Sally Returns",
-      "title_ko": "Sally Returns"
+      "title_ko": "살리의 귀환"
     },
     {
       "stem": "sally_sandii-3am",
       "type": "short_story",
-      "title_en": "Sally Sandii-3Am",
-      "title_ko": "Sally Sandii-3Am"
+      "title_en": "The New Rose Hotel, 3 AM",
+      "title_ko": "로즈 호텔, 새벽 3시"
     },
     {
       "stem": "sense_net_infiltration",
       "type": "short_story",
-      "title_en": "Sense Net Infiltration",
-      "title_ko": "Sense Net Infiltration"
+      "title_en": "Sense/Net Infiltration",
+      "title_ko": "Sense/Net Infiltration (한국어 번역)"
     },
     {
       "stem": "sense_net_trace",
       "type": "short_story",
-      "title_en": "Sense Net Trace",
-      "title_ko": "Sense Net Trace"
+      "title_en": "Sense/Net Trace",
+      "title_ko": "센스/넷 추적"
     },
     {
       "stem": "straylight_approach",
       "type": "short_story",
       "title_en": "Straylight Approach",
-      "title_ko": "Straylight Approach"
+      "title_ko": "Straylight Approach (한국어 번역)"
     },
     {
       "stem": "ta_defection",
       "type": "short_story",
-      "title_en": "Ta Defection",
-      "title_ko": "Ta Defection"
+      "title_en": "T-A Defection",
+      "title_ko": "T-A 이탈"
     },
     {
       "stem": "ta_heist",
-      "type": "novelette",
-      "title_en": "Ta Heist",
-      "title_ko": "Ta Heist"
+      "type": "short_story",
+      "title_en": "T-A Heist",
+      "title_ko": "T-A 강도"
     },
     {
       "stem": "the_choice",
       "type": "short_story",
       "title_en": "The Choice",
-      "title_ko": "The Choice"
+      "title_ko": "선택"
     },
     {
       "stem": "tutorial_maze",
       "type": "short_story",
-      "title_en": "Tutorial Maze",
-      "title_ko": "Tutorial Maze"
+      "title_en": "Tutorial: Maze",
+      "title_ko": "튜토리얼: 미로"
     },
     {
       "stem": "vegas_stakeout",
       "type": "short_story",
       "title_en": "Vegas Stakeout",
-      "title_ko": "Vegas Stakeout"
+      "title_ko": "베가스 스테이크아웃"
     },
     {
       "stem": "watchdog_patrol",
       "type": "short_story",
       "title_en": "Watchdog Patrol",
-      "title_ko": "Watchdog Patrol"
+      "title_ko": "워치독 순찰"
     },
     {
       "stem": "wigan_call",
       "type": "short_story",
-      "title_en": "Wigan Call",
-      "title_ko": "Wigan Call"
+      "title_en": "Wigan's Call",
+      "title_ko": "Wigan's Call (한국어 번역)"
     },
     {
       "stem": "wigan_zavijava",
       "type": "short_story",
-      "title_en": "Wigan Zavijava",
-      "title_ko": "Wigan Zavijava"
+      "title_en": "What Wigan Saw",
+      "title_ko": "위건이 본 것"
     },
     {
       "stem": "winter_infiltrate",
       "type": "short_story",
       "title_en": "Winter Infiltrate",
-      "title_ko": "Winter Infiltrate"
+      "title_ko": "윈터 침투"
     },
     {
       "stem": "wintermute_negotiation",
       "type": "short_story",
       "title_en": "Wintermute Negotiation",
-      "title_ko": "Wintermute Negotiation"
+      "title_ko": "윈터뮤트 협상"
     },
     {
       "stem": "yakuza_deal",
       "type": "short_story",
       "title_en": "Yakuza Deal",
-      "title_ko": "Yakuza Deal"
+      "title_ko": "야쿠자 거래"
     },
     {
       "stem": "zion_express",
       "type": "short_story",
       "title_en": "Zion Express",
-      "title_ko": "Zion Express"
+      "title_ko": "자이온 익스프레스"
     }
   ]
 }

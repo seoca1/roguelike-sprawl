@@ -1,7 +1,7 @@
 # Chapter 9: Neuromancer (뉴로맨서, Merged AI)
 
 > **이 문서는 [`../scenario/README.md`](../scenario/README.md)의 Chapter 9 명세.**
-> 캐릭터: **Neuromancer (Wintermute + Neuromancer 합체)** · 동기: 초월 · 단편: [Neuromancer](../../Fiction/wiki/works/neuromancer)
+> 캐릭터: **Neuromancer (Wintermute + Neuromancer 합체)** · 동기: 초월 · 단편: [Neuromancer](../../../../Fiction/wiki/works/neuromancer)
 
 ## 1. 캐릭터 프로필
 

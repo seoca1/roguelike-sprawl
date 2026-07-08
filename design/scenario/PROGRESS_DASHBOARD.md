@@ -1,7 +1,8 @@
 # Roguelike Sprawl — Project Dashboard
 
-**Last Updated**: 2026-06-23
-**Project Phase**: Phase 4 — Story Implementation
+**Last Updated**: 2026-07-08 (Phase 7 완료 상태)
+**Project Phase**: Phase 7 완료 (2026-07-07)
+**참고**: Phase 4 당시 작성. Phase 7 기준으로 부분 업데이트됨. 최신 전체 진도는 `chapter-progress.md` 참조.
 
 ---
 
@@ -9,20 +10,21 @@
 
 | 항목 | 현재 | 목표 | 진도 |
 |------|------|------|------|
-| 플레이어블 챕터 | **6/15** | 15/15 | **40%** |
-| phases 데이터 | 15/15 챕터 | 15/15 챕터 | **100%** ✅ |
+| 플레이어블 챕터 | **31/45** | 45/45 | **69%** |
+| phases 데이터 | 45/45 챕터 | 45/45 챕터 | **100%** ✅ |
 | 컷씬 참조 | 41개 | 45개 | 91% |
-| 스토리 텍스트 | EN ~68K / KO ~34K | — | — |
-| 케이 전체 챕터 | ✅ 25 eps, 103 beats, 8 combats | — | **NEW** |
-| 실 전체 챕터 | ✅ 25 eps, 99 beats, 12 combats | — | **NEW** |
-| 카스 전체 챕터 | ✅ 25 eps, 100 beats, 11 combats | — | **NEW** |
+| Stories (단편소설) | **39 stories** (EN/KO pairs) | — | ✅ |
+| 미션 수 | **47 missions** | — | ✅ |
+| GN 씬 (9자키) | **72 scenes** (9×8) | 72 | **100%** ✅ |
+| 케이 전체 챕터 | ✅ 25 eps, 103 beats, 8 combats | — | — |
+| 실 전체 챕터 | ✅ 25 eps, 99 beats, 12 combats | — | — |
+| 카스 전체 챕터 | ✅ 25 eps, 100 beats, 11 combats | — | — |
 | Chapter Flow 대시보드 | ✅ 동적 로딩 | — | — |
-| Story Reader HTML | ✅ 완비 | — | **NEW** |
-| ICE 스케일링 시스템 | ✅ 완비 (8 types + 21 aliases) | — | **NEW** |
-| 캐릭터 메타데이터 | ✅ 완비 | — | **NEW** |
-| 세계관 관계성 문서 | ✅ 완비 | — | **NEW** |
-| 검증 파이프라인 스크립트 | ✅ scripts/verify_story_pipeline.py | — | **NEW** |
-| Player Status HUD | ✅ HP bar + Grade + PPL | — | **NEW** |
+| Story HTML | ✅ 78 files (EN↔KO) | — | **NEW** |
+| ICE 스케일링 시스템 | ✅ 완비 (41 types) | — | **UPDATED** |
+| 9자키 완전 통합 | ✅ Phase 7~9 | — | **NEW** |
+| 검증 파이프라인 스크립트 | ✅ scripts/verify_story_pipeline.py | — | — |
+| Player Status HUD | ✅ HP bar + Grade + PPL | — | — |
 
 ---
 
@@ -238,8 +240,9 @@ Overall: ✅ PASS — Gap: 0 beats unmapped
 ## 6. 테스트 상태
 
 ```
-2706 passed ✅
+4106 passed ✅ (prototype/.venv pytest)
 ruff: All checks passed ✅
+mypy: 0 errors ✅
 ```
 
 ### 검증 파이프라인 스크립트

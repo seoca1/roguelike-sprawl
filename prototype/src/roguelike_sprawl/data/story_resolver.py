@@ -19,8 +19,18 @@ from __future__ import annotations
 
 from pathlib import Path
 
-# 가장 최근 canonical 날짜 (v2.0 최종). 새 버전 출시 시 갱신.
-CANONICAL_DATES = ("2026-06-29", "2026-06-23", "2026-06-22", "2026-06-20", "2026-06-19")
+# 가장 최근 canonical 날짜 (v2.1). 새 버전 출시 시 갱신.
+CANONICAL_DATES = (
+    "2026-07-08",
+    "2026-07-01",
+    "2026-06-30",
+    "2026-06-29",
+    "2026-06-25",
+    "2026-06-23",
+    "2026-06-22",
+    "2026-06-20",
+    "2026-06-19",
+)
 
 # 소설 디렉토리 목록 (derivative_type 순)
 NOVEL_DIR_NAMES: tuple[str, ...] = ("short-stories", "novelettes", "novellas")
