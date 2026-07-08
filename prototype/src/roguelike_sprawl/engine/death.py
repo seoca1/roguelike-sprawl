@@ -529,30 +529,27 @@ def handle_death_input(
 def handle_death_summary_input(
     event: tcod.event.Event,
     state: AppState,
-) -> str:
+) -> bool:
     """Handle input on DEATH_SUMMARY screen.
 
-    Returns:
-        "" if no action, otherwise one of:
-        - "new_jockey" (player pressed 1)
-        - "same_jockey" (player pressed 2)
-        - "hall_of_dead" (player pressed 3)
-        - "menu" (player pressed 4)
+    N1=new jockey, N2=same jockey, N3=hall of dead, N4/ESC/Q=menu.
     """
     import tcod.event
 
-    if not isinstance(event, tcod.event.KeyDown):
-        return ""
-
-    if event.sym is tcod.event.KeySym.N1:
-        return "new_jockey"
-    if event.sym is tcod.event.KeySym.N2:
-        return "same_jockey"
-    if event.sym is tcod.event.KeySym.N3:
-        return "hall_of_dead"
-    if event.sym in (tcod.event.KeySym.N4, tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
-        return "menu"
-    return ""
+    if isinstance(event, tcod.event.KeyDown):
+        if event.sym is tcod.event.KeySym.N1:
+            handle_death_summary_choice(state, "new_jockey")
+            return True
+        if event.sym is tcod.event.KeySym.N2:
+            handle_death_summary_choice(state, "same_jockey")
+            return True
+        if event.sym is tcod.event.KeySym.N3:
+            handle_death_summary_choice(state, "hall_of_dead")
+            return True
+        if event.sym in (tcod.event.KeySym.N4, tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+            handle_death_summary_choice(state, "menu")
+            return True
+    return True
 
 
 def handle_hall_of_dead_input(

@@ -287,23 +287,31 @@ def test_gn_input_q_menu(state: AppState) -> None:
 
 
 def test_saved_progress_key1_other_chars(state: AppState) -> None:
+    state.screen = ScreenKind.SAVED_PROGRESS
     result = handle_saved_progress_input(_key_event(KeySym.N1), state)
-    assert result == "other_chars"
+    assert result is True
+    assert state.screen == ScreenKind.GRAPHIC_NOVEL_MENU
 
 
 def test_saved_progress_key2_continue(state: AppState) -> None:
+    state.screen = ScreenKind.SAVED_PROGRESS
     result = handle_saved_progress_input(_key_event(KeySym.N2), state)
-    assert result == "continue"
+    assert result is True
+    assert state.screen == ScreenKind.HUB
 
 
 def test_saved_progress_key3_menu(state: AppState) -> None:
+    state.screen = ScreenKind.SAVED_PROGRESS
     result = handle_saved_progress_input(_key_event(KeySym.N3), state)
-    assert result == "menu"
+    assert result is True
+    assert state.screen == ScreenKind.MENU
 
 
 def test_saved_progress_esc_menu(state: AppState) -> None:
+    state.screen = ScreenKind.SAVED_PROGRESS
     result = handle_saved_progress_input(_key_event(KeySym.ESCAPE), state)
-    assert result == "menu"
+    assert result is True
+    assert state.screen == ScreenKind.MENU
 
 
 # ----------------------------------------------------------------------------

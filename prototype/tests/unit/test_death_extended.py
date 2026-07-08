@@ -198,39 +198,47 @@ def test_restart_resets_chapter_state(state: AppState) -> None:
 
 
 def test_handle_death_summary_input_1() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.DEATH_SUMMARY, character_id="veteran")
     result = handle_death_summary_input(_make_event(KeySym.N1), state)
-    assert result == "new_jockey"
+    assert result is True
+    assert state.character_id in ("novice", "heretic")
 
 
 def test_handle_death_summary_input_2() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.DEATH_SUMMARY, character_id="veteran", is_dead=True)
     result = handle_death_summary_input(_make_event(KeySym.N2), state)
-    assert result == "same_jockey"
+    assert result is True
+    assert state.screen == ScreenKind.HUB
 
 
 def test_handle_death_summary_input_3() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.DEATH_SUMMARY)
     result = handle_death_summary_input(_make_event(KeySym.N3), state)
-    assert result == "hall_of_dead"
+    assert result is True
+    assert state.screen == ScreenKind.HALL_OF_DEAD
 
 
 def test_handle_death_summary_input_4() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.DEATH_SUMMARY, is_dead=True)
     result = handle_death_summary_input(_make_event(KeySym.N4), state)
-    assert result == "menu"
+    assert result is True
+    assert state.screen == ScreenKind.MENU
+    assert state.is_dead is False
 
 
 def test_handle_death_summary_input_escape() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.DEATH_SUMMARY, is_dead=True)
     result = handle_death_summary_input(_make_event(KeySym.ESCAPE), state)
-    assert result == "menu"
+    assert result is True
+    assert state.screen == ScreenKind.MENU
+    assert state.is_dead is False
 
 
 def test_handle_death_summary_input_unknown() -> None:
-    state = AppState()
+    state = AppState(screen=ScreenKind.DEATH_SUMMARY)
     result = handle_death_summary_input(_make_event(KeySym.A), state)
-    assert result == ""
+    assert result is True
+    assert state.screen == ScreenKind.DEATH_SUMMARY
 
 
 def test_handle_hall_of_dead_input_up() -> None:

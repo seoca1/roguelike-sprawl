@@ -211,8 +211,65 @@ def _render(
         else:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO SCENES LOADED ===", fg=(255, 0, 0))
+    elif state.screen is ScreenKind.SAVED_PROGRESS:
+        from . import config, save_progress
+
+        save_dir = config.DATA_DIR / "saves"
+        summary = save_progress.get_progress_summary(save_dir=save_dir)
+        console.clear()
+        width = console.width
+        title = "당신의 자키" if t.lang == "ko" else "Your Jockey"
+        console.print(0, 0, "═" * width)
+        console.print((width - len(title)) // 2, 0, f" {title} ")
+        console.print(0, 1, "─" * width)
+        if not summary.has_save:
+            msg = "아직 자키가 없습니다" if t.lang == "ko" else "No save file yet"
+            console.print((width - len(msg)) // 2, 8, msg)
+            hint = "[1] NEW RUN  [2] 다른 캐릭터  [3] 메인메뉴"
+            console.print((width - len(hint)) // 2, 14, hint)
+        else:
+            lines = save_progress.render_summary_lines(summary, t_lang=t.lang)
+            y = 3
+            for line in lines:
+                console.print(4, y, line)
+                y += 1
+            y += 1
+            console.print(4, y, "─" * 40)
+            y += 1
+            if t.lang == "ko":
+                opts = [
+                    "[1] 다른 캐릭터 스토리 보기",
+                    "[2] 게임플레이 계속 (HUB)",
+                    "[3] 메인메뉴",
+                ]
+            else:
+                opts = [
+                    "[1] Other character stories",
+                    "[2] Continue gameplay (HUB)",
+                    "[3] Main menu",
+                ]
+            for i, opt in enumerate(opts):
+                console.print(4, y + i * 2, opt)
     elif state.screen is ScreenKind.HUB:
         hub_screen.render_hub(console, t, state)
+    elif state.screen in (
+        ScreenKind.CHARACTER_SELECT,
+        ScreenKind.CHAPTER,
+        ScreenKind.GRAPHIC_NOVEL_ENDING_MENU,
+        ScreenKind.SAVE_SLOT_SELECT,
+        ScreenKind.NPC,
+        ScreenKind.EVENT,
+        ScreenKind.STORY,
+        ScreenKind.ENDING,
+        ScreenKind.ARC_PHASE,
+        ScreenKind.CYBERSPACE_BROWSER,
+        ScreenKind.CYBERSPACE_MAP,
+    ):
+        console.clear(bg=(0, 0, 0))
+        msg = f"[{state.screen.value.upper()}] — not yet implemented"
+        console.print(x=2, y=2, string=msg, fg=(180, 180, 100))
+        hint = "[ESC] Return to menu"
+        console.print(x=2, y=4, string=hint, fg=(128, 128, 128))
     elif state.screen is ScreenKind.MATRIX:
         if state.dungeon_mode:
             # ADR-0060 Phase 1: NetHack-style 2D room grid
@@ -243,6 +300,10 @@ def _render(
         from . import death as death_screen
 
         death_screen.render_death_screen(console, state)
+    elif state.screen is ScreenKind.DEATH_SUMMARY:
+        from . import death as death_screen
+
+        death_screen.render_death_summary_screen(console, state)
     elif state.screen is ScreenKind.HALL_OF_DEAD:
         from . import death as death_screen
 
@@ -401,8 +462,30 @@ def _handle_input(
             state.gn_paused = not state.gn_paused
             return True
         return True
+    if state.screen is ScreenKind.SAVED_PROGRESS:
+        return menu_screen.handle_saved_progress_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.HUB:
         return hub_screen.handle_hub_input(event, state)  # type: ignore[arg-type]
+    if state.screen in (
+        ScreenKind.CHARACTER_SELECT,
+        ScreenKind.CHAPTER,
+        ScreenKind.GRAPHIC_NOVEL_ENDING_MENU,
+        ScreenKind.SAVE_SLOT_SELECT,
+        ScreenKind.NPC,
+        ScreenKind.EVENT,
+        ScreenKind.STORY,
+        ScreenKind.ENDING,
+        ScreenKind.ARC_PHASE,
+        ScreenKind.CYBERSPACE_BROWSER,
+        ScreenKind.CYBERSPACE_MAP,
+    ):
+        import tcod.event
+
+        if isinstance(event, tcod.event.KeyDown):
+            if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
+                state.screen = ScreenKind.MENU
+                return True
+        return True
     if state.screen is ScreenKind.MATRIX:
         # ADR-0060 Phase 1: `D` key toggles NetHack-style dungeon view
         # (dungeon_view) vs abstract node graph (matrix_view).
@@ -437,6 +520,10 @@ def _handle_input(
         from . import death as death_screen
 
         return death_screen.handle_death_input(event, state)  # type: ignore[arg-type]
+    if state.screen is ScreenKind.DEATH_SUMMARY:
+        from . import death as death_screen
+
+        return death_screen.handle_death_summary_input(event, state)  # type: ignore[arg-type]
     if state.screen is ScreenKind.HALL_OF_DEAD:
         from . import death as death_screen
 

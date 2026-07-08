@@ -364,24 +364,26 @@ def handle_graphic_novel_input(
 def handle_saved_progress_input(
     event: tcod.event.Event,
     state: AppState,
-) -> str:
+) -> bool:
     """Handle input on the SAVED_PROGRESS screen.
 
-    Returns the action:
-        - "other_chars" : go to GRAPHIC_NOVEL_MENU
-        - "continue" : load save → HUB
-        - "menu" : back to main menu
-        - "" : no action
+    Arrow keys (↑↓) or WASD navigate; Enter/Space confirms.
     """
-    if not isinstance(event, KeyDown):
-        return ""
-    if event.sym in (KeySym.ESCAPE, KeySym.Q, KeySym.N3):
-        return "menu"
-    if event.sym is KeySym.N1:
-        return "other_chars"
-    if event.sym is KeySym.N2:
-        return "continue"
-    return ""
+    if isinstance(event, KeyDown):
+        if event.sym in (KeySym.ESCAPE, KeySym.Q, KeySym.N3):
+            state.screen = ScreenKind.MENU
+            return True
+        if event.sym in (KeySym.UP, KeySym.W):
+            return True
+        if event.sym in (KeySym.DOWN, KeySym.S):
+            return True
+        if event.sym in (KeySym.RETURN, KeySym.KP_ENTER, KeySym.SPACE, KeySym.N1):
+            state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
+            return True
+        if event.sym is KeySym.N2:
+            state.screen = ScreenKind.HUB
+            return True
+    return True
 
 
 def handle_save_slot_select_input(
