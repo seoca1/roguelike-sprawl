@@ -124,7 +124,7 @@ def test_render_menu_continue_no_save_label(
 def test_handle_menu_key1_new_run(state: AppState) -> None:
     state.screen = ScreenKind.MENU
     handle_menu_input(_key_event(KeySym.N1), state)
-    assert state.screen == ScreenKind.CHARACTER_SELECT
+    assert state.screen == ScreenKind.HUB
 
 
 def test_handle_menu_key2_graphic_novel(state: AppState) -> None:

@@ -107,7 +107,7 @@ def _select_menu_option(state: AppState, index: int) -> None:
     """Execute the menu action for the given 0-based option index."""
     has_save = getattr(state, "has_save", False)
     if index == 0:
-        state.screen = ScreenKind.CHARACTER_SELECT
+        state.screen = ScreenKind.HUB
     elif index == 1:
         state.screen = ScreenKind.GRAPHIC_NOVEL_MENU
         state.gn_scene_chain = []
