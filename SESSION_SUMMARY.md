@@ -1,9 +1,9 @@
-# Session Summary — 2026-07-08 (v0.7.0)
+# Session Summary — 2026-07-08 (v0.7.1)
 
 > **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: Salvation Phase mypy fixes + ADR-0102 Accepted + **v1.0.0b1 PyPI Release**
+> **세션 범위**: 메인 메뉴 UX 개선 + 화면 디스패치 완전 구현
 > **테스트**: 4146 passed (39 skipped, 0 failed)
-> **변경 파일**: 12 files
+> **변경 파일**: 8 files
 
 ---
 
@@ -53,7 +53,7 @@
 | pytest | **4146 passed** (39 skipped) |
 | ruff check | **All passed** |
 | ruff format | **All passed** |
-| mypy strict | **0 errors** (119 source files) |
+| mypy strict | **0 errors** (120 source files) |
 | dashboard tests | **623 passed** |
 
 ---
@@ -62,10 +62,11 @@
 
 ### 즉시 착수 가능
 1. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
+2. **미구현 화면 우선순위**: CHAPTER (단편 显示), CHARACTER_SELECT (캐릭터 선택), NPC (만남 대화)
 
 ### 중장기 작업
-2. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
-3. **테스트 커버리지 증가** — 현재 ~38% → 목표 80%
+3. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
+4. **테스트 커버리지 증가** — 현재 ~38% → 목표 80%
 
 ---
 
@@ -91,19 +92,16 @@
 
 | 커밋 | 설명 |
 |---|---|
-| `e28c100` | fix(ci): pin all GitHub Actions to full-length commit SHAs |
-| `bebc50c` | fix(release): cd prototype before updating pyproject.toml |
-| `a0dd39d` | fix(release): remove --prelease flag (uv publish uses version string) |
-| `9c65562` | fix(release): combine cat grep with && to fix YAML block scalar issue |
-| `452ed19` | fix(release): fix cat command placement outside Python string |
-| `e0eff0b` | fix(release): use env var for version to avoid shell interpolation |
-| `49b4cd6` | feat(salvation): fix mypy errors and type issues in Salvation Phase integration |
-| `2afa9d3` | docs(adr): ADR-0102 Accepted — 1.0.0b1, manual dispatch |
-| `77010b2` | docs: SESSION_SUMMARY.md v0.6.0 — ADR-0102 Accepted, Salvation mypy fixed |
+| `b4978ed` | feat(app): implement SAVED_PROGRESS + DEATH_SUMMARY screens, add stub handlers |
+| `1251a22` | feat(graphic_novel): implement GRAPHIC_NOVEL screen in game loop |
+| `6152f11` | fix(menu+app): add missing screen dispatches for GRAPHIC_NOVEL_MENU and HALL_OF_DEAD |
+| `4a5efbe` | feat(menu): arrow key navigation + cursor indicator |
+| `65295cf` | fix(menu): New Run → HUB (CHARACTER_SELECT not yet implemented) |
+| `dcbd85f` | fix(macOS): handle WindowClose event in game loop |
 
 ---
 
 **세션 종료 시간**: 2026-07-08
 **최종 검증**: ruff ✅ / format ✅ / mypy ✅ / pytest 4146 ✅
-**이 문서 버전**: v0.7.0
-**이전 버전**: v0.6.0 (2026-07-08)
+**이 문서 버전**: v0.7.1
+**이전 버전**: v0.7.0 (2026-07-08)

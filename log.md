@@ -2,6 +2,24 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-08] feat | 메인 메뉴 방향키 네비게이션 + 화면 디스패치 완전 구현
+
+### 문제
+- 메인 메뉴에서 숫자키 선택 시 응답 없음 (New Run → CHARACTER_SELECT 화면 없음)
+- Graphic Novel 선택 시 응답 없음 (GRAPHIC_NOVEL_MENU 렌더러/입력 미구현)
+- 특정 화면 진입 시 창이 멈춤 (이벤트 루프에 화면 디스패치缺失)
+
+### 수정 내용
+1. **메인 메뉴**: `menu_selected_index` 필드 추가, `▸` 커서, ↑↓/WASD 네비게이션, Enter确认
+2. **GRAPHIC_NOVEL**: scene chain 로딩, 실시간 시계, auto-advance dialogue/scene, P=일시정지, S=스킵
+3. **SAVED_PROGRESS**: 렌더/입력 완전 구현 (GN 종료 후 화면)
+4. **DEATH_SUMMARY**: 기존 핸들러를 app.py에 연결
+5. ** stub**: CHARACTER_SELECT, CHAPTER, NPC, EVENT, STORY, ENDING, ARC_PHASE, CYBERSPACE_* 등 미구현 화면 스텁 처리 (ESC→MENU, 충돌 방지)
+
+### 결과
+- `make run`으로 전체 메뉴 플로우 동작 확인
+- mypy: 0 errors, pytest: 4146 passed
+
 ## [2026-07-08] fix | macOS WindowClose 이벤트 처리 — 창 닫기 버튼 수정
 
 ### 문제
