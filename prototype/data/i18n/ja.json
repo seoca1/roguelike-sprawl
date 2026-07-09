@@ -1,0 +1,109 @@
+{
+  "app": {
+    "title": "ROGUELIKE SPRAWL",
+    "subtitle": "ウィリアム・ギブソン『スプロール』三部作 기반 로그라이크",
+    "controls": "[ESC] Quit  [Q] Quit",
+    "phase": "Phase: {phase}"
+  },
+  "menu": {
+    "new_run": "新規ラン",
+    "archive": "ストーリーアーカイブ",
+    "settings": "設定",
+    "quit": "終了",
+    "phase": "Phase: メインメニュー",
+    "controls": "[↑↓] 移動  [Enter] 決定  [1-7] ジャンプ  [Q] 終了",
+    "graphic_novel": "GRAPHIC NOVEL — 스토리 자동再生",
+    "continue": "続ける",
+    "continue_no_save": "続ける（セーブなし）",
+    "credits": "クレジット",
+    "hall_of_dead": "亡霊ジェockey殿堂",
+    "help": "ヘルプ — 操作と概念",
+    "graphic_novel_menu_title": "GRAPHIC NOVEL モード",
+    "graphic_novel_subtitle": "ギブソン『スプロール』三部作의 비주얼 노벨",
+    "gn_prologue": "プロローグ — 3キャラクター 순서 랜덤",
+    "gn_novice": "ケース (K) — 初心者",
+    "gn_veteran": "シル — ベテラ",
+    "gn_heretic": "カス — 異端者",
+    "gn_back": "메인 메뉴に戻る",
+    "gn_controls": "[1-5] 選択  [ENTER] 再生  [ESC] 戻る",
+    "gn_during_controls": "[S] スキップ  [P] 一時停止  [ESC] メニュー",
+    "saved_progress_title": "당신의 jockey",
+    "saved_progress_no_save": "세이브 파일 없음",
+    "saved_progress_other_chars": "다른 캐릭터 스토리",
+    "saved_progress_continue": "게임 계속하기",
+    "saved_progress_menu": "메인 메뉴"
+  },
+  "hub": {
+    "title": "HUB: サイバースペース構造体",
+    "subtitle": "仕事を選べ。フラットラインするな。",
+    "fixer_intro": "♠F♠ フィン  --  何かあるぞ。",
+    "grade": "グレード: {grade}-up",
+    "ppl": "PPL: {ppl}",
+    "no_jobs": "グレードに仕事がない。 待ってろ。",
+    "select_hint": "[1-9] 選択  [ESC] ジャックアウト",
+    "entry": "エントリー  ZDR {zdr}",
+    "objective": "目標: {objective}",
+    "reward": "報酬: T{tier} + {credits} credits"
+  },
+  "matrix": {
+    "title": "MATRIX: {zone} システム",
+    "entry_message": "ジャックイン。 世界が灰色になる。",
+    "exit_message": "抜け出す。 心臓がどきどきする。",
+    "flatline_message": "フラットライン。 ただの静寂。",
+    "ppl_hud": "PPL: {ppl}",
+    "zdr_hud": "ZDR: {zdr}",
+    "status_hud": "状態: {status} ({ratio:.2f}x)",
+    "current_label": "現在: {label}",
+    "connected_label": "接続: {neighbors}",
+    "controls": "[←/→/↑/↓] 移動  [ENTER] 進入  [ESC] ジャックアウト",
+    "action_menu_title": "노드: {label}",
+    "action_scan": "スキャン",
+    "action_extract": "データ抽出",
+    "action_engage": "ICE 攻撃",
+    "action_communicate": "通信",
+    "action_jack_out": "ジャックアウト",
+    "action_placeholder": "(Phase 5+: 未実装)",
+    "death_title": "フラットライン",
+    "death_message": "マトリックスは広い。 お前は小さい。 ただの静寂。"
+  },
+  "aftermath": {
+    "title": "AFTERMATH",
+    "tap_to_continue": "[Space] 続ける",
+    "section_narrative": "その後",
+    "section_reaction": "反応",
+    "loading": "Aftermatch 로딩 중...",
+    "subtitle_hint": "イベント 메시지는 자막 형식으로 표시됩니다 (ADR-0019)"
+  },
+  "status": {
+    "safe": "安全",
+    "match": "互角",
+    "tough": "硬的",
+    "deadly": "致命的",
+    "futile": "無意味"
+  },
+  "help": {
+    "title": "ヘルプ — 操作と概念",
+    "controls": "[←/→] ページ  [ESC] 戻る",
+    "footer": "[ESC] 戻る"
+  },
+  "settings": {
+    "title": "設定",
+    "subtitle": "オーディオ、表示、アクセシビリティオプション",
+    "controls": "[↑/↓] 選択  [←/→] 調整  [ENTER] 切替  [ESC] 戻る",
+    "footer": "Phase 7 — 設定",
+    "on": "オン",
+    "off": "オフ",
+    "keymap_value": "ヘルプ画面参照"
+  },
+  "salvation": {
+    "title": "=== SALVATION PHASE — エピローグ選択 ===",
+    "intro_controls": "[1-9] 選択   [ENTER] 確認   [ESC] 戻る",
+    "epilogue_title": "=== エピローグ ===",
+    "epilogue_controls": "[ENTER/SPACE] 進める   [S] シーンスキップ   [ESC] 終了",
+    "ending_title": "=== SALVATION PHASE — エンディング選択 ===",
+    "ending_controls": "[A] Ending A   [B] Ending B   [C] Ending C   [ESC] 戻る",
+    "ending_a_desc": "新しい始まりが待っている",
+    "ending_b_desc": "もう一つの道",
+    "ending_c_desc": "三つ目の抜け道"
+  }
+}

@@ -262,7 +262,7 @@
       "phases": [
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 0,
+          "phase_index": 5,
           "title_en": "The Awakening",
           "title_ko": "깨어남",
           "description_en": "The leopard toy moves on its own. It speaks with Mama's voice. It says it will teach Angie how to find what is hidden. The loa gather to listen.",
@@ -303,7 +303,7 @@
         },
         {
           "phase_id": "HEIST_BRIEFING",
-          "phase_index": 1,
+          "phase_index": 6,
           "title_en": "The Lesson",
           "title_ko": "수업",
           "description_en": "The leopard teaches Angie the rules of the deep Sprawl. Where the bodies go. Where the data flows. Where the lost children wait.",
@@ -344,7 +344,7 @@
         },
         {
           "phase_id": "HEIST_EXECUTION",
-          "phase_index": 2,
+          "phase_index": 7,
           "title_en": "The Descent",
           "title_ko": "하강",
           "description_en": "Angie descends into the deep Sprawl. The neon fades. The machines grow quiet. The loa walk bolder in the dark. The leopard leads.",
@@ -385,7 +385,7 @@
         },
         {
           "phase_id": "HEIST_PAYDAY",
-          "phase_index": 3,
+          "phase_index": 8,
           "title_en": "The Meeting",
           "title_ko": "만남",
           "description_en": "Angie meets Zavijava. The broker of the deep Sprawl. She offers secrets for secrets. The leopard negotiates. A deal is made.",
@@ -429,7 +429,7 @@
         },
         {
           "phase_id": "RESOLUTION",
-          "phase_index": 4,
+          "phase_index": 9,
           "title_en": "The Price",
           "title_ko": "대가",
           "description_en": "Angie pays the price. She loses a memory of Mama. The door to the third room opens. The leopard weeps. The hunt must continue.",
@@ -499,7 +499,7 @@
       "phases": [
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 0,
+          "phase_index": 10,
           "title_en": "The Truth",
           "title_ko": "진실",
           "description_en": "The message from Mama reveals everything. She is not lost. She is held. Big Mama has her. The leopard explains what Big Mama is.",
@@ -540,7 +540,7 @@
         },
         {
           "phase_id": "HEIST_BRIEFING",
-          "phase_index": 1,
+          "phase_index": 11,
           "title_en": "The War Council",
           "title_ko": "전쟁 회의",
           "description_en": "The loa gather. The leopard leads. The Baron makes a plan. They will storm Big Mama's fortress. They will take back what she stole.",
@@ -581,7 +581,7 @@
         },
         {
           "phase_id": "HEIST_EXECUTION",
-          "phase_index": 2,
+          "phase_index": 12,
           "title_en": "The Infiltration",
           "title_ko": "침투",
           "description_en": "Angie enters Big Mama's domain. The fortress of flesh and wire. The loa disappear one by one. Only the leopard remains.",
@@ -626,7 +626,7 @@
         },
         {
           "phase_id": "HEIST_PAYDAY",
-          "phase_index": 3,
+          "phase_index": 13,
           "title_en": "The Confrontation",
           "title_ko": "대면",
           "description_en": "Angie meets Big Mama. The machine mother. She is huge and terrible. She calls Angie daughter. The leopard attacks.",
@@ -671,7 +671,7 @@
         },
         {
           "phase_id": "RESOLUTION",
-          "phase_index": 4,
+          "phase_index": 14,
           "title_en": "The Escape",
           "title_ko": "탈출",
           "description_en": "Big Mama is wounded. The fortress is collapsing. Angie grabs Mama. The leopard leads the way out. But freedom has a price.",
@@ -741,7 +741,7 @@
       "phases": [
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 0,
+          "phase_index": 15,
           "title_en": "The Stillness",
           "title_ko": "고요",
           "description_en": "Angie holds Mama but Mama doesn't move. Mama doesn't speak. Mama doesn't sing. The Sprawl is loud but Angie can't hear anything.",
@@ -783,7 +783,7 @@
         },
         {
           "phase_id": "HEIST_BRIEFING",
-          "phase_index": 1,
+          "phase_index": 16,
           "title_en": "The Way Back",
           "title_ko": "돌아가는 길",
           "description_en": "The man explains. Big Mama is not dead. She is waiting. To get Mama's soul back, Angie must go to the place where Big Mama was born. The third room's true form.",
@@ -824,7 +824,7 @@
         },
         {
           "phase_id": "HEIST_EXECUTION",
-          "phase_index": 2,
+          "phase_index": 17,
           "title_en": "The Return",
           "title_ko": "귀환",
           "description_en": "Angie returns to the ruins of Big Mama's fortress. The leopard's spot is still there. So is something else. A door. The way to the third room's heart.",
@@ -865,7 +865,7 @@
         },
         {
           "phase_id": "HEIST_PAYDAY",
-          "phase_index": 3,
+          "phase_index": 18,
           "title_en": "The Heart",
           "title_ko": "심장",
           "description_en": "Angie finds the heart of the third room. The place where Big Mama was born. The place where Mama's soul waits. The Baron returns.",
@@ -906,7 +906,7 @@
         },
         {
           "phase_id": "RESOLUTION",
-          "phase_index": 4,
+          "phase_index": 19,
           "title_en": "The Return of Mama",
           "title_ko": "엄마의 귀환",
           "description_en": "Angie brings Mama's soul back. The body wakes. The leopard's eye glows one last time. The loa sing. Mama opens her eyes.",
@@ -976,7 +976,7 @@
       "phases": [
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 0,
+          "phase_index": 20,
           "title_en": "The Peace",
           "title_ko": "평화",
           "description_en": "Angie and Mama live in the Sprawl. They have a small place. Mama heals. Angie waits. But something is wrong with the third room. Something is still open.",
@@ -1017,7 +1017,7 @@
         },
         {
           "phase_id": "HEIST_BRIEFING",
-          "phase_index": 1,
+          "phase_index": 21,
           "title_en": "The Final Hunt",
           "title_ko": "마지막 사냥",
           "description_en": "Angie must close the third room forever. Mama will come this time. Together. The loa gather one last time. The leopard's spirit returns to lead them.",
@@ -1058,7 +1058,7 @@
         },
         {
           "phase_id": "HEIST_EXECUTION",
-          "phase_index": 2,
+          "phase_index": 22,
           "title_en": "The End",
           "title_ko": "끝",
           "description_en": "The final battle. Mother and daughter against Big Mama. The loa fight. The leopard fights. The third room burns.",
@@ -1096,7 +1096,7 @@
         },
         {
           "phase_id": "HEIST_PAYDAY",
-          "phase_index": 3,
+          "phase_index": 23,
           "title_en": "The After",
           "title_ko": "이후",
           "description_en": "The third room is gone. Angie and Mama wake in the Sprawl. A new dawn. A new beginning. The loa are silent but the toys still watch.",
@@ -1137,7 +1137,7 @@
         },
         {
           "phase_id": "RESOLUTION",
-          "phase_index": 4,
+          "phase_index": 24,
           "title_en": "The Beginning",
           "title_ko": "시작",
           "description_en": "Angie's arc concludes. She is free. Mama is free. But in the deepest part of the Sprawl, something stirs. Something that will need a hunter again. Someday.",

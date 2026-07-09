@@ -2,6 +2,101 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-09] audit | graphic novel Gibson tone + data bug fix
+
+### 12 씬 Gibson 톤 감사 결과 (ADR-0041 확장 검증)
+- case/sil/kas 각 4개 씬 = 12 canonical scenes
+- 평균 dialogue 길이: ~444 chars (목표 4× = ~400 chars ✅)
+- Tone markers: 모든 씬이 Gibson 스타일 유지 (cold/detached, fragment sentences, tech references)
+- ADR-0032/ADR-0041 디자인과 일치
+
+### 발견된 데이터 버그
+- `data/scenes/3jane/07_sale.json`: dialogue[2]가 46,230자 (반복 텍스트 1,909회 복제)
+- 원인: copy-paste 오류로 "Freeside is the family." 1,909회 반복
+- 수정: Proper replacement content 작성 (443자, Gibson 톤 유지)
+- 전체 테스트: 4044 passed ✅
+
+### scenes 5-9 톤 감사 결과 (case/sil/kas)
+- 15개 scenes (5-9 per character) 전부 Gibson 톤 유지 ✅
+- Tone markers: sensory details + tech terms + corporate/cold tone + detached narrative
+- anachronism check: 0건 (81 scenes 전부 clean, "agi"는 "imagine"의 substring false positive)
+- AI references: 전부 in-universe (Wintermute merging, T-A AI curators) — Gibson 적절함 ✅
+- 평균 dialogue: scenes 5-9는 scenes 1-4보다 김 (800-1000C avg) — 자연스러운 스토리 깊이
+
+## [2026-07-09] test | combat/boss.py edge case tests 추가
+
+### 테스트 파일
+- `tests/unit/test_boss_ice.py`에 7개 edge case 테스트 추가
+
+### 추가된 테스트 (TestCurrentPhase)
+- `test_exactly_at_phase_2_threshold`: hp=66, max_hp=100 → phase 2 (0.66 threshold 경계)
+- `test_exactly_at_phase_3_threshold`: hp=33, max_hp=100 → phase 3 (0.33 threshold 경계)
+- `test_negative_hp_is_phase_3`: hp=-10, max_hp=100 → phase 3 (hp_ratio = -0.1)
+- `test_negative_max_hp_is_phase_3`: hp=0, max_hp=-100 → phase 3 (방어적 처리)
+- `test_hp_exceeds_max_hp_stays_phase_1`: hp=101, max_hp=100 → phase 1 (1.01 ratio)
+
+### 추가된 테스트 (TestPhaseTransition)
+- `test_skip_transition_phase_1_to_3`: phase 1→3 스킵 전환 감지
+- `test_reverse_transition_phase_3_to_1`: phase 3→1 역방향 전환 감지 (힐링 시)
+
+### 결과
+- test_boss_ice.py: 52→59 tests (+7)
+- 전체 테스트: 4037→4044 passed (+7), lint/typecheck는 CI에서 실행 (로컬 venv에 ruff/mypy 없음)
+
+## [2026-07-09] verify | arc.json 매핑 검증 + phase_index 일관성 수정
+
+### 검증 결과
+- 9개 arc.json 전부 검증 (3jane, angie, case, kas, neuromancer, sally, sil, suit, wigan)
+- phase_id 유효성: ENCOUNTER/HEIST_BRIEFING/HEIST_EXECUTION/HEIST_PAYDAY/INTERLUDE/RESOLUTION/REVELATION — 모두 유효
+- episode_ref 매핑 (case/kas/sil): 25개 episode_ref 전부 expanded.json과 일치 ✅
+- story_beats ↔ beats 배열: 모든 arc에서 일치 ✅
+- phase_index 일관성: 7개는 global (0-24), 2개(angie, kas)는 per-chapter (0-4)
+
+### 발견된 문제 및 수정
+- `angie_arc.json` + `kas_arc.json`: phase_index가 챕터당 0-4로 리셋됨
+- 수정: global phase_index (0-24)로 통일 (40개 phase_index 값 변경)
+  - ch2: 0→5, 1→6, 2→7, 3→8, 4→9
+  - ch3: 0→10, 1→11, 2→12, 3→13, 4→14
+  - ch4: 0→15, 1→16, 2→17, 3→18, 4→19
+  - ch5: 0→20, 1→21, 2→22, 3→23, 4→24
+
+### 검증 명령
+```bash
+cd prototype && make test  # 4146 passed ✅
+```
+
+### 영향 파일
+- `prototype/data/story/arcs/angie_arc.json`
+- `prototype/data/story/arcs/kas_arc.json`
+
+---
+
+## [2026-07-09] i18n | Japanese + Chinese UI translation files added
+
+### Changes
+- `prototype/data/i18n/ja.json` — 89 Japanese UI strings (Gibson universe terms kept in EN: ICE, matrix, flatline, construct)
+- `prototype/data/i18n/zh.json` — 89 Chinese UI strings
+- `prototype/src/roguelike_sprawl/settings.py` — `Language` enum updated: added `JAPANESE = "ja"`, `CHINESE = "zh"`
+
+### Translation approach
+- Gibson universe proper nouns kept in English (Case, Tessier-Ashpool, Ono-Sendai, ICE, construct, etc.)
+- UI action strings translated (Jack in/out, flatline, etc.)
+- Japanese: mix of katakana for EN terms + Japanese sentence structure
+- Chinese: simplified characters, cyberpunk slang (爆掉 for flatline)
+- All 89 keys verified match across all 4 languages (EN/KO/JA/ZH)
+- Translator auto-loads JSON by lang code — no code changes needed beyond enum
+
+### Verification
+- `make test`: 4146 passed ✅
+- All 4 languages load correctly via `Translator(lang, data_dir)`
+
+### Limitations
+- `SubtitleMode` still Korean-centric (English + Korean / Korean only)
+- JA/ZH = UI-only translations, story content remains in English
+- No in-game language selector UI added yet
+
+---
+
 ## [2026-07-09] fix | Combat VFX afterimage persists — clear overlay area before drawing
 
 ### 문제

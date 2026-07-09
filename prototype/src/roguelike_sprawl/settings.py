@@ -49,6 +49,8 @@ class Language(StrEnum):
 
     KOREAN = "ko"
     ENGLISH = "en"
+    JAPANESE = "ja"
+    CHINESE = "zh"
     BOTH = "both"
 
 

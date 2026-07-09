@@ -1,0 +1,109 @@
+{
+  "app": {
+    "title": "ROGUELIKE SPRAWL",
+    "subtitle": "威廉·吉布森《 sprawl 》三部曲改编的Roguelike游戏",
+    "controls": "[ESC] 退出  [Q] 退出",
+    "phase": "阶段: {phase}"
+  },
+  "menu": {
+    "new_run": "新运行",
+    "archive": "故事档案",
+    "settings": "设置",
+    "quit": "退出",
+    "phase": "阶段: 主菜单",
+    "controls": "[↑↓] 导航  [Enter] 确认  [1-7] 跳转  [Q] 退出",
+    "graphic_novel": "GRAPHIC NOVEL — 故事自动播放",
+    "continue": "继续",
+    "continue_no_save": "继续（无存档）",
+    "credits": "制作人员",
+    "hall_of_dead": "亡命 jockey 名堂",
+    "help": "帮助 — 操作与概念",
+    "graphic_novel_menu_title": "GRAPHIC NOVEL 模式",
+    "graphic_novel_subtitle": "吉布森《 sprawl 》三部曲的视觉小说",
+    "gn_prologue": "序幕 — 3个角色随机顺序",
+    "gn_novice": "案例 (K) — 新手",
+    "gn_veteran": "实 — 老手",
+    "gn_heretic": "卡斯 — 异端",
+    "gn_back": "返回主菜单",
+    "gn_controls": "[1-5] 选择  [ENTER] 播放  [ESC] 返回",
+    "gn_during_controls": "[S] 跳过  [P] 暂停  [ESC] 菜单",
+    "saved_progress_title": "你的 jockey",
+    "saved_progress_no_save": "无存档文件",
+    "saved_progress_other_chars": "其他角色故事",
+    "saved_progress_continue": "继续游戏",
+    "saved_progress_menu": "主菜单"
+  },
+  "hub": {
+    "title": "HUB: 网络空间构造体",
+    "subtitle": "选个任务。别爆掉。",
+    "fixer_intro": "♠F♠ 芬恩  --  有单子给你。",
+    "grade": "等级: {grade}-up",
+    "ppl": "PPL: {ppl}",
+    "no_jobs": "你这个等级没活儿。等着吧。",
+    "select_hint": "[1-9] 选择  [ESC] 退出",
+    "entry": "入口  ZDR {zdr}",
+    "objective": "目标: {objective}",
+    "reward": "报酬: T{tier} + {credits} credits"
+  },
+  "matrix": {
+    "title": "MATRIX: {zone} 系统",
+    "entry_message": "接入。世界变成灰色。",
+    "exit_message": "拔出来。心跳加速。",
+    "flatline_message": "你爆了。静态。沉默。",
+    "ppl_hud": "PPL: {ppl}",
+    "zdr_hud": "ZDR: {zdr}",
+    "status_hud": "状态: {status} ({ratio:.2f}x)",
+    "current_label": "当前: {label}",
+    "connected_label": "连接: {neighbors}",
+    "controls": "[←/→/↑/↓] 移动  [ENTER] 进入  [ESC] 退出",
+    "action_menu_title": "节点: {label}",
+    "action_scan": "扫描",
+    "action_extract": "提取数据",
+    "action_engage": "对抗ICE",
+    "action_communicate": "通讯",
+    "action_jack_out": "退出",
+    "action_placeholder": "(Phase 5+: 未实现)",
+    "death_title": "爆掉",
+    "death_message": "矩阵很广阔。你很渺小。静态。沉默。"
+  },
+  "aftermath": {
+    "title": "AFTERMATH",
+    "tap_to_continue": "[Space] 继续",
+    "section_narrative": "余波",
+    "section_reaction": "反应",
+    "loading": "加载 aftermath...",
+    "subtitle_hint": "事件消息以字幕格式显示 (ADR-0019)"
+  },
+  "status": {
+    "safe": "安全",
+    "match": "匹配",
+    "tough": "困难",
+    "deadly": "致命",
+    "futile": "徒劳"
+  },
+  "help": {
+    "title": "帮助 — 操作与概念",
+    "controls": "[←/→] 页面  [ESC] 返回",
+    "footer": "[ESC] 返回"
+  },
+  "settings": {
+    "title": "设置",
+    "subtitle": "音频、显示和辅助功能选项",
+    "controls": "[↑/↓] 选择  [←/→] 调整  [ENTER] 切换  [ESC] 返回",
+    "footer": "Phase 7 — 设置",
+    "on": "开",
+    "off": "关",
+    "keymap_value": "见帮助界面"
+  },
+  "salvation": {
+    "title": "=== SALVATION PHASE — 尾声选择 ===",
+    "intro_controls": "[1-9] 选择   [ENTER] 确认   [ESC] 返回",
+    "epilogue_title": "=== 尾声 ===",
+    "epilogue_controls": "[ENTER/SPACE] 推进   [S] 跳过场景   [ESC] 退出",
+    "ending_title": "=== SALVATION PHASE — 结局选择 ===",
+    "ending_controls": "[A] Ending A   [B] Ending B   [C] Ending C   [ESC] 返回",
+    "ending_a_desc": "新的开始等待着你",
+    "ending_b_desc": "另一条前进之路",
+    "ending_c_desc": "第三条出路"
+  }
+}

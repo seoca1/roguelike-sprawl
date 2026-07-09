@@ -205,6 +205,36 @@ class TestCurrentPhase:
         phase = current_phase(boss, WINTERMUTE_PROFILE)
         assert phase.phase == 3
 
+    def test_exactly_at_phase_2_threshold(self) -> None:
+        # HP 66/100 = 0.66 exactly → phase 2 (≤ threshold)
+        boss = _make_combatant(hp=66, max_hp=100)
+        phase = current_phase(boss, WINTERMUTE_PROFILE)
+        assert phase.phase == 2
+
+    def test_exactly_at_phase_3_threshold(self) -> None:
+        # HP 33/100 = 0.33 exactly → phase 3 (≤ threshold)
+        boss = _make_combatant(hp=33, max_hp=100)
+        phase = current_phase(boss, WINTERMUTE_PROFILE)
+        assert phase.phase == 3
+
+    def test_negative_hp_is_phase_3(self) -> None:
+        # hp=-10, max_hp=100 → hp_ratio = -0.1 ≤ all thresholds
+        boss = _make_combatant(hp=-10, max_hp=100)
+        phase = current_phase(boss, WINTERMUTE_PROFILE)
+        assert phase.phase == 3
+
+    def test_negative_max_hp_is_phase_3(self) -> None:
+        # hp=0, max_hp=-100 → hp_ratio = -0.0 (negative zero), ≤ all thresholds
+        boss = _make_combatant(hp=0, max_hp=-100)
+        phase = current_phase(boss, WINTERMUTE_PROFILE)
+        assert phase.phase == 3
+
+    def test_hp_exceeds_max_hp_stays_phase_1(self) -> None:
+        # hp=101, max_hp=100 → hp_ratio = 1.01 > 1.0 (phase 1 threshold)
+        boss = _make_combatant(hp=101, max_hp=100)
+        phase = current_phase(boss, WINTERMUTE_PROFILE)
+        assert phase.phase == 1
+
 
 class TestPhaseTransition:
     def test_no_transition_when_phase_matches(self) -> None:
@@ -226,6 +256,20 @@ class TestPhaseTransition:
     def test_no_transition_when_already_max(self) -> None:
         boss = _make_combatant(hp=0, current_phase=3)
         assert phase_transition(boss, WINTERMUTE_PROFILE) is None
+
+    def test_skip_transition_phase_1_to_3(self) -> None:
+        # Stale phase: boss was manually set to phase 1 but HP now phase 3
+        boss = _make_combatant(hp=20, max_hp=100, current_phase=1)
+        new = phase_transition(boss, WINTERMUTE_PROFILE)
+        assert new is not None
+        assert new.phase == 3
+
+    def test_reverse_transition_phase_3_to_1(self) -> None:
+        # Healing: boss HP recovered from phase 3 to phase 1
+        boss = _make_combatant(hp=100, max_hp=100, current_phase=3)
+        new = phase_transition(boss, WINTERMUTE_PROFILE)
+        assert new is not None
+        assert new.phase == 1
 
 
 class TestPhaseDamage:

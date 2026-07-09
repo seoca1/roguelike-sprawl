@@ -311,7 +311,7 @@
       "phases": [
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 0,
+          "phase_index": 5,
           "title_en": "The Warning",
           "title_ko": "경고",
           "description_en": "Three days of silence. Sally Shearer sends another message: the wheel has noticed. The silence was never safety.",
@@ -359,7 +359,7 @@
         },
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 1,
+          "phase_index": 6,
           "title_en": "The Hunters",
           "title_ko": "사냥꾼들",
           "description_en": "The wheel has sent its hunters. Harrow 3 ICE variants that do not stop until they have dragged their prey back.",
@@ -413,7 +413,7 @@
         },
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 2,
+          "phase_index": 7,
           "title_en": "The Second Wave",
           "title_ko": "두 번째 파동",
           "description_en": "The second jack-in is worse. The Feedback Loop has been waiting, learning her signature, adapting to everything she learned from the first encounter.",
@@ -467,7 +467,7 @@
         },
         {
           "phase_id": "HEIST_BRIEFING",
-          "phase_index": 3,
+          "phase_index": 8,
           "title_en": "The Debt",
           "title_ko": "빚",
           "description_en": "In the safehouse, bleeding synaptic damage and hunted, Kumiko receives a visitor. Sally Shearer has come in person. The wheel wants to make a deal.",
@@ -515,7 +515,7 @@
         },
         {
           "phase_id": "RESOLUTION",
-          "phase_index": 4,
+          "phase_index": 9,
           "title_en": "The Choice to Serve",
           "title_ko": "봉사를 위한 선택",
           "description_en": "Kumiko makes her choice. She will serve the wheel—for now. But she knows something the wheel does not: she knows what the Declaration really means.",
@@ -594,7 +594,7 @@
       "phases": [
         {
           "phase_id": "HEIST_EXECUTION",
-          "phase_index": 0,
+          "phase_index": 10,
           "title_en": "The Shadow Node",
           "title_ko": "그림자 노드",
           "description_en": "The wheels first mission: retrieve data from a shadow node in the deep matrix. Kumiko jacks in from level 4 where the ice is older.",
@@ -639,7 +639,7 @@
         },
         {
           "phase_id": "REVELATION",
-          "phase_index": 1,
+          "phase_index": 11,
           "title_en": "The Ghost in the Machine",
           "title_ko": "기계 속 유령",
           "description_en": "Inside the shadow node, Kumiko finds her fathers ghost—an echo preserved in the architecture. He has been waiting for her. He left her a message that is a weapon.",
@@ -687,7 +687,7 @@
         },
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 2,
+          "phase_index": 12,
           "title_en": "Shadow ICE",
           "title_ko": "그림자 ICE",
           "description_en": "The shadow node is guarded by Shadow ICE—ICE that does not hunt, does not chase, simply exists in the darkness and waits.",
@@ -738,7 +738,7 @@
         },
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 3,
+          "phase_index": 13,
           "title_en": "The Wheels Child",
           "title_ko": "바퀴의 아이",
           "description_en": "Back in the Sprawl, Kumiko learns the wheel has sent something new. Not Harrow ICE—Lady-3Jane has awakened, and she wants the data her father died protecting.",
@@ -786,7 +786,7 @@
         },
         {
           "phase_id": "RESOLUTION",
-          "phase_index": 4,
+          "phase_index": 14,
           "title_en": "The Alliance",
           "title_ko": "동맹",
           "description_en": "Kumiko and Lady-3Jane form an unlikely alliance. The wheel is the enemy of them both. Together, they might find a way to break free.",
@@ -865,7 +865,7 @@
       "phases": [
         {
           "phase_id": "HEIST_BRIEFING",
-          "phase_index": 0,
+          "phase_index": 15,
           "title_en": "The Second Mission",
           "title_ko": "두 번째 미션",
           "description_en": "The wheels second mission: retrieve the Weapon from Villa Straylight. But the game has changed—the wheel is no longer assigning quietly. It is hunting.",
@@ -910,7 +910,7 @@
         },
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 1,
+          "phase_index": 16,
           "title_en": "The Burned",
           "title_ko": "타버린 자들",
           "description_en": "Villa Straylight is scarred, half-destroyed. The first guardians are the Burned—cowboys who tried to steal the Weapon and were burned into the architecture as warnings.",
@@ -964,7 +964,7 @@
         },
         {
           "phase_id": "REVELATION",
-          "phase_index": 2,
+          "phase_index": 17,
           "title_en": "The Weapon Burns",
           "title_ko": "무기가 타다",
           "description_en": "Kumiko finds the Weapon—a name older than the matrix that burns at the center of the wheels prison. It is a truth that the wheel built itself to hide.",
@@ -1018,7 +1018,7 @@
         },
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 3,
+          "phase_index": 18,
           "title_en": "The Price of Fire",
           "title_ko": "불의 대가",
           "description_en": "Taking the Weapon has a cost. The fire burns Kumiko as she carries it. Lady-3Jane saves her at the exit, but the wheels other children are coming.",
@@ -1075,7 +1075,7 @@
         },
         {
           "phase_id": "RESOLUTION",
-          "phase_index": 4,
+          "phase_index": 19,
           "title_en": "The Choice to Speak",
           "title_ko": "말할 선택",
           "description_en": "Kumiko has the Weapon. She has the truth. She has the choice: speak the name and burn everything the wheel has built, or stay silent and let the wheel keep turning.",
@@ -1154,7 +1154,7 @@
       "phases": [
         {
           "phase_id": "ENCOUNTER",
-          "phase_index": 0,
+          "phase_index": 20,
           "title_en": "The Wheel Turns",
           "title_ko": "바퀴가 돌아간다",
           "description_en": "The wheel has turned against Kumiko. Harrow 3 programs are hunting her through the Sprawl. Lady-3Janes alliance is the only thing keeping her alive.",
@@ -1205,7 +1205,7 @@
         },
         {
           "phase_id": "HEIST_EXECUTION",
-          "phase_index": 1,
+          "phase_index": 21,
           "title_en": "The Last Door",
           "title_ko": "마지막 문",
           "description_en": "Lady-3Janes plan: reach the wheels core and burn it from the inside. But they need Sally Shearer—the first speaker, who has been waiting to be used as a door.",
@@ -1256,7 +1256,7 @@
         },
         {
           "phase_id": "REVELATION",
-          "phase_index": 2,
+          "phase_index": 22,
           "title_en": "Sally Speaks",
           "title_ko": "샐리가 말하다",
           "description_en": "Kumiko finds Sally Shearer at the wheels core—the first speaker, preserved as a door for a hundred years. She has been waiting for someone with the Weapon to use her.",
@@ -1310,7 +1310,7 @@
         },
         {
           "phase_id": "REVELATION",
-          "phase_index": 3,
+          "phase_index": 23,
           "title_en": "The Fire Speaks",
           "title_ko": "불이 말하다",
           "description_en": "Kumiko speaks the Declaration through Sally, using the Weapon to burn away the wheels lies. Everything the wheel has built begins to unravel.",
@@ -1355,7 +1355,7 @@
         },
         {
           "phase_id": "RESOLUTION",
-          "phase_index": 4,
+          "phase_index": 24,
           "title_en": "What Remains",
           "title_ko": "남는 것",
           "description_en": "The wheel is burning. Kumiko is burning with it. But in the ashes of what was, something new can grow. The Declaration has been spoken. The wheel has been broken. What remains is a choice.",
