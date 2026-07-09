@@ -300,3 +300,52 @@ def test_ap_regen() -> None:
     for _ in range(70):
         step_combat(state)
     assert p.ap >= 3
+
+
+def test_vfx_overlay_no_afterimage() -> None:
+    """Regression: hit flash must not leave afterimages when expired.
+
+    Before fix: _draw_vfx_overlay only printed at sparse cells (x+y)%3==0,
+    and console.print only set fg (not bg). After flash expired, the colored
+    cells remained visible as ghost images (afterimages).
+
+    After fix: _draw_vfx_overlay clears the entire region with bg=0 before
+    drawing any effects, preventing afterimages.
+    """
+    import tcod.console
+    from roguelike_sprawl.combat.effects import CombatEffects
+    from roguelike_sprawl.engine.combat_view import _draw_vfx_overlay
+    from roguelike_sprawl.engine.layout import Region, RegionId
+
+    console = tcod.console.Console(30, 20)
+    region = Region(id=RegionId.MAIN, x=5, y=3, w=20, h=14)
+
+    # Phase 1: render with hit flash ACTIVE
+    fx = CombatEffects()
+    fx.hit_flash.trigger(color=(255, 255, 255), duration_ms=120)
+    _draw_vfx_overlay(console, region, fx, 0, 0)
+
+    # Count flash cells
+    flash_count_active = sum(
+        1 for y in range(region.y, region.y + region.h)
+        for x in range(region.x, region.x + region.w)
+        if chr(console.ch[y, x]) == "█"
+    )
+    assert flash_count_active > 0, "Hit flash should render some cells"
+
+    # Phase 2: advance time so flash expires, then re-render
+    fx.step(200)  # 200ms > 120ms duration
+    assert not fx.hit_flash.is_active, "Hit flash should be expired"
+
+    _draw_vfx_overlay(console, region, fx, 0, 0)
+
+    # Phase 3: verify no flash cells remain (afterimage bug is fixed)
+    flash_count_after = sum(
+        1 for y in range(region.y, region.y + region.h)
+        for x in range(region.x, region.x + region.w)
+        if chr(console.ch[y, x]) == "█"
+    )
+    assert flash_count_after == 0, (
+        f"Afterimage bug: {flash_count_after} flash cells remain after expiry. "
+        "The overlay region should be cleared before re-drawing."
+    )
