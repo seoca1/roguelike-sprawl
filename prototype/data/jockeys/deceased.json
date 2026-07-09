@@ -1,5 +1,21 @@
 [
   {
+    "jockey_id": "0f3926b5aab8428cb54e26eb58258edc",
+    "name": "케이 (K) — Novice",
+    "character_id": "novice",
+    "grade": 1,
+    "died_at_node": "entry_shallow_1_mid_0",
+    "died_at_mission": "craft_job",
+    "died_at_timestamp_ms": 1783609334856,
+    "inventory_snapshot": [
+      "data_fragment"
+    ],
+    "missions_completed": 0,
+    "data_recovered": 0,
+    "playtime_minutes": 0,
+    "epitaph": "Cash for the next, then."
+  },
+  {
     "jockey_id": "c4b3a09ef30a481794457ad75a94baa0",
     "name": "케이 (K) — Novice",
     "character_id": "novice",
