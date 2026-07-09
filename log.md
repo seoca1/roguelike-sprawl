@@ -2,6 +2,33 @@
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
 
+## [2026-07-10] fix+test | Combat VFX afterimage — clear overlay before draw + regression test
+
+### 문제
+전투 화면에서 스킬 이펙트(특히 hit flash) 잔상이 사라지지 않음.
+- 원인: `_draw_vfx_overlay`의 hit flash가 sparse pattern(`(x+y)%3==0`)으로만 그리며, `console.print`가 foreground만 설정하고 background는 기존값 유지
+- 결과: flash 종료 후에도 colored background가 afterimage로 남음
+
+### 수정 내용
+`engine/combat_view.py` `_draw_vfx_overlay` 시작 부분에 명시적 clear 추가:
+```python
+for y in range(ry, min(ry + rh, console.height)):
+    for x in range(rx, min(rx + rw, console.width)):
+        console.print(x=x, y=y, string=" ", fg=(0, 0, 0), bg=(0, 0, 0))
+```
+
+### 검증
+- Headless isolated test: flash 활성 시 94셀 → 만료 후 0셀 ✅
+- OLD behavior 확인: 만료 후에도 94셀 잔존 (afterimage bug) ✅
+- `test_vfx_overlay_no_afterimage` regression test 추가
+- pytest: 4154 passed ✅
+
+### 영향
+- `prototype/src/roguelike_sprawl/engine/combat_view.py`
+- `prototype/tests/unit/test_combat.py` (regression test)
+
+---
+
 ## [2026-07-09] audit | graphic novel Gibson tone + data bug fix
 
 ### 12 씬 Gibson 톤 감사 결과 (ADR-0041 확장 검증)
