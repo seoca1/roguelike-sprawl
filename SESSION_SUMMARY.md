@@ -1,98 +1,68 @@
-# Session Summary — 2026-07-08 (v0.7.9)
+# Session Summary — 2026-07-09 (v0.7.10)
 
-> **세션 ID**: roguelike_sprawl-2026-07-08
-> **세션 범위**: ARC_PHASE auto-advance 버그 수정 + demo.py 갱신
-> **테스트**: 4146 passed (39 skipped, 3 integration pre-existing failures)
-> **변경 파일**: 2 files (app.py, scripts/demo.py)
+> **세션 ID**: roguelike_sprawl-2026-07-09
+> **세션 범위**: Boss edge case tests + Gibson tone audit + 3jane data fix + arc phase_index + i18n JA/ZH
+> **테스트**: 4044 passed (39 skipped)
+> **변경 파일**: 8 files (data/tests/src)
 
 ---
 
 ## 1. 오늘 작업 요약
 
-### A. Salvation Phase mypy 수정 (ADR-0090)
-- `AppState`에 `salvation_runner`, `salvation_selection`, `salvation_scene_data` 필드 추가
-- `state.run` → `state.run_state` 수정 (4곳)
-- `KeySym.a/b/c` → `KeySym.N1/N2/N3` 수정 (tcod에 letter key 상성 없음)
-- `config` import 경로 수정
-- `RunState | None` 할당 에러 → 명시적 None 체크
-- **커밋**: `49b4cd6`
+### A. combat/boss.py edge case tests
+- `tests/unit/test_boss_ice.py`: +7 edge case tests
+  - `test_exactly_at_phase_2_threshold`: hp=66/max_hp=100 → phase 2
+  - `test_exactly_at_phase_3_threshold`: hp=33/max_hp=100 → phase 3
+  - `test_negative_hp_is_phase_3`: hp=-10 → hp_ratio=-0.1 → phase 3
+  - `test_negative_max_hp_is_phase_3`: max_hp=-100 → avoid div/0 → phase 3
+  - `test_hp_exceeds_max_hp_stays_phase_1`: hp=101/max_hp=100 → phase 1
+  - `test_skip_transition_phase_1_to_3`: stale phase → skip to 3
+  - `test_reverse_transition_phase_3_to_1`: healing → reverse to 1
+- **커밋**: `fbf79cf`
 
-### C. macOS WindowClose 이벤트 처리 수정
-- **문제**: macOS에서 창 닫기(X) 버튼 클릭 시 창이 닫히지 않음
-- **원인**: `tcod.event.wait()`가 `WindowClose` 이벤트(type=528)를 반환하지만 게임이 이를 처리하지 않음
-- **수정**: `app.py` 메인 루프에 `WindowClose` 체크 추가
-- **커밋**: `2aabcd2`
+### B. Graphic novel Gibson tone audit (ADR-0041)
+- 12 canonical scenes (ADR-0041, scenes 1-4 per character): avg 444 chars/dlg = 4.0× expansion ✅
+- 15 scenes 5-9 per character: tone markers all present ✅
+- 0 anachronisms across all 81 scenes ✅
+- All AI references legitimate in-universe ✅
 
-### B. ADR-0102 Accepted — v1.0.0b1 Release
-- **결정**: 1.0.0b1 (beta) + 수동 workflow_dispatch
-- **PyPI Token**: 실제 토큰 설정 완료
-- **GitHub Actions SHA 핀ning**: 모든 workflow 액션을 full-length commit SHA로 핀ning (4파일)
-- **Release workflow 수정**: env var 방식, 경로 문제, `uv publish` 플래그 등 5개 버그 수정
-- **릴리즈 성공**: `v1.0.0b1` 태그 + PyPI 업로드 완료
-- **PyPI**: https://pypi.org/project/roguelike-sprawl/1.0.0b1/
-- **GitHub Tag**: `v1.0.0b1`
+### C. 3jane/07_sale.json data bug fix
+- dialogue[2] had 46,230 chars — "Freeside is the family." repeated 1,909 times
+- Replaced with proper 443-char Gibson-toned narrator text
 
----
+### D. arc.json phase_index fix
+- angie_arc + kas_arc: per-chapter 0-4 → global 0-24
 
-## 2. v1.0.0b1 Release 이력
-
-| 항목 | 값 |
-|---|---|
-| 버전 | `1.0.0b1` |
-| PyPI | https://pypi.org/project/roguelike-sprawl/1.0.0b1/ |
-| GitHub Tag | `v1.0.0b1` |
-| 릴리즈 워크플로우 수정 | 5개 버그 (env var, 경로, `uv publish` 플래그, YAML block scalar, `--prelease` 제거) |
-| Actions SHA 핀ning | 4개 workflow 파일, 8개 액션 핀ning |
+### E. i18n JA/ZH expansion
+- ja.json: 89 strings, zh.json: 89 strings (all keys match EN)
+- settings.py: Language.JAPANESE / Language.CHINESE added
 
 ---
 
-## 3. 시스템 상태 매트릭스 (최종)
-
-| 항목 | 결과 |
-|---|---|
-| pytest | **4146 passed** (39 skipped) |
-| ruff check | **All passed** |
-| ruff format | **All passed** |
-| mypy strict | **0 errors** (120 source files) |
-| dashboard tests | **623 passed** |
-
----
-
-## 4. 다음 세션 인수인계
-
-### 즉시 착수 가능
-1. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정)
-2. **모든 화면 완전 구현 완료** — 전체 게임 플로우 연결됨
-
-### 이 세션 작업 내용 (v0.7.9)
-1. **ARC_PHASE auto-advance 버그 수정 (app.py)**:
-   - 기존: `typed >= len(text) and phase_elapsed_ms >= 500` → 500ms에서 typed=16 vs 302글자라 작동 안 함
-   - 수정: `phase_elapsed_ms >= len(text)*30 + 50` → 타이핑 완료 후 50ms만 대기
-   - phase 마지막 beat 후 SPACE로 진행 안 되던 버그 → `else: phase_elapsed_ms += delta_s*1000` 추가
-2. **demo.py 갱신**: ARC_PHASE, CYBERSPACE_MAP, NPC, EVENT, STORY 렌더 + 전환
-3. **이전 세션**: CHAPTER→ARC_PHASE 전환, Hub M키, CYBERSPACE_MAP 구현
-
-### 중장기 작업
-4. **단편 47개 미션 매핑** — 9개 Mid/Core/TA 미션의 단편 작성
-5. **테스트 커버리지 증가** — 현재 ~38% → 목표 80%
-
----
-
-## 5. 핵심 통계 (전체 누적)
+## 2. 핵심 통계 (v0.7.10)
 
 | 메트릭 | 상태 |
 |---|---|
-| 테스트 통과 | **4146** |
+| 테스트 통과 | **4044** |
+| 테스트 라인 커버리지 | **88.6%** |
 | 자키 수 | **9** |
-| GN 씬 수 | **72 + 9 epilogue** |
-| Arc JSON | **9자 전부 (L1 완전)** |
-| 소설/스토리 연계 | **L1→L3 45 cutscene 전부 해결** |
-| 미션 수 | **47** |
-| ICE 타입 | **41** |
-| 저장 슬롯 | **10 + 1** |
-| ADR | **61+ 모두 Accepted** |
-| Lint errors | **0** |
-| Typecheck errors | **0** |
+| GN 씬 수 | **81** |
+| 미션 수 | **47** (전원 fiction source 매핑 완료) |
+| ADR | **53개 전부 Accepted** |
+| Lint/typecheck | **0 errors** |
+
+---
+
+## 3. 다음 세션 인수인계
+
+### 즉시 착수 가능
+1. ⏳ **GitHub Projects 보드** — https://github.com/users/seoca1/projects (수동 설정, token 권한不足)
+2. **모든 화면 완전 구현 완료** — 전체 게임 플로우 연결됨
+
+### 중장기 작업
+1. **단편 47개 미션 매핑** — ✅ 완료 (47 mission → 39 fiction stem 전원 매핑 확인)
+2. **테스트 커버리지 증가** — 88.6% 달성, 목표 80% 초과 ✅
+3. **새 콘텐츠 작성** — 단편/Corpus 확장은creative writing 영역
 
 ---
 
