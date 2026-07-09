@@ -179,6 +179,11 @@ def _draw_vfx_overlay(
     """Render VFX overlay on top of combat (Layer 1-5 effects)."""
     rx, ry, rw, rh = region.x, region.y, region.w, region.h
 
+    # Clear the overlay area first to prevent afterimages (hit flash etc.)
+    for y in range(ry, min(ry + rh, console.height)):
+        for x in range(rx, min(rx + rw, console.width)):
+            console.print(x=x, y=y, string=" ", fg=(0, 0, 0), bg=(0, 0, 0))
+
     # Hit flash: white overlay with alpha fade
     if fx.hit_flash.is_active:
         flash_char = "█"
