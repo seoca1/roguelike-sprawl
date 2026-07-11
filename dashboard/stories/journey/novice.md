@@ -240,7 +240,7 @@
 | 최종 등급 | 5 |
 | 핸드폰 등급 추정 | Wisp T1 → **T3 Hammer** |
 | CHAPTER 화면 본편 | `case_jackout-30sec` (12초 타이핑) |
-| 위키 참조 | [[case]], [[neuromancer]], [[cyberspace]], [[chiba-city]], [[identity-and-the-matrix]] |
+| 위키 참조 | [[case]], [[neuromancer]], [[cyberspace]], [[chiba-city]], [[identity-and-consciousness]] |
 
 ## 엔딩 통계 (선택 시)
 

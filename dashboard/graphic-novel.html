@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Roguelike Sprawl 그래픽 노블 모드 — 81 씬 (9 자키 × 9 씬), 캐릭터 포트레잇, 배경 아트, 단편 연결">
+<meta name="description" content="Roguelike Sprawl 그래픽 노블 모드 — 81 씬 (9 cast / 4 archetypes × 9 씬), 캐릭터 포트레잇, 배경 아트, 단편 연결">
 <meta name="keywords" content="roguelike, cyberpunk, gibson, sprawl, graphic-novel, ascii, tcod, python, korean, fanfiction, derivative">
 <meta name="author" content="emilio">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -171,8 +171,40 @@ nav.dashboard-nav a:hover {
   border-color: #00ff9c;
 }
 </style>
+<style>
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #06090f; border-bottom: 1px solid #1a2530;
+    padding: 8px 16px; margin: -8px -8px 16px -8px;
+    display: flex; gap: 12px; align-items: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .top-nav a { color: #66ffcc; text-decoration: none; }
+  .top-nav a:hover { color: #00ccff; }
+  .top-nav .sep { color: #2a3540; }
+</style>
 </head>
+
 <body>
+<nav class="top-nav">
+  <a href="./index.html">🌐 Hub</a>
+  <span class="sep">|</span>
+  <a href="./library.html">📚 Library</a>
+  <a href="./stories-browse.html">📖 Browse</a>
+  <a href="./search.html">🔍 Search</a>
+  <a href="./reading-stats.html">📊 Reading</a>
+  <a href="./character-graph.html">🕸️ Chars</a>
+  <a href="./mission-flow.html">🎯 Missions</a>
+  <a href="./jokey.html">🎭 Cast</a>
+  <span class="sep">|</span>
+  <a href="./missions.html">📖 Story</a>
+  <a href="./graphic-novel.html">🎬 GN</a>
+  <span class="sep">|</span>
+  <a href="./combat.html">⚔ Combat</a>
+</nav>
+
+
 
 <header>
   <h1>▌ 그래픽 노블 모드 ▐</h1>
@@ -183,10 +215,10 @@ nav.dashboard-nav a:hover {
 <nav class="dashboard-nav">
   <a href="index.html">🏠 Home</a>
   <a href="library.html">📚 Stories</a>
-  <a href="achievements.html">🏆 Achievements</a>
+  <a href="./player.html#achievements">🏆 Achievements</a>
   <a href="combat.html">⚔ Combat</a>
   <a href="sound.html">🔊 Sound</a>
-  <a href="equipment.html">🛡 Equipment</a>
+  <a href="./player.html#equipment">🛡 Equipment</a>
   <a href="cyberspace.html">🌐 Cyberspace</a>
   <a href="settings.html">⚙ Settings</a>
   <a href="stages.html">🎬 Stages</a>

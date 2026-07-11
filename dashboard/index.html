@@ -166,6 +166,13 @@
   <a href="./index.html">🌐 Hub</a>
   <span class="sep">|</span>
   <span class="current">🌆 Roguelike</span>
+  <span class="sep">|</span>
+  <a href="./library.html">📚 Library</a>
+  <a href="./search.html">🔍 Search</a>
+  <a href="./reading-stats.html">📊 Reading</a>
+  <a href="./character-graph.html">🕸️ Characters</a>
+  <a href="./mission-flow.html">🎯 Missions</a>
+  <a href="./jokey.html">🎭 Cast</a>
 </nav>
 <a class="top-hub-link" id="projects-hub-link" href="../../" title="Projects Hub (local dev only)">🌐 Projects Hub</a>
 <script>
@@ -230,6 +237,16 @@
   </div>
 </div>
 
+<section id="continue-reading" style="margin:24px 0;padding:16px;background:#0d1420;border:1px solid #1a2530;border-radius:6px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h2 style="margin:0;font-size:18px;color:#ffaa55">📖 Continue Reading</h2>
+    <span style="font-size:11px;color:#6a7888">last 6 reads · localStorage only</span>
+  </div>
+  <div id="cr-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px"></div>
+  <p id="cr-empty" style="display:none;color:#6a7888;font-size:12px">No reading history yet. Try <a href="./stories-browse.html" style="color:#66ffcc">stories-browse.html</a> to get started.</p>
+</section>
+<script src="continue-reading.js"></script>
+
 <h2>📂 Dashboards (대시보드 메뉴)</h2>
 <div class="menu-grid">
 
@@ -267,7 +284,7 @@
   <a class="menu-card" href="graphic-novel.html">
     <div class="icon">📖</div>
     <h3>Graphic Novel <span style="font-size:11px;color:#ff6699">(ADR-0032)</span></h3>
-    <p>81 씬 자동플레이 비주얼 노블 (9 자키 × 9 씬). 배경 아트 + 캐릭터 포트레잇 + 대사 + 진행 바. 메뉴 5 옵션의 핵심 진입로.</p>
+    <p>81 씬 자동플레이 비주얼 노블 (9 cast / 4 archetypes × 9 씬). 배경 아트 + 캐릭터 포트레잇 + 대사 + 진행 바. 메뉴 5 옵션의 핵심 진입로.</p>
     <div class="stats">
       <span class="stat"><span class="num">81</span> scenes</span>
       <span class="stat"><span class="num">9</span> chars</span>
@@ -327,7 +344,7 @@
     <div class="arrow">→</div>
   </a>
 
-  <a class="menu-card" href="equipment.html">
+  <a class="menu-card" href="./player.html#equipment">
     <div class="icon">📦</div>
     <h3>Equipment Dashboard</h3>
     <p>8 슬롯, 6 등급, 9 기술 유형, 3-tier 제작.</p>
@@ -362,7 +379,7 @@
   <a class="menu-card" href="play.html">
     <div class="icon">▶</div>
     <h3>Play (Beta) <span style="font-size:11px;color:#ffaa55">(NEW)</span></h3>
-    <p>인터랙티브 챕터 데모. 9 자키 × 5 챕터 × 47 미션 × A/B/C 엔딩 → 단편 발췌. 정적 HTML+JS (GitHub Pages 호환). 진짜 tcod 게임 루프는 백엔드 필요.</p>
+    <p>인터랙티브 챕터 데모. 9 cast / 4 archetypes × 5 챕터 × 47 미션 × A/B/C 엔딩 → 단편 발췌. 정적 HTML+JS (GitHub Pages 호환). 진짜 tcod 게임 루프는 백엔드 필요.</p>
     <div class="stats">
       <span class="stat"><span class="num">47</span> 미션</span>
       <span class="stat"><span class="num">9</span> 자키</span>
@@ -375,7 +392,7 @@
   <a class="menu-card" href="stories/episode-reader.html">
     <div class="icon">📑</div>
     <h3>Story Reader <span style="font-size:11px;color:#ffaa55;">(NEW)</span></h3>
-    <p>4 아크 × 4 챕터 chapter index. 챕터 카드 클릭 → EN/KO 챕터 excerpt 표시.</p>
+    <p>9 cast / 4 archetypes × 12 챕터 × 9 아크 chapter index. 챕터 카드 클릭 → EN/KO 챕터 excerpt 표시.</p>
     <div class="stats">
       <span class="stat"><span class="num">4</span> 챕터</span>
       <span class="stat"><span class="num">4</span> 아크</span>
@@ -384,7 +401,7 @@
     <div class="arrow">→</div>
   </a>
 
-  <a class="menu-card" href="achievements.html">
+  <a class="menu-card" href="./player.html#achievements">
     <div class="icon">🏆</div>
     <h3>Achievements</h3>
     <p>업적 카탈로그. 전투/탐험/도구/경제/엔딩/메타 카테고리. 27 업적.</p>

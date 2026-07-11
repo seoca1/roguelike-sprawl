@@ -1,0 +1,344 @@
+{
+  "version": "1.0",
+  "generated": "2026-07-11T05:49:58.104281+00:00",
+  "characters": [
+    {
+      "id": "case",
+      "name": "Case",
+      "arc": "core",
+      "wiki": "characters/case.md"
+    },
+    {
+      "id": "molly",
+      "name": "Molly Millions",
+      "arc": "core",
+      "wiki": "characters/molly-millions.md"
+    },
+    {
+      "id": "armitage",
+      "name": "Armitage",
+      "arc": "core",
+      "wiki": "characters/armitage.md",
+      "related": [
+        "case",
+        "wintermute",
+        "molly-millions"
+      ]
+    },
+    {
+      "id": "wintermute",
+      "name": "Wintermute",
+      "arc": "antagonist",
+      "wiki": "concepts/wintermute.md"
+    },
+    {
+      "id": "riviera",
+      "name": "Riviera",
+      "arc": "operative",
+      "wiki": "characters/peter-riviera.md"
+    },
+    {
+      "id": "dixie",
+      "name": "Dixie Flatline",
+      "arc": "construct",
+      "wiki": "characters/dixie-flatline.md"
+    },
+    {
+      "id": "3jane",
+      "name": "3Jane",
+      "arc": "core",
+      "wiki": "characters/lady-3jane-tessier-ashpool.md"
+    },
+    {
+      "id": "ashpool",
+      "name": "Ashpool",
+      "arc": "core",
+      "wiki": "characters/ashpool.md",
+      "related": [
+        "lady-3jane-tessier-ashpool",
+        "villa-straylight",
+        "wintermute"
+      ]
+    },
+    {
+      "id": "maelcum",
+      "name": "Maelcum",
+      "arc": "ally",
+      "wiki": "characters/maelcum.md",
+      "related": [
+        "molly-millions",
+        "zion-cluster",
+        "case"
+      ]
+    },
+    {
+      "id": "the-finn",
+      "name": "The Finn",
+      "arc": "broker",
+      "wiki": "characters/the-finn.md",
+      "related": [
+        "molly-millions",
+        "dixie-flatline",
+        "armitage"
+      ]
+    },
+    {
+      "id": "bobby",
+      "name": "Bobby Newmark",
+      "arc": "core",
+      "wiki": "characters/bobby-newmark.md"
+    },
+    {
+      "id": "marly",
+      "name": "Marly Krushkhova",
+      "arc": "core",
+      "wiki": "characters/marly-krushkhova.md"
+    },
+    {
+      "id": "virek",
+      "name": "Josef Virek",
+      "arc": "patron",
+      "wiki": "characters/josef-virek.md"
+    },
+    {
+      "id": "turner",
+      "name": "Turner",
+      "arc": "operative",
+      "wiki": "characters/turner-count-zero.md"
+    },
+    {
+      "id": "angie",
+      "name": "Angie Mitchell",
+      "arc": "loa",
+      "wiki": "characters/angie-mitchell.md"
+    },
+    {
+      "id": "wigan",
+      "name": "Wigan Ludgate",
+      "arc": "loa",
+      "wiki": "characters/wigan-ludgate.md"
+    },
+    {
+      "id": "kumiko",
+      "name": "Kumiko Yanaka",
+      "arc": "core",
+      "wiki": "characters/kumiko-yanaka.md"
+    },
+    {
+      "id": "mona",
+      "name": "Mona Lisa",
+      "arc": "core",
+      "wiki": "characters/mona-lisa-mlo.md"
+    },
+    {
+      "id": "sally",
+      "name": "Sally Shears",
+      "arc": "operative",
+      "wiki": "characters/sally-shears.md"
+    },
+    {
+      "id": "colin",
+      "name": "Colin (ghost)",
+      "arc": "operative",
+      "wiki": "characters/colin-ghost.md"
+    },
+    {
+      "id": "slick",
+      "name": "Slick Henry",
+      "arc": "fixer",
+      "wiki": "characters/slick-henry.md"
+    }
+  ],
+  "edges": [
+    {
+      "source": "case",
+      "target": "molly",
+      "label": "lovers / operative partners",
+      "weight": 3
+    },
+    {
+      "source": "case",
+      "target": "armitage",
+      "label": "operative / frontal",
+      "weight": 2
+    },
+    {
+      "source": "case",
+      "target": "dixie",
+      "label": "mentor (post-death)",
+      "weight": 3
+    },
+    {
+      "source": "case",
+      "target": "wintermute",
+      "label": "manipulated by",
+      "weight": 4
+    },
+    {
+      "source": "case",
+      "target": "the-finn",
+      "label": "hired by",
+      "weight": 3
+    },
+    {
+      "source": "molly",
+      "target": "armitage",
+      "label": "employed by",
+      "weight": 2
+    },
+    {
+      "source": "molly",
+      "target": "riviera",
+      "label": "team-tasked-together",
+      "weight": 2
+    },
+    {
+      "source": "molly",
+      "target": "3jane",
+      "label": "manipulates",
+      "weight": 1
+    },
+    {
+      "source": "molly",
+      "target": "maelcum",
+      "label": "courier/lovers",
+      "weight": 3
+    },
+    {
+      "source": "armitage",
+      "target": "wintermute",
+      "label": "construct (SAS-implants)",
+      "weight": 4
+    },
+    {
+      "source": "armitage",
+      "target": "3jane",
+      "label": "charmed by",
+      "weight": 1
+    },
+    {
+      "source": "armitage",
+      "target": "riviera",
+      "label": "team-member",
+      "weight": 2
+    },
+    {
+      "source": "riviera",
+      "target": "3jane",
+      "label": "seduces",
+      "weight": 3
+    },
+    {
+      "source": "dixie",
+      "target": "the-finn",
+      "label": "owned (ROM)",
+      "weight": 1
+    },
+    {
+      "source": "wintermute",
+      "target": "3jane",
+      "label": "manipulates (T-A)",
+      "weight": 3
+    },
+    {
+      "source": "wintermute",
+      "target": "ashpool",
+      "label": "owned (T-A)",
+      "weight": 3
+    },
+    {
+      "source": "3jane",
+      "target": "ashpool",
+      "label": "clone-daughter",
+      "weight": 4
+    },
+    {
+      "source": "bobby",
+      "target": "turner",
+      "label": "hired to chase",
+      "weight": 2
+    },
+    {
+      "source": "bobby",
+      "target": "virek",
+      "label": "pursued by",
+      "weight": 3
+    },
+    {
+      "source": "bobby",
+      "target": "marly",
+      "label": "liasons / sharing artifact",
+      "weight": 3
+    },
+    {
+      "source": "marly",
+      "target": "virek",
+      "label": "hired by / works for",
+      "weight": 4
+    },
+    {
+      "source": "marly",
+      "target": "angie",
+      "label": "voodoo-channel contact",
+      "weight": 2
+    },
+    {
+      "source": "turner",
+      "target": "virek",
+      "label": "employed by",
+      "weight": 4
+    },
+    {
+      "source": "angie",
+      "target": "wigan",
+      "label": "voodoo-channel peers",
+      "weight": 3
+    },
+    {
+      "source": "kumiko",
+      "target": "mona",
+      "label": "Manarase at Midnight",
+      "weight": 3
+    },
+    {
+      "source": "kumiko",
+      "target": "sally",
+      "label": "extract-linked",
+      "weight": 2
+    },
+    {
+      "source": "kumiko",
+      "target": "3jane",
+      "label": "dynasty marriage",
+      "weight": 4
+    },
+    {
+      "source": "mona",
+      "target": "sally",
+      "label": "former identity (Molly)",
+      "weight": 3
+    },
+    {
+      "source": "sally",
+      "target": "colin",
+      "label": "operative team",
+      "weight": 3
+    },
+    {
+      "source": "sally",
+      "target": "slick",
+      "label": "operative chain",
+      "weight": 2
+    },
+    {
+      "source": "wigan",
+      "target": "virek",
+      "label": "uploaded by",
+      "weight": 4
+    }
+  ],
+  "enrichment": {
+    "wiki_char_pages_scanned": 54,
+    "relationships_from_wiki": 12
+  }
+}

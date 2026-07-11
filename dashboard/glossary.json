@@ -1,0 +1,778 @@
+{
+  "version": "1.0",
+  "generated": "2026-07-11T05:49:58.104281+00:00",
+  "wiki_base": "../../../Fiction/wiki/",
+  "term_count": 128,
+  "terms": [
+    "Mona Lisa / \"Molly Millions\" (Mona Lisa Overdrive)",
+    "The Finn (a.k.a. The Finn / Augustus Conn)",
+    "characters/lady 3jane tessier ashpool",
+    "3Jane (Jokey — Tessier-Ashpool Heir)",
+    "Jackie (Count Zero sequel character)",
+    "Kas (Jokey — Heretic Console Cowboy)",
+    "Neuromancer (Jokey — The Merged AI)",
+    "Sally (Jokey — The Market Operator)",
+    "Ashpool (Tessier-Ashpool founder)",
+    "Heretic (Jokey — The Declaration)",
+    "Wigan (Jokey — Vodou Code Vessel)",
+    "characters/3jane tessier ashpool",
+    "Armitage (Colonel Willie Corto)",
+    "Novice (Jokey — The First Jack)",
+    "Veteran (Jokey — The Old Score)",
+    "Dixie Flatline (McCoy Pauley)",
+    "Johnny Mnemonic (short story)",
+    "Angie (Jokey — Loa Receiver)",
+    "Bobby Newmark (\"Count Zero\")",
+    "Fragments of a Hologram Rose",
+    "Sil (Jokey — Veteran Runner)",
+    "characters/marly krushkhova",
+    "Lady 3Jane Tessier-Ashpool",
+    "identity and consciousness",
+    "independence vs connection",
+    "lady 3jane tessier ashpool",
+    "characters/angie mitchell",
+    "works/mona lisa overdrive",
+    "addiction and dependency",
+    "characters/kumiko yanaka",
+    "characters/wigan ludgate",
+    "Sprawl Trilogy (series)",
+    "Suit (Jokey — The Suit)",
+    "characters/sally shears",
+    "technology and humanity",
+    "All Tomorrow's Parties",
+    "Colin (or \"the ghost\")",
+    "Red Star, Winter Orbit",
+    "characters/josef virek",
+    "characters/slick henry",
+    "cyberspace as frontier",
+    "Mitchell (Loa master)",
+    "The Difference Engine",
+    "reality vs simulation",
+    "Corto (Willie Corto)",
+    "class and inequality",
+    "concepts/neuromancer",
+    "3Jane (short story)",
+    "Cherry Chesterfield",
+    "Pattern Recognition",
+    "characters/armitage",
+    "characters/mitchell",
+    "concepts/wintermute",
+    "mona lisa overdrive",
+    "The Bridge Trilogy",
+    "characters/ashpool",
+    "concepts/the aleph",
+    "turner count zero",
+    "works/neuromancer",
+    "gender and power",
+    "marly krushkhova",
+    "villa straylight",
+    "works/count zero",
+    "characters/case",
+    "Burning Chrome",
+    "New Rose Hotel",
+    "angie mitchell",
+    "characters/kas",
+    "characters/sil",
+    "dixie flatline",
+    "molly millions",
+    "Spook Country",
+    "Virtual Light",
+    "Wigan Ludgate",
+    "bobby newmark",
+    "kumiko yanaka",
+    "mona lisa mlo",
+    "peter riviera",
+    "Hilton Swift",
+    "Robin Lanier",
+    "Sally Shears",
+    "The Projects",
+    "Zero History",
+    "zion cluster",
+    "Little Bird",
+    "Roger Swain",
+    "colin ghost",
+    "josef virek",
+    "neuromancer",
+    "slick henry",
+    "Kid Afrika",
+    "Piper Hill",
+    "Two-A-Days",
+    "chiba city",
+    "count zero",
+    "cyberspace",
+    "night city",
+    "the matrix",
+    "the sprawl",
+    "wintermute",
+    "Linda Lee",
+    "Petty San",
+    "The Aleph",
+    "the boxes",
+    "Beauvoir",
+    "armitage",
+    "freeside",
+    "istanbul",
+    "mitchell",
+    "the finn",
+    "Agrippa",
+    "Maelcum",
+    "ashpool",
+    "biosoft",
+    "simstim",
+    "Turner",
+    "Alain",
+    "Hideo",
+    "Idoru",
+    "Lucas",
+    "Petal",
+    "Prior",
+    "Eddy",
+    "Paco",
+    "case",
+    "meat",
+    "zion",
+    "ice"
+  ],
+  "map": {
+    "ice": {
+      "page": "concepts/ice.md",
+      "tooltip": "ice",
+      "text": "ice"
+    },
+    "wintermute": {
+      "page": "concepts/wintermute.md",
+      "tooltip": "wintermute",
+      "text": "wintermute"
+    },
+    "simstim": {
+      "page": "concepts/simstim.md",
+      "tooltip": "simstim",
+      "text": "simstim"
+    },
+    "the boxes": {
+      "page": "concepts/the-boxes.md",
+      "tooltip": "the boxes",
+      "text": "the boxes"
+    },
+    "biosoft": {
+      "page": "concepts/biosoft.md",
+      "tooltip": "biosoft",
+      "text": "biosoft"
+    },
+    "meat": {
+      "page": "concepts/meat.md",
+      "tooltip": "meat",
+      "text": "meat"
+    },
+    "turner": {
+      "page": "characters/turner-count-zero.md",
+      "tooltip": "Turner",
+      "text": "Turner"
+    },
+    "josef virek": {
+      "page": "characters/turner-count-zero.md",
+      "tooltip": "josef virek",
+      "text": "josef virek"
+    },
+    "bobby newmark": {
+      "page": "characters/turner-count-zero.md",
+      "tooltip": "bobby newmark",
+      "text": "bobby newmark"
+    },
+    "marly krushkhova": {
+      "page": "characters/turner-count-zero.md",
+      "tooltip": "marly krushkhova",
+      "text": "marly krushkhova"
+    },
+    "works/count zero": {
+      "page": "characters/turner-count-zero.md",
+      "tooltip": "works/count zero",
+      "text": "works/count zero"
+    },
+    "heretic (jokey — the declaration)": {
+      "page": "characters/heretic.md",
+      "tooltip": "Heretic (Jokey — The Declaration)",
+      "text": "Heretic (Jokey — The Declaration)"
+    },
+    "characters/kas": {
+      "page": "characters/heretic.md",
+      "tooltip": "characters/kas",
+      "text": "characters/kas"
+    },
+    "freeside": {
+      "page": "characters/heretic.md",
+      "tooltip": "freeside",
+      "text": "freeside"
+    },
+    "villa straylight": {
+      "page": "characters/heretic.md",
+      "tooltip": "villa straylight",
+      "text": "villa straylight"
+    },
+    "linda lee": {
+      "page": "characters/linda-lee.md",
+      "tooltip": "Linda Lee",
+      "text": "Linda Lee"
+    },
+    "case": {
+      "page": "characters/linda-lee.md",
+      "tooltip": "case",
+      "text": "case"
+    },
+    "neuromancer": {
+      "page": "characters/linda-lee.md",
+      "tooltip": "neuromancer",
+      "text": "neuromancer"
+    },
+    "works/neuromancer": {
+      "page": "characters/linda-lee.md",
+      "tooltip": "works/neuromancer",
+      "text": "works/neuromancer"
+    },
+    "colin (or \"the ghost\")": {
+      "page": "characters/colin-ghost.md",
+      "tooltip": "Colin (or \"the ghost\")",
+      "text": "Colin (or \"the ghost\")"
+    },
+    "slick henry": {
+      "page": "characters/colin-ghost.md",
+      "tooltip": "slick henry",
+      "text": "slick henry"
+    },
+    "mona lisa mlo": {
+      "page": "characters/colin-ghost.md",
+      "tooltip": "mona lisa mlo",
+      "text": "mona lisa mlo"
+    },
+    "kumiko yanaka": {
+      "page": "characters/colin-ghost.md",
+      "tooltip": "kumiko yanaka",
+      "text": "kumiko yanaka"
+    },
+    "works/mona lisa overdrive": {
+      "page": "characters/colin-ghost.md",
+      "tooltip": "works/mona lisa overdrive",
+      "text": "works/mona lisa overdrive"
+    },
+    "sally shears": {
+      "page": "characters/sally-shears.md",
+      "tooltip": "Sally Shears",
+      "text": "Sally Shears"
+    },
+    "molly millions": {
+      "page": "characters/sally-shears.md",
+      "tooltip": "molly millions",
+      "text": "molly millions"
+    },
+    "colin ghost": {
+      "page": "characters/sally-shears.md",
+      "tooltip": "colin ghost",
+      "text": "colin ghost"
+    },
+    "petty san": {
+      "page": "characters/petty-san.md",
+      "tooltip": "Petty San",
+      "text": "Petty San"
+    },
+    "the sprawl": {
+      "page": "characters/petty-san.md",
+      "tooltip": "the sprawl",
+      "text": "the sprawl"
+    },
+    "count zero": {
+      "page": "characters/case.md",
+      "tooltip": "count zero",
+      "text": "count zero"
+    },
+    "mona lisa overdrive": {
+      "page": "characters/case.md",
+      "tooltip": "mona lisa overdrive",
+      "text": "mona lisa overdrive"
+    },
+    "dixie flatline": {
+      "page": "characters/case.md",
+      "tooltip": "dixie flatline",
+      "text": "dixie flatline"
+    },
+    "chiba city": {
+      "page": "characters/case.md",
+      "tooltip": "chiba city",
+      "text": "chiba city"
+    },
+    "night city": {
+      "page": "characters/case.md",
+      "tooltip": "night city",
+      "text": "night city"
+    },
+    "armitage": {
+      "page": "characters/case.md",
+      "tooltip": "armitage",
+      "text": "armitage"
+    },
+    "peter riviera": {
+      "page": "characters/case.md",
+      "tooltip": "peter riviera",
+      "text": "peter riviera"
+    },
+    "lady 3jane tessier ashpool": {
+      "page": "characters/case.md",
+      "tooltip": "lady 3jane tessier ashpool",
+      "text": "lady 3jane tessier ashpool"
+    },
+    "cyberspace as frontier": {
+      "page": "characters/case.md",
+      "tooltip": "cyberspace as frontier",
+      "text": "cyberspace as frontier"
+    },
+    "identity and consciousness": {
+      "page": "characters/case.md",
+      "tooltip": "identity and consciousness",
+      "text": "identity and consciousness"
+    },
+    "addiction and dependency": {
+      "page": "characters/case.md",
+      "tooltip": "addiction and dependency",
+      "text": "addiction and dependency"
+    },
+    "reality vs simulation": {
+      "page": "characters/case.md",
+      "tooltip": "reality vs simulation",
+      "text": "reality vs simulation"
+    },
+    "technology and humanity": {
+      "page": "characters/case.md",
+      "tooltip": "technology and humanity",
+      "text": "technology and humanity"
+    },
+    "the aleph": {
+      "page": "characters/the-aleph.md",
+      "tooltip": "The Aleph",
+      "text": "The Aleph"
+    },
+    "dixie flatline (mccoy pauley)": {
+      "page": "characters/dixie-flatline.md",
+      "tooltip": "Dixie Flatline (McCoy Pauley)",
+      "text": "Dixie Flatline (McCoy Pauley)"
+    },
+    "the finn": {
+      "page": "characters/dixie-flatline.md",
+      "tooltip": "the finn",
+      "text": "the finn"
+    },
+    "hideo": {
+      "page": "characters/hideo.md",
+      "tooltip": "Hideo",
+      "text": "Hideo"
+    },
+    "corto (willie corto)": {
+      "page": "characters/corto.md",
+      "tooltip": "Corto (Willie Corto)",
+      "text": "Corto (Willie Corto)"
+    },
+    "the finn (a.k.a. the finn / augustus conn)": {
+      "page": "characters/the-finn.md",
+      "tooltip": "The Finn (a.k.a. The Finn / Augustus Conn)",
+      "text": "The Finn (a.k.a. The Finn / Augustus Conn)"
+    },
+    "jackie (count zero sequel character)": {
+      "page": "characters/jackie-count-zero.md",
+      "tooltip": "Jackie (Count Zero sequel character)",
+      "text": "Jackie (Count Zero sequel character)"
+    },
+    "angie mitchell": {
+      "page": "characters/jackie-count-zero.md",
+      "tooltip": "angie mitchell",
+      "text": "angie mitchell"
+    },
+    "wigan (jokey — vodou code vessel)": {
+      "page": "characters/wigan.md",
+      "tooltip": "Wigan (Jokey — Vodou Code Vessel)",
+      "text": "Wigan (Jokey — Vodou Code Vessel)"
+    },
+    "characters/wigan ludgate": {
+      "page": "characters/wigan.md",
+      "tooltip": "characters/wigan ludgate",
+      "text": "characters/wigan ludgate"
+    },
+    "concepts/the aleph": {
+      "page": "characters/wigan.md",
+      "tooltip": "concepts/the aleph",
+      "text": "concepts/the aleph"
+    },
+    "characters/angie mitchell": {
+      "page": "characters/wigan.md",
+      "tooltip": "characters/angie mitchell",
+      "text": "characters/angie mitchell"
+    },
+    "characters/josef virek": {
+      "page": "characters/wigan.md",
+      "tooltip": "characters/josef virek",
+      "text": "characters/josef virek"
+    },
+    "turner count zero": {
+      "page": "characters/josef-virek.md",
+      "tooltip": "turner count zero",
+      "text": "turner count zero"
+    },
+    "the matrix": {
+      "page": "characters/angie-mitchell.md",
+      "tooltip": "the matrix",
+      "text": "the matrix"
+    },
+    "mitchell": {
+      "page": "characters/angie-mitchell.md",
+      "tooltip": "mitchell",
+      "text": "mitchell"
+    },
+    "veteran (jokey — the old score)": {
+      "page": "characters/veteran.md",
+      "tooltip": "Veteran (Jokey — The Old Score)",
+      "text": "Veteran (Jokey — The Old Score)"
+    },
+    "characters/sil": {
+      "page": "characters/veteran.md",
+      "tooltip": "characters/sil",
+      "text": "characters/sil"
+    },
+    "ashpool": {
+      "page": "characters/molly-millions.md",
+      "tooltip": "ashpool",
+      "text": "ashpool"
+    },
+    "gender and power": {
+      "page": "characters/molly-millions.md",
+      "tooltip": "gender and power",
+      "text": "gender and power"
+    },
+    "class and inequality": {
+      "page": "characters/molly-millions.md",
+      "tooltip": "class and inequality",
+      "text": "class and inequality"
+    },
+    "independence vs connection": {
+      "page": "characters/molly-millions.md",
+      "tooltip": "independence vs connection",
+      "text": "independence vs connection"
+    },
+    "the projects": {
+      "page": "characters/the-projects.md",
+      "tooltip": "The Projects",
+      "text": "The Projects"
+    },
+    "piper hill": {
+      "page": "characters/piper-hill.md",
+      "tooltip": "Piper Hill",
+      "text": "Piper Hill"
+    },
+    "maelcum": {
+      "page": "characters/maelcum.md",
+      "tooltip": "Maelcum",
+      "text": "Maelcum"
+    },
+    "zion cluster": {
+      "page": "characters/maelcum.md",
+      "tooltip": "zion cluster",
+      "text": "zion cluster"
+    },
+    "armitage (colonel willie corto)": {
+      "page": "characters/armitage.md",
+      "tooltip": "Armitage (Colonel Willie Corto)",
+      "text": "Armitage (Colonel Willie Corto)"
+    },
+    "lucas": {
+      "page": "characters/lucas-count-zero.md",
+      "tooltip": "Lucas",
+      "text": "Lucas"
+    },
+    "sally (jokey — the market operator)": {
+      "page": "characters/sally.md",
+      "tooltip": "Sally (Jokey — The Market Operator)",
+      "text": "Sally (Jokey — The Market Operator)"
+    },
+    "characters/sally shears": {
+      "page": "characters/sally.md",
+      "tooltip": "characters/sally shears",
+      "text": "characters/sally shears"
+    },
+    "roger swain": {
+      "page": "characters/roger-swain.md",
+      "tooltip": "Roger Swain",
+      "text": "Roger Swain"
+    },
+    "3jane (jokey — tessier-ashpool heir)": {
+      "page": "characters/3jane.md",
+      "tooltip": "3Jane (Jokey — Tessier-Ashpool Heir)",
+      "text": "3Jane (Jokey — Tessier-Ashpool Heir)"
+    },
+    "characters/lady 3jane tessier ashpool": {
+      "page": "characters/3jane.md",
+      "tooltip": "characters/lady 3jane tessier ashpool",
+      "text": "characters/lady 3jane tessier ashpool"
+    },
+    "characters/ashpool": {
+      "page": "characters/3jane.md",
+      "tooltip": "characters/ashpool",
+      "text": "characters/ashpool"
+    },
+    "characters/kumiko yanaka": {
+      "page": "characters/3jane.md",
+      "tooltip": "characters/kumiko yanaka",
+      "text": "characters/kumiko yanaka"
+    },
+    "sil (jokey — veteran runner)": {
+      "page": "characters/sil.md",
+      "tooltip": "Sil (Jokey — Veteran Runner)",
+      "text": "Sil (Jokey — Veteran Runner)"
+    },
+    "characters/marly krushkhova": {
+      "page": "characters/sil.md",
+      "tooltip": "characters/marly krushkhova",
+      "text": "characters/marly krushkhova"
+    },
+    "wigan ludgate": {
+      "page": "characters/wigan-ludgate.md",
+      "tooltip": "Wigan Ludgate",
+      "text": "Wigan Ludgate"
+    },
+    "eddy": {
+      "page": "characters/eddy.md",
+      "tooltip": "Eddy",
+      "text": "Eddy"
+    },
+    "robin lanier": {
+      "page": "characters/robin-lanier.md",
+      "tooltip": "Robin Lanier",
+      "text": "Robin Lanier"
+    },
+    "little bird": {
+      "page": "characters/little-bird.md",
+      "tooltip": "Little Bird",
+      "text": "Little Bird"
+    },
+    "cyberspace": {
+      "page": "characters/little-bird.md",
+      "tooltip": "cyberspace",
+      "text": "cyberspace"
+    },
+    "kas (jokey — heretic console cowboy)": {
+      "page": "characters/kas.md",
+      "tooltip": "Kas (Jokey — Heretic Console Cowboy)",
+      "text": "Kas (Jokey — Heretic Console Cowboy)"
+    },
+    "characters/3jane tessier ashpool": {
+      "page": "characters/kas.md",
+      "tooltip": "characters/3jane tessier ashpool",
+      "text": "characters/3jane tessier ashpool"
+    },
+    "petal": {
+      "page": "characters/petal.md",
+      "tooltip": "Petal",
+      "text": "Petal"
+    },
+    "two-a-days": {
+      "page": "characters/two-a-day.md",
+      "tooltip": "Two-A-Days",
+      "text": "Two-A-Days"
+    },
+    "bobby newmark (\"count zero\")": {
+      "page": "characters/bobby-newmark.md",
+      "tooltip": "Bobby Newmark (\"Count Zero\")",
+      "text": "Bobby Newmark (\"Count Zero\")"
+    },
+    "hilton swift": {
+      "page": "characters/hilton-swift.md",
+      "tooltip": "Hilton Swift",
+      "text": "Hilton Swift"
+    },
+    "lady 3jane tessier-ashpool": {
+      "page": "characters/lady-3jane-tessier-ashpool.md",
+      "tooltip": "Lady 3Jane Tessier-Ashpool",
+      "text": "Lady 3Jane Tessier-Ashpool"
+    },
+    "ashpool (tessier-ashpool founder)": {
+      "page": "characters/ashpool.md",
+      "tooltip": "Ashpool (Tessier-Ashpool founder)",
+      "text": "Ashpool (Tessier-Ashpool founder)"
+    },
+    "paco": {
+      "page": "characters/paco.md",
+      "tooltip": "Paco",
+      "text": "Paco"
+    },
+    "prior": {
+      "page": "characters/prior.md",
+      "tooltip": "Prior",
+      "text": "Prior"
+    },
+    "cherry chesterfield": {
+      "page": "characters/cherry-chesterfield.md",
+      "tooltip": "Cherry Chesterfield",
+      "text": "Cherry Chesterfield"
+    },
+    "angie (jokey — loa receiver)": {
+      "page": "characters/angie.md",
+      "tooltip": "Angie (Jokey — Loa Receiver)",
+      "text": "Angie (Jokey — Loa Receiver)"
+    },
+    "characters/mitchell": {
+      "page": "characters/angie.md",
+      "tooltip": "characters/mitchell",
+      "text": "characters/mitchell"
+    },
+    "alain": {
+      "page": "characters/alain.md",
+      "tooltip": "Alain",
+      "text": "Alain"
+    },
+    "neuromancer (jokey — the merged ai)": {
+      "page": "characters/neuromancer.md",
+      "tooltip": "Neuromancer (Jokey — The Merged AI)",
+      "text": "Neuromancer (Jokey — The Merged AI)"
+    },
+    "concepts/wintermute": {
+      "page": "characters/neuromancer.md",
+      "tooltip": "concepts/wintermute",
+      "text": "concepts/wintermute"
+    },
+    "concepts/neuromancer": {
+      "page": "characters/neuromancer.md",
+      "tooltip": "concepts/neuromancer",
+      "text": "concepts/neuromancer"
+    },
+    "mona lisa / \"molly millions\" (mona lisa overdrive)": {
+      "page": "characters/mona-lisa-mlo.md",
+      "tooltip": "Mona Lisa / \"Molly Millions\" (Mona Lisa Overdrive)",
+      "text": "Mona Lisa / \"Molly Millions\" (Mona Lisa Overdrive)"
+    },
+    "mitchell (loa master)": {
+      "page": "characters/mitchell.md",
+      "tooltip": "Mitchell (Loa master)",
+      "text": "Mitchell (Loa master)"
+    },
+    "novice (jokey — the first jack)": {
+      "page": "characters/novice.md",
+      "tooltip": "Novice (Jokey — The First Jack)",
+      "text": "Novice (Jokey — The First Jack)"
+    },
+    "characters/case": {
+      "page": "characters/novice.md",
+      "tooltip": "characters/case",
+      "text": "characters/case"
+    },
+    "beauvoir": {
+      "page": "characters/beauvoir.md",
+      "tooltip": "Beauvoir",
+      "text": "Beauvoir"
+    },
+    "kid afrika": {
+      "page": "characters/kid-afrika.md",
+      "tooltip": "Kid Afrika",
+      "text": "Kid Afrika"
+    },
+    "suit (jokey — the suit)": {
+      "page": "characters/suit.md",
+      "tooltip": "Suit (Jokey — The Suit)",
+      "text": "Suit (Jokey — The Suit)"
+    },
+    "characters/slick henry": {
+      "page": "characters/suit.md",
+      "tooltip": "characters/slick henry",
+      "text": "characters/slick henry"
+    },
+    "characters/armitage": {
+      "page": "characters/suit.md",
+      "tooltip": "characters/armitage",
+      "text": "characters/armitage"
+    },
+    "the difference engine": {
+      "page": "works/the-difference-engine.md",
+      "tooltip": "The Difference Engine",
+      "text": "The Difference Engine"
+    },
+    "spook country": {
+      "page": "works/spook-country.md",
+      "tooltip": "Spook Country",
+      "text": "Spook Country"
+    },
+    "the bridge trilogy": {
+      "page": "works/bridge-trilogy.md",
+      "tooltip": "The Bridge Trilogy",
+      "text": "The Bridge Trilogy"
+    },
+    "fragments of a hologram rose": {
+      "page": "works/fragments-of-a-hologram-rose.md",
+      "tooltip": "Fragments of a Hologram Rose",
+      "text": "Fragments of a Hologram Rose"
+    },
+    "burning chrome": {
+      "page": "works/burning-chrome.md",
+      "tooltip": "Burning Chrome",
+      "text": "Burning Chrome"
+    },
+    "johnny mnemonic (short story)": {
+      "page": "works/johnny-mnemonic.md",
+      "tooltip": "Johnny Mnemonic (short story)",
+      "text": "Johnny Mnemonic (short story)"
+    },
+    "3jane (short story)": {
+      "page": "works/3jane-tessier-ashpool.md",
+      "tooltip": "3Jane (short story)",
+      "text": "3Jane (short story)"
+    },
+    "red star, winter orbit": {
+      "page": "works/red-star-winter-orbit.md",
+      "tooltip": "Red Star, Winter Orbit",
+      "text": "Red Star, Winter Orbit"
+    },
+    "new rose hotel": {
+      "page": "works/new-rose-hotel.md",
+      "tooltip": "New Rose Hotel",
+      "text": "New Rose Hotel"
+    },
+    "zero history": {
+      "page": "works/zero-history.md",
+      "tooltip": "Zero History",
+      "text": "Zero History"
+    },
+    "idoru": {
+      "page": "works/idoru.md",
+      "tooltip": "Idoru",
+      "text": "Idoru"
+    },
+    "sprawl trilogy (series)": {
+      "page": "works/sprawl-trilogy.md",
+      "tooltip": "Sprawl Trilogy (series)",
+      "text": "Sprawl Trilogy (series)"
+    },
+    "pattern recognition": {
+      "page": "works/pattern-recognition.md",
+      "tooltip": "Pattern Recognition",
+      "text": "Pattern Recognition"
+    },
+    "agrippa": {
+      "page": "works/agrippa.md",
+      "tooltip": "Agrippa",
+      "text": "Agrippa"
+    },
+    "all tomorrow's parties": {
+      "page": "works/all-tomorrows-parties.md",
+      "tooltip": "All Tomorrow's Parties",
+      "text": "All Tomorrow's Parties"
+    },
+    "virtual light": {
+      "page": "works/virtual-light.md",
+      "tooltip": "Virtual Light",
+      "text": "Virtual Light"
+    },
+    "istanbul": {
+      "page": "settings/istanbul.md",
+      "tooltip": "istanbul",
+      "text": "istanbul"
+    },
+    "zion": {
+      "page": "settings/zion.md",
+      "tooltip": "zion",
+      "text": "zion"
+    }
+  }
+}

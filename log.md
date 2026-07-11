@@ -1,6 +1,493 @@
+## [2026-07-10] fix | app.py portrait path + test schema sync
+
+**Status**: Complete
+
+### Changes
+- `app.py` line 356/361: `config.DATA_DIR / "portraits"` → `config.DATA_DIR / "art"` (graphic novel portraits are at `data/art/portraits/portraits.json`, not `data/portraits.json`)
+- `test_graphic_novel_view.py`: `test_portrait_frozen` and `test_background_frozen` — added required `palette` + `char_colors` fields; `test_load_portrait_case_think` — height 14→12
+- `verification_report.json`: added `graphic_novel_schema` and `app_portrait_path` entries
+
+### Verification
+- 42/42 tests pass (`test_graphic_novel_view.py`)
+
+---
+
+## [2026-07-10] research | Unicode Block Art for 2× Vertical Resolution Portraits
+
+**Status**: Complete
+
+### Research Document
+- **Location**: `design/research/unicode-block-art.md` (11KB)
+- **Goal**: Upgrade ASCII portraits from 10×14 cells to higher resolution using Unicode block characters
+
+### Key Findings
+1. **Unicode Block Characters**: ✅ Fully suitable for 2× vertical resolution
+   - `▀` (U+2580) upper half + `▄` (U+2584) lower half = 2 pixels per cell
+   - `█` (U+2588) full block, `▌`/`▐` half blocks, `░`/`▒`/`▓` shades
+   - 10×14 cells → 10×28 pixels (double vertical resolution)
+
+2. **python-tcod Compatibility**: ✅ Verified
+   - `console.print()` supports Unicode characters
+   - `console.ch/fg/bg` arrays for per-pixel color control
+   - Already in use: `▌`, `▓`, `░`, `▒` in existing portraits/backgrounds
+
+3. **Current Portrait System**: ✅ Extensible
+   - `PortraitManager` loads from JSON, caches in memory
+   - `Portrait` dataclass: id, title, character, size, art array
+   - Single foreground color per portrait (current limitation)
+
+4. **Rendering Approach**: Pixel array → block characters
+   - Each cell renders 2 vertical pixels via `▀` with fg/bg colors
+   - Pre-compute character/color arrays during load
+   - Backward compatible via format detection
+
+### Proposed Data Format
+**Option B (Recommended)**: Run-Length Encoded with palette
+- 256-color palette (16 base + 16 skin + 16 metal + 16 neon + 192 gradient)
+- RLE compression for repeated colors
+- ~2-4 KB per portrait (vs. 8.4 KB uncompressed)
+
+### Implementation Roadmap
+- **Phase 1**: Proof of concept (1-2 days) — single test portrait
+- **Phase 2**: Tooling (2-3 days) — pixel editor + converter
+- **Phase 3**: Content creation (3-5 days) — convert 3 existing + 3 new
+- **Phase 4**: Integration (2-3 days) — update PortraitManager + tests
+- **Phase 5**: Full migration (5-7 days) — all 15 portraits + optimization
+- **Total**: 13-20 days
+
+### Next Steps
+1. Create proof-of-concept with single test portrait
+2. Implement rendering function and verify visual quality
+3. Build pixel editor tool for art creation
+4. Convert 3 existing portraits and gather feedback
+5. Proceed with full implementation if results are satisfactory
+
+---
+
+## [2026-07-10] demo_system_audit | HACK screen fix + combat_simulator.py --duration + verification_report.json updated
+
+**Status**: Complete
+
+### play.py — ScreenKind.HACK rendering + auto-pilot
+- Added `hacking_view.render_hack()` branch in `_render_current()` — HACK screen now renders
+- Added auto-pilot action: auto-executes probe after 1s, auto-exits to MATRIX after 2s result display
+- play.py imports cleanly
+
+### combat_simulator.py — wall-clock duration cap
+- Added `--duration` flag (default 30s) to prevent long headless runs
+- No wall-clock limit previously: default `--max-ticks=600` ran ~5 minutes
+- Loop now breaks when wall-clock time exceeds cap; reports TIMEOUT
+
+### verification_report.json — demo_audit section added
+- Added `demo_audit` section covering: phase-1-5 smoke pass, all dungeon/combat scripts audited, HACK screen fix, room_type/DEAD_END compatibility
+
+### Demo audit results (all PASS)
+| Script | Status |
+|---|---|
+| play_dungeon_mode.py | PASS |
+| play_ecs_dungeon.py | PASS |
+| play_arc_bsp.py | PASS |
+| boss_ice_demo.py | PASS |
+| combat_grades_demo.py | PASS |
+| combat_effects_demo.py | PASS |
+| combat_simulator.py | PASS |
+| phase-1-5 smoke (6 scripts) | PASS |
+
+### node.room_type / DEAD_END compatibility
+- `ProceduralDungeonGenerator._build_nodes()` sets `Node.room_type` from `Room.room_type`
+- `dungeon_view._ROOM_GLYPHS`: DEAD_END → "X", name → "Dead End"
+- `dungeon_view._node_attributes()`: `RoomType.DEAD_END` → `NodeKind.ROUTER`
+- No structural changes needed in demo scripts
+
+---
+
+## [2026-07-10] pipeline | build_static_data.py + 6 챕터 카드 enrichment + Stats instrumentation
+
+**Status**: Complete
+
+**Changes:**
+
+### Static data generator
+- **신규**: `Game/roguelike_sprawl/tools/build_static_data.py` (16KB)
+- 한 번 실행으로 dashboard/의 모든 data JSON 자동 빌드
+- 출력: `mission_links.json`, `search_index.json`, `character_graph.json`, `glossary.json`, `dataset_health.json`
+- wiki 자동 글로서리 추출 → **99 terms** (수동 작성 82 → 자동 99로 확장)
+- missions.json/story md/wiki 자동 cross-link 및 무결성 검사
+- 실행: `python3 Game/roguelike_sprawl/tools/build_static_data.py` → exit 0, ALL CONTRACTS PASS
+
+### 챕터 카드 Tier 1-4 enrichment (6개)
+- 기존 78개 단편 카드에만 통합되어 있던 11개 features를 6개 챕터 카드(case/sil/kas × en/ko)에도 적용
+- 챕터 카드: glossary, reading-position, sync-scroll, reader-controls, missions, print, stats 11개 모두
+- 챕터 카드는 그래픽 노블 디스플레이 multi-episode 형식
+
+### Stats instrumentation (Tier 4 보강)
+- **신규**: `Game/roguelike_sprawl/dashboard/stats.js` (2KB)
+- `window.SprawlStats.increment(event)` API로 경량 localStorage 추적
+- **3 trigger sites**: glossary.hover, reading.resume, controls.font_change
+- 자동 tracked: `page.view` (모든 카드 진입)
+- `reading-stats.html`에 telemetry panel 추가 — 이벤트 통계 표시
+
+### 검증 (continuation 종료)
+- 84 cards × 11 features = **924/924 (100%)** 통합 통과
+- `verify_contracts.py` ALL CONTRACTS PASS
+- Bridge Trilogy 보류 5개 파일 명시
+- Game log 5개 entry (integration, cleanup, enhancement, decision, pipeline)
+
+**다음 세션**: `make data` 빌드 명령 노출, stats panel 기본 표시, git pre-commit hook 자동화
+
+---
+
+## [2026-07-10] decision | Bridge Trilogy 파생 콘텐츠 보류 (Parked)
+
+**Decision**: roguelike_sprawl 게임 프로젝트는 **William Gibson의 Sprawl 3부작 (1984-1988)** 범위로 한정. Bridge 3부작 (1993-1999) 적용은 게임 콘텐츠 범위에서 제외.
+
+**이유:**
+- 게임의 모든 chapter / arc / mission이 Sprawl 3부작에서 파생
+- Bridge 고유 캐릭터·세계관(스마트 약물, 팹리스 등)은 게임에 없음
+- 마케팅 대비 효과 불분명
+
+**연결 문서:** `docs/progress/BRIDGE_TRILOGY_HOLD.md`
+
+**재개 조건:** 게임 확장 (Phase X1+) / 사용자 수요 / 외부 솔루션 등장
+
+---
+
+## [2026-07-10] enhancement | Dashboard Tier 1~4 완성 (Notion 대용, 44페이지 archive)
+
+**Changes (11개 항목):**
+
+### Tier 1 (코어 cross-references) — Notion 대체 기능
+1. **Glossary 통합**: 82개 깁슨 용어 자동 hover 링크 (`glossary.js` + `glossary.json` 78 카드 통합)
+2. **Mission ↔ Story 양방향**: 72 카드에 mission badge 표시 (`missions.css`, `data/mission_links.json`)
+3. **Character cross-link**: 39 카드의 character badge가 wiki로 링크 (`character-badge-link` 자동 처리)
+
+### Tier 2 (독서 경험)
+4. **Reading position**: localStorage에 scroll % 저장 (resume button)
+5. **EN ↔ KO sync scroll**: `?pct=` URL 파라미터로 양쪽 페이지 스크롤 동기
+6. **Print/PDF styles**: 흑백, 페이지 번호, 인쇄 footer
+7. **Search across stories**: `search.html` + `data/search_index.json` (78개 entry)
+
+### Tier 3 (시각화 + 학습)
+8. **Reading stats dashboard**: Arc별 진척도 (localStorage 누적)
+9. **Character relationship graph**: 21 캐릭터, 31 관계 force-directed SVG
+10. **Mission progress visualization**: 47 미션 Arc별 그룹 카드
+
+### Tier 4 (Polish)
+11. **Reader controls**: 노트 (localStorage) + Dyslexia-friendly 글꼴 + 키보드 단축키 (j/k/n/?)
+
+**신규 페이지 4개:**
+- `search.html`, `reading-stats.html`, `character-graph.html`, `mission-flow.html`
+
+**신규 모듈 14개:**
+- JS: glossary, reading-position, sync-scroll, search, reading-stats, character-graph, mission-flow, reader-controls (8개)
+- CSS: glossary, missions, print, reading-position, sync-scroll, reader-controls (6개)
+
+**데이터 파일 4개:**
+- `data/mission_links.json` (36 source × 미션)
+- `data/search_index.json` (78 카드)
+- `data/character_graph.json` (21 챠, 31 엣지)
+- `glossary.json` (82 용어)
+
+**검증:**
+- 78 카드 × 10 features: 780개 통합 모두 통과
+- Notion: 44페이지 archive, 7 메타 페이지 보관
+- 단일 진실 공급원: Dashboard HTML
+
+**참조:** `docs/progress/DASHBOARD_ENHANCEMENT_REPORT.md`
+
+---
+
+## [2026-07-10] cleanup | Notion 파생 소설 44개 archive, dashboard 강화 계획
+
+**Changes:**
+
+1. **Notion cleanup**: 44개 파생 소설 페이지 모두 archive (trash로 이동)
+   - 8개 원작 요약 (Fiction/output/): workspace root children
+   - 36개 단편 (39개 단편 중 35개): Roguelike Sprawl guide children
+   - 이유: Notion에 소설을 첨부하는 것 비효율 → dashboard HTML 단일 진실 공급원
+2. **활성 페이지 보관**: 7개 (운영 가이드 5 + Roguelike Sprawl 가이드 + 오늘 Progress 보고)
+3. **Dashboard 강화 계획**: `docs/progress/DASHBOARD_ENHANCEMENT_PLAN.md`
+   - Tier 1: Glossary 통합 + Mission↔Story 양방향 + 캐릭터 cross-link (Notion 대체 기능)
+   - Tier 2: Reading position + EN↔KO 동기 스크롤 + Print
+   - Tier 3: Reading stats + 캐릭터 관계도 + 미션 진행도
+4. **AGENTS.md 업데이트**: Game/roguelike_sprawl/AGENTS.md §4.0 "Notion 사용 정책" 추가 (콘텐츠는 dashboard, 메타 문서만 Notion)
+
+**참조:** `docs/progress/DASHBOARD_ENHANCEMENT_PLAN.md`, `docs/notion-reflects/README.md`
+
+---
+
+## [2026-07-10] integration | Wiki TODOs 정리 + Game 챕터 보강 + derivative_stories.md 링크 복구
+
+**Status:** Complete
+
+**Changes:**
+
+1. **Fiction wiki TODOs 정리**: 88개 페이지 작성 (characters 40, themes 33, settings 8, concepts 5, works 2; sprawl-trilogy 보너스 1)
+2. **20개 EN 파일 YAML 버그 수정**: `language: en` 아래 잘못 인덴트된 `  ko: 한국어` 라인 제거
+3. **missions.json `aleph_fragment` source 수정**: `wigan_zavijava` → `aleph_fragment` (실제 파일 존재)
+4. **Fiction wiki의 깨진 wikilink 일괄 수정** — 14개 패턴 보정
+5. **33개 테마 페이지 Related Characters/Motifs/Themes 섹션 Python 버그로 깨어진 표 복구**
+6. **Game expanded 챕터 3개에 portrait/theme 추가**:
+   - `case_expanded.json`: art:case, matrix_rain
+   - `kas_expanded.json`: art:kumiko, sense_net
+   - `sil_expanded.json`: art:marly, cyberspace
+7. **`derivative_stories.md` 47개 깨진 상대 경로 수정** (`../Fiction/` → `../../../../Fiction/`)
+8. **AGENTS.md CJK 혼용 방지 가이드** (Fiction/schema + Game/roguelike_sprawl, MiniMax 모델 특성 반영)
+9. **MiniMax-M3 서브에이전트 설정** — `explore`/`librarian` agent를 `minimax-coding-plan/MiniMax-M3`로 변경 (opencode TUI 재시작 후 적용)
+
+**참조:** `../PROGRESS_REPORT_2026-07-10.md` (vault 통합 보고서)
+
+---
+
 # Roguelike Sprawl - Activity Log
 
 LLM Wiki 패턴의 활동 기록. 시간 순으로 추가. 각 항목은 `## [YYYY-MM-DD] {kind} | {title}` 형식.
+
+## [2026-07-10] refactor | Dungeon movement overhaul + TRAP/RANDOM_COMBAT events + NPC dialog + boss phases + DEAD_END rooms
+
+### Phase 1 — 던전 이동 개편
+
+#### 문제
+`_handle_cardinal_movement`이 BFS 레이아웃 위치로 노드를 찾았으나, 실제로는 **graph neighbor만 이동 가능**해야 함. 역방향 (백트래킹) 이동이 graph의 방향성 엣지로 인해 차단됨.
+
+#### 수정 내용 (`dungeon_view.py`)
+
+**1. 전진 이동: graph neighbor 기반 + dot product 방향 정렬**
+```python
+# 기존: 위치 기반 (잘못된 방법)
+target_pos = (cx + dx, cy + dy)
+for node in nodes:
+    if _get_room_position(node.id) == target_pos and edge_exists(current, node.id):
+        move_to(node)
+
+# 새 방법: graph neighbor 중 dot product으로 최적 방향 노드 선택
+neighbors = matrix.neighbors(current_id)
+best_node = argmax(neighbor, dot(current_pos, neighbor_pos, dir_vector))
+```
+
+**2. 역방향/백트랙: exploration.path 기반 무제한 복귀**
+- `state.exploration.path`에 방문 경로 저장
+- 이전 방으로의 이동은 graph 방향과 무관하게 항상 허용
+- `PgUp` 키 또는 해당 방향 키로 복귀 가능
+- 복귀 시 path에서 current pop (중복 방지)
+
+**3. PageUp 키 추가** — `_handle_backtrack(state)` 함수 신규
+```python
+if event.sym is KeySym.PAGEUP:
+    _handle_backtrack(state, prog_registry, ice_registry)
+    return True
+```
+
+#### Phase 2 — TRAP 이벤트 구현
+
+알람 레벨이 MEDIUM 이상인 노드 진입 시 HP 데미지:
+```python
+_TRAP_DAMAGE = {
+    AlarmLevel.LOW: 0,
+    AlarmLevel.MEDIUM: 5,
+    AlarmLevel.HIGH: 15,
+    AlarmLevel.CRITICAL: 30,
+}
+```
+적용: 전진 이동 성공 시 + 백트랙 이동 성공 시 모두 체크.
+
+#### Phase 3 — RANDOM_COMBAT 구현
+
+노드 이동 시 zone 기반 확률적 랜덤 전투:
+```python
+_RANDOM_COMBAT_CHANCE = {
+    ZoneDepth.SURFACE: 0.02,  # 2%
+    ZoneDepth.MID: 0.05,       # 5%
+    ZoneDepth.DEEP: 0.08,      # 8%
+    ZoneDepth.CORE: 0.12,      # 12%
+    ZoneDepth.TA: 0.20,        # 20%
+}
+_RANDOM_ICE_BY_ZONE = {
+    ZoneDepth.SURFACE: IceKind.STANDARD,
+    ZoneDepth.MID: IceKind.WATCHDOG,
+    ZoneDepth.DEEP: IceKind.STANDARD,
+    ZoneDepth.CORE: IceKind.BLACK,
+    ZoneDepth.TA: IceKind.BLACK,
+}
+```
+랜덤combat 발생 시: zone에 맞는 ICE 생성 → `combat_view.start_combat()` → COMBAT screen 전환.
+
+#### Phase 4 — 전투-던전 연동 (미구현 → 기존 확인)
+`_defeat_current_ice_node()`가 이미 구현되어 있음 (`combat_view.py:863`).
+승리 후 ENTER 키 입력 시 ICE 노드가 graph에서 제거됨.
+
+### 검증
+- `tests/unit/test_dungeon_view.py`: **7 passed** (新增 4개 백트랙/TRAP 테스트)
+- 전체 테스트: **3312 passed** (novels/story_resolver/novel_integration/test_novel.py 제외)
+- Pre-existing failures (26 tests): Fiction symlink 제거와 무관
+
+### 영향 파일
+- `prototype/src/roguelike_sprawl/engine/dungeon_view.py` (핵심 수정)
+- `prototype/tests/unit/test_dungeon_view.py` (회귀 테스트 4개新增)
+- `design/systems/dungeon_events.md` (신규 설계 문서)
+
+### 미완료 (P2/P3)
+- NPC encounter stub → 실제 dialog로 업그레이드
+- Boss phase transition (ICE 다단계 HP)
+- Dead-end room type (역방향 punishment)
+
+---
+
+## [2026-07-10] refactor | System Probe hacking minigame (Phase 6+)
+
+### 문제
+`action_menu.py`의 `HACK` 액션이 stub으로 남아 있었음 — 데이터 프레그먼트 1개만 flavor 텍스트와 함께 증정.
+
+### 수정 내용
+
+**`engine/hacking_view.py` (신규)** — System Probe 미니게임:
+- 20칸 probe bar: DANGER(3) → CAUTION(3) → SAFE(5) → CAUTION(3) → DANGER(6)
+--indicator가 좌우로 진동. 속도는 플레이어 grade에 따라 scaling (grade 1=6pos/s, grade 5=12pos/s)
+- **ENTER 키 입력 시 outcome 판정**:
+  - SAFE zone → `perfect` (3x Data Fragments)
+  - CAUTION zone → `good` (2x Data Fragments)
+  - DANGER zone (oscillating forward) → `partial` (1x Data Fragment)
+  - DANGER zone (oscillating backward) → `fail` (0, no reward)
+- 결과 화면: flavor 메시지 + 보상 적용
+- ESC: aborted → partial reward
+
+**`engine/state.py`**: `ScreenKind.HACK` 추가 + `hack_state`, `hack_node_label` 필드 추가
+
+**`engine/app.py`**:
+- `hacking_view.render_hack()` dispatch (MATRIX/COMBAT/NPC 순서)
+- `hacking_view.handle_hack_input()` dispatch
+- `hacking_view.step_hack(state, delta_s)` 미니게임 tick (COMBAT 스텝 옆)
+
+**`action_menu.py`**: stub → `hacking_view.start_hack(state, node.label)` 호출
+
+### 검증
+- `make lint` ✅ (ruff)
+- `make typecheck` ✅ (mypy)
+- dungeon/combat 테스트: **154 passed**
+
+### 영향 파일
+- `engine/hacking_view.py` (신규)
+- `engine/state.py` (`ScreenKind.HACK`, `hack_state`, `hack_node_label`)
+- `engine/app.py` (render/input/loop wiring)
+- `engine/action_menu.py` (stub → real minigame)
+
+---
+
+## [2026-07-10] fix | Combat tick/stack freeze — step_combat() not called in main loop
+
+### 문제
+사용자 보고: "전투 중 AP 안 차오르고, 자동 공격도 안 멈추고, 게임 진행이 막힘."
+
+### 원인 분석
+`step_combat()` (AP regeneration + mutual auto-attacks + `tick_ms += TICK_MS`)가 **app.py 메인 루프에서 한 번도 호출되지 않음.**
+- `render_combat()`는 렌더만, 상태 진전 없음
+- GRAPHIC_NOVEL / CHAPTER는 자체 `elapsed_ms` 진행 로직 있음
+- COMBAT 화면은 `step_combat()` 미호출로 tick_ms 정지 → AP 미차오름
+
+### 수정 내용
+`prototype/src/roguelike_sprawl/engine/app.py`:
+1. `from ..combat.state import step_combat` 추가 (line ~16)
+2. 메인 루프 COMBAT 브랜치에 `step_combat(state.combat_state)` 호출 추가 (line ~148)
+
+```python
+if state.screen is ScreenKind.COMBAT and state.combat_state is not None:
+    step_combat(state.combat_state)
+```
+
+### 검증
+- `from roguelike_sprawl.engine.app import step_combat` — import 성공 ✅
+- `tests/unit/` (novels/novel_integration/story_resolver/test_novel.py 제외): **3308 passed** ✅
+- Pre-existing failures (26 tests): `_find_repo_root()`가 삭제된 `Fiction/derivative/sprawl-trilogy/short-stories` 참조 — 본 수정과 무관
+
+### 영향 파일
+- `prototype/src/roguelike_sprawl/engine/app.py`
+
+---
+
+## [2026-07-10] audit+fix | wiki 구조 정리 — Fiction symlink 제거 + AGENTS.md §4.1 갱신
+
+### 감사 결과
+LLM Wiki · 메타데이터 · 시스템 구조 · 대시보드 연계성 감사 결과 — 전반적 일관성 양호 (4건 주의 필요):
+
+1. **SOURCES_INVENTORY.md 혼란** ⚠️: `wiki/Fiction/SOURCES_INVENTORY.md`가 Fiction 프로젝트 루트의 파일을 symlink 경로로 노출 — 네임스페이스 오염
+2. Gibson 원본 미 ingestion — acknowledged backlog (SOURCES_INVENTORY.md: "Not yet ingested")
+3. novelette 카운트 0 — 현재 short_story만 존재, 계획된 novelette 없다면 정상
+4. 테스트 수 변동 (4254→4185) — Phase 개발 중 자연적 현상
+
+### 수정 내용
+
+#### 1. Fiction symlink 제거
+- **대상**: `wiki/Fiction → ../../../Fiction` (Fiction 프로젝트 전체를 game's wiki에 노출)
+- **문제**: `SOURCES_INVENTORY.md`, `raw/`, `derivative/` 등이 game's wiki 네임스페이스에 노출
+- **조치**: `rm wiki/Fiction` symlink 제거
+
+#### 2. AGENTS.md §4.1 갱신
+- `../../../Fiction/wiki/` → `../../../../Fiction/wiki/` (실제 사용되는 4단계 상대경로)
+- 절대 경로 기준점 명시: "이는 `Projects/Fiction/wiki/` — Fiction 프로젝트의 위키 디렉토리"
+- world wiki 파일들의 Primary Source 경로 (모두 이미 `../../../../Fiction/wiki/...`)와 정합성 확인 ✅
+
+#### 3. wiki/index.md world/ 섹션 갱신
+- 세계관 위키 테이블 추가 (6개 world/ 페이지 × Primary Source 경로)
+- Fiction wiki 읽기 전용 경고 문구 추가
+
+### 검증
+- Fiction wiki 경로 유효성: `../../../../Fiction/wiki/authors/william-gibson.md` → ✅ (`Projects/Fiction/wiki/`)
+- world wiki Primary Source 어노테이션: 5개 파일 모두 올바른 4단계 상대경로 ✅
+- `wiki/` 디렉토리: `world/` (6 MD) + symlink 없는 깨끗한 상태 ✅
+
+### 영향 파일
+- `wiki/Fiction` (symlink 삭제)
+- `wiki/index.md` (세계관 테이블 + Fiction wiki 경고 추가)
+- `AGENTS.md` (§4.1 경로 표기 정정)
+
+---
+
+## [2026-07-10] refactor | MATRIX 화면 dungeon-only mode — D 키 토글 제거
+
+### 결정 사유
+`D` 키로 graph view ↔ dungeon view를 토글했으나, graph view가 dungeon view보다战术적으로 우월한 정보를 제공하지 않음. Toggle 상태 관리 + 2套 렌더러 유지 비용 > 이점. Dungeon view가 유일한 매트릭스 화면이 되어，玩家가 "어느 모드가 진짜?" 혼란 해소.
+
+### 변경 내용
+
+#### 제거 (state.py)
+- `state.dungeon_mode: bool` 필드 제거
+
+#### 제거 (app.py)
+- `D` 키 토글 핸들러 (`state.dungeon_mode = not state.dungeon_mode`)
+- `_maybe_spawn_jackin_glitch` 헬퍼 함수
+- `matrix_view` render/input 브랜치
+- MATRIX screen: 항상 `dungeon_view` 사용
+
+#### 제거 (crash_reporter.py)
+- `dungeon_mode` crash dump 항목
+
+#### 갱신 (test_dungeon_view.py)
+- `TestDungeonModeField` 클래스 제거
+- `TestDKeyToggle` 클래스 제거
+- `s.dungeon_mode = True` 라인 제거 (유지된 테스트 3건)
+
+#### 갱신 (play_dungeon_mode.py)
+- Docstring: toggle → dungeon-only 모드 설명으로 재작성
+- `main()`: `dungeon_mode` 참조 제거
+
+#### 문서화 (ADR-0060)
+- Consequences에 "2026-07-10 Dungeon-only 변경" 섹션 추가
+- Decision 체크리스트에 "Dungeon-only mode" 항목 추가
+
+### 검증
+- `test_dungeon_view.py`: **3 passed** (cardinal movement × 2, render smoke × 1)
+- 전체 테스트: **3373 passed** (test_novels.py pre-existing failure 제외)
+- `play_dungeon_mode.py`: **BSP dungeon 정상 생성** ✅
+
+### 영향 파일
+- `prototype/src/roguelike_sprawl/engine/state.py`
+- `prototype/src/roguelike_sprawl/engine/app.py`
+- `prototype/src/roguelike_sprawl/engine/crash_reporter.py`
+- `prototype/tests/unit/test_dungeon_view.py`
+- `prototype/scripts/play_dungeon_mode.py`
+- `decisions/0060-dungeon-exploration-redesign.md`
+
+---
 
 ## [2026-07-10] fix+test | Combat VFX afterimage — clear overlay before draw + regression test
 
@@ -4586,3 +5073,316 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - Suit 캐릭터 시나리오 테이블 추가 (5개 미션)
 - 72개 story 파일 링크 무결성 확인 (0 broken)
 - Ficton wiki ↔ roguelike_sprawl cross-link 검증 완료
+
+
+## 2026-07-11
+
+**Session:** sound.html BGM 플레이어 UI 명확화
+
+**Changes:**
+- `dashboard/sound.html`: 테마 재생 버튼(클릭 가능)과 정적 reference 카드(읽기 전용) 시각적 구분
+  - 재생 버튼 라벨에 ▶ 아이콘 추가 (`<span class="play-icon">▶</span>`)
+  - Reference 카드: `opacity: 0.55`, `cursor: default`, `border-style: dashed`
+  - Reference 섹션 상단에 명시적 헤더 추가: "📋 Reference — read-only theme descriptions (use buttons above to play)"
+
+**Root Cause:**
+- 사용자가 "Themes 클릭해도 소리 안 들림" 보고
+- Playwright 검증 결과 코드 자체는 정상 (audio.play() resolved, now-playing 텍스트 갱신)
+- 실제 원인: 페이지 하단의 정적 reference 카드를 재생 버튼으로 오인 (시각적 유사성)
+
+**Verification:**
+- Playwright (headless Chromium) 5/5 통과:
+  1. 재생 버튼에 ▶ 아이콘 렌더링됨
+  2. Reference 카드 opacity 0.55, cursor default, dashed border 적용
+  3. "📋 Reference" 헤더 visible 상태
+  4. 재생 버튼 클릭 → `now-playing` 정상 갱신 (`▶ Matrix Rain — ...`)
+  5. Reference 카드 클릭 → 오디오 트리거 안 됨 (의도된 비활성)
+
+
+## 2026-07-11
+
+**Session:** sound.html BGM catch 핸들러 진단 개선
+
+**Background:**
+- UI 명확화 적용 후 사용자가 "파일 없음 이라고 표시됨" 보고
+- `playTheme()` 의 `a.play().catch(e => ...)` 와 `a.onerror` 두 곳 모두 `"⚠ 파일 없음: <file>"` 만 표시 → 모든 에러를 파일 부재로 오진
+
+**Changes:**
+- `dashboard/sound.html` `playTheme()`:
+  - `a.play().catch(e => ...)` 분기화:
+    - `NotAllowedError` → "⚠ 브라우저 자동재생 차단 — 한 번 더 클릭해 보세요"
+    - `NotSupportedError` → "⚠ 파일 형식 미지원: <file>"
+    - 기타 → "⚠ 재생 실패 (<name>): <file>"
+    - 모든 케이스 `console.error("[bgm-player] ...")` 로 진단 로그
+  - `a.onerror = ...` 분기화 (실제 `a.error.code` 기준):
+    - `code 4` (MEDIA_ERR_SRC_NOT_SUPPORTED) → "⚠ 파일 없음 (404): <file>"
+    - `code 3` (MEDIA_ERR_DECODE) → "⚠ 디코드 실패: <file>"
+    - 기타 → "⚠ 오디오 오류 (code X): <file>"
+    - `console.error` 에 `a.error`, `networkState` 포함
+
+**Verification:**
+- Playwright (12/12 정상 + 404 시뮬레이션):
+  - 12개 실재 파일 클릭 → 모두 "▶ <Theme> — <desc>" 정상 표시, "파일 없음" 0건
+  - 404 시뮬레이션 → catch `NotSupportedError` + onerror `code 4` 정확히 분기
+
+**사용자 후속 액션:**
+- 브라우저 새로고침 (Cmd+Shift+R) 후 같은 버튼 다시 클릭
+- "⚠ 브라우저 자동재생 차단" 메시지 → 자동재생 정책 이슈, 한 번 더 클릭
+- "⚠ 파일 없음 (404)" 또는 "디코드 실패" → 실제 파일 경로/포맷 점검
+- 콘솔에 `[bgm-player]` 로그가 보이면 정확한 원인 확인 가능
+
+
+## 2026-07-11
+
+**Session:** sound.html Empty src attribute 오진단 수정
+
+**Background:**
+- catch 핸들러 진단 개선 후 사용자가 여전히 "파일 없음 (404)" 메시지 표시됨 보고
+- 사용자 콘솔 로그 공유:
+  ```
+  [bgm-player] audio error: MediaError {code: 4, message: "MEDIA_ELEMENT_ERROR: Empty src attribute"}
+  src: theme_matrix_rain.wav networkState: 3
+  ```
+- 실제 에러: `audio.src = ""` (NETWORK_NO_SOURCE). "404 파일 없음"이 오진.
+
+**Root Cause:**
+- `stopAll()` 함수가 `currentAudio.src = ""` 패턴 사용 → 빈 src 할당 시 onerror 비동기 발화
+- `new Audio(arg)` 생성자가 일부 브라우저(Safari/file:// 근처)에서 src를 제대로 설정하지 않는 알려진 변동성
+- 이전 catch 핸들러는 `code 4` 를 모두 "파일 없음 (404)" 로 매핑 → 메시지 오진
+
+**Changes:**
+- `dashboard/sound.html` `playTheme()`:
+  - 생성자 `new Audio()` + `a.src = audioSrc` (명시 할당, 크로스 브라우저 안정)
+  - onerror 가드: `a._bgmCleared` 플래그 OR `!a.src` OR src 가 location.href 끝 OR "/" 끝 → 메시지 표시 안 함 (잘못된 진단 방지)
+  - 메시지 분기 강화: `code 4 + src 진짜 있음 + networkState 3` 일 때만 "파일 없음 (404)" 표시
+  - 일반 오류 메시지에 `networkState` 포함
+- `dashboard/sound.html` `stopAll()`:
+  - `currentAudio.src = ""` → `_bgmCleared = true` 후 `removeAttribute("src")` + `load()` 호출
+  - onerror 가 `_bgmCleared` 플래그 보고 정상적으로 침묵 (오진 메시지 안 띄움)
+
+**Verification:**
+- Playwright (headless Chromium) localhost:8765:
+  - TEST 1: Matrix Rain 클릭 → "▶ Matrix Rain — ..." 정상
+  - TEST 2: Stop 클릭 → "🎧 BGM 미리듣기" (이전엔 빈 src 에러 메시지 표시됨)
+  - TEST 3: Stop 후 다시 Matrix Rain 클릭 → "▶ Matrix Rain — ..." 정상
+  - TEST 4: 동일 버튼 토글 → "🎧 BGM 미리듣기"
+  - TEST 5: 11개 다른 버튼 순차 클릭 → 모두 "▶ Theme — desc" 정상, "파일 없음" 0/11
+  - 콘솔 로그 "Empty src" 관련 0건 (suppressed 의도대로)
+
+**사용자 후속 액션:**
+- 브라우저 하드 새로고침 (Cmd+Shift+R) 후 사운드 버튼 클릭
+- "▶ Theme — desc" 표시되면 정상
+- "🎧 BGM 미리듣기" 표시되면 정상 (정지/미선택 상태)
+- 다른 메시지가 뜨면 F12 Console `[bgm-player]` 로그 공유
+
+
+## 2026-07-11
+
+**Session:** sound.html persistent DOM audio element
+
+**Background:**
+- 직전 수정으로 에러 메시지는 사라졌지만 "소리가 안 들림" 보고
+- catch 핸들러가 NotAllowedError로 분기되지 않음 → play() 자체는 성공하지만 실제로는 오디오 출력 안 됨
+- 원인: `new Audio()` (detached element) 가 Safari/일부 브라우저에서 자동재생 안 됨
+
+**Root Cause:**
+- HTMLAudioElement `new Audio(src)` 는 detached 상태로 생성됨
+- Safari, 일부 모바일 브라우저는 DOM에 attached 된 audio element 만 자동재생 보장
+- Chromium headless 에서는 autoplay-policy flag 덕분에 통과 → 검증 통과로 위양성
+
+**Changes:**
+- `dashboard/sound.html`:
+  - `ensureBgmAudio()` 함수 추가: lazy-init persistent `<audio>` element, `document.body.appendChild` 로 DOM 부착, `display: none` 으로 숨김
+  - `playTheme()` 가 매번 새 audio 만들지 않고 `ensureBgmAudio()` 가 반환한 단일 element 재사용 (src 만 교체)
+  - `preload = "auto"` 설정으로 메타데이터/일부 버퍼 먼저 로드
+
+**Verification (Playwright on localhost:8765):**
+- TEST 1: lazy-init 전 — element 없음 (정상, 첫 클릭 전)
+- TEST 2: Matrix Rain 클릭 — element 존재, inDOM=true, src 정상, currentTime=1.86, paused=false, readyState=4 ✅
+- TEST 3: 1.5s 대기 — currentTime 1.86→0.29 (3초 짜리 loop 라 1 사이클 완료 후 재시작) → **실제 재생 중** ✅
+- TEST 4: Stop 클릭 — paused=true, src 제거, "🎧 BGM 미리듣기" ✅
+- TEST 5: Cyberspace 클릭 — src 교체, currentTime=1.43 정상 재생 ✅
+- TEST 6: 12개 모두 순차 — 전부 "▶ Theme — desc" 표시, 에러 0건 ✅
+
+**사용자 후속 액션:**
+- 하드 새로고침 (Cmd+Shift+R) 후 Matrix Rain 버튼 클릭
+- "▶ Matrix Rain — 매트릭스 진입 · 비 · 데이터" 표시되면서 **실제 소리 출력**
+- macOS 시스템 볼륨 확인 (혹시 0/음소거 안 됐는지)
+- 여전히 안 들리면 F12 Console 의 `[bgm-player]` 로그 공유
+
+## 2026-07-11
+
+**Session:** BGM v3 — 미니맥스 Music 2.6 외부 트랙 1/12 (matrix_rain)
+
+**Changes:**
+- `sounds/theme_matrix_rain.wav`: 261초 풀 → 30초 BGM loop (페이드 in/out + loudnorm -16 LUFS)
+- `sounds/full/theme_matrix_rain.wav`: 261초 풀 트랙 별도 보존
+- `sounds/theme_matrix_rain_v1_orig.wav`: 3초 v1 백업
+- `dashboard/sound.html`: "🎼 전체 트랙 감상" 섹션 추가 (12 슬롯, 1 active + 11 pending)
+
+**구조:**
+- 게임 배포: 30초 편집 버전 (BGM)
+- 대시보드 감상: 261초 풀 트랙 (별도 메뉴)
+
+## 2026-07-11
+
+**Session:** BGM v3 batch — finn_office 까지 5/12 완료
+
+**Changes (5 트랙 × BGM + Full × 2 variants):**
+- `cyberspace`: BGM 30초 + 풀 215.9초 + (f) 220.2초
+- `chiba`: BGM 30초 + 풀 226.2초 + (m) 183.8초
+- `sense_net`: BGM 30초 + 풀 178.0초 + (f) 160.8초
+- `finn_office`: BGM 30초 + 풀 238.3초 + (m) 219.9초
+- `matrix_rain` (이전 세션): BGM + 풀 + (f) 모두 완료
+
+**Processes:**
+- 4 트랙 일괄: `import_minimax_track.sh` (BGM + 1st 풀 = 기본 생성)
+- (f)/(m) variants 별도 변환: ffmpeg 직접 호출 (16-bit 44.1kHz, loudnorm -16 LUFS)
+- `dashboard/sound.html` 갤러리: 5 트랙 active + 7 pending
+
+## 2026-07-11
+
+**Session:** BGM v3 — 12/12 트랙 완성 + 풀 mp3 통일 + 갤러리 7 신규 트랙
+
+**12/12 트랙 완성 (finn_office 포함):**
+- matrix_rain, cyberspace, chiba, sense_net, finn_office (BGM 30초 변환 완료)
+- broadcast, hammer_alert, industrial, loa_drum, loa_drum_fade, loa_channel, manarase_drone (신규 7 트랙)
+
+**Format 통일:**
+- BGM (게임 배포): WAV 16-bit 44.1kHz, 30초 loop, -16 LUFS
+- 풀 트랙 (대시보드 감상): MP3 256kbps, ~2-4분
+
+**Processes:**
+- 미니맥스 다운로드 → 30초 trim + 정규화 (BGM)
+- variants (f)/(m) → mp3 그대로 복사 (재인코딩 안 함)
+- `dashboard/sound.html` 갤러리: 12 트랙 active (master+variants), 0 pending
+
+## 2026-07-11
+
+**Session:** BGM v3 마무리 — 풀 트랙 mp3 통일 + 갤러리 24 src 검증
+
+**12/12 트랙 완성 상태:**
+- 모두 BGM 30초 WAV + 풀 ~2-4분 MP3 (256kbps) + (f)/(m) variants MP3
+
+**최종 정리:**
+- `.wav.removed` 백업 + 잔여 `.wav` 모두 제거
+- 옛 이름 (theme_ prefix 없음) mp3 파일 정리 (HTML 참조 안 됨)
+- 중복 `theme_matrix_rain_full.mp3` 제거 (WAV-converted 중복)
+- 풀 트랙: WAV (44MB/트랙) → MP3 (6-8MB/트랙) 로 절약 → ~75% 디스크 절약
+
+**Format 통일:**
+- BGM (게임 배포): WAV 16-bit 44.1kHz, 30초 loop, -16 LUFS, ~5MB
+- 풀 트랙 (감상): MP3 256kbps, ~2-4분, 5-8MB (12×2=24 파일 ~170MB)
+
+**HTML 갤러리:**
+- 24 mp3 src 모두 검증 OK
+- 12 active master rows + 12 variant rows = 24 audio controls
+- 0 pending
+
+## 2026-07-11
+
+**Session:** BGM v3 — Downloads 정리 + prototype 통합
+
+**Cleanup:**
+- `~/Downloads/*.mp3` 24개 (~154MB) 삭제 — 미니맥스 생성 결과물 모두 dashboard/sounds 로 통합 완료
+- `.wav.removed` / 옛 이름 mp3 / 중복 중복 모두 정리됨
+
+**Prototype ↔ Dashboard 사운드 통합:**
+- `prototype/data/sounds_test/theme_*.wav` → `dashboard/sounds/theme_*.wav` symlink 12개
+- `prototype/scripts/demo_minimax_bgms.py` 신규 — 12 BGM 실제 재생 검증 (silent/5s/30s 옵션)
+- `prototype/src/roguelike_sprawl/audio/theme.py` 의 `THEMES` dict 가 새 BGM 파일명 (theme_matrix_rain.wav 등) 그대로 매칭 — 변경 불필요
+
+## 2026-07-11
+
+**Session:** BGM v3 문서화 완료
+
+**Changes:**
+- `Game/roguelike_sprawl/SESSION_SUMMARY_2026-07-11.md` (Part 2 추가)
+- `Game/roguelike_sprawl/docs/bgm-external-generation-guide.md` (미니맥스 웹 UI 경로 addendum)
+
+**최종 상태:**
+- BGM v3 100% 완성 (12/12 트랙)
+- 모든 문서 동기화 완료
+
+## 2026-07-11
+
+**Session:** Notion 정리 — BGM 페이지 Roguelike Sprawl 하위 이동
+
+**Actions:**
+- 3 페이지 (Projects Progress 07-11, BGM External Guide, BGM v3 Final) 의 부모를 Roguelike Sprawl 프로젝트 가이드 페이지로 이동
+- `docs/notion-reflects/README.md` 매핑 로그 갱신
+
+**Notion 위치 변경:**
+- 이전: `386f643d-3530-80c5-9a00-fd7d571d7634` (Workspace Index)
+- 이후: `38df643d-3530-8103-af2c-e2277b4bcdfa` (Roguelike Sprawl - 프로젝트 가이드)
+
+## 2026-07-11
+
+**Session:** Notion 페이지 이동 시도 + API 한계 확인
+
+**Actions:**
+- 3 페이지의 `parent` 를 Roguelike Sprawl 로 변경 시도
+- 결과: **Notion API 한계 — `pages.update` 의 `parent` 필드는 read-only**
+- API 호출은 success 반환하지만 실제로는 부모 변경 안 됨 (silent 무시)
+- Roguelike 자식 페이지 수: 0 (이동 안됨)
+
+**결론**: UI 작업 필요 — 사용자가 Notion 웹 UI 에서 직접 드래그 앤 드롭.
+**README.md** 에 "이동 안내" 섹션 추가 (사용자 액션 가이드).
+
+**Status:** 코드 변경 없이 문서만 업데이트. 페이지 ID 보존됨.
+
+## 2026-07-11
+
+**Session:** Notion 페이지 정리 + 날짜 일관성 검증
+
+**Actions:**
+- 3 페이지 상태 확인:
+  - Projects Progress 2026-07-10 → Roguelike ✅ (사용자 UI drag)
+  - BGM v3 Final 2026-07-11 → Roguelike ✅ (사용자 UI drag)
+  - BGM External Guide 2026-07-11 → Workspace (User가 UI 작업 안 함)
+- BGM External Guide: archived → restored (unarchived)
+- `docs/notion-reflects/README.md` 매핑 정확히 갱신 (실제 parent 반영)
+- 3 페이지 제목 날짜 정상 (2026-07-10, 2026-07-11 두 개 + 2026-07-08)
+
+**최종 상태:**
+- Roguelike Sprawl 하위: Projects Progress 07-10 + BGM v3 Final (2 페이지)
+- Workspace Index 하위: BGM External Guide (사용자 UI drag 필요)
+
+## 2026-07-11
+
+**Session:** Notion 제목 정리 마무리
+
+**Changes:**
+- Roguelike Sprawl Notion 페이지 제목: "Roguelike Sprawl - 프로젝트 가이드 (2026-07-08)" → "Roguelike Sprawl - 프로젝트 가이드"
+- Fiction `_publish/scripts/update_notion_page.py` 의 heading 도구 호출도 동명 갱신 (next sync 시 일치)
+
+## 2026-07-11
+
+**Session:** Roguelike Sprawl Notion 페이지 갱신
+
+**Changes:**
+- 페이지 heading_1 의 "(2026-07-10)" 제거 (페이지 제목과 일치)
+- 마지막 갱신 quote: 2026-07-10 → 2026-07-11 + BGM v3 추가
+- 섹션 6 (검증 상태): (2026-07-08) → (2026-07-11), mkdocs → BGM 검증 bullet 교체
+- 섹션 9 (다음 작업): "v1.0.0-alpha.1" → "BGM v3 완료" 로 갱신
+- BGM 인덱스 텍스트 4개 (heading + 3 paragraph) 정리 (child_page 4개가 자동 표시)
+- 페이지 끝에 "🎵 BGM v3 (2026-07-11)" 새 섹션 추가 (5 블록)
+
+## 2026-07-11
+
+**Session:** Roguelike Sprawl 프로젝트 audit + Fiction wiki 정합성 + commit
+
+**Audit 결과:**
+- roguelike_sprawl 만 wikilink 검증: 25개, broken 0개 (12개 → 0개)
+- journey 페이지 12개 broken wikilink 정리:
+  - 10개: Fiction wiki 에 페이지 없음 → wikilink → 마크다운 텍스트 (` `code` `) 로 변경
+  - 2개: 자동 매핑 (`bobby-quine` → `bobby-newmark`, `identity-and-the-matrix` → `identity-and-consciousness`)
+- .gitignore 갱신: v1_backup, v1_orig 패턴 (BGM 재생성용 임시 파일)
+
+**BGM v3 작업 (오늘):**
+- `dashboard/sound.html` (4 단계 수정)
+- `dashboard/sounds/theme_*.wav` × 12 (3초 v1 → 30초 BGM 교체)
+- `SESSION_SUMMARY_2026-07-11.md` (Part 1 + 2)
+- `log.md` (BGM v3 6+ 항목)
+- `docs/bgm-external-generation-guide.md` (미니맥스 addendum)
+- `prototype/scripts/demo_minimax_bgms.py` (12 BGM 검증 CLI)

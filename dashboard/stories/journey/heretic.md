@@ -14,7 +14,7 @@
 | 픽서 | The Finn (초기) → Sally → Kumiko |
 | 동기 | **전복.** "다 태우러 왔어. 매트릭스 전체를. 3백 년의 데이터를. Tessier-Ashpool을." |
 | 챕터 ID | `chapter_heretic` |
-| 챕터 스크린 본문 | [[Fiction/wiki/works/mona-lisa-overdrive]] · [[Fiction/wiki/characters/kumiko-yanaka]] · [[Fiction/wiki/factions/yanaka-family]] |
+| 챕터 스크린 본문 | [[Fiction/wiki/works/mona-lisa-overdrive]] · [[Fiction/wiki/characters/kumiko-yanaka]] · `yanaka-family` (위키 페이지 없음) |
 | 모티프 | 매나리사 / 자정 / 11번지 / 택시 / Sally Sendai / "바퀴" / loa / 선언문 |
 | 시작 credits | 0 |
 | 시작 등급 | 1 (그러나 혁명적 의지) |
@@ -214,7 +214,7 @@ CHAPTER 화면 12초 타이핑: 카스가 Kumiko의 시점에서 시작하지만
 - Tessier-Ashpool 데이터가 공개
 - **결과**: Sprawl의 새로운 loa-자키 시대 시작
 - **아이템 사용**: unique_construct × 1
-- **위키 영향**: [[voodoo-and-the-matrix]] 활성, [[tessier-ashpool]] 약화
+- **위키 영향**: `voodoo-and-the-matrix` (위키 페이지 없음) 활성, `tessier-ashpool` (위키 페이지 없음) 약화
 
 #### 엔딩 B: 👑 흡수 (Absorption)
 ```
@@ -236,7 +236,7 @@ CHAPTER 화면 12초 타이핑: 카스가 Kumiko의 시점에서 시작하지만
 | 최종 등급 | 5 |
 | 핸드폰 등급 추정 | Custom Viral Deck → **T4 (unique_construct 보유)** |
 | CHAPTER 화면 본편 | `kumiko_manarase-midnight` (12초 타이핑) |
-| 위키 참조 | [[kumiko-yanaka]], [[yanaka-family]], [[mona-lisa-overdrive]], [[voodoo-and-the-matrix]], [[the-aleph]], [[slick-henry]] |
+| 위키 참조 | [[kumiko-yanaka]], `yanaka-family` (위키 페이지 없음), [[mona-lisa-overdrive]], `voodoo-and-the-matrix` (위키 페이지 없음), [[the-aleph]], [[slick-henry]] |
 
 ---
 

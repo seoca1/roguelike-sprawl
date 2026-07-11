@@ -14,7 +14,7 @@
 | 픽서 | The Finn (초기) → 변동 (MaaS, ta_rep, sally, kumiko) |
 | 동기 | **복수.** "Mara의 죽음. Tessier-Ashpool에 대한 복수. 베테랑의 무게." |
 | 챕터 ID | `chapter_veteran` |
-| 챕터 스크린 본문 | [[Fiction/wiki/works/count-zero]] · [[Fiction/wiki/characters/marly-krushkhova]] · [[Fiction/wiki/factions/tessier-ashpool]] |
+| 챕터 스크린 본문 | [[Fiction/wiki/works/count-zero]] · [[Fiction/wiki/characters/marly-krushkhova]] · `tessier-ashpool` (위키 페이지 없음) |
 | 모티프 | 마스크 / 73 Eridani / Zavijava / Mara의 죽음 / Tessier-Ashpool / 선언문 |
 | 시작 credits | 0 |
 | 시작 등급 | 1 (그러나 실전 경력 10+) |
@@ -234,7 +234,7 @@ CHAPTER 화면 12초 타이핑: 실이 Marly의 시점에서 시작하지만 실
 - Sprawl 전체가 T-A에 등을 돌림
 - **결과**: 3Jane이 죽고, 새로운 T-A의 적이 실을 쫓음
 - **아이템 사용**: data_fragment 다수
-- **위키 영향**: [[tessier-ashpool]] 약화, [[factions/yanaka-family]] 영향
+- **위키 영향**: `tessier-ashpool` (위키 페이지 없음) 약화, `yanaka-family` (위키 페이지 없음) 영향
 
 #### 엔딩 B: 💼 사업 (Business as Usual)
 ```
@@ -257,7 +257,7 @@ CHAPTER 화면 12초 타이핑: 실이 Marly의 시점에서 시작하지만 실
 | 최종 등급 | 5 |
 | 핸드폰 등급 추정 | Hammer T2 → **T4 Hammer** |
 | CHAPTER 화면 본편 | `marly_louisiana-god` (12초 타이핑) |
-| 위키 참조 | [[marly-krushkhova]], [[tessier-ashpool]], [[voodoo-and-the-matrix]], [[wigan-ludgate]], [[angie-mitchell]], [[bobby-quine]] |
+| 위키 참조 | [[marly-krushkhova]], `tessier-ashpool` (위키 페이지 없음), `voodoo-and-the-matrix` (위키 페이지 없음), [[wigan-ludgate]], [[angie-mitchell]], [[bobby-newmark]] |
 
 ## 연결 단편 발췌
 

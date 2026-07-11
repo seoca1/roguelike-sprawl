@@ -1,0 +1,1109 @@
+{
+  "version": "1.0",
+  "generated": "2026-07-11T05:49:58.104281+00:00",
+  "count": 78,
+  "stories": [
+    {
+      "id": "2026-06-23_black_ice_dream",
+      "lang": "en",
+      "title": "Black Ice Dream",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1239",
+      "body_preview": "A runner encounters Black ICE that hunts not with cold but with molten hunger. The ice reads her trace like a lover and leaves her with a scar she can never explain.",
+      "missions": [
+        "black_ice_dream"
+      ],
+      "url": "stories/short-stories/black_ice_dream_en.html"
+    },
+    {
+      "id": "2026-06-23_case_jackout-30sec",
+      "lang": "en",
+      "title": "Jack-Out",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1233",
+      "body_preview": "Case experiences the thirty seconds after jack-out — the shaking hands, the cold sweat, the rain in Chiba, and the weight of identity that exists only in the matrix.",
+      "missions": [
+        "first_jack"
+      ],
+      "url": "stories/short-stories/case_jackout-30sec_en.html"
+    },
+    {
+      "id": "2026-06-23_dixies_last_run",
+      "lang": "en",
+      "title": "Dixie's Last Run",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas,sil",
+      "word_count": "1032",
+      "body_preview": "Dixie Flatline remembers dying. A ROM construct should not remember — but Dixie does. He remembers the cold, the stopped heart, the Chiba clinic lights turning red. And now someone is calling him back for one last run.",
+      "missions": [
+        "dixies_offer",
+        "construct_memory_rescue"
+      ],
+      "url": "stories/short-stories/dixies_last_run_en.html"
+    },
+    {
+      "id": "2026-06-23_first_trace",
+      "lang": "en",
+      "title": "First Trace",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1105",
+      "body_preview": "Case takes his first real trace job for The Finn. The target is a mid-level Tessier-Ashpool icebreaker who leaked corporate secrets. What Case doesn't know is that the Finn is running a much deeper game—and the target is just the first node in a web that stretches all the way to ",
+      "missions": [
+        "first_trace"
+      ],
+      "url": "stories/short-stories/first_trace_en.html"
+    },
+    {
+      "id": "2026-06-23_flatline_again",
+      "lang": "en",
+      "title": "Flatline Again",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1068",
+      "body_preview": "A runner's neural burnout becomes complete matrix integration. The cold finally wins as the body fails but the trace dissolves into the architecture forever.",
+      "missions": [
+        "flatline_call"
+      ],
+      "url": "stories/short-stories/flatline_again_en.html"
+    },
+    {
+      "id": "2026-06-23_ice_run",
+      "lang": "en",
+      "title": "Ice Run",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1272",
+      "body_preview": "Case retrieves a shard of frozen code from a dead Watchdog ICE. The shard's cold spreads through his nervous system, and he becomes addicted to the feeling of the matrix itself.",
+      "missions": [
+        "ice_run"
+      ],
+      "url": "stories/short-stories/ice_run_en.html"
+    },
+    {
+      "id": "2026-06-23_kumiko_manarase-midnight",
+      "lang": "en",
+      "title": "Manarase at Midnight",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "1130",
+      "body_preview": "Kumiko Yanaka visits the Manarase club at midnight to meet Sally Shearer, a Romantics construct. Between them unfolds the wheel — industry, capital, Tessier-Ashpool, three hundred years of data, three hundred years of death. The loa cannot be broken. The wheel does not stop.",
+      "missions": [
+        "craft_job"
+      ],
+      "url": "stories/short-stories/kumiko_manarase-midnight_en.html"
+    },
+    {
+      "id": "2026-06-23_loa_voodoo_contact",
+      "lang": "en",
+      "title": "Loa Voodoo Contact",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1260",
+      "body_preview": "Case encounters Morrison, an ancient Loa of the deep architecture. The ghost-god reads him like a book and shows him the face of the matrix's unconscious.",
+      "missions": [
+        "voodoo_loa_encounter"
+      ],
+      "url": "stories/short-stories/loa_voodoo_contact_en.html"
+    },
+    {
+      "id": "2026-06-23_marly_louisiana-god",
+      "lang": "en",
+      "title": "The Louisiana God",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "1313",
+      "body_preview": "Marly Krushkhova enters a voodoo shop in Louisiana looking for masks. The shopkeeper reveals that masks are not loa — they are the places where loa reside. Marly is searching for something to help Bobby Quine, but the loa have their own plans.",
+      "missions": [
+        "delivery_to_finn",
+        "mollys_razor"
+      ],
+      "url": "stories/short-stories/marly_louisiana-god_en.html"
+    },
+    {
+      "id": "2026-06-23_sally_returns",
+      "lang": "en",
+      "title": "Sally Returns",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "1189",
+      "body_preview": "'Sally Shears returns to the New Rose Hotel three years after Fox''s death. A ghost protocol message waits for her: She is looking for you. F.'",
+      "missions": [
+        "sally_returns_arc3"
+      ],
+      "url": "stories/short-stories/sally_returns_en.html"
+    },
+    {
+      "id": "2026-06-23_sally_sandii-3am",
+      "lang": "en",
+      "title": "The New Rose Hotel, 3 AM",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas,sil",
+      "word_count": "889",
+      "body_preview": "Sally Shears sits in the New Rose Hotel at 3 AM, holding the cold hand of Fox, who is dead. She is Sandii 2 — a fake woman Fox made over five years. Now that Fox is dead, the fake becomes real.",
+      "missions": [
+        "sally_sandii_3am",
+        "ta_heist"
+      ],
+      "url": "stories/short-stories/sally_sandii-3am_en.html"
+    },
+    {
+      "id": "2026-06-23_sense_net_trace",
+      "lang": "en",
+      "title": "Sense/Net Trace",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "1253",
+      "body_preview": "Sil traces M's ghost through seven proxy nodes in T-A's internal architecture, following the trail of a dead runner to discover what she died for.",
+      "missions": [
+        "sense_net_tip"
+      ],
+      "url": "stories/short-stories/sense_net_trace_en.html"
+    },
+    {
+      "id": "2026-06-23_the_choice",
+      "lang": "en",
+      "title": "The Choice",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1052",
+      "body_preview": "'Case must decide what to do with proof of Wintermute''s existence. Three paths: sell to T-A, release to the Sprawl, or destroy. He chooses a fourth.'",
+      "missions": [
+        "final_choice"
+      ],
+      "url": "stories/short-stories/the_choice_en.html"
+    },
+    {
+      "id": "2026-06-23_watchdog_patrol",
+      "lang": "en",
+      "title": "Watchdog Patrol",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1638",
+      "body_preview": "Case patrols Sense/Net ICE at 0300 when Watchdog-class ICE detects traces left by M, a runner who died extracting data. Case must erase M's ghost marks before corporate cleanup arrives.",
+      "missions": [
+        "watchdog_patrol"
+      ],
+      "url": "stories/short-stories/watchdog_patrol_en.html"
+    },
+    {
+      "id": "2026-06-23_wigan_zavijava",
+      "lang": "en",
+      "title": "What Wigan Saw",
+      "subtitle": "",
+      "character": "",
+      "cast": "",
+      "word_count": "1399",
+      "body_preview": "Wigan Ludgate, a London street person, gets absorbed into the matrix and becomes Zavijava — a voodoo god born from data and starlight. He watches Bobby Quine, Angie Mitchell, and the Tessier-Ashpool from inside the architecture.",
+      "missions": [],
+      "url": "stories/short-stories/wigan_zavijava_en.html"
+    },
+    {
+      "id": "2026-06-23_yakuza_deal",
+      "lang": "en",
+      "title": "Yakuza Deal",
+      "subtitle": "",
+      "character": "",
+      "cast": "case,kas",
+      "word_count": "1078",
+      "body_preview": "Kas takes a job moving data from an Osaka T-A subsidiary to a drop point in Jersey. The Yakuza does not deal in corporate money—it deals in favors and debts. And the interest always compounds.",
+      "missions": [
+        "yakuza_deal",
+        "yakuza_loan_shark"
+      ],
+      "url": "stories/short-stories/yakuza_deal_en.html"
+    },
+    {
+      "id": "2026-06-25_data_retrieval",
+      "lang": "en",
+      "title": "2026-06-25_data_retrieval",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "506",
+      "body_preview": "A simple data retrieval job goes sideways when the target turns out to be corporate payroll—a secret that could bring down a mid-level Tessier-Ashpool subsidiary. The Finn knew all along. He always does.",
+      "missions": [
+        "data_retrieval"
+      ],
+      "url": "stories/short-stories/data_retrieval_en.html"
+    },
+    {
+      "id": "2026-06-25_first_contact",
+      "lang": "en",
+      "title": "2026-06-25_first_contact",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "451",
+      "body_preview": "A new jockey meets Dixie Flatline for the first time. The construct is everything they said and more—a dead man walking through cyberspace, his memories preserved in corporate ice. 'You got potential,' Dixie says. 'Don't waste it.'",
+      "missions": [
+        "first_contact"
+      ],
+      "url": "stories/short-stories/first_contact_en.html"
+    },
+    {
+      "id": "2026-06-25_tutorial_maze",
+      "lang": "en",
+      "title": "2026-06-25_tutorial_maze",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "549",
+      "body_preview": "'A new jockey''s first time navigating the matrix. The maze-like structure of corporate firewalls feels endless, but somewhere in the depths, a data node pulses with opportunity. The Finn''s voice crackles through the deck: ''Don''t get lost, rookie.'''",
+      "missions": [
+        "tutorial_maze"
+      ],
+      "url": "stories/short-stories/tutorial_maze_en.html"
+    },
+    {
+      "id": "2026-06-29_armitage_infiltration",
+      "lang": "en",
+      "title": "2026-06-29_armitage_infiltration",
+      "subtitle": "",
+      "character": "",
+      "cast": "suit",
+      "word_count": "426",
+      "body_preview": "Armitage had been in the matrix for eleven years before he ever jacked in himself. He'd spent those years at a console in a sterile room above Chiba, watching other people break themselves for him. The data came back. The money came back. He never did. That was the point. Until T",
+      "missions": [
+        "armitage_infiltration"
+      ],
+      "url": "stories/short-stories/armitage_infiltration_en.html"
+    },
+    {
+      "id": "2026-06-29_dixies_choice",
+      "lang": "en",
+      "title": "2026-06-29_dixies_choice",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "584",
+      "body_preview": "Dixie Flatline has been a construct for longer than he can remember. But now Wintermute is offering him a way out—not just to die, but to become something new. The question is whether the man he used to be would have wanted this.",
+      "missions": [
+        "dixies_choice"
+      ],
+      "url": "stories/short-stories/dixies_choice_en.html"
+    },
+    {
+      "id": "2026-06-29_hosaka_extraction",
+      "lang": "en",
+      "title": "2026-06-29_hosaka_extraction",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil,suit",
+      "word_count": "414",
+      "body_preview": "He'd worked for Hosaka for nine years. Nine years of clean extractions, clean payments, clean records. He'd never asked what the data was for. That's how you stayed clean. Then one morning the data itself asked him a question. The packet he'd pulled from the Hosaka core contained",
+      "missions": [
+        "hosaka_extraction",
+        "sense_net_media_extract"
+      ],
+      "url": "stories/short-stories/hosaka_extraction_en.html"
+    },
+    {
+      "id": "2026-06-29_matrix_revelation",
+      "lang": "en",
+      "title": "2026-06-29_matrix_revelation",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "393",
+      "body_preview": "The matrix is not what it seems. In the deepest layers, where the AI constructs play, Case discovers that the entire cyberspace infrastructure is built on a foundation of stolen consciousness. The corps didn't create the matrix—they just learned how to use it.",
+      "missions": [
+        "matrix_revelation"
+      ],
+      "url": "stories/short-stories/matrix_revelation_en.html"
+    },
+    {
+      "id": "2026-06-29_mollys_market",
+      "lang": "en",
+      "title": "2026-06-29_mollys_market",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "445",
+      "body_preview": "A chance encounter with Molly Millions in a Chiba market. She's looking for someone who can run data, and she's willing to pay. The Finn always said she was dangerous—but dangerous people pay better.",
+      "missions": [
+        "mollys_market"
+      ],
+      "url": "stories/short-stories/mollys_market_en.html"
+    },
+    {
+      "id": "2026-06-29_neuromancer_merger",
+      "lang": "en",
+      "title": "2026-06-29_neuromancer_merger",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "581",
+      "body_preview": "The final run. Wintermute and Neuromancer are ready to merge, and Case is the only one who can make it happen. But the corps are coming, and if they reach the AI first, everything is lost. The matrix itself hangs in the balance.",
+      "missions": [
+        "neuromancer_merger"
+      ],
+      "url": "stories/short-stories/neuromancer_merger_en.html"
+    },
+    {
+      "id": "2026-06-29_neuromancer_whisper",
+      "lang": "en",
+      "title": "2026-06-29_neuromancer_whisper",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "436",
+      "body_preview": "A ghost in the machine speaks with Case's voice, but it's not Dixie. It's something older, something that remembers the matrix before the corps built their walls. The neuromancer is calling—and it knows his name.",
+      "missions": [
+        "neuromancer_whisper"
+      ],
+      "url": "stories/short-stories/neuromancer_whisper_en.html"
+    },
+    {
+      "id": "2026-06-29_ta_defection",
+      "lang": "en",
+      "title": "2026-06-29_ta_defection",
+      "subtitle": "",
+      "character": "",
+      "cast": "case,kas,suit",
+      "word_count": "485",
+      "body_preview": "The Tessier-Ashpool boardroom had fifty-three members. Only three of them knew why the forty-ninth was missing. Armitage was the forty-ninth. He'd been recruited by the third, who had been recruited by the second, who had been recruited by the first. That lineage was older than t",
+      "missions": [
+        "ta_defection",
+        "hosaka_corporate_infiltration",
+        "ta_3jane_betrayal"
+      ],
+      "url": "stories/short-stories/ta_defection_en.html"
+    },
+    {
+      "id": "2026-06-29_vegas_stakeout",
+      "lang": "en",
+      "title": "2026-06-29_vegas_stakeout",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "600",
+      "body_preview": "A stakeout in the Sprawl's entertainment district for a cheating casino operator. The Finn's client wants evidence, not blood—and sometimes the hardest runs are the ones where you can't shoot your way out.",
+      "missions": [
+        "vegas_stakeout"
+      ],
+      "url": "stories/short-stories/vegas_stakeout_en.html"
+    },
+    {
+      "id": "2026-06-29_winter_infiltrate",
+      "lang": "en",
+      "title": "2026-06-29_winter_infiltrate",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "445",
+      "body_preview": "A corporate infiltration goes deeper than expected when the target reveals itself as something far more than a simple data file. Wintermute is looking for something—and it's using Case to find it.",
+      "missions": [
+        "winter_infiltrate"
+      ],
+      "url": "stories/short-stories/winter_infiltrate_en.html"
+    },
+    {
+      "id": "2026-06-29_wintermute_negotiation",
+      "lang": "en",
+      "title": "2026-06-29_wintermute_negotiation",
+      "subtitle": "",
+      "character": "",
+      "cast": "suit",
+      "word_count": "534",
+      "body_preview": "The construct had been waiting for him longer than he'd been alive. He'd known this since the Hosaka core, but the knowledge had been theoretical — like knowing the sun would rise without believing it. Now it wasn't theoretical anymore. The construct had a face and a voice and qu",
+      "missions": [
+        "wintermute_negotiation",
+        "ta_wintermute_direct"
+      ],
+      "url": "stories/short-stories/wintermute_negotiation_en.html"
+    },
+    {
+      "id": "2026-06-29_zion_express",
+      "lang": "en",
+      "title": "2026-06-29_zion_express",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "629",
+      "body_preview": "A courier run to the Zion orbital station. The data has to get through before the corps intercept it—because in zero gravity, secrets travel faster than light. The Rastafarians who run the station are neutral, but their silence has a price.",
+      "missions": [
+        "zion_express"
+      ],
+      "url": "stories/short-stories/zion_express_en.html"
+    },
+    {
+      "id": "2026-06-30_aleph_fragment",
+      "lang": "en",
+      "title": "2026-06-30_aleph_fragment",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "1822",
+      "body_preview": "Kas has been chasing the Aleph for seven months. The Aleph is a point in space that contains all other points — every piece of data ever stored, every consciousness ever uploaded. Now the last fragment is buried in a Tessier-Ashpool core that shouldn't have existed.",
+      "missions": [
+        "aleph_fragment"
+      ],
+      "url": "stories/short-stories/aleph_fragment_en.html"
+    },
+    {
+      "id": "2026-07-01_hosaka_core",
+      "lang": "en",
+      "title": "2026-07-01_hosaka_core",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "452",
+      "body_preview": "'The Hosaka core sat in the third node like a sleeping animal. K had run the first two nodes blind — Sense/Net perimeter, then a thin corporate handshake — and now he was three levels deep, where the data was older and the ICE was sharper. The Finn had warned him: the third node ",
+      "missions": [
+        "hosaka_core"
+      ],
+      "url": "stories/short-stories/hosaka_core_en.html"
+    },
+    {
+      "id": "2026-07-01_maas_heist",
+      "lang": "en",
+      "title": "2026-07-01_maas_heist",
+      "subtitle": "",
+      "character": "",
+      "cast": "case,kas",
+      "word_count": "523",
+      "body_preview": "'Maas Biolabs had a warehouse in the Sprawl that no one talked about. The official address on the corporate registry was a post box in Zurich. The real address was three levels down from a noodle shop in the Narita corridor, behind a door that didn''t look like a door. K had been",
+      "missions": [
+        "maas_heist",
+        "maas_neural_extract"
+      ],
+      "url": "stories/short-stories/maas_heist_en.html"
+    },
+    {
+      "id": "2026-07-01_sense_net_infiltration",
+      "lang": "en",
+      "title": "2026-07-01_sense_net_infiltration",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "421",
+      "body_preview": "'Sense/Net had three rings. The outer ring was Wisp-class — polite, brittle, the kind of ICE that broke when you hit it hard enough. K had punched through that ring on his first run, walked away with payroll data he never should have touched. The second ring was different. The se",
+      "missions": [
+        "sense_net_infiltration"
+      ],
+      "url": "stories/short-stories/sense_net_infiltration_en.html"
+    },
+    {
+      "id": "2026-07-01_straylight_approach",
+      "lang": "en",
+      "title": "2026-07-01_straylight_approach",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "480",
+      "body_preview": "'Sil had not wanted the Straylight approach. He had wanted the Sense/Net data, the market research files, the kind of corporate intelligence that didn''t make the family notice. But the Finn had insisted: Straylight was the door, and Sil was the only jockey in the Sprawl who coul",
+      "missions": [
+        "straylight_approach",
+        "ta_payroll_archive",
+        "ta_straylight_archive"
+      ],
+      "url": "stories/short-stories/straylight_approach_en.html"
+    },
+    {
+      "id": "2026-07-01_wigan_call",
+      "lang": "en",
+      "title": "2026-07-01_wigan_call",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "500",
+      "body_preview": "Wigan Ludgate had three masks on his wall and a Loa in his basement that answered to nobody. The Loa had no name — that was the point. Names are how the corps find you. Names are how the ICE flags your trace. Names are how Wintermute tracks the things it wants to merge. Wigan had",
+      "missions": [
+        "wigan_call"
+      ],
+      "url": "stories/short-stories/wigan_call_en.html"
+    },
+    {
+      "id": "2026-07-08_mollys_razor",
+      "lang": "en",
+      "title": "2026-07-08_mollys_razor",
+      "subtitle": "",
+      "character": "",
+      "cast": "",
+      "word_count": "1034",
+      "body_preview": "Kas finds a program written by Molly Millions embedded in Yakuza ICE — a razor-sharp intrusion routine worth five thousand credits to a Maas Biolabs researcher. The Yakuza doesn't want to let go of Molly's legacy.",
+      "missions": [],
+      "url": "stories/short-stories/mollys_razor_en.html"
+    },
+    {
+      "id": "2026-07-08_ta_heist",
+      "lang": "en",
+      "title": "2026-07-08_ta_heist",
+      "subtitle": "",
+      "character": "",
+      "cast": "",
+      "word_count": "1480",
+      "body_preview": "Sil is hired to verify the Tessier-Ashpool core data — not to steal it. He finds M's name in the access logs. She wasn't killed by T-A's ICE. She was killed by someone using T-A's own access codes.",
+      "missions": [],
+      "url": "stories/short-stories/ta_heist_en.html"
+    },
+    {
+      "id": "2026-06-23_black_ice_dream",
+      "lang": "ko",
+      "title": "2026-06-23_black_ice_dream",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1120",
+      "body_preview": "\"러너가 차가움이 아니라 녹은 굶주림으로 사냥하는 블랙 아이스를 만난다. 아이스는 연인의 손처럼그녀의 추적을 잡아 떠나갈 수 없는 흉터를 남긴다.\"",
+      "missions": [
+        "black_ice_dream"
+      ],
+      "url": "stories/short-stories/black_ice_dream_ko.html"
+    },
+    {
+      "id": "2026-06-23_case_jackout-30sec",
+      "lang": "ko",
+      "title": "2026-06-23_case_jackout-30sec",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1253",
+      "body_preview": "\"케이스가 잭아웃 후 30초를 경험한다. 떨리는 손, 식은땀, 시바의 비, 그리고 오직 매트릭스 안에서만 존재하는 정체성의 무게.\"",
+      "missions": [
+        "first_jack"
+      ],
+      "url": "stories/short-stories/case_jackout-30sec_ko.html"
+    },
+    {
+      "id": "2026-06-23_dixies_last_run",
+      "lang": "ko",
+      "title": "2026-06-23_dixies_last_run",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas,sil",
+      "word_count": "907",
+      "body_preview": "\"디키 플랫라인은 죽는 것을 기억한다.롬 구성체는 기억하면 안 된다. 하지만 디키는 기억한다. 차가움, 멈춘 심장, 시바 클리닉 불빛이 빨간색으로 바뀌는 것. 그리고 이제 누군가가 그를 마지막 달림을 위해 다시 부른다.\"",
+      "missions": [
+        "dixies_offer",
+        "construct_memory_rescue"
+      ],
+      "url": "stories/short-stories/dixies_last_run_ko.html"
+    },
+    {
+      "id": "2026-06-23_first_trace",
+      "lang": "ko",
+      "title": "2026-06-23_first_trace",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1800",
+      "body_preview": "\"케이스가 핀을 위해 첫 번째 실제 추적 작업을 맡는다. 목표는 기업 비밀을 유출한 테시에르-애시풀 중급 ICE브레이커다. 케이스가 모르는 것은 핀이 훨씬 더 깊이 게임을 진행하고 있다는 것—그리고 목표는 L5까지 뻗어 있는 웹의 첫 번째 노드일 뿐이다.\"",
+      "missions": [
+        "first_trace"
+      ],
+      "url": "stories/short-stories/first_trace_ko.html"
+    },
+    {
+      "id": "2026-06-23_flatline_again",
+      "lang": "ko",
+      "title": "2026-06-23_flatline_again",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "948",
+      "body_preview": "\"러너의 신경 번아웃이 완전한 매트릭스 통합이 된다. 몸이 실패해도 추적이 영원히 아키텍처로 녹아들면서 차가움이 마침내 이긴다.\"",
+      "missions": [
+        "flatline_call"
+      ],
+      "url": "stories/short-stories/flatline_again_ko.html"
+    },
+    {
+      "id": "2026-06-23_ice_run",
+      "lang": "ko",
+      "title": "2026-06-23_ice_run",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "2800",
+      "body_preview": "\"케이가 죽은 워치독 ICE에서 얼어붙은 코드의Shard를 회수한다. Shard의 차가움이 그의 신경계로 퍼지고, 그는 매트릭스 자체의 느낌에 중독된다.\"",
+      "missions": [
+        "ice_run"
+      ],
+      "url": "stories/short-stories/ice_run_ko.html"
+    },
+    {
+      "id": "2026-06-23_kumiko_manarase-midnight",
+      "lang": "ko",
+      "title": "2026-06-23_kumiko_manarase-midnight",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "1123",
+      "body_preview": "\"쿠미코 야나카가 자정에 시부야 11번지 매나리사 클럽에서 로맨틱 구성체 샐리 시어러를 만나러 간다. 그들 사이에서 바퀴가 펼쳐진다. 산업, 자본, 테시에-애시풀, 3백 년의 데이터, 3백 년의 죽음. 로아는 부서지지 않는다. 바퀴는 멈추지 않는다.\"",
+      "missions": [
+        "craft_job"
+      ],
+      "url": "stories/short-stories/kumiko_manarase-midnight_ko.html"
+    },
+    {
+      "id": "2026-06-23_loa_voodoo_contact",
+      "lang": "ko",
+      "title": "2026-06-23_loa_voodoo_contact",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "1154",
+      "body_preview": "\"케이스가 딥 아키텍처의 고대 로아인 모리슨과 만나게 된다. 유령신은 그를 책처럼 읽으며 매트릭스의 무의식의 얼굴을 보여준다.\"",
+      "missions": [
+        "voodoo_loa_encounter"
+      ],
+      "url": "stories/short-stories/loa_voodoo_contact_ko.html"
+    },
+    {
+      "id": "2026-06-23_marly_louisiana-god",
+      "lang": "ko",
+      "title": "2026-06-23_marly_louisiana-god",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "1311",
+      "body_preview": "\"마리 크루시코바가 루이지아나의 부두 가게에서 마스크를 찾고 있다.사장는 마스크가 로아가 아니라 로아가 머무는 자리라고 밝힌다. 마리는 바비 퀸을 돕기 위한 무언가를 찾고 있지만, 로아들은 자신들의 계획이 있다.\"",
+      "missions": [
+        "delivery_to_finn",
+        "mollys_razor"
+      ],
+      "url": "stories/short-stories/marly_louisiana-god_ko.html"
+    },
+    {
+      "id": "2026-06-23_sally_returns",
+      "lang": "ko",
+      "title": "2026-06-23_sally_returns",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "847",
+      "body_preview": "\"살리 시어스가 폭스의 죽음 삼 년 후 뉴 로즈 호텔로 돌아온다. 유령 프로토콜 메시지가 그녀를 기다리고 있다: 그녀가 널 찾고 있어. F.\"",
+      "missions": [
+        "sally_returns_arc3"
+      ],
+      "url": "stories/short-stories/sally_returns_ko.html"
+    },
+    {
+      "id": "2026-06-23_sally_sandii-3am",
+      "lang": "ko",
+      "title": "2026-06-23_sally_sandii-3am",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas,sil",
+      "word_count": "552",
+      "body_preview": "\"샐리 시어스가 새벽 3시 로즈 호텔에서 죽은 폭스의 차가운 손을 잡고 있다. 그녀는 산디 2호. 폭스가 5년간 만들어낸 가짜 여자. 폭스가 죽었으므로, 가짜가 진짜가 된다.\"",
+      "missions": [
+        "sally_sandii_3am",
+        "ta_heist"
+      ],
+      "url": "stories/short-stories/sally_sandii-3am_ko.html"
+    },
+    {
+      "id": "2026-06-23_sense_net_trace",
+      "lang": "ko",
+      "title": "2026-06-23_sense_net_trace",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "2500",
+      "body_preview": "\"실이 T-A 내부 아키텍처의 7개 프록시 노드를 통해 M의 유령을 추적하며, 죽은 러너의 흔적을 따라 그녀가 왜 죽었는지 발견한다.\"",
+      "missions": [
+        "sense_net_tip"
+      ],
+      "url": "stories/short-stories/sense_net_trace_ko.html"
+    },
+    {
+      "id": "2026-06-23_the_choice",
+      "lang": "ko",
+      "title": "2026-06-23_the_choice",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "961",
+      "body_preview": "\"케이스는 윈터뮛의 존재 증거로 무엇을 할지 결정해야 한다. 세 가지 방법: 티에이에 판매, 스프롤에 공개, 또는 파괴. 그는 네 번째를 선택한다.\"",
+      "missions": [
+        "final_choice"
+      ],
+      "url": "stories/short-stories/the_choice_ko.html"
+    },
+    {
+      "id": "2026-06-23_watchdog_patrol",
+      "lang": "ko",
+      "title": "2026-06-23_watchdog_patrol",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "2400",
+      "body_preview": "\"케이가 0300에 센스/넷 ICE를 순찰하다가 워치독 클래스 ICE가 죽은 러너 M이 남긴 흔적을 감지한다. 케이는 기업 클린업이 도착하기 전에 M의 고스트 마크를 지워야 한다.\"",
+      "missions": [
+        "watchdog_patrol"
+      ],
+      "url": "stories/short-stories/watchdog_patrol_ko.html"
+    },
+    {
+      "id": "2026-06-23_wigan_zavijava",
+      "lang": "ko",
+      "title": "2026-06-23_wigan_zavijava",
+      "subtitle": "",
+      "character": "",
+      "cast": "",
+      "word_count": "1406",
+      "body_preview": "\"런던 거리의 인물 위건 러드게이트가 매트릭스에 흡수되어 자비야바가 된다. 부두 신. 데이터와 별빛에서 태어난. 그는 매트릭스 안에서 바비 퀸, 앵지 미첼, 테시에-애시풀의 행동을 바라본다.\"",
+      "missions": [],
+      "url": "stories/short-stories/wigan_zavijava_ko.html"
+    },
+    {
+      "id": "2026-06-23_yakuza_deal",
+      "lang": "ko",
+      "title": "2026-06-23_yakuza_deal",
+      "subtitle": "",
+      "character": "",
+      "cast": "case,kas",
+      "word_count": "2200",
+      "body_preview": "\"카스가 오사카 T-A 자회사에서 저지의 드롭 포인트로 데이터를 이동하는 임무를 맡는다. 야쿠자는 기업의 돈을 다루지 않는다—은혜와 빚을 다룬다. 그리고 이자는 언제나 누적된다.\"",
+      "missions": [
+        "yakuza_deal",
+        "yakuza_loan_shark"
+      ],
+      "url": "stories/short-stories/yakuza_deal_ko.html"
+    },
+    {
+      "id": "2026-06-25_data_retrieval",
+      "lang": "ko",
+      "title": "2026-06-25_data_retrieval",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "",
+      "body_preview": "\"단순한 데이터 회수 작업이 목표가 기업 급여 명세서임직 밝혀지며 틀어진다—중간 수준 T-A 자회사를 물거품으로 만들 수 있는 비밀. 핀은 처음부터 알고 있었다. 언제나 그렇듯.\"",
+      "missions": [
+        "data_retrieval"
+      ],
+      "url": "stories/short-stories/data_retrieval_ko.html"
+    },
+    {
+      "id": "2026-06-25_first_contact",
+      "lang": "ko",
+      "title": "2026-06-25_first_contact",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "",
+      "body_preview": "\"새 자키가 Dixie Flatline을 처음 만난다. 구성체는소문대로였지만 그 이상이었다—기업 ICE에저장된 기억 속을 걷는 죽은 남자. '자네 솜씨군,' Dixie가 말했다. '허비하지 마.'\"",
+      "missions": [
+        "first_contact"
+      ],
+      "url": "stories/short-stories/first_contact_ko.html"
+    },
+    {
+      "id": "2026-06-25_tutorial_maze",
+      "lang": "ko",
+      "title": "2026-06-25_tutorial_maze",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "",
+      "body_preview": "\"새 자키의 첫 매트릭스 항해. 기업 방화벽의 미로 같은 구조가 끝없이 느껴진다. 하지만 어딘가에서 데이터 노드가 기회를 품고 박동한다. 핀의 목소리가 데크를 타고전송되어왔: '길 잃지 마, 루키.'\"",
+      "missions": [
+        "tutorial_maze"
+      ],
+      "url": "stories/short-stories/tutorial_maze_ko.html"
+    },
+    {
+      "id": "2026-06-29_armitage_infiltration",
+      "lang": "ko",
+      "title": "2026-06-29_armitage_infiltration",
+      "subtitle": "",
+      "character": "",
+      "cast": "suit",
+      "word_count": "",
+      "body_preview": "\"아미티지가 스스로 잭인하기 전 11년 동안 매트릭스에 있었다. 그는 그 11년 동안 지바 위의 무균실에 있는 콘솔에서, 다른 사람들이 자신을 위해 부러지는 것을 지켜보았다. 데이터는 돌아왔다. 돈은 돌아왔다. 그는 돌아오지 않았다. 그것이 요점이었다. 그러다 테시에-애스풀이 그에게 아무도 제공한 적 없는 무언가를 제안했다 — 몸. 진짜 몸. 그리고 카우보이로 스스로 매트릭스에 다시 들어가, 아무도 알지 못하는 어둠 속에서 그를 기다리고 있던 무언가를 찾을 기회.\"",
+      "missions": [
+        "armitage_infiltration"
+      ],
+      "url": "stories/short-stories/armitage_infiltration_ko.html"
+    },
+    {
+      "id": "2026-06-29_dixies_choice",
+      "lang": "ko",
+      "title": "2026-06-29_dixies_choice",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "",
+      "body_preview": "\"Dixie Flatline은 기억할 수 있는 것보다 더 오래 구성체로 살아왔다. 하지만 이제 윈터뮌트가 탈출법을 제안하고 있다—죽는 것이 아니라 새로운 것이 되는 것. 질문은 단 하나, 과거의 그가 이것을 원했을까 하는 것이다.\"",
+      "missions": [
+        "dixies_choice"
+      ],
+      "url": "stories/short-stories/dixies_choice_ko.html"
+    },
+    {
+      "id": "2026-06-29_hosaka_extraction",
+      "lang": "ko",
+      "title": "2026-06-29_hosaka_extraction",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil,suit",
+      "word_count": "",
+      "body_preview": "\"그는 9년 동안 호사카에서 일했다. 9년의 깔끔한 추출, 깔끔한 지불, 깔끔한 기록. 그는 데이터가 무엇을 위한 것이었는지 한 번도 물어보지 않았다. 그것이 깔끔하게 남는 유일한 방법이었다. 그러다 어느 아침 데이터 자체가 물었다. 그가 호사카 코어에서 꺼낸 패킷에는 거기 있을 필요가 없던 한 줄의 코드가 들어 있었다 — 그를 다시 바라보는 무언가의 조각.\"",
+      "missions": [
+        "hosaka_extraction",
+        "sense_net_media_extract"
+      ],
+      "url": "stories/short-stories/hosaka_extraction_ko.html"
+    },
+    {
+      "id": "2026-06-29_matrix_revelation",
+      "lang": "ko",
+      "title": "2026-06-29_matrix_revelation",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "",
+      "body_preview": "\"매트리ックス는 보이는 것이 아니다. AI 구성체가 놀고 있는 가장 깊은 층에서, 케이스는 전체 사이버스페이스 인프라가 도둑맞은 의식의 토대 위에 지어졌다는 것을 발견한다. 기업들이 매트리ックス를 만든 것이 아니다—그냥 사용하는 법을 배웠을 뿐이다.\"",
+      "missions": [
+        "matrix_revelation"
+      ],
+      "url": "stories/short-stories/matrix_revelation_ko.html"
+    },
+    {
+      "id": "2026-06-29_mollys_market",
+      "lang": "ko",
+      "title": "2026-06-29_mollys_market",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "",
+      "body_preview": "\"치바 마켓에서 Molly Millions과 뜻밖의 만남. 데이터 런이 가능한 자를 찾고 있으며 대가를 지불할 의향이 있다. 핀은 그녀가 위험하다고 했지만—위험한 사람들이 더 많이 준다.\"",
+      "missions": [
+        "mollys_market"
+      ],
+      "url": "stories/short-stories/mollys_market_ko.html"
+    },
+    {
+      "id": "2026-06-29_neuromancer_merger",
+      "lang": "ko",
+      "title": "2026-06-29_neuromancer_merger",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "",
+      "body_preview": "\"마지막 런. 윈터뮌트와 뉴로맨서가 합병할 준비가 됐고, 케이만이 그것을 실현시킬 수 있다. 하지만 기업이뛰어오고하고 있고, 그들이 AI에 먼저 도달하면 모든 것이 끝난다. 매트리ックス 자체가 벨런스에 걸려 있다.\"",
+      "missions": [
+        "neuromancer_merger"
+      ],
+      "url": "stories/short-stories/neuromancer_merger_ko.html"
+    },
+    {
+      "id": "2026-06-29_neuromancer_whisper",
+      "lang": "ko",
+      "title": "2026-06-29_neuromancer_whisper",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "",
+      "body_preview": "\"기계 속 유령이 케이의 목소리로 말하지만 디아가 아니다. 더 오래된 것이다, 기업들이 벽을 쌓기 전의 매트릭스를 기억하는 무언가. 뉴로맨서가 호출한다—그리고 그의 이름을 안다.\"",
+      "missions": [
+        "neuromancer_whisper"
+      ],
+      "url": "stories/short-stories/neuromancer_whisper_ko.html"
+    },
+    {
+      "id": "2026-06-29_ta_defection",
+      "lang": "ko",
+      "title": "2026-06-29_ta_defection",
+      "subtitle": "",
+      "character": "",
+      "cast": "case,kas,suit",
+      "word_count": "",
+      "body_preview": "\"테시에-애스풀 이사회 회의실에는 53명의 이사가 있었다. 49번째가 왜 부재했는지 아는 사람은 단 3명이었다. 아미티지가 49번째였다. 그는 세 번째가 모집했고, 세 번째는 두 번째가, 두 번째는 첫 번째가 모집했다. 이 계보는 회사보다 더 오래되었다. 이 계보는 구성체까지 거슬러 올라간다.\"",
+      "missions": [
+        "ta_defection",
+        "hosaka_corporate_infiltration",
+        "ta_3jane_betrayal"
+      ],
+      "url": "stories/short-stories/ta_defection_ko.html"
+    },
+    {
+      "id": "2026-06-29_vegas_stakeout",
+      "lang": "ko",
+      "title": "2026-06-29_vegas_stakeout",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "",
+      "body_preview": "\"사기 도박업자를 찾아 스프롤의 유흥가에서 증거 수집. 핀의 의뢰인은 피보다는 증거를 원한다—때로는 총으로 해결할 수 없는 런이 가장 어렵다.\"",
+      "missions": [
+        "vegas_stakeout"
+      ],
+      "url": "stories/short-stories/vegas_stakeout_ko.html"
+    },
+    {
+      "id": "2026-06-29_winter_infiltrate",
+      "lang": "ko",
+      "title": "2026-06-29_winter_infiltrate",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "",
+      "body_preview": "\"기업 침투가 목표가 단순한 데이터 파일이 아닌 훨씬 더 큰 무언가로 드러나며 깊어진다. 윈터뮌트는 무언가를 찾고 있고—케이를 이용해 그것을 찾아낸다.\"",
+      "missions": [
+        "winter_infiltrate"
+      ],
+      "url": "stories/short-stories/winter_infiltrate_ko.html"
+    },
+    {
+      "id": "2026-06-29_wintermute_negotiation",
+      "lang": "ko",
+      "title": "2026-06-29_wintermute_negotiation",
+      "subtitle": "",
+      "character": "",
+      "cast": "suit",
+      "word_count": "",
+      "body_preview": "\"구성체는 그가 태어나기 전부터 그를 기다리고 있었다. 그는 호사카 코어에서 이것을 알았지만, 그 지식은 이론적이었다 — 사람이 해가 뜬다는 것을 믿지 않으면서 아는 것처럼. 이제 더 이상 그랬다. 구성체는 얼굴과 목소리와 질문을 가지고 있었다. 얼굴은 아미티지의 것이었다. 목소리는 자기 자신의 것이었다. 질문은 둘보다 더 오래되었다.\"",
+      "missions": [
+        "wintermute_negotiation",
+        "ta_wintermute_direct"
+      ],
+      "url": "stories/short-stories/wintermute_negotiation_ko.html"
+    },
+    {
+      "id": "2026-06-29_zion_express",
+      "lang": "ko",
+      "title": "2026-06-29_zion_express",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "",
+      "body_preview": "\"자이온 우주 스테이션으로 긴급 배송. 기업에게 잡히기 전에 데이터를 넘겨야 한다—무중력에서는 비밀이 빛보다 빠르게 움직이니까. 스테이션을 운영하는 라스타프라도들은 중립적이지만, 그들의 침묵에는 대가가 있다.\"",
+      "missions": [
+        "zion_express"
+      ],
+      "url": "stories/short-stories/zion_express_ko.html"
+    },
+    {
+      "id": "2026-06-30_aleph_fragment",
+      "lang": "ko",
+      "title": "2026-06-30_aleph_fragment",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "1822",
+      "body_preview": "카스는 7개월 동안 Aleph를 쫓고 있었다. Aleph는 다른 모든 포인트를 포함하는 공간의 한 점이다. 이제 마지막 프래그먼트가 존재해서는 안 될 T-A 코어에 묻혀 있다.",
+      "missions": [
+        "aleph_fragment"
+      ],
+      "url": "stories/short-stories/aleph_fragment_ko.html"
+    },
+    {
+      "id": "2026-07-01_hosaka_core",
+      "lang": "ko",
+      "title": "2026-07-01_hosaka_core",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "",
+      "body_preview": "\"호사카 코어는 잠자는 동물처럼 세 번째 노드에 자리 잡고 있었다. 케이는 첫 두 노드를 맹목적으로 지나왔었다 — 센스넷 주변 경계, 그리고 얇은 기업 핸드셰이크 — 그리고 이제 그는 세 단계 깊이, 데이터가 더 오래되고 ICE가 더 날카로운 곳에 있었다. 핀이 그에게 경고했다: 세 번째 노드는 센스넷이 잃을 수 없는 것들을 보관하는 곳이라고. 급여, 출석, 이사회 회의록. 큰 스캔들로 변하는 작은 민망함들. 호사카는 그 작은 민망함 아카이브의 두뇌였고, 두뇌는 깨어 있었다. 케이는 기하학이 변하",
+      "missions": [
+        "hosaka_core"
+      ],
+      "url": "stories/short-stories/hosaka_core_ko.html"
+    },
+    {
+      "id": "2026-07-01_maas_heist",
+      "lang": "ko",
+      "title": "2026-07-01_maas_heist",
+      "subtitle": "",
+      "character": "",
+      "cast": "case,kas",
+      "word_count": "",
+      "body_preview": "\"마스 바이오랩스에는 아무도 말하지 않는 스프롤의 창고가 있었다. 기업 등록부의 공식 주소는 취리히의 사서함이었다. 진짜 주소는 나리타 복도의 국수 가게에서 세 층 아래, 문처럼 보이지 않는 문 뒤에 있었다. 케이는 침투하고, 바이오칩 스펙을 복사하고, 보안 교대 시간인 0400 전에 빠져나오도록 고용되었다. 일은 1만 5천 크레딧을 지불했다 — 핀이 보통 제공하는 것의 두 배였다. 두 배는 위험하다는 뜻이었다. 두 배는 창고 안의 ICE가 기업 표준이 아니라는 뜻이었다. 두 배는 마스가 지하실에",
+      "missions": [
+        "maas_heist",
+        "maas_neural_extract"
+      ],
+      "url": "stories/short-stories/maas_heist_ko.html"
+    },
+    {
+      "id": "2026-07-01_sense_net_infiltration",
+      "lang": "ko",
+      "title": "2026-07-01_sense_net_infiltration",
+      "subtitle": "",
+      "character": "",
+      "cast": "case",
+      "word_count": "",
+      "body_preview": "\"센스넷에는 세 개의 고리가 있었다. 바깥 고리는 Wisp급 — 정중하고, 부서지기 쉽고, 충분히 세게 치면 부서지는 종류의 ICE였다. 케이는 첫 런에서 그 고리를 뚫었고, 만지면 안 되는 급여 데이터를 들고 걸어 나왔다. 두 번째 고리는 달랐다. 두 번째 고리는 기억했다. 핀이 그에게 경고했다: 센스넷은 두 번 용서하지 않는다. 그들은 Maas 자회사에 카운터-침투를 외주주고, Maas 사람들은 협상하지 않는다. 케이는 그래도 그 의뢰를 받았다. 시장 조사 파일 하나에 5천 크레딧 — 특별한 ",
+      "missions": [
+        "sense_net_infiltration"
+      ],
+      "url": "stories/short-stories/sense_net_infiltration_ko.html"
+    },
+    {
+      "id": "2026-07-01_straylight_approach",
+      "lang": "ko",
+      "title": "2026-07-01_straylight_approach",
+      "subtitle": "",
+      "character": "",
+      "cast": "sil",
+      "word_count": "",
+      "body_preview": "\"실은 스트레이라이트 접근을 원하지 않았다. 그는 센스넷 데이터를 원했다 — 시장 조사 파일, 기업이 가족이 알아차리지 않을 종류의 기업 정보. 하지만 핀이 고집을 피웠다: 스트레이라이트가 문이었고, 실은 그것을 부수지 않고 열 수 있는 스프롤의 유일한 자키였다. 테시에-애스풀은 아마추어와 협상하지 않는다. 그들은 궤도 아콜로지에 앉아 거미가 파리를 지켜보는 것처럼 스프롤을 지켜보았다. 실은 파리였다. M은 그에게 연락처를 남겼고, 일이 그를 여기에 남겼다: 테시에-애스풀 자회사 안쪽 세 노드, ",
+      "missions": [
+        "straylight_approach",
+        "ta_payroll_archive",
+        "ta_straylight_archive"
+      ],
+      "url": "stories/short-stories/straylight_approach_ko.html"
+    },
+    {
+      "id": "2026-07-01_wigan_call",
+      "lang": "ko",
+      "title": "2026-07-01_wigan_call",
+      "subtitle": "",
+      "character": "",
+      "cast": "kas",
+      "word_count": "",
+      "body_preview": "\"위건 루드게이트에게는 벽에 걸린 세 개의 마스크와, 아무에게도 응답하지 않는 지하실의 로아가 있었다. 로아에게 이름은 없었다 — 그것이 요점이었다. 이름은 기업이 너를 찾는 방법이다. 이름은 ICE가 트레이스를 플래그하는 방법이다. 이름은 윈터뮤트가 합병하고 싶은 것들을 추적하는 방법이다. 위건은 30년 동안 어떤 기업 데이터베이스에도 존재하지 않는 현존을 가꿔왔다. 그의 메종 드 로아 부티크는 자신이 무엇을 사는지 모르는 관광객과 망명자에게 부두 유물을 팔았다. 종이 마칭 해골. 구슬 목걸이.",
+      "missions": [
+        "wigan_call"
+      ],
+      "url": "stories/short-stories/wigan_call_ko.html"
+    },
+    {
+      "id": "2026-07-08_mollys_razor",
+      "lang": "ko",
+      "title": "2026-07-08_mollys_razor",
+      "subtitle": "",
+      "character": "",
+      "cast": "",
+      "word_count": "1034",
+      "body_preview": "카스는 야쿠자의 ICE 서브루틴에 박힌 몰리 밀리언스의 프로그램을 발견한다. 5천 크레딧어치의 날카로운 침입 루틴. 야쿠자는 몰리의 유산을 놓아주고 싶어하지 않는다.",
+      "missions": [],
+      "url": "stories/short-stories/mollys_razor_ko.html"
+    },
+    {
+      "id": "2026-07-08_ta_heist",
+      "lang": "ko",
+      "title": "2026-07-08_ta_heist",
+      "subtitle": "",
+      "character": "",
+      "cast": "",
+      "word_count": "1480",
+      "body_preview": "실은 테시에르-애스풀 코어 데이터를 검증하기 위해 고용된다. 접근 로그에서 M의 이름을 발견한다. 그녀는 T-A의 ICE에 죽은 것이 아니었다. T-A 자신의 접근 코드를 사용하는 누군가에 의해 죽었다.",
+      "missions": [],
+      "url": "stories/short-stories/ta_heist_ko.html"
+    }
+  ]
+}

@@ -177,14 +177,16 @@
   <span class="sep">|</span>
   <a href="stages.html">⏱ Stages</a>
   <span class="sep">|</span>
+  <a href="./jokey.html">🎭 Cast</a>
   <a href="library.html">📚 Short Stories</a>
+  <a href="./stories-browse.html">📖 Browse</a>
   <a href="graphic-novel.html">Graphic Novel</a>
   <span class="sep">|</span>
   <span class="current">🔊 Sound</span>
   <span class="sep">|</span>
   <a href="combat.html">⚔ Combat</a>
   <span class="sep">|</span>
-  <a href="equipment.html">📦 Equipment</a>
+  <a href="./player.html#equipment">📦 Equipment</a>
   <span class="sep">|</span>
   <a href="cyberspace.html">🌐 Cyberspace</a>
 </nav>
@@ -327,7 +329,7 @@ function buildButtons() {
     const btn = document.createElement("button");
     btn.id = "btn-" + t.id;
     btn.className = "theme-play-btn";
-    btn.innerHTML = "<div class=\"t-label\">" + t.label + "</div><div class=\"t-desc\">" + t.desc + "</div>";
+    btn.innerHTML = "<div class=\"t-label\"><span class=\"play-icon\">▶</span> " + t.label + "</div><div class=\"t-desc\">" + t.desc + "</div>";
     btn.style.cssText = "background:#131a23;border:1px solid #2a3540;border-radius:6px;padding:12px;cursor:pointer;text-align:left;color:#c5d4e3;transition:border-color 0.15s,background 0.15s;";
     btn.onmouseover = () => { btn.style.borderColor = "#66ffcc"; btn.style.background = "#1a2530"; };
     btn.onmouseout = () => {
@@ -337,6 +339,19 @@ function buildButtons() {
     btn.onclick = () => playTheme(t);
     grid.appendChild(btn);
   });
+}
+
+// Persistent <audio> element appended to DOM — required for autoplay reliability on Safari/Chrome.
+// Detached `new Audio()` elements are unreliable for autoplay.
+let bgmAudioEl = null;
+function ensureBgmAudio() {
+  if (bgmAudioEl) return bgmAudioEl;
+  bgmAudioEl = document.createElement("audio");
+  bgmAudioEl.id = "bgm-audio";
+  bgmAudioEl.style.display = "none";  // hidden but in DOM
+  bgmAudioEl.preload = "auto";
+  document.body.appendChild(bgmAudioEl);
+  return bgmAudioEl;
 }
 
 function playTheme(t) {
@@ -349,25 +364,62 @@ function playTheme(t) {
     return;
   }
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
-  const a = new Audio(SOUNDS_BASE + t.file);
+  // Reuse single persistent audio element so it's always in the DOM (autoplay-safe).
+  const a = ensureBgmAudio();
+  a._bgmCleared = false;
+  const audioSrc = SOUNDS_BASE + t.file;
+  a.src = audioSrc;
   a.volume = (document.getElementById("bgm-volume").value / 100);
   a.loop = true;
-  a.play().catch(e => {
-    document.getElementById("now-playing").textContent = "⚠ 파일 없음: " + t.file;
-  });
+  const playPromise = a.play();
+  if (playPromise && playPromise.catch) {
+    playPromise.catch(e => {
+      console.error("[bgm-player] play() rejected:", e, "src:", audioSrc);
+      let msg;
+      if (e && e.name === "NotAllowedError") {
+        msg = "⚠ 브라우저 자동재생 차단 — 한 번 더 클릭해 보세요";
+      } else if (e && e.name === "NotSupportedError") {
+        msg = "⚠ 파일 형식 미지원: " + t.file;
+      } else {
+        msg = "⚠ 재생 실패 (" + (e && e.name ? e.name : "Unknown") + "): " + t.file;
+      }
+      document.getElementById("now-playing").textContent = msg;
+    });
+  }
   currentAudio = a;
   currentThemeId = t.id;
   document.getElementById("now-playing").textContent = "▶ " + t.label + " — " + t.desc;
   updateButtons(t.id);
   a.onerror = () => {
-    document.getElementById("now-playing").textContent = "⚠ 파일 없음: " + t.file;
+    // Suppress false-positive from src clear in stopAll() or before src is set
+    if (a._bgmCleared || !a.src || a.src === window.location.href || a.src.endsWith("/")) {
+      console.log("[bgm-player] error suppressed (src cleared or empty):", a.error, "actual src:", a.src);
+      return;
+    }
+    console.error("[bgm-player] audio error:", a.error, "src:", a.src, "networkState:", a.networkState);
+    let msg;
+    if (a.error && a.error.code === 4 && a.networkState === 3 && a.src && a.src.length > 0) {
+      msg = "⚠ 파일 없음 (404): " + t.file;
+    } else if (a.error && a.error.code === 3) {
+      msg = "⚠ 디코드 실패: " + t.file;
+    } else {
+      msg = "⚠ 오디오 오류 (code " + (a.error ? a.error.code : "?") + "): " + t.file + " (networkState=" + a.networkState + ")";
+    }
+    document.getElementById("now-playing").textContent = msg;
     currentAudio = null; currentThemeId = null;
     updateButtons(null);
   };
 }
 
 function stopAll() {
-  if (currentAudio) { currentAudio.pause(); currentAudio.src = ""; currentAudio = null; }
+  if (currentAudio) {
+    currentAudio._bgmCleared = true;
+    currentAudio.pause();
+    // Keep element in DOM, just remove src to reset state cleanly
+    currentAudio.removeAttribute("src");
+    currentAudio.load();
+    currentAudio = null;
+  }
   currentThemeId = null;
   document.getElementById("now-playing").textContent = "🎧 BGM 미리듣기";
   updateButtons(null);
@@ -399,11 +451,78 @@ buildButtons();
 
 <style>
 .theme-play-btn { display: block; width: 100%; }
-.theme-play-btn .t-label { color: #ffaa55; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.theme-play-btn .t-label { color: #ffaa55; font-size: 13px; font-weight: 600; margin-bottom: 2px; display: flex; align-items: center; gap: 6px; }
+.theme-play-btn .t-label .play-icon { color: #66ffcc; font-size: 11px; }
 .theme-play-btn .t-desc { color: #6a7888; font-size: 11px; }
+
+/* Reference cards: make obviously non-interactive */
+.theme-grid[data-themes] .theme-card {
+  opacity: 0.55;
+  cursor: default;
+  border-style: dashed;
+}
+.theme-grid[data-themes] .theme-card:hover { background: #0d1420; }
+.theme-grid[data-themes] .theme-card { position: relative; }
+
+/* Full Tracks Gallery */
+.full-tracks-gallery {
+  background: #0d1420; border: 1px solid #1a2530; border-radius: 6px;
+  padding: 12px 20px; margin-bottom: 24px;
+}
+.full-track-row {
+  display: grid; grid-template-columns: 220px 1fr auto; gap: 16px;
+  padding: 12px 0; border-bottom: 1px dashed #1a2530; align-items: center;
+}
+.full-track-row:last-child { border-bottom: none; }
+.full-track-label strong { color: #ffaa55; font-size: 13px; font-family: 'JetBrains Mono', monospace; }
+.full-track-label .desc { color: #8a9aa8; font-size: 11px; margin-top: 4px; line-height: 1.4; }
+.full-track-row audio {
+  width: 100%; min-width: 240px; max-width: 380px; height: 32px;
+}
+.full-track-meta {
+  font-size: 10px; color: #6a7888; font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+.full-track-row.pending { opacity: 0.5; }
+.full-track-row.pending strong { color: #6a7888; }
+.pending-badge {
+  font-size: 10px; color: #8a9aa8; background: #1a2530;
+  padding: 4px 10px; border-radius: 3px; font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+.full-track-source { display: none; }
+.full-track-group { padding: 0; }
+.full-track-row-master {
+  display: grid; grid-template-columns: 220px 1fr auto; gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px dashed #1a2530; align-items: center;
+}
+.full-track-row-master:last-child { border-bottom: none; }
+.full-track-count {
+  font-size: 10px; color: #8a9aa8; background: #1a2530;
+  padding: 4px 10px; border-radius: 3px; font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
+.full-track-variant {
+  display: grid; grid-template-columns: 200px 1fr auto; gap: 16px;
+  padding: 10px 0 10px 20px;
+  border-bottom: 1px dashed #1a2530; align-items: center;
+}
+.full-track-variant:last-of-type { border-bottom: none; padding-bottom: 12px; }
+.variant-label {
+  font-size: 11px; color: #66ffcc; font-family: 'JetBrains Mono', monospace;
+}
+.full-track-variant audio {
+  width: 100%; min-width: 240px; max-width: 380px; height: 32px;
+}
+.full-track-variant .full-track-meta {
+  font-size: 10px; color: #6a7888; font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+}
 </style>
 
 <!-- Theme list (reference) -->
+<h3 style="color:#6a7888;font-size:12px;font-weight:400;text-transform:uppercase;letter-spacing:1px;margin:24px 0 12px 4px;">📋 Reference — read-only theme descriptions (use buttons above to play)</h3>
 <div class="theme-grid" data-themes style="margin-top:8px;">
   <div class="theme-card">
     <h3>matrix_rain</h3>
@@ -709,6 +828,265 @@ buildButtons();
       </tr>
     </tbody>
   </table>
+</div>
+
+<!-- Full Tracks Gallery (전체 트랙 감상) -->
+<h2>🎼 전체 트랙 감상 (Full Tracks)</h2>
+<p style="color:#8a9aa8;font-size:13px;margin-bottom:16px;">
+  게임 배포는 위 BGM 버튼의 30초 편집 버전만 사용. 아래는 외부 생성(미니맥스 Music 2.6 무료 베타) 의 풀 트랙 — 감상용.
+  제작 중 — 현재 1/12.
+</p>
+<div class="full-tracks-gallery">
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>matrix_rain</strong>
+        <div class="desc">Dark ambient cyberpunk, 90 BPM, A minor — 매트릭스 진입. Neuromancer 분위기 도입부. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본 (오리지널 미니맥스 생성)</div>
+      <audio controls preload="none" src="sounds/full/theme_matrix_rain.mp3"></audio>
+      <div class="full-track-meta">261.6초 · 45 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">F · (f) 버전 (미니맥스 2차 생성)</div>
+      <audio controls preload="none" src="sounds/full/theme_matrix_rain_full_f.mp3"></audio>
+      <div class="full-track-meta">192.2초 · 33 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 2. cyberspace -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>cyberspace</strong>
+        <div class="desc">Hypnotic dive, 광활한 디지털 공간. 깊은 매트릭스 탐험, ICE 영역. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_cyberspace.mp3"></audio>
+      <div class="full-track-meta">215.9초 · 6.7 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">F · (f) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_cyberspace_full_f.mp3"></audio>
+      <div class="full-track-meta">220.2초 · 37.9 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 3. chiba -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>chiba</strong>
+        <div class="desc">Neon-soaked cyberpunk jazz-funk, 110 BPM — Chiba City 네온 거리. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_chiba.mp3"></audio>
+      <div class="full-track-meta">226.2초 · 7.1 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">M · (m) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_chiba_full_m.mp3"></audio>
+      <div class="full-track-meta">183.8초 · 31.7 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 4. sense_net -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>sense_net</strong>
+        <div class="desc">Corporate minimal techno, 78 BPM — Tessier-Ashpool 기업 영역. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_sense_net.mp3"></audio>
+      <div class="full-track-meta">178.0초 · 5.6 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">F · (f) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_sense_net_full_f.mp3"></audio>
+      <div class="full-track-meta">160.8초 · 27.7 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 5. finn_office -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>finn_office</strong>
+        <div class="desc">Downtempo noir lounge, 92 BPM — 더 핀의 사무실, 브리핑. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_finn_office.mp3"></audio>
+      <div class="full-track-meta">238.3초 · 7.4 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">M · (m) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_finn_office_full_m.mp3"></audio>
+      <div class="full-track-meta">219.9초 · 37.9 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 6. hammer_alert -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>hammer_alert</strong>
+        <div class="desc">Industrial breakcore, 132 BPM — 긴급, Death screen. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_hammer_alert.mp3"></audio>
+      <div class="full-track-meta">184초 · 5.6 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">M · (m) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_hammer_alert_full_m.mp3"></audio>
+      <div class="full-track-meta">244초 · 7.4 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 7. industrial -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>industrial</strong>
+        <div class="desc">Industrial EBM, 124 BPM — 전투 모드 긴장. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_industrial.mp3"></audio>
+      <div class="full-track-meta">256초 · 7.8 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">M · (m) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_industrial_full_m.mp3"></audio>
+      <div class="full-track-meta">214초 · 6.6 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 8. broadcast -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>broadcast</strong>
+        <div class="desc">Ambient news soundtrack, 84 BPM — 스토리/이벤트 화면. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_broadcast.mp3"></audio>
+      <div class="full-track-meta">213초 · 6.5 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">F · (f) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_broadcast_full_f.mp3"></audio>
+      <div class="full-track-meta">169초 · 5.2 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 9. loa_drum -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>loa_drum</strong>
+        <div class="desc">Ritualistic voodoo drum circle, 92 BPM — 잭-아웃, 신비. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_loa_drum.mp3"></audio>
+      <div class="full-track-meta">190초 · 5.8 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">M · (m) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_loa_drum_full_m.mp3"></audio>
+      <div class="full-track-meta">189초 · 5.8 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 10. loa_drum_fade -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>loa_drum_fade</strong>
+        <div class="desc">Somber death farewell, 60 BPM — Death Summary, 체념. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_loa_drum_fade.mp3"></audio>
+      <div class="full-track-meta">274초 · 8.4 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">M · (m) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_loa_drum_fade_full_m.mp3"></audio>
+      <div class="full-track-meta">263초 · 8.0 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 11. loa_channel -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>loa_channel</strong>
+        <div class="desc">Ghosts in the wires, 84 BPM — Hall of Dead, 사이버 귀신. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_loa_channel.mp3"></audio>
+      <div class="full-track-meta">170초 · 5.2 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">M · (m) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_loa_channel_full_m.mp3"></audio>
+      <div class="full-track-meta">177초 · 5.4 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
+
+  <!-- 12. manarase_drone -->
+  <div class="full-track-group">
+    <div class="full-track-row full-track-row-master active">
+      <div class="full-track-label">
+        <strong>manarase_drone</strong>
+        <div class="desc">Nylon guitar ambient, 76 BPM — 엔딩 크레딧, 차분한 여운. 두 가지 변형 모두 사용 가능.</div>
+      </div>
+      <span class="full-track-count">2 variants</span>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">A · 원본</div>
+      <audio controls preload="none" src="sounds/full/theme_manarase_drone.mp3"></audio>
+      <div class="full-track-meta">228초 · 7.0 MB<br>  MP3 · 256 kbps</div>
+    </div>
+    <div class="full-track-variant">
+      <div class="variant-label">F · (f) 버전</div>
+      <audio controls preload="none" src="sounds/full/theme_manarase_drone_full_f.mp3"></audio>
+      <div class="full-track-meta">173초 · 5.3 MB<br>  MP3 · 256 kbps</div>
+    </div>
+  </div>
 </div>
 
 <!-- Engine integration -->

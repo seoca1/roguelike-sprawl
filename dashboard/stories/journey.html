@@ -118,6 +118,11 @@
   .stats-bar .stat { color: #ffaa55; }
   .stats-bar .stat span { color: #66ffcc; font-weight: 600; }
 </style>
+    <link rel="stylesheet" href="../missions.css">
+<link rel="stylesheet" href="../reading-position.css">
+<link rel="stylesheet" href="../sync-scroll.css">
+<link rel="stylesheet" href="../print.css" media="print">
+<link rel="stylesheet" href="../reader-controls.css">
 </head>
 <body>
 <nav class="top-nav">
@@ -657,5 +662,9 @@ function switchChar(char) {
   document.getElementById('journey-' + char).classList.add('active');
 }
 </script>
+<script src="../reading-position.js"></script>
+<script src="../sync-scroll.js"></script>
+<div class="print-footer">Roguelike Sprawl — Gibson Sprawl 3부작 기반 로그라이크 — 2026 © wiki/site attribution</div>
+<script src="../reader-controls.js"></script>
 </body>
 </html>

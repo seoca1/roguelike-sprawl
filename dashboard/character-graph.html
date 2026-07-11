@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character Graph — Roguelike Sprawl</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Crimson+Pro:wght@400;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', monospace;
+    background: #06090f;
+    color: #c5d4e3;
+    line-height: 1.6;
+    padding: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  h1 { color: #66ffcc; font-size: 26px; margin-bottom: 6px; }
+  .subtitle { color: #6a7888; font-size: 13px; margin-bottom: 16px; }
+  .controls {
+    background: #0d1420;
+    border: 1px solid #1a2530;
+    border-radius: 6px;
+    padding: 12px;
+    margin-bottom: 12px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 12px;
+  }
+  .controls label { color: #8a98a8; }
+  .controls input[type="range"] { vertical-align: middle; }
+  .controls a.btn {
+    padding: 6px 12px;
+    background: #66ffcc22;
+    border: 1px solid #66ffcc;
+    border-radius: 4px;
+    color: #66ffcc;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .graph-container {
+    position: relative;
+    background: #06090f;
+    border: 1px solid #1a2530;
+    border-radius: 6px;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+  }
+  svg { width: 100%; height: 100%; cursor: grab; }
+  svg:active { cursor: grabbing; }
+
+  .node text { fill: #c5d4e3; font-size: 11px; pointer-events: none; }
+  .node circle { stroke: #66ffcc; stroke-width: 2px; cursor: pointer; transition: r 0.15s ease; }
+  .node.fixed circle { fill: #ffaa55; }
+  .node.selected circle { fill: #ff5577; }
+
+  .node-label {
+    font-weight: 600;
+    text-shadow: 0 0 4px #06090f;
+  }
+
+  .edge {
+    stroke: #2a3540;
+    stroke-width: 1.5px;
+    fill: none;
+    transition: stroke 0.15s ease, stroke-width 0.15s ease;
+  }
+  .edge.weight-1 { stroke-width: 1px; opacity: 0.5; }
+  .edge.weight-2 { stroke-width: 2px; opacity: 0.7; }
+  .edge.weight-3 { stroke-width: 2.5px; opacity: 0.85; }
+  .edge.weight-4 { stroke-width: 3.5px; opacity: 1; stroke: #66ffcc; }
+
+  .arc-core circle { stroke: #66ffcc; }
+  .arc-operative circle { stroke: #ffaa55; }
+  .arc-patron circle { stroke: #ff5577; }
+  .arc-antagonist circle { stroke: #cc4488; stroke-dasharray: 4 2; }
+  .arc-construct circle { stroke: #00ccff; }
+  .arc-ally circle { stroke: #88dd44; }
+  .arc-loa circle { stroke: #ccaaff; }
+  .arc-broker circle { stroke: #ddcc99; }
+  .arc-fixer circle { stroke: #ddcc99; }
+
+  .legend {
+    margin-top: 12px;
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    font-size: 12px;
+  }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-circle {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid #66ffcc;
+  }
+
+  .info-panel {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    max-width: 280px;
+    background: #0d1420ee;
+    border: 1px solid #1a2530;
+    border-radius: 6px;
+    padding: 14px;
+    font-size: 12px;
+    line-height: 1.5;
+    display: none;
+  }
+  .info-panel.show { display: block; }
+  .info-panel h3 { color: #66ffcc; margin-bottom: 4px; font-size: 14px; }
+  .info-panel .label { color: #6a7888; text-transform: uppercase; font-size: 10px; }
+  .info-panel .close { float: right; cursor: pointer; color: #8a98a8; }
+
+  @media print {
+    .controls, .legend { display: none; }
+  }
+</style>
+<style>
+  .top-nav {
+    position: sticky; top: 0; z-index: 100;
+    background: #06090f; border-bottom: 1px solid #1a2530;
+    padding: 8px 16px; margin: -8px -8px 16px -8px;
+    display: flex; gap: 12px; align-items: center;
+    flex-wrap: wrap;
+    font-size: 13px;
+  }
+  .top-nav a { color: #66ffcc; text-decoration: none; }
+  .top-nav a:hover { color: #00ccff; }
+  .top-nav .sep { color: #2a3540; }
+</style>
+<meta name="description" content="Character relationship graph — 21 characters · 31 edges. Force-directed SVG visualization. 9 cast + 4 archetypes.">
+<meta name="keywords" content="roguelike, cyberpunk, gibson, sprawl, character, graph, force-directed">
+<meta name="author" content="emilio">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://seoca1.github.io/roguelike-sprawl/character-graph.html">
+<meta property="og:title" content="Character Graph — Roguelike Sprawl">
+<meta property="og:description" content="Character relationship graph — 21 characters · 31 edges. Force-directed SVG visualization. 9 cast + 4 archetypes.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://seoca1.github.io/roguelike-sprawl/character-graph.html">
+<meta property="og:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:site_name" content="Roguelike Sprawl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Character Graph — Roguelike Sprawl">
+<meta name="twitter:description" content="Character relationship graph — 21 characters · 31 edges. Force-directed SVG visualization. 9 cast + 4 archetypes.">
+<meta name="twitter:image" content="https://seoca1.github.io/roguelike-sprawl/favicon.svg">
+<meta name="theme-color" content="#0a0e14">
+</head>
+
+<body>
+<nav class="top-nav">
+  <a href="./index.html">🌐 Hub</a>
+  <span class="sep">|</span>
+  <a href="./library.html">📚 Library</a>
+  <a href="./stories-browse.html">📖 Browse</a>
+  <a href="./search.html">🔍 Search</a>
+  <a href="./reading-stats.html">📊 Reading</a>
+  <a href="./character-graph.html">🕸️ Chars</a>
+  <a href="./mission-flow.html">🎯 Missions</a>
+  <a href="./jokey.html">🎭 Cast</a>
+  <span class="sep">|</span>
+  <a href="./missions.html">📖 Story</a>
+  <a href="./graphic-novel.html">🎬 GN</a>
+  <span class="sep">|</span>
+  <a href="./combat.html">⚔ Combat</a>
+</nav>
+
+
+
+<h1>Character Relationship Graph</h1>
+<p class="subtitle">Force-directed · drag nodes to reposition · click for details · 21 characters · 31 edges</p>
+
+<div class="controls">
+  <label>Stiffness: <input type="range" id="stiffness" min="0.001" max="0.05" step="0.001" value="0.015"></label>
+  <label>Repulsion: <input type="range" id="repulsion" min="200" max="2000" step="100" value="800"></label>
+  <label>Friction: <input type="range" id="friction" min="0.6" max="0.99" step="0.01" value="0.85"></label>
+  <a class="btn" id="restart-btn">Restart simulation</a>
+  <a class="btn" id="pin-btn">Pin positions</a>
+</div>
+
+<div class="graph-container">
+  <svg id="graph"></svg>
+  <div class="info-panel" id="info-panel"></div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-circle" style="border-color:#66ffcc"></span>Core</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#ffaa55"></span>Operative</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#ff5577"></span>Patron</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#cc4488;border-style:dashed"></span>Antagonist</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#00ccff"></span>Construct</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#88dd44"></span>Ally</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#ccaaff"></span>Loa-channel</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#ddcc99"></span>Broker/Fixer</div>
+</div>
+
+<script src="character-graph.js"></script>
+</body>
+</html>

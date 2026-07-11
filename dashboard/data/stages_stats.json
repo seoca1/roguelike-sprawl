@@ -1,9 +1,35 @@
 {
-  "stages": 14,
-  "stage_enum": 14,
-  "transitions": 14,
-  "missions": 47,
-  "chapter_states": 18,
-  "objectives": 4,
-  "_generated_at": "2026-07-08T18:27:25"
+  "version": "2.0",
+  "generated_at": "2026-07-10T12:29:40.747372+00:00",
+  "schema": "real chapter phases (replaces legacy 14-stage system)",
+  "totals": {
+    "missions": 47,
+    "chapters": 12,
+    "arcs": 9,
+    "cast_characters": 9,
+    "archetypes": 4,
+    "phase_types": 7,
+    "phase_rows": 225
+  },
+  "phase_distribution": {
+    "ENCOUNTER": 53,
+    "RESOLUTION": 50,
+    "HEIST_EXECUTION": 43,
+    "HEIST_BRIEFING": 40,
+    "HEIST_PAYDAY": 31,
+    "REVELATION": 5,
+    "INTERLUDE": 3
+  },
+  "archetype_distribution": {
+    "heretic": 12,
+    "novice": 15,
+    "suit": 5,
+    "veteran": 15
+  },
+  "cast_distribution": {
+    "case": 15,
+    "kas": 12,
+    "sil": 15,
+    "suit": 5
+  }
 }

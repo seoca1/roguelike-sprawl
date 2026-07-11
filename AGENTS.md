@@ -43,6 +43,8 @@
 
 ## 4. Sprawl 세계관 정확성 규칙
 
+> **2026-07-10 정책 변경**: 파생 소설을 Notion에 게시하지 **않는다**. 대신 `Game/roguelike_sprawl/dashboard/stories/` HTML 카드를 단일 진실 공급원으로 사용. 자세한 계획: `docs/progress/DASHBOARD_ENHANCEMENT_PLAN.md`.
+
 깁슨 원작의 톤과 용어를 정확히 살리는 것은 디자인의 일부다.
 
 - 깁슨이 만든 용어(ICE, deck, program, construct, wetware, console cowboy 등) 사용
@@ -53,21 +55,33 @@
 - 21세기 인터넷 memes, Cyberpunk 2077, D&D 등 다른 작품의 용어로 대체 금지
 - 사실 단언 시 원문 인용 첨부 ("깁슨에 따르면..." → 인용 필수)
 
+### 4.0 Notion 사용 정책
+
+**Notion은 메타 문서 (진행 보고, 가이드, 운영 문서)만 보관.**
+**파생 소설·콘텐츠는 dashboard HTML이 진실 공급원.**
+
+- ❌ Notion에 게시 금지: 파생 단편 (derivative fiction), 챕터 본문, 게임 카드 본문
+- ✅ Notion 보관 가능: 진행 보고, 운영 가이드, 게임 디자인 노트
+- 이유: Notion은 외부 게시 플랫폼 — 컨텐츠 중복 위험, 동기화 비용, dashboard HTML이 더 효율적 (GitHub Pages 즉시 표시, 검색 가능, 로컬 백업)
+
 ### 4.1 World Source: Fiction wiki
 
-게임의 세계관은 **`../../../Fiction/wiki/`** (깁슨 분석 wiki)을 *Primary source*로 참조한다.
+게임의 세계관은 **`../../../../Fiction/wiki/`** (깁슨 분석 wiki)를 *Primary source*로 참조한다.
+(이는 `Projects/Fiction/wiki/` — Fiction 프로젝트의 위키 디렉토리)
 
 - 게임 wiki (`Game/roguelike_sprawl/wiki/world/`)는 게임용 요약/적응
 - 깊은 분석/원문 인용/캐릭터 디테일은 Fiction wiki 참조
+- **절대 경로**: `../../../../Fiction/wiki/...` (위치: `wiki/` 하위 MD 파일 기준 4단계 상승)
+- AGENTS.md 기준 절대 경로: `../../../Fiction/wiki/...`
 - Fiction wiki 페이지 예시:
-  - `../../../Fiction/wiki/authors/william-gibson.md`
-  - `../../../Fiction/wiki/works/neuromancer.md` (1984)
-  - `../../../Fiction/wiki/works/count-zero.md` (1986)
-  - `../../../Fiction/wiki/works/mona-lisa-overdrive.md` (1988)
-  - `../../../Fiction/wiki/characters/case.md`
-  - `../../../Fiction/wiki/characters/molly-millions.md`
-  - `../../../Fiction/wiki/settings/cyberspace.md`
-  - `../../../Fiction/wiki/index.md`
+  - `../../../../Fiction/wiki/authors/william-gibson.md`
+  - `../../../../Fiction/wiki/works/neuromancer.md` (1984)
+  - `../../../../Fiction/wiki/works/count-zero.md` (1986)
+  - `../../../../Fiction/wiki/works/mona-lisa-overdrive.md` (1988)
+  - `../../../../Fiction/wiki/characters/case.md`
+  - `../../../../Fiction/wiki/characters/molly-millions.md`
+  - `../../../../Fiction/wiki/settings/cyberspace.md`
+  - `../../../../Fiction/wiki/index.md`
 
 게임 내 텍스트 작성 시:
 1. Fiction wiki에서 원문 톤 확인
@@ -226,7 +240,78 @@ uv run python scripts/play.py --lang ko
 - PR마다 lint + format + typecheck + test 자동 실행
 - python-tcod 21+ 검증
 
-## 7. 절대 하지 말 것
+## 7. CJK 혼용 방지 가이드
+
+**목적**: 한국어/영어 문장 속에 한자(漢字)나 일본어가 깨진 듯 끼어드는 혼용(mixed-script contamination)을 방지한다.
+
+**MiniMax 특성**: 중국 기반 모델이다. 한국어·영어 출력 시에도 한자·중국어·일본어가 자연스럽게 섞여 나올 수 있으므로, 의식적으로script를 분리해야 한다.
+
+### 허용 vs. 금지
+
+| 구분 | 예시 | 허용? |
+|---|---|---|
+| 한국어 문장에 한자가 1~2자 섞임 | `matrix(행렬) 연결된` | ❌ |
+| 한국어 문장에 가타카나가 끼어듦 | `Jack-Out(잭아웃) 후` | ❌ |
+| 한국어 문장인데 일본어 kana가散在 | `그래서  그래서` | ❌ |
+| 한국어 문장인데 영어 단어가 괄호 속에 삽입 | `잭아웃(jack-out) 후` | ❌ |
+| 한국어 문장 전체가 중국어/일본어 | `矩阵 连接 虚拟化` | ❌ |
+| 영어 문장 속 괄호 한글 번역 | `matrix (매트릭스) connection` | ❌ |
+| 한국어 문장의 일부를 영어 term으로 | `matrix와 가상화 연결` | ✅ |
+| **고유명사 (캐릭터/지명/기술명)** | 케이스, 몰리, ICE, Ono-Sendai | ✅ |
+
+### MiniMaxscript混合되기 쉬いパターン（意识的に分離）
+
+```
+❌ " matrix(矩阵) 连接 虚拟化"         → 한국어 문서에서 한자 섞임
+❌ "잭아웃 후 (jack-out) 30초"         → 괄호 속 영어 섞임
+❌ "그래서(so) 그것은"                 → 괄호 속 영어 섞임
+❌ "matrix — 행렬, virtualization"      → 혼합 표기
+✅ "matrix와 가상화 연결"               → 한국어만
+✅ "Jack-Out, 30 seconds later"        → 영어만
+✅ "matrix와 가상화"                   → 기술 용어는 영어 그대로 허용
+```
+
+### 올바른 작성 예시
+
+```
+# 한국어 문서 (language: ko)
+❌ " matrix(행렬) 연결된 virtualization"
+✅ "matrix와 가상화 연결"
+✅ "matrix - 가상화 연결"
+
+❌ "Jack-Out(잭아웃) 후 30초"
+✅ "잭아웃 후 30초"
+
+# 영어 문서 (language: en)
+❌ "잭아웃 후 30초"
+✅ "Jack-Out, 30 seconds later"
+```
+
+### 파일별 기준
+
+- **`language: en`** → 본문은 영어. 한글·한자 섞기 금지.
+- **`language: ko`** → 본문은 한국어. 한자·가타카나·히라가나 섞기 금지.
+- **코드 주석** → 해당 코드의 `language`/frontmatter 기준.
+- **EN/KO 쌍 파일** → 각 파일이 개별 언어 기준. 상호 참조는 wikilink (`[[...]]`).
+
+### 자동 검사 패턴
+
+작성 후 다음이 발견되면 제거 또는 교체:
+- 한국어 문장에서 1~2글자 단독으로 떨어진 한자 (주변이 한글인 경우)
+- 한국어 문장 속 가타카나/히라가나 문자
+- 영어 문장 속 한글
+
+### 허용되는 hybrid 사례
+
+굳이 번역하면 의미가 흐리는 용어는 원문 그대로:
+- **기술 용어**: ICE, deck, wetware, construct, jack-in, jack-out
+- **캐릭터명**: 케이스(Case), 몰리(Molly), 쿠미코(Kumiko)
+- **지명**: 시바 시티, 프리스타운, 사이버스페이스
+- **작품명**: Neuromancer, Count Zero (제목은 원문 유지)
+
+---
+
+## 8. 절대 하지 말 것
 
 - `raw/` 수정
 - 결정된 사항(`decisions/`의 Accepted 상태) 임의 변경
