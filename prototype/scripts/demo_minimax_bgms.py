@@ -5,6 +5,7 @@
   uv run python scripts/demo_minimax_bgms.py           # 5초씩 (빠른 검증)
   uv run python scripts/demo_minimax_bgms.py --full   # 30초씩 전곡 (감상)
 """
+
 from __future__ import annotations
 
 import argparse
@@ -56,15 +57,15 @@ def main() -> int:
             continue
         path = SNDS_DIR / name
         if not path.exists():
-            print(f"  ❌ {idx+1:2}. {name:<32} (파일 없음)")
+            print(f"  ❌ {idx + 1:2}. {name:<32} (파일 없음)")
             failed += 1
             continue
 
         size_kb = path.stat().st_size // 1024
-        print(f"  [{idx+1:2}/{len(files)}] ▶ {name:<32} ({size_kb:>5} KB)")
+        print(f"  [{idx + 1:2}/{len(files)}] ▶ {name:<32} ({size_kb:>5} KB)")
 
         if args.silent:
-            print(f"      ✓ 파일 검증 OK")
+            print("      ✓ 파일 검증 OK")
             passed += 1
             continue
 
@@ -78,7 +79,7 @@ def main() -> int:
                 print(f"      ❌ 재생 실패: {e}")
                 failed += 1
         else:
-            print(f"      (afplay 없음, 검증만)")
+            print("      (afplay 없음, 검증만)")
             passed += 1
 
     print(f"\n=== 결과: {passed} OK / {failed} 실패 (전체 {len(files)}개) ===")

@@ -5386,3 +5386,21 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - `log.md` (BGM v3 6+ 항목)
 - `docs/bgm-external-generation-guide.md` (미니맥스 addendum)
 - `prototype/scripts/demo_minimax_bgms.py` (12 BGM 검증 CLI)
+
+## 2026-07-11
+
+**Session:** MiniMax 비디오 API 검토 + 가이드 작성
+
+**검토 결과:**
+- MiniMax Hailuo-2.3 / Hailuo-02 (T2V/I2V/S2V) — 검증 완료 (endpoint 200 OK)
+- in-game (python-tcod ASCII) 부적합 — 미학 위배
+- dashboard (web) 강력 추천 — 18 portraits, 72 GN scenes, character-graph, episode-reader
+- marketing 트레일러 가능 — 10초 시네마틱
+
+**작성:** `Game/roguelike_sprawl/docs/video-generation-guide.md` (Phase 1~4)
+- Phase 1: 9 자키 intro ($1.35)
+- Phase 2: 5 GN transition ($1.00)
+- Phase 3: 마케팅 트레일러 1 ($0.30)
+- Phase 4: 12 Story trailer (선택, $1.80)
+
+**총 비용:** $2.65 (1+2+3) ~ $4.45 (+4)
