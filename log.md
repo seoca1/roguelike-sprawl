@@ -5404,3 +5404,18 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - Phase 4: 12 Story trailer (선택, $1.80)
 
 **총 비용:** $2.65 (1+2+3) ~ $4.45 (+4)
+
+## 2026-07-11
+
+**Session end:** 종료 — 누적 3 commit push 완료 (origin main)
+- 8bea82a: BGM v3 (12 tracks MiniMax) + journey wikilink cleanup
+- eef629f: lint fix (F541) + video generation guide
+- 67ee96e: BGM v3 symlink + wiki audit + 12 BGM integration
+
+**이번 세션 scope 외 (다음 세션 commit 권장):**
+- prototype/src/* (게임 로직 — 누적분)
+- prototype/scripts/* (5 files, demo_minimax_bgms.py 제외)
+- prototype/data/* (chapters, missions, art json)
+- prototype/tests/* (skip 마커 추가분)
+- decisions/0060
+- untracked 6 files (GRAPHIC_NOVEL_ARCHITECTURE_ANALYSIS, design/, hacking_view, etc.)
