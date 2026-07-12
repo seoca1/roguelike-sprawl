@@ -5457,3 +5457,39 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - M2 14 파일 > 250 LOC 리팩토링 (별도 ADR 권장)
 - M3 docstring 90%+ 누락 모듈 (graphic_novel_view, combat_view, matrix_view 등) 보강
 
+
+
+## 2026-07-12
+
+**Session:** 헬스 체크 후속 — 잔여 uncommitted 일회성 정리 (item 1, 부분 완료)
+
+**Scope:** 헬스 체크에서 식별된 73 파일 미커밋 작업분 정리. AGENTS.md "한 세션 너무 많은 변경" 정책에 따라 7 commits 으로 1차 종료, 잔여 50+ 파일은 사용자 의사결정 영역으로 이관.
+
+**Changes (4 commits, 17 files):**
+- **chore(dashboard)** (d8fcde6, 4 files): graphic-novel/jokey/library/stages.html post-Phase-7 sync
+  - graphic-novel: Fiction cross-ref 3개 → local stories/short-stories/ 경로
+  - jokey: mission count 15 → 47 (Arc 2~3 통합), cast 표기 동일
+  - library/stages: meta description text 정정
+- **docs(decisions): 0031** (e0f2b20, 1 file): Fiction cross-ref en/ subdir 동기화 (A 와 동일 패턴)
+- **docs(design): scenario** (f21a643, 8 files): chapter-1~7 Fiction cross-ref en/ 동기화
+- **docs(design): 신규 다지인** (3f52121, 4 files = 1,635 lines):
+  - design/systems/dungeon_events.md (201 lines)
+  - design/research/unicode-block-art.md (559 lines) + SUMMARY (205 lines)
+  - GRAPHIC_NOVEL_ARCHITECTURE_ANALYSIS.md (670 lines, ADR-0032+0041+0042+0044 통합)
+
+**잔여 (사용자 의사결정 영역, FLAGGED):**
+- **decisions/0060-dungeon-exploration-redesign.md**: Accepted ADR 에 신규 결정("Dungeon-only mode, 2026-07-10") Consequences 추가. AGENTS.md §4 "Accepted 임의 변경 금지, 새 결정은 신규 ADR로" 적용 필요 — 신규 ADR-0103 작성 또는 Status 변경 권장, 본 세션 scope 외로 commit 보류.
+- **prototype/data/saves/gn_progress_slot_1.json**: .gitignore 패턴(`prototype/data/saves/*.json`) 대상 save file. 추적 해제(rm --cached) 또는 .gitignore 재검토 필요.
+- **prototype/tests/{unit:18, integration:4}**: 22 files — 일괄 검토 필요.
+- **prototype/src/roguelike_sprawl/{engine:9, matrix:2, combat:1}**: 12 files — engine 로직 변경 등 영향도 큼.
+- **prototype/data/{story/chapters:7, story/arcs.json(untracked), missions:1, jockeys:1, art/{portraits,backgrounds}.json:2, saves/1}**: 13 files — 데이터-주도 콘텐츠.
+- **prototype/scripts/{combat_simulator, demo, play, play_dungeon_mode}.py + verification_report.json**: 5 files — 데모 스크립트.
+- **tools/build_static_data.py** (untracked): 신규 빌드 도구.
+
+**다음 세션 후보:**
+- decisions/0060 처리 (신규 ADR-0103 작성 또는 Status 변경, 사용자 결정)
+- save file 추적 해제 또는 .gitignore 재검토
+- prototype/ 일괄 commit (data → scripts → src → tests 순서 권장)
+- tools/build_static_data.py 검토 후 commit
+
+**검증:** ruff + mypy clean (121 files), 2983 tests pass, dashboard integrity 4/4.
