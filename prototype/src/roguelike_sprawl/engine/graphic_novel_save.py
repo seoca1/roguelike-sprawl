@@ -116,21 +116,50 @@ class GNProgress:
     session_id: str = field(default_factory=lambda: uuid.uuid4().hex[:12])
 
     def to_dict(self) -> dict[str, Any]:
+        """Serialize this snapshot to a plain dict (JSON-friendly).
+
+        Returns:
+            Dict containing all dataclass fields in declaration order.
+        """
         return asdict(self)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> GNProgress:
+        """Build a :class:`GNProgress` from a previously serialized dict.
+
+        Coerces all fields defensively: missing keys fall back to defaults,
+        unknown ``ending`` values collapse to ``"A"``, and numeric fields
+        are recovered via ``_safe_int`` / ``_safe_float`` so a corrupted
+        save file does not raise. Forward-compatible with older v1.0.0
+        saves that lack an ``ending`` key.
+
+        Args:
+            data: Dict produced by :meth:`to_dict` (or a previous save file).
+
+        Returns:
+            A fully-populated :class:`GNProgress` instance.
+        """
         ending_raw = str(data.get("ending", "A"))
         if ending_raw not in ("A", "B", "C"):
             ending_raw = "A"  # unknown values default to A (forward-compat)
 
         def _safe_int(key: str, default: int = 0) -> int:
+            """Read ``data[key]`` and coerce to ``int``.
+
+            Falls back to ``default`` if the key is missing or the value
+            cannot be parsed as an integer.
+            """
             try:
                 return int(str(data.get(key, default)))
             except (TypeError, ValueError):
                 return default
 
         def _safe_float(key: str, default: float = 0.0) -> float:
+            """Read ``data[key]`` and coerce to ``float``.
+
+            Falls back to ``default`` if the key is missing or the value
+            cannot be parsed as a float.
+            """
             try:
                 return float(str(data.get(key, default)))
             except (TypeError, ValueError):

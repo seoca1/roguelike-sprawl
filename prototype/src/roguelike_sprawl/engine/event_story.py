@@ -78,6 +78,11 @@ class CharacterArt:
     height: int = 20
 
     def get_lines(self) -> tuple[str, ...]:
+        """Return the raw art lines (no colors).
+
+        Returns:
+            The tuple of art lines in declared order.
+        """
         return self.art_lines
 
     def get_colored_lines(self) -> list[tuple[str, tuple[int, int, int]]]:
@@ -146,6 +151,15 @@ class EventStory:
     one_time: bool = True
 
     def get_line(self, index: int) -> EventLine | None:
+        """Return the line at ``index`` or ``None`` if out of range.
+
+        Args:
+            index: 0-based line index.
+
+        Returns:
+            The :class:`EventLine` at that position, or ``None`` when the
+            index is negative or beyond the end of ``self.lines``.
+        """
         if 0 <= index < len(self.lines):
             return self.lines[index]
         return None
@@ -605,12 +619,18 @@ class EventRegistry:
     """Registry of event stories and triggers."""
 
     def __init__(self) -> None:
+        """Initialize an empty registry and auto-load the default event set."""
         self._events: dict[str, EventStory] = {}
         # Auto-load default events
         for event in self._default_events():
             self._events[event.id] = event
 
     def _default_events(self) -> list[EventStory]:
+        """Return the built-in event stories that every fresh registry starts with.
+
+        Returns:
+            The curated default event list (Dixie, Finn, Chiba City, ICE victory, …).
+        """
         return [
             DIXIE_ENCOUNTER,
             FINN_AFTER_JACK,
@@ -619,6 +639,14 @@ class EventRegistry:
         ]
 
     def get(self, event_id: str) -> EventStory | None:
+        """Look up an event story by its id.
+
+        Args:
+            event_id: The event's unique id (e.g. ``"dixie_encounter"``).
+
+        Returns:
+            The matching :class:`EventStory` or ``None`` if not registered.
+        """
         return self._events.get(event_id)
 
     def get_by_trigger(self, trigger: EventTrigger, trigger_id: str) -> EventStory | None:
@@ -629,6 +657,11 @@ class EventRegistry:
         return None
 
     def all(self) -> list[EventStory]:
+        """Return every registered event story.
+
+        Returns:
+            A fresh list of all :class:`EventStory` values in insertion order.
+        """
         return list(self._events.values())
 
 

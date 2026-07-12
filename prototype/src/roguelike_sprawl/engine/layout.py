@@ -59,13 +59,26 @@ class Region:
 
     @property
     def x2(self) -> int:
+        """Right edge x-coordinate (inclusive)."""
         return self.x + self.w - 1
 
     @property
     def y2(self) -> int:
+        """Bottom edge y-coordinate (inclusive)."""
         return self.y + self.h - 1
 
     def contains(self, x: int, y: int) -> bool:
+        """Return True if the cell at (x, y) lies within this region.
+
+        Boundaries are inclusive on both edges.
+
+        Args:
+            x: Column to test.
+            y: Row to test.
+
+        Returns:
+            ``True`` when ``(x, y)`` is inside the rectangle.
+        """
         return self.x <= x <= self.x2 and self.y <= y <= self.y2
 
 
