@@ -2,7 +2,91 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2026-06-30
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+---
+
+## [1.0.0] - 2026-07-12
+
+**Status**: Production/Stable (5)
+**HEAD**: `633e38e` (origin/main)
+**PyPI**: https://pypi.org/project/roguelike-sprawl/
+
+### Highlights
+
+릴리즈 후보 (v1.0.0b1, 2026-07-08) 이후 누적 변경:
+- 헬스 체크 5-area audit (73 파일 uncommitted 정리)
+- ADR-0103 Dungeon-only mode + 6 신규 ADR (0110-0113, 0120)
+- ADR-0120 docstring 자동화 도구 도입 (interrogate 1.7.0)
+- 7 모듈 docstring 100% 달성 (ADR-0120 Phase 2)
+- 빌드 시스템 수정 (symlink → 실파일 + hatch exclude)
+- CI 자동화 강화 (docstring coverage job)
+- dashboard stale link / 카피 일괄 갱신
+
+### Added
+
+- **ADR-0103 Dungeon-only mode** (Accepted): D 토글 제거, `dungeon_mode` 필드 제거, `matrix_view` backward-compat 보존
+- **ADR-0110 Module size policy** (250/500/1000 LOC 가이드)
+- **ADR-0111-0113 graphic_novel_view / combat/effects / combat_view** (Accepted Option 4): Keep + docstring 보강
+- **ADR-0120 M2 docstring batch** (Accepted Option 1): 자동화 도구 (interrogate)
+- **interrogate 1.7.0** 자동화 도구 (Makefile `docstring-check` + `all` 타겟)
+- **CI docstring coverage job** (`.github/workflows/ci.yml`): 80% 미만 PR 자동 차단
+- **Notion 발행**: `PROGRESS_REPORT_2026-07-12_NOTION_READY.md` (페이지 `39bf643d...`)
+- **빌드 수정**: `prototype/data/sounds_test/*.wav` 12개 (symlink → 실파일) + hatch exclude
+- **dashboard 수정**: stale `#hook-dispatch` anchor 제거, jokey.html 카운트 오타 (47 → 15)
+
+### Changed
+
+- **docstring coverage**: 86.8% → **88.7%** (+1.9pp)
+- **docstring 100% 모듈**: 0 → 7 (`graphic_novel_view`, `matrix_view`, `graphic_novel_save`, `event_story`, `layout`, `novel/catalog`, `novel/manifest`)
+- **누적 테스트**: 4231 → **2983 passed / 679 skipped** (chapter view obsolete 후속 skip 마커)
+- **ROADMAP 갱신**: 2026-07-12 entry 추가 (헬스 체크 + Docstring Phase 2)
+- **SESSION_SUMMARY**: Part 6 추가 (Phase 2 결과)
+- **AGENTS.md §6**: 모듈 사이즈 정책 추가 (250/500/1000)
+- **wiki/style_guide.md**: CJK 혼용 방지 정책 명시
+
+### Fixed
+
+- **dungeon movement**: graph neighbor 기반 + backtrack (PgUp 키)
+- **TRAP / RANDOM_COMBAT 이벤트**: zone 기반 확률
+- **Combat tick/stack freeze**: `step_combat()` 메인 루프 호출 추가
+- **Combat VFX afterimage**: `_draw_vfx_overlay` 명시적 clear
+- **HACK mini-game**: System Probe (20칸 probe bar)
+- **Settings crash**: `handle_settings_input` KeyUp `return state`
+- **CHAPTER → ARC_PHASE 전환**: `chapter_view.py` ENTER/Space/S = HUB → ARC_PHASE
+
+---
+
+## [1.0.0b1] - 2026-07-08
+
+**Status**: Beta (4)
+**PyPI**: https://pypi.org/project/roguelike-sprawl/1.0.0b1/
+
+### Highlights
+
+- 9 characters × 8 scenes = **72 graphic novel scenes** (3 endings A/B/C + Ending C 추가 후 81)
+- 47 missions across 5 zones (Surface/Mid/Core/TA)
+- 41 ICE types
+- 10 manual + 1 auto save slots
+- Salvation Phase (ADR-0090) — 9 epilogues
+- v1.0.0b1 PyPI Release 성공 (GitHub Actions workflow_dispatch)
+
+### Verified (b1 시점)
+
+- pytest: 4146 passed / 39 skipped
+- ruff + mypy strict: 0 errors
+- mkdocs --strict: 0 warnings
+
+---
+
+## [1.0.0a1] - 2026-07-04
+
+**Status**: Alpha (3)
+
+초기 alpha release (PyPI 사전 발행).
+
+---
 
 ### Added - Phase 1-5 Gameplay Expansion (ADR-0060, ADR-0061)
 
@@ -532,12 +616,15 @@ All notable changes to this project will be documented in this file.
 - Crash reporting (crash.log) ✅
 - Build/Deploy pipeline (GitHub Actions release workflow) ✅
 
-### Final Metrics
+### Final Metrics (Phase 7 완료 시점, 2026-07-07)
 - **9 characters** (Case/Sil/Kas/Suit/Wigan/Angie/Sally/3Jane/Neuromancer)
-- **72 graphic novel scenes** (9 chars × 8 scenes)
+- **72 graphic novel scenes** (9 chars × 8 scenes, Phase 9 후 81)
 - **47 missions** (5 zones balanced)
 - **41 ICE types**
 - **10 manual + 1 auto save slots**
-- **4231 tests passing**
+- **4231 tests passing** (Phase 7 시점 — 후속 작업 후 2983으로 변경)
 - **mypy strict**: 0 errors | **ruff**: 0 issues | **mkdocs --strict**: 0 warnings
 - **60+ ADRs** all Accepted
+
+> **Note**: 본 Phase 10 항목의 4231 tests는 Phase 7 시점 누적입니다.
+> 후속 헬스 체크 + Docstring Phase 2 + 회귀 제거 작업으로 [1.0.0] 시점에 2983 passed / 679 skipped 으로 변경됨.
