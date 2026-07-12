@@ -1,6 +1,6 @@
 {
-  "character": "veteran",
-  "id": "chapter_veteran",
+  "character": "sil",
+  "id": "chapter_sil",
   "title_en": "The Old Score",
   "title_ko": "오래된 의문",
   "subtitle_en": "The Louisiana God",
@@ -2159,5 +2159,8 @@
   ],
   "duration_ms": 520000,
   "char_delay_ms": 45,
-  "next_screen": "HUB"
+  "next_screen": "HUB",
+  "portrait": "art:marly",
+  "theme": "cyberspace",
+  "character_ref": "veteran"
 }

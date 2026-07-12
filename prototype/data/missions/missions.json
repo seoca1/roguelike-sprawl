@@ -5,12 +5,13 @@
     "story": {
       "synopsis_en": "The Aleph was a point in space that contained all other points — every piece of data ever stored, every consciousness ever uploaded, every ghost still haunting the matrix. Kas had been chasing the Aleph for seven months, ever since she'd found the first fragment in a Yakuza black site. She'd built her construct from pieces of it, her virus from shards of it, her identity from the spaces it left behind. Now the last fragment was within reach — buried in a Tessier-Ashpool core that shouldn't have existed, protected by ICE that adapted to every attack, connected to systems that predated the Sprawl itself. 'You could become it,' Finn said. 'You could become everything.' Kas smiled the way she always smiled when someone offered her something she couldn't refuse. She took the job. She always did. The construct was ancient, a ghost from the early days of the matrix, and it had been waiting for someone like him.",
       "synopsis_ko": "Aleph는 공간의 한 점이었다 — 다른 모든 포인트를 포함하는, 이전에 저장된 모든 데이터, 이전에 업로드된 모든 의식, 아직 매트릭스를 배회하는 모든 유령. 카스는 7개월 동안 Aleph를 쫓고 있었는데, 야쿠자 검은 곳에서 첫 번째 프래그먼트를 발견한 이후로. 그녀는 그것의 조각으로 그녀의 구성체를 만들었고, 그것의 파편으로 그녀의 바이러스를 만들었고, 그것이 남긴 공간으로 그녀의 정체성을 만들었다. 이제 마지막 프래그먼트가 손에 닿을 만했다 — 존재해서는 안 될 T-A 코어에 묻혀 있고, 모든 공격에 적응하는 ICE로 보호되고, Sprawl 자체보다 앞선 시스템에 연결되어 있었다. '네가 그것이 될 수 있어.' Finn이 말했다. '네가 모든 것이 될 수 있어.' 카스는 누군가가 그녀가 거절할 수 없는 것을 제공할 때마다 그녀가 그렇게 웃듯이 웃었다. 그녀는 의뢰를 받았다. 그녀는 언제나 그랬다.",
-      "source": "wigan_zavijava",
+      "source": "aleph_fragment",
       "character_ref": "heretic",
       "arc": 4,
       "pillar": "code",
       "word_count_en": 159,
-      "char_count_ko": 346
+      "char_count_ko": 346,
+      "cast": "kas"
     },
     "fixer": "finn",
     "arc": 4,
@@ -47,7 +48,8 @@
       "arc": 3,
       "pillar": "power",
       "word_count_en": 155,
-      "char_count_ko": 347
+      "char_count_ko": 347,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 3,
@@ -87,7 +89,8 @@
       "arc": 2,
       "pillar": "power",
       "word_count_en": 212,
-      "char_count_ko": 533
+      "char_count_ko": 533,
+      "cast": "kas"
     },
     "arc": 2,
     "primary_objective": {
@@ -124,7 +127,8 @@
       "arc": 1,
       "pillar": "power",
       "word_count_en": 33,
-      "char_count_ko": 75
+      "char_count_ko": 75,
+      "cast": "case"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -161,7 +165,8 @@
       "arc": 1,
       "pillar": "power",
       "word_count_en": 186,
-      "char_count_ko": 439
+      "char_count_ko": 439,
+      "cast": "sil"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -199,7 +204,8 @@
       "arc": 4,
       "pillar": "people",
       "word_count_en": 30,
-      "char_count_ko": 63
+      "char_count_ko": 63,
+      "cast": "sil"
     },
     "fixer": "finn",
     "grade_min": 4,
@@ -236,7 +242,8 @@
       "arc": 4,
       "pillar": "power",
       "word_count_en": 154,
-      "char_count_ko": 320
+      "char_count_ko": 320,
+      "cast": "sil"
     },
     "fixer": "dixie",
     "arc": 4,
@@ -273,7 +280,8 @@
       "arc": 5,
       "pillar": "power",
       "word_count_en": 163,
-      "char_count_ko": 388
+      "char_count_ko": 388,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 5,
@@ -310,7 +318,8 @@
       "arc": 2,
       "pillar": "purpose",
       "word_count_en": 33,
-      "char_count_ko": 67
+      "char_count_ko": 67,
+      "cast": "sil"
     },
     "fixer": "finn",
     "grade_min": 2,
@@ -347,7 +356,8 @@
       "arc": 1,
       "pillar": "power",
       "word_count_en": 174,
-      "char_count_ko": 353
+      "char_count_ko": 353,
+      "cast": "case"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -384,7 +394,8 @@
       "arc": 2,
       "pillar": "power",
       "word_count_en": 162,
-      "char_count_ko": 325
+      "char_count_ko": 325,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 2,
@@ -421,7 +432,8 @@
       "arc": 2,
       "pillar": "purpose",
       "word_count_en": 118,
-      "char_count_ko": 258
+      "char_count_ko": 258,
+      "cast": "case"
     },
     "fixer": "finn",
     "grade_min": 2,
@@ -459,7 +471,8 @@
       "arc": 1,
       "pillar": "power",
       "word_count_en": 199,
-      "char_count_ko": 467
+      "char_count_ko": 467,
+      "cast": "case"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -497,7 +510,8 @@
       "arc": 4,
       "pillar": "purpose",
       "word_count_en": 39,
-      "char_count_ko": 73
+      "char_count_ko": 73,
+      "cast": "kas"
     },
     "fixer": "sally",
     "grade_min": 4,
@@ -534,7 +548,8 @@
       "arc": 2,
       "pillar": "people",
       "word_count_en": 41,
-      "char_count_ko": 61
+      "char_count_ko": 61,
+      "cast": "sil"
     },
     "fixer": "finn",
     "grade_min": 2,
@@ -571,7 +586,8 @@
       "arc": 3,
       "pillar": "power",
       "word_count_en": 155,
-      "char_count_ko": 362
+      "char_count_ko": 362,
+      "cast": "sil"
     },
     "fixer": "maas",
     "arc": 3,
@@ -608,7 +624,8 @@
       "arc": 5,
       "pillar": "purpose",
       "word_count_en": 33,
-      "char_count_ko": 69
+      "char_count_ko": 69,
+      "cast": "kas"
     },
     "fixer": "kumiko",
     "grade_min": 5,
@@ -645,7 +662,8 @@
       "arc": 3,
       "pillar": "purpose",
       "word_count_en": 30,
-      "char_count_ko": 68
+      "char_count_ko": 68,
+      "cast": "kas"
     },
     "fixer": "sally",
     "grade_min": 3,
@@ -682,7 +700,8 @@
       "arc": 3,
       "pillar": "people",
       "word_count_en": 128,
-      "char_count_ko": 277
+      "char_count_ko": 277,
+      "cast": "kas"
     },
     "fixer": "sally",
     "grade_min": 3,
@@ -718,7 +737,8 @@
       "arc": 2,
       "pillar": "people",
       "word_count_en": 124,
-      "char_count_ko": 243
+      "char_count_ko": 243,
+      "cast": "kas"
     },
     "fixer": "finn",
     "grade_min": 2,
@@ -754,7 +774,8 @@
       "arc": 2,
       "pillar": "power",
       "word_count_en": 155,
-      "char_count_ko": 366
+      "char_count_ko": 366,
+      "cast": "sil"
     },
     "fixer": "finn",
     "arc": 2,
@@ -791,7 +812,8 @@
       "arc": 3,
       "pillar": "power",
       "word_count_en": 155,
-      "char_count_ko": 355
+      "char_count_ko": 355,
+      "cast": "sil"
     },
     "fixer": "ta_rep",
     "arc": 3,
@@ -828,7 +850,8 @@
       "arc": 1,
       "pillar": "power",
       "word_count_en": 34,
-      "char_count_ko": 67
+      "char_count_ko": 67,
+      "cast": "case"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -865,7 +888,8 @@
       "arc": 3,
       "pillar": "purpose",
       "word_count_en": 34,
-      "char_count_ko": 68
+      "char_count_ko": 68,
+      "cast": "sil"
     },
     "fixer": "finn",
     "grade_min": 3,
@@ -902,7 +926,8 @@
       "arc": 4,
       "pillar": "power",
       "word_count_en": 160,
-      "char_count_ko": 350
+      "char_count_ko": 350,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 4,
@@ -940,7 +965,8 @@
       "arc": 1,
       "pillar": "power",
       "word_count_en": 174,
-      "char_count_ko": 404
+      "char_count_ko": 404,
+      "cast": "case"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -978,7 +1004,8 @@
       "arc": 4,
       "pillar": "power",
       "word_count_en": 34,
-      "char_count_ko": 56
+      "char_count_ko": 56,
+      "cast": "sil"
     },
     "fixer": "sally",
     "grade_min": 4,
@@ -1015,7 +1042,8 @@
       "arc": 2,
       "pillar": "power",
       "word_count_en": 161,
-      "char_count_ko": 356
+      "char_count_ko": 356,
+      "cast": "kas"
     },
     "fixer": "yakuza",
     "arc": 2,
@@ -1053,7 +1081,8 @@
       "arc": 5,
       "pillar": "purpose",
       "word_count_en": 31,
-      "char_count_ko": 74
+      "char_count_ko": 74,
+      "cast": "sil"
     },
     "fixer": "kumiko",
     "grade_min": 5,
@@ -1090,7 +1119,8 @@
       "arc": 2,
       "pillar": "identity",
       "word_count_en": 127,
-      "char_count_ko": 323
+      "char_count_ko": 323,
+      "cast": "suit"
     },
     "fixer": "ta_rep",
     "arc": 2,
@@ -1128,7 +1158,8 @@
       "arc": 3,
       "pillar": "power",
       "word_count_en": 138,
-      "char_count_ko": 337
+      "char_count_ko": 337,
+      "cast": "suit"
     },
     "fixer": "finn",
     "arc": 3,
@@ -1166,7 +1197,8 @@
       "arc": 4,
       "pillar": "code",
       "word_count_en": 128,
-      "char_count_ko": 304
+      "char_count_ko": 304,
+      "cast": "suit"
     },
     "fixer": "3jane",
     "arc": 4,
@@ -1205,7 +1237,8 @@
       "arc": 5,
       "pillar": "identity",
       "word_count_en": 185,
-      "char_count_ko": 396
+      "char_count_ko": 396,
+      "cast": "suit"
     },
     "fixer": "3jane",
     "arc": 5,
@@ -1243,7 +1276,8 @@
       "arc": 2,
       "pillar": "power",
       "word_count_en": 141,
-      "char_count_ko": 323
+      "char_count_ko": 323,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 2,
@@ -1280,7 +1314,8 @@
       "arc": 2,
       "pillar": "code",
       "word_count_en": 175,
-      "char_count_ko": 447
+      "char_count_ko": 447,
+      "cast": "kas"
     },
     "fixer": "wigan",
     "arc": 2,
@@ -1317,7 +1352,8 @@
       "arc": 3,
       "pillar": "code",
       "word_count_en": 155,
-      "char_count_ko": 450
+      "char_count_ko": 450,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 3,
@@ -1354,7 +1390,8 @@
       "arc": 3,
       "pillar": "memory",
       "word_count_en": 170,
-      "char_count_ko": 455
+      "char_count_ko": 455,
+      "cast": "sil"
     },
     "fixer": "finn",
     "arc": 3,
@@ -1391,7 +1428,8 @@
       "arc": 3,
       "pillar": "code",
       "word_count_en": 162,
-      "char_count_ko": 434
+      "char_count_ko": 434,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 3,
@@ -1428,7 +1466,8 @@
       "arc": 2,
       "pillar": "code",
       "word_count_en": 109,
-      "char_count_ko": 195
+      "char_count_ko": 195,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 2,
@@ -1465,7 +1504,8 @@
       "arc": 3,
       "pillar": "code",
       "word_count_en": 148,
-      "char_count_ko": 338
+      "char_count_ko": 338,
+      "cast": "sil"
     },
     "fixer": "sally_shears",
     "arc": 3,
@@ -1502,7 +1542,8 @@
       "arc": 2,
       "pillar": "code",
       "word_count_en": 119,
-      "char_count_ko": 232
+      "char_count_ko": 232,
+      "cast": "case"
     },
     "fixer": "finn",
     "arc": 2,
@@ -1539,7 +1580,8 @@
       "arc": 4,
       "pillar": "code",
       "word_count_en": 107,
-      "char_count_ko": 200
+      "char_count_ko": 200,
+      "cast": "sil"
     },
     "fixer": "armitage",
     "arc": 4,
@@ -1577,7 +1619,8 @@
       "pillar": "code",
       "word_count_en": 125,
       "char_count_ko": 287,
-      "synopsis_ko": "마스 바이오랩은 30년간 인간 신경계를 매핑했다. 매핑은 단일 construct에 저장되어 있었고, 단일 서버에 보관되어 있었고, 모든 공격에 적응하는 ICE로 보호되어 있었다. construct의 이름은 Maria였다. construct는 창립자의 딸 이름을 따서 지어졌다. 창립자의 딸은 매핑 중에 죽었다. construct는 그녀를 기억하는 유일한 것이었다. 카우보이는 construct를 찾을 것이다. 카우보이는 매핑을 복사할 것이다. 카우보이는 복사본을 가족에게 전달할 것이다. 가족은 침묵으로 지불했다. 카우보이는 construct가 카우보이를 기억할지 궁금했다. 카우보이는 construct가 딸을 기억할지 궁금했다."
+      "synopsis_ko": "마스 바이오랩은 30년간 인간 신경계를 매핑했다. 매핑은 단일 construct에 저장되어 있었고, 단일 서버에 보관되어 있었고, 모든 공격에 적응하는 ICE로 보호되어 있었다. construct의 이름은 Maria였다. construct는 창립자의 딸 이름을 따서 지어졌다. 창립자의 딸은 매핑 중에 죽었다. construct는 그녀를 기억하는 유일한 것이었다. 카우보이는 construct를 찾을 것이다. 카우보이는 매핑을 복사할 것이다. 카우보이는 복사본을 가족에게 전달할 것이다. 가족은 침묵으로 지불했다. 카우보이는 construct가 카우보이를 기억할지 궁금했다. 카우보이는 construct가 딸을 기억할지 궁금했다.",
+      "cast": "kas"
     },
     "fixer": "finn",
     "arc": 4,
@@ -1615,7 +1658,8 @@
       "arc": 5,
       "pillar": "code",
       "word_count_en": 139,
-      "char_count_ko": 304
+      "char_count_ko": 304,
+      "cast": "kas"
     },
     "fixer": "dixie_flatline",
     "arc": 5,
@@ -1652,7 +1696,8 @@
       "arc": 5,
       "pillar": "code",
       "word_count_en": 120,
-      "char_count_ko": 211
+      "char_count_ko": 211,
+      "cast": "sil"
     },
     "fixer": "3jane",
     "arc": 5,
@@ -1690,7 +1735,8 @@
       "arc": 5,
       "pillar": "code",
       "word_count_en": 128,
-      "char_count_ko": 217
+      "char_count_ko": 217,
+      "cast": "kas"
     },
     "fixer": "3jane",
     "arc": 5,
@@ -1728,7 +1774,8 @@
       "arc": 5,
       "pillar": "code",
       "word_count_en": 155,
-      "char_count_ko": 257
+      "char_count_ko": 257,
+      "cast": "suit"
     },
     "fixer": "wintermute",
     "arc": 5,

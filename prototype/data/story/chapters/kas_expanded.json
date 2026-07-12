@@ -1,6 +1,6 @@
 {
-  "character": "heretic",
-  "id": "chapter_heretic",
+  "character": "kas",
+  "id": "chapter_kas",
   "title_en": "The Declaration",
   "title_ko": "선언",
   "subtitle_en": "Manarase at Midnight",
@@ -2200,5 +2200,8 @@
   "arc_chapters_linked": [],
   "duration_ms": 0,
   "char_delay_ms": 60,
-  "next_screen": "HUB"
+  "next_screen": "HUB",
+  "portrait": "art:kumiko",
+  "theme": "sense_net",
+  "character_ref": "heretic"
 }

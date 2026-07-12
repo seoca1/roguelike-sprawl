@@ -1,6 +1,6 @@
 {
-  "character": "novice",
-  "id": "chapter_novice",
+  "character": "case",
+  "id": "chapter_case",
   "title_en": "The First Jack",
   "title_ko": "첫 잭인",
   "subtitle_en": "Thirty Seconds After Jack-Out",
@@ -2050,5 +2050,8 @@
   ],
   "duration_ms": 480000,
   "char_delay_ms": 45,
-  "next_screen": "HUB"
+  "next_screen": "HUB",
+  "portrait": "art:case",
+  "theme": "matrix_rain",
+  "character_ref": "novice"
 }

@@ -35,12 +35,17 @@
       "wintermute_negotiation"
     ],
     "character_ref": "suit",
-    "fixers_used": ["ta_rep", "finn", "3jane"]
+    "fixers_used": [
+      "ta_rep",
+      "finn",
+      "3jane"
+    ]
   },
   "_play_notes": {
     "narrative_role": "Armitage is the suit — corporate operator who jacked in for stealth. Phase 6+ adds him as the 4th character after Case/Sil/Kas. The 4 missions trace his arc: 1) Infiltration (introduce), 2) Hosaka extraction (corruption revealed), 3) TA defection (side switch), 4) Wintermute negotiation (full circle).",
     "ending": "His ending is silent — he never jacks out.",
     "tone": "Cold, calculating, second-person POV. He uses the matrix the way other people use a desk.",
     "replaces_case": "Same role as Case but reversed: Case is a cowboy who ends up a construct, Armitage is a suit who ends up the construct's mouthpiece."
-  }
+  },
+  "character_ref": "suit"
 }
