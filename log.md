@@ -5554,3 +5554,37 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - 권장: 'Defer all' → ADR-0110 가 정당화 + docstring 정책으로 흡수, ADR-0111/0112/0113 폐기 결정
 
 **누적 (오늘 세션):** 22 commits, 5 regions.
+
+
+## 2026-07-12
+
+**Session:** 헬스 체크 후속 5차 — 직접 판단 결정 (3 ADR) + ADR-0120 Phase 1 완료
+
+**Scope:** 사용자 위임 직접 판단 (3 ADR Option 4) + ADR-0120 도구 도입.
+
+**Changes (4 commits):**
+- **7b114f8** docs(decisions): ADR-0111/0112/0113 Accepted (Option 4) — Keep + docstring 보강
+  - graphic_novel_view 1,510 / combat/effects 1,246 / combat_view 1,053 모두 Option 4
+  - 각 모듈 보유 사유: 8 ADR 통합 / 5-Layer VFX / 18 import 응집
+- **5b815f0** docs(decisions): ADR-0120 Accepted (Option 1) — M2 docstring 자동화 도구
+- **3d8f041** feat(m2-docstring): Phase 1 자동화 도구 도입
+  - interrogate 1.7.0 (docstring-coverage 대체, 빌드 의존성 문제 해결)
+  - Makefile docstring-check 타겟, all 타겟에 포함
+  - **초기 측정 86.8% PASS** (audit 이 '90%+ 4 모듈' 클레임 중 실제 일치 2/4)
+
+**Phase 1 결과:**
+- pyproject.toml: interrogate>=1.7 dev deps 추가
+- Makefile: docstring-check 타겟 + all 타겟
+- 측정 86.8% (1475 items, 195 docstring, 80% threshold)
+- audit 검증:
+  - graphic_novel_view 98% 누락 ✅ 일치
+  - matrix_view 88% 누락 ✅ 일치  
+  - combat_view 0% 누락 (audit 잘못 — 18 import 다른 문제)
+  - combat/effects 76% (부분)
+
+**Phase 2 우선순위 (다음 세션):**
+1. graphic_novel_view.py — 46 누락 (1,510 LOC)
+2. matrix_view.py — 29 누락 (1,057 LOC, ADR-0103 보존)
+3. event_story, graphic_novel_save, layout, novel/* — 12-22 누락
+
+**검증:** ruff + mypy clean, 2983 tests pass, docstring 86.8%.
