@@ -37,12 +37,15 @@ def _resolve_href(href: str, base: Path) -> Path | None:
 
     External (``http``, ``mailto``, ``javascript``, ``#``, ``data:``)
     and dynamic JS-template (``'<expr>' + var``) hrefs are skipped.
+    Query strings (``?filter=...``) are stripped before path resolution
+    so legitimate filter URLs are not flagged as broken.
     """
     if href.startswith(("http://", "https://", "mailto:", "javascript:", "#", "data:")):
         return None
     if "' + " in href or '+ "' in href:
         return None
-    href_clean = href.split("#", 1)[0]
+    # Strip both anchors and query strings before path resolution.
+    href_clean = href.split("?", 1)[0].split("#", 1)[0]
     if not href_clean:
         return None
     if href_clean.startswith("/"):
@@ -96,33 +99,49 @@ def check_no_untitled() -> list[str]:
     return errors
 
 
+def _strip_date_prefix(stem: str) -> str:
+    """Drop a leading ``YYYY-MM-DD_`` from a story stem, if present."""
+    return re.sub(r"^\d{4}-\d{2}-\d{2}_", "", stem)
+
+
 def check_mission_coverage() -> list[str]:
     errors: list[str] = []
     if not MISSIONS_JSON.exists():
         return [f"  missions.json not found: {MISSIONS_JSON}"]
+
+    # Cards live in the data-driven search_index.json (used by
+    # stories-browse.html after 2026-07-10). library.html is a redirect
+    # stub and contains no hardcoded cards.
+    search_index_path = DASHBOARD / "data" / "search_index.json"
+    if not search_index_path.exists():
+        return [f"  search_index.json not found: {search_index_path}"]
+    search_index = json.loads(search_index_path.read_text(encoding="utf-8"))
+    stories = search_index.get("stories", [])
+
+    # search_index ids carry a ``YYYY-MM-DD_`` prefix; HTML stems and
+    # mission sources do not. Normalize all sides to slugs for comparison.
+    story_slugs = {_strip_date_prefix(story.get("id", "")) for story in stories}
+
     missions = json.loads(MISSIONS_JSON.read_text(encoding="utf-8"))
     sources = {m["story"]["source"] for m in missions.values() if "story" in m}
 
-    # Available HTML files.
-    html_stems = {html.stem.replace("_en", "") for html in SHORT_STORIES_HTML.glob("*_en.html")}
+    html_stems = {_strip_date_prefix(html.stem.replace("_en", "")) for html in SHORT_STORIES_HTML.glob("*_en.html")}
 
-    # HTML pages whose source doesn't exist.
-    # aleph_fragment, mollys_razor, ta_heist are free-form Fiction stories
-    # created 2026-07-08 without dedicated game missions (ADR-0052 scope).
-    # They are intentionally un-owned; tolerated here.
-    KNOWN_ORPHANS = {"aleph_fragment", "mollys_razor", "ta_heist"}
-    orphan_pages = sorted((html_stems - sources) - KNOWN_ORPHANS)
+    # Free-form Fiction pages without a dedicated game mission.
+    # aleph_fragment / mollys_razor / ta_heist are ADR-0052 scope (2026-07-08);
+    # wigan_zavijava is a recent derivative without a mission counterpart.
+    known_orphans = {"aleph_fragment", "mollys_razor", "ta_heist", "wigan_zavijava"}
+    orphan_pages = sorted((html_stems - story_slugs) - known_orphans)
     for stem in orphan_pages:
-        errors.append(f"  orphan page (no mission source): {stem}")
+        errors.append(f"  orphan page (no search_index story): {stem}")
 
-    # Mission sources that have no card in library.html.
-    library_html = (DASHBOARD / "library.html").read_text(encoding="utf-8")
-    cards = set()
-    for href in re.findall(r'href="stories/short-stories/([^"]+)"', library_html):
-        cards.add(href.replace("_en.html", "").replace("_ko.html", ""))
-    missing = sorted(sources - cards)
+    # A mission source has a card iff a search_index story shares its slug.
+    # We deliberately do NOT require the reverse ``missions[]`` array on the
+    # story because some stories reference a generic mission (``craft_job``)
+    # but still back the source-specific story via the matching slug.
+    missing = sorted(sources - story_slugs)
     for stem in missing:
-        errors.append(f"  mission source without library.html card: {stem}")
+        errors.append(f"  mission source without search_index card: {stem}")
     return errors
 
 
