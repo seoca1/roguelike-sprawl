@@ -127,5 +127,65 @@
       "def build_ice_enemy("
     ]
   },
-  "overall": "PASS"
+  "overall": "PASS",
+  "demo_audit": {
+    "timestamp": "2026-07-10",
+    "scripts_audited": [
+      "play_dungeon_mode.py",
+      "play_ecs_dungeon.py",
+      "play_arc_bsp.py",
+      "boss_ice_demo.py",
+      "combat_grades_demo.py",
+      "combat_effects_demo.py",
+      "combat_simulator.py",
+      "play.py"
+    ],
+    "phase_1_5_smoke": {
+      "status": "PASS",
+      "scripts": [
+        "play_dungeon_mode.py",
+        "play_vfx_overlay.py",
+        "play_mission_mapping.py",
+        "play_ecs_dungeon.py",
+        "play_novel_runtime.py",
+        "play_arc_bsp.py"
+      ]
+    },
+    "dungeon_combat_hacking": {
+      "play_dungeon_mode": "PASS",
+      "play_ecs_dungeon": "PASS",
+      "play_arc_bsp": "PASS",
+      "boss_ice_demo": "PASS",
+      "combat_grades_demo": "PASS",
+      "combat_effects_demo": "PASS",
+      "combat_simulator": "PASS"
+    },
+    "screen_kind_hack": {
+      "status": "FIXED",
+      "before": "play.py missing ScreenKind.HACK rendering and auto-pilot action",
+      "after": "Added hacking_view.render_hack + auto-execute/auto-exit logic"
+    },
+    "combat_simulator_timeout": {
+      "status": "FIXED",
+      "before": "No wall-clock duration cap — ran for full 5 minutes",
+      "after": "Added --duration flag (default 30s)"
+    },
+    "graphic_novel_schema": {
+      "status": "PASS",
+      "note": "Unicode block art schema with per-cell palette + char_colors — 18 portraits (10×12), 13 backgrounds (40×16), all tests pass"
+    },
+    "app_portrait_path": {
+      "status": "FIXED",
+      "before": "app.py passed config.DATA_DIR / 'portraits' (wrong — loads old entity portraits.json)",
+      "after": "app.py now passes config.DATA_DIR / 'art' (correct — loads data/art/portraits/portraits.json)"
+    },
+    "node_room_type": {
+      "status": "PASS",
+      "note": "ProceduralDungeonGenerator._build_nodes sets Node.room_type from Room.room_type; dungeon_view uses glyph_map[room_type]"
+    },
+    "room_type_dead_end": {
+      "status": "PASS",
+      "note": "DEAD_END glyph=X, name=Dead End in dungeon_view._ROOM_GLYPHS; mapped to NodeKind.ROUTER in _node_attributes"
+    }
+  }
 }

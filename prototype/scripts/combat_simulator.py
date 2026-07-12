@@ -225,6 +225,12 @@ def main() -> int:
         help="Safety cap (game ticks; 1 tick = 100ms)",
     )
     parser.add_argument("--log", action="store_true", help="Verbose event log to stderr")
+    parser.add_argument(
+        "--duration",
+        type=float,
+        default=30.0,
+        help="Wall-clock duration cap in seconds (default 30). Prevents long headless runs.",
+    )
     args = parser.parse_args()
 
     project_root = Path(__file__).parent.parent
@@ -265,7 +271,11 @@ def main() -> int:
 
     last_event_count = 0
     max_tick_ms = args.max_ticks * TICK_MS
+    start = time.monotonic()
     while not state.finished and state.tick_ms < max_tick_ms:
+        if time.monotonic() - start >= args.duration:
+            sys.stdout.write(f"\n=== Combat TIMEOUT ({args.duration}s wall-clock limit) ===\n")
+            break
         step_combat(state)
         if state.tick_ms >= next_skill_check_ms:
             next_skill_check_ms = state.tick_ms + skill_check_interval_ms

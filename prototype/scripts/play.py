@@ -228,6 +228,11 @@ def _render_current(
     elif state.screen is ScreenKind.MATRIX and state.matrix is not None:
         layout = matrix_view.get_layout(state.matrix)
         matrix_view.render_matrix(console, t, state, layout)
+    elif state.screen is ScreenKind.HACK:
+        from roguelike_sprawl.engine import hacking_view
+
+        hacking_view.step_hack(state, elapsed)
+        hacking_view.render_hack(console, t, state)
     elif state.screen is ScreenKind.STORY:
         story_view.render_story(
             console,
@@ -1232,6 +1237,29 @@ def main() -> int:
             elif state.screen is ScreenKind.MATRIX:
                 if step > 2:
                     narration = _action_matrix(state)
+            elif state.screen is ScreenKind.HACK:
+                hack_state = getattr(state, "hack_state", None)
+                if hack_state is not None and hack_state.outcome is not None:
+                    if not hasattr(state, "_hack_result_shown_at"):
+                        state._hack_result_shown_at = elapsed
+                    elif elapsed - state._hack_result_shown_at > 2.0:
+                        from roguelike_sprawl.engine import hacking_view
+
+                        state.screen = ScreenKind.MATRIX
+                        hacking_view._clear_hack_state(state)
+                        if hasattr(state, "_hack_result_shown_at"):
+                            delattr(state, "_hack_result_shown_at")
+                        narration = "Auto: HACK complete → Matrix"
+                else:
+                    if not hasattr(state, "_hack_started_at"):
+                        state._hack_started_at = elapsed
+                    elif elapsed - state._hack_started_at > 1.0:
+                        from roguelike_sprawl.engine import hacking_view
+
+                        hacking_view._execute_probe(hack_state)
+                        hacking_view._apply_hack_reward(state, hack_state.outcome)
+                        state._hack_result_shown_at = elapsed
+                        narration = f"Auto: HACK → {hack_state.outcome}"
             elif state.screen is ScreenKind.STORY:
                 # Auto-leave Story to Hub
                 if state.current_mission is not None:

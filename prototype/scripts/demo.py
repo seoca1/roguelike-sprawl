@@ -211,7 +211,9 @@ def render_frame(
                 y += 1
                 for sector_id, sector in world.sectors.items():
                     sm = "→ " if sector_id == state.world_map.current_sector else "  "
-                    console.print(4, y, f"{sm}SECTOR: {sector.name} [{len(sector.servers)} servers]")
+                    console.print(
+                        4, y, f"{sm}SECTOR: {sector.name} [{len(sector.servers)} servers]"
+                    )
                     y += 1
                     for srv in sector.servers[:3]:
                         vm = "• " if srv.id == state.world_map.current_server else "  "
@@ -233,8 +235,13 @@ def render_frame(
             if state.current_phase_index < len(chapter.phases):
                 phase = chapter.phases[state.current_phase_index]
                 phase_view.render_arc_phase(
-                    console, phase, state.current_beat_index,
-                    state.phase_typed_chars, 0.0, state.phase_elapsed_ms, t
+                    console,
+                    phase,
+                    state.current_beat_index,
+                    state.phase_typed_chars,
+                    0.0,
+                    state.phase_elapsed_ms,
+                    t,
                 )
     elif state.screen is ScreenKind.NPC:
         from roguelike_sprawl.engine import npc_view
@@ -342,6 +349,7 @@ def _step_auto(
         # Load arc data (same as _load_chapter in menu.py)
         try:
             from roguelike_sprawl.engine import config as config_mod
+
             state.current_arc = get_arc_for_character(config_mod.DATA_DIR, state.character_id)
         except Exception:
             state.current_arc = None
@@ -407,8 +415,10 @@ def _step_auto(
                 state.phase_typed_chars = 0
                 return f"Auto: beat {state.current_beat_index}/{len(phase.beats)}."
         state.phase_elapsed_ms += 100
-        return (f"Auto: arc ch{state.current_chapter_index} ph{state.current_phase_index} "
-                f"beat{state.current_beat_index}")
+        return (
+            f"Auto: arc ch{state.current_chapter_index} ph{state.current_phase_index} "
+            f"beat{state.current_beat_index}"
+        )
 
     if state.screen is ScreenKind.HUB:
         if not missions:
