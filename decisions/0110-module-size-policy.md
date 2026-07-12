@@ -1,6 +1,6 @@
 # ADR-0110: 모듈 사이즈 정책 (현행 250 LOC)
 
-**상태**: Draft
+**상태**: Accepted (Option 4, 사용자 결정 2026-07-12)
 **날짜**: 2026-07-12
 **결정자**: 사용자
 **우선순위**: P3 (The Build)
@@ -96,16 +96,59 @@
 
 ## 사용자 결정 (Decision)
 
-[ ] Option 1 (Strict 250)
-[ ] Option 2 (Soft 300 / Hard 500)
-[ ] Option 3 (Status quo)
-[ ] Option 4 (신규 가이드 250/500/1000)
-[ ] 기타: ___
-[ ] Defer (다음 단계로 미룸)
+[x] Option 4 (신규 가이드 250/500/1000) — 사용자 결정 2026-07-12
 
 ## 결과 (Consequences)
 
-(결정 후 작성)
+### 정책 (Accepted)
+
+- **250 LOC**: 신규 모듈 권장 한도 (PR 리뷰 체크리스트)
+- **500 LOC**: PR 거부 기준 (1회성 / 단발성 모듈은 700~800 LOC 까지 예외 허용)
+- **1000+ LOC**: 신규 ADR 필수 (정당화 + 분할 계획 OR 보유 사유 명시)
+
+### 영향 받는 항목 (현행 14 파일)
+
+| 파일 | LOC | 등급 | 처리 |
+|---|---:|---|---|
+| `engine/graphic_novel_view.py` | 1,510 | 1000+ | 별도 ADR (제안: 0111) |
+| `combat/effects.py` | 1,246 | 1000+ | 별도 ADR (제안: 0112) |
+| `engine/matrix_view.py` | 1,057 | 1000+ | ADR-0103 — backward compat 보존 결정 |
+| `engine/combat_view.py` | 1,053 | 1000+ | 별도 ADR (제안: 0113) |
+| `achievements.py` | 938 | 500 | 리팩토링 권장 (PR 거부 X) |
+| `matrix/dungeon_generator.py` | 850 | 500 | 리팩토링 권장 |
+| `engine/app.py` | 845 | 500 | 리팩토링 권장 |
+| `run/state.py` | 759 | 500 | 리팩토링 권장 |
+| `engine/story_cinematic.py` | 754 | 250 | soft 경고 |
+| `engine/save_manager.py` | 739 | 250 | soft 경고 |
+| `combat/combo.py` | 685 | 250 | soft 경고 |
+| `engine/dungeon_view.py` | 678 | 250 | soft 경고 |
+| `engine/hub.py` | 672 | 250 | soft 경고 |
+| `engine/event_story.py` | 666 | 250 | soft 경고 |
+
+### CI 적용 (option 4)
+
+- 신규 PR 시 500 LOC 초과 시 lint 룰 또는 CI step 추가 검토
+- 1000+ LOC 신규 모듈 PR 시 ADR 링크 필수
+
+### AGENTS.md §6 갱신
+
+(다음 commit): "한 줄 100자 (ruff)" 옆에 모듈 사이즈 가이드 추가:
+- 250: 신규 권장
+- 500: PR 거부
+- 1000: ADR 필수
+
+### ADR-0103 호환
+
+- `matrix_view.py` (1,057 LOC) 는 ADR-0103 의 backward compat 보존 결정 우선
+- 본 ADR-0110 채택 후에도 ADR-0103 의 matrix_view 모듈 처리 결정 유지
+- 향후 matrix_view 가 정말 사용처 없으면 archive 결정 가능
+
+### 후속 ADR (제안)
+
+- ADR-0111: graphic_novel_view.py 분할 (1,510 → ~700 + 서브모듈 3-4개)
+- ADR-0112: combat/effects.py 분할 (1,246 → VFX 5-Layer 시스템 모듈별 분리)
+- ADR-0113: combat_view.py 분할 (1,053 → 렌더링 / 입력 / 상태 분리)
+- 각 1000+ 파일별 별도 ADR 작성 후 리팩토링
 
 ## 영향 받는 항목
 
@@ -123,3 +166,4 @@
 ## 변경 이력
 
 - 2026-07-12: Draft 작성 (헬스 체크 audit 결과)
+- 2026-07-12: Accepted (Option 4 — 사용자 결정)
