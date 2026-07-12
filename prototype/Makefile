@@ -1,4 +1,4 @@
-.PHONY: help install sync run test lint format typecheck build clean download-font all
+.PHONY: help install sync run test lint format typecheck docstring-check build clean download-font all
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -90,6 +90,9 @@ format: ## Format code with ruff
 typecheck: ## Run mypy type checker
 	uv run mypy src/
 
+docstring-check: ## Measure docstring coverage (ADR-0120)
+	uv run interrogate -vv src/roguelike_sprawl
+
 build: ## Build the package
 	uv build
 
@@ -97,7 +100,7 @@ clean: ## Clean build artifacts and caches
 	rm -rf dist/ build/ *.egg-info .pytest_cache .mypy_cache .ruff_cache htmlcov/
 	find . -name '__pycache__' -type d -exec rm -rf {} + 2>/dev/null || true
 
-all: format lint typecheck test ## Run all checks (format, lint, typecheck, test)
+all: format lint typecheck docstring-check test ## Run all checks (format, lint, typecheck, docstring-check, test)
 
 # --- Sound system ---
 .PHONY: sound-test sound-manager sound-demo sound-demo-full sound-clean

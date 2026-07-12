@@ -31,7 +31,8 @@ dev = [
     "pytest-cov>=4.0",
     "ruff>=0.1.0",
     "mypy>=1.0",
-]
+    "interrogate>=1.7",
+] 
 
 [project.scripts]
 roguelike-sprawl = "roguelike_sprawl.engine.app:main"

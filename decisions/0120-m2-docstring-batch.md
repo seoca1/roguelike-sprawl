@@ -106,14 +106,39 @@ combat_view 1,053) 중 3 모듈은 "보유 사유 + docstring 보강" 으로 정
 
 ## 결과 (Consequences)
 
-### Phase 1 (이 세션) — 자동화 도구 도입
+### Phase 1 (이 세션 완료) — 자동화 도구 도입 ✅
 
 자동화 도구로 docstring 누락 추적 가능. 14 파일 일괄 보강 작업은 별도 Phase 2 로 분리.
 
-- `pyproject.toml` `dev` deps 에 `docstring-coverage>=2.0` 추가
-- `Makefile` 에 `docstring-coverage` 타겟 추가 (현재 coverage 측정)
-- CI: `docstring-coverage` 측정 + 리포트 출력
-- 옵션: 80% 미만 시 PR 거부 룰 (Phase 1.5)
+- ✅ `pyproject.toml` `dev` deps 에 `interrogate>=1.7` 추가 (`docstring-coverage` 은 빌드 의존성 문제로 교체)
+- ✅ `Makefile` 에 `docstring-check` 타겟 추가 (현재 coverage 측정)
+- ✅ 80% 미만 시 PR 거부 룰 활성 (Makefile `all` 타겟에 포함)
+- ✅ 초기 측정: **86.8% (1475/195 docstring, 80% threshold PASS)** — 전체 건강한 상태
+
+#### 실제 측정 결과 (2026-07-12, interrogate 1.7.0)
+
+| 모듈 | Coverage |
+|---|---:|
+| 전체 (`src/roguelike_sprawl/`) | **86.8% PASS** |
+| 최악 (graphic_novel_view.py) | 2% (46/47 누락) |
+| 차악 (matrix_view.py) | 12% (29/33 누락) |
+| 그 외 90%+ 커버리지 다수 | — |
+
+audit (2026-07-12) 의 "graphic_novel_view / combat_view / matrix_view / combat_effects 90%+ 누락" 클레임 중:
+- ✅ graphic_novel_view: 98% 누락 (실측 일치)
+- ✅ matrix_view: 88% 누락 (실측 일치)
+- ⚠️ combat_view: 실제 0% 누락 (audit 잘못, 18 import 가 있는 다른 문제)
+- ⚠️ combat/effects: 76% 누락 부분 일치
+
+진짜 우선순위 (실측 기반):
+1. `graphic_novel_view.py` — 46 누락 (1,510 LOC 의 핵심)
+2. `matrix_view.py` — 29 누락 (1,057 LOC, ADR-0103 보존)
+3. `engine/event_story.py` — 12 누락 (500-999 LOC)
+4. `engine/graphic_novel_save.py` — 22 누락 (별도 ADR-0044)
+5. `engine/layout.py` — 12 누락
+6. `novel/hooks.py` — 14 누락
+7. `novel/manifest.py` — 12 누락
+8. `novel/catalog.py` — 13 누락
 
 ### Phase 2 (다음 세션) — 14 파일 일괄 보강
 
