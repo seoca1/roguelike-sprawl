@@ -2,6 +2,8 @@
 
 ## 변경 이력 (Recent)
 
+- **2026-07-12**: ADR-0120 Phase 2 — **28 docstring 보강**, 7 모듈 100% 달성 (graphic_novel_view / matrix_view / graphic_novel_save / event_story / layout / novel/catalog / novel/manifest), **interrogate 86.8% → 88.7%** — **2983 tests pass** 유지 (4 atomic commits push: 90719b2 docs / 5e3b19a 1000+LOC / cea388c engine / 4ecb082 novel, HEAD = `4ecb082`)
+- **2026-07-12**: 헬스 체크 (5-way audit) + 4-step remediation + ADR 정책 (0103/0110/0111/0112/0113/0120) + docstring Phase 1 (interrogate 자동화) — **2983 tests pass** (32 commits, HEAD `b9889c7`)
 - **2026-07-11**: BGM v3 (12 tracks 미니맥스 외부 생성) + dashboard audio 검증 + wiki audit (journey 12 broken → 0) + video generation guide + Notion 페이지 정리 + lint fix (F541) — **2983 tests pass** (A. dashboard integrity 테스트 2개 복원으로 +2)
   - **BGM v3 Part 1**: `dashboard/sound.html` BGM player 4-단계 수정 (UI 명확화, catch 분기, _bgmCleared, ensureBgmAudio)
   - **BGM v3 Part 2**: 12 트랙 30초 WAV (정규화 -16 LUFS) + 24 갤러리 mp3 + ThemePlayer 통합 + `import_minimax_track.sh` 자동화
@@ -320,9 +322,9 @@ Phase 7: 알파 빌드
 
 ## 현재 위치
 
-**현재 Phase**: **Phase 7 완료 (2026-07-07), Phase 10 작업 중**
-**누적 테스트**: **4146 passed** + 39 skipped + 0 xfailed (2026-07-08)
-**검증 상태**: ruff check ✅ / ruff format ✅ / mypy strict ✅ (120 source files)
+**현재 Phase**: **Phase 7 완료 (2026-07-07), Phase 10 작업 중, ADR-0120 Phase 2 완료 (2026-07-12)**
+**누적 테스트**: **2983 passed** + 679 skipped (2026-07-12, 4 commits 추가 후)
+**검증 상태**: ruff check ✅ / ruff format ✅ / mypy strict ✅ (121 source files) / interrogate 88.7% PASS
 
 **Phase 6+ 사이클 요약 (2026-07-04)**:
 - **lint/mypy 174 errors → 0** (29c3eeb) — 43 files 변경, +717/-645 lines
@@ -375,4 +377,6 @@ Phase 7: 알파 빌드
 **차순 작업** (Phase 10 완료):
 1. ✅ **Salvation Phase 완료** (ADR-0090 ✅) — 9자 × epilogue + ChapterState 3개 + Stage 1개
 2. ✅ **튜토리얼/온보딩** — Help 시스템 (Phase 7)
-3. ⏳ **v1.0.0-alpha.1 release** — GitHub에서 수동 생성 필요
+3. ✅ **ADR-0120 Phase 2** (2026-07-12) — 28 docstring, 7 모듈 100%, interrogate 88.7%
+4. ⏳ **Notion 발행** — `PROGRESS_REPORT_2026-07-12_NOTION_READY.md` (P1~P8, 21 commits) — 사용자 액션 `NOTION_TOKEN` 등록 필요
+5. ⏳ **v1.0.0 final release** (PyPI) — b1 (2026-07-08 발행) 다음 단계
