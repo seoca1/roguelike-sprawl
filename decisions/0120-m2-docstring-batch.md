@@ -149,6 +149,33 @@ Phase 1 자동화 완료 후, 우선순위:
 
 각 모듈 보강 후 docstring-coverage 측정 + CI 트래킹.
 
+### Phase 2 (2026-07-12 완료) — 우선순위 모듈 일괄 보강 ✅
+
+Phase 1 자동화 완료 후, 우선순위가 높은 7 모듈 보강 작업 즉시 착수. ADR-0120 작성 시점의 누락 추정치("graphic_novel_view 46/47 누락" 등)가 실제보다 컸음 — 실제 miss는 28개였음 (interrogate 컬럼 순서가 `Total | Miss | Cover | Cover%` 이었음).
+
+**완료된 7 모듈 (모두 100% 달성):**
+
+| 모듈 | 추가 docstring | 이전 → 이후 |
+|---|---:|---|
+| `engine/graphic_novel_view.py` | 1 | 98% → **100%** |
+| `engine/matrix_view.py` | 4 | 88% → **100%** (ADR-0103 보존) |
+| `engine/graphic_novel_save.py` | 4 | 85% → **100%** |
+| `engine/event_story.py` | 6 | 67% → **100%** |
+| `engine/layout.py` | 3 | 80% → **100%** |
+| `novel/catalog.py` | 7 | 65% → **100%** |
+| `novel/manifest.py` | 3 | 80% → **100%** |
+
+**총 28개 docstring 추가**, 전 모듈 100% 달성.
+
+**검증:**
+- ruff check: All passed
+- mypy strict: 0 errors (121 source files)
+- pytest: 2983 passed, 679 skipped (회귀 없음)
+- interrogate: **88.7%** (86.8% → 88.7%, +1.9pp)
+
+**잔여 (선택적 후속):**
+- 80% 미만 coverage 모듈: `event_view`, `mission_completion`, `npc_view` 등 — 신규 코드 작성 시 자연 흡수
+
 ### 옵션 5 회피 사유
 
 Option 5 (Phase 1+2 동시) 는 작업 범위 큼 (5-6 세션 추정). Phase 1 + Option 4 (점진적) 로 분리 진행이 효율적.
@@ -178,3 +205,4 @@ Option 5 (Phase 1+2 동시) 는 작업 범위 큼 (5-6 세션 추정). Phase 1 +
 
 - 2026-07-12: Draft 작성 (ADR-0111/0112/0113 후속)
 - 2026-07-12: Accepted (Option 1 — 사용자 위임 직접 판단)
+- 2026-07-12: Phase 2 완료 — 7 모듈 100% 달성, 28 docstring 추가, interrogate 88.7%

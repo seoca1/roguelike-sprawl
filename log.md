@@ -5621,3 +5621,79 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - Notion 발행: PROGRESS_REPORT_2026-07-12 즉시 / Phase 2 후 통합
 
 본 세션 종합 SESSION_SUMMARY: SESSION_SUMMARY_2026-07-12.md (10 섹션)
+
+## [2026-07-12] feat | ADR-0120 Phase 2 — docstring 28개 보강, 7 모듈 100% 달성
+
+**Status**: Complete
+
+### 발견 (중요)
+- ADR-0120 작성 시점의 표현 "graphic_novel_view 46/47 누락"이 오해의 소지였음
+- 실제 interrogate 출력 컬럼은 `Total | Miss | Cover | Cover%`이며
+- 진짜 miss 카운트는 **28개** (이전 인상의 ~100+개가 아님)
+
+### 작업 내용 (7 모듈, 28 docstring 추가)
+| 모듈 | 추가 | 결과 |
+|---|---:|---|
+| `engine/graphic_novel_view.py` | 1 | 98% → **100%** |
+| `engine/matrix_view.py` | 4 | 88% → **100%** (ADR-0103 보존) |
+| `engine/graphic_novel_save.py` | 4 | 85% → **100%** |
+| `engine/event_story.py` | 6 | 67% → **100%** |
+| `engine/layout.py` | 3 | 80% → **100%** |
+| `novel/catalog.py` | 7 | 65% → **100%** |
+| `novel/manifest.py` | 3 | 80% → **100%** |
+
+### 추가된 docstring (28 항목 요약)
+- `_page_char_count` (중첩 함수, 페이지 문자 카운트)
+- `_short_kind`, `_status_glyph`, `_jack_out`, `get_layout` (matrix)
+- `GNProgress.to_dict`, `GNProgress.from_dict`, `_safe_int`, `_safe_float` (save)
+- `CharacterArt.get_lines`, `EventStory.get_line`, `EventRegistry.__init__`, `_default_events`, `get`, `all` (event_story)
+- `Region.x2`, `Region.y2`, `Region.contains` (layout)
+- `NovelCatalog.__post_init__`, `__len__`, `__iter__`, `by_stem`, `__contains__`, `by_tag`, `_coerce_str_list` (catalog)
+- `NovelManifest.set`, `get`, `__contains__` (manifest)
+
+### 검증 (clean 종료)
+- ruff check: All passed
+- mypy strict: 0 errors in 121 files
+- pytest: **2983 passed**, 679 skipped (no regression)
+- interrogate: **88.7%** (86.8% → 88.7%, +1.9pp)
+
+### 영향
+- `prototype/src/roguelike_sprawl/engine/graphic_novel_view.py`
+- `prototype/src/roguelike_sprawl/engine/matrix_view.py`
+- `prototype/src/roguelike_sprawl/engine/graphic_novel_save.py`
+- `prototype/src/roguelike_sprawl/engine/event_story.py`
+- `prototype/src/roguelike_sprawl/engine/layout.py`
+- `prototype/src/roguelike_sprawl/novel/catalog.py`
+- `prototype/src/roguelike_sprawl/novel/manifest.py`
+
+### 다음 세션 후보
+- Phase 2 잔여: 다른 모듈 coverage 80% 미만 → event_view, mission_completion, npc_view 등 (선택)
+- Notion 발행: PROGRESS_REPORT_2026-07-12
+- v1.0.0-alpha.1 PyPI 릴리즈 (GitHub Actions workflow_dispatch)
+
+---
+
+## 2026-07-12
+
+**Session:** ADR-0120 Phase 2 docstring 보강 — 7 모듈 100% 달성
+
+**Scope:** Phase 1 자동화 도구(interrogate) 도입 후, Phase 2로 실제 docstring 보강 작업.
+
+**Changes (7 파일, 28 docstring 추가):**
+- `engine/graphic_novel_view.py`: 1개 (중첩 함수 `_page_char_count`)
+- `engine/matrix_view.py`: 4개 (`_short_kind`, `_status_glyph`, `_jack_out`, `get_layout`) — ADR-0103 보존 결정 유지
+- `engine/graphic_novel_save.py`: 4개 (`GNProgress.to_dict`, `from_dict`, `_safe_int`, `_safe_float`)
+- `engine/event_story.py`: 6개 (`CharacterArt.get_lines`, `EventStory.get_line`, `EventRegistry.__init__`, `_default_events`, `get`, `all`)
+- `engine/layout.py`: 3개 (`Region.x2`, `Region.y2`, `Region.contains`)
+- `novel/catalog.py`: 7개 (`__post_init__`, `__len__`, `__iter__`, `by_stem`, `__contains__`, `by_tag`, `_coerce_str_list`)
+- `novel/manifest.py`: 3개 (`set`, `get`, `__contains__`)
+
+**발견 (중요):** ADR-0120 작성 시 "graphic_novel_view 46/47 누락" 표현이 오해의 소지였음. 실제 interrogate 컬럼 순서는 `Total | Miss | Cover | Cover%`로, 진짜 miss는 1개였음. Phase 2 실제 누락 합계는 **28개**.
+
+**검증:**
+- ruff check: All passed
+- mypy strict: 0 errors (121 source files)
+- pytest: **2983 passed**, 679 skipped (회귀 없음)
+- interrogate: **88.7% PASS** (86.8% → 88.7%, +1.9pp)
+
+**Status:** 7 모듈 모두 100% 달성. 다음 우선순위는 coverage 80% 미만 모듈 또는 다른 후속 작업.
