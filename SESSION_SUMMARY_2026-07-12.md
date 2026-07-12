@@ -115,6 +115,14 @@
 - `publish_to_notion.py --dry-run` 검증 성공 — Notion 블록 변환 정상 (테이블/헤딩/리스트 모두 변환 OK)
 - 발행 대기: `NOTION_TOKEN` 환경변수 등록 필요 (사용자 액션)
 
+**Notion 발행 완료 (2026-07-12 후속)**:
+- **토큰**: `Fiction/_publish/scripts/.env` (NOTION_TOKEN 환경변수 — vault secrets) — vault roguelike_sprawl와 동일 workspace
+- **스크립트**: `Language/_publish/scripts/publish_to_notion.py`
+- **페이지 ID**: `39bf643d-3530-816c-a158-ffeda18f2dc6`
+- **URL**: https://app.notion.com/p/Projects-Progress-2026-07-12-39bf643d3530816ca158ffeda18f2dc6
+- **블록 수**: 45개 append (헤딩/테이블/리스트/리스트-테이블 모두 정상)
+- **vault 매핑**: `docs/notion-reflects/README.md` 활성 페이지 섹션에 entry 추가 (BGM v3 Final 다음)
+
 ---
 
 ## 2. 누적 메트릭 (시작 → 종료)

@@ -5697,3 +5697,31 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - interrogate: **88.7% PASS** (86.8% → 88.7%, +1.9pp)
 
 **Status:** 7 모듈 모두 100% 달성. 다음 우선순위는 coverage 80% 미만 모듈 또는 다른 후속 작업.
+
+## [2026-07-12] feat | Notion 발행 — PROGRESS_REPORT_2026-07-12
+
+**Status**: Complete
+
+### 발행
+- **스크립트**: `Language/_publish/scripts/publish_to_notion.py`
+- **토큰**: `Fiction/_publish/scripts/.env` (NOTION_TOKEN 환경변수 — vault secrets)
+- **부모 페이지**: `38df643d-3530-8103-af2c-e2277b4bcdfa` (Roguelike Sprawl - 프로젝트 가이드)
+
+### 결과
+- **페이지 ID**: `39bf643d-3530-816c-a158-ffeda18f2dc6`
+- **URL**: https://app.notion.com/p/Projects-Progress-2026-07-12-39bf643d3530816ca158ffeda18f2dc6
+- **블록 수**: 45개 append (헤딩/테이블/리스트 모두 정상 변환)
+- **dry-run 검증**: 통과 (publish_to_notion.py --dry-run)
+
+### vault 매핑
+- `docs/notion-reflects/README.md`: 활성 페이지 섹션에 본 entry 추가 (BGM v3 Final 다음 위치)
+- `docs/notion-reflects/PROGRESS_REPORT_2026-07-12_NOTION_READY.md`: 본문 끝에 "Notion 발행 결과" 섹션 추가
+
+### 발견 (운영)
+- NOTION_TOKEN이 환경변수에 export되어 있지 않았음 (3개 .env 파일: Fiction / Language / roguelike_sprawl)
+- Fiction .env 의 토큰이 vault roguelike_sprawl 와 같은 workspace → 정상 작동
+- Language `publish_to_notion.py` + Fiction 토큰 조합으로 발행 (cross-project 사용)
+
+### 영향
+- vault 외부 파일 (commit 외부): `docs/notion-reflects/README.md`, `docs/notion-reflects/PROGRESS_REPORT_2026-07-12_NOTION_READY.md`
+- vault 내부 파일 (commit 대상): `log.md`, `SESSION_SUMMARY_2026-07-12.md`
