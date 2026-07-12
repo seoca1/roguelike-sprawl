@@ -5588,3 +5588,36 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 3. event_story, graphic_novel_save, layout, novel/* — 12-22 누락
 
 **검증:** ruff + mypy clean, 2983 tests pass, docstring 86.8%.
+
+
+## 2026-07-12
+
+**Session end:** 종료 — 32 commits push 완료 (origin/main HEAD = `b9889c7`)
+
+5 파트로 구분된 작업 흐름:
+- **Part 1**: 5-area 헬스 체크 (3 explore + 2 직접 grep 보완)
+- **Part 2**: A/B/C/D 4-step remediation (dashboard integrity, ROADMAP, false positive 확인, 73 파일 commit)
+- **Part 3**: B/F/E/C 후속 (deceased.json untrack, Notion report, wiki CJK, ADR-0103, ADR-0110)
+- **Part 4**: 사용자 위임 직접 판단 (3 ADR Option 4 + ADR-0120 Option 1)
+- **Part 5**: ADR-0120 Phase 1 구현 (interrogate 1.7.0 도입, 86.8% PASS)
+
+**세션 검증 (clean 종료):**
+- working tree: 0 파일
+- 32 commits 모두 origin/main 반영
+- ruff + mypy clean (121 source files)
+- 2983 tests pass (662 skipped)
+- docstring 86.8% PASS (interrogate 1.7.0)
+
+**신규 ADR (6건)**:
+- 0103 (Dungeon-only mode, Accepted) — decisions/b28a6d0
+- 0110 (모듈 사이즈 정책, Accepted Option 4) — decisions/89c9bc2 + AGENTS.md §6
+- 0111 (graphic_novel_view, Accepted Option 4) — decisions/7b114f8
+- 0112 (combat/effects, Accepted Option 4) — decisions/7b114f8
+- 0113 (combat_view, Accepted Option 4) — decisions/7b114f8
+- 0120 (M2 docstring batch, Accepted Option 1) — decisions/5b815f0
+
+**잔여 (다음 세션 결정 대기):**
+- Phase 2 docstring 보강: graphic_novel_view 46 + matrix_view 29 + 기타 8 모듈
+- Notion 발행: PROGRESS_REPORT_2026-07-12 즉시 / Phase 2 후 통합
+
+본 세션 종합 SESSION_SUMMARY: SESSION_SUMMARY_2026-07-12.md (10 섹션)
