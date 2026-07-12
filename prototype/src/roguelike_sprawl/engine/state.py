@@ -101,6 +101,7 @@ class ScreenKind(StrEnum):
     DEATH_SUMMARY = "death_summary"  # Jockey report after flatline (ADR-0040)
     HALL_OF_DEAD = "hall_of_dead"  # Archive of deceased jockeys (ADR-0040)
     NPC = "npc"  # NPC encounter with dialogue choices
+    HACK = "hack"  # System probe hacking minigame (Phase 6+)
     EVENT = "event"  # Event story (cutscene with character art)
     JACK_OUT = "jack_out"  # Matrix disconnect animation (Stage.JACK_OUT)
     REWARD = "reward"  # Mission rewards screen (Stage.REWARD)
@@ -137,10 +138,6 @@ class AppState:
     current_node_id: str | None = None
     # Matrix node navigation cursor (↑/↓ to select adjacent node, Enter to move)
     matrix_nav_index: int = 0
-    # Dungeon view mode toggle (ADR-0060 Phase 1). When True, the MATRIX
-    # screen renders a NetHack-style 2D room grid (dungeon_view) instead
-    # of the abstract node graph (matrix_view). Toggle via `D` key.
-    dungeon_mode: bool = False
     hub_selected_index: int = 0
     menu_selected_index: int = 0
     character_select_index: int = 0
@@ -160,6 +157,8 @@ class AppState:
     cinematic_state: CinematicState | None = None
     # NPC encounter state. None until NPC encounter starts.
     npc_state: NPCState | None = None
+    hack_state: object | None = None
+    hack_node_label: str = ""
     # NPC choice navigation (arrow key selection)
     npc_choice_index: int = 0
     # Event story state (cutscenes with character art)

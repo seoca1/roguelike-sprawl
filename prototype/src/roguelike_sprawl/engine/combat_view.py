@@ -18,9 +18,11 @@ import tcod.event
 from tcod.event import KeyDown, KeySym
 
 from ..audio import safe_play
+from ..combat.boss import PhaseProfile
 from ..combat.effects import (
     CombatEffects,
     IceType,
+    boss_phase_transition_sequence,
     spawn_hit_effects,
     spawn_ice_death,
     spawn_ice_intro,
@@ -1020,4 +1022,32 @@ def start_combat(
     except ValueError:
         ice_type = IceType.STANDARD
     spawn_ice_intro(state.combat_effects, ice_type, enemy.name)
-    return CombatState(player=player, enemy=enemy)
+    cs = CombatState(player=player, enemy=enemy)
+
+    from ..combat.boss import get_boss_profile, is_boss
+
+    if is_boss(ice_type):
+        profile = get_boss_profile(ice_type)
+        if profile is not None:
+            from ..combat.boss import apply_phase_to_combatant
+
+            apply_phase_to_combatant(cs.enemy, profile)
+            cs.boss_profile = profile
+
+    return cs
+
+
+def spawn_phase_transition(
+    effects: CombatEffects,
+    phase: PhaseProfile,
+    ice_type: IceType,
+) -> None:
+    """Spawn boss phase transition cinematic (ADR-0050)."""
+    total_phases = len(phase) if hasattr(phase, "__len__") else 3
+    effects.cinematic = boss_phase_transition_sequence(
+        ice_type,
+        phase.phase,
+        total_phases,
+    )
+    effects.slow_motion_ms = effects.cinematic.total_duration_ms
+    effects.shake.trigger(intensity=3.0, duration_ms=400)

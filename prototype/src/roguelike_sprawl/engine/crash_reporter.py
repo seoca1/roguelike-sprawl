@@ -31,7 +31,6 @@ def _format_state_snapshot(state: AppState | None) -> str:
     lines = [
         f"  screen: {state.screen}",
         f"  demo_elapsed_s: {state.demo_elapsed_s:.1f}",
-        f"  dungeon_mode: {state.dungeon_mode}",
         f"  combat_state: {'present' if state.combat_state else 'None'}",
         f"  cinematic_state: {'present' if state.cinematic_state else 'None'}",
     ]

@@ -14,10 +14,11 @@ import tcod.tileset
 
 from ..audio import sound_manager
 from ..combat.registry import IceRegistry, ProgramRegistry
+from ..combat.state import step_combat
 from ..i18n import Translator
 from ..missions import JobBoard
 from ..portraits import PortraitManager
-from . import combat_view, config, dungeon_view, matrix_view, story_cinematic
+from . import combat_view, config, dungeon_view, hacking_view, story_cinematic
 from . import hub as hub_screen
 from . import menu as menu_screen
 from .state import AppState, ScreenKind
@@ -26,6 +27,27 @@ from .state import AppState, ScreenKind
 def _load_job_board() -> JobBoard:
     """Load the mission JSON if present; return an empty board otherwise."""
     return JobBoard.load(config.DATA_DIR / "missions" / "missions.json")
+
+
+def _maybe_boss_phase_transition(state: AppState) -> None:
+    """Check and apply boss phase transitions after each combat tick."""
+    cs = state.combat_state
+    if cs is None or cs.boss_profile is None or cs.finished:
+        return
+    from ..combat.boss import phase_transition
+
+    new_phase = phase_transition(cs.enemy, cs.boss_profile)
+    if new_phase is not None:
+        from ..combat.boss import apply_phase_to_combatant
+        from ..combat.effects import IceType
+
+        apply_phase_to_combatant(cs.enemy, cs.boss_profile)
+        cs.push(f">>> {new_phase.intro_text}")
+        try:
+            ice_type = IceType(cs.enemy.id)
+        except ValueError:
+            ice_type = IceType.BLACK
+        combat_view.spawn_phase_transition(state.combat_effects, new_phase, ice_type)
 
 
 def main() -> int:
@@ -144,6 +166,13 @@ def _main_inner() -> int:
                                     # All beats done — accumulate elapsed time so SPACE advances
                                     state.phase_elapsed_ms += delta_s * 1000
 
+                if state.screen is ScreenKind.COMBAT and state.combat_state is not None:
+                    step_combat(state.combat_state)
+                    _maybe_boss_phase_transition(state)
+
+                if state.screen is ScreenKind.HACK:
+                    hacking_view.step_hack(state, delta_s)
+
                 _render(
                     root_console, t, portraits, state, _global_prog_registry, _global_ice_registry
                 )
@@ -153,7 +182,9 @@ def _main_inner() -> int:
                     if isinstance(event, tcod.event.WindowEvent) and event.type == "WindowClose":
                         running = False
                         break
-                    result = _handle_input(event, state, _global_prog_registry, _global_ice_registry)
+                    result = _handle_input(
+                        event, state, _global_prog_registry, _global_ice_registry
+                    )
                     if not result:
                         running = False
                         break
@@ -168,22 +199,6 @@ def _main_inner() -> int:
                 return 1
 
         return 0
-
-
-def _maybe_spawn_jackin_glitch(state: AppState) -> None:
-    """Spawn a one-shot jack-in glitch VFX when toggling into dungeon mode.
-
-    ADR-0060 Phase 1.5: this provides the cyberspace atmosphere that the
-    map no longer carries. Without 3D cyberspace glyphs, the visual
-    transition is the only \"cyberspace\" hint at the map level.
-    """
-    try:
-        from ..combat.effects import spawn_jackin_glitch
-
-        spawn_jackin_glitch(state.combat_effects)
-    except ImportError:
-        # Combat effects not loaded yet; fall back to a status hint only.
-        state.status_messages.append(">>> Jacking into the matrix...")
 
 
 def _render_cyberspace_map(console: tcod.console.Console, t: Translator, state: AppState) -> None:
@@ -209,7 +224,10 @@ def _render_cyberspace_map(console: tcod.console.Console, t: Translator, state: 
             s_marker = "→ " if sector_id == wm.current_sector else "  "
             server_count = len(sector.servers)
             console.print(
-                x=6, y=y, string=f"{s_marker}SECTOR: {sector.name} [{server_count} servers]", fg=(180, 180, 100)
+                x=6,
+                y=y,
+                string=f"{s_marker}SECTOR: {sector.name} [{server_count} servers]",
+                fg=(180, 180, 100),
             )
             y += 1
             for server in sector.servers[:5]:
@@ -217,7 +235,12 @@ def _render_cyberspace_map(console: tcod.console.Console, t: Translator, state: 
                 console.print(x=10, y=y, string=f"{sv_marker}{server.name}", fg=(200, 200, 200))
                 y += 1
             if len(sector.servers) > 5:
-                console.print(x=10, y=y, string=f"  ... and {len(sector.servers) - 5} more", fg=(100, 100, 100))
+                console.print(
+                    x=10,
+                    y=y,
+                    string=f"  ... and {len(sector.servers) - 5} more",
+                    fg=(100, 100, 100),
+                )
                 y += 1
         y += 1
 
@@ -241,7 +264,13 @@ def _render_arc_phase(
     from .chapter_cutscene import PhaseData
 
     phase_view.render_arc_phase(
-        console, cast(PhaseData, phase), beat_index, typed_chars, beat_elapsed_ms, phase_elapsed_ms, translator
+        console,
+        cast(PhaseData, phase),
+        beat_index,
+        typed_chars,
+        beat_elapsed_ms,
+        phase_elapsed_ms,
+        translator,
     )
 
 
@@ -324,12 +353,12 @@ def _render(
                 p_r = None
                 if scene.portrait_left:
                     try:
-                        p_l = load_portrait(config.DATA_DIR / "portraits", scene.portrait_left)
+                        p_l = load_portrait(config.DATA_DIR / "art", scene.portrait_left)
                     except Exception:
                         pass
                 if scene.portrait_right:
                     try:
-                        p_r = load_portrait(config.DATA_DIR / "portraits", scene.portrait_right)
+                        p_r = load_portrait(config.DATA_DIR / "art", scene.portrait_right)
                     except Exception:
                         pass
                 typed = gn_view.dialogue_typed_chars(
@@ -403,6 +432,8 @@ def _render(
         else:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO NPC STATE ===", fg=(255, 0, 0))
+    elif state.screen is ScreenKind.HACK:
+        hacking_view.render_hack(console, t, state)
     elif state.screen is ScreenKind.ENDING:
         menu_screen.render_ending(console, t, state)
     elif state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
@@ -441,8 +472,13 @@ def _render(
                 if state.current_phase_index < len(chapter.phases):
                     phase = chapter.phases[state.current_phase_index]
                     _render_arc_phase(
-                        console, phase, state.current_beat_index,
-                        state.phase_typed_chars, 0.0, state.phase_elapsed_ms, t
+                        console,
+                        phase,
+                        state.current_beat_index,
+                        state.phase_typed_chars,
+                        0.0,
+                        state.phase_elapsed_ms,
+                        t,
                     )
                 else:
                     console.clear(bg=(0, 0, 0))
@@ -458,7 +494,9 @@ def _render(
         if not hasattr(state, "world_map") or state.world_map is None:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO WORLD DATA ===", fg=(255, 0, 0))
-            console.print(x=2, y=4, string="Start a mission from the Hub first.", fg=(128, 128, 128))
+            console.print(
+                x=2, y=4, string="Start a mission from the Hub first.", fg=(128, 128, 128)
+            )
         else:
             _render_cyberspace_map(console, t, state)
     elif state.screen is ScreenKind.CHARACTER_SELECT:
@@ -474,15 +512,9 @@ def _render(
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO CHAPTER DATA ===", fg=(255, 0, 0))
     elif state.screen is ScreenKind.MATRIX:
-        if state.dungeon_mode:
-            # ADR-0060 Phase 1: NetHack-style 2D room grid
-            dungeon_view.render_dungeon_matrix(console, t, state, prog_registry, ice_registry)
-        else:
-            if state.matrix is not None:
-                layout = matrix_view.get_layout(state.matrix)
-            else:
-                layout = {}
-            matrix_view.render_matrix(console, t, state, layout, prog_registry, ice_registry)
+        # ADR-0060: dungeon_view (NetHack-style 2D room grid) is the only mode.
+        # matrix_view (abstract node graph) has been removed.
+        dungeon_view.render_dungeon_matrix(console, t, state, prog_registry, ice_registry)
     elif state.screen is ScreenKind.COMBAT:
         if state.combat_state is not None:
             combat_view.render_combat(console, t, state, state.combat_state)
@@ -709,7 +741,11 @@ def _handle_input(
             if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
                 state.screen = ScreenKind.MENU
                 return True
-            if event.sym in (tcod.event.KeySym.SPACE, tcod.event.KeySym.RETURN, tcod.event.KeySym.RIGHT):
+            if event.sym in (
+                tcod.event.KeySym.SPACE,
+                tcod.event.KeySym.RETURN,
+                tcod.event.KeySym.RIGHT,
+            ):
                 _advance_arc_phase(state)
                 return True
             if event.sym in (tcod.event.KeySym.S,):
@@ -736,28 +772,16 @@ def _handle_input(
         if state.npc_state is not None:
             npc_view.handle_npc_input(event, state, state.npc_state)  # type: ignore[arg-type]
         return True
+    if state.screen is ScreenKind.HACK:
+        hacking_view.handle_hack_input(event, state)  # type: ignore[arg-type]
+        return True
     if state.screen is ScreenKind.MATRIX:
-        # ADR-0060 Phase 1: `D` key toggles NetHack-style dungeon view
-        # (dungeon_view) vs abstract node graph (matrix_view).
-        if (
-            isinstance(event, tcod.event.KeyDown)
-            and event.sym is tcod.event.KeySym.D
-            and not (event.mod & tcod.event.Modifier.SHIFT)
-        ):
-            state.dungeon_mode = not state.dungeon_mode
-            label = "DUNGEON (NetHack)" if state.dungeon_mode else "MATRIX (graph)"
-            state.status_messages.append(f">>> View mode: {label}")
-            if state.dungeon_mode:
-                _maybe_spawn_jackin_glitch(state)
-            return True
-        if state.dungeon_mode:
-            return dungeon_view.handle_dungeon_input(
-                event,  # type: ignore[arg-type]
-                state,
-                prog_registry,
-                ice_registry,
-            )
-        return matrix_view.handle_matrix_input(event, state, prog_registry, ice_registry)  # type: ignore[arg-type]
+        return dungeon_view.handle_dungeon_input(
+            event,  # type: ignore[arg-type]
+            state,
+            prog_registry,
+            ice_registry,
+        )
     if state.screen is ScreenKind.COMBAT:
         if state.combat_state is not None:
             return combat_view.handle_combat_input(event, state, state.combat_state)  # type: ignore[arg-type]

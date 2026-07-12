@@ -430,8 +430,8 @@ _CHARACTER_TO_CHAPTER_FILE = {
 def _load_chapter(state: AppState, char_id: str) -> None:
     """Load chapter and arc JSON for the given character ID into state."""
     from . import config as config_mod
-    from .chapter_view import load_chapter
     from .chapter_cutscene import get_arc_for_character
+    from .chapter_view import load_chapter
 
     filename = _CHARACTER_TO_CHAPTER_FILE.get(char_id)
     if filename is None:
@@ -473,7 +473,7 @@ def render_character_select(console: tcod.console.Console, t: Translator, state:
 
     selected = getattr(state, "character_select_index", 0)
     y = 6
-    for i, (name, char_id, desc) in enumerate(CHARACTER_OPTIONS):
+    for i, (name, _char_id, desc) in enumerate(CHARACTER_OPTIONS):
         marker = "▸ " if i == selected else "  "
         fg = (255, 255, 0) if i == selected else (200, 200, 200)
         console.print(x=4, y=y + i * 4, string=f"{marker}[{i + 1}] {name}", fg=fg)

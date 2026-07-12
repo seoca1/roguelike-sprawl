@@ -622,8 +622,8 @@ def handle_hub_input(event: tcod.event.Event, state: AppState) -> bool:
 def _ensure_world_map(state: AppState) -> None:
     """Load world map if not already loaded."""
     if not hasattr(state, "world_map") or state.world_map is None:
-        from . import config as config_mod
         from ..cyberspace.registry import WorldRegistry
+        from . import config as config_mod
 
         registry = WorldRegistry.load(config_mod.DATA_DIR / "cyberspace" / "worlds.json")
         state.world_map = registry.world_map

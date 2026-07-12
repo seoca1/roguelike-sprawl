@@ -35,6 +35,7 @@ class RoomType(StrEnum):
     NPC = "npc"
     ROUTER = "router"
     CORE = "core"
+    DEAD_END = "dead_end"
 
 
 @dataclass
@@ -105,27 +106,43 @@ class DungeonGenerator:
     def generate(self, seed: int, mission_grade: int = 1) -> MatrixGraph:
         """Generate a dungeon-style MatrixGraph.
 
-        Grid: 7x5 (cols x rows)
-        Rooms: entry → npc → data → ice → exit (linear path with branches)
+        Grid: 5x4 (cols x rows) — 4-directional layout
+        Every room (except EXT) has exits in all 4 cardinal directions.
+        Path: Entry(R2,C0) → Dixie(R1,C2) → Data(R1,C3) →绕ICE→ Exit(R2,C4)
         """
         # Layout is deterministic; seed reserved for future random variations
         del seed
 
-        # Define room positions manually for predictable layout
-        # Path: entry(0,2) → corridor(1,2) → npc(2,2) → corridor(3,2) → data(4,2) → corridor(5,2) → ice(6,2) → exit(6,3)
-        # Plus branches: (1,1) and (5,1) for atmosphere
+        # 5 columns x 4 rows grid (col=x, row=y)
+        # Row 0 (top):    (0,0)R (1,0)R (2,0)ICE (3,0)R (4,0)R
+        # Row 1 (mid):    (0,1)R (1,1)R (2,1)NPC (3,1)DATA (4,1)R
+        # Row 2 (bot):    (0,2)ENT(1,2)R (2,2)R (3,2)R (4,2)EXT
+        # Row 3 (btm2):   (0,3)R (1,3)R (2,3)R (3,3)R (4,3)R
         layout: list[tuple[str, int, int, RoomType, str]] = [
+            # Row 0
+            ("r00", 0, 0, RoomType.ROUTER, "Comms Relay"),
+            ("r10", 1, 0, RoomType.ROUTER, "Router"),
+            ("ice", 2, 0, RoomType.ICE, "ICE Barrier"),
+            ("r30", 3, 0, RoomType.ROUTER, "Junction"),
+            ("r40", 4, 0, RoomType.ROUTER, "Gateway"),
+            # Row 1
+            ("r01", 0, 1, RoomType.ROUTER, "Buffer"),
+            ("r11", 1, 1, RoomType.ROUTER, "Hub"),
+            ("npc_dixie", 2, 1, RoomType.NPC, "Dixie Flatline"),
+            ("data", 3, 1, RoomType.DATA, "Data Vault"),
+            ("r41", 4, 1, RoomType.ROUTER, "Node"),
+            # Row 2
             ("entry", 0, 2, RoomType.ENTRY, "Entry"),
-            ("corridor_1", 1, 2, RoomType.ROUTER, "Corridor"),
-            ("npc_dixie", 2, 2, RoomType.NPC, "Dixie Flatline"),
-            ("corridor_2", 3, 2, RoomType.ROUTER, "Corridor"),
-            ("data", 4, 2, RoomType.DATA, "Data Vault"),
-            ("corridor_3", 5, 2, RoomType.ROUTER, "Corridor"),
-            ("ice", 6, 2, RoomType.ICE, "ICE Barrier"),
-            ("exit", 6, 3, RoomType.EXIT, "Exit"),
-            # Side rooms for atmosphere
-            ("side_1", 1, 1, RoomType.ROUTER, "Side Room"),
-            ("side_2", 5, 3, RoomType.ROUTER, "Side Room"),
+            ("r12", 1, 2, RoomType.ROUTER, "Corridor"),
+            ("r22", 2, 2, RoomType.ROUTER, "Intersect"),
+            ("r32", 3, 2, RoomType.ROUTER, "Access Point"),
+            ("exit", 4, 2, RoomType.EXIT, "Exit"),
+            # Row 3
+            ("r03", 0, 3, RoomType.ROUTER, "Sublevel"),
+            ("r13", 1, 3, RoomType.ROUTER, "Underpass"),
+            ("r23", 2, 3, RoomType.ROUTER, "Deep Core"),
+            ("r33", 3, 3, RoomType.ROUTER, "Archive"),
+            ("r43", 4, 3, RoomType.ROUTER, "Terminal"),
         ]
 
         rooms: list[Room] = [
@@ -133,28 +150,24 @@ class DungeonGenerator:
             for room_id, x, y, room_type, label in layout
         ]
 
-        # Define connections (cardinal moves only)
-        edges: list[Edge] = [
-            Edge("entry", "corridor_1"),
-            Edge("corridor_1", "npc_dixie"),
-            Edge("corridor_1", "side_1"),
-            Edge("npc_dixie", "corridor_2"),
-            Edge("corridor_2", "data"),
-            Edge("data", "corridor_3"),
-            Edge("corridor_3", "ice"),
-            Edge("corridor_3", "side_2"),
-            Edge("ice", "exit"),
-            # Reverse (since graph is undirected)
-            Edge("corridor_1", "entry"),
-            Edge("npc_dixie", "corridor_1"),
-            Edge("side_1", "corridor_1"),
-            Edge("corridor_2", "npc_dixie"),
-            Edge("data", "corridor_2"),
-            Edge("corridor_3", "data"),
-            Edge("ice", "corridor_3"),
-            Edge("side_2", "corridor_3"),
-            Edge("exit", "ice"),
-        ]
+        # Define connections — every room connects to its 4 cardinal neighbors
+        # (x,y) connects to (x±1,y) and (x,y±1) where those rooms exist
+        def edge_pairs() -> list[Edge]:
+            pairs: list[tuple[str, str]] = []
+            ids_at: dict[tuple[int, int], str] = {(r.x, r.y): r.id for r in rooms}
+            for r in rooms:
+                for dx, dy in [(1, 0), (0, 1)]:  # only forward pairs (reverse added below)
+                    neighbor = ids_at.get((r.x + dx, r.y + dy))
+                    if neighbor:
+                        pairs.append((r.id, neighbor))
+            # Add reverse edges (graph is undirected)
+            result: list[Edge] = []
+            for a, b in pairs:
+                result.append(Edge(a, b))
+                result.append(Edge(b, a))
+            return result
+
+        edges: list[Edge] = edge_pairs()
 
         # Convert rooms to Nodes
         faction = Faction.SENSE_NET
@@ -187,6 +200,8 @@ class DungeonGenerator:
                 zone=ZoneDepth.SURFACE,
                 ice=ice_kind,
                 faction=faction,
+                x=room.x,
+                y=room.y,
             )
             nodes.append(node)
 
@@ -650,6 +665,8 @@ class ProceduralDungeonGenerator:
         # NPC bias adds up to 2 extra NPC slots
         if npc_bias > 0 and rng.random() < (0.10 + 0.10 * npc_bias):
             return RoomType.NPC
+        if rng.random() < 0.08:
+            return RoomType.DEAD_END
         return RoomType.ROUTER
 
     def _label_for(self, room_type: RoomType, index: int) -> str:
@@ -661,6 +678,7 @@ class ProceduralDungeonGenerator:
             RoomType.ROUTER: "Router",
             RoomType.CORE: "Core",
             RoomType.EMPTY: "Empty",
+            RoomType.DEAD_END: "Dead End",
         }
         base = labels.get(room_type, "Room")
         return f"{base} {index}"
@@ -683,6 +701,7 @@ class ProceduralDungeonGenerator:
                     zone=zone,
                     ice=ice_kind,
                     faction=faction,
+                    room_type=room.room_type,
                 )
             )
         return nodes
@@ -712,6 +731,8 @@ class ProceduralDungeonGenerator:
             return (NodeKind.ICE, ice, ZoneDepth.MID)
         if room_type is RoomType.NPC:
             return (NodeKind.CONSTRUCT, IceKind.NONE, ZoneDepth.MID)
+        if room_type is RoomType.DEAD_END:
+            return (NodeKind.ROUTER, IceKind.NONE, ZoneDepth.MID)
         return (NodeKind.ROUTER, IceKind.NONE, ZoneDepth.SURFACE)
 
     def _build_bidirectional_edges(

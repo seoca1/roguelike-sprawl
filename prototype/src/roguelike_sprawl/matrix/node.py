@@ -8,6 +8,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import StrEnum
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from roguelike_sprawl.matrix.dungeon_generator import RoomType
 
 
 class NodeKind(StrEnum):
@@ -81,6 +85,8 @@ class Node:
         ice: ICE present at this node (usually ``NONE`` for non-ice nodes).
         alarm: Alarm level.
         faction: Faction modifier.
+        x: Grid x coordinate (0 = leftmost column).
+        y: Grid y coordinate (0 = topmost row).
     """
 
     id: str
@@ -90,6 +96,9 @@ class Node:
     ice: IceKind = IceKind.NONE
     alarm: AlarmLevel = AlarmLevel.LOW
     faction: Faction = Faction.NONE
+    room_type: RoomType | None = None
+    x: int = 0
+    y: int = 0
 
     def __post_init__(self) -> None:
         if not self.id:

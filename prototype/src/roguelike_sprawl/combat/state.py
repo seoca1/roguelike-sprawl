@@ -10,7 +10,10 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
+
+if TYPE_CHECKING:
+    from roguelike_sprawl.combat.boss import BossProfile
 
 TICK_MS = 100  # 10 FPS — sufficient for the simulator
 AUTO_ATTACK_INTERVAL_MS = 2000  # 1 attack / 2s (ADR-0003)
@@ -193,6 +196,7 @@ class CombatState:
     # Combo counter (consecutive attacks)
     player_combo: int = 0
     enemy_combo: int = 0
+    boss_profile: BossProfile | None = None
 
     def push(self, msg: str) -> None:
         """Append an event to the action log (capped at 6 lines)."""

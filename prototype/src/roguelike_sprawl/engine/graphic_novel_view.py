@@ -47,7 +47,7 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True, slots=True)
 class Portrait:
-    """A character portrait (10x14 ASCII).
+    """A character portrait (10x12 Unicode block art) with per-cell color.
 
     Attributes:
         id: Portrait identifier (e.g. "case_think")
@@ -57,6 +57,8 @@ class Portrait:
         width: Portrait width in cells
         height: Portrait height in cells
         art: Tuple of art lines
+        palette: Mapping from color key to RGB tuple, e.g. {"default": (200,200,220), "eyes": (80,160,255)}
+        char_colors: Mapping from character to palette key, e.g. {"◉": "eyes", "─": "default"}
     """
 
     id: str
@@ -66,11 +68,13 @@ class Portrait:
     width: int
     height: int
     art: tuple[str, ...]
+    palette: dict[str, tuple[int, int, int]]
+    char_colors: dict[str, str]
 
 
 @dataclass(frozen=True, slots=True)
 class Background:
-    """A background scene (40x16 ASCII).
+    """A background scene (40x16 Unicode block art) with per-cell color.
 
     Attributes:
         id: Background identifier (e.g. "bg_chat_room")
@@ -79,6 +83,8 @@ class Background:
         width: Width in cells
         height: Height in cells
         art: Tuple of art lines
+        palette: Mapping from color key to RGB tuple
+        char_colors: Mapping from character to palette key
     """
 
     id: str
@@ -87,6 +93,8 @@ class Background:
     width: int
     height: int
     art: tuple[str, ...]
+    palette: dict[str, tuple[int, int, int]]
+    char_colors: dict[str, str]
 
 
 # ============================================================================
@@ -153,32 +161,64 @@ class SceneData:
 # ============================================================================
 
 
+def _parse_palette(raw_palette: object) -> dict[str, tuple[int, int, int]]:
+    """Parse a palette dict from JSON: values can be RGB lists or palette-key strings."""
+    if not raw_palette:
+        return {"default": (200, 200, 220)}
+    result: dict[str, tuple[int, int, int]] = {}
+    if isinstance(raw_palette, dict):
+        for k, v in raw_palette.items():
+            if isinstance(v, list) and len(v) == 3:
+                result[k] = (v[0], v[1], v[2])
+            elif isinstance(v, str) and v in result:
+                result[k] = result[v]
+    return result if result else {"default": (200, 200, 220)}
+
+
+def _parse_char_colors(raw: object) -> dict[str, str]:
+    """Parse char_colors dict from JSON: maps single characters to palette keys."""
+    if isinstance(raw, dict):
+        return dict(raw)
+    return {}
+
+
 def load_portrait(art_dir: Path, portrait_id: str) -> Portrait:
     """Load a portrait by id from data/art/portraits/portraits.json.
 
     The id is in the format "art:case_think" or just "case_think".
+    Supports both legacy format (art only) and new format (art + palette + char_colors).
     """
     short_id = portrait_id.removeprefix("art:")
     path = art_dir / "portraits" / "portraits.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     raw = data[short_id]
+    palette = _parse_palette(raw.get("palette"))
+    char_colors = _parse_char_colors(raw.get("char_colors"))
+    height = raw.get("size", [10, 12])[1]
     return Portrait(
         id=raw["id"],
         title_en=raw["title_en"],
         title_ko=raw["title_ko"],
         character=raw["character"],
         width=raw["size"][0],
-        height=raw["size"][1],
+        height=height,
         art=tuple(raw["art"]),
+        palette=palette,
+        char_colors=char_colors,
     )
 
 
 def load_background(art_dir: Path, bg_id: str) -> Background:
-    """Load a background by id from data/art/backgrounds/backgrounds.json."""
+    """Load a background by id from data/art/backgrounds/backgrounds.json.
+
+    Supports both legacy format and new per-cell color format.
+    """
     short_id = bg_id.removeprefix("art:")
     path = art_dir / "backgrounds" / "backgrounds.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     raw = data[short_id]
+    palette = _parse_palette(raw.get("palette"))
+    char_colors = _parse_char_colors(raw.get("char_colors"))
     return Background(
         id=raw["id"],
         title_en=raw["title_en"],
@@ -186,6 +226,8 @@ def load_background(art_dir: Path, bg_id: str) -> Background:
         width=raw["size"][0],
         height=raw["size"][1],
         art=tuple(raw["art"]),
+        palette=palette,
+        char_colors=char_colors,
     )
 
 
@@ -639,15 +681,23 @@ def _draw_scene_background_band(
     width: int,
     background: Background | None,
 ) -> None:
-    """Atmospheric background art, y=2..13."""
+    """Atmospheric background art, y=2..13 with per-cell color support."""
     if background is None:
         return
     bg_band_bottom = 14
+    palette = background.palette
+    char_colors = background.char_colors
+    default_color = palette.get("default", (160, 160, 180))
     for i, line in enumerate(background.art):
         y = 2 + i
         if y >= bg_band_bottom:
             break
-        console.print(0, y, line[:width])
+        for x_offset, ch in enumerate(line[:width]):
+            x = x_offset
+            if 0 <= x < width:
+                color_key = char_colors.get(ch, "default")
+                color = palette.get(color_key, default_color)
+                console.print(x, y, ch, fg=color)
 
 
 def _draw_scene_portrait(
@@ -656,13 +706,20 @@ def _draw_scene_portrait(
     portrait_l: Portrait | None,
     portrait_r: Portrait | None,
 ) -> None:
-    """A small portrait in the corner with a dimmed backdrop."""
+    """A small portrait in the corner with a dimmed backdrop.
+
+    Renders each character with per-cell color via palette lookup.
+    Clipping bug fixed: uses portrait.height (12) instead of hardcoded 14.
+    """
     portrait = portrait_l or portrait_r
     if portrait is None:
         return
     px = 2 if portrait_l else width - portrait.width - 2
     py = 2
     bg_band_bottom = 14
+    palette = portrait.palette
+    char_colors = portrait.char_colors
+    default_color = palette.get("default", (200, 200, 220))
     # Dim background panel behind portrait
     for dy in range(portrait.height):
         y = py + dy
@@ -673,12 +730,17 @@ def _draw_scene_portrait(
             if 0 <= x < width:
                 code = int(console.ch[x, y])
                 if code == 0x20:
-                    console.print(x, y, "░")
+                    console.print(x, y, "░", fg=(50, 50, 60))
     for i, line in enumerate(portrait.art):
         y = py + i
         if y >= bg_band_bottom:
             break
-        console.print(px, y, line[:width])
+        for x_offset, ch in enumerate(line[: portrait.width]):
+            x = px + x_offset
+            if 0 <= x < width:
+                color_key = char_colors.get(ch, "default")
+                color = palette.get(color_key, default_color)
+                console.print(x, y, ch, fg=color)
 
 
 def _draw_scene_speaker_heading(

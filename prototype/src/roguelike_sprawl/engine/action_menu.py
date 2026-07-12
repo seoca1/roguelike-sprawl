@@ -25,9 +25,10 @@ from ..audio import safe_play
 from ..combat.registry import IceRegistry, ProgramRegistry
 from ..i18n import Translator
 from ..matrix.node import Node, NodeKind
-from . import combat_view
+from . import combat_view, hacking_view
 from .input_utils import is_confirm_key
 from .layout import Region, clear_region
+from .npc_event import DIXIE_FLATLINE_EVENT, NPCState
 from .state import AppState, ScreenKind
 
 
@@ -291,21 +292,12 @@ def _execute_action(
         state.message = f"Passed through {node.label}."
         state.status_messages.append(f">>> MOVE: Passed through {node.label}")
     elif action_id == "hack":
-        # Phase 6 stub: SYSTEM node — emit a flavour message that hints
-        # at deeper interaction without a full minigame. Keeps the
-        # action visible (un-locked) so the player can experiment.
-        state.message = f"Probing {node.label}..."
-        state.status_messages.append(f">>> HACK: Probing {node.label} — system probes partial")
-        # Light reward: a small data fragment chance.
-        if not hasattr(state, "inventory") or state.inventory is None:
-            state.inventory = {}
-        state.inventory["data_fragment"] = state.inventory.get("data_fragment", 0) + 1
-        state.status_messages.append(">>> Gained: 1x Data Fragment (probe)")
+        hacking_view.start_hack(state, node.label)
     elif action_id == "communicate":
-        # Phase 6 stub: CONSTRUCT node — open an NPC-style dialog echo
-        # so the player gets a narrative beat without a full exchange.
-        state.message = f"Construct '{node.label}' acknowledges you."
-        state.status_messages.append(f">>> COMMUNICATE: {node.label} — construct listens")
+        state.npc_state = NPCState(event=DIXIE_FLATLINE_EVENT)
+        state.screen = ScreenKind.NPC
+        state.action_menu_open = False
+        state.status_messages.append(f">>> COMMUNICATE: {node.label} — opening dialog...")
     elif action_id == "access":
         # Phase 6 stub: CORE node — peek at the next objective.
         state.message = f"Core '{node.label}' exposes a route forward."
