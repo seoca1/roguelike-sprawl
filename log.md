@@ -5493,3 +5493,37 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - tools/build_static_data.py 검토 후 commit
 
 **검증:** ruff + mypy clean (121 files), 2983 tests pass, dashboard integrity 4/4.
+
+
+## 2026-07-12
+
+**Session:** 헬스 체크 후속 — 잔여 uncommitted 일회성 정리 (item 1, 완료)
+
+**Scope:** 헬스 체크에서 식별된 73+ 파일 미커밋 작업분 정리. AGENTS.md '한 세션 너무 많은 변경' 정책 위배 경계까지 push 했으나 시퀀스 모두 완료.
+
+**Changes (5 commits, 32 files):**
+- **b28a6d0** docs(decisions): ADR-0103 Dungeon-only mode + AGENTS.md §4 준수 (0060 immutable revert)
+  - 신규 ADR-0103 (Accepted 2026-07-10) 로 Dungeon-only 결정 문서화
+  - 0060 working tree 의 신규 Consequences 섹션 revert (immutable 보존)
+- **c52f8a8** chore(data): save file 추적 해제 (.gitignore 준수)
+  - prototype/data/saves/gn_progress_slot_1.json (ADR-0044 save slot 1)
+- **6d45683** chore(data): post-Phase-7 콘텐츠 업데이트 (12 files, +32,753/-369)
+  - art/portraits, art/backgrounds, jockeys/deceased, missions, story/chapters ×7, story/arcs (신규)
+- **05295c9** chore(scripts): post-Phase-7 demo CLI + 빌드 도구 (6 files, +517/-37)
+  - scripts/combat|demo|play|play_dungeon_mode.py + verification_report.json + tools/build_static_data.py (신규 389 lines)
+- **21b116b** feat(src): post-Phase-7 / Dungeon-only 통합 (13 files, +821/-189)
+  - hacking_view.py (신규 329 lines), engine 9 파일, matrix 2, combat 1
+  - ADR-0103 적용: D 토글 제거, matrix_view 폐기, dungeon_mode 필드 제거
+- **fd201a7** test: post-Phase-7 / Dungeon-only 통합 (22 files, +427/-133)
+  - unit 18 + integration 4, chapter view skip 마커, novel pipeline, expansion missions
+- **e9b7302** data: Hall of Dead 자키 아카이브 누적 (+196 lines)
+
+**최종 누적:** 세션 전체 13 commits, 99 files. 회귀 2983 tests pass 유지, ruff + mypy clean.
+
+**검토 항목 (다음 세션):**
+- prototype/data/jockeys/deceased.json 추적 vs .gitignore 불일치 (A안 untrack vs B안 추적 유지)
+- ADR-0103 작성에 따른 후속 (matrix_view.py archive 또는 삭제, 관련 테스트 클래스 정리)
+- M2 14 파일 > 250 LOC 리팩토링 (별도 ADR)
+- M3 docstring 90%+ 누락 모듈 보강 (별도 ADR)
+
+**잔여 uncommitted:** 0 파일.
