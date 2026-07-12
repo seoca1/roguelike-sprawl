@@ -44,6 +44,16 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/roguelike_sprawl"]
+exclude = [
+    "data/sounds_test/*.wav",  # Absolute symlinks (BGM v3, 2026-07-11) — wheel invalid
+    "data/sounds_test/*",
+]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    "data/sounds_test/*.wav",
+    "data/sounds_test/*",
+]
 
 [tool.ruff]
 line-length = 100
