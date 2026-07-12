@@ -5527,3 +5527,30 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - M3 docstring 90%+ 누락 모듈 보강 (별도 ADR)
 
 **잔여 uncommitted:** 0 파일.
+
+
+## 2026-07-12
+
+**Session:** 헬스 체크 후속 4차 — AGENTS.md 정책 / ADR 후속
+
+**Scope:** 헬스 체크 → A/B/C/D/E/F 완료 후, 헬스 체크에서 도출된 MEDIUM/M2 항목 (250+ LOC 14 파일) 에 대해 ADR 패턴 적용.
+
+**Changes (5 commits):**
+- **89c9bc2** docs(decisions): ADR-0110 Accepted (Option 4) — 신규 250/500/1000 LOC 가이드 사용자 결정
+  - 정책: 250 권장 / 500 PR 거부 (700-800 예외) / 1000+ ADR 필수
+  - 14 파일 등급 분류, 1000+ 4 모듈 후속 ADR 필요
+  - matrix_view (ADR-0103) 보존 결정 우선
+- **88138cf** docs(agents): §6 모듈 사이즈 정책 추가
+  - AGENTS.md §6 스타일 섹션 다음에 신규 sub-section
+- **1078504** docs(decisions): ADR-0111 Draft — graphic_novel_view (1,510 LOC) 처리
+  - 옵션: Keep / 3-way 분할 / 5-way 분할 / Keep+docstring
+- **ea0ebf8** docs(decisions): ADR-0112/0113 Draft — combat/effects (1,246) + combat_view (1,053)
+  - 각각 독립 결정 — Defer all 가능
+
+**검증:** ruff + mypy clean, 2983 tests pass, working tree 0.
+
+**잔여 (사용자 결정 영역):**
+- ADR-0111/0112/0113 각 Draft → 사용자 옵션 선택 후 Accepted 전환 + Consequences 작성 + (분할 시) 신규 PR
+- 권장: 'Defer all' → ADR-0110 가 정당화 + docstring 정책으로 흡수, ADR-0111/0112/0113 폐기 결정
+
+**누적 (오늘 세션):** 22 commits, 5 regions.
