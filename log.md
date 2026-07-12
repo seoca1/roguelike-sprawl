@@ -5419,3 +5419,41 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 - prototype/tests/* (skip 마커 추가분)
 - decisions/0060
 - untracked 6 files (GRAPHIC_NOVEL_ARCHITECTURE_ANALYSIS, design/, hacking_view, etc.)
+
+
+## 2026-07-12
+
+**Session:** roguelike_sprawl 헬스 체크 (5-way audit + 4-step remediation)
+
+**Scope:** 사용자가 시작한 전체 헬스 체크 → 우선순위 매트릭스 → A/B/C/D 4단계 순차 적용. C (M4/M5)는 audit false positive 확인 후 no-op.
+
+**Changes:**
+- **A · fix(dashboard): integrity test restoration** (991ae31, 80 files, +141/-122)
+  - 78 short-stories HTML: `../glossary.css` → `../../glossary.css` 경로 정정
+  - `dashboard/missions.html`: 26개 Fiction cross-reference 에 `en/` 서브디렉토리 누락 복원
+  - `tests/integration/test_dashboard_integrity.py`:
+    - library.html 카드 매칭 → `search_index.json` 데이터-주도 (2026-07-10 stories-browse.html 합병 이후)
+    - `_resolve_href` 가 anchor + query string 모두 분리
+    - `_strip_date_prefix` 로 HTML stem(날짜 없음) ↔ search_index id(날짜 있음) 정규화
+    - `known_orphans` 에 wigan_zavijava 추가 (ADR-0052 scope)
+- **B · docs(roadmap): sync 2026-07-10 + 2026-07-11 history** (4d4722f, +10)
+  - 3일 갭 해소: BGM v3 + dashboard audio + wiki audit + video guide + Notion 정리
+  - 5 commits (8bea82a/eef629f/67ee96e/9ac268d/b64488a) 메타 정리
+- **C · audit false positive** (no commit):
+  - M4 (pyproject.toml [tool.*] 부재): 실은 47-89 라인에 `[tool.ruff]`, `[tool.mypy]`, `[tool.pytest.ini_options]`, `[tool.coverage.*]` 이미 존재
+  - M5 (.gitignore __pycache__/* 부재): 실은 line 2에 이미 존재
+
+**검증:**
+- ruff + mypy clean (121 files)
+- dashboard integrity 4/4 pass (이전 2/4)
+- 전체 테스트 2983 pass (이전 2981, +2)
+
+**잔여 (사용자 결정 대기, 본 세션 commit 범위 외):**
+- 다른 세션의 uncommitted changes (dashboard/graphic-novel.html, jokey.html, stages.html, library.html, design/scenario/, decisions/0031/0060, prototype/src/* 등) — 본 헬스 체크 발견 시점에 이미 modified 상태였음, 본 세션 작업 아님
+- 7 untracked: GRAPHIC_NOVEL_ARCHITECTURE_ANALYSIS.md, design/research/, design/systems/dungeon_events.md, prototype/data/story/arcs.json, prototype/src/roguelike_sprawl/engine/hacking_view.py, tools/build_static_data.py
+
+**다음 세션 후보:**
+- 잔여 uncommitted 검토/커밋 (사용자 본인 작업분)
+- M2 14 파일 > 250 LOC 리팩토링 (별도 ADR 권장)
+- M3 docstring 90%+ 누락 모듈 (graphic_novel_view, combat_view, matrix_view 등) 보강
+
