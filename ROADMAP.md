@@ -2,6 +2,16 @@
 
 ## 변경 이력 (Recent)
 
+- **2026-07-11**: BGM v3 (12 tracks 미니맥스 외부 생성) + dashboard audio 검증 + wiki audit (journey 12 broken → 0) + video generation guide + Notion 페이지 정리 + lint fix (F541) — **2983 tests pass** (A. dashboard integrity 테스트 2개 복원으로 +2)
+  - **BGM v3 Part 1**: `dashboard/sound.html` BGM player 4-단계 수정 (UI 명확화, catch 분기, _bgmCleared, ensureBgmAudio)
+  - **BGM v3 Part 2**: 12 트랙 30초 WAV (정규화 -16 LUFS) + 24 갤러리 mp3 + ThemePlayer 통합 + `import_minimax_track.sh` 자동화
+  - **부가 도구**: `scripts/verify_sounds.py`, `scripts/audio-doctor.py` (macOS 오디오 디바이스 진단)
+  - **문서**: `docs/video-generation-guide.md` (MiniMax Hailuo-2.3/02 검토, Phase 1~4, $2.65~$4.45)
+  - **5 commits**: 8bea82a (BGM v3), eef629f (lint + video), 67ee96e (symlink + wiki), 9ac268d (handover), b64488a (log)
+- **2026-07-10**: library.html → stories-browse.html data-driven 통합 (78 cards, 81 GN scenes) — library.html은 redirect stub으로 전환
+  - data: `dashboard/data/search_index.json` 단일 진실 공급원 (78 stories, 9 cast × 4 archetypes)
+  - 동적 렌더링: `dashboard/stories-browse.js` (character / language / state / text 필터 + localStorage read state)
+  - library.html (64줄 redirect) → canonical `stories-browse.html` link
 - **2026-07-08**: CHAPTER→ARC_PHASE 전환 완료 + library_stats.json + dashboard HTML 수정 — **4146 tests pass**
 - **2026-07-07**: Phase 7 완료 (ADR-0090 Accepted) — **4146 tests pass** — Help/Settings/Sound/Crash/Build/mypy 7/7 완료
 - **2026-07-04**: Phase 6.1/6.2/7.1/7.2/7.3/8/9 완료 — **4254 tests pass** (+145)
