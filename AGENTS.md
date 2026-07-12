@@ -177,6 +177,13 @@ prototype/
 - 모듈 / 클래스 / 함수 모두 docstring
 - `__slots__` 사용 (메모리 효율)
 
+### 모듈 사이즈 정책 (ADR-0110)
+- **250 LOC**: 신규 모듈 권장 한도 (PR 리뷰 체크리스트)
+- **500 LOC**: PR 거부 기준 (1회성 / 단발성 모듈은 700~800 LOC 까지 예외 허용)
+- **1000+ LOC**: 신규 ADR 필수 (정당화 + 분할 계획 OR 보유 사유 명시)
+
+현행 14 파일은 ADR-0110 Consequences 표 참조. 1000+ LOC 4 모듈은 후속 ADR (제안: 0111/0112/0113) 로 정당화/분할 처리. matrix_view.py 는 ADR-0103 의 backward compat 보존 결정 우선.
+
 ### 명령 (Makefile)
 
 ```bash
