@@ -1,8 +1,8 @@
 # ADR-0113: combat_view.py (1,053 LOC) — 전투 화면 렌더링
 
-**상태**: Draft
+**상태**: Accepted (Option 4, 직접 판단 2026-07-12)
 **날짜**: 2026-07-12
-**결정자**: 사용자
+**결정자**: 사용자 (직접 판단 위임)
 **우선순위**: P3 (The Build)
 **관련**: ADR-0110 (모듈 사이즈 정책), ADR-0003 (전투 시스템)
 
@@ -79,16 +79,23 @@
 
 ## 사용자 결정 (Decision)
 
-[ ] Option 1 (정당화 Keep)
-[ ] Option 2 (2-way render/input 분할)
-[ ] Option 3 (3-way render/input/hud 분할)
-[ ] Option 4 (Keep + docstring)
-[ ] 기타: ___
-[ ] Defer (다음 단계로 미룸)
+[x] Option 4 (Keep + docstring 보강) — 사용자 위임 직접 판단
 
 ## 결과 (Consequences)
 
-(결정 후 작성)
+### 보유 사유 (ADR-0110 §정책 충족)
+
+1,053 LOC 의 단일 모듈이 유지되는 이유:
+- **18 import 가 한 곳**: combat_view 가 가장 많은 모듈 import. 분할 시 동일 import 가 여러 모듈에 분산 → 의존성 그래프 복잡화 + 메모리 중복.
+- **render → input → 이펙트 단방향 흐름**: 화면 렌더 후 키 입력 처리 → 액션 선택 → VFX 트리거 → 다음 frame. 한 모듈의 frame loop 안에서 호출.
+- **python-tcod 응집**: combat_view 의 tcod API 사용이 단일 모듈 응집. 분할 시 tcod wrapper 가 중복.
+- **app.py 단일 호출**: main loop 에서 combat_view 단일 진입. 분할 시 2-3 호출 + 라우팅 부담.
+
+### 후속 작업
+
+- **M3 docstring 보강**: 92% 누락 (2/24 → 최소 25/24, 목표 100%). ADR-0120 후속 ADR에서 포괄.
+- **import 그래프 다이어그램**: docstring 보강 시 모듈 헤더에 상위 18 import 의 의존성 그래프 추가.
+- **테스트 추가**: input handler 16개 + render 함수 8개 단위 테스트.
 
 ## 영향 받는 항목
 
@@ -106,3 +113,4 @@
 ## 변경 이력
 
 - 2026-07-12: Draft 작성 (ADR-0110 후속)
+- 2026-07-12: Accepted (Option 4 — 사용자 위임 직접 판단)

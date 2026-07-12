@@ -1,8 +1,8 @@
 # ADR-0112: combat/effects.py (1,246 LOC) — 5-Layer VFX 시스템
 
-**상태**: Draft
+**상태**: Accepted (Option 4, 직접 판단 2026-07-12)
 **날짜**: 2026-07-12
-**결정자**: 사용자
+**결정자**: 사용자 (직접 판단 위임)
 **우선순위**: P3 (The Build)
 **관련**: ADR-0110 (모듈 사이즈 정책), ADR-0018 (Combat Animation 5-Layer VFX)
 
@@ -88,16 +88,23 @@ Option 4 는 작업 부담 낮지만 사이즈 정책 미충족.
 
 ## 사용자 결정 (Decision)
 
-[ ] Option 1 (정당화 Keep)
-[ ] Option 2 (5-way Layer 분할)
-[ ] Option 3 (2-way spawner/renderer 분할)
-[ ] Option 4 (Keep + docstring)
-[ ] 기타: ___
-[ ] Defer (다음 단계로 미룸)
+[x] Option 4 (Keep + docstring 보강) — 사용자 위임 직접 판단
 
 ## 결과 (Consequences)
 
-(결정 후 작성)
+### 보유 사유 (ADR-0110 §정책 충족)
+
+1,246 LOC 의 단일 모듈이 유지되는 이유:
+- **5-Layer VFX 타이밍 동기**: particle (Layer 1) → shake (Layer 2) → flash (Layer 3) → transition (Layer 4) → cinematic (Layer 5) 가 동시 진행. 한 모듈에서 frame-by-frame 동기화가 본질적. 분할 시 inter-module tick 공유 부담.
+- **12 spawn 함수 응집**: spawn_jackin_glitch, spawn_room_flash, spawn_data_acquired, spawn_jackout_whiteout 등 12 함수가 동일 spawner API. Layer 분할 시 spawner 별 모듈 + cross-layer 호출.
+- **python-tcod 의존**: 렌더링 wrapper. API 가 단일 모듈에 응집되어야 사용처 (`combat_view.py`, `dungeon_view.py`) 가 단순한 import.
+- **VFX 시스템 단일 책임**: 한 화면 효과 (예: jackin) 가 모든 Layer 통합. 분리 시 각 Layer 의 슬라이스를 호출해야 함.
+
+### 후속 작업
+
+- **M3 docstring 보강**: 93% 누락 (2/28 → 최소 30/28, 목표 100%). ADR-0120 후속 ADR에서 포괄.
+- **VFX 함수별 사용 예시**: docstring 보강 시 sample 호출 예시 포함 (e.g., `spawn_jackin_glitch(effects)` 의 결과).
+- **테스트 추가**: helper 함수별 단위 테스트.
 
 ## 영향 받는 항목
 
@@ -115,3 +122,4 @@ Option 4 는 작업 부담 낮지만 사이즈 정책 미충족.
 ## 변경 이력
 
 - 2026-07-12: Draft 작성 (ADR-0110 후속)
+- 2026-07-12: Accepted (Option 4 — 사용자 위임 직접 판단)
