@@ -793,6 +793,17 @@ def _truncate_page_to_typed(
     cursor so the rest of the text appears progressively."""
 
     def _page_char_count(page: list[str]) -> int:
+        """Return the total character count of a page if its lines were joined by spaces.
+
+        Lines are conceptually re-joined with a single space between each, so
+        n lines contribute ``sum(len) + (n-1)`` chars (one separator per gap).
+
+        Args:
+            page: List of wrapped lines on the page.
+
+        Returns:
+            Effective character count of the page.
+        """
         # n lines joined by single spaces = sum(len) + (n-1) spaces
         return sum(len(line) for line in page) + max(0, len(page) - 1)
 

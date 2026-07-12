@@ -84,10 +84,30 @@ _STATUS_GLYPH: dict[Status, str] = {
 
 
 def _short_kind(kind: NodeKind) -> str:
+    """Return a short human-readable label for a :class:`NodeKind`.
+
+    Falls back to the enum value capitalized when the kind is unknown.
+
+    Args:
+        kind: Node kind to label.
+
+    Returns:
+        Short label string (e.g. "Entry", "ICE", "Construct").
+    """
     return _KIND_LABEL.get(kind, kind.value.capitalize())
 
 
 def _status_glyph(status: Status) -> str:
+    """Return a single-character glyph representing a :class:`Status`.
+
+    Falls back to ``"?"`` when the status is unknown.
+
+    Args:
+        status: Combat/status flag.
+
+    Returns:
+        One-character string (e.g. "+", "!", "X").
+    """
     return _STATUS_GLYPH.get(status, "?")
 
 
@@ -1035,6 +1055,15 @@ def _handle_movement(state: AppState, sym: KeySym) -> None:
 
 
 def _jack_out(state: AppState) -> None:
+    """Disconnect from the matrix and return the player to the Hub.
+
+    Clears all matrix-related state (graph, current node, current mission,
+    exploration tracker) and switches the screen to :class:`ScreenKind.HUB`.
+    Any in-flight status message is also cleared.
+
+    Args:
+        state: Application state to mutate.
+    """
     state.matrix = None
     state.current_node_id = None
     state.current_mission = None
@@ -1047,6 +1076,18 @@ _last_layout: dict[MatrixGraph, dict[str, tuple[int, int]]] = {}
 
 
 def get_layout(matrix: MatrixGraph) -> dict[str, tuple[int, int]]:
+    """Return a node-id → ``(x, y)`` position map for the given matrix graph.
+
+    Results are memoized in a module-level cache keyed by the matrix object
+    itself. The cache is process-wide and never invalidated (matrices are
+    typically short-lived per-run).
+
+    Args:
+        matrix: The matrix graph to lay out.
+
+    Returns:
+        Dict mapping each node id to its rendered ``(x, y)`` position.
+    """
     cached = _last_layout.get(matrix)
     if cached is not None:
         return cached
