@@ -20,11 +20,11 @@ prototype/.venv/bin/python tools/build_dashboard.py
 |---|---|---|
 | `combat_stats.json`     | `prototype/data/combat/ice_types.json` (29 ICE), `effects.py:15 animations`, `programs.json` | `combat.html` (5 카드) |
 | `novel_stats.json`      | `Fiction/.../short-stories/*.md` (30 stems), `novel/hooks.py:HookKind` | `novel.html` (6 카드) |
-| `story_stats.json`      | `prototype/data/missions/missions.json` (29), `story/chapters/*.json` | `stories.html` / `stages.html` |
+| `story_stats.json`      | `prototype/data/missions/missions.json` (47), `story/chapters/*.json` (12) | `stories-browse.html` / `stages.html` |
 | `cyberspace_stats.json` | `prototype/data/cyberspace/worlds.json` (2 worlds / 4 sectors / 6 servers), `matrix/node.py:NodeKind` (8) + `ZoneDepth` (4) | `cyberspace.html` (5 카드) |
 | `journey_stats.json`    | hardcoded (novice/veteran/heretic credits) | `journey/*.html` |
 | `index_stats.json`      | `pytest --collect-only` (tests_total), `prologue_data.json` (lines), `event_dialogues.json` (npcs), `stage_structure.json` (stages/missions) | `index.html` (Project Status 패널) |
-| `character_stats.json`  | `design/story/characters.md` (3 캐릭터 × 5 attributes) | `story.html` (캐릭터 카드 age / deck / weapon / origin / job) |
+| `character_stats.json`  | `design/story/characters.md` (9 캐릭터 × 5 attributes) | `story.html` (캐릭터 카드 age / deck / weapon / origin / job) |
 | `run_stats.json`        | `prototype/src/run/state.py` Stage / ChapterState / ObjectiveKind enum | `stages.html` (Stage enum count) + `story.html` (endings count) |
 | `data_index.json`       | 위 8 파일의 인덱스 | (참조용) |
 
@@ -51,10 +51,10 @@ prototype/.venv/bin/python tools/build_dashboard.py
 | 페이지 | 동기화 소스 | 자동 / 수동 | 메모 |
 |---|---|---|---|
 | `story.html` | 캐릭터 3명 (Case/Sil/Kas) — `<div class="character-card">` 정적 디자인. 챕터 카드 21개는 JS 동적 렌더 (inline). | 혼합 | **character-card 부분 정적**. 예: 나이/데크/무기/동기/인용구 — 디자인 콘텐츠. |
-| `stories.html` | `Fiction/derivative/sprawl-trilogy/short-stories/*.md` (29 stems) → 58 HTML | 자체 generator (`prototype/scripts/generate_story_html.py`) | **통계 동기화 완료**: 29/58/29/29/0 (commit b91b7cc). |
+| `stories-browse.html` | `Fiction/derivative/sprawl-trilogy/short-stories/*.md` (29 stems) → 58 HTML | 자체 generator (`prototype/scripts/generate_story_html.py`) | **통계 동기화 완료**: 29/58/29/29/0 (commit b91b7cc). 2026-07-10 stories.html → stories-browse.html 합병. |
 | `stories/journey/{novice,veteran,heretic}.md\|html` | 시뮬레이션 시나리오 (정적). Missions 데이터와 직접 동기화 없음 (별도 합산). | 정적 | novice 20,050 / veteran 27,500 / heretic 20,100 cr (디자인 값). |
 | `stories/short-stories/{en,ko}.html` | 단편 본문 (58개) | `generate_story_html.py` | 자동 생성. 다시 실행 시 replace. |
-| `story_read.html` | 12 챕터 카드 인덱스 — `chapters/{case,sil,kas}_expanded.json` (시간차표시용 데이터) | 정적 | 3 챕터 × 2 (EN+KO) × 2 액트 = 12 카드. |
+| `stories/episode-reader.html` | 챕터 카드 인덱스 — `chapters/{case,sil,kas,...}.json` (9 자키) | 정적 | 9 챕터 × 2 (EN+KO) = 18 카드. 2026-07-08 story_read.html → stories/episode-reader.html 이동. |
 
 ---
 
