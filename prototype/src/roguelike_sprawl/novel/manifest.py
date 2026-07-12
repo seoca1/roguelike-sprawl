@@ -114,12 +114,15 @@ class NovelManifest:
     entries: dict[str, ManifestEntry] = field(default_factory=dict)
 
     def set(self, entry: ManifestEntry) -> None:
+        """Insert or replace an entry keyed by ``entry.stem``."""
         self.entries[entry.stem] = entry
 
     def get(self, stem: str) -> ManifestEntry | None:
+        """Look up an entry by stem, or ``None`` if absent."""
         return self.entries.get(stem)
 
     def __contains__(self, stem: object) -> bool:
+        """Return ``True`` if a stem is registered as an entry."""
         return isinstance(stem, str) and stem in self.entries
 
     # ----- factory methods ------------------------------------------------

@@ -90,6 +90,7 @@ class NovelCatalog:
     stems_by_tag: dict[str, set[str]] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Lazily populate the catalog if no entries were supplied at construction."""
         if not self.entries:
             self.refresh()
 
@@ -150,18 +151,40 @@ class NovelCatalog:
     # ----- query helpers ------------------------------------------------
 
     def __len__(self) -> int:
+        """Return the number of registered novel entries."""
         return len(self.entries)
 
     def __iter__(self) -> Iterator[NovelEntry]:
+        """Iterate over all registered :class:`NovelEntry` values."""
         return iter(self.entries.values())
 
     def by_stem(self, stem: str) -> NovelEntry | None:
+        """Look up an entry by its file stem.
+
+        Args:
+            stem: The stem of the short-story file (no extension, no language suffix).
+
+        Returns:
+            The matching :class:`NovelEntry`, or ``None`` if not found.
+        """
         return self.entries.get(stem)
 
     def __contains__(self, stem: object) -> bool:
+        """Return ``True`` if a stem is registered as an entry.
+
+        Non-string keys always return ``False``.
+        """
         return isinstance(stem, str) and stem in self.entries
 
     def by_tag(self, tag: str) -> list[NovelEntry]:
+        """Return all entries tagged with ``tag``, sorted by stem.
+
+        Args:
+            tag: Game-integration tag (e.g. ``"first_jack"``).
+
+        Returns:
+            Sorted list of matching :class:`NovelEntry` objects.
+        """
         return [self.entries[s] for s in sorted(self.stems_by_tag.get(tag, set()))]
 
     def language_pairs(self) -> list[tuple[str, str]]:
@@ -332,6 +355,18 @@ def _split_top_level_commas(text: str) -> list[str]:
 
 
 def _coerce_str_list(value: object) -> list[str]:
+    """Coerce a parsed-YAML value to a list of strings.
+
+    YAML list inputs are stringified element-wise; a non-empty scalar
+    string becomes a single-element list; anything else (``None``, empty
+    string, mapping, …) yields an empty list.
+
+    Args:
+        value: Arbitrary YAML value (list, str, or other).
+
+    Returns:
+        List of string elements, possibly empty.
+    """
     if isinstance(value, list):
         return [str(v) for v in value]
     if isinstance(value, str) and value:
