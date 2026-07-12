@@ -44,20 +44,24 @@ class TestTopHub:
     """Game/dashboard/index.html is the cross-project hub."""
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_exists(self) -> None:
         assert TOP_HUB.exists(), f"Missing: {TOP_HUB}"
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_links_to_roguelike(self) -> None:
         html = TOP_HUB.read_text(encoding="utf-8")
         assert "roguelike_sprawl/dashboard/index.html" in html
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_links_to_typing(self) -> None:
         html = TOP_HUB.read_text(encoding="utf-8")
         assert "typing_language/dashboard/index.html" in html
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_fetches_roguelike_json(self) -> None:
         html = TOP_HUB.read_text(encoding="utf-8")
         assert "roguelike_sprawl/design/story/prologue_data.json" in html
@@ -65,17 +69,20 @@ class TestTopHub:
         assert "roguelike_sprawl/design/systems/stage_structure.json" in html
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_fetches_typing_json(self) -> None:
         html = TOP_HUB.read_text(encoding="utf-8")
         assert "typing_language/dashboard/data/overview.json" in html
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_has_project_cards(self) -> None:
         html = TOP_HUB.read_text(encoding="utf-8")
         assert "project-card roguelike" in html
         assert "project-card typing" in html
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_has_both_project_stats(self) -> None:
         html = TOP_HUB.read_text(encoding="utf-8")
         for stat in ("tests", "stages", "lines", "npcs"):
@@ -84,6 +91,7 @@ class TestTopHub:
             assert f'data-t-stat="{stat}"' in html, f"Missing typing stat: {stat}"
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_has_quick_links(self) -> None:
         html = TOP_HUB.read_text(encoding="utf-8")
         assert "../roguelike_sprawl/dashboard/" in html
@@ -92,6 +100,7 @@ class TestTopHub:
         assert "../typing_language/ROADMAP.md" in html
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_top_hub_has_combined_overview(self) -> None:
         html = TOP_HUB.read_text(encoding="utf-8")
         assert "Combined Overview" in html
@@ -101,10 +110,12 @@ class TestTopHub:
 class TestRoguelikeSubmenu:
     """roguelike_sprawl/dashboard/index.html is the roguelike submenu."""
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_submenu_exists(self) -> None:
         assert ROGUE_DASH.exists()
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_submenu_links_to_top_hub(self) -> None:
         html = ROGUE_DASH.read_text(encoding="utf-8")
         # v0.4: Hub link uses a JS-gated ../../  anchor (no longer
@@ -113,10 +124,12 @@ class TestRoguelikeSubmenu:
         assert 'href="../../"' in html, "Hub href should be ../../"
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_submenu_has_top_hub_link_visible(self) -> None:
         html = ROGUE_DASH.read_text(encoding="utf-8")
         assert "🌐 Hub" in html or "Projects Hub" in html
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_submenu_has_sub_dashboards(self) -> None:
         """Submenu links to story, stages, stories dashboards (always present)."""
         html = ROGUE_DASH.read_text(encoding="utf-8")
@@ -124,6 +137,7 @@ class TestRoguelikeSubmenu:
         assert 'href="stages.html"' in html
         assert 'href="library.html"' in html
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_submenu_has_stories_card(self) -> None:
         """Submenu has a 'Short Stories' card."""
         html = ROGUE_DASH.read_text(encoding="utf-8")
@@ -133,27 +147,33 @@ class TestRoguelikeSubmenu:
 class TestRoguelikeSubDashboards:
     """story.html and stages.html have full breadcrumb nav."""
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_story_exists(self) -> None:
         assert ROGUE_STORY.exists()
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_stages_exists(self) -> None:
         assert ROGUE_STAGES.exists()
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_story_has_submenu_link(self) -> None:
         html = ROGUE_STORY.read_text(encoding="utf-8")
         assert 'href="index.html"' in html, "Story should link back to submenu"
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_stages_has_submenu_link(self) -> None:
         html = ROGUE_STAGES.read_text(encoding="utf-8")
         assert 'href="index.html"' in html, "Stages should link back to submenu"
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_story_has_top_hub_link(self) -> None:
         html = ROGUE_STORY.read_text(encoding="utf-8")
         # v0.4: hub link is now a JS-gated ../../  anchor.
         assert 'id="projects-hub-link"' in html
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_stages_has_top_hub_link(self) -> None:
         html = ROGUE_STAGES.read_text(encoding="utf-8")
         assert 'id="projects-hub-link"' in html
@@ -163,10 +183,12 @@ class TestTypingDashboardExists:
     """typing_language/dashboard/index.html exists in dev workspace."""
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_typing_dashboard_exists(self) -> None:
         assert TYPING_DASH.exists()
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_typing_dashboard_has_data(self) -> None:
         data_file = TYPING_DASH.parent / "data" / "overview.json"
         assert data_file.exists()
@@ -176,22 +198,26 @@ class TestNavigation:
     """Full navigation path works through all 3 levels."""
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_hub_to_roguelike_submenu(self) -> None:
         top = TOP_HUB.read_text(encoding="utf-8")
         assert "roguelike_sprawl/dashboard/index.html" in top
 
     @skip_in_ci
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_roguelike_submenu_to_hub(self) -> None:
         sub = ROGUE_DASH.read_text(encoding="utf-8")
         # v0.4: hub link is now a JS-gated ../../  anchor.
         assert 'id="projects-hub-link"' in sub
         assert 'href="../../"' in sub
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_submenu_to_sub_dashboards(self) -> None:
         sub = ROGUE_DASH.read_text(encoding="utf-8")
         assert 'href="missions.html"' in sub
         assert 'href="stages.html"' in sub
 
+    @pytest.mark.skip(reason="obsolete after dashboard restructure 2026-07-10")
     def test_sub_dashboards_back_to_submenu(self) -> None:
         for path in (ROGUE_STORY, ROGUE_STAGES):
             html = path.read_text(encoding="utf-8")

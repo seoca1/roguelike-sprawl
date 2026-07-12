@@ -110,8 +110,8 @@ def check_mission_coverage() -> list[str]:
     # aleph_fragment, mollys_razor, ta_heist are free-form Fiction stories
     # created 2026-07-08 without dedicated game missions (ADR-0052 scope).
     # They are intentionally un-owned; tolerated here.
-    KNOWN_ORPHANS = {"aleph_fragment", "mollys_razor", "ta_heist"}
-    orphan_pages = sorted((html_stems - sources) - KNOWN_ORPHANS)
+    known_orphans = {"aleph_fragment", "mollys_razor", "ta_heist"}
+    orphan_pages = sorted((html_stems - sources) - known_orphans)
     for stem in orphan_pages:
         errors.append(f"  orphan page (no mission source): {stem}")
 

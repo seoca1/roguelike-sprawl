@@ -313,6 +313,7 @@ def test_vfx_overlay_no_afterimage() -> None:
     drawing any effects, preventing afterimages.
     """
     import tcod.console
+
     from roguelike_sprawl.combat.effects import CombatEffects
     from roguelike_sprawl.engine.combat_view import _draw_vfx_overlay
     from roguelike_sprawl.engine.layout import Region, RegionId
@@ -327,7 +328,8 @@ def test_vfx_overlay_no_afterimage() -> None:
 
     # Count flash cells
     flash_count_active = sum(
-        1 for y in range(region.y, region.y + region.h)
+        1
+        for y in range(region.y, region.y + region.h)
         for x in range(region.x, region.x + region.w)
         if chr(console.ch[y, x]) == "█"
     )
@@ -341,7 +343,8 @@ def test_vfx_overlay_no_afterimage() -> None:
 
     # Phase 3: verify no flash cells remain (afterimage bug is fixed)
     flash_count_after = sum(
-        1 for y in range(region.y, region.y + region.h)
+        1
+        for y in range(region.y, region.y + region.h)
         for x in range(region.x, region.x + region.w)
         if chr(console.ch[y, x]) == "█"
     )

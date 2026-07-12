@@ -1,10 +1,6 @@
-"""Tests for dungeon view rendering and D-key toggle (ADR-0060 Phase 1).
+"""Tests for dungeon view rendering (ADR-0060 Phase 1 — dungeon-only mode).
 
 Covers:
-    - AppState.dungeon_mode default False
-    - `_handle_input` on MATRIX screen with D key toggles dungeon_mode
-    - Shift+D does NOT toggle (reserved for future)
-    - Other MATRIX keys still dispatched correctly when dungeon_mode=True
     - render_dungeon_matrix generates glyphs without errors
     - 4-directional movement inside dungeon
 """
@@ -22,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from roguelike_sprawl.combat.registry import IceRegistry, ProgramRegistry  # noqa: E402
 from roguelike_sprawl.engine import dungeon_view  # noqa: E402
-from roguelike_sprawl.engine.app import AppState, ScreenKind, _handle_input  # noqa: E402
+from roguelike_sprawl.engine.app import AppState, ScreenKind  # noqa: E402
 from roguelike_sprawl.matrix import (  # noqa: E402
     Edge,
     IceKind,
@@ -31,10 +27,39 @@ from roguelike_sprawl.matrix import (  # noqa: E402
     NodeKind,
     ZoneDepth,
 )
+from roguelike_sprawl.matrix.exploration import ExplorationState
 
 # ----------------------------------------------------------------------------
 # Fixtures
 # ----------------------------------------------------------------------------
+
+
+def _make_branch_graph() -> MatrixGraph:
+    """Build a branching graph: entry -> router (+ice / +data) -> exit."""
+    nodes = (
+        Node(id="entry", label="Jack-in", kind=NodeKind.ENTRY, zone=ZoneDepth.SURFACE),
+        Node(id="router", label="Router", kind=NodeKind.ROUTER, zone=ZoneDepth.SURFACE),
+        Node(id="ice", label="ICE", kind=NodeKind.ICE, zone=ZoneDepth.MID, ice=IceKind.STANDARD),
+        Node(id="data", label="Data", kind=NodeKind.DATA, zone=ZoneDepth.SURFACE),
+        Node(id="exit", label="Exit", kind=NodeKind.EXIT, zone=ZoneDepth.CORE),
+    )
+    edges = (
+        Edge(src="entry", dst="router"),
+        Edge(src="router", dst="ice"),
+        Edge(src="router", dst="data"),
+        Edge(src="ice", dst="exit"),
+        Edge(src="data", dst="exit"),
+    )
+    return MatrixGraph(nodes=nodes, edges=edges, entry_id="entry")
+
+
+def _state_with_branch() -> AppState:
+    s = AppState()
+    s.matrix = _make_branch_graph()
+    s.current_node_id = "entry"
+    s.exploration = ExplorationState(current="entry")
+    s.screen = ScreenKind.MATRIX
+    return s
 
 
 def _make_graph() -> MatrixGraph:
@@ -104,71 +129,6 @@ def _ice_registry() -> IceRegistry:
 
 
 # ============================================================================
-# dungeon_mode field
-# ============================================================================
-
-
-class TestDungeonModeField:
-    def test_default_is_false(self) -> None:
-        s = AppState()
-        assert s.dungeon_mode is False
-
-
-# ============================================================================
-# D key toggle (MATRIX screen only)
-# ============================================================================
-
-
-class TestDKeyToggle:
-    def test_d_toggles_dungeon_mode_true(self) -> None:
-        s = _state_with_graph()
-        assert s.dungeon_mode is False
-        keep = _handle_input(
-            _key_event(KeySym.D),
-            s,
-            _prog_registry(),  # type: ignore[arg-type]
-            _ice_registry(),  # type: ignore[arg-type]
-        )
-        assert keep is True
-        assert s.dungeon_mode is True
-
-    def test_d_toggles_back_to_false(self) -> None:
-        s = _state_with_graph()
-        s.dungeon_mode = True
-        _handle_input(
-            _key_event(KeySym.D),
-            s,
-            _prog_registry(),  # type: ignore[arg-type]
-            _ice_registry(),  # type: ignore[arg-type]
-        )
-        assert s.dungeon_mode is False
-
-    def test_shift_d_does_not_toggle(self) -> None:
-        """Shift+D is reserved for future use; must not toggle."""
-        s = _state_with_graph()
-        assert s.dungeon_mode is False
-        _handle_input(
-            _key_event(KeySym.D, shift=True),
-            s,
-            _prog_registry(),  # type: ignore[arg-type]
-            _ice_registry(),  # type: ignore[arg-type]
-        )
-        # Shift+D fell through to matrix_view's input handler
-        # (which itself ignores it without a matrix). dungeon_mode unchanged.
-        assert s.dungeon_mode is False
-
-    def test_d_appends_status_message(self) -> None:
-        s = _state_with_graph()
-        _handle_input(
-            _key_event(KeySym.D),
-            s,
-            _prog_registry(),  # type: ignore[arg-type]
-            _ice_registry(),  # type: ignore[arg-type]
-        )
-        assert any("View mode" in msg for msg in s.status_messages)
-
-
-# ============================================================================
 # Cardinal direction movement in dungeon mode
 # ============================================================================
 
@@ -176,23 +136,64 @@ class TestDKeyToggle:
 class TestCardinalMovementDungeon:
     def test_handle_dungeon_input_right_moves_to_neighbor(self) -> None:
         s = _state_with_graph()
-        s.dungeon_mode = True
-        # Map ids -> positions. The graph is linear so we rely on dungeon_view's
-        # BFS layout to place each node uniquely.
-        dungeon_view._handle_cardinal_movement(s, KeySym.RIGHT)
-        # After pressing RIGHT, we may or may not move (depends on layout),
-        # but the call should not raise.
+        dungeon_view._handle_cardinal_movement(s, KeySym.RIGHT, None, None)
         assert s.current_node_id in {"entry", "data", "ice", "exit"}
 
     def test_handle_dungeon_input_invalid_direction_no_op(self) -> None:
         s = _state_with_graph()
-        s.dungeon_mode = True
-        # Press UP on a graph that may not have a neighbor above —
-        # the call should never raise regardless of the layout it computes.
-        dungeon_view._handle_cardinal_movement(s, KeySym.UP)
-        # After any movement attempt, current_node_id is still one of the
-        # 4 known nodes (no exception, no garbage state).
+        dungeon_view._handle_cardinal_movement(s, KeySym.UP, None, None)
         assert s.current_node_id in {"entry", "data", "ice", "exit"}
+
+    def test_backtrack_pageup_key_returns_to_previous_room(self) -> None:
+        s = _state_with_branch()
+        dungeon_view._handle_cardinal_movement(s, KeySym.RIGHT, None, None)
+        assert s.current_node_id == "router"
+        dungeon_view._handle_backtrack(s, None, None)
+        assert s.current_node_id == "entry"
+
+    def test_backtrack_via_reverse_direction_key(self) -> None:
+        s = _state_with_branch()
+        dungeon_view._handle_cardinal_movement(s, KeySym.RIGHT, None, None)
+        assert s.current_node_id == "router"
+        dungeon_view._handle_cardinal_movement(s, KeySym.RIGHT, None, None)
+        assert s.current_node_id == "ice"
+        dungeon_view._handle_cardinal_movement(s, KeySym.LEFT, None, None)
+        assert s.current_node_id == "router"
+
+    def test_forward_branches_via_dot_product_alignment(self) -> None:
+        s = _state_with_branch()
+        dungeon_view._handle_cardinal_movement(s, KeySym.RIGHT, None, None)
+        assert s.current_node_id == "router"
+        dungeon_view._handle_cardinal_movement(s, KeySym.UP, None, None)
+        assert s.current_node_id == "data"
+        dungeon_view._handle_cardinal_movement(s, KeySym.RIGHT, None, None)
+        assert s.current_node_id == "exit"
+
+    def test_trap_damage_on_high_alarm_node_entry(self) -> None:
+        from roguelike_sprawl.matrix.node import AlarmLevel
+
+        nodes = (
+            Node(id="e", label="Entry", kind=NodeKind.ENTRY, zone=ZoneDepth.SURFACE),
+            Node(
+                id="h",
+                label="HighAlarm",
+                kind=NodeKind.ROUTER,
+                zone=ZoneDepth.MID,
+                alarm=AlarmLevel.HIGH,
+            ),
+        )
+        edges = (Edge(src="e", dst="h"),)
+        g = MatrixGraph(nodes=nodes, edges=edges, entry_id="e")
+        s = AppState()
+        s.matrix = g
+        s.current_node_id = "e"
+        s.player_hp = 100
+        s.exploration = ExplorationState(current="e")
+        s.screen = ScreenKind.MATRIX
+        dungeon_view._handle_cardinal_movement(s, KeySym.RIGHT, None, None)
+        assert s.current_node_id == "h"
+        assert s.player_hp == 85
+        assert any("TRAP" in m for m in s.status_messages)
 
 
 # ============================================================================
@@ -203,8 +204,5 @@ class TestCardinalMovementDungeon:
 class TestDungeonRenderSmoke:
     def test_render_dungeon_matrix_does_not_raise(self) -> None:
         s = _state_with_graph()
-        s.dungeon_mode = True
         console = tcod.console.Console(80, 50, order="F")
-        # T (Translator) not used by render_dungeon_matrix in current impl;
-        # pass None to confirm signature flexibility.
         dungeon_view.render_dungeon_matrix(console, None, s)  # type: ignore[arg-type]

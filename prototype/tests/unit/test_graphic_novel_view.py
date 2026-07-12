@@ -76,8 +76,10 @@ def test_portrait_frozen() -> None:
         title_ko="T",
         character="case",
         width=10,
-        height=14,
+        height=12,
         art=("a", "b"),
+        palette={"default": (200, 200, 220)},
+        char_colors={},
     )
     with pytest.raises((AttributeError, Exception)):
         p.id = "hacked"  # type: ignore[misc]
@@ -91,6 +93,8 @@ def test_background_frozen() -> None:
         width=40,
         height=16,
         art=("a", "b"),
+        palette={"default": (160, 160, 180)},
+        char_colors={},
     )
     with pytest.raises((AttributeError, Exception)):
         b.id = "hacked"  # type: ignore[misc]
@@ -118,7 +122,7 @@ def test_load_portrait_case_think() -> None:
     assert p.id == "case_think"
     assert p.character == "case"
     assert p.width == 10
-    assert len(p.art) == 14
+    assert len(p.art) == 12
 
 
 def test_load_portrait_marly_mask() -> None:

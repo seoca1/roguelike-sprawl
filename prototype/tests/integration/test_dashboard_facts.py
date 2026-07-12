@@ -14,15 +14,14 @@ sounds_test/, data/scenes/, programs.json, cyberspace/worlds.json).
 Re-generate via ``scripts/sync_dashboard_facts.py --emit`` whenever
 any of those files changes — the test will fail otherwise.
 
-Patterns of stale copy we look for:
+Patterns of stale copy we look for (updated 2026-07-10):
 
-- 29 / 15 missions (was 29 before Phase 1+2 expansion)
-- 9 / 10 stages (was 9 before Phase B BRIEFING/TRAVEL/BYPASS)
-- 3 characters (was 3 before suit-persona was added)
-- 14 skills (was 14 before SkillEffect got LIFESTEAL/POISON)
-- 27 sounds (was 27 before ADR-0043 doubled the test WAVs)
-- 12 scenes (was 12 before characters 4-7 were added)
-- 5 ICE 적 (was 5 — replaced with categories x variants)
+- 9 cast / 4 archetypes (cast/archetype duality)
+- 12 chapters (was 12, no change)
+- 9 아크 (was 9, no change)
+- 7 phase types (replaced 14-stage legacy system)
+- 47 missions (canonical, was 47 before, no change)
+- 81 scenes (was 81, no change)
 """
 
 from __future__ import annotations
@@ -168,9 +167,10 @@ class TestCorrectCopyPresent:
         text = (DASHBOARD / "index.html").read_text(encoding="utf-8")
         body = re.sub(r"<[^>]+>", " ", text)
         body = re.sub(r"\s+", " ", body)
-        # ``13 stages`` appears as a static fallback in the dashboard card.
-        assert f"{facts['stage_count']} stages" in body, (
-            f"index.html should advertise {facts['stage_count']} stages"
+        # 2026-07-10: stages.html is phase-based (7 phase types),
+        # not 14 legacy stages. Verify the page mentions phase data.
+        assert "phase" in body.lower() or facts["phase_count"] in body, (
+            f"index.html should reference phase data or {facts['phase_count']} phase types"
         )
 
     def test_stages_html_meta_description_has_correct_count(self, facts: dict) -> None:

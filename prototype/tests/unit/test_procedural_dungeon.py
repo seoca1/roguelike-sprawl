@@ -242,11 +242,11 @@ class TestEdgeCases:
 
 
 class TestOriginalDungeonGenerator:
-    def test_returns_ten_nodes(self) -> None:
+    def test_returns_twenty_nodes(self) -> None:
         g = DungeonGenerator()
         graph = g.generate(seed=42, mission_grade=1)
-        # Hand-crafted 7x5 layout: 10 rooms.
-        assert len(graph.nodes) == 10
+        # 5x4 grid layout: 20 rooms (all 4-directional connectivity)
+        assert len(graph.nodes) == 20
 
     def test_seed_ignored_deterministic(self) -> None:
         g = DungeonGenerator()
