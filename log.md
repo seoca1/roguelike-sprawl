@@ -5725,3 +5725,48 @@ uv run python scripts/demo_full_flow.py --character veteran --lang ko
 ### 영향
 - vault 외부 파일 (commit 외부): `docs/notion-reflects/README.md`, `docs/notion-reflects/PROGRESS_REPORT_2026-07-12_NOTION_READY.md`
 - vault 내부 파일 (commit 대상): `log.md`, `SESSION_SUMMARY_2026-07-12.md`
+
+## [2026-07-12] ci+fix | v1.0.0 final release 빌드 검증 + 자동화 강화 + dashboard 오타 수정
+
+**Status**: Complete
+
+### Changes (3 commits)
+
+**A · ci: docstring coverage job 추가** (6dcfb83, +19/-1)
+- `.github/workflows/ci.yml`: 신규 `docstring` job
+  - ubuntu-latest에서 `interrogate>=1.7` 설치
+  - `interrogate -vv src/roguelike_sprawl` 실행
+  - 80% 미만 시 non-zero exit → CI 자동 실패
+- `ci-success` needs에 `docstring` 추가
+- ADR-0120 Consequences "80% 미만 시 PR 거부 룰" 활성
+- 신규 PR마다 docstring 검사 자동화
+
+**B · fix(build): 12 symlink → 실제 파일 + hatch exclude** (5c7b5cf, +10, mode 12)
+- **문제**: BGM v3 작업 (2026-07-11, commit 67ee96e)에서 `prototype/data/sounds_test/*.wav` 12개를 dashboard/sounds 절대 symlink로 변경
+- v1.0.0b1 (2026-07-08) 빌드 시점에는 symlink 없었음 → 빌드 통과
+- 현재 v1.0.0 빌드 시 sdist에 절대 symlink 포함 → tar 거부 ("external symlinks not allowed")
+- **해결**:
+  - 12개 symlink → 실제 WAV 파일 교체 (5.3 MB each)
+  - `pyproject.toml`: hatch exclude 추가 (wheel + sdist 둘 다)
+- **검증**:
+  - `uv build`: a1 wheel 370KB (b1 356KB와 유사), tar.gz 3.6MB (b1 3.9MB와 유사)
+  - 125 files, pytest 2983 passed / 679 skipped (회귀 없음)
+- sounds_test 사용처는 wheel 외부에서 dashboard/sounds 직접 참조 (b1 wheel 정책과 동일)
+
+**C · fix(dashboard): stale anchor + 오타 2건** (2407bcc + 194da42, +2/-4)
+- `dashboard/index.html`, `play.html`: `library.html#hook-dispatch` → `library.html`
+  - library.html이 stories-browse.html로 통합된 후 anchor 깨짐
+- `dashboard/jokey.html`: novice 옆 `(47 missions)` → `(15)` + `— 47 total`
+  - 실제 missions.json 검증: novice 15, veteran 15, heretic 12, suit 5 = 47 total
+
+### 검증 (clean 종료)
+- ruff: clean
+- mypy strict: 0 errors (121 files)
+- pytest: 2983 passed / 679 skipped
+- interrogate: 88.7% PASS
+- `uv build`: 성공 (wheel 370KB, sdist 3.6MB)
+
+### 잔여 (사용자 액션 필요)
+- **v1.0.0 final release**: GitHub repo Settings → Secrets → `PYPI_API_TOKEN` 등록 후
+  - Actions → Release to PyPI → Run workflow → version `1.0.0` 선택
+  - release.yml이 자동 처리: pyproject.toml 1.0.0 업데이트, Production/Stable 분류, uv build, PyPI publish, v1.0.0 tag 생성
