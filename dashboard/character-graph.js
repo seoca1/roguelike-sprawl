@@ -19,6 +19,7 @@
   let draggedNode = null;
   let pinMode = false;
   let running = true;
+  let currentTrilogyFilter = "all";
 
   function loadData() {
     return fetch(DATA_PATH, { cache: "no-store" })
@@ -28,6 +29,39 @@
         buildGraph();
         animate();
       });
+  }
+
+  function applyTrilogyFilter(trilogy) {
+    currentTrilogyFilter = trilogy;
+    if (!nodes.length) return;
+
+    nodes.forEach((n) => {
+      if (n.el) {
+        if (trilogy === "all" || n.trilogy === trilogy) {
+          n.el.style.opacity = "1";
+          n.el.style.pointerEvents = "auto";
+        } else {
+          n.el.style.opacity = "0.1";
+          n.el.style.pointerEvents = "none";
+        }
+      }
+    });
+
+    edges.forEach((e) => {
+      if (e.line) {
+        const sourceVisible = trilogy === "all" || e.source.trilogy === trilogy;
+        const targetVisible = trilogy === "all" || e.target.trilogy === trilogy;
+        if (sourceVisible && targetVisible) {
+          e.line.style.opacity = "";
+        } else {
+          e.line.style.opacity = "0.05";
+        }
+      }
+    });
+
+    document.querySelectorAll(".trilogy-btn").forEach((b) => {
+      b.classList.toggle("active", b.dataset.trilogy === trilogy);
+    });
   }
 
   function buildGraph() {
@@ -40,6 +74,7 @@
       id: c.id,
       name: c.name,
       arc: c.arc,
+      trilogy: c.trilogy || "sprawl",
       wiki: c.wiki,
       x: width / 2 + Math.cos((i / data.characters.length) * Math.PI * 2) * 240,
       y: height / 2 + Math.sin((i / data.characters.length) * Math.PI * 2) * 180,
@@ -68,7 +103,7 @@
 
     nodes.forEach((n) => {
       const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      g.setAttribute("class", "node arc-" + n.arc);
+      g.setAttribute("class", "node arc-" + n.arc + " trilogy-" + n.trilogy);
       g.dataset.id = n.id;
 
       const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
@@ -99,11 +134,12 @@
     draggedNode = n;
   }
   function showInfo(e, n) {
+    const arcDesc = n.arc_description ? `<div style="color:#9aa8b8;font-size:0.85em;margin-top:2px">${n.arc_description}</div>` : '';
     panel.innerHTML = `
       <span class="close">×</span>
       <h3>${n.name}</h3>
       <div class="label">Role</div>
-      <div>${n.arc}</div>
+      <div>${n.arc}${arcDesc}</div>
       <div class="label" style="margin-top:6px">Connected to</div>
       <div>${edges.filter(e => e.source === n || e.target === n).map(e => {
         const o = (e.source === n ? e.target : e.source);

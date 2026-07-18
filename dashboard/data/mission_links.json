@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated": "2026-07-11T05:49:58.104281+00:00",
+  "generated": "2026-07-16T14:31:57.233050+00:00",
   "by_source": {
     "aleph_fragment": [
       {
@@ -65,17 +65,6 @@
         "grade_min": 1,
         "grade_max": 2,
         "fixer": "finn"
-      },
-      {
-        "id": "mollys_razor",
-        "title": "Molly's Razor",
-        "character_ref": "veteran",
-        "cast": "sil",
-        "arc": 3,
-        "pillar": "power",
-        "grade_min": 3,
-        "grade_max": 4,
-        "fixer": "maas"
       }
     ],
     "dixies_choice": [
@@ -219,6 +208,32 @@
         "fixer": "finn"
       }
     ],
+    "molly_decides": [
+      {
+        "id": "molly_decides",
+        "title": "Molly Decides",
+        "character_ref": "veteran",
+        "cast": "molly",
+        "arc": 2,
+        "pillar": "people",
+        "grade_min": 2,
+        "grade_max": 3,
+        "fixer": "finn"
+      }
+    ],
+    "mollys_razor": [
+      {
+        "id": "mollys_razor",
+        "title": "Molly's Razor",
+        "character_ref": "veteran",
+        "cast": "sil",
+        "arc": 3,
+        "pillar": "power",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "maas"
+      }
+    ],
     "neuromancer_merger": [
       {
         "id": "neuromancer_merger",
@@ -269,17 +284,6 @@
         "grade_min": 2,
         "grade_max": 3,
         "fixer": "finn"
-      },
-      {
-        "id": "ta_heist",
-        "title": "T-A Heist",
-        "character_ref": "veteran",
-        "cast": "sil",
-        "arc": 3,
-        "pillar": "power",
-        "grade_min": 4,
-        "grade_max": 4,
-        "fixer": "ta_rep"
       }
     ],
     "sense_net_trace": [
@@ -293,6 +297,19 @@
         "grade_min": 2,
         "grade_max": 3,
         "fixer": "finn"
+      }
+    ],
+    "ta_heist": [
+      {
+        "id": "ta_heist",
+        "title": "T-A Heist",
+        "character_ref": "veteran",
+        "cast": "sil",
+        "arc": 3,
+        "pillar": "power",
+        "grade_min": 4,
+        "grade_max": 4,
+        "fixer": "ta_rep"
       }
     ],
     "tutorial_maze": [
@@ -590,6 +607,84 @@
         "grade_max": 5,
         "fixer": "finn"
       }
+    ],
+    "beijing_memory_courier": [
+      {
+        "id": "beijing_memory_courier",
+        "title": "Beijing Memory Courier",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 3,
+        "pillar": "memory",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "chrome_teeth"
+      }
+    ],
+    "2026-07-15_tokyo-courier-run": [
+      {
+        "id": "tokyo_courier_run",
+        "title": "Tokyo Courier Run",
+        "character_ref": "novice",
+        "cast": "courier",
+        "arc": 1,
+        "pillar": "power",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "masahiko"
+      }
+    ],
+    "2026-07-15_idoru-wedding-protocol": [
+      {
+        "id": "idoru_wedding",
+        "title": "Idoru Wedding Protocol",
+        "character_ref": "heretic",
+        "cast": "rei-toi",
+        "arc": 2,
+        "pillar": "purpose",
+        "grade_min": 2,
+        "grade_max": 3,
+        "fixer": "yamazaki"
+      }
+    ],
+    "2026-07-15_bridge-construct": [
+      {
+        "id": "bridge_scaffold",
+        "title": "Bridge Construct",
+        "character_ref": "veteran",
+        "cast": "berry-rydell",
+        "arc": 3,
+        "pillar": "purpose",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "masahiko"
+      }
+    ],
+    "2026-07-15_kombinat-node-hack": [
+      {
+        "id": "kombinat_node_hack",
+        "title": "Kombinat Node Hack",
+        "character_ref": "suit",
+        "cast": "yamazaki",
+        "arc": 4,
+        "pillar": "power",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "yamazaki"
+      }
+    ],
+    "2026-07-15_chevette-run": [
+      {
+        "id": "chevette_run",
+        "title": "Chevette Run",
+        "character_ref": "novice",
+        "cast": "chevette",
+        "arc": 1,
+        "pillar": "power",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "masahiko"
+      }
     ]
   },
   "by_character": {
@@ -605,7 +700,9 @@
       "wigan_call": "Wigan's Call",
       "maas_heist": "Maas Neural Extract",
       "dixies_last_run": "Construct Memory Rescue",
-      "ta_defection": "3Jane's Betrayal"
+      "ta_defection": "3Jane's Betrayal",
+      "beijing_memory_courier": "Beijing Memory Courier",
+      "2026-07-15_idoru-wedding-protocol": "Idoru Wedding Protocol"
     },
     "novice": {
       "black_ice_dream": "Black Ice Dream",
@@ -622,27 +719,33 @@
       "hosaka_core": "Hosaka Core",
       "maas_heist": "Maas Biolabs Heist",
       "ta_defection": "Hosaka Corporate Infiltration",
-      "yakuza_deal": "Yakuza Loan Shark"
+      "yakuza_deal": "Yakuza Loan Shark",
+      "2026-07-15_tokyo-courier-run": "Tokyo Courier Run",
+      "2026-07-15_chevette-run": "Chevette Run"
     },
     "veteran": {
-      "marly_louisiana-god": "Molly's Razor",
+      "marly_louisiana-god": "Delivery to Finn",
       "dixies_choice": "Dixie's Choice",
       "dixies_last_run": "Dixie's Offer",
       "first_contact": "First Contact",
       "mollys_market": "Molly's Market",
+      "molly_decides": "Molly Decides",
+      "mollys_razor": "Molly's Razor",
       "sense_net_trace": "Sense/Net Tip",
-      "sally_sandii-3am": "T-A Heist",
+      "ta_heist": "T-A Heist",
       "vegas_stakeout": "Vegas Stakeout",
       "winter_infiltrate": "Winter Infiltration",
       "zion_express": "Zion Express",
       "straylight_approach": "Straylight Archive",
-      "hosaka_extraction": "Sense/Net Media Extract"
+      "hosaka_extraction": "Sense/Net Media Extract",
+      "2026-07-15_bridge-construct": "Bridge Construct"
     },
     "suit": {
       "armitage_infiltration": "Armitage's First Infiltration",
       "hosaka_extraction": "Hosaka Internal Extraction",
       "ta_defection": "Tessier-Ashpool Defection",
-      "wintermute_negotiation": "Wintermute Direct"
+      "wintermute_negotiation": "Wintermute Direct",
+      "2026-07-15_kombinat-node-hack": "Kombinat Node Hack"
     }
   }
 }

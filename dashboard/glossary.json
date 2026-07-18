@@ -1,158 +1,313 @@
 {
   "version": "1.0",
-  "generated": "2026-07-11T05:49:58.104281+00:00",
+  "generated": "2026-07-16T14:31:57.233050+00:00",
   "wiki_base": "../../../Fiction/wiki/",
-  "term_count": 128,
+  "term_count": 218,
   "terms": [
     "Mona Lisa / \"Molly Millions\" (Mona Lisa Overdrive)",
-    "The Finn (a.k.a. The Finn / Augustus Conn)",
+    "Construct Narrative Arc (Updated 2026-07-13)",
     "characters/lady 3jane tessier ashpool",
     "3Jane (Jokey — Tessier-Ashpool Heir)",
     "Jackie (Count Zero sequel character)",
     "Kas (Jokey — Heretic Console Cowboy)",
     "Neuromancer (Jokey — The Merged AI)",
     "Sally (Jokey — The Market Operator)",
+    "themes/technology and spirituality",
     "Ashpool (Tessier-Ashpool founder)",
     "Heretic (Jokey — The Declaration)",
     "Wigan (Jokey — Vodou Code Vessel)",
+    "themes/identity and consciousness",
     "characters/3jane tessier ashpool",
     "Armitage (Colonel Willie Corto)",
     "Novice (Jokey — The First Jack)",
     "Veteran (Jokey — The Old Score)",
+    "themes/artificial intelligence",
+    "themes/corporate media control",
+    "themes/technology and humanity",
     "Dixie Flatline (McCoy Pauley)",
     "Johnny Mnemonic (short story)",
+    "Sally Shears (Molly Millions)",
     "Angie (Jokey — Loa Receiver)",
     "Bobby Newmark (\"Count Zero\")",
+    "Chia Pet McKenzie (차이 펫 맥켄지)",
+    "Colin Laney (Bridge version)",
     "Fragments of a Hologram Rose",
     "Sil (Jokey — Veteran Runner)",
+    "themes/reality vs simulation",
+    "wintermute neuromancer merge",
     "characters/marly krushkhova",
+    "technology and spirituality",
+    "works/all tomorrows parties",
     "Lady 3Jane Tessier-Ashpool",
+    "characters/hubertus bigend",
     "identity and consciousness",
     "independence vs connection",
     "lady 3jane tessier ashpool",
+    "themes/media and celebrity",
+    "characters/andrew pollard",
     "characters/angie mitchell",
+    "characters/damien vorcees",
     "works/mona lisa overdrive",
+    "works/pattern recognition",
     "addiction and dependency",
+    "characters/cayce pollard",
     "characters/kumiko yanaka",
     "characters/wigan ludgate",
+    "themes/corporate warfare",
+    "Parkabrake (Bo Sellars)",
+    "Peter 2 Tessier-Ashpool",
     "Sprawl Trilogy (series)",
     "Suit (Jokey — The Suit)",
+    "artificial intelligence",
+    "characters/hollis henry",
     "characters/sally shears",
+    "childhood and innocence",
+    "corporate media control",
+    "posthuman transcendence",
     "technology and humanity",
+    "themes/art and creation",
     "All Tomorrow's Parties",
     "Colin (or \"the ghost\")",
     "Red Star, Winter Orbit",
+    "Spook Country (스푹 컨트리)",
+    "Win Cabreira (윈 카브레이라)",
+    "characters/colin laney",
     "characters/josef virek",
+    "characters/neuromancer",
     "characters/slick henry",
     "cyberspace as frontier",
     "Mitchell (Loa master)",
     "The Difference Engine",
+    "all tomorrows parties",
+    "characters/parkabrake",
+    "characters/wintermute",
     "reality vs simulation",
     "Corto (Willie Corto)",
     "class and inequality",
     "concepts/neuromancer",
+    "consciousness upload",
+    "construct_5_sequence",
+    "identity and doubles",
+    "loa matrix construct",
     "3Jane (short story)",
     "Cherry Chesterfield",
-    "Pattern Recognition",
+    "Chevette Washington",
     "characters/armitage",
+    "characters/masahiko",
     "characters/mitchell",
+    "characters/yamazaki",
     "concepts/wintermute",
+    "media and celebrity",
     "mona lisa overdrive",
+    "pattern recognition",
+    "works/virtual light",
     "The Bridge Trilogy",
+    "bigend methodology",
     "characters/ashpool",
+    "characters/rei toi",
+    "characters/the rez",
     "concepts/the aleph",
+    "works/zero history",
+    "characters/shinya",
+    "concepts/kombinat",
+    "new york blue ant",
     "turner count zero",
     "works/neuromancer",
+    "The Rez (Lo/Rez)",
+    "art and creation",
     "gender and power",
     "marly krushkhova",
     "villa straylight",
     "works/count zero",
+    "Hubertus Bigend",
+    "Masahiko (마사히코)",
+    "Rei Toi (Idoru)",
+    "Yamazaki (야마자키)",
     "characters/case",
+    "concepts/lo rez",
+    "corporate power",
+    "Andrew Pollard",
     "Burning Chrome",
+    "Damien Vorcees",
     "New Rose Hotel",
+    "ai as pantheon",
     "angie mitchell",
     "characters/kas",
+    "characters/rez",
     "characters/sil",
     "dixie flatline",
     "molly millions",
+    "works/specials",
+    "Cayce Pollard",
     "Spook Country",
-    "Virtual Light",
     "Wigan Ludgate",
+    "blue ant soho",
     "bobby newmark",
+    "characters/lo",
     "kumiko yanaka",
     "mona lisa mlo",
     "peter riviera",
+    "san francisco",
+    "virtual light",
+    "Berry Rydell",
     "Hilton Swift",
+    "Hollis Henry",
+    "Keith Harada",
     "Robin Lanier",
-    "Sally Shears",
     "The Projects",
+    "The Rez (레즈)",
     "Zero History",
+    "sally shears",
+    "smart matter",
     "zion cluster",
     "Little Bird",
     "Roger Swain",
+    "Shinya (시냐)",
+    "bobby quine",
     "colin ghost",
     "josef virek",
     "neuromancer",
     "slick henry",
+    "tokyo idoru",
+    "works/idoru",
     "Kid Afrika",
     "Piper Hill",
     "Two-A-Days",
     "chiba city",
+    "coolhunter",
     "count zero",
     "cyberspace",
     "night city",
+    "the bridge",
     "the matrix",
     "the sprawl",
+    "voodoo loa",
     "wintermute",
     "Linda Lee",
     "Petty San",
     "The Aleph",
+    "construct",
     "the boxes",
+    "yakushi 8",
     "Beauvoir",
+    "Zavijava",
     "armitage",
     "freeside",
     "istanbul",
+    "kombinat",
     "mitchell",
     "the finn",
     "Agrippa",
     "Maelcum",
     "ashpool",
     "biosoft",
+    "footage",
     "simstim",
+    "the rez",
+    "Lo (로)",
     "Turner",
+    "lo rez",
     "Alain",
-    "Hideo",
-    "Idoru",
     "Lucas",
     "Petal",
     "Prior",
+    "cheba",
+    "hideo",
+    "idoru",
+    "t ray",
     "Eddy",
     "Paco",
     "case",
     "meat",
+    "node",
     "zion",
     "ice"
   ],
   "map": {
+    "yakushi 8": {
+      "page": "concepts/yakushi-8.md",
+      "tooltip": "yakushi 8",
+      "text": "yakushi 8"
+    },
+    "bigend methodology": {
+      "page": "concepts/bigend-methodology.md",
+      "tooltip": "bigend methodology",
+      "text": "bigend methodology"
+    },
     "ice": {
       "page": "concepts/ice.md",
       "tooltip": "ice",
       "text": "ice"
+    },
+    "kombinat": {
+      "page": "concepts/kombinat.md",
+      "tooltip": "kombinat",
+      "text": "kombinat"
+    },
+    "construct": {
+      "page": "concepts/construct.md",
+      "tooltip": "construct",
+      "text": "construct"
     },
     "wintermute": {
       "page": "concepts/wintermute.md",
       "tooltip": "wintermute",
       "text": "wintermute"
     },
+    "wintermute neuromancer merge": {
+      "page": "concepts/wintermute-neuromancer-merge.md",
+      "tooltip": "wintermute neuromancer merge",
+      "text": "wintermute neuromancer merge"
+    },
+    "coolhunter": {
+      "page": "concepts/coolhunter.md",
+      "tooltip": "coolhunter",
+      "text": "coolhunter"
+    },
     "simstim": {
       "page": "concepts/simstim.md",
       "tooltip": "simstim",
       "text": "simstim"
     },
+    "node": {
+      "page": "concepts/node.md",
+      "tooltip": "node",
+      "text": "node"
+    },
     "the boxes": {
       "page": "concepts/the-boxes.md",
       "tooltip": "the boxes",
       "text": "the boxes"
+    },
+    "footage": {
+      "page": "concepts/footage.md",
+      "tooltip": "footage",
+      "text": "footage"
+    },
+    "idoru": {
+      "page": "concepts/idoru.md",
+      "tooltip": "idoru",
+      "text": "idoru"
+    },
+    "lo rez": {
+      "page": "concepts/lo-rez.md",
+      "tooltip": "lo rez",
+      "text": "lo rez"
+    },
+    "smart matter": {
+      "page": "concepts/smart-matter.md",
+      "tooltip": "smart matter",
+      "text": "smart matter"
+    },
+    "loa matrix construct": {
+      "page": "concepts/loa-matrix-construct.md",
+      "tooltip": "loa matrix construct",
+      "text": "loa matrix construct"
+    },
+    "t ray": {
+      "page": "concepts/t-ray.md",
+      "tooltip": "t ray",
+      "text": "t ray"
     },
     "biosoft": {
       "page": "concepts/biosoft.md",
@@ -163,6 +318,46 @@
       "page": "concepts/meat.md",
       "tooltip": "meat",
       "text": "meat"
+    },
+    "andrew pollard": {
+      "page": "characters/andrew-pollard.md",
+      "tooltip": "Andrew Pollard",
+      "text": "Andrew Pollard"
+    },
+    "works/pattern recognition": {
+      "page": "characters/andrew-pollard.md",
+      "tooltip": "works/pattern recognition",
+      "text": "works/pattern recognition"
+    },
+    "themes/corporate media control": {
+      "page": "characters/andrew-pollard.md",
+      "tooltip": "themes/corporate media control",
+      "text": "themes/corporate media control"
+    },
+    "themes/identity and consciousness": {
+      "page": "characters/andrew-pollard.md",
+      "tooltip": "themes/identity and consciousness",
+      "text": "themes/identity and consciousness"
+    },
+    "themes/media and celebrity": {
+      "page": "characters/andrew-pollard.md",
+      "tooltip": "themes/media and celebrity",
+      "text": "themes/media and celebrity"
+    },
+    "themes/technology and humanity": {
+      "page": "characters/andrew-pollard.md",
+      "tooltip": "themes/technology and humanity",
+      "text": "themes/technology and humanity"
+    },
+    "characters/cayce pollard": {
+      "page": "characters/andrew-pollard.md",
+      "tooltip": "characters/cayce pollard",
+      "text": "characters/cayce pollard"
+    },
+    "characters/hubertus bigend": {
+      "page": "characters/andrew-pollard.md",
+      "tooltip": "characters/hubertus bigend",
+      "text": "characters/hubertus bigend"
     },
     "turner": {
       "page": "characters/turner-count-zero.md",
@@ -214,15 +409,35 @@
       "tooltip": "Linda Lee",
       "text": "Linda Lee"
     },
+    "neuromancer": {
+      "page": "characters/linda-lee.md",
+      "tooltip": "neuromancer",
+      "text": "neuromancer"
+    },
     "case": {
       "page": "characters/linda-lee.md",
       "tooltip": "case",
       "text": "case"
     },
-    "neuromancer": {
+    "chiba city": {
       "page": "characters/linda-lee.md",
-      "tooltip": "neuromancer",
-      "text": "neuromancer"
+      "tooltip": "chiba city",
+      "text": "chiba city"
+    },
+    "identity and consciousness": {
+      "page": "characters/linda-lee.md",
+      "tooltip": "identity and consciousness",
+      "text": "identity and consciousness"
+    },
+    "addiction and dependency": {
+      "page": "characters/linda-lee.md",
+      "tooltip": "addiction and dependency",
+      "text": "addiction and dependency"
+    },
+    "technology and humanity": {
+      "page": "characters/linda-lee.md",
+      "tooltip": "technology and humanity",
+      "text": "technology and humanity"
     },
     "works/neuromancer": {
       "page": "characters/linda-lee.md",
@@ -254,20 +469,60 @@
       "tooltip": "works/mona lisa overdrive",
       "text": "works/mona lisa overdrive"
     },
-    "sally shears": {
+    "works/idoru": {
+      "page": "characters/colin-ghost.md",
+      "tooltip": "works/idoru",
+      "text": "works/idoru"
+    },
+    "sally shears (molly millions)": {
       "page": "characters/sally-shears.md",
-      "tooltip": "Sally Shears",
-      "text": "Sally Shears"
+      "tooltip": "Sally Shears (Molly Millions)",
+      "text": "Sally Shears (Molly Millions)"
+    },
+    "count zero": {
+      "page": "characters/sally-shears.md",
+      "tooltip": "count zero",
+      "text": "count zero"
+    },
+    "mona lisa overdrive": {
+      "page": "characters/sally-shears.md",
+      "tooltip": "mona lisa overdrive",
+      "text": "mona lisa overdrive"
     },
     "molly millions": {
       "page": "characters/sally-shears.md",
       "tooltip": "molly millions",
       "text": "molly millions"
     },
-    "colin ghost": {
+    "turner count zero": {
       "page": "characters/sally-shears.md",
-      "tooltip": "colin ghost",
-      "text": "colin ghost"
+      "tooltip": "turner count zero",
+      "text": "turner count zero"
+    },
+    "the finn": {
+      "page": "characters/sally-shears.md",
+      "tooltip": "the finn",
+      "text": "the finn"
+    },
+    "corporate power": {
+      "page": "characters/sally-shears.md",
+      "tooltip": "corporate power",
+      "text": "corporate power"
+    },
+    "win cabreira (윈 카브레이라)": {
+      "page": "characters/win-cabreira.md",
+      "tooltip": "Win Cabreira (윈 카브레이라)",
+      "text": "Win Cabreira (윈 카브레이라)"
+    },
+    "themes/reality vs simulation": {
+      "page": "characters/win-cabreira.md",
+      "tooltip": "themes/reality vs simulation",
+      "text": "themes/reality vs simulation"
+    },
+    "characters/parkabrake": {
+      "page": "characters/win-cabreira.md",
+      "tooltip": "characters/parkabrake",
+      "text": "characters/parkabrake"
     },
     "petty san": {
       "page": "characters/petty-san.md",
@@ -279,25 +534,25 @@
       "tooltip": "the sprawl",
       "text": "the sprawl"
     },
-    "count zero": {
-      "page": "characters/case.md",
-      "tooltip": "count zero",
-      "text": "count zero"
+    "hollis henry": {
+      "page": "characters/hollis-henry.md",
+      "tooltip": "Hollis Henry",
+      "text": "Hollis Henry"
     },
-    "mona lisa overdrive": {
-      "page": "characters/case.md",
-      "tooltip": "mona lisa overdrive",
-      "text": "mona lisa overdrive"
+    "works/specials": {
+      "page": "characters/hollis-henry.md",
+      "tooltip": "works/specials",
+      "text": "works/specials"
+    },
+    "works/zero history": {
+      "page": "characters/hollis-henry.md",
+      "tooltip": "works/zero history",
+      "text": "works/zero history"
     },
     "dixie flatline": {
       "page": "characters/case.md",
       "tooltip": "dixie flatline",
       "text": "dixie flatline"
-    },
-    "chiba city": {
-      "page": "characters/case.md",
-      "tooltip": "chiba city",
-      "text": "chiba city"
     },
     "night city": {
       "page": "characters/case.md",
@@ -324,65 +579,210 @@
       "tooltip": "cyberspace as frontier",
       "text": "cyberspace as frontier"
     },
-    "identity and consciousness": {
-      "page": "characters/case.md",
-      "tooltip": "identity and consciousness",
-      "text": "identity and consciousness"
-    },
-    "addiction and dependency": {
-      "page": "characters/case.md",
-      "tooltip": "addiction and dependency",
-      "text": "addiction and dependency"
-    },
     "reality vs simulation": {
       "page": "characters/case.md",
       "tooltip": "reality vs simulation",
       "text": "reality vs simulation"
-    },
-    "technology and humanity": {
-      "page": "characters/case.md",
-      "tooltip": "technology and humanity",
-      "text": "technology and humanity"
     },
     "the aleph": {
       "page": "characters/the-aleph.md",
       "tooltip": "The Aleph",
       "text": "The Aleph"
     },
+    "ashpool": {
+      "page": "characters/wintermute.md",
+      "tooltip": "ashpool",
+      "text": "ashpool"
+    },
+    "hideo": {
+      "page": "characters/wintermute.md",
+      "tooltip": "hideo",
+      "text": "hideo"
+    },
+    "the rez": {
+      "page": "characters/wintermute.md",
+      "tooltip": "the rez",
+      "text": "the rez"
+    },
+    "sally shears": {
+      "page": "characters/wintermute.md",
+      "tooltip": "sally shears",
+      "text": "sally shears"
+    },
+    "artificial intelligence": {
+      "page": "characters/wintermute.md",
+      "tooltip": "artificial intelligence",
+      "text": "artificial intelligence"
+    },
+    "corporate media control": {
+      "page": "characters/wintermute.md",
+      "tooltip": "corporate media control",
+      "text": "corporate media control"
+    },
+    "concepts/wintermute": {
+      "page": "characters/wintermute.md",
+      "tooltip": "concepts/wintermute",
+      "text": "concepts/wintermute"
+    },
+    "concepts/neuromancer": {
+      "page": "characters/wintermute.md",
+      "tooltip": "concepts/neuromancer",
+      "text": "concepts/neuromancer"
+    },
+    "characters/armitage": {
+      "page": "characters/wintermute.md",
+      "tooltip": "characters/armitage",
+      "text": "characters/armitage"
+    },
+    "characters/neuromancer": {
+      "page": "characters/wintermute.md",
+      "tooltip": "characters/neuromancer",
+      "text": "characters/neuromancer"
+    },
     "dixie flatline (mccoy pauley)": {
       "page": "characters/dixie-flatline.md",
       "tooltip": "Dixie Flatline (McCoy Pauley)",
       "text": "Dixie Flatline (McCoy Pauley)"
     },
-    "the finn": {
+    "posthuman transcendence": {
       "page": "characters/dixie-flatline.md",
-      "tooltip": "the finn",
-      "text": "the finn"
+      "tooltip": "posthuman transcendence",
+      "text": "posthuman transcendence"
     },
-    "hideo": {
-      "page": "characters/hideo.md",
-      "tooltip": "Hideo",
-      "text": "Hideo"
+    "keith harada": {
+      "page": "characters/keith-harada.md",
+      "tooltip": "Keith Harada",
+      "text": "Keith Harada"
+    },
+    "characters/colin laney": {
+      "page": "characters/keith-harada.md",
+      "tooltip": "characters/colin laney",
+      "text": "characters/colin laney"
+    },
+    "characters/rei toi": {
+      "page": "characters/keith-harada.md",
+      "tooltip": "characters/rei toi",
+      "text": "characters/rei toi"
+    },
+    "characters/rez": {
+      "page": "characters/keith-harada.md",
+      "tooltip": "characters/rez",
+      "text": "characters/rez"
+    },
+    "concepts/kombinat": {
+      "page": "characters/keith-harada.md",
+      "tooltip": "concepts/kombinat",
+      "text": "concepts/kombinat"
+    },
+    "the rez (레즈)": {
+      "page": "characters/rez.md",
+      "tooltip": "The Rez (레즈)",
+      "text": "The Rez (레즈)"
+    },
+    "works/all tomorrows parties": {
+      "page": "characters/rez.md",
+      "tooltip": "works/all tomorrows parties",
+      "text": "works/all tomorrows parties"
+    },
+    "themes/art and creation": {
+      "page": "characters/rez.md",
+      "tooltip": "themes/art and creation",
+      "text": "themes/art and creation"
     },
     "corto (willie corto)": {
       "page": "characters/corto.md",
       "tooltip": "Corto (Willie Corto)",
       "text": "Corto (Willie Corto)"
     },
-    "the finn (a.k.a. the finn / augustus conn)": {
+    "masahiko (마사히코)": {
+      "page": "characters/masahiko.md",
+      "tooltip": "Masahiko (마사히코)",
+      "text": "Masahiko (마사히코)"
+    },
+    "characters/yamazaki": {
+      "page": "characters/masahiko.md",
+      "tooltip": "characters/yamazaki",
+      "text": "characters/yamazaki"
+    },
+    "characters/shinya": {
+      "page": "characters/masahiko.md",
+      "tooltip": "characters/shinya",
+      "text": "characters/shinya"
+    },
+    "class and inequality": {
       "page": "characters/the-finn.md",
-      "tooltip": "The Finn (a.k.a. The Finn / Augustus Conn)",
-      "text": "The Finn (a.k.a. The Finn / Augustus Conn)"
+      "tooltip": "class and inequality",
+      "text": "class and inequality"
+    },
+    "zavijava": {
+      "page": "characters/zavijava.md",
+      "tooltip": "Zavijava",
+      "text": "Zavijava"
+    },
+    "construct_5_sequence": {
+      "page": "characters/zavijava.md",
+      "tooltip": "construct_5_sequence",
+      "text": "construct_5_sequence"
+    },
+    "bobby quine": {
+      "page": "characters/zavijava.md",
+      "tooltip": "bobby quine",
+      "text": "bobby quine"
+    },
+    "angie mitchell": {
+      "page": "characters/zavijava.md",
+      "tooltip": "angie mitchell",
+      "text": "angie mitchell"
+    },
+    "voodoo loa": {
+      "page": "characters/zavijava.md",
+      "tooltip": "voodoo loa",
+      "text": "voodoo loa"
+    },
+    "the matrix": {
+      "page": "characters/zavijava.md",
+      "tooltip": "the matrix",
+      "text": "the matrix"
+    },
+    "ai as pantheon": {
+      "page": "characters/zavijava.md",
+      "tooltip": "ai as pantheon",
+      "text": "ai as pantheon"
+    },
+    "consciousness upload": {
+      "page": "characters/zavijava.md",
+      "tooltip": "consciousness upload",
+      "text": "consciousness upload"
     },
     "jackie (count zero sequel character)": {
       "page": "characters/jackie-count-zero.md",
       "tooltip": "Jackie (Count Zero sequel character)",
       "text": "Jackie (Count Zero sequel character)"
     },
-    "angie mitchell": {
-      "page": "characters/jackie-count-zero.md",
-      "tooltip": "angie mitchell",
-      "text": "angie mitchell"
+    "cayce pollard": {
+      "page": "characters/cayce-pollard.md",
+      "tooltip": "Cayce Pollard",
+      "text": "Cayce Pollard"
+    },
+    "characters/hollis henry": {
+      "page": "characters/cayce-pollard.md",
+      "tooltip": "characters/hollis henry",
+      "text": "characters/hollis henry"
+    },
+    "characters/damien vorcees": {
+      "page": "characters/cayce-pollard.md",
+      "tooltip": "characters/damien vorcees",
+      "text": "characters/damien vorcees"
+    },
+    "parkabrake (bo sellars)": {
+      "page": "characters/parkabrake.md",
+      "tooltip": "Parkabrake (Bo Sellars)",
+      "text": "Parkabrake (Bo Sellars)"
+    },
+    "works/virtual light": {
+      "page": "characters/parkabrake.md",
+      "tooltip": "works/virtual light",
+      "text": "works/virtual light"
     },
     "wigan (jokey — vodou code vessel)": {
       "page": "characters/wigan.md",
@@ -409,20 +809,45 @@
       "tooltip": "characters/josef virek",
       "text": "characters/josef virek"
     },
-    "turner count zero": {
+    "art and creation": {
       "page": "characters/josef-virek.md",
-      "tooltip": "turner count zero",
-      "text": "turner count zero"
+      "tooltip": "art and creation",
+      "text": "art and creation"
     },
-    "the matrix": {
-      "page": "characters/angie-mitchell.md",
-      "tooltip": "the matrix",
-      "text": "the matrix"
+    "identity and doubles": {
+      "page": "characters/bobby-quine.md",
+      "tooltip": "identity and doubles",
+      "text": "identity and doubles"
+    },
+    "chevette washington": {
+      "page": "characters/chevette-washington.md",
+      "tooltip": "Chevette Washington",
+      "text": "Chevette Washington"
+    },
+    "virtual light": {
+      "page": "characters/chevette-washington.md",
+      "tooltip": "virtual light",
+      "text": "virtual light"
+    },
+    "all tomorrows parties": {
+      "page": "characters/chevette-washington.md",
+      "tooltip": "all tomorrows parties",
+      "text": "all tomorrows parties"
     },
     "mitchell": {
       "page": "characters/angie-mitchell.md",
       "tooltip": "mitchell",
       "text": "mitchell"
+    },
+    "childhood and innocence": {
+      "page": "characters/angie-mitchell.md",
+      "tooltip": "childhood and innocence",
+      "text": "childhood and innocence"
+    },
+    "technology and spirituality": {
+      "page": "characters/angie-mitchell.md",
+      "tooltip": "technology and spirituality",
+      "text": "technology and spirituality"
     },
     "veteran (jokey — the old score)": {
       "page": "characters/veteran.md",
@@ -434,25 +859,35 @@
       "tooltip": "characters/sil",
       "text": "characters/sil"
     },
-    "ashpool": {
-      "page": "characters/molly-millions.md",
-      "tooltip": "ashpool",
-      "text": "ashpool"
+    "chia pet mckenzie (차이 펫 맥켄지)": {
+      "page": "characters/chia-pet-mckenzie.md",
+      "tooltip": "Chia Pet McKenzie (차이 펫 맥켄지)",
+      "text": "Chia Pet McKenzie (차이 펫 맥켄지)"
+    },
+    "characters/the rez": {
+      "page": "characters/chia-pet-mckenzie.md",
+      "tooltip": "characters/the rez",
+      "text": "characters/the rez"
     },
     "gender and power": {
       "page": "characters/molly-millions.md",
       "tooltip": "gender and power",
       "text": "gender and power"
     },
-    "class and inequality": {
-      "page": "characters/molly-millions.md",
-      "tooltip": "class and inequality",
-      "text": "class and inequality"
-    },
     "independence vs connection": {
       "page": "characters/molly-millions.md",
       "tooltip": "independence vs connection",
       "text": "independence vs connection"
+    },
+    "characters/case": {
+      "page": "characters/molly-millions.md",
+      "tooltip": "characters/case",
+      "text": "characters/case"
+    },
+    "characters/wintermute": {
+      "page": "characters/molly-millions.md",
+      "tooltip": "characters/wintermute",
+      "text": "characters/wintermute"
     },
     "the projects": {
       "page": "characters/the-projects.md",
@@ -464,10 +899,20 @@
       "tooltip": "Piper Hill",
       "text": "Piper Hill"
     },
+    "berry rydell": {
+      "page": "characters/berry-rydell.md",
+      "tooltip": "Berry Rydell",
+      "text": "Berry Rydell"
+    },
     "maelcum": {
       "page": "characters/maelcum.md",
       "tooltip": "Maelcum",
       "text": "Maelcum"
+    },
+    "zion": {
+      "page": "characters/maelcum.md",
+      "tooltip": "zion",
+      "text": "zion"
     },
     "zion cluster": {
       "page": "characters/maelcum.md",
@@ -498,6 +943,11 @@
       "page": "characters/roger-swain.md",
       "tooltip": "Roger Swain",
       "text": "Roger Swain"
+    },
+    "damien vorcees": {
+      "page": "characters/damien-vorcees.md",
+      "tooltip": "Damien Vorcees",
+      "text": "Damien Vorcees"
     },
     "3jane (jokey — tessier-ashpool heir)": {
       "page": "characters/3jane.md",
@@ -544,6 +994,11 @@
       "tooltip": "Robin Lanier",
       "text": "Robin Lanier"
     },
+    "media and celebrity": {
+      "page": "characters/peter-riviera.md",
+      "tooltip": "media and celebrity",
+      "text": "media and celebrity"
+    },
     "little bird": {
       "page": "characters/little-bird.md",
       "tooltip": "Little Bird",
@@ -553,6 +1008,31 @@
       "page": "characters/little-bird.md",
       "tooltip": "cyberspace",
       "text": "cyberspace"
+    },
+    "hubertus bigend": {
+      "page": "characters/hubertus-bigend.md",
+      "tooltip": "Hubertus Bigend",
+      "text": "Hubertus Bigend"
+    },
+    "characters/andrew pollard": {
+      "page": "characters/hubertus-bigend.md",
+      "tooltip": "characters/andrew pollard",
+      "text": "characters/andrew pollard"
+    },
+    "the rez (lo/rez)": {
+      "page": "characters/the-rez.md",
+      "tooltip": "The Rez (Lo/Rez)",
+      "text": "The Rez (Lo/Rez)"
+    },
+    "concepts/lo rez": {
+      "page": "characters/the-rez.md",
+      "tooltip": "concepts/lo rez",
+      "text": "concepts/lo rez"
+    },
+    "characters/lo": {
+      "page": "characters/the-rez.md",
+      "tooltip": "characters/lo",
+      "text": "characters/lo"
     },
     "kas (jokey — heretic console cowboy)": {
       "page": "characters/kas.md",
@@ -568,6 +1048,26 @@
       "page": "characters/petal.md",
       "tooltip": "Petal",
       "text": "Petal"
+    },
+    "peter 2 tessier-ashpool": {
+      "page": "characters/peter-2-tessier-ashpool.md",
+      "tooltip": "Peter 2 Tessier-Ashpool",
+      "text": "Peter 2 Tessier-Ashpool"
+    },
+    "shinya (시냐)": {
+      "page": "characters/shinya.md",
+      "tooltip": "Shinya (시냐)",
+      "text": "Shinya (시냐)"
+    },
+    "themes/corporate warfare": {
+      "page": "characters/shinya.md",
+      "tooltip": "themes/corporate warfare",
+      "text": "themes/corporate warfare"
+    },
+    "characters/masahiko": {
+      "page": "characters/shinya.md",
+      "tooltip": "characters/masahiko",
+      "text": "characters/masahiko"
     },
     "two-a-days": {
       "page": "characters/two-a-day.md",
@@ -604,10 +1104,45 @@
       "tooltip": "Prior",
       "text": "Prior"
     },
+    "lo (로)": {
+      "page": "characters/lo.md",
+      "tooltip": "Lo (로)",
+      "text": "Lo (로)"
+    },
+    "yamazaki (야마자키)": {
+      "page": "characters/yamazaki.md",
+      "tooltip": "Yamazaki (야마자키)",
+      "text": "Yamazaki (야마자키)"
+    },
     "cherry chesterfield": {
       "page": "characters/cherry-chesterfield.md",
       "tooltip": "Cherry Chesterfield",
       "text": "Cherry Chesterfield"
+    },
+    "rei toi (idoru)": {
+      "page": "characters/rei-toi.md",
+      "tooltip": "Rei Toi (Idoru)",
+      "text": "Rei Toi (Idoru)"
+    },
+    "themes/artificial intelligence": {
+      "page": "characters/rei-toi.md",
+      "tooltip": "themes/artificial intelligence",
+      "text": "themes/artificial intelligence"
+    },
+    "themes/technology and spirituality": {
+      "page": "characters/rei-toi.md",
+      "tooltip": "themes/technology and spirituality",
+      "text": "themes/technology and spirituality"
+    },
+    "colin laney (bridge version)": {
+      "page": "characters/colin-laney.md",
+      "tooltip": "Colin Laney (Bridge version)",
+      "text": "Colin Laney (Bridge version)"
+    },
+    "pattern recognition": {
+      "page": "characters/colin-laney.md",
+      "tooltip": "pattern recognition",
+      "text": "pattern recognition"
     },
     "angie (jokey — loa receiver)": {
       "page": "characters/angie.md",
@@ -629,15 +1164,10 @@
       "tooltip": "Neuromancer (Jokey — The Merged AI)",
       "text": "Neuromancer (Jokey — The Merged AI)"
     },
-    "concepts/wintermute": {
-      "page": "characters/neuromancer.md",
-      "tooltip": "concepts/wintermute",
-      "text": "concepts/wintermute"
-    },
-    "concepts/neuromancer": {
-      "page": "characters/neuromancer.md",
-      "tooltip": "concepts/neuromancer",
-      "text": "concepts/neuromancer"
+    "colin ghost": {
+      "page": "characters/slick-henry.md",
+      "tooltip": "colin ghost",
+      "text": "colin ghost"
     },
     "mona lisa / \"molly millions\" (mona lisa overdrive)": {
       "page": "characters/mona-lisa-mlo.md",
@@ -653,11 +1183,6 @@
       "page": "characters/novice.md",
       "tooltip": "Novice (Jokey — The First Jack)",
       "text": "Novice (Jokey — The First Jack)"
-    },
-    "characters/case": {
-      "page": "characters/novice.md",
-      "tooltip": "characters/case",
-      "text": "characters/case"
     },
     "beauvoir": {
       "page": "characters/beauvoir.md",
@@ -678,11 +1203,6 @@
       "page": "characters/suit.md",
       "tooltip": "characters/slick henry",
       "text": "characters/slick henry"
-    },
-    "characters/armitage": {
-      "page": "characters/suit.md",
-      "tooltip": "characters/armitage",
-      "text": "characters/armitage"
     },
     "the difference engine": {
       "page": "works/the-difference-engine.md",
@@ -714,6 +1234,11 @@
       "tooltip": "Johnny Mnemonic (short story)",
       "text": "Johnny Mnemonic (short story)"
     },
+    "spook country (스푹 컨트리)": {
+      "page": "works/specials.md",
+      "tooltip": "Spook Country (스푹 컨트리)",
+      "text": "Spook Country (스푹 컨트리)"
+    },
     "3jane (short story)": {
       "page": "works/3jane-tessier-ashpool.md",
       "tooltip": "3Jane (short story)",
@@ -734,20 +1259,10 @@
       "tooltip": "Zero History",
       "text": "Zero History"
     },
-    "idoru": {
-      "page": "works/idoru.md",
-      "tooltip": "Idoru",
-      "text": "Idoru"
-    },
     "sprawl trilogy (series)": {
       "page": "works/sprawl-trilogy.md",
       "tooltip": "Sprawl Trilogy (series)",
       "text": "Sprawl Trilogy (series)"
-    },
-    "pattern recognition": {
-      "page": "works/pattern-recognition.md",
-      "tooltip": "Pattern Recognition",
-      "text": "Pattern Recognition"
     },
     "agrippa": {
       "page": "works/agrippa.md",
@@ -759,20 +1274,45 @@
       "tooltip": "All Tomorrow's Parties",
       "text": "All Tomorrow's Parties"
     },
-    "virtual light": {
-      "page": "works/virtual-light.md",
-      "tooltip": "Virtual Light",
-      "text": "Virtual Light"
+    "construct narrative arc (updated 2026-07-13)": {
+      "page": "works/construct_5_sequence.md",
+      "tooltip": "Construct Narrative Arc (Updated 2026-07-13)",
+      "text": "Construct Narrative Arc (Updated 2026-07-13)"
+    },
+    "san francisco": {
+      "page": "settings/san-francisco.md",
+      "tooltip": "san francisco",
+      "text": "san francisco"
     },
     "istanbul": {
       "page": "settings/istanbul.md",
       "tooltip": "istanbul",
       "text": "istanbul"
     },
-    "zion": {
-      "page": "settings/zion.md",
-      "tooltip": "zion",
-      "text": "zion"
+    "new york blue ant": {
+      "page": "settings/new-york-blue-ant.md",
+      "tooltip": "new york blue ant",
+      "text": "new york blue ant"
+    },
+    "the bridge": {
+      "page": "settings/the-bridge.md",
+      "tooltip": "the bridge",
+      "text": "the bridge"
+    },
+    "blue ant soho": {
+      "page": "settings/blue-ant-soho.md",
+      "tooltip": "blue ant soho",
+      "text": "blue ant soho"
+    },
+    "cheba": {
+      "page": "settings/cheba.md",
+      "tooltip": "cheba",
+      "text": "cheba"
+    },
+    "tokyo idoru": {
+      "page": "settings/tokyo-idoru.md",
+      "tooltip": "tokyo idoru",
+      "text": "tokyo idoru"
     }
   }
 }

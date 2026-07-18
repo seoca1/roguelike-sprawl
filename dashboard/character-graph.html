@@ -85,6 +85,42 @@
   .arc-broker circle { stroke: #ddcc99; }
   .arc-fixer circle { stroke: #ddcc99; }
 
+  /* Trilogy colors */
+  .trilogy-sprawl circle { stroke: #ff8844; }
+  .trilogy-bridge circle { stroke: #88dd44; }
+  .trilogy-blue-ant circle { stroke: #66ffcc; }
+
+  /* Node styling by trilogy */
+  .node.trilogy-sprawl text { fill: #ffaa88; }
+  .node.trilogy-bridge text { fill: #aadd66; }
+  .node.trilogy-blue-ant text { fill: #88ffcc; }
+
+  /* Filter UI */
+  .trilogy-filter {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0;
+    flex-wrap: wrap;
+  }
+  .trilogy-btn {
+    padding: 4px 10px;
+    background: #131a23;
+    border: 1px solid #2a3540;
+    border-radius: 3px;
+    color: #c5d4e3;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+  }
+  .trilogy-btn.active {
+    background: #66ffcc22;
+    border-color: #66ffcc;
+    color: #66ffcc;
+  }
+  .trilogy-btn[data-trilogy="sprawl"].active { background: #ff884422; border-color: #ff8844; color: #ff8844; }
+  .trilogy-btn[data-trilogy="bridge"].active { background: #88dd4422; border-color: #88dd44; color: #88dd44; }
+  .trilogy-btn[data-trilogy="blue-ant"].active { background: #66ffcc22; border-color: #66ffcc; color: #66ffcc; }
+
   .legend {
     margin-top: 12px;
     display: flex;
@@ -176,7 +212,7 @@
 
 
 <h1>Character Relationship Graph</h1>
-<p class="subtitle">Force-directed · drag nodes to reposition · click for details · 21 characters · 31 edges</p>
+<p class="subtitle">Force-directed · drag nodes to reposition · click for details · 27 characters · 40 edges</p>
 
 <div class="controls">
   <label>Stiffness: <input type="range" id="stiffness" min="0.001" max="0.05" step="0.001" value="0.015"></label>
@@ -184,6 +220,14 @@
   <label>Friction: <input type="range" id="friction" min="0.6" max="0.99" step="0.01" value="0.85"></label>
   <a class="btn" id="restart-btn">Restart simulation</a>
   <a class="btn" id="pin-btn">Pin positions</a>
+</div>
+
+<div class="trilogy-filter">
+  <span style="color:#8a98a8;font-size:12px;margin-right:8px">Trilogy:</span>
+  <button class="trilogy-btn active" data-trilogy="all">All</button>
+  <button class="trilogy-btn" data-trilogy="sprawl" style="color:#ff8844">Sprawl</button>
+  <button class="trilogy-btn" data-trilogy="bridge" style="color:#88dd44">Bridge</button>
+  <button class="trilogy-btn" data-trilogy="blue-ant" style="color:#66ffcc">Blue Ant</button>
 </div>
 
 <div class="graph-container">
@@ -200,6 +244,10 @@
   <div class="legend-item"><span class="legend-circle" style="border-color:#88dd44"></span>Ally</div>
   <div class="legend-item"><span class="legend-circle" style="border-color:#ccaaff"></span>Loa-channel</div>
   <div class="legend-item"><span class="legend-circle" style="border-color:#ddcc99"></span>Broker/Fixer</div>
+  <span style="margin-left:14px;color:#8a98a8;font-size:12px">Trilogy:</span>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#ff8844"></span>Sprawl</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#88dd44"></span>Bridge</div>
+  <div class="legend-item"><span class="legend-circle" style="border-color:#66ffcc"></span>Blue Ant</div>
 </div>
 
 <script src="character-graph.js"></script>

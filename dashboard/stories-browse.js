@@ -12,6 +12,7 @@
   const INDEX_PATH = "data/search_index.json";
 
   const filters = {
+    trilogy: "all",
     char: "all",
     lang: "all",
     state: "all",
@@ -66,6 +67,10 @@
     const readState = readReadState();
 
     const filtered = stories.filter((s) => {
+      if (filters.trilogy !== "all") {
+        const t = s.trilogy || "sprawl";
+        if (t !== filters.trilogy) return false;
+      }
       if (filters.char !== "all") {
         const char = (s.character || "").split(" ")[0];
         if (char !== filters.char) return false;
@@ -97,9 +102,15 @@
         ? Math.min(100, Math.round((readState[s.url].y / Math.max(1, document.body.scrollHeight)) * 100))
         : 0;
       const langBadge = s.lang === "en" ? "EN" : "KO";
+      const trilogyBadge = s.trilogy || "sprawl";
+      const trilogyColors = { sprawl: "#ff8844", bridge: "#88dd44", "blue-ant": "#66ffcc" };
+      const trilogyColor = trilogyColors[trilogyBadge] || "#66ffcc";
       return `<div class="story-card ${isRead ? "read" : ""}">
         ${isRead ? '<span class="read-badge">✓ READ</span>' : ""}
-        <div class="lang">[${langBadge}] ${fmtDate(s.id)}</div>
+        <div class="lang" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>[${langBadge}] ${fmtDate(s.id)}</span>
+          <span style="background:${trilogyColor}22;border:1px solid ${trilogyColor};color:${trilogyColor};padding:1px 5px;border-radius:2px;font-size:9px;text-transform:uppercase;">${trilogyBadge}</span>
+        </div>
         <div class="title"><a href="${escHtml(s.url)}">${highlight(s.title || s.id, filters.text)}</a></div>
         <div class="meta">${highlight(s.character || "—", filters.text)} · ${escHtml(s.word_count || "")}</div>
         <div class="meta">${highlight(s.id, filters.text)}</div>
@@ -113,6 +124,14 @@
   }
 
   function attachUI() {
+    document.querySelectorAll("[data-trilogy]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filters.trilogy = btn.dataset.trilogy;
+        document.querySelectorAll("[data-trilogy]").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        rerender();
+      });
+    });
     document.querySelectorAll("[data-char]").forEach((btn) => {
       btn.addEventListener("click", () => {
         filters.char = btn.dataset.char;
@@ -158,6 +177,15 @@
           return (a.id || "").localeCompare(b.id || "");
         });
         attachUI();
+        // Apply ?lang=ko or ?lang=en URL query param pre-filter
+        const params = new URLSearchParams(window.location.search);
+        const urlLang = params.get("lang");
+        if (urlLang === "ko" || urlLang === "en") {
+          filters.lang = urlLang;
+          document.querySelectorAll("[data-lang]").forEach((b) => {
+            b.classList.toggle("active", b.dataset.lang === urlLang);
+          });
+        }
         render(storiesData);
       });
   });

@@ -165,7 +165,7 @@
     body { padding: 16px; }
   }
 </style>
-<meta name="description" content="78 derivative stories browsable by character, language, read state. Data-driven from search_index.json. 9 cast × 4 archetypes.">
+<meta name="description" content="127 derivative stories browsable by character, trilogy, language, read state. Data-driven from search_index.json. Sprawl (114) + Bridge (12) + Blue Ant (1).">
 <meta name="keywords" content="roguelike, cyberpunk, gibson, sprawl, stories, browse, cards">
 <meta name="author" content="emilio">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -199,9 +199,17 @@
 </nav>
 
 <h1>Stories Browse</h1>
-<p class="subtitle">Data-driven 78-card index · filter by character, language, arc, read state · read state via localStorage</p>
+<p class="subtitle">Data-driven 127-card index · filter by trilogy, character, language, read state · read state via localStorage</p>
 
 <div class="filters">
+
+  <div class="filter-row">
+    <div class="filter-label">Trilogy</div>
+    <button class="filter-btn active" data-trilogy="all">All</button>
+    <button class="filter-btn" data-trilogy="sprawl">Sprawl</button>
+    <button class="filter-btn" data-trilogy="bridge">Bridge</button>
+    <button class="filter-btn" data-trilogy="blue-ant">Blue Ant</button>
+  </div>
 
   <div class="filter-row">
     <div class="filter-label">Character</div>

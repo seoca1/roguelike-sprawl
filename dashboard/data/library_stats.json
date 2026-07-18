@@ -1,8 +1,8 @@
 {
-  "short_stories_en": 39,
-  "short_stories_ko": 39,
-  "novelettes_en": 0,
-  "novelettes_ko": 0,
+  "short_stories_en": 52,
+  "short_stories_ko": 52,
+  "novelettes_en": 4,
+  "novelettes_ko": 4,
   "hook_kinds": 6,
   "hook_kind_names": [
     "narrative",
@@ -15,13 +15,13 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-08T18:27:25",
-  "catalog_entries": 39,
+  "_generated_at": "2026-07-14T01:32:05",
+  "catalog_entries": 56,
   "catalog_entries_list": [
     {
       "stem": "aleph_fragment",
       "type": "short_story",
-      "title_en": "Aleph's Fragment",
+      "title_en": "Aleph Fragment",
       "title_ko": "알레프의 파편"
     },
     {
@@ -29,6 +29,12 @@
       "type": "short_story",
       "title_en": "Armitage Infiltration",
       "title_ko": "아미티지 침투"
+    },
+    {
+      "stem": "beijing_memory_courier",
+      "type": "short_story",
+      "title_en": "Beijing Memory Courier",
+      "title_ko": "베이징 메모리 쿠리어 (Beijing Memory Courier)"
     },
     {
       "stem": "black_ice_dream",
@@ -39,8 +45,32 @@
     {
       "stem": "case_jackout-30sec",
       "type": "short_story",
-      "title_en": "Jack-Out",
+      "title_en": "Case Jackout-30Sec",
       "title_ko": "잭아웃"
+    },
+    {
+      "stem": "casey_leaves",
+      "type": "short_story",
+      "title_en": "Casey Leaves",
+      "title_ko": "Casey의 첫 밖 (Casey Leaves)"
+    },
+    {
+      "stem": "construct_asks",
+      "type": "short_story",
+      "title_en": "Construct Asks",
+      "title_ko": "콘스트럭트의 질문 (Construct Asks)"
+    },
+    {
+      "stem": "construct_dawn",
+      "type": "short_story",
+      "title_en": "Construct Dawn",
+      "title_ko": "콘스트럭트의 새벽 (Construct Dawn)"
+    },
+    {
+      "stem": "construct_named",
+      "type": "short_story",
+      "title_en": "Construct Named",
+      "title_ko": "콘스트럭트의 이름 (Construct Named)"
     },
     {
       "stem": "data_retrieval",
@@ -50,14 +80,14 @@
     },
     {
       "stem": "dixies_choice",
-      "type": "short_story",
-      "title_en": "Dixie's Choice",
+      "type": "novelette",
+      "title_en": "Dixies Choice",
       "title_ko": "디지의 선택"
     },
     {
       "stem": "dixies_last_run",
       "type": "short_story",
-      "title_en": "Dixie's Last Run",
+      "title_en": "Dixies Last Run",
       "title_ko": "딕시의 마지막 달림"
     },
     {
@@ -82,7 +112,7 @@
       "stem": "hosaka_core",
       "type": "short_story",
       "title_en": "Hosaka Core",
-      "title_ko": "Hosaka Core (한국어 번역)"
+      "title_ko": "호사카 코어 (Hosaka Core)"
     },
     {
       "stem": "hosaka_extraction",
@@ -99,7 +129,7 @@
     {
       "stem": "kumiko_manarase-midnight",
       "type": "short_story",
-      "title_en": "Manarase at Midnight",
+      "title_en": "Kumiko Manarase-Midnight",
       "title_ko": "자정의 매나리사"
     },
     {
@@ -111,13 +141,13 @@
     {
       "stem": "maas_heist",
       "type": "short_story",
-      "title_en": "Maas Biolabs Heist",
-      "title_ko": "Maas Biolabs Heist (한국어 번역)"
+      "title_en": "Maas Heist",
+      "title_ko": "마스 바이오랩스 강탈"
     },
     {
       "stem": "marly_louisiana-god",
       "type": "short_story",
-      "title_en": "The Louisiana God",
+      "title_en": "Marly Louisiana-God",
       "title_ko": "루이지아나의 신"
     },
     {
@@ -127,15 +157,33 @@
       "title_ko": "매트릭스 계시"
     },
     {
+      "stem": "molly_decides",
+      "type": "novelette",
+      "title_en": "Molly Decides",
+      "title_ko": "몰리의 결정"
+    },
+    {
+      "stem": "molly_meets_casey",
+      "type": "short_story",
+      "title_en": "Molly Meets Casey",
+      "title_ko": "Molly가 Casey를 만나다 (Molly Meets Casey)"
+    },
+    {
+      "stem": "molly_returns",
+      "type": "short_story",
+      "title_en": "Molly Returns",
+      "title_ko": "몰리의 귀환 (Molly Returns)"
+    },
+    {
       "stem": "mollys_market",
       "type": "short_story",
-      "title_en": "Molly's Market",
+      "title_en": "Mollys Market",
       "title_ko": "몰리의 마켓"
     },
     {
       "stem": "mollys_razor",
       "type": "short_story",
-      "title_en": "Molly's Razor",
+      "title_en": "Mollys Razor",
       "title_ko": "몰리의 면도칼"
     },
     {
@@ -159,38 +207,50 @@
     {
       "stem": "sally_sandii-3am",
       "type": "short_story",
-      "title_en": "The New Rose Hotel, 3 AM",
+      "title_en": "Sally Sandii-3Am",
       "title_ko": "로즈 호텔, 새벽 3시"
     },
     {
       "stem": "sense_net_infiltration",
       "type": "short_story",
-      "title_en": "Sense/Net Infiltration",
-      "title_ko": "Sense/Net Infiltration (한국어 번역)"
+      "title_en": "Sense Net Infiltration",
+      "title_ko": "센스넷 침투"
     },
     {
       "stem": "sense_net_trace",
       "type": "short_story",
-      "title_en": "Sense/Net Trace",
+      "title_en": "Sense Net Trace",
       "title_ko": "센스/넷 추적"
     },
     {
       "stem": "straylight_approach",
       "type": "short_story",
       "title_en": "Straylight Approach",
-      "title_ko": "Straylight Approach (한국어 번역)"
+      "title_ko": "스트레이라이트 접근"
     },
     {
       "stem": "ta_defection",
       "type": "short_story",
-      "title_en": "T-A Defection",
+      "title_en": "Ta Defection",
       "title_ko": "T-A 이탈"
     },
     {
       "stem": "ta_heist",
       "type": "short_story",
-      "title_en": "T-A Heist",
+      "title_en": "Ta Heist",
       "title_ko": "T-A 강도"
+    },
+    {
+      "stem": "tessier_archive",
+      "type": "short_story",
+      "title_en": "Tessier Archive",
+      "title_ko": "테시에 아카이브 (Tessier Archive)"
+    },
+    {
+      "stem": "the_answer",
+      "type": "short_story",
+      "title_en": "The Answer",
+      "title_ko": "The Answer"
     },
     {
       "stem": "the_choice",
@@ -199,9 +259,39 @@
       "title_ko": "선택"
     },
     {
+      "stem": "the_first_walk",
+      "type": "short_story",
+      "title_en": "The First Walk",
+      "title_ko": "첫 발걸음 (The First Walk)"
+    },
+    {
+      "stem": "the_fourth_word",
+      "type": "short_story",
+      "title_en": "The Fourth Word",
+      "title_ko": "The Fourth Word"
+    },
+    {
+      "stem": "the_full_name",
+      "type": "short_story",
+      "title_en": "The Full Name",
+      "title_ko": "The Full Name"
+    },
+    {
+      "stem": "the_leaving",
+      "type": "novelette",
+      "title_en": "The Leaving",
+      "title_ko": "떠남 (The Leaving)"
+    },
+    {
+      "stem": "the_naming",
+      "type": "short_story",
+      "title_en": "The Naming",
+      "title_ko": "The Naming"
+    },
+    {
       "stem": "tutorial_maze",
       "type": "short_story",
-      "title_en": "Tutorial: Maze",
+      "title_en": "Tutorial Maze",
       "title_ko": "튜토리얼: 미로"
     },
     {
@@ -219,14 +309,14 @@
     {
       "stem": "wigan_call",
       "type": "short_story",
-      "title_en": "Wigan's Call",
+      "title_en": "Wigan Call",
       "title_ko": "Wigan's Call (한국어 번역)"
     },
     {
       "stem": "wigan_zavijava",
-      "type": "short_story",
-      "title_en": "What Wigan Saw",
-      "title_ko": "위건이 본 것"
+      "type": "novelette",
+      "title_en": "Wigan Zavijava",
+      "title_ko": "위건 자비야바"
     },
     {
       "stem": "winter_infiltrate",
@@ -239,6 +329,18 @@
       "type": "short_story",
       "title_en": "Wintermute Negotiation",
       "title_ko": "윈터뮤트 협상"
+    },
+    {
+      "stem": "winters_child",
+      "type": "short_story",
+      "title_en": "Winters Child",
+      "title_ko": "윈터의 자식 (Winter's Child)"
+    },
+    {
+      "stem": "winters_morning",
+      "type": "short_story",
+      "title_en": "Winters Morning",
+      "title_ko": "윈터의 아침 (Winter's Morning)"
     },
     {
       "stem": "yakuza_deal",
