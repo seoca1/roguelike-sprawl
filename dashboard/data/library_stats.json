@@ -1,8 +1,8 @@
 {
-  "short_stories_en": 52,
-  "short_stories_ko": 52,
-  "novelettes_en": 4,
-  "novelettes_ko": 4,
+  "short_stories_en": 48,
+  "short_stories_ko": 48,
+  "novelettes_en": 9,
+  "novelettes_ko": 9,
   "hook_kinds": 6,
   "hook_kind_names": [
     "narrative",
@@ -15,8 +15,8 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-14T01:32:05",
-  "catalog_entries": 56,
+  "_generated_at": "2026-07-19T01:37:12",
+  "catalog_entries": 57,
   "catalog_entries_list": [
     {
       "stem": "aleph_fragment",
@@ -38,9 +38,15 @@
     },
     {
       "stem": "black_ice_dream",
-      "type": "short_story",
+      "type": "novelette",
       "title_en": "Black Ice Dream",
       "title_ko": "블랙 아이스 드림"
+    },
+    {
+      "stem": "bridge-recognition",
+      "type": "short_story",
+      "title_en": "Bridge-Recognition",
+      "title_ko": "브리지 인식 (Bridge Recognition)"
     },
     {
       "stem": "case_jackout-30sec",
@@ -68,7 +74,7 @@
     },
     {
       "stem": "construct_named",
-      "type": "short_story",
+      "type": "novelette",
       "title_en": "Construct Named",
       "title_ko": "콘스트럭트의 이름 (Construct Named)"
     },
@@ -124,7 +130,7 @@
       "stem": "ice_run",
       "type": "short_story",
       "title_en": "Ice Run",
-      "title_ko": "얼음 달콤"
+      "title_ko": "얼음 달콤 (Ice Run)"
     },
     {
       "stem": "kumiko_manarase-midnight",
@@ -272,9 +278,9 @@
     },
     {
       "stem": "the_full_name",
-      "type": "short_story",
+      "type": "novelette",
       "title_en": "The Full Name",
-      "title_ko": "The Full Name"
+      "title_ko": "풀 네임 (The Full Name)"
     },
     {
       "stem": "the_leaving",
@@ -284,9 +290,9 @@
     },
     {
       "stem": "the_naming",
-      "type": "short_story",
+      "type": "novelette",
       "title_en": "The Naming",
-      "title_ko": "The Naming"
+      "title_ko": "이름 (The Naming)"
     },
     {
       "stem": "tutorial_maze",
@@ -310,7 +316,7 @@
       "stem": "wigan_call",
       "type": "short_story",
       "title_en": "Wigan Call",
-      "title_ko": "Wigan's Call (한국어 번역)"
+      "title_ko": "위건의 호출"
     },
     {
       "stem": "wigan_zavijava",
@@ -338,7 +344,7 @@
     },
     {
       "stem": "winters_morning",
-      "type": "short_story",
+      "type": "novelette",
       "title_en": "Winters Morning",
       "title_ko": "윈터의 아침 (Winter's Morning)"
     },

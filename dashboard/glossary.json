@@ -1,10 +1,11 @@
 {
   "version": "1.0",
-  "generated": "2026-07-16T14:31:57.233050+00:00",
+  "generated": "2026-07-18T16:37:12.846049+00:00",
   "wiki_base": "../../../Fiction/wiki/",
-  "term_count": 218,
+  "term_count": 226,
   "terms": [
     "Mona Lisa / \"Molly Millions\" (Mona Lisa Overdrive)",
+    "William Gibson Reading Order & World Overview",
     "Construct Narrative Arc (Updated 2026-07-13)",
     "characters/lady 3jane tessier ashpool",
     "3Jane (Jokey — Tessier-Ashpool Heir)",
@@ -58,6 +59,7 @@
     "Peter 2 Tessier-Ashpool",
     "Sprawl Trilogy (series)",
     "Suit (Jokey — The Suit)",
+    "The Gernsback Continuum",
     "artificial intelligence",
     "characters/hollis henry",
     "characters/sally shears",
@@ -67,6 +69,7 @@
     "technology and humanity",
     "themes/art and creation",
     "All Tomorrow's Parties",
+    "Burning Chrome (story)",
     "Colin (or \"the ghost\")",
     "Red Star, Winter Orbit",
     "Spook Country (스푹 컨트리)",
@@ -101,6 +104,7 @@
     "mona lisa overdrive",
     "pattern recognition",
     "works/virtual light",
+    "The Belonging Kind",
     "The Bridge Trilogy",
     "bigend methodology",
     "characters/ashpool",
@@ -108,11 +112,13 @@
     "characters/the rez",
     "concepts/the aleph",
     "works/zero history",
+    "The Winter Market",
     "characters/shinya",
     "concepts/kombinat",
     "new york blue ant",
     "turner count zero",
     "works/neuromancer",
+    "Blue Ant Trilogy",
     "The Rez (Lo/Rez)",
     "art and creation",
     "gender and power",
@@ -160,6 +166,7 @@
     "sally shears",
     "smart matter",
     "zion cluster",
+    "Hinterlands",
     "Little Bird",
     "Roger Swain",
     "Shinya (시냐)",
@@ -190,6 +197,7 @@
     "the boxes",
     "yakushi 8",
     "Beauvoir",
+    "Dogfight",
     "Zavijava",
     "armitage",
     "freeside",
@@ -1214,10 +1222,20 @@
       "tooltip": "Spook Country",
       "text": "Spook Country"
     },
+    "william gibson reading order & world overview": {
+      "page": "works/gibson-reading-order.md",
+      "tooltip": "William Gibson Reading Order & World Overview",
+      "text": "William Gibson Reading Order & World Overview"
+    },
     "the bridge trilogy": {
       "page": "works/bridge-trilogy.md",
       "tooltip": "The Bridge Trilogy",
       "text": "The Bridge Trilogy"
+    },
+    "blue ant trilogy": {
+      "page": "works/blue-ant-trilogy.md",
+      "tooltip": "Blue Ant Trilogy",
+      "text": "Blue Ant Trilogy"
     },
     "fragments of a hologram rose": {
       "page": "works/fragments-of-a-hologram-rose.md",
@@ -1229,6 +1247,11 @@
       "tooltip": "Burning Chrome",
       "text": "Burning Chrome"
     },
+    "burning chrome (story)": {
+      "page": "works/burning-chrome-story.md",
+      "tooltip": "Burning Chrome (story)",
+      "text": "Burning Chrome (story)"
+    },
     "johnny mnemonic (short story)": {
       "page": "works/johnny-mnemonic.md",
       "tooltip": "Johnny Mnemonic (short story)",
@@ -1238,6 +1261,11 @@
       "page": "works/specials.md",
       "tooltip": "Spook Country (스푹 컨트리)",
       "text": "Spook Country (스푹 컨트리)"
+    },
+    "the belonging kind": {
+      "page": "works/the-belonging-kind.md",
+      "tooltip": "The Belonging Kind",
+      "text": "The Belonging Kind"
     },
     "3jane (short story)": {
       "page": "works/3jane-tessier-ashpool.md",
@@ -1254,6 +1282,11 @@
       "tooltip": "New Rose Hotel",
       "text": "New Rose Hotel"
     },
+    "the gernsback continuum": {
+      "page": "works/the-gernsback-continuum.md",
+      "tooltip": "The Gernsback Continuum",
+      "text": "The Gernsback Continuum"
+    },
     "zero history": {
       "page": "works/zero-history.md",
       "tooltip": "Zero History",
@@ -1264,6 +1297,11 @@
       "tooltip": "Sprawl Trilogy (series)",
       "text": "Sprawl Trilogy (series)"
     },
+    "hinterlands": {
+      "page": "works/hinterlands.md",
+      "tooltip": "Hinterlands",
+      "text": "Hinterlands"
+    },
     "agrippa": {
       "page": "works/agrippa.md",
       "tooltip": "Agrippa",
@@ -1273,6 +1311,16 @@
       "page": "works/all-tomorrows-parties.md",
       "tooltip": "All Tomorrow's Parties",
       "text": "All Tomorrow's Parties"
+    },
+    "the winter market": {
+      "page": "works/the-winter-market.md",
+      "tooltip": "The Winter Market",
+      "text": "The Winter Market"
+    },
+    "dogfight": {
+      "page": "works/dogfight.md",
+      "tooltip": "Dogfight",
+      "text": "Dogfight"
     },
     "construct narrative arc (updated 2026-07-13)": {
       "page": "works/construct_5_sequence.md",

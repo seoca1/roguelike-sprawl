@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated": "2026-07-16T14:31:57.233050+00:00",
+  "generated": "2026-07-18T16:37:12.846049+00:00",
   "by_source": {
     "aleph_fragment": [
       {
@@ -621,7 +621,7 @@
         "fixer": "chrome_teeth"
       }
     ],
-    "2026-07-15_tokyo-courier-run": [
+    "tokyo-courier-run": [
       {
         "id": "tokyo_courier_run",
         "title": "Tokyo Courier Run",
@@ -634,7 +634,7 @@
         "fixer": "masahiko"
       }
     ],
-    "2026-07-15_idoru-wedding-protocol": [
+    "idoru-wedding-protocol": [
       {
         "id": "idoru_wedding",
         "title": "Idoru Wedding Protocol",
@@ -647,7 +647,7 @@
         "fixer": "yamazaki"
       }
     ],
-    "2026-07-15_bridge-construct": [
+    "bridge-construct": [
       {
         "id": "bridge_scaffold",
         "title": "Bridge Construct",
@@ -660,7 +660,7 @@
         "fixer": "masahiko"
       }
     ],
-    "2026-07-15_kombinat-node-hack": [
+    "kombinat-node-hack": [
       {
         "id": "kombinat_node_hack",
         "title": "Kombinat Node Hack",
@@ -673,7 +673,7 @@
         "fixer": "yamazaki"
       }
     ],
-    "2026-07-15_chevette-run": [
+    "chevette-run": [
       {
         "id": "chevette_run",
         "title": "Chevette Run",
@@ -702,7 +702,7 @@
       "dixies_last_run": "Construct Memory Rescue",
       "ta_defection": "3Jane's Betrayal",
       "beijing_memory_courier": "Beijing Memory Courier",
-      "2026-07-15_idoru-wedding-protocol": "Idoru Wedding Protocol"
+      "idoru-wedding-protocol": "Idoru Wedding Protocol"
     },
     "novice": {
       "black_ice_dream": "Black Ice Dream",
@@ -720,8 +720,8 @@
       "maas_heist": "Maas Biolabs Heist",
       "ta_defection": "Hosaka Corporate Infiltration",
       "yakuza_deal": "Yakuza Loan Shark",
-      "2026-07-15_tokyo-courier-run": "Tokyo Courier Run",
-      "2026-07-15_chevette-run": "Chevette Run"
+      "tokyo-courier-run": "Tokyo Courier Run",
+      "chevette-run": "Chevette Run"
     },
     "veteran": {
       "marly_louisiana-god": "Delivery to Finn",
@@ -738,14 +738,14 @@
       "zion_express": "Zion Express",
       "straylight_approach": "Straylight Archive",
       "hosaka_extraction": "Sense/Net Media Extract",
-      "2026-07-15_bridge-construct": "Bridge Construct"
+      "bridge-construct": "Bridge Construct"
     },
     "suit": {
       "armitage_infiltration": "Armitage's First Infiltration",
       "hosaka_extraction": "Hosaka Internal Extraction",
       "ta_defection": "Tessier-Ashpool Defection",
       "wintermute_negotiation": "Wintermute Direct",
-      "2026-07-15_kombinat-node-hack": "Kombinat Node Hack"
+      "kombinat-node-hack": "Kombinat Node Hack"
     }
   }
 }

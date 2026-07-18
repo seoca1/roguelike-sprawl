@@ -230,36 +230,36 @@
   "mission_distribution": {
     "by_pillar": {
       "code": 14,
-      "power": 19,
+      "power": 22,
       "people": 5,
-      "purpose": 7,
+      "purpose": 9,
       "identity": 2,
       "memory": 2
     },
     "by_arc": {
-      "1": 6,
-      "2": 14,
-      "3": 12,
-      "4": 9,
+      "1": 8,
+      "2": 15,
+      "3": 13,
+      "4": 10,
       "5": 8
     },
     "by_zone": {
-      "core": 8,
-      "deep": 10,
+      "core": 9,
+      "deep": 12,
       "freeside": 5,
       "mid": 9,
-      "surface": 13,
+      "surface": 15,
       "ta": 4
     },
     "by_grade_range": {
       "grade_1-1": 2,
-      "grade_1-2": 4,
+      "grade_1-2": 6,
       "grade_1-5": 1,
       "grade_2-2": 1,
-      "grade_2-3": 12,
-      "grade_3-4": 10,
+      "grade_2-3": 13,
+      "grade_3-4": 11,
       "grade_4-4": 1,
-      "grade_4-5": 9,
+      "grade_4-5": 10,
       "grade_5-5": 3,
       "grade_5-6": 5,
       "grade_6-6": 1
@@ -356,5 +356,5 @@
     "prototype/data/programs/programs.json",
     "prototype/data/cyberspace/worlds.json"
   ],
-  "_generated_at": "2026-07-14T01:32:06"
+  "_generated_at": "2026-07-19T01:37:12"
 }
