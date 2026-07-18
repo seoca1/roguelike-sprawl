@@ -40,12 +40,23 @@
       "3jane_wintermute_merge"
     ],
     "character_ref": "3jane",
-    "fixers_used": ["wintermute", "ashpool"]
+    "fixers_used": [
+      "wintermute",
+      "ashpool"
+    ]
   },
   "_play_notes": {
     "narrative_role": "3Jane is the 8th character — the T-A family heir from Neuromancer. Phase 9 adds her as the aristocratic POV. Her 4 missions trace her arc: 1) Straylight dawn, 2) Bobby recording, 3) Aleph chamber, 4) Wintermute merge.",
     "ending": "Her ending is the family — whether the merge completes, the family is sold, or 3Jane leaves Straylight.",
     "tone": "Aristocratic, royal 'we'. Every sentence is precise grammar. Family is the pronoun.",
     "replaces_sally": "Opposite of Sally: Sally is a self-made market operator, 3Jane is a born family heir. Sally says 'I', 3Jane says 'we'."
-  }
+  },
+  "epilogue_supplement": [
+    {
+      "stem": "casey_leaves",
+      "title_en": "Casey Leaves",
+      "title_ko": "케이시 떠남",
+      "relation": "Casey (Case's daughter, post-Neuromancer) going her own way"
+    }
+  ]
 }

@@ -39,12 +39,23 @@
       "angie_mitchell_rescue"
     ],
     "character_ref": "wigan",
-    "fixers_used": ["angie", "zavijava"]
+    "fixers_used": [
+      "angie",
+      "zavijava"
+    ]
   },
   "_play_notes": {
     "narrative_role": "Wigan is the 5th character — a Vodou construct whose loa (Zavijava) speaks through him. Phase 7+ adds him as the philosophical counterpart to Suit: where Suit is corporate cold, Wigan is ritualistic warm. The 4 missions trace his arc: 1) Zavijava introduction, 2) Angie's call, 3) Bobby's burial, 4) Angie reunion.",
     "ending": "His ending is memory — whether he keeps it or lets it dissolve.",
     "tone": "Dreamlike, ritualistic. He uses Vodou grammar (loa names, offerings, veves). Half-sentences in loa-influenced speech.",
     "replaces_case": "Same upload/construct role as Case but reversed: Case is a cowboy who becomes a construct, Wigan is a construct who tries to remember being a cowboy."
-  }
+  },
+  "epilogue_supplement": [
+    {
+      "stem": "wigan_zavijava",
+      "title_en": "Wigan Zavijava",
+      "title_ko": "위간 자비야바",
+      "relation": "Count Zero standalone — Bobby Newmark meets the voodoo matrix"
+    }
+  ]
 }

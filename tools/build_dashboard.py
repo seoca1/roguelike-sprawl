@@ -188,23 +188,39 @@ def load_library_stats(repo: Path) -> dict[str, object]:
                 novel_dir = cand
                 break
 
-    short_stems, short_titles, short_dtypes = _scan_dir(short_dir)
-    novel_stems, novel_titles, novel_dtypes = _scan_dir(novel_dir)
+    short_en_dir = short_dir / "en"
+    short_ko_dir = short_dir / "ko"
+    novel_en_dir = novel_dir / "en"
+    novel_ko_dir = novel_dir / "ko"
+
+    short_stems, short_titles, short_dtypes = _scan_dir(short_en_dir)
+    short_ko_stems, short_ko_titles, short_ko_dtypes = _scan_dir(short_ko_dir)
+    short_stems |= short_ko_stems
+    short_titles.update(short_ko_titles)
+    short_dtypes.update(short_ko_dtypes)
+    novel_stems, novel_titles, novel_dtypes = _scan_dir(novel_en_dir)
+    novel_ko_stems, novel_ko_titles, novel_ko_dtypes = _scan_dir(novel_ko_dir)
+    novel_stems |= novel_ko_stems
+    novel_titles.update(novel_ko_titles)
+    novel_dtypes.update(novel_ko_dtypes)
 
     # Use frontmatter derivative_type as source of truth, not directory name
     all_dtypes = {**short_dtypes, **novel_dtypes}
 
     en_stems = set()
     ko_stems = set()
-    for f in (list(short_dir.glob("*.md") if short_dir.exists() else []) +
-               list(novel_dir.glob("*.md") if novel_dir.exists() else [])):
-        is_ko = ".ko." in f.name
-        stem = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", f.name)
-        stem = re.sub(r"\.ko\.md$", "", stem) if is_ko else re.sub(r"\.md$", "", stem)
-        if is_ko:
-            ko_stems.add(stem)
-        else:
-            en_stems.add(stem)
+    for d in (short_en_dir, novel_en_dir):
+        if d.exists():
+            for f in d.glob("*.md"):
+                stem = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", f.name)
+                stem = re.sub(r"\.md$", "", stem)
+                en_stems.add(stem)
+    for d in (short_ko_dir, novel_ko_dir):
+        if d.exists():
+            for f in d.glob("*.md"):
+                stem = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", f.name)
+                stem = re.sub(r"\.ko\.md$", "", stem)
+                ko_stems.add(stem)
 
     # Count by derivative_type (from frontmatter), not directory
     novel_en = sum(1 for s in en_stems if all_dtypes.get(s) == "novelette")

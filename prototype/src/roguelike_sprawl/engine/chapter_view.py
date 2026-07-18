@@ -44,6 +44,7 @@ class ChapterData:
         duration_ms: Auto-advance timeout in milliseconds
         next_screen: ScreenKind to advance to (default HUB)
         char_delay_ms: Per-character typing delay
+        epilogue_supplement: Post-merger standalone orphan refs (list of dicts)
     """
 
     character: str
@@ -59,6 +60,7 @@ class ChapterData:
     duration_ms: int
     next_screen: str
     char_delay_ms: int = 60
+    epilogue_supplement: tuple = ()
 
 
 def load_chapter(path: Path) -> ChapterData:
@@ -89,7 +91,55 @@ def load_chapter(path: Path) -> ChapterData:
         duration_ms=raw.get("duration_ms", 12000),
         next_screen=raw.get("next_screen", "HUB"),
         char_delay_ms=raw.get("char_delay_ms", 30),
+        epilogue_supplement=tuple(raw.get("epilogue_supplement", [])),
     )
+
+
+# Persona→chapter mapping:
+#   "novice"  → case (Case POV)
+#   "veteran" → sil
+#   "heretic" → kas
+#   "suit"    → suit
+#   other characters (wigan/angie/sally/neuromancer) → own file
+# Unknown personas fall back to "novice" → case.json.
+PERSONA_TO_CHAPTER = {
+    "novice": "case",
+    "veteran": "sil",
+    "heretic": "kas",
+    "suit": "suit",
+}
+
+
+def epilogue_supplement_for(stem: str, data_dir: Path) -> tuple:
+    """Look up the epilogue_supplement entry for a given story stem.
+
+    ADR-0006 (canonical continuity): the 16 standalone orphans in
+    Fiction/derivative/sprawl-trilogy/short-stories/{en,ko}/ are linked
+    to chapter epilogues via the "epilogue_supplement" field in chapter
+    JSONs. This function returns the supplement list for a given chapter
+    character so callers can render "see also" links in the chapter view.
+
+    Args:
+        stem: The orphan stem (e.g. "winters_child").
+        data_dir: Prototype data root (e.g. .../prototype/data).
+
+    Returns:
+        Tuple of supplement dicts (each has stem/title_en/title_ko/relation),
+        or empty tuple if no chapter references this stem.
+    """
+    chapters_dir = data_dir / "story" / "chapters"
+    if not chapters_dir.exists():
+        return ()
+    matches = []
+    for ch_path in chapters_dir.glob("*.json"):
+        try:
+            raw = json.loads(ch_path.read_text(encoding="utf-8"))
+        except Exception:
+            continue
+        for sup in raw.get("epilogue_supplement", []):
+            if sup.get("stem") == stem:
+                matches.append(sup)
+    return tuple(matches)
 
 
 def chapter_for_character(character: str, data_dir: Path) -> ChapterData:

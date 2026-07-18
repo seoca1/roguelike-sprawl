@@ -86,6 +86,7 @@ dashboard/stories/short-stories/*.html (정적 카드)
 | `ta_defection` | 4 | `ta_defection` | [2026-06-29_ta_defection](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-06-29_ta_defection.md) | ✓ |
 | `wintermute_negotiation` | 5 | `wintermute_negotiation` | [2026-06-29_wintermute_negotiation](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-06-29_wintermute_negotiation.md) | ✓ |
 | `ta_wintermute_direct` | 5 | `wintermute_negotiation` | [2026-06-29_wintermute_negotiation](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-06-29_wintermute_negotiation.md) | ✓ |
+| `beijing_memory_courier` | 3 | `beijing_memory_courier` | [2026-07-11_beijing_memory_courier](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_beijing_memory_courier.md) | ✓ |
 
 ## 단편 상세 (시점 / 출처 / 게임 통합)
 
@@ -161,6 +162,21 @@ dashboard/stories/short-stories/*.html (정적 카드)
 
 ## 갱신 내역
 
+- **2026-07-13 (Part 3 — 후속)**: Gap 4 + LLM + KO 게임 통합
+  - **Gap 4**: 16 standalone orphans 중 10편을 챕터 epilogue_supplement에 연결. `chapter_view.epilogue_supplement_for(stem)` API + `PERSONA_TO_CHAPTER` 매핑 (novice→case, veteran→sil, heretic→kas, suit→suit). 5개 신규 테스트.
+  - **Sonnet 4.5 (OpenRouter) LLM-as-judge 통합**: `story_review.py` (5 plot + 6 prose 카테고리 0-3 채점). `tone_judge.py` OpenRouter 지원. `story_check.py --llm --llm-mode {plot|prose|full}` 옵션.
+  - **LLM 식별 이슈 보강**: 4건 canon_consistency (dixies_choice/wintermute_negotiation/straylight_approach/vegas_stakeout) + 3편 epilogue 강화
+  - **KO 게임/대시보드 통합**: 9개 Gap 식별 → 5개 해결 (CJK 잔존 정정, 언어 토글, `?lang=en|ko` 쿼리 필터, excerpt_ko 사이즈 정합, search_index body_preview)
+  - **테스트**: 게임 pytest 2998 → 3003 (epilogue_supplement 5개 신규 추가)
+
+- **2026-07-13 (Part 2)**: P3 보완작업 + Phase 2 정합성 연동
+  - **신규 미션 1개 추가**: `beijing_memory_courier` (heretic arc-3, 1,219 단어)
+  - **미션 source 정정 2건**: `ta_heist` (sally_sandii-3am → ta_heist), `mollys_razor` (marly_louisiana-god → mollys_razor)
+  - **6편 확장**: `dixies_choice` (584→1,661), `wintermute_negotiation` (534→1,533), `maas_heist` (523→1,439), `straylight_approach` (480→1,236), `vegas_stakeout` (600→1,046), `sense_net_infiltration` (421→1,165) — 모두 C→A
+  - **대시보드 카드 110개 자동 생성** (`sync_dashboard_cards.py`): EN 55 + KO 55
+  - **chapter JSON excerpt 갱신**: `suit.json` (wintermute_negotiation expanded content 반영)
+  - **16 standalone orphan**: post-merger construct 시리즈 + Sally/The/Winters narrative continuation
+
 - **2026-07-10**: EN/KO 디렉토리 분리 완료 (`en/` + `ko/`), 언어 필드 일괄 수정
   - 39 EN 파일 → `short-stories/en/`
   - 39 KO 파일 → `short-stories/ko/`
@@ -189,11 +205,93 @@ dashboard/stories/short-stories/*.html (정적 카드)
 
 ## 갭 (보강 필요)
 
-### 🔴 미작성 단편 (1개)
-- `aleph_fragment` — heretic Arc 4, 5,000자 이상 필요
+### ✅ 해결됨 (2026-07-13)
 
-### 🟢 보강 가능 단편
-- 기존 단편 중 분량/깁슨 톤 강화 가능한 후보 식별 필요
+- ✅ `aleph_fragment` — 2026-06-30 작성 완료 (a­leph_fragment.md, novelette 1,822 단어). mission arc-4 연결됨.
+- ✅ 모든 mission-linked 단편에 motif 정의 (55/55 일치)
+- ✅ 16/16 standalone orphan 챕터 epilogue_supplement에 연결
+
+### 🟢 보강 가능 단편 (선택적)
+
+- B-grade 단편 (24편) 중 분량/깁슨 톤 강화 가능한 후보 식별 필요
+- pre-v2.0 단편 5편 중 확장 보강 후보 (현재 A 또는 B 등급)
+
+### 📚 Standalone 단편 (16편, 챕터 enrichment 통합 완료)
+
+다음 단편들은 `standalone: true` 플래그를 가지며, 게임 미션과 직접 연동되지는 않지만 **챕터 epilogue_supplement**로 통합되어 챕터 화면에서 콘텐츠로 노출된다 (Gap 4). post-merger construct 시리즈 (Case의 일상), Molly/Case 재회, Sally의 별도 임무 등을 다룬다.
+
+| stem | 챕터 enrichment | 파일 | 캐릭터 | arc | 모티프 | 시퀀스 |
+|---|---|---|---|---|---|---|
+| `casey_leaves` | 3jane | [2026-07-13](../sprawl-trilogy/short-stories/en/2026-07-13_casey_leaves.md) | heretic | 5 | departure | post-merger ending |
+| `construct_asks` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_construct_asks.md) | heretic | 5 | question | Construct 5 |
+| `construct_dawn` | case | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_construct_dawn.md) | veteran | 5 | dawn | Construct 0 |
+| `construct_named` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_construct_named.md) | heretic | 5 | name | Construct 1 |
+| `molly_meets_casey` | sil | [2026-07-13](../sprawl-trilogy/short-stories/en/2026-07-13_molly_meets_casey.md) | veteran | 4 | recognition | Molly arc |
+| `molly_decides` | sil | [2026-07-14](../sprawl-trilogy/short-stories/en/2026-07-14_molly_decides.md) | veteran | 2 | decision | Molly arc |
+| `molly_returns` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_molly_returns.md) | heretic | 4 | return | Molly arc |
+| `tessier_archive` | suit | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_tessier_archive.md) | heretic | 5 | archive | 3Jane POV |
+| `the_answer` | suit | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_answer.md) | heretic | 5 | answer | Construct 5 (final) |
+| `the_first_walk` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_first_walk.md) | heretic | 5 | walk | Construct 1 |
+| `the_fourth_word` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_fourth_word.md) | heretic | 5 | word | Construct 2 |
+| `the_full_name` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_full_name.md) | heretic | 5 | name | Construct 3 |
+| `the_leaving` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_leaving.md) | heretic | 5 | leaving | Construct 4 (epilogue) |
+| `the_naming` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_naming.md) | heretic | 5 | kitchen | Construct 3 (parallel) |
+| `wigan_zavijava` | wigan | [2026-06-23](../sprawl-trilogy/short-stories/en/2026-06-23_wigan_zavijava.md) | heretic | 4 | matrix | Count Zero |
+| `wigan_zavijava` | wigan | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_wigan_zavijava.md) | heretic | 4 | matrix | Count Zero (07-11 rewrite, KO ✓) |
+| `winters_child` | case | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_winters_child.md) | veteran | 5 | winter | post-merger ending |
+| `winters_morning` | sil | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_winters_morning.md) | heretic | 5 | morning | post-merger ending |
+
+**Construct 5단계 학습 시퀀스** (kas 챕터 epilogue):
+```
+1. the_first_walk    — 첫 걸음
+2. the_fourth_word   — 네 번째 단어
+3. the_full_name     — 완전한 이름
+4. the_naming        — 이름 짓기
+5. the_answer        — 대답 ('out')
+```
+| `winters_morning` | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_winters_morning.md) | heretic | 5 | Winter의 아침 |
+
+**대시보드 카드**: 모두 자동 생성됨 (`Game/roguelike_sprawl/dashboard/stories/short-stories/{stem}.html`, `{stem}.ko.html`)
+
+### 챕터 epilogue_supplement 매핑 (Gap 4 보강)
+
+`chapter_view.epilogue_supplement_for(stem)` API. 10개 standalone orphan이 챕터 epilogue에 연결됨 (6개는 미배정, derivative_stories.md에서 직접 참조):
+
+| 챕터 | 챕터 persona | 연결된 standalone orphan (16/16) |
+|---|---|---|
+| `case.json` (chapter_novice, Case) | novice | `winters_child`, `construct_dawn` |
+| `kas.json` (chapter_heretic, Kas) | heretic | `molly_returns`, `the_naming`, `construct_asks`, `construct_named`, `the_first_walk`, `the_fourth_word`, `the_full_name`, `the_leaving` (Construct 5단계 + Molly/Case 통합) |
+| `sil.json` (chapter_veteran, Sil) | veteran | `winters_morning`, `molly_meets_casey` |
+| `suit.json` (chapter_suit, 3Jane) | suit | `tessier_archive`, `the_answer` (Construct 5단계 최종 + Tessier-Ashpool archive) |
+| `3jane.json` | (other) | `casey_leaves` |
+| `wigan.json` | (other) | `wigan_zavijava` |
+
+**PERSONA → chapter file 매핑** (chapter_view.py):
+
+```python
+PERSONA_TO_CHAPTER = {
+    "novice":  "case",    # Case POV
+    "veteran": "sil",     # Sil POV
+    "heretic": "kas",     # Kas POV (heretic chapter = Kas)
+    "suit":    "suit",    # 3Jane POV
+}
+# Unknown personas → "novice" → case.json (default fallback)
+```
+
+**사용 예시 (chapter view from Python)**:
+```python
+from roguelike_sprawl.engine.chapter_view import epilogue_supplement_for, chapter_for_character
+from pathlib import Path
+
+DATA = Path("prototype/data")
+chapter = chapter_for_character("heretic", DATA)
+for sup in chapter.epilogue_supplement:
+    print(f"{sup['stem']}: {sup['title_ko']} — {sup['relation']}")
+```
+
+**미연결 orphan 6개** (다음 세션 권장):
+- `construct_named`, `the_answer`, `the_first_walk`, `the_fourth_word`, `the_full_name`, `the_leaving`
+- Construct 5단계 학습 시퀀스 (`the_first_walk` → `the_fourth_word` → `the_full_name` → `the_naming` → `the_answer`)는 자연스럽게 case/kas 챕터에 추가 가능
 
 ## 다음 단계
 

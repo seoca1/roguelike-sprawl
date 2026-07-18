@@ -1,5 +1,5 @@
 {
-  "mission_count": 47,
+  "mission_count": 54,
   "character_count": 4,
   "character_ids": [
     "heretic",
@@ -15,10 +15,10 @@
     5
   ],
   "arc_distribution": {
-    "4": 9,
-    "3": 11,
-    "2": 13,
-    "1": 6,
+    "4": 10,
+    "3": 13,
+    "2": 15,
+    "1": 8,
     "5": 8
   },
   "ice_unique_count": 41,
@@ -43,6 +43,6 @@
   "cyberspace_sectors_total": 8,
   "cyberspace_servers_total": 184,
   "skill_effect_count": 15,
-  "test_count_collected": 2666,
-  "_generated_at": "2026-07-07T14:58:07+00:00"
+  "test_count_collected": 2678,
+  "_generated_at": "2026-07-16T14:41:13+00:00"
 }

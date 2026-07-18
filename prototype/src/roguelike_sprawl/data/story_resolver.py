@@ -32,14 +32,32 @@ CANONICAL_DATES = (
     "2026-06-19",
 )
 
-# 소설 디렉토리 목록 (derivative_type 순)
+# 소설 디렉토리 목록 (derivative_type 순) — 2026-07-10 구조 변경 반영
+# en/ko 하위 디렉토리로 분리됨. resolver는 양쪽 구조 (legacy + new) 모두 지원.
 NOVEL_DIR_NAMES: tuple[str, ...] = ("short-stories", "novelettes", "novellas")
+LANG_SUBDIRS: tuple[str, ...] = ("en", "ko")
 
 
 def _novel_dirs(repo_root: Path) -> list[Path]:
-    """모든 소설 디렉토리 경로 반환 (존재하는 것만)."""
-    sprawl = repo_root / "Fiction" / "derivative" / "sprawl-trilogy"
-    return [sprawl / name for name in NOVEL_DIR_NAMES if (sprawl / name).exists()]
+    """모든 소설 디렉토리 경로 반환 (존재하는 것만).
+
+    Searches all three trilogies (Sprawl / Bridge / Blue Ant).
+    Returns both legacy paths (e.g., short-stories/case_jackout.md)
+    and new paths (e.g., short-stories/en/case_jackout.md).
+    """
+    derivative = repo_root / "Fiction" / "derivative"
+    trilogies = ("sprawl-trilogy", "bridge-trilogy", "blue-ant")
+    paths: list[Path] = []
+    for trilogy in trilogies:
+        for name in NOVEL_DIR_NAMES:
+            base = derivative / trilogy / name
+            if base.exists():
+                paths.append(base)
+                for lang in LANG_SUBDIRS:
+                    sub = base / lang
+                    if sub.exists():
+                        paths.append(sub)
+    return paths
 
 
 def _short_stories_dir(repo_root: Path) -> Path:
@@ -48,7 +66,10 @@ def _short_stories_dir(repo_root: Path) -> Path:
 
 
 def _search_in_dirs(stem: str, suffix: str, repo_root: Path) -> Path | None:
-    """모든 소설 디렉토리에서 canonical 날짜 순으로 검색."""
+    """모든 소설 디렉토리에서 canonical 날짜 순으로 검색.
+
+    2026-07-10 구조 변경: en/ko 하위 디렉토리도 검색.
+    """
     for date in CANONICAL_DATES:
         for base in _novel_dirs(repo_root):
             candidate = base / f"{date}_{stem}{suffix}"

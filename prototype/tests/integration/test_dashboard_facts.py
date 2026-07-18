@@ -20,7 +20,7 @@ Patterns of stale copy we look for (updated 2026-07-10):
 - 12 chapters (was 12, no change)
 - 9 아크 (was 9, no change)
 - 7 phase types (replaced 14-stage legacy system)
-- 47 missions (canonical, was 47 before, no change)
+- 48 missions (canonical, was 47 before, no change)
 - 81 scenes (was 81, no change)
 """
 

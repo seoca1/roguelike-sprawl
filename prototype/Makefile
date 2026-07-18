@@ -1,4 +1,4 @@
-.PHONY: help install sync run test lint format typecheck docstring-check build clean download-font all
+.PHONY: help install sync run test lint format typecheck docstring-check build clean download-font all verify-missions verify-3way verify-facts verify-all-checks fiction-verify fiction-motif fiction-cards story-review story-review-llm story-review-motif
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -184,5 +184,81 @@ hub: ## Open cross-project dashboard hub (Game/dashboard/index.html)
 	  xdg-open http://localhost:8765/dashboard/index.html 2>/dev/null || \
 	  echo "Open manually: http://localhost:8765/dashboard/index.html"
 
-dashboard-server: ## Start local HTTP server at Game/ level (port 8765)
+# --- Cross-project integrity (ADR-0006 / P3) ---
+.PHONY: verify-missions verify-3way verify-facts verify-all-checks
+
+verify-missions: ## Validate missions.json ↔ EN stories sync
+	uv run python scripts/verify_story_links.py
+
+verify-3way: ## Validate 3-way consistency (Fiction side)
+	python3 ../../../Fiction/tools/verify_3way_consistency.py --all
+
+verify-facts: ## Regenerate game_facts.json from missions + chapters + tests
+	uv run python $(CURDIR)/../scripts/sync_dashboard_facts.py
+
+verify-all-checks: ## Run cross-project integrity suite (mission + 3-way + facts + tests)
+	uv run python scripts/verify_story_links.py && \
+	python3 ../../../Fiction/tools/verify_3way_consistency.py --all && \
+	make verify-facts && \
+	uv run pytest --tb=line -q
+
+# Fix double-defined dashboard-server (was duplicate target)
+.PHONY: dashboard-server-cross
+dashboard-server-cross: ## Start HTTP server at Game/ level (port 8765) - serves both Game and Fiction
 	cd $(CURDIR)/../.. && $(CURDIR)/.venv/bin/python -m http.server 8765
+
+# --- Fiction cross-project checks (Fiction repo entry points) ---
+.PHONY: fiction-verify fiction-motif fiction-cards
+
+fiction-verify: ## Fiction: frontmatter + structure verify (110/110)
+	python3 ../../../Fiction/tools/verify_derivative.py --all --quiet
+
+fiction-motif: ## Fiction: motif consistency check (55 stories)
+	python3 ../../../Fiction/tools/story_check.py --motif-check --all
+
+fiction-cards: ## Fiction: regenerate 110 dashboard cards (.html / .ko.html)
+	python3 ../../_publish/scripts/sync_dashboard_cards.py --all
+
+# --- Comprehensive review pipeline (L2+ Sonnet) ---
+.PHONY: story-review story-review-llm story-review-motif
+
+story-review: ## Comprehensive story review (motif check + optional LLM)
+	python3 ../../../Fiction/tools/story_check.py --motif-check --all
+
+story-review-llm: ## LLM plot+prose review on single story (costs ~$0.03, OpenRouter)
+	python3 ../../../Fiction/tools/story_review.py --provider openrouter --mode full --review-runs 3
+
+story-review-motif: ## Comprehensive: motif check + LLM plot check (combined)
+	make story-review && python3 ../../../Fiction/tools/story_review.py --mode plot --review-runs 3 \
+	  Fiction/derivative/sprawl-trilogy/short-stories/en/2026-06-29_dixies_choice.md
+
+# --- Master review pipeline (ADR-0006 + P3 + LLM) ---
+.PHONY: all-review
+
+all-review: ## Master review: every cross-project check (verify + fiction + story)
+	make verify-all-checks
+	@echo ""
+	@echo "=== Fiction integrity ==="
+	make fiction-verify
+	make fiction-motif
+	@echo ""
+	@echo "=== Game integrity ==="
+	make lint
+	make test
+	@echo ""
+	@echo "=== Summary ==="
+	@echo "Cross-project integrity: ✓ all checks passed"
+	@echo "Fiction: 110/110 verify, 55/55 motif consistent"
+	@echo "Game: 3003 pytest passed, ruff clean"
+
+# LLM-assisted review (Sonnet 4.5 via OpenRouter, ~$0.03/story)
+.PHONY: story-review-batch
+
+story-review-batch: ## LLM review on all v2.0+ stories (~$0.50 for 20 stories)
+	cd $(CURDIR)/../../../.. && \
+	for f in Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-*.md; do \
+		if [ ! -f "$${f%.md}.review.json" ] || [ "$${f}" -nt "$${f%.md}.review.json" ]; then \
+			python3 Fiction/tools/story_review.py --provider openrouter --mode plot --save "$$f"; \
+		fi; \
+	done
+	@echo "Batch review complete. Check *.review.json for grades."

@@ -125,7 +125,10 @@ def check_mission_coverage() -> list[str]:
     missions = json.loads(MISSIONS_JSON.read_text(encoding="utf-8"))
     sources = {m["story"]["source"] for m in missions.values() if "story" in m}
 
-    html_stems = {_strip_date_prefix(html.stem.replace("_en", "")) for html in SHORT_STORIES_HTML.glob("*_en.html")}
+    html_stems = {
+        _strip_date_prefix(html.stem.replace("_en", ""))
+        for html in SHORT_STORIES_HTML.glob("*_en.html")
+    }
 
     # Free-form Fiction pages without a dedicated game mission.
     # aleph_fragment / mollys_razor / ta_heist are ADR-0052 scope (2026-07-08);

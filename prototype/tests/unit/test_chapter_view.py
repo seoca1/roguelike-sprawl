@@ -100,9 +100,10 @@ def test_chapter_data_excerpt_nonempty(case_data: ChapterData) -> None:
     # Strip whitespace and count
     en_chars = len(case_data.excerpt_en.strip())
     ko_chars = len(case_data.excerpt_ko.strip())
-    # Korean: ~2,000+ chars, English: ~1,000+ chars
+    # Both EN/KO: ≥1000 chars (12s screen at ~80 chars/sec × 12s = ~1000 chars).
+    # KO originally targeted ~2,000+ but trimmed 2026-07-13 to fit screen budget.
     assert en_chars >= 1000, f"English excerpt too short: {en_chars}"
-    assert ko_chars >= 2000, f"Korean excerpt too short: {ko_chars}"
+    assert ko_chars >= 1000, f"Korean excerpt too short: {ko_chars}"
 
 
 # ----------------------------------------------------------------------------
@@ -356,3 +357,42 @@ def test_original_story_list_characters() -> None:
 
     chars = list_characters()
     assert chars == ["novice", "veteran", "heretic"]
+
+
+class TestEpilogueSupplement:
+    """ADR-0006: 16 standalone orphans linked to chapter epilogues."""
+
+    def test_epilogue_supplement_field_present(self, case_data) -> None:
+        """Case chapter should have post-merger epilogue supplements."""
+        assert hasattr(case_data, "epilogue_supplement")
+        assert len(case_data.epilogue_supplement) >= 1
+
+    def test_supplements_have_required_fields(self, case_data) -> None:
+        for sup in case_data.epilogue_supplement:
+            assert "stem" in sup, f"Missing stem in {sup}"
+            assert "title_en" in sup, f"Missing title_en in {sup}"
+            assert "title_ko" in sup, f"Missing title_ko in {sup}"
+            assert "relation" in sup, f"Missing relation in {sup}"
+
+    def test_epilogue_supplement_for_lookup(self) -> None:
+        """epilogue_supplement_for() finds linked orphans."""
+        from roguelike_sprawl.engine.chapter_view import epilogue_supplement_for
+
+        sups = epilogue_supplement_for("winters_child", DATA_DIR.parent.parent)
+        assert len(sups) >= 1
+        assert any(s["stem"] == "winters_child" for s in sups)
+
+    def test_epilogue_supplement_for_unknown(self) -> None:
+        """Unknown stem → empty tuple."""
+        from roguelike_sprawl.engine.chapter_view import epilogue_supplement_for
+
+        assert epilogue_supplement_for("nonexistent_stem", DATA_DIR) == ()
+
+    def test_persona_to_chapter_mapping(self) -> None:
+        """Verify persona → chapter file mapping."""
+        from roguelike_sprawl.engine.chapter_view import PERSONA_TO_CHAPTER
+
+        assert PERSONA_TO_CHAPTER["novice"] == "case"
+        assert PERSONA_TO_CHAPTER["heretic"] == "kas"
+        assert PERSONA_TO_CHAPTER["veteran"] == "sil"
+        assert PERSONA_TO_CHAPTER["suit"] == "suit"

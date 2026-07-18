@@ -307,7 +307,7 @@ class TestRealMissionsJsonIntegration:
 
         board = JobBoard.load(data_dir / "missions" / "missions.json")
         # CONTENT_EXPANSION Phase A+: 29 original + 4 Armitage + 5 Arc 2-3
-        assert len(board) == 47
+        assert len(board) == 54
 
     def test_hostile_maas_hides_maas_missions(self, data_dir: Path) -> None:
         """Real test: Maas missions are locked when hostile with Maas."""

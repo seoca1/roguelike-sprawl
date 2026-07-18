@@ -245,12 +245,12 @@ class TestDashboardIntegration:
 
         stats = mod.load_mission_stats(_Path(projects_root))
         # CONTENT_EXPANSION Phase A+: 33 → 38 missions (5 new Arc 2-3)
-        assert stats["missions"] == 47
+        assert stats["missions"] == 54
         assert stats["chapters"] == 4
         assert "Armitage" in stats["characters"]
         # 4 characters total now
         assert len(stats["characters"]) == 4
-        assert stats["missions"] == 47
+        assert stats["missions"] == 54
         assert stats["chapters"] == 4
         assert "Armitage" in stats["characters"]
         # 4 characters total now
