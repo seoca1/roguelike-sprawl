@@ -7709,3 +7709,86 @@ the Sense/Net corporate entity (faction) which is defended by the suit-archetype
 - Mission count: Phase 1 (initial) → Phase 26 (62)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 28 — New mission: zion_vote_observation (novice-arc, paired with Fiction Phase 28)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 28 novice-arc mission expansion paired with Fiction Phase 28 zion-vote derivative.
+
+### 신규 Mission: zion_vote_observation
+
+| Field | Value |
+|---|---|
+| ID | `zion_vote_observation` |
+| Title | "Zion Vote Observation" |
+| Character ref | `novice` (K-class observer / procedural-witness archetype) |
+| Arc | 5 |
+| Pillar | `purpose` |
+| Grade range | 4-5 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 510 words)
+
+The cluster's vote is every seven years. The corporate offer is every quarter.
+The pilot-Cowboy stands outside the L-5 corridor's corporate-class-access zone
+and records the procedural assembly. The procedural assembly is the cluster's
+existence. Outside, in the corridor, Tessier-Ashpool has a corporate offer on
+the table. Inside, in the cluster's vote-hall, every seven years the cluster
+votes the same way: *no*. The procedural recording is what the L-5 operator's
+run is for: the cowboy is here to witness the *no*, the procedural recording is
+the matrix-presence witness, the witness is what the era's working-class-without-
+the-matrix has on the corporate-class's vote-tracking system. ... [full EN body
+in missions.json]
+
+### Story synopsis (KO, 1201 chars)
+
+클러스터의 표결은 매 7년이다. 기업 제안은 매 분기다. 조종사-카우보이는 L-5
+회랑의 기업-급-접근 구역 밖에 서서 절차적 집행을 기록한다. ... [full KO body]
+
+### Story spine
+
+The L-5 corridor's procedural-record mechanism: the cluster's vote-tracking
+is what the corporate class's vote-tracking is forced to consult because the
+procedural-record has a matrix-presence witness. The cowboy is here to witness
+the *no* — the witnessing is the binding — the binding is the cluster's existence.
+Maelcum's nineteen years of piloting-voice produced the procedural-record that
+is the cluster's working-class-without-the-matrix posture.
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 28:
+
+- **Fiction** `derivative/sprawl-trilogy/short-stories/{en,ko}/2026-07-19_zion-vote.{md,.ko.md}` (new Sprawl short story, 412 EN / 1077 KO words)
+- **Fiction** `wiki/characters/maelcum.md` (existing, Tier 1 — promoted Phase 15)
+- **Fiction** `wiki/settings/zion.md`, `zion-cluster.md` (existing settings)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `zion_vote_observation` (510 words EN / 1201 chars KO)
+
+The derivative's procedural-assembly thematic operationalized in the mission
+as a matrix-witness run.
+
+### Mission distribution (Phase 28 후)
+
+| Character | Phase 27 | **Phase 28** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| **novice** | 20 | **21** ← +1 (this phase) |
+| heretic | 15 | 15 |
+| suit | 7 | 7 |
+| **Total** | **62** | **63** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 62 → **63** |
+
+### Cumulative state (Phase 1-28 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 28 (63)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
