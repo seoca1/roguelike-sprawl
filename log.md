@@ -8134,3 +8134,71 @@ statework scenario.
 - Mission count: Phase 1 (initial) → Phase 32 (67)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 33 — New mission: chevette_nightshift_run (novice-arc Bridge courier)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 33 novice-arc mission expansion paired with Fiction Phase 33 Chevette Nightshift derivative.
+
+### 신규 Mission: chevette_nightshift_run
+
+| Field | Value |
+|---|---|
+| ID | `chevette_nightshift_run` |
+| Title | "Chevette Nightshift Run" |
+| Character ref | `novice` (Chevette-class Bridge-courier working-class procedural) |
+| Arc | 1 |
+| Pillar | `people` |
+| Grade range | 1-2 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 503 words)
+
+Chevette pedals along the bridge. The bridge is what the squatter community
+lives under. The squatter community is the bridge's working-class. The
+working-class is the bridge's. Chevette is the working-class. The
+working-class is the bridge's courier. The courier is Chevette. ... [full
+EN body in missions.json]
+
+### Story synopsis (KO, 1186 chars)
+
+셰벳이 브리지를 따라 페달을 밟는다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 33:
+
+- **Fiction** `derivative/bridge-trilogy/short-stories/{en,ko}/2026-07-19_chevette_nightshift.{md,.ko.md}` (new derivative, 478 EN / 1244 KO words)
+- **Fiction** `wiki/characters/chevette-washington.md` (existing, Tier 1 — promoted Phase 16)
+- **Fiction** `wiki/settings/the-bridge.md` (existing setting)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `chevette_nightshift_run` (503 words EN) — Bridge-courier data-key pick-up
+
+The derivative's Chevette-courier-nightshift register operationalized in the
+mission's novice-arc data-key pick-up scenario.
+
+### Mission distribution (Phase 33 후)
+
+| Character | Phase 32 | **Phase 33** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| **novice** | 22 | **23** ← +1 (this phase) |
+| heretic | 16 | 16 |
+| suit | 9 | 9 |
+| **Total** | **67** | **68** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 67 → **68** |
+
+### Cumulative state (Phase 1-33 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 33 (68)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
