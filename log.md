@@ -7621,3 +7621,91 @@ Together these constitute the working-class matrix-operator's complete kit.
 - Mission count: Phase 1 (initial) → Phase 25 (61)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 26 — New mission: sense_net_archive_intrusion (suit-arc corporate-defensive)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 26 suit-arc mission expansion paired with Fiction Phase 26 sense-net concept page.
+
+### 신규 Mission: sense_net_archive_intrusion
+
+| Field | Value |
+|---|---|
+| ID | `sense_net_archive_intrusion` |
+| Title | "Sense/Net Archive Intrusion" |
+| Character ref | `suit` (corporate-defensive operative / 0300 emergency-response) |
+| Arc | 4 |
+| Pillar | `purpose` |
+| Grade range | 4-5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 379 words)
+
+The Suit's office gets the call at 0300. A Sense/Net archive has been probed.
+Three Cowboy-class operators — not the usual hustler-class, not the working-
+class hounds that show up for the daily-grind extractions — three *professionals*
+have been working their way through Sense/Net's first-defense perimeter for the
+better part of an hour. The Suit logs in. The Suit has credentials Sense/Net
+doesn't quite know how to invalidate — corporate-erasure protection that pays
+for itself in moments exactly like this one. The Suit reads the intrusion
+profile. Three professionals, working in concert. Each one separately skilled;
+together, a coordinated probe. Sense/Net's first-defense ICE has been doing
+its work. The probe has cost each operator a constructed presence. The probes
+have left traces: a sequence of operation-patterns that the Sense/Net ICE has
+marked as Cowboy-class intrusion traces. The Suit reads the trace-patterns. The
+trace-patterns have a seasonal marker — they're the trace-pattern of a
+*sense-net-class* hired operative, not a freelance Cowboy. The hires are inside
+the Sense/Net ecosystem. The hires are staffed by someone in the Sense/Net
+corporate layer. The Sense/Net corporate layer uses its own internal
+defensive-class hires to test its own defenses; the test is what the Sense/Net
+trace-profile suggests. The Suit recognizes the trace. The Suit recognizes who
+paid for the test. The test-failure on Sense/Net's perimeter is the operative-
+class hedge-fund's preferred quarterly-review signal — the Sense/Net defensive
+architecture has a measurable weakness, the weakness is what the quarterly-
+review measures. The Suit's job is to find the weakness before the quarterly-
+review does. The Suit finds the weakness. The Suit knows what to do with the
+weakness. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 924 chars)
+
+이 Suit의 사무실에는 0300에 전화가 온다. Sense/Net 데이터 보관소가
+점검을 받았다 ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 26 — both projects now have **sense-net** content:
+
+- **Fiction** `wiki/concepts/sense-net.md` (79 lines) — data-archival substrate concept
+- **Fiction** `wiki/factions/sense-net.md` (existing faction page) — Sense/Net corporate entity
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `sense_net_archive_intrusion` (379 words EN)
+
+Concept-faction-mission trio: the data-archival substrate (concept) supports
+the Sense/Net corporate entity (faction) which is defended by the suit-archetype
+(mission).
+
+### Mission distribution (Phase 26 후)
+
+| Character | Phase 25 | **Phase 26** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 20 | 20 |
+| heretic | 15 | 15 |
+| **suit** | 6 | **7** ← +1 (this phase, first suit-archetype mission since Phase 13 case-meets-cayce) |
+| **Total** | **61** | **62** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 61 → **62** |
+
+### Cumulative state (Phase 1-26 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 26 (62)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
