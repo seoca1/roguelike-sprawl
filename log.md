@@ -7888,3 +7888,100 @@ This mission pairs with Fiction Phase 29 — both projects now have **cortex-hou
 - Mission count: Phase 1 (initial) → Phase 29 (64)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 30 — New mission: zaibatsu_statework (suit-arc industrial-class substrate)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 30 suit-arc mission expansion paired with Fiction Phase 30 zaibatsu concept page.
+
+### 신규 Mission: zaibatsu_statework
+
+| Field | Value |
+|---|---|
+| ID | `zaibatsu_statework` |
+| Title | "Zaibatsu Statework" |
+| Character ref | `suit` (corporate-defensive / zaibatsu-supply-chain statework) |
+| Arc | 5 |
+| Pillar | `purpose` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 467 words)
+
+The zaibatsu has been operating out of a Seven-Eleven in Chiba for forty years.
+The seven-eleven is the pacific rim's most-concentrated industrial-class
+substrate, run by operators whose names appear on no corporate document. The
+operator-pairs at the counter know which zaibatsu they work for: they know
+the name, they know the family tree, they know the morning-shift and the
+evening-shift. The Suit's office has been tracking the seven-eleven's
+zaibatsu-supply-chain for two years. The Suit tracks it because the supply-
+chain's leaked into the sprawl's working-class matrix-labor market through the
+Ono-Sendai / Hosaka / cybernetic-cyberdeck supply lines. The cowboy-class
+equipment that the working-class matrix-labor market has been buying for ten
+years traces to a zaibatsu-supplied industrial-substrate supply chain. The
+trace is the era's late-Capitalist industrial-class substrate. The trace is
+what the Seven-Eleven zaibatsu has been quietly running. The Suit knows. The
+Suit logs in. The Suit reads the seven-eleven's till-transactions. The till-
+transactions trace the zaibatsu-supply-chain's daily throughput. The throughput
+is the era's late-Capitalist industrial-class substrate, individual transactions,
+individual cowboy-class equipment purchases, individual working-class
+matrix-operative substitutions — the substitutions are what the era's
+industrial-class substrate has been managing through the seven-eleven. The
+Suit reads the substitutions. The Suit reads the daily substrate-management
+registry. The Suit recognizes the registry: the registry is the era's late-
+Capitalist industrial-class substrate's *intimate statework*. The statework is
+what the zaibatsu has been running through the Seven-Eleven. The Suit's log-in
+is part of the statework. The Suit's reading is the corporate-statework's
+monitoring. The monitoring is what the era's late-Capitalist industrial-class
+substrate has required. The Suit files the daily report. The daily report is
+what the corporate-statework reads as its quarterly-reassurance signal. The
+reassurance is what the era's late-Capitalist industrial-class substrate has
+had as its industrial-class operational continuity. The continuity is what
+the zaibatsu has produced. The Suit gets paid. The Suit goes home. The Seven-
+Eleven zaibatsu-supply-chain continues. The era's late-Capitalist industrial-
+class operational continuity continues.
+
+### Story synopsis (KO, 1112 chars)
+
+자이바쓰는 40년 동안 치바의 Seven-Eleven에서 운영되어 왔다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 30 — both projects now have **zaibatsu** content:
+
+- **Fiction** `wiki/concepts/zaibatsu.md` (72 lines) — East-Asian industrial-conglomerate substrate concept
+- **Fiction** `wiki/factions/zaibatsu.md` (existing faction-page treatment)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `zaibatsu_statework` (467 words EN) — zaibatsu-supply-chain corporate-statework
+
+Concept-faction-mission trio: the industrial-class substrate (concept) supports
+the zaibatsu-organized corporate form (faction) which operates the supply-chain
+monitored by the suit-archetype (mission).
+
+### Mission distribution (Phase 30 후)
+
+| Character | Phase 29 | **Phase 30** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 22 | 22 |
+| heretic | 15 | 15 |
+| **suit** | 7 | **8** ← +1 (this phase) |
+| **Total** | **64** | **65** |
+
+Suit-arc becomes closer to balanced (was 7 of 65 = 10.8%; now 8 of 65 = 12.3%).
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 64 → **65** |
+
+### Cumulative state (Phase 1-30 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 30 (65)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
