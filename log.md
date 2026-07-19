@@ -7985,3 +7985,83 @@ Suit-arc becomes closer to balanced (was 7 of 65 = 10.8%; now 8 of 65 = 12.3%).
 - Mission count: Phase 1 (initial) → Phase 30 (65)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 31 — New mission: finn_factory_labour_run (suit-arc labor-market audit)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 31 suit-arc mission expansion paired with Fiction Phase 31 Finn's Factory Labour derivative.
+
+### 신규 Mission: finn_factory_labour_run
+
+| Field | Value |
+|---|---|
+| ID | `finn_factory_labour_run` |
+| Title | "Finn's Factory Labour Run" |
+| Character ref | `suit` (corporate-statework / Finn-labor-market audit) |
+| Arc | 2 |
+| Pillar | `purpose` |
+| Grade range | 4-5 |
+| Fixer | `slick-henry` |
+| Zone | surface |
+
+### Story synopsis (EN, 412 words)
+
+The Suit audits the Finn's labor market every quarter. The audit is a
+statework formality. The Suit shows up at the Finn's Cheap Hotel bar with
+a corporate-issued clipboard. The clipboard has seventeen names. The Suit
+reads the names that the working-class matrix-operators have been matched
+with for the past quarter. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 988 chars)
+
+Suit는 매 분기 핀의 노동 시장을 감사한다. ... [full KO body in missions.json]
+
+### Story spine
+
+The corporate-statework view of Finn's labor-market. The Suit audits the
+labor-market through corporate-issued clipboard; the clipboard has seventeen
+matches per quarter. Seventeen is the Finn's labor-market throughput; the
+throughput is the working-class-matrix-labor market's daily operational
+image. The audit is the corporate-statework's confirmation. The continuation
+is what the working-class matrix-labor market has had as its industrial-class
+operational continuation. The matching is the Finn's factory-labor.
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 31:
+
+- **Fiction** `derivative/sprawl-trilogy/short-stories/{en,ko}/2026-07-19_finns_factory_labour.{md,.ko.md}` (new derivative, 580 EN / 1107 KO words)
+- **Fiction** `wiki/characters/the-finn.md` (existing, Tier 1 — promoted Phase 16)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `finn_factory_labour_run` (412 words EN) — Suit-view of Finn's labor-market
+
+The derivative's Finn-voice fixer-memoir operationalizes a parallel structure
+*X is the Y's Z* register; the mission's Suit-view operationalizes the same
+register from the corporate-statework side (parallel structure preserved).
+
+### Mission distribution (Phase 31 후)
+
+| Character | Phase 30 | **Phase 31** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 22 | 22 |
+| heretic | 15 | 15 |
+| **suit** | 8 | **9** ← +1 (this phase) |
+| **Total** | **65** | **66** |
+
+Suit-arc continues balancing (now 9/66 = 13.6%, was 8/65 = 12.3%).
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 65 → **66** |
+
+### Cumulative state (Phase 1-31 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 31 (66)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
