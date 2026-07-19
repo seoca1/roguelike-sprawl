@@ -8065,3 +8065,72 @@ Suit-arc continues balancing (now 9/66 = 13.6%, was 8/65 = 12.3%).
 - Mission count: Phase 1 (initial) → Phase 31 (66)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 32 — New mission: bing_statework (heretic-arc class-pharmacology)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 32 heretic-arc mission expansion paired with Fiction Phase 32 bing concept page.
+
+### 신규 Mission: bing_statework
+
+| Field | Value |
+|---|---|
+| ID | `bing_statework` |
+| Title | "Bing Statework" |
+| Character ref | `heretic` (heretic-as-binged; class-pharmacology operational-continuation) |
+| Arc | 2 |
+| Pillar | `power` |
+| Grade range | 3-4 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 488 words)
+
+The heretic checks the bing supply. The heretic's worked-class matrix-labor
+market's principal stimulant is the era's working-class pharmacology. The bing
+is what the era's working-class matrix-operator takes before jacking in. The
+bing is what the era's class-structure uses to distinguish the working-class
+from the corporate-class. The heretic is the working-class. The heretic is
+not the corporate-class. The heretic is the binged. The binged is the era's
+working-class class-substance. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1111 chars)
+
+이단자가 빙을 점검한다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 32 — both projects now have **bing** content:
+
+- **Fiction** `wiki/concepts/bing.md` (81 lines) — Chiba pharmacology / *binged-state* register
+- **Fiction** `wiki/characters/case.md` (existing, Tier 1; promoted Phase 15) — the trilogy's principal *binged-state* exemplar
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `bing_statework` (488 words EN) — heretic-class statework scenario
+
+The concept's *binged-state* register operationalized in the mission's heretic-class
+statework scenario.
+
+### Mission distribution (Phase 32 후)
+
+| Character | Phase 31 | **Phase 32** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 22 | 22 |
+| **heretic** | 15 | **16** ← +1 (this phase) |
+| suit | 9 | 9 |
+| **Total** | **66** | **67** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 66 → **67** |
+
+### Cumulative state (Phase 1-32 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 32 (67)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
