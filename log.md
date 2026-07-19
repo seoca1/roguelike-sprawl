@@ -7432,3 +7432,88 @@ plus Loa-channel substrate depth:
 - Mission count: Phase 1 (initial) → Phase 23 (59)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 24 — New mission: ono_sendai_repair (novice-arc cross-project)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 24 novice-arc mission expansion paired with Fiction Phase 24 ono-sendai concept page.
+
+### 신규 Mission: ono_sendai_repair
+
+| Field | Value |
+|---|---|
+| ID | `ono_sendai_repair` |
+| Title | "Ono-Sendai Repair" |
+| Character ref | `novice` (pre-recruitment K-class archetype) |
+| Arc | 1 |
+| Pillar | `purpose` |
+| Grade range | 1-2 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 295 words)
+
+The Cyberspace 7 has been through three Chiba caps and one too many jack-outs. K
+can feel it in the back of his skull, a low-level buzz where the Ono-Sendai meet
+the cortex, the deck's bio-electrical interface degrading like an old Hosaka
+terminal on its second life. He needs it repaired. He doesn't have credit for
+the Ono-Sendai service clinic on the eighth floor — the real Ono-Sendai shop,
+the brand office, where the Cyberspace 7's calibration is performed with
+proprietary Ono-Sendai diagnostic rigs. He has enough for the street-corner
+jack-doc on the fourteenth — Pavel-equipment, no warranty, the technician who
+can fix a cracked interface but can't tell a deck from a deck-chair. K goes up
+the eighth. The brand office won't take him. The rep looks at the deck, looks at
+K, looks at the deck again. The rep is maybe thirty. The deck is older than
+the rep. K is younger than the rep. The rep says the kinds of things reps say,
+things about corporate client-rights and minimum-purchase thresholds and the
+Cyberspace 7's discontinued status. K has a brief life-flash moment. The brief
+life-flash moment is what working-class matrix-labor feel when Ono-Sendai stops
+recognizing them. The deck is the working-class substrate; the brand office's
+non-recognition is the substrate's working-class cut-off. K leaves the eighth
+floor. The street-corner jack-doc on the fourteenth fixes the cracked interface.
+The fix is partial. The deck runs at eighty percent of its designed capability.
+K is okay with eighty percent. Eighty percent is the working-class
+matrix-operative's standard operating capability.
+
+### Story synopsis (KO, 728 chars)
+
+Cyberspace 7은 세 번의 치바 캡슐과 잭아웃 한 번을 더 거쳤다. K는 그것을
+후두골 안쪽에서 ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 24 — both projects now have **ono-sendai**
+content:
+
+- **Fiction** `wiki/concepts/ono-sendai.md` (81 lines) — vendor / Cyberspace 7 concept
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `ono_sendai_repair` (295 words EN) — pre-recruitment deck-repair narrative
+
+The concept page documents the Cyberspace 7's vendor-as-character pattern and
+consumer-grade working-class substrate status; the mission narrative operationalizes
+those features as Case's pre-recruitment deck-repair scenario.
+
+### Mission distribution (Phase 24 후)
+
+| Character | Phase 23 | **Phase 24** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 18 | **19** |
+| heretic | 15 | 15 |
+| suit | 6 | 6 |
+| **Total** | **59** | **60** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 59 → **60** |
+
+### Cumulative state (Phase 1-24 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 24 (60)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
