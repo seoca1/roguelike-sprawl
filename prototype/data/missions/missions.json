@@ -2094,5 +2094,149 @@
         "memory_fragment": 1
       }
     }
+  },
+  "bigend_laney_lunch": {
+    "id": "bigend_laney_lunch",
+    "title": "Bigend Meets Laney",
+    "story": {
+      "synopsis_en": "Tokyo, May 2003. Colin Laney, fresh from the Rez/Lo reunion, is approached by Hubertus Bigend of Blue Ant in a Roppongi noodle shop. Bigend offers Laney a contract: profile the data-flow patterns that produced Rei Toei, the world's first idoru. Laney, whose previous employers paid him in deletions and threats, recognizes the offer as genuine only when Bigend mentions Cayce Pollard. The story traces Laney's reluctant entry into the brand-economy of the post-Cold-War moment, where data-flow analysis has become the era's most valuable service.",
+      "synopsis_ko": "도쿄, 2003년 5월. 레즈-로 재결합에서 막 돌아온 콜린 레니는 롭퐁이의 라멘 가게에서 블루 앤트의 위베르투스 바이겐드에게 접근을 받는다. 바이겐드는 레니에게 계약—세계 최초의 아이도루인 레이 토에이를 만들어낸 데이터 흐름 패턴을 분석해달라는—을 제안한다. 이전 고용주들이 삭제로 그를 위협하던 것과 달리, 바이겐드가 케이스 폴라드의 이름을 언급했을 때 레니는 비로소 이 제안이 진짜임을 깨닫는다.",
+      "source": "bigend-laney-lunch",
+      "character_ref": "veteran",
+      "arc": 1,
+      "pillar": "memory",
+      "word_count_en": 1082,
+      "char_count_ko": 2157,
+      "cast": "laney, bigend"
+    },
+    "fixer": "bigend",
+    "arc": 1,
+    "pillar": "memory",
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "data_analysis",
+      "target": "blue_ant_contract"
+    },
+    "secondary_objectives": [],
+    "matrix_seed": 0,
+    "zone": "tokyo",
+    "rewards": {
+      "credits": 2500,
+      "materials": {
+        "yen": 1
+      }
+    }
+  },
+  "coolhunter_laney_tokyo": {
+    "id": "coolhunter_laney_tokyo",
+    "title": "Coolhunter Meets Laney",
+    "story": {
+      "synopsis_en": "Tokyo, October 2003. Cayce Pollard, dispatched by Hubertus Bigend to interview Colin Laney about the data-flow patterns behind Rei Toei, finds Laney in a Shibuya back-alley noodle shop. Laney produces an unusual allergic reaction in Cayce — not to a brand, but to a pattern. The story traces their exchange and Cayce recognition that she has met the era most sensitive data-flow analyst.",
+      "synopsis_ko": "도쿄, 2003년 10월. 위베르투스 바이겐드로부터 레이 토에이背后的 데이터 흐름 패턴에 대해 콜린 레니와 인터뷰하라는 파견을 받은 케이스 폴라드는 시부야 뒷골목 라멘 가게에서 레니를 찾는다. 레니는 케이스에게 브랜드가 아닌 패턴에 대한 알레르기 반응을 일으킨다. 짧은 만남과 케이스가 시대의 가장 민감한 데이터 흐름 분석가를 만났다는 인식.",
+      "source": "coolhunter-laney-tokyo",
+      "character_ref": "novice",
+      "arc": 2,
+      "pillar": "people",
+      "word_count_en": 1082,
+      "char_count_ko": 2157,
+      "cast": "cayce, laney"
+    },
+    "fixer": "bigend",
+    "arc": 2,
+    "pillar": "people",
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "data_analysis",
+      "target": "cayce_laney_exchange"
+    },
+    "secondary_objectives": [],
+    "matrix_seed": 0,
+    "zone": "tokyo",
+    "rewards": {
+      "credits": 2500,
+      "materials": {
+        "yen": 1
+      }
+    }
+  },
+  "case_meets_cayce": {
+    "id": "case_meets_cayce",
+    "title": "Case Meets Cayce",
+    "story": {
+      "synopsis_en": "New York, 2007. Case, retired from matrix-work but still operating occasionally for hire, accepts a meeting with Hubertus Bigend of Blue Ant, who wants a pattern-read on a new data-flow that has appeared in the matrix. At the meeting Cayce Pollard is the coolhunter Bigend has assigned to work the case. Case and Cayce meet, both detecting what the other detects, and both recognizing for the first time a kindred instrument. The story traces their brief encounter and the recognition that the Sprawl matrix-cowboy and the Blue Ant brand-sensor are two forms of the same operation.",
+      "synopsis_ko": "뉴욕, 2007년. 매트릭스 작업에서 은퇴했지만 여전히 가끔 계약으로 일하는 케이스는 매트릭스에 나타난 새로운 데이터 흐름에 대한 패턴 읽기를 의뢰한 블루 앤트의 위베르투스 바이겐드 회의를 수락한다. 회의에서 케이스 폴라드는 바이겐드가 사건을 맡긴 쿨헌터이다. 케이스와 케이스는 만나고, 둘 다 다른 사람이 감지하는 것을 감지한다. 이 이야기는 짧은 만남과 매트릭스 카우보이와 블루 앤트 시대의 브랜드 센서가 같은 작업의 두 가지 형태라는 인식을 그린다.",
+      "source": "case-meets-cayce",
+      "character_ref": "veteran",
+      "arc": 4,
+      "pillar": "identity",
+      "word_count_en": 1082,
+      "char_count_ko": 1947,
+      "cast": "case, cayce"
+    },
+    "fixer": "bigend",
+    "arc": 4,
+    "pillar": "identity",
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "pattern_read",
+      "target": "post_wintermute_substrate"
+    },
+    "secondary_objectives": [],
+    "matrix_seed": 0,
+    "zone": "soho",
+    "rewards": {
+      "credits": 3500,
+      "materials": {
+        "yen": 1,
+        "soho_pass": 1
+      }
+    }
+  },
+  "panther_negotiate": {
+    "id": "panther_negotiate",
+    "title": "Panther Negotiate",
+    "story": {
+      "synopsis_en": "The Moderns want to talk. They don't come up to the deck and say so — they pipe it through a cuttle-cassette left in the bass drum of the Falconer's lounge, the cuttle the Moderns favor for retainer-class negotiations. Finn plays it sideways under the table while the runner eats shabu up at Chiba's port district. The runner knows what's coming. Retainer-class work — corporate extractions that want counter-operative cosmetic — don't pay the Moderns to look like Moderns on the run. They pay the Moderns to look like the corporate employer's chosen-cowboy on the run. The Panther Moderns' retainer offer is the corporate employer's stylistic. The runner now wears the right Z-surge jacket, walks with a Chiba-strut calibrated to Sense/Net's preferred hiring profile, and jacks into a Tessier-Ashpool core designed to look, to ICE, like a Sense/Net extract. The Moderns are paid for looking the part. The runner is paid for playing it. The ICE doesn't see the difference because the difference is, in the era's late-Capitalist retainer logic, the same thing.",
+      "synopsis_ko": "모던스가 협상을 걸어왔다. 직접 와서 말한 게 아니라 — 페이콘어 라운지의 베이스 드럼 안에 묻어둔 컷틀 카세트를 통해서, 모던스가 리테이너 클래스 협상에 선호하는 그 컷틀로. 핀은 러너가 치바의 항구 지구에서 샤부를 먹고 있을 때 식탁 아래에서 그것을 사선으로 틀어놓았다. 러너는 뭘 봐오는지 안다. 리테이너 클래스 작업 — 카운터 오퍼레이티브 코스메틱을 원하는 기업 추출 — 는 모던스에게 모던스처럼 달리는 값을 치지 않는다. 그들은 모던스에게 모던스가 아니라 기업이 뽑은 카우보이처럼 달리는 값을 친다. 팬서 모던스의 리테이너 제안은 기업이 원하는 스타일이다. 러너는 이제 맞는 Z-서지 재킷을 걸치고, Sense/Net이 선호하는 채용 프로필에 보정 맞춘 치바-스트룻으로 걷고, Sense/Net 추출처럼 ICE에게 보이도록 설계된 T-A 코어에 잭을 꽂는다. 모던스는 그 역할을 연기한 돈을 받는다. 러너는 그 역할을 수행한 돈을 받는다. 시대의 후기 자본주의 리테이너 논리에서, 그 차이는 같은 거니까, ICE가 그 차이를 보지 못한다.",
+      "source": "panther_negotiate",
+      "character_ref": "veteran",
+      "arc": 2,
+      "pillar": "power",
+      "word_count_en": 195,
+      "char_count_ko": 487,
+      "cast": "sil"
+    },
+    "fixer": "finn",
+    "grade_min": 2,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "sense_net_disguise"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.construct",
+        "count": 2
+      },
+      {
+        "type": "deliver",
+        "target": "panther_handling",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 1083,
+    "zone": "surface",
+    "rewards": {
+      "credits": 1100,
+      "materials": {
+        "data_fragment": 4,
+        "unique_construct": 1
+      }
+    },
+    "arc": 2
   }
 }

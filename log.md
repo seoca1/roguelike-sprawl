@@ -7266,3 +7266,83 @@ lov: "Lov's absence drives the Rez's music"
 - `Game/roguelike_sprawl/prototype/tests/unit/test_mission_rep_filter.py` (48 → 54)
 - `Game/roguelike_sprawl/dashboard/stages.html` (이전 세션: 48 → 54)
 
+
+## [2026-07-19] design | Phase 22 — New mission: panther_negotiate
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`Fiction, roguelike_sprawl 프로젝트에 대해서만 추가 확장해줘`). roguelike_sprawl: 신규 mission 1개 추가 (Phase 22 of game-side).
+
+### 신규 Mission: panther_negotiate
+
+| Field | Value |
+|---|---|
+| ID | `panther_negotiate` |
+| Title | "Panther Negotiate" |
+| Character ref | `veteran` (retainer-class work) |
+| Arc | 2 |
+| Pillar | `power` |
+| Grade range | 2-3 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 195 words)
+
+The Moderns want to talk. They don't come up to the deck and say so — they pipe it
+through a cuttle-cassette left in the bass drum of the Falconer's lounge, the cuttle
+the Moderns favor for retainer-class negotiations. Finn plays it sideways under the
+table while the runner eats shabu up at Chiba's port district. The runner knows
+what's coming. Retainer-class work — corporate extractions that want
+counter-operative cosmetic — don't pay the Moderns to look like Moderns on the run.
+They pay the Moderns to look like the corporate employer's chosen-cowboy on the
+run. The Panther Moderns' retainer offer is the corporate employer's stylistic. The
+runner now wears the right Z-surge jacket, walks with a Chiba-strut calibrated to
+Sense/Net's preferred hiring profile, and jacks into a Tessier-Ashpool core designed
+to look, to ICE, like a Sense/Net extract. The Moderns are paid for looking the
+part. The runner is paid for playing it. The ICE doesn't see the difference because
+the difference is, in the era's late-Capitalist retainer logic, the same thing.
+
+### Story synopsis (KO, 487 chars)
+
+모던스가 협상을 걸어왔다. 직접 와서 말한 게 아니라 — 페이콘어 라운지의
+베이스 드럼 안에 묻어둔 컷틀 카세트를 통해서, 모던스가 리테이너 클래스 협상에
+선호하는 그 컷틀로. 핀은 러너가 치바의 항구 지구에서 샤부를 먹고 있을 때
+식탁 아래에서 그것을 사선으로 틀어놓았다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission ties to Fiction Phase 22 — both projects now have **panther-moderns**
+content:
+
+- **Fiction** `wiki/concepts/panther-moderns.md` (67 lines) — concept page
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `panther_negotiate` (195 words EN) — retainer-class mission narrative
+
+The concept page documents the Panther Moderns' structural features; the mission
+narrative operationalizes those features in a retainer-class work example.
+
+### Mission distribution (Phase 22 후)
+
+| Character | Before | **After** |
+|---|---:|---:|
+| veteran | 19 | **20** |
+| novice | 18 | 18 |
+| heretic | 14 | 14 |
+| suit | 6 | 6 |
+| **Total** | **57** | **58** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| `python3 -c "import json; d=json.load(open('prototype/data/missions/missions.json')); ...` | panther_negotiate structure 검증 OK |
+| Mission count | 57 → **58** |
+| Wikilink integrity | unchanged |
+
+### Cumulative state (Phase 1-22 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 22+ (58)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
