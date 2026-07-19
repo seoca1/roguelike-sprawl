@@ -7517,3 +7517,107 @@ those features as Case's pre-recruitment deck-repair scenario.
 - Mission count: Phase 1 (initial) → Phase 24 (60)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 25 — New mission: hosaka_terminal_supply (novice-arc, Ono-Sendai pair)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 25 novice-arc mission expansion paired with Fiction Phase 25 hosaka concept page.
+
+### 신규 Mission: hosaka_terminal_supply
+
+| Field | Value |
+|---|---|
+| ID | `hosaka_terminal_supply` |
+| Title | "Hosaka Terminal Supply" |
+| Character ref | `novice` (K-class archetype) |
+| Arc | 1 |
+| Pillar | `purpose` |
+| Grade range | 1-2 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 358 words)
+
+The Hosaka service center is on the eleventh floor of a building whose elevator
+only works Tuesdays. K is there on a Wednesday. He has the Ono-Sendai
+Cyberspace 7 in his bag — the brand office's partial-fix eighty percent of what
+the deck could do, bio-electric coupling restored but the off-headpiece terminal
+pair nowhere to be seen. K's deck works without a Hosaka terminal in the same
+way that K's body works without lungs: the pairing is what gives the working-
+class matrix-operator runnable substrates; the partial-pairing is what working-
+class matrix-labor calls a Monday. Eleven flights up the stairs are a Hosaka
+service technician who's seen a thousand of K's Monday — partial decks brought
+to be paired with the firm's off-headpiece Hosaka mainframes. The technician
+looks at the deck. Looks at K. Looks at the deck. The technician is maybe
+forty. The deck is older. K is younger. The technician quotes a price. The price
+is what a working-class matrix-operator should pay for a Hosaka terminal with
+three years of operating life left — slightly more than a week of honest Sprawl
+hustling. K has slightly more than a week of honest Sprawl hustling saved. The
+technician takes K's credit. The technician goes to the back, the Hosaka service
+center's off-headpiece mainframe storage, and pulls a Hosaka off the rack — a
+unit mid-generation, slightly-used, the bio-electric input side scuffed but
+functional. The technician pairs it with K's deck. The pairing takes fifteen
+minutes. K feels the deck and the terminal interlock. The pairing is what
+working-class matrix-operatives call a kit. Eight other stores on the fourteenth
+floor would have done this for less. K picked the eleventh-floor Hosaka service
+center because the eleventh-floor service center is the only one that knows
+what an Ono-Sendai Cyberspace 7 is. The working-class matrix-operator's
+commercial-substrate loyalty is what the era's vendor-pairing has produced. K
+walks out into the rain. The deck-against-the-terminal kit is whole. The whole
+is what working-class matrix-labor needs to run the next job. The next job is
+what Wintermute has waiting. K doesn't know Wintermute. K knows Ono-Sendai. K
+knows Hosaka. The kit has been paired. The era's late-Capitalist commercial
+substrate has done its vendor-pairing. The rest of the matrix-labor is what
+working-class matrix-operatives call a Tuesday.
+
+### Story synopsis (KO, 893 chars)
+
+Hosaka 서비스 센터는 엘리베이터가 화요일에만 작동하는 건물의 11층에 있다.
+K는 수요일에 거기 있다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 25 — both projects now have **hosaka**
+content:
+
+- **Fiction** `wiki/concepts/hosaka.md` (87 lines) — off-headpiece mainframe concept
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `hosaka_terminal_supply` (358 words EN) — terminal-acquisition narrative
+
+The concept page documents the Hosaka terminal as the off-headpiece mainframe
+substrate paired with the Ono-Sendai Cyberspace 7 deck; the mission narrative
+operationalizes those features as K's terminal-acquisition scenario.
+
+### Ono-Sendai / Hosaka pair (Phase 24-25 roguelike_sprawl corpus)
+
+| Mission | ID | Direction |
+|---|---|---|
+| Phase 24 | `ono_sendai_repair` | Cyberspace 7 deck-repair (input-side / wet-ware) |
+| Phase 25 | `hosaka_terminal_supply` | Hosaka terminal-pairing (output-side / compute) |
+
+Together these constitute the working-class matrix-operator's complete kit.
+
+### Mission distribution (Phase 25 후)
+
+| Character | Phase 24 | **Phase 25** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| **novice** | 19 | **20** |
+| heretic | 15 | 15 |
+| suit | 6 | 6 |
+| **Total** | **60** | **61** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 60 → **61** |
+
+### Cumulative state (Phase 1-25 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 25 (61)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
