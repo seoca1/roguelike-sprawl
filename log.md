@@ -8202,3 +8202,70 @@ mission's novice-arc data-key pick-up scenario.
 - Mission count: Phase 1 (initial) → Phase 33 (68)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 34 — New mission: cayce_footage_audit_run (heretic-arc brand-and-power)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 34 heretic-arc mission expansion paired with Fiction Phase 34 Cayce Footage Audit derivative.
+
+### 신규 Mission: cayce_footage_audit_run
+
+| Field | Value |
+|---|---|
+| ID | `cayce_footage_audit_run` |
+| Title | "Cayce Footage Audit Run" |
+| Character ref | `heretic` (heretic-as-coolhunter; brand-and-power new-media statework) |
+| Arc | 1 |
+| Pillar | `purpose` |
+| Grade range | 4-5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 408 words)
+
+Cayce audits the footage. The footage has been circulating. The fragments
+have been circulating for weeks. The fragments are what the footage is.
+The footage is the era's working-class new-media. ... [full EN body in
+missions.json]
+
+### Story synopsis (KO, 947 chars)
+
+케이시가 영상을 감사한다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 34:
+
+- **Fiction** `derivative/blue-ant/short-stories/{en,ko}/2026-07-19_cayce_footage_audit.{md,.ko.md}` (new derivative, 666 EN / 1463 KO words)
+- **Fiction** `wiki/characters/cayce-pollard.md` (existing, Tier 1 — promoted Phase 16)
+- **Fiction** `wiki/concepts/footage.md` (existing concept)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `cayce_footage_audit_run` (408 words EN) — heretic-class brand-and-power statework scenario
+
+The derivative's Cayce-coolhunter-footage-audit register operationalized in
+the mission's heretic-class statework scenario.
+
+### Mission distribution (Phase 34 후)
+
+| Character | Phase 33 | **Phase 34** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 23 | 23 |
+| **heretic** | 16 | **17** ← +1 (this phase) |
+| suit | 9 | 9 |
+| **Total** | **68** | **69** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 68 → **69** |
+
+### Cumulative state (Phase 1-34 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 34 (69)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
