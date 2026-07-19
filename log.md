@@ -7792,3 +7792,99 @@ as a matrix-witness run.
 - Mission count: Phase 1 (initial) → Phase 28 (63)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 29 — New mission: cortex_hound_recovery (novice-arc Case-style)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 29 novice-arc mission expansion paired with Fiction Phase 29 cortex-hound concept page.
+
+### 신규 Mission: cortex_hound_recovery
+
+| Field | Value |
+|---|---|
+| ID | `cortex_hound_recovery` |
+| Title | "Cortex-Hound Recovery" |
+| Character ref | `novice` (K-class working-class pre-recursion) |
+| Arc | 1 |
+| Pillar | `power` |
+| Grade range | 1-3 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 488 words)
+
+K wakes up in a Cheap Hotel room in Chiba. The room is three meters by four.
+The walls are plywood. The bed is a futon. The window is two meters off the
+floor. The window's bars are broken. The bartender next door owes Finn money.
+Finn has been waiting. Finn has been waiting for a year. K has been waiting
+for longer. K was once a Cowboy. K was once a runner. K was once a runner for
+a Sense/Net archive extraction that worked three winters ago. K got too
+aggressive in his running. Sense/Net retaliated. Sense/Net administered a
+mycotoxin through K's nervous system — a cortex-hound, the corporate class's
+principal enforcement, a *payload* that damages the wet-ware-coupling without
+killing the cowboy. K's matrix-presence is broken. K's jacking-in capacity is
+broken. K's working-class operative role is *cortexed out*. K's body is alive.
+K's matrix is dead. K walks the Chiba port district waiting for the matrix to
+come back. The matrix does not come back. K drinks cheap Korean coffee. K eats
+shabu. K remembers the matrix. The matrix was more real than this room. The
+matrix was more real than his hands. The matrix was — Finn appears. Finn says
+there is a clinic in the L-5 corridor. The clinic can repair the cortex-hound.
+The repair is expensive. The repair is corporate-grade. The repair would
+restore K's jacking-in capacity. K's eye lights up. K has been waiting. K waits
+now for the L-5 corridor. The L-5 corridor is where the clinic is. The L-5
+corridor is where Wintermute has been waiting too. K doesn't know Wintermute.
+K knows the clinic. The clinic is what K's pre-recursion run's purpose is. K
+runs for the clinic. The run becomes a Wintermute operation. The operation is
+what K's waiting has been for. The waiting has been the working-class-without-
+the-matrix posture. The posture has been the L-5 corridor's waiting. The
+waiting is what the cortex-hound has produced as the era's working-class
+enforcement. The working-class enforcement has been the era's working-class
+architecture. The architecture is what K is in. K runs. The cortex-hound has
+been the cortex-hound. The recovery is the recovery. The recovery is what
+Wintermute is operating through. The operation through is what K's pre-recursion
+working-class-without-the-matrix has become. K runs for the clinic. The clinic
+is what the working-class cowboy's cortex-hound was for.
+
+### Story synopsis (KO, 1215 chars)
+
+K는 치바의 싼 호텔 방에서 깨어난다. ... [full KO body in missions.json]
+
+### Story spine
+
+- **Case-style archetype revival**: K's pre-recursion trauma (Sense/Net cortex-hound → catatonic working-class-without-the-matrix → Finn offers L-5 clinic) maps directly to *Neuromancer*'s Case model. The recovery-run is what the corporate-class disabling operation produces as its sequel.
+- **Working-class-without-the-matrix posture**: while disabled, K persists in Chiba's port-district underclass — drowning cortex-hound aftermath in cheap Korean coffee, shabu, matrix-recollection ("the matrix was more real than this room").
+- **L-5 corridor promise**: Finn's clinic-offer is the Wintermute-recruitment structural-foreshadow; the recovery-run becomes a Wintermute operation through the L-5 procedural-record mechanism (paired with zion_vote_observation's procedural-binding mechanism).
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 29 — both projects now have **cortex-hound** content:
+
+- **Fiction** `wiki/concepts/cortex-hound.md` (87 lines) — bio-cybernetic disabling technology concept
+- **Fiction** `wiki/characters/case.md` (existing, Tier 1; promoted Phase 15) — principal cortex-hound exemplar pre-Wintermute
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `cortex_hound_recovery` (488 words EN) — operationalizing the disabling-then-recovery sequence
+
+### Mission distribution (Phase 29 후)
+
+| Character | Phase 28 | **Phase 29** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| **novice** | 21 | **22** ← +1 (this phase) |
+| heretic | 15 | 15 |
+| suit | 7 | 7 |
+| **Total** | **63** | **64** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 63 → **64** |
+
+### Cumulative state (Phase 1-29 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 29 (64)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
