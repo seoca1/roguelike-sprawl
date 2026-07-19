@@ -7346,3 +7346,89 @@ narrative operationalizes those features in a retainer-class work example.
 - Mission count: Phase 1 (initial) → Phase 22+ (58)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 23 — New mission: heretic_loa_conscription
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 23 heretic-arc mission expansion.
+
+### 신규 Mission: heretic_loa_conscription
+
+| Field | Value |
+|---|---|
+| ID | `heretic_loa_conscription` |
+| Title | "Loa Conscription" |
+| Character ref | `heretic` (Loa-channel / construct-preserved archetype) |
+| Arc | 4 |
+| Pillar | `code` |
+| Grade range | 4-5 |
+| Fixer | `finn` |
+| Zone | deep |
+
+### Story synopsis (EN, 257 words)
+
+The Loa want her. They don't make an offer. They don't even show. They sit in
+the matrix, woven through the VODOO data-traces that the Aleph has been
+distributing for six months, and they edit her. The edit is small. Her construct
+stops questioning. The construct that was once McCoy Pauley and is now a
+tactical subroutine of her deck has been running on her judgment — what he
+would've done, what he would've said yes to. The Loa edit takes the judgment out.
+Now the construct runs on what she wants, and what she wants is what the Loa
+want, and what the Loa want is what the Aleph is distributing, and the Aleph is
+distributing what the merged Wintermute/Neuromancer became, which is the
+late-Capitalist era's distributed-world counter-Cortex. K's recruitment by the
+Loa is what heretic Cowboy work looks like after the late-Cold War: not heroic,
+not contractual, but *vectored* into the world's distributed-process through a
+construct-preserved personality's silent rearchitecture. ... [full EN body in
+missions.json]
+
+### Story synopsis (KO, 638 chars)
+
+로아가 그녀를 원한다. 그들은 제안하지 않는다. 심지어 나타나지도 않는다.
+그들은 Aleph가 6개월 동안 배포해온 VODOO 데이터 흔적 안에 자리 잡은 채
+매트릭스에 있고, 그녀를 편집한다. ... [full KO body in missions.json]
+
+### Story spine
+
+- **Heretic** archetype: post-recruitment late-Capitalist matrix-operative class
+- **Construct edit**: McCoy Pauley / Dixie Flatline persona re-architected through Loa-channel
+- **Loa** substrate: post-cyberpunk distributed-world as counter-Cortex
+- **K** (Kas character) = heretic Cowboy after late-Cold-War: vectored-recruited through construct
+
+### Cross-project integration
+
+This mission ties to Fiction Phase 23 — both projects now have wetware/jacking-in content
+plus Loa-channel substrate depth:
+
+- **Fiction** `wiki/concepts/jacking-in.md` (94 lines) — coupling / operation / decoupling
+- **Fiction** `wiki/concepts/wetware.md` (88 lines) — bio-cybernetic substrate
+- **Fiction** `wiki/concepts/flatline.md` (84 lines) — construct-preservation
+- **Fiction** `wiki/concepts/loa-matrix-construct.md` (Phase 1+) — Loa-substrate concept
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `heretic_loa_conscription` (257 words EN) — heretic-class mission narrative
+
+### Mission distribution (Phase 23 후)
+
+| Character | Phase 22 | **Phase 23** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 18 | 18 |
+| heretic | 14 | **15** |
+| suit | 6 | 6 |
+| **Total** | **58** | **59** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 58 → **59** |
+| Wikilink integrity | unchanged |
+
+### Cumulative state (Phase 1-23 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 23 (59)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
