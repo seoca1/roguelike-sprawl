@@ -8700,3 +8700,72 @@ Suit-arc now at 12 (was 11) — most-doubled since pre-22 (was 5); 16.2% of tota
 - Mission count: Phase 1 (initial) → Phase 40 (74)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 41 — New mission: laney_node_signal_run (veteran-arc data-pattern perception)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 41 veteran-arc mission expansion paired with Fiction Phase 41 nodal-points concept + Bridge derivative.
+
+### 신규 Mission: laney_node_signal_run
+
+| Field | Value |
+|---|---|
+| ID | `laney_node_signal_run` |
+| Title | "Laney Node Signal Run" |
+| Character ref | `veteran` (Laney-class data-perceiver working-class) |
+| Arc | 2 |
+| Pillar | `power` |
+| Grade range | 2-3 |
+| Fixer | `finn` |
+| Zone | deep |
+
+### Story synopsis (EN, 491 words)
+
+Laney perceives the nodal points. The nodal points are the data-flow
+convergences. The convergences are what Laney perceives. Laney is the
+data-perceiver. The data-perceiver is Laney. ... [full EN body in
+missions.json]
+
+### Story synopsis (KO, 1160 chars)
+
+레니가 노드 포인트를 인식한다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 41:
+
+- **Fiction** `wiki/concepts/nodal-points.md` (81 lines) — Bridge Trilogy data-pattern perception substrate
+- **Fiction** `derivative/bridge-trilogy/short-stories/{en,ko}/2026-07-19_laney_node_signal.{md,.ko.md}` (Bridge #2 derivative, 545 EN / 1187 KO words)
+- **Fiction** `wiki/characters/colin-laney.md` (existing, Tier 1; promoted Phase 16)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `laney_node_signal_run` (491 words EN) — data-pattern perception procedural
+
+The concept's *nodal-points-state* register operationalized in the mission's
+veteran-class data-pattern perception procedural.
+
+### Mission distribution (Phase 41 후)
+
+| Character | Phase 40 | **Phase 41** |
+|---|---:|---:|
+| **veteran** | 20 | **21** ← +1 (this phase) |
+| novice | 25 | 25 |
+| heretic | 17 | 17 |
+| suit | 12 | 12 |
+| **Total** | **74** | **75** |
+
+Veteran-arc now at 21 (was 20); continued rebalancing.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 74 → **75** |
+
+### Cumulative state (Phase 1-41 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 41 (75)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
