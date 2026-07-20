@@ -9111,3 +9111,70 @@ number for roguelike_sprawl-side.
 - Mission count: Phase 1 (initial) → Phase 46 (80)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 47 — New mission: eurydice_arc (heretic-arc underground-operative)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 47 heretic-arc mission expansion paired with Fiction Phase 47 eurydice motif page.
+
+### 신규 Mission: eurydice_arc
+
+| Field | Value |
+|---|---|
+| ID | `eurydice_arc` |
+| Title | "Eurydice Arc" |
+| Character ref | `heretic` (heretic-as-underground-operative auditor) |
+| Arc | 2 |
+| Pillar | `power` |
+| Grade range | 3-4 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 487 words)
+
+The heretic audits the Eurydice. The Eurydice is the era's late-Capitalist
+underground-operative class-image. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1095 chars)
+
+이단자가 Eurydice를 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 47 — both projects now have **eurydice** content:
+
+- **Fiction** `wiki/motifs/eurydice.md` (39 lines) — Cultural motif / underground-operative archetype
+- **Fiction** `wiki/works/idoru.md` (existing) — work-analysis
+- **Fiction** `wiki/works/all-tomorrows-parties.md` (existing) — work-analysis
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `eurydice_arc` (487 words EN) — underground-operative statework audit
+
+The motif's *underground-operative class-image* operationalized in the
+mission's heretic-class statework audit scenario.
+
+### Mission distribution (Phase 47 후)
+
+| Character | Phase 46 | **Phase 47** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 25 | 25 |
+| **heretic** | 19 | **20** ← +1 (this phase) |
+| suit | 15 | 15 |
+| **Total** | **80** | **81** |
+
+Heretic-arc now at 20 (was 19); reaches round number 20.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 80 → **81** |
+
+### Cumulative state (Phase 1-47 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 47 (81)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
