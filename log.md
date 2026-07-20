@@ -8837,3 +8837,71 @@ Suit-arc now at 13 (was 12); 17.1% of total.
 - Mission count: Phase 1 (initial) → Phase 42 (76)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 43 — New mission: trauma_squads_pair_arc (heretic-arc class-enforcement)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 43 heretic-arc mission expansion paired with Fiction Phase 43 trauma-squads motif + trauma-squads-and-cortex-hound connection pages.
+
+### 신규 Mission: trauma_squads_pair_arc
+
+| Field | Value |
+|---|---|
+| ID | `trauma_squads_pair_arc` |
+| Title | "Trauma-Squads Pair Arc" |
+| Character ref | `heretic` (heretic-as-class-enforcement auditor) |
+| Arc | 4 |
+| Pillar | `power` |
+| Grade range | 4-5 |
+| Fixer | `finn` |
+| Zone | deep |
+
+### Story synopsis (EN, 504 words)
+
+The heretic audits the trauma-squads / cortex-hound pairing. The trauma-squads
+is the era's brain-damage-management service class. The cortex-hound is the
+era's class-enforcement disabling technology. ... [full EN body in
+missions.json]
+
+### Story synopsis (KO, 1200 chars)
+
+이단자가 외상-분대 / 코르텍스-하운드 페어링을 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 43:
+
+- **Fiction** `wiki/motifs/trauma-squads.md` (42 lines) — Cultural motif / brain-damage-management
+- **Fiction** `wiki/connections/trauma-squads-and-cortex-hound.md` (82 lines) — Cross-work connection
+- **Fiction** `wiki/concepts/cortex-hound.md` (Phase 29) — disabling technology
+- **Fiction** `wiki/concepts/trauma-squads.md` (Phase 40) — specialized-service class
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `trauma_squads_pair_arc` (504 words EN) — heretic-class corporate-statework
+
+The connection's *trauma-squads/cortex-hound pairing* operationalized in
+the mission's heretic-class statework audit.
+
+### Mission distribution (Phase 43 후)
+
+| Character | Phase 42 | **Phase 43** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 25 | 25 |
+| **heretic** | 17 | **18** ← +1 (this phase) |
+| suit | 13 | 13 |
+| **Total** | **76** | **77** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 76 → **77** |
+
+### Cumulative state (Phase 1-43 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 43 (77)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
