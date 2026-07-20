@@ -9924,3 +9924,69 @@ Suit-arc now at 21 (was 20); 23.1% of total.
 - Mission count: Phase 1 (initial) → Phase 58 (91)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 59 — New mission: hounds_arc (suit-arc working-class-canine)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 59 suit-arc mission expansion paired with Fiction Phase 59 hounds concept page.
+
+### 신규 Mission: hounds_arc
+
+| Field | Value |
+|---|---|
+| ID | `hounds_arc` |
+| Title | "Hounds Arc" |
+| Character ref | `suit` (corporate-statework / working-class-canine audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 364 words)
+
+The Suit audits the Hounds. The Hounds are the era's late-Capitalist
+working-class-canine. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 856 chars)
+
+Suit가 Hounds를 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 59:
+
+- **Fiction** `wiki/concepts/hounds.md` (84 lines) — Working-class-canine substrate
+- **Fiction** `wiki/works/all-tomorrows-parties.md` (existing) — work-analysis
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `hounds_arc` (364 words EN) — corporate-statework
+
+The concept's *hounds working-class-canine* operationalized in the
+mission's suit-class class-statework scenario.
+
+### Mission distribution (Phase 59 후)
+
+| Character | Phase 58 | **Phase 59** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 27 | 27 |
+| heretic | 21 | 21 |
+| **suit** | 21 | **22** ← +1 (this phase) |
+| **Total** | **91** | **92** |
+
+Suit-arc now at 22 (was 21); 23.9% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 91 → **92** |
+
+### Cumulative state (Phase 1-59 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 59 (92)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
