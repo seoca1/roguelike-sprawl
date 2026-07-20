@@ -8269,3 +8269,77 @@ the mission's heretic-class statework scenario.
 - Mission count: Phase 1 (initial) → Phase 34 (69)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 35 — New mission: fido_statework (suit-arc public-house AI)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 35 suit-arc mission expansion paired with Fiction Phase 35 fido concept page.
+
+### 신규 Mission: fido_statework
+
+| Field | Value |
+|---|---|
+| ID | `fido_statework` |
+| Title | "Fido Statework" |
+| Character ref | `suit` (corporate-statework / Fido off-hours AI audit) |
+| Arc | 5 |
+| Pillar | `purpose` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | surface |
+
+### Story synopsis (EN, 510 words)
+
+The Suit audits Fido. Fido is the Chat's AI. Fido is the era's working-class-
+bar low-utility public-house AI. Fido is what the working-class matrix-
+operator encounters in the off-hours. The off-hours is the working-class's
+principal class-image. Fido is the class-image. Fido runs the Chat. The
+Chat is the working-class-bar. The Suit audits Fido. The audit is a
+corporate-statework formality. The Suit shows up at the Chat's back-office.
+The Suit shows up with a corporate-issued clipboard. The clipboard has the
+era's working-class-bar off-hours AI operational-data. The operational-data
+is Fido's voice-output and persona-programming. ... [full EN body]
+
+### Story synopsis (KO, 1220 chars)
+
+Suit가 Fido를 감사한다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 35 — both projects now have **Fido** content:
+
+- **Fiction** `wiki/concepts/fido.md` (80 lines) — low-utility public-house AI / entertainment-programming
+- **Fiction** `wiki/characters/case.md` (existing, Tier 1) — the trilogy's principal working-class matrix-operator who encounters Fido
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `fido_statework` (510 words EN) — corporate-statework scenario on Fido
+
+The concept's *low-utility AI* register operationalized in the mission's
+suit-class statework scenario.
+
+### Mission distribution (Phase 35 후)
+
+| Character | Phase 34 | **Phase 35** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 23 | 23 |
+| heretic | 17 | 17 |
+| **suit** | 9 | **10** ← +1 (this phase) |
+| **Total** | **69** | **70** |
+
+Suit-arc now at 10 missions (was 9 in Phase 30) — balanced with veteran (20)
+at 14.3% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 69 → **70** |
+
+### Cumulative state (Phase 1-35 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 35 (70)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
