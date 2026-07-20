@@ -9383,3 +9383,69 @@ Novice-arc now at 26 (was 25); continues as largest archetype.
 - Cross-project pairs: Phase 1 → Phase 50 (25 pairs; all 25 paired with Fiction wiki pages)
 - Character refs: 4 archetypes (veteran / novice / heretic / suit) — all 4 archetypes rebalanced through Phase 22-49
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 51 — New mission: wendell_suburban_arc (novice-arc working-class-aspirant)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 51 novice-arc mission expansion paired with Fiction Phase 51 wendell-wright character page.
+
+### 신규 Mission: wendell_suburban_arc
+
+| Field | Value |
+|---|---|
+| ID | `wendell_suburban_arc` |
+| Title | "Wendell Suburban Arc" |
+| Character ref | `novice` (Wendell-class working-class-aspirant) |
+| Arc | 1 |
+| Pillar | `power` |
+| Grade range | 1-2 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 387 words)
+
+Wendell runs the suburban-class. The suburban-class is the era's
+late-Capitalist working-class-aspirant. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 880 chars)
+
+Wendell이 교외-계급을 달린다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 51:
+
+- **Fiction** `wiki/characters/wendell-wright.md` (86 lines) — Wannabe-rock-musician
+- **Fiction** `wiki/works/idoru.md` (existing) — work-analysis
+- **Fiction** `wiki/concepts/idoru.md` (existing) — synthetic-pop-idol image
+- **Fiction** `wiki/connections/sprawl-to-bridge.md` (existing) — Sprawl-Bridge cross-work
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `wendell_suburban_arc` (387 words EN) — working-class-aspirant procedural
+
+The character's *Wendell aspirant-image* operationalized in the
+mission's novice-class suburban-arc procedural.
+
+### Mission distribution (Phase 51 후)
+
+| Character | Phase 50 | **Phase 51** |
+|---|---:|---:|
+| **novice** | 25 | **26** ← +1 (this phase) |
+| veteran | 21 | 21 |
+| heretic | 20 | 20 |
+| suit | 16 | 16 |
+| **Total** | **83** | **84** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 83 → **84** |
+
+### Cumulative state (Phase 1-51 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 51 (84)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
