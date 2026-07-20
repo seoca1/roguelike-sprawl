@@ -9178,3 +9178,72 @@ Heretic-arc now at 20 (was 19); reaches round number 20.
 - Mission count: Phase 1 (initial) → Phase 47 (81)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 48 — New mission: working_class_ridership_arc (suit-arc ridership substrate)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 48 suit-arc mission expansion paired with Fiction Phase 48 working-class-ridership-and-late-capitalist-substrate connection page.
+
+### 신규 Mission: working_class_ridership_arc
+
+| Field | Value |
+|---|---|
+| ID | `working_class_ridership_arc` |
+| Title | "Working-Class Ridership Arc" |
+| Character ref | `suit` (corporate-statework / ridership substrate audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 504 words)
+
+The Suit audits the working-class-ridership. The working-class-ridership
+is the era's late-Capitalist working-class-matrix-operator retainer-class.
+The retainer-class is the working-class-ridership. ... [full EN body in
+missions.json]
+
+### Story synopsis (KO, 1093 chars)
+
+Suit가 작업-급-라이더십을 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 48 — both projects now have **working-class-ridership & late-Capitalist substrate** content:
+
+- **Fiction** `wiki/connections/working-class-ridership-and-late-capitalist-substrate.md` (82 lines) — Cross-work connection
+- **Fiction** `wiki/settings/fukuoka-okinawan.md` (Phase 46) — Working-class-ridership substrate
+- **Fiction** `wiki/motifs/eurydice.md` (Phase 47) — Underground-operative archetype
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `working_class_ridership_arc` (504 words EN) — corporate-statework on ridership substrate
+
+The connection's *working-class-ridership & late-Capitalist substrate* pairing
+operationalized in the mission's suit-class statework audit scenario.
+
+### Mission distribution (Phase 48 후)
+
+| Character | Phase 47 | **Phase 48** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 25 | 25 |
+| heretic | 20 | 20 |
+| **suit** | 15 | **16** ← +1 (this phase) |
+| **Total** | **81** | **82** |
+
+Suit-arc now at 16 (was 15); 19.5% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 81 → **82** |
+
+### Cumulative state (Phase 1-48 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 48 (82)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
