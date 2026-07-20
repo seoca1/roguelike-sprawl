@@ -8973,3 +8973,71 @@ heretic-class cultural-religious audit scenario.
 - Mission count: Phase 1 (initial) → Phase 44 (78)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 45 — New mission: yanaka_family_power_arc (suit-arc family-power)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 45 suit-arc mission expansion paired with Fiction Phase 45 yukio-yanaka character page.
+
+### 신규 Mission: yanaka_family_power_arc
+
+| Field | Value |
+|---|---|
+| ID | `yanaka_family_power_arc` |
+| Title | "Yanaka Family-Power Arc" |
+| Character ref | `suit` (corporate-statework / family-power audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 504 words)
+
+The Suit audits the Yanaka family-power. The Yanaka family-power is
+the era's late-Capitalist family-patriarch's corporate-statework. ... [full
+EN body in missions.json]
+
+### Story synopsis (KO, 1248 chars)
+
+Suit가 Yanaka 가족-권력을 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 45:
+
+- **Fiction** `wiki/characters/yukio-yanaka.md` (81 lines) — Family-patriarch / corporate-arranger
+- **Fiction** `wiki/characters/kumiko-yanaka.md` (existing) — the daughter
+- **Fiction** `wiki/works/mona-lisa-overdrive.md` (existing) — work-analysis
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `yanaka_family_power_arc` (504 words EN) — family-power corporate-statework
+
+The character page's *family-patriarch* register operationalized in the
+mission's suit-class family-power audit scenario.
+
+### Mission distribution (Phase 45 후)
+
+| Character | Phase 44 | **Phase 45** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 25 | 25 |
+| heretic | 19 | 19 |
+| **suit** | 13 | **14** ← +1 (this phase) |
+| **Total** | **78** | **79** |
+
+Suit-arc now at 14 (was 13); 17.7% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 78 → **79** |
+
+### Cumulative state (Phase 1-45 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 45 (79)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
