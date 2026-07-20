@@ -8343,3 +8343,75 @@ at 14.3% of total.
 - Mission count: Phase 1 (initial) → Phase 35 (70)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 36 — New mission: chickenhead_rickshaw_run (novice-arc simstim-rickshaw)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 36 novice-arc mission expansion paired with Fiction Phase 36 chickenhead concept page.
+
+### 신규 Mission: chickenhead_rickshaw_run
+
+| Field | Value |
+|---|---|
+| ID | `chickenhead_rickshaw_run` |
+| Title | "Chickenhead Rickshaw Run" |
+| Character ref | `novice` (K-class simstim-rickshaw working-class operator) |
+| Arc | 1 |
+| Pillar | `people` |
+| Grade range | 1-2 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 421 words)
+
+K pedals the rickshaw through the Chiba port-district consensual hallucination.
+The rickshaw is the working-class-matrix-operator's principal off-hours
+operational-image. The consensual hallucination is the simstim-rickshaw's
+experiential-substrate. The experiential-substrate is the chickenhead-state.
+The chickenhead-state is the working-class-matrix-operator's *chickenhead*
+register. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1013 chars)
+
+K가 치바 항구 지구의 합의된 환각을 통해 인력거를 페달로 밟는다. ... [full
+KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 36:
+
+- **Fiction** `wiki/concepts/chickenhead.md` (81 lines) — simstim-rickshaw working-class-driver
+- **Fiction** `wiki/concepts/simstim.md` (existing concept) — the Gibson technology the chickenhead drives
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `chickenhead_rickshaw_run` (421 words EN) — simstim-rickshaw procedural scenario
+
+The concept's *chickenhead-state* register operationalized in the mission's
+novice-class rickshaw-driving procedural.
+
+### Mission distribution (Phase 36 후)
+
+| Character | Phase 35 | **Phase 36** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| **novice** | 23 | **24** ← +1 (this phase) |
+| heretic | 17 | 17 |
+| suit | 10 | 10 |
+| **Total** | **70** | **71** |
+
+Novice-arc now at 24 (was 23); still the largest archetype. Phase 36 marks
+novice-arc's continued strengthening.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 70 → **71** |
+
+### Cumulative state (Phase 1-36 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 36 (71)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
