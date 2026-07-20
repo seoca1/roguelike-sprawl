@@ -8564,3 +8564,71 @@ Novice-arc now at 25 (was 24); continues as largest archetype.
 - Mission count: Phase 1 (initial) → Phase 38 (72)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 39 — New mission: bama_statework (suit-arc urban-megastructure)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 39 suit-arc mission expansion paired with Fiction Phase 39 bama concept page.
+
+### 신규 Mission: bama_statework
+
+| Field | Value |
+|---|---|
+| ID | `bama_statework` |
+| Title | "BAMA Statework" |
+| Character ref | `suit` (corporate-statework / urban-megastructure audit) |
+| Arc | 5 |
+| Pillar | `purpose` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 412 words)
+
+The Suit audits the BAMA. The BAMA is the era's urban-megastructure. The
+BAMA is what runs from Boston through to Atlanta. The Boston-to-Atlanta
+metropolitan axis is the era's working-class-matrix-operator's principal
+operational-image. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1021 chars)
+
+Suit가 BAMA를 감사한다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 39:
+
+- **Fiction** `wiki/concepts/bama.md` (82 lines) — Boston-to-Atlanta Metropolitan Axis urban-megastructure
+- **Fiction** `wiki/characters/case.md` (existing, Tier 1)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `bama_statework` (412 words EN) — corporate-statework on urban-megastructure
+
+The concept's *BAMA-state* register operationalized in the mission's
+suit-class urban-megastructure audit.
+
+### Mission distribution (Phase 39 후)
+
+| Character | Phase 38 | **Phase 39** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 25 | 25 |
+| heretic | 17 | 17 |
+| **suit** | 10 | **11** ← +1 (this phase) |
+| **Total** | **72** | **73** |
+
+Suit-arc now at 11 (was 10) — continued rebalancing toward balanced.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 72 → **73** |
+
+### Cumulative state (Phase 1-39 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 39 (73)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
