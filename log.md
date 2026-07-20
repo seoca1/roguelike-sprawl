@@ -9855,3 +9855,72 @@ Suit-arc now at 20 (was 19); reaches round number 20.
 - Mission count: Phase 1 (initial) → Phase 57 (90)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 58 — New mission: mona_bridge_arc (suit-arc bridge-squatter)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 58 suit-arc mission expansion paired with Fiction Phase 58 mona character page.
+
+### 신규 Mission: mona_bridge_arc
+
+| Field | Value |
+|---|---|
+| ID | `mona_bridge_arc` |
+| Title | "Mona Bridge Arc" |
+| Character ref | `suit` (corporate-statework / bridge-squatter audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 373 words)
+
+The Suit audits the bridge-squatter. The bridge-squatter is the era's
+late-Capitalist Bay-Area bridge-squatter class-image. The bridge-squatter
+is the era's working-class-precariat substrate. ... [full EN body in
+missions.json]
+
+### Story synopsis (KO, 845 chars)
+
+Suit가 브릿지-스쿼터를 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 58:
+
+- **Fiction** `wiki/characters/mona.md` (81 lines) — Bay-Area-bridge-squatter
+- **Fiction** `wiki/works/mona-lisa-overdrive.md` (existing) — work-analysis
+- **Fiction** `wiki/connections/sprawl-to-bridge.md` (existing) — Sprawl-Bridge cross-work
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `mona_bridge_arc` (373 words EN) — corporate-statework
+
+The character's *Mona bridge-squatter* operationalized in the mission's
+suit-class class-statework scenario.
+
+### Mission distribution (Phase 58 후)
+
+| Character | Phase 57 | **Phase 58** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 27 | 27 |
+| heretic | 21 | 21 |
+| **suit** | 20 | **21** ← +1 (this phase) |
+| **Total** | **90** | **91** |
+
+Suit-arc now at 21 (was 20); 23.1% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 90 → **91** |
+
+### Cumulative state (Phase 1-58 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 58 (91)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
