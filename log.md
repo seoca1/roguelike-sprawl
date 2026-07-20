@@ -9652,3 +9652,71 @@ Suit-arc now at 18 (was 17); 20.7% of total.
 - Mission count: Phase 1 (initial) → Phase 54 (87)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 55 — New mission: w_anchor_arc (suit-arc equipment-anchor)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 55 suit-arc mission expansion paired with Fiction Phase 55 w-anchor concept page.
+
+### 신규 Mission: w_anchor_arc
+
+| Field | Value |
+|---|---|
+| ID | `w_anchor_arc` |
+| Title | "W-Anchor Arc" |
+| Character ref | `suit` (corporate-statework / equipment-anchor audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 412 words)
+
+The Suit audits the W-anchor. The W-anchor is the era's late-Capitalist
+equipment-anchor substrate. The equipment-anchor is the era's working-class
+retainer-class. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1000 chars)
+
+Suit가 W-anchor를 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 55:
+
+- **Fiction** `wiki/concepts/w-anchor.md` (85 lines) — Equipment-anchor substrate
+- **Fiction** `wiki/works/all-tomorrows-parties.md` (existing) — work-analysis
+- **Fiction** `wiki/concepts/cyberspace.md` (existing) — operative environment
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `w_anchor_arc` (412 words EN) — corporate-statework
+
+The concept's *W-anchor* operationalized in the mission's suit-class
+class-statework scenario.
+
+### Mission distribution (Phase 55 후)
+
+| Character | Phase 54 | **Phase 55** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 26 | 26 |
+| heretic | 21 | 21 |
+| **suit** | 18 | **19** ← +1 (this phase) |
+| **Total** | **87** | **88** |
+
+Suit-arc now at 19 (was 18); 21.6% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 87 → **88** |
+
+### Cumulative state (Phase 1-55 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 55 (88)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
