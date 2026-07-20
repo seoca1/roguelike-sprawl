@@ -9449,3 +9449,70 @@ mission's novice-class suburban-arc procedural.
 - Mission count: Phase 1 (initial) → Phase 51 (84)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 52 — New mission: boone_tokyo_electronics_arc (suit-arc Tokyo-electronics)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 52 suit-arc mission expansion paired with Fiction Phase 52 boone-chu character page.
+
+### 신규 Mission: boone_tokyo_electronics_arc
+
+| Field | Value |
+|---|---|
+| ID | `boone_tokyo_electronics_arc` |
+| Title | "Boone Tokyo-Electronics Arc" |
+| Character ref | `suit` (corporate-statework / Tokyo-electronics audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 422 words)
+
+The Suit audits the Boone. The Boone is the era's late-Capitalist
+Tokyo-electronics-dealer. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1010 chars)
+
+Suit가 Boone을 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 52:
+
+- **Fiction** `wiki/characters/boone-chu.md` (86 lines) — Ex-boyfriend / Tokyo-electronics dealer
+- **Fiction** `wiki/characters/cayce-pollard.md` (existing) — Cayce Pollard
+- **Fiction** `wiki/works/pattern-recognition.md` (existing) — work-analysis
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `boone_tokyo_electronics_arc` (422 words EN) — corporate-statework
+
+The character's *Boone Tokyo-electronics-dealer* operationalized in the
+mission's suit-class statework audit scenario.
+
+### Mission distribution (Phase 52 후)
+
+| Character | Phase 51 | **Phase 52** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 26 | 26 |
+| heretic | 20 | 20 |
+| **suit** | 16 | **17** ← +1 (this phase) |
+| **Total** | **84** | **85** |
+
+Suit-arc now at 17 (was 16); 20.0% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 84 → **85** |
+
+### Cumulative state (Phase 1-52 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 52 (85)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
