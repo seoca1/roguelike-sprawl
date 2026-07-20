@@ -8769,3 +8769,71 @@ Veteran-arc now at 21 (was 20); continued rebalancing.
 - Mission count: Phase 1 (initial) → Phase 41 (75)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 42 — New mission: pan_mannerist_audit (suit-arc art-movement cover)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 42 suit-arc mission expansion paired with Fiction Phase 42 pan-mannerists faction page.
+
+### 신규 Mission: pan_mannerist_audit
+
+| Field | Value |
+|---|---|
+| ID | `pan_mannerist_audit` |
+| Title | "Pan-Mannerist Audit" |
+| Character ref | `suit` (corporate-statework / art-movement cover audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 482 words)
+
+The Suit audits the Pan-Mannerist aesthetic. The Pan-Mannerist aesthetic
+is the era's late-1970s / early-1980s art-movement. ... [full EN body in
+missions.json]
+
+### Story synopsis (KO, 1134 chars)
+
+Suit가 Pan-Mannerist 미학을 감사한다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 42:
+
+- **Fiction** `wiki/factions/pan-mannerists.md` (87 lines) — late-1970s / early-1980s art-movement faction
+- **Fiction** `wiki/concepts/panther-moderns.md` (Phase 22 concept) — the retainer-class that deploys the Pan-Mannerist aesthetic
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `pan_mannerist_audit` (482 words EN) — corporate-statework on art-movement cover
+
+The faction's *Pan-Mannerist aesthetic* operationalized in the mission's
+suit-class statework scenario on the working-class-matrix-operator
+retainer-class's art-movement cover.
+
+### Mission distribution (Phase 42 후)
+
+| Character | Phase 41 | **Phase 42** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 25 | 25 |
+| heretic | 17 | 17 |
+| **suit** | 12 | **13** ← +1 (this phase) |
+| **Total** | **75** | **76** |
+
+Suit-arc now at 13 (was 12); 17.1% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 75 → **76** |
+
+### Cumulative state (Phase 1-42 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 42 (76)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
