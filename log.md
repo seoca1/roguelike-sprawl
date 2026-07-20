@@ -9787,3 +9787,71 @@ Novice-arc now at 27 (was 26); reaches round number 27.
 - Mission count: Phase 1 (initial) → Phase 56 (89)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 57 — New mission: tessier_sleeper_arc (suit-arc family-tyranny)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 57 suit-arc mission expansion paired with Fiction Phase 57 tessier-ashpool-sleepers concept page + closure integration.
+
+### 신규 Mission: tessier_sleeper_arc
+
+| Field | Value |
+|---|---|
+| ID | `tessier_sleeper_arc` |
+| Title | "Tessier-Ashpool Sleeper Arc" |
+| Character ref | `suit` (corporate-statework / family-tyranny audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 412 words)
+
+The Suit audits the Tessier-Ashpool Sleepers. The Tessier-Ashpool Sleepers
+are the era's late-Capitalist clan-genetic-continuity substrate. ... [full
+EN body in missions.json]
+
+### Story synopsis (KO, 1010 chars)
+
+Suit가 Tessier-Ashpool Sleepers를 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 57:
+
+- **Fiction** `wiki/concepts/tessier-ashpool-sleepers.md` (85 lines) — Clan-genetic-continuity substrate
+- **Fiction** `wiki/works/neuromancer.md` (existing) — work-analysis
+- **Fiction** `wiki/concepts/villa-straylight.md` (existing) — Tessier-Ashpool's Straylight setting
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `tessier_sleeper_arc` (412 words EN) — corporate-statework
+
+The concept's *Tessier-Ashpool family-tyranny* operationalized in the
+mission's suit-class class-statework scenario.
+
+### Mission distribution (Phase 57 후)
+
+| Character | Phase 56 | **Phase 57** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 27 | 27 |
+| heretic | 21 | 21 |
+| **suit** | 19 | **20** ← +1 (this phase) |
+| **Total** | **89** | **90** |
+
+Suit-arc now at 20 (was 19); reaches round number 20.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 89 → **90** |
+
+### Cumulative state (Phase 1-57 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 57 (90)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
