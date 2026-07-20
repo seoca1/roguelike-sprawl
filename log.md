@@ -9584,3 +9584,71 @@ Heretic-arc now at 21 (was 20); reaches round number 21.
 - Mission count: Phase 1 (initial) → Phase 53 (86)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 54 — New mission: pacific_empire_arc (suit-arc Pacific-Empire subculture)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 54 suit-arc mission expansion paired with Fiction Phase 54 g-boys-and-pacific-empire connection page.
+
+### 신규 Mission: pacific_empire_arc
+
+| Field | Value |
+|---|---|
+| ID | `pacific_empire_arc` |
+| Title | "Pacific-Empire Arc" |
+| Character ref | `suit` (corporate-statework / Pacific-Empire subculture audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 413 words)
+
+The Suit audits the Pacific-Empire subculture. The Pacific-Empire
+subculture is the era's late-Capitalist East-Asian cultural-economic
+dominant subculture. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 996 chars)
+
+Suit가 Pacific-Empire 서브컬처를 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 54:
+
+- **Fiction** `wiki/connections/g-boys-and-pacific-empire.md` (82 lines) — Cross-work connection
+- **Fiction** `wiki/factions/g-boys.md` (Phase 53 faction) — Kung-fu subculture
+- **Fiction** `wiki/settings/tokyo-idoru.md` (Phase 36 setting) — Blue-Ant Tokyo late-Capitalist image
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `pacific_empire_arc` (413 words EN) — corporate-statework
+
+The connection's *G-Boys / Pacific-Empire subculture pairing* operationalized
+in the mission's suit-class class-statework audit scenario.
+
+### Mission distribution (Phase 54 후)
+
+| Character | Phase 53 | **Phase 54** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 26 | 26 |
+| heretic | 21 | 21 |
+| **suit** | 17 | **18** ← +1 (this phase) |
+| **Total** | **86** | **87** |
+
+Suit-arc now at 18 (was 17); 20.7% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 86 → **87** |
+
+### Cumulative state (Phase 1-54 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 54 (87)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
