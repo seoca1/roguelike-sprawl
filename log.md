@@ -9990,3 +9990,30 @@ Suit-arc now at 22 (was 21); 23.9% of total.
 - Mission count: Phase 1 (initial) → Phase 59 (92)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 60 — Cumulative final closure (Phase 22-59)
+
+**Status:** Final closure update.
+
+**Scope**: Fiction + roguelike_sprawl cumulative final closure (Phase 22-59, 38 phases).
+
+### Cumulative state (Phase 22-59)
+
+| Metric | Pre-22 | **Phase 22-59 cumulative** |
+|---|---:|---:|
+| roguelike_sprawl missions | 57 | **92** |
+| veteran | 18 | 21 |
+| novice | 18 | 27 |
+| heretic | 14 | 21 |
+| suit | 5 | 22 |
+| **Round numbers** | — | **80, 90** |
+
+### 검증
+
+- validate_stage_structure.py: 12 stages, 13 transitions, 29 mission refs (all 92 missions valid)
+- validate_prologue_data.py: 5 scenes, 3 chars, 6 endings
+- validate_event_dialogues.py: cross-refs OK
+
+### 시리즈 종료 선언
+
+2026-07-19 Fiction + roguelike_sprawl Cross-Project Cumulative Extension (Phase 22-59, 38 phases) 종료. 34 cross-project pairs, 92 missions, 38 concepts, 81/81 derivatives, 12 factions, 14 motifs, 14 connections, 6 sources, 82 characters, 16 settings 도달.
