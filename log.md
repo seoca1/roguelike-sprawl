@@ -8494,3 +8494,73 @@ novice-arc's continued strengthening.
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
 - 14 mission-generator scripts, all re-runnable
+
+## [2026-07-19] design | Phase 38 — New mission: surface_mail_run (novice-arc non-matrix data-delivery)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 38 novice-arc mission expansion paired with Fiction Phase 38 surface-mail concept page.
+
+### 신규 Mission: surface_mail_run
+
+| Field | Value |
+|---|---|
+| ID | `surface_mail_run` |
+| Title | "Surface Mail Run" |
+| Character ref | `novice` (K-class non-matrix data-delivery working-class operator) |
+| Arc | 1 |
+| Pillar | `people` |
+| Grade range | 1-2 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 425 words)
+
+K delivers the data. The data goes through the surface-mail. The
+surface-mail is the era's low-bandwidth physical-postal data-transmission. The
+physical-postal is what the working-class-matrix-operator uses for non-urgent
+data-delivery. The non-urgent is the surface-mail. ... [full EN body in
+missions.json]
+
+### Story synopsis (KO, 1010 chars)
+
+K가 데이터를 전달한다. 데이터는 표면-우편을 통해 간다. ... [full KO body
+in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 38:
+
+- **Fiction** `wiki/concepts/surface-mail.md` (79 lines) — low-bandwidth physical-postal data-transmission
+- **Fiction** `wiki/characters/case.md` (existing, Tier 1)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `surface_mail_run` (425 words EN) — non-matrix data-delivery procedural
+
+The concept's *non-matrix data-transmission register* operationalized in
+the mission's novice-class physical-postal data-delivery.
+
+### Mission distribution (Phase 38 후)
+
+| Character | Phase 37 | **Phase 38** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| **novice** | 24 | **25** ← +1 (this phase) |
+| heretic | 17 | 17 |
+| suit | 10 | 10 |
+| **Total** | **71** | **72** |
+
+Novice-arc now at 25 (was 24); continues as largest archetype.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 71 → **72** |
+
+### Cumulative state (Phase 1-38 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 38 (72)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
