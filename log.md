@@ -9041,3 +9041,73 @@ Suit-arc now at 14 (was 13); 17.7% of total.
 - Mission count: Phase 1 (initial) → Phase 45 (79)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 46 — New mission: fukuoka_ridership_arc (suit-arc working-class-ridership)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 46 suit-arc mission expansion paired with Fiction Phase 46 fukuoka-okinawan setting page.
+
+### 신규 Mission: fukuoka_ridership_arc
+
+| Field | Value |
+|---|---|
+| ID | `fukuoka_ridership_arc` |
+| Title | "Fukuoka Ridership Arc" |
+| Character ref | `suit` (corporate-statework / Fukuoka ridership audit) |
+| Arc | 5 |
+| Pillar | `power` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 503 words)
+
+The Suit audits the Fukuoka ridership. The Fukuoka ridership is the
+era's late-Capitalist working-class-ridership. The ridership is what
+the working-class-matrix-operator retainer-class uses. ... [full EN body
+in missions.json]
+
+### Story synopsis (KO, 1174 chars)
+
+Suit가 Fukuoka 라이더십을 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 46 — both projects now have **Fukuoka / Okinawan Network** content:
+
+- **Fiction** `wiki/settings/fukuoka-okinawan.md` (80 lines) — late-Capitalist working-class-ridership substrate
+- **Fiction** `wiki/works/mona-lisa-overdrive.md` (existing) — work-analysis
+- **Fiction** `wiki/works/all-tomorrows-parties.md` (existing) — work-analysis
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `fukuoka_ridership_arc` (503 words EN) — corporate-statework on ridership substrate
+
+The setting's *Fukuoka / Okinawan Network ridership substrate* operationalized
+in the mission's suit-class statework audit.
+
+### Mission distribution (Phase 46 후)
+
+| Character | Phase 45 | **Phase 46** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 25 | 25 |
+| heretic | 19 | 19 |
+| **suit** | 14 | **15** ← +1 (this phase) |
+| **Total** | **79** | **80** |
+
+Suit-arc now at 15 (was 14); 18.75% of total. **Total missions: 80** = first round
+number for roguelike_sprawl-side.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 79 → **80** (first round number) |
+
+### Cumulative state (Phase 1-46 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 46 (80)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
