@@ -8632,3 +8632,71 @@ Suit-arc now at 11 (was 10) — continued rebalancing toward balanced.
 - Mission count: Phase 1 (initial) → Phase 39 (73)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 40 — New mission: trauma_squads_audit (suit-arc post-cortex-hound)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 40 suit-arc mission expansion paired with Fiction Phase 40 trauma-squads concept page.
+
+### 신규 Mission: trauma_squads_audit
+
+| Field | Value |
+|---|---|
+| ID | `trauma_squads_audit` |
+| Title | "Trauma-Squads Audit" |
+| Character ref | `suit` (corporate-statework / post-cortex-hound audit) |
+| Arc | 5 |
+| Pillar | `purpose` |
+| Grade range | 5 |
+| Fixer | `slick-henry` |
+| Zone | deep |
+
+### Story synopsis (EN, 423 words)
+
+The Suit audits the trauma-squads. The trauma-squads is the era's
+post-cortex-hound specialized-service class. The trauma-squads is what
+the working-class-matrix-operator uses for post-cortex-hound service. ... [full
+EN body in missions.json]
+
+### Story synopsis (KO, 1051 chars)
+
+Suit가 외상-분대를 감사한다. ... [full KO body in missions.json]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 40 — both projects now have **trauma-squads** content:
+
+- **Fiction** `wiki/concepts/trauma-squads.md` (81 lines) — specialized-service class / brain-damage-management
+- **Fiction** `wiki/concepts/cortex-hound.md` (existing, Phase 29)
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `trauma_squads_audit` (423 words EN) — post-cortex-hound service audit
+
+The concept's *post-cortex-hound specialized-service* register operationalized
+in the mission's suit-class statework scenario.
+
+### Mission distribution (Phase 40 후)
+
+| Character | Phase 39 | **Phase 40** |
+|---|---:|---:|
+| veteran | 20 | 20 |
+| novice | 25 | 25 |
+| heretic | 17 | 17 |
+| **suit** | 11 | **12** ← +1 (this phase) |
+| **Total** | **73** | **74** |
+
+Suit-arc now at 12 (was 11) — most-doubled since pre-22 (was 5); 16.2% of total.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 73 → **74** |
+
+### Cumulative state (Phase 1-40 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 40 (74)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
