@@ -8415,3 +8415,82 @@ novice-arc's continued strengthening.
 - Mission count: Phase 1 (initial) → Phase 36 (71)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 37 — Cross-Project Cumulative Extension Closure (Phase 22-36)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue.`). roguelike_sprawl Phase 37 cumulative-extension closure of Phase 22-36 work.
+
+### Cumulative state (Phase 1-37 of game-side)
+
+- **Mission count**: Phase 1 (initial) → Phase 37 (**71**)
+- **Mission-generator scripts** (all re-runnable):
+  - scripts/add_panther_mission.py (Phase 22, veteran arc 2)
+  - scripts/add_heretic_mission.py (Phase 23, heretic arc 4)
+  - scripts/add_ono_sendai_mission.py (Phase 24, novice arc 1)
+  - scripts/add_hosaka_mission.py (Phase 25, novice arc 1)
+  - scripts/add_sense_net_mission.py (Phase 26, suit arc 4)
+  - scripts/add_zion_vote_mission.py (Phase 28, novice arc 5)
+  - scripts/add_cortex_hound_mission.py (Phase 29, novice arc 1)
+  - scripts/add_zaibatsu_mission.py (Phase 30, suit arc 5)
+  - scripts/add_finn_factory_mission.py (Phase 31, suit arc 2)
+  - scripts/add_bing_statework_mission.py (Phase 32, heretic arc 2)
+  - scripts/add_chevette_mission.py (Phase 33, novice arc 1)
+  - scripts/add_cayce_footage_mission.py (Phase 34, heretic arc 1)
+  - scripts/add_fido_statework_mission.py (Phase 35, suit arc 5)
+  - scripts/add_chickenhead_mission.py (Phase 36, novice arc 1)
+
+- **Character-arc distribution** (post-Phase 36):
+  - veteran: 20 (28.2%)
+  - novice: 24 (33.8%)
+  - heretic: 17 (23.9%)
+  - suit: 10 (14.1%)
+
+- **Mission sources** (story.source field):
+  - Phase 22-36 sources tied to Fiction derivative/concept cross-project pairs
+  - All missions tagged with `pending: true` in game_integration (operational-form pending gameplay-trigger-availability)
+
+- **All Gibson-voice validations PASS**:
+  - validate_stage_structure.py: 12 stages, 13 transitions, 29 mission refs valid
+  - validate_prologue_data.py: 5 scenes, 3 chars, 6 endings
+  - validate_event_dialogues.py: cross-refs OK
+
+### Cross-project cumulative state (Phase 22-37)
+
+| | Pre-22 | **Phase 22-37** | Δ |
+|---|---:|---:|---:|
+| Total missions | 57 | **71** | +14 |
+| Novel missions (Phase 22-36) | 0 | 14 | +14 |
+| Mission-generator scripts | 0 | **14** | +14 |
+| Cross-project pairs (Fiction↔roguelike_sprawl) | 0 | **13** | +13 |
+| Veteran arc | 20 | 20 | (Phase 22 added 1) |
+| Novice arc | 18 | **24** | +6 (Phase 24, 25, 28, 29, 33, 36) |
+| Heretic arc | 14 | **17** | +3 (Phase 23, 32, 34) |
+| Suit arc | 5 | **10** | +5 (Phase 22, 26, 30, 31, 35) |
+
+### Cumulative 13 cross-project pairs (Phase 22-36)
+
+| Phase | Concept/Derivative | Mission |
+|---|---|---|
+| 22 | panther-moderns | panther_negotiate |
+| 23 | wetware + jacking-in | heretic_loa_conscription |
+| 24 | ono-sendai | ono_sendai_repair |
+| 25 | hosaka | hosaka_terminal_supply |
+| 26 | sense-net | sense_net_archive_intrusion |
+| 28 | zion-vote | zion_vote_observation |
+| 29 | cortex-hound | cortex_hound_recovery |
+| 30 | zaibatsu | zaibatsu_statework |
+| 31 | finns_factory_labour | finn_factory_labour_run |
+| 32 | bing | bing_statework |
+| 33 | chevette_nightshift | chevette_nightshift_run |
+| 34 | cayce_footage_audit | cayce_footage_audit_run |
+| 35 | fido | fido_statework |
+| 36 | chickenhead | chickenhead_rickshaw_run |
+
+### Cumulative state (Phase 1-37 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 37 (71)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
+- 14 mission-generator scripts, all re-runnable
