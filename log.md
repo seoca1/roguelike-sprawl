@@ -9720,3 +9720,70 @@ Suit-arc now at 19 (was 18); 21.6% of total.
 - Mission count: Phase 1 (initial) → Phase 55 (88)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 56 — New mission: viktor_orbit_arc (novice-arc orbit-rigger)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 56 novice-arc mission expansion paired with Fiction Phase 56 viktor character page.
+
+### 신규 Mission: viktor_orbit_arc
+
+| Field | Value |
+|---|---|
+| ID | `viktor_orbit_arc` |
+| Title | "Viktor Orbit Arc" |
+| Character ref | `novice` (Viktor-class orbit-rigger) |
+| Arc | 1 |
+| Pillar | `purpose` |
+| Grade range | 1-2 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 376 words)
+
+K rigs the orbit. The orbit is the era's late-Capitalist orbit-rigger
+substrate. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 851 chars)
+
+K가 궤도를 리깅한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 56:
+
+- **Fiction** `wiki/characters/viktor.md` (81 lines) — Russian-Mafia-operative
+- **Fiction** `wiki/works/idoru.md` (existing) — work-analysis
+- **Fiction** `wiki/characters/rei-toi|rei-toei.md` (existing) — synthetic-pop-idol
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `viktor_orbit_arc` (376 words EN) — orbit-rigger procedural
+
+The character's *Viktor orbit-rigger* operationalized in the mission's
+novice-class orbit-rigger procedural.
+
+### Mission distribution (Phase 56 후)
+
+| Character | Phase 55 | **Phase 56** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| **novice** | 26 | **27** ← +1 (this phase) |
+| heretic | 21 | 21 |
+| suit | 19 | 19 |
+| **Total** | **88** | **89** |
+
+Novice-arc now at 27 (was 26); reaches round number 27.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 88 → **89** |
+
+### Cumulative state (Phase 1-56 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 56 (89)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
