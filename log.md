@@ -9316,3 +9316,70 @@ Novice-arc now at 26 (was 25); continues as largest archetype.
 - Mission count: Phase 1 (initial) → Phase 49 (83)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 50 — Cumulative closure update (Phase 22-49)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 50 cumulative closure update.
+
+### Cumulative state (Phase 22-49, roguelike_sprawl)
+
+- **Mission count**: Phase 1 (initial) → Phase 49 (**83**)
+- **Mission-generator scripts**: Phase 1 → Phase 49 (**21 scripts**, all re-runnable)
+- **Cross-project pairs**: Phase 1 → Phase 49 (**25 pairs** with Fiction wiki pages)
+
+### roguelike_sprawl archetype distribution (Phase 49)
+
+| Character | Pre-22 | **Phase 49** |
+|---|---:|---:|
+| veteran | 18 | **21** |
+| novice | 18 | **26** |
+| heretic | 14 | **20** |
+| suit | 5 | **16** |
+| **Total** | 57 | **83** |
+
+### 검증 (Phase 22-49 cumulative)
+
+- validate_stage_structure.py: 12 stages, 13 transitions, 29 mission refs valid (all 83 missions)
+- validate_prologue_data.py: 5 scenes, 3 chars, 6 endings
+- validate_event_dialogues.py: cross-refs OK
+- Mission source coverage: All 83 missions tagged with `pending: true` in game_integration (operational-form pending gameplay-trigger availability)
+
+### Cumulative cross-project pair catalog (Phase 22-49, 25 pairs)
+
+25 cross-project pairs established:
+
+- Phase 22: panther-moderns ↔ panther_negotiate (Panther Moderns retainer-class)
+- Phase 23: wetware+jacking-in ↔ heretic_loa_conscription (cyberware substrate)
+- Phase 24: ono-sendai ↔ ono_sendai_repair (deck repair)
+- Phase 25: hosaka ↔ hosaka_terminal_supply (terminal pairing)
+- Phase 26: sense-net ↔ sense_net_archive_intrusion (corporate defensive)
+- Phase 28: zion-vote ↔ zion_vote_observation (procedural witness)
+- Phase 29: cortex-hound ↔ cortex_hound_recovery (Case-style recovery)
+- Phase 30: zaibatsu ↔ zaibatsu_statework (industrial-class substrate)
+- Phase 31: finns_factory_labour ↔ finn_factory_labour_run (Finn-voice fixer-memoir)
+- Phase 32: bing ↔ bing_statework (pharmacological-statework)
+- Phase 33: chevette_nightshift ↔ chevette_nightshift_run (Bridge-courier procedural)
+- Phase 34: cayce_footage_audit ↔ cayce_footage_audit_run (coolhunter-footage-audit)
+- Phase 35: fido ↔ fido_statework (public-house AI statework)
+- Phase 36: chickenhead ↔ chickenhead_rickshaw_run (simstim-rickshaw procedural)
+- Phase 38: surface-mail ↔ surface_mail_run (non-matrix data-delivery)
+- Phase 40: trauma-squads ↔ trauma_squads_audit (post-cortex-hound statework)
+- Phase 41: nodal-points+laney_node_signal ↔ laney_node_signal_run (data-perception procedural)
+- Phase 42: pan-mannerists ↔ pan_mannerist_audit (art-movement cover statework)
+- Phase 43: trauma-squads (motif) ↔ trauma_squads_pair_arc (cross-work class-enforcement)
+- Phase 44: idoru (source) ↔ idoru_wedding_arc (cultural-religious event)
+- Phase 45: yukio-yanaka ↔ yanaka_family_power_arc (family-power statework)
+- Phase 46: fukuoka-okinawan ↔ fukuoka_ridership_arc (ridership substrate statework)
+- Phase 47: eurydice ↔ eurydice_arc (underground-operative statework)
+- Phase 48: working-class-ridership (connection) ↔ working_class_ridership_arc (ridership substrate statework)
+- Phase 49: virtual-light (source) ↔ virtual_light_data_key_arc (data-key delivery)
+
+### Cumulative state (Phase 1-50 roguelike_sprawl)
+
+- Mission count: Phase 1 (initial) → Phase 50 (83)
+- Mission-generator scripts: 21 (Phase 22-49 added 18; Phase 1-21 had 3 base scripts)
+- Cross-project pairs: Phase 1 → Phase 50 (25 pairs; all 25 paired with Fiction wiki pages)
+- Character refs: 4 archetypes (veteran / novice / heretic / suit) — all 4 archetypes rebalanced through Phase 22-49
+- All Gibson-voice validations PASS via `validate_*.py` scripts
