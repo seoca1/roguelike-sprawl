@@ -9247,3 +9247,72 @@ Suit-arc now at 16 (was 15); 19.5% of total.
 - Mission count: Phase 1 (initial) → Phase 48 (82)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 49 — New mission: virtual_light_data_key_arc (novice-arc data-key)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 49 novice-arc mission expansion paired with Fiction Phase 49 virtual-light source-summary.
+
+### 신규 Mission: virtual_light_data_key_arc
+
+| Field | Value |
+|---|---|
+| ID | `virtual_light_data_key_arc` |
+| Title | "Virtual Light Data-Key Arc" |
+| Character ref | `novice` (K-class data-key courier) |
+| Arc | 1 |
+| Pillar | `people` |
+| Grade range | 1-2 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 502 words)
+
+K pedals the data-key. The data-key is the era's late-Capitalist
+corporate-state surveillance map. The data-key is what the working-
+class-matrix-operator delivers. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1150 chars)
+
+K가 데이터-키를 페달로 밟는다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 49:
+
+- **Fiction** `wiki/sources/virtual-light.md` (55 lines) — Bridge Trilogy #1 source-summary
+- **Fiction** `wiki/works/virtual-light.md` (existing) — work-analysis
+- **Fiction** `wiki/characters/chevette-washington.md` (existing) — Bridge-courier
+- **Fiction** `wiki/characters/berry-rydell.md` (existing) — IntenSecure security specialist
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `virtual_light_data_key_arc` (502 words EN) — data-key delivery
+
+The source's *data-key image* operationalized in the mission's
+novice-class data-delivery procedural.
+
+### Mission distribution (Phase 49 후)
+
+| Character | Phase 48 | **Phase 49** |
+|---|---:|---:|
+| **novice** | 25 | **26** ← +1 (this phase) |
+| veteran | 21 | 21 |
+| heretic | 20 | 20 |
+| suit | 16 | 16 |
+| **Total** | **82** | **83** |
+
+Novice-arc now at 26 (was 25); continues as largest archetype.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 82 → **83** |
+
+### Cumulative state (Phase 1-49 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 49 (83)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
