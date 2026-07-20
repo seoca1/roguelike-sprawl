@@ -9516,3 +9516,71 @@ Suit-arc now at 17 (was 16); 20.0% of total.
 - Mission count: Phase 1 (initial) → Phase 52 (85)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 53 — New mission: g_boys_arc (heretic-arc kung-fu subculture)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 53 heretic-arc mission expansion paired with Fiction Phase 53 g-boys faction page.
+
+### 신규 Mission: g_boys_arc
+
+| Field | Value |
+|---|---|
+| ID | `g_boys_arc` |
+| Title | "G-Boys Arc" |
+| Character ref | `heretic` (heretic-as-kung-fu subculture auditor) |
+| Arc | 3 |
+| Pillar | `power` |
+| Grade range | 3-4 |
+| Fixer | `finn` |
+| Zone | surface |
+
+### Story synopsis (EN, 487 words)
+
+The heretic audits the G-Boys. The G-Boys are the era's late-Capitalist
+kung-fu subculture. The kung-fu subculture is the era's working-class-
+matrix-operator retainer-class. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1101 chars)
+
+이단자가 G-Boys를 감사한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 53:
+
+- **Fiction** `wiki/factions/g-boys.md` (95 lines) — Kung-fu subculture
+- **Fiction** `wiki/works/virtual-light.md` (existing) — work-analysis
+- **Fiction** `wiki/works/idoru.md` (existing) — work-analysis
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `g_boys_arc` (487 words EN) — kung-fu subculture class-statework
+
+The faction's *G-Boy subculture-class-image* operationalized in the
+mission's heretic-class class-statework scenario.
+
+### Mission distribution (Phase 53 후)
+
+| Character | Phase 52 | **Phase 53** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 26 | 26 |
+| **heretic** | 20 | **21** ← +1 (this phase) |
+| suit | 17 | 17 |
+| **Total** | **85** | **86** |
+
+Heretic-arc now at 21 (was 20); reaches round number 21.
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 85 → **86** |
+
+### Cumulative state (Phase 1-53 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 53 (86)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
