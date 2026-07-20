@@ -8905,3 +8905,71 @@ the mission's heretic-class statework audit.
 - Mission count: Phase 1 (initial) → Phase 43 (77)
 - Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
 - All Gibson-voice validations PASS via `validate_*.py` scripts
+
+## [2026-07-19] design | Phase 44 — New mission: idoru_wedding_arc (heretic-arc post-cyberpunk cultural-religious)
+
+**Status:** Complete (no commit yet per Behavior rules — explicit commit on next user direction)
+
+**Scope**: User continuation decision (`continue to all Fiction project.`). roguelike_sprawl Phase 44 heretic-arc mission expansion paired with Fiction Phase 44 idoru source-summary.
+
+### 신규 Mission: idoru_wedding_arc
+
+| Field | Value |
+|---|---|
+| ID | `idoru_wedding_arc` |
+| Title | "Idoru Wedding Arc" |
+| Character ref | `heretic` (heretic-as-cultural-religious auditor) |
+| Arc | 3 |
+| Pillar | `power` |
+| Grade range | 3-4 |
+| Fixer | `finn` |
+| Zone | deep |
+
+### Story synopsis (EN, 514 words)
+
+The heretic witnesses the idoru-wedding. The idoru-wedding is the era's
+late-Capitalist post-cyberpunk cultural-religious event. The idoru is
+the era's synthetic-pop-idol cultural-religious form. The cultural-
+religious form is what the Rez marries. ... [full EN body in missions.json]
+
+### Story synopsis (KO, 1230 chars)
+
+이단자가 이도루-결혼을 목격한다. ... [full KO body]
+
+### Cross-project integration
+
+This mission pairs with Fiction Phase 44 — both projects now have **idoru** content:
+
+- **Fiction** `wiki/sources/idoru.md` (55 lines) — Bridge Trilogy 1996 source-summary
+- **Fiction** `wiki/works/idoru.md` (existing) — work-analysis
+- **Fiction** `wiki/characters/rei-toi|rei-toei.md` (existing) — synthetic-pop-idol character
+- **Fiction** `wiki/concepts/idoru.md` (existing) — synthetic-pop-idol concept
+- **roguelike_sprawl** `prototype/data/missions/missions.json` → `idoru_wedding_arc` (514 words EN) — post-cyberpunk cultural-religious scenario
+
+The source's *Idoru-wedding* plot operationalized in the mission's
+heretic-class cultural-religious audit scenario.
+
+### Mission distribution (Phase 44 후)
+
+| Character | Phase 43 | **Phase 44** |
+|---|---:|---:|
+| veteran | 21 | 21 |
+| novice | 25 | 25 |
+| **heretic** | 18 | **19** ← +1 (this phase) |
+| suit | 13 | 13 |
+| **Total** | **77** | **78** |
+
+### 검증
+
+| 검증 | 결과 |
+|---|---|
+| `python3 scripts/validate_stage_structure.py` | **PASS** (12 stages, 13 transitions, 29 mission refs valid) |
+| `python3 scripts/validate_prologue_data.py` | **PASS** (5 scenes, 3 chars, 6 endings) |
+| `python3 scripts/validate_event_dialogues.py` | **PASS** (cross-refs OK) |
+| Mission count | 77 → **78** |
+
+### Cumulative state (Phase 1-44 of game-side)
+
+- Mission count: Phase 1 (initial) → Phase 44 (78)
+- Character refs in missions.json: 4 archetypes (veteran / novice / heretic / suit)
+- All Gibson-voice validations PASS via `validate_*.py` scripts
