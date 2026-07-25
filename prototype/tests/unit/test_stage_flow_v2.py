@@ -474,3 +474,91 @@ class TestFullRunFlow:
         # DEATH_RESTART flow
         run.mark_death_restart()
         assert run.current_stage is Stage.DEATH_RESTART
+
+
+class TestDataDrivenStageFlow:
+    """Phase J: stage_flow declared in missions.json (C-1 implementation)."""
+
+    def test_first_jack_flow_from_mission_data(self) -> None:
+        """get_mission_flow() reads stage_flow from mission JSON."""
+        import json
+        from pathlib import Path
+
+        from roguelike_sprawl.run.state import get_mission_flow
+
+        # Load missions.json
+        missions_path = (
+            Path(__file__).resolve().parents[2]
+            / "data" / "missions" / "missions.json"
+        )
+        with missions_path.open() as f:
+            data = json.load(f)
+
+        flow = get_mission_flow("first_jack", data)
+        stage_values = [s.stage.value for s in flow]
+        assert "briefing" in stage_values
+        assert "extract_data" in stage_values
+        assert "defeat_ice" in stage_values
+        assert "complete" in stage_values
+        assert len(flow) == 8
+
+    def test_watchdog_patrol_uses_bypass_security(self) -> None:
+        """watchdog_patrol flow uses BYPASS_SECURITY (not EXTRACT_DATA)."""
+        import json
+        from pathlib import Path
+
+        from roguelike_sprawl.run.state import get_mission_flow
+
+        missions_path = (
+            Path(__file__).resolve().parents[2]
+            / "data" / "missions" / "missions.json"
+        )
+        with missions_path.open() as f:
+            data = json.load(f)
+
+        flow = get_mission_flow("watchdog_patrol", data)
+        stage_values = [s.stage.value for s in flow]
+        assert "bypass_security" in stage_values
+        assert "extract_data" not in stage_values
+
+    def test_data_retrieval_uses_black_market(self) -> None:
+        """data_retrieval flow uses BLACK_MARKET stage (special variant)."""
+        import json
+        from pathlib import Path
+
+        from roguelike_sprawl.run.state import get_mission_flow
+
+        missions_path = (
+            Path(__file__).resolve().parents[2]
+            / "data" / "missions" / "missions.json"
+        )
+        with missions_path.open() as f:
+            data = json.load(f)
+
+        flow = get_mission_flow("data_retrieval", data)
+        stage_values = [s.stage.value for s in flow]
+        assert "black_market" in stage_values
+        assert "extract_data" in stage_values
+
+    def test_fallback_to_first_jack(self) -> None:
+        """Mission without stage_flow falls back to first_jack's flow."""
+        import json
+        from pathlib import Path
+
+        from roguelike_sprawl.run.state import get_mission_flow
+
+        missions_path = (
+            Path(__file__).resolve().parents[2]
+            / "data" / "missions" / "missions.json"
+        )
+        with missions_path.open() as f:
+            data = json.load(f)
+
+        # ice_run (different id, has stage_flow in JSON)
+        flow = get_mission_flow("ice_run", data)
+        stage_values = [s.stage.value for s in flow]
+        # ice_run uses same flow as first_jack
+        assert stage_values == [
+            "briefing", "travel", "meet_npc", "extract_data",
+            "defeat_ice", "jack_out", "reward", "complete",
+        ]

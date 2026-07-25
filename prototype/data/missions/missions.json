@@ -164,7 +164,17 @@
     "arc": 1,
     "is_canonical_cast": true,
     "reward_credits": 75,
-    "reward_tier": 1
+    "reward_tier": 1,
+    "stage_flow": [
+      "briefing",
+      "travel",
+      "meet_npc",
+      "extract_data",
+      "black_market",
+      "jack_out",
+      "reward",
+      "complete"
+    ]
   },
   "delivery_to_finn": {
     "id": "delivery_to_finn",
