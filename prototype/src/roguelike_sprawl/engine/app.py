@@ -208,7 +208,11 @@ def _render(
     prog_registry: ProgramRegistry,
     ice_registry: IceRegistry,
 ) -> None:
-    """Render the current screen. ``portraits`` is reserved for later use."""
+    """Render the current screen (Phase D-2 deep2: dispatch table).
+
+    ``portraits`` is reserved for later use. Actual rendering logic lives
+    in screen_dispatch.py — this function just sets BGM theme + delegates.
+    """
     _ = portraits
     # BGM: play appropriate theme for the current screen
     try:
@@ -217,217 +221,14 @@ def _render(
         original_story.update_screen_theme(state.screen.value, state.sound_config)
     except Exception:
         pass
-    if state.screen is ScreenKind.MENU:
-        menu_screen.render_menu(console, t, state)
-    elif state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
-        from . import graphic_novel_view
+    from .screen_dispatch import render_current_screen
 
-        has_save = getattr(state, "has_save", False)
-        graphic_novel_view.render_graphic_novel_menu(console, t, state.gn_menu_selected, has_save)
-    elif state.screen is ScreenKind.GRAPHIC_NOVEL:
-        from .graphic_novel_view import render_graphic_novel_screen as _render_gn
+    render_current_screen(
+        console, t, state,
+        prog_registry=prog_registry,
+        ice_registry=ice_registry,
+    )
 
-        _render_gn(console, state, t)
-    elif state.screen is ScreenKind.SAVED_PROGRESS:
-        from . import config, save_progress
-
-        save_dir = config.DATA_DIR / "saves"
-        summary = save_progress.get_progress_summary(save_dir=save_dir)
-        console.clear()
-        width = console.width
-        title = "당신의 자키" if t.lang == "ko" else "Your Jockey"
-        console.print(0, 0, "═" * width)
-        console.print((width - len(title)) // 2, 0, f" {title} ")
-        console.print(0, 1, "─" * width)
-        if not summary.has_save:
-            msg = "아직 자키가 없습니다" if t.lang == "ko" else "No save file yet"
-            console.print((width - len(msg)) // 2, 8, msg)
-            hint = "[1] NEW RUN  [2] 다른 캐릭터  [3] 메인메뉴"
-            console.print((width - len(hint)) // 2, 14, hint)
-        else:
-            lines = save_progress.render_summary_lines(summary, t_lang=t.lang)
-            y = 3
-            for line in lines:
-                console.print(4, y, line)
-                y += 1
-            y += 1
-            console.print(4, y, "─" * 40)
-            y += 1
-            if t.lang == "ko":
-                opts = [
-                    "[1] 다른 캐릭터 스토리 보기",
-                    "[2] 게임플레이 계속 (HUB)",
-                    "[3] 메인메뉴",
-                ]
-            else:
-                opts = [
-                    "[1] Other character stories",
-                    "[2] Continue gameplay (HUB)",
-                    "[3] Main menu",
-                ]
-            for i, opt in enumerate(opts):
-                console.print(4, y + i * 2, opt)
-    elif state.screen is ScreenKind.HUB:
-        hub_screen.render_hub(console, t, state)
-    elif state.screen is ScreenKind.NPC:
-        from . import npc_view
-
-        if state.npc_state is not None:
-            npc_view.render_npc(console, t, state, state.npc_state)
-        else:
-            console.clear(bg=(0, 0, 0))
-            console.print(x=2, y=2, string="=== NO NPC STATE ===", fg=(255, 0, 0))
-    elif state.screen is ScreenKind.HACK:
-        hacking_view.render_hack(console, t, state)
-    elif state.screen is ScreenKind.ENDING:
-        menu_screen.render_ending(console, t, state)
-    elif state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
-        from . import graphic_novel_view as gn_view
-
-        gn_view.render_graphic_novel_ending_menu(
-            console, t, state.gn_mode, state.menu_selected_index
-        )
-    elif state.screen is ScreenKind.SAVE_SLOT_SELECT:
-        from . import save_load_view
-
-        save_load_view.render_save_load(console, state)
-    elif state.screen is ScreenKind.EVENT:
-        from . import event_view
-
-        if state.active_event is not None:
-            event_view.render_event_story(console, t, state, state.active_event)
-        else:
-            console.clear(bg=(0, 0, 0))
-            console.print(x=2, y=2, string="=== NO ACTIVE EVENT ===", fg=(255, 0, 0))
-    elif state.screen is ScreenKind.STORY:
-        from . import config as config_mod
-        from . import story_view as story_screen
-
-        registry = story_screen.StoryRegistry.load(config_mod.DATA_DIR)
-        story_screen.render_story(console, state, registry, state.story_aftermath_id)
-    elif state.screen is ScreenKind.ARC_PHASE:
-        if state.current_arc is None:
-            console.clear(bg=(0, 0, 0))
-            console.print(x=2, y=2, string="=== NO ARC DATA ===", fg=(255, 0, 0))
-            console.print(x=2, y=4, string="Play through CHAPTER first.", fg=(128, 128, 128))
-        else:
-            arc = state.current_arc
-            if state.current_chapter_index < len(arc.chapters):
-                chapter = arc.chapters[state.current_chapter_index]
-                if state.current_phase_index < len(chapter.phases):
-                    phase = chapter.phapters[state.current_chapter_index].phases[
-                        state.current_phase_index
-                    ]
-                    from . import phase_view
-
-                    phase_view.render_arc_phase(
-                        console,
-                        phase,
-                        state.current_beat_index,
-                        state.phase_typed_chars,
-                        0.0,
-                        state.phase_elapsed_ms,
-                        t,
-                    )
-                else:
-                    console.clear(bg=(0, 0, 0))
-                    console.print(x=2, y=2, string="Arc complete.", fg=(180, 180, 100))
-            else:
-                console.clear(bg=(0, 0, 0))
-                console.print(x=2, y=2, string="All arcs complete.", fg=(180, 180, 100))
-    elif state.screen is ScreenKind.CYBERSPACE_BROWSER:
-        from . import cyberspace_browser as cb_screen
-
-        cb_screen.render_cyberspace_browser(console, t, state)
-    elif state.screen is ScreenKind.CYBERSPACE_MAP:
-        if not hasattr(state, "world_map") or state.world_map is None:
-            console.clear(bg=(0, 0, 0))
-            console.print(x=2, y=2, string="=== NO WORLD DATA ===", fg=(255, 0, 0))
-            console.print(
-                x=2, y=4, string="Start a mission from the Hub first.", fg=(128, 128, 128)
-            )
-        else:
-            _render_cyberspace_map(console, t, state)
-    elif state.screen is ScreenKind.CHARACTER_SELECT:
-        menu_screen.render_character_select(console, t, state)
-    elif state.screen is ScreenKind.CHAPTER:
-        from . import chapter_view
-
-        if state.chapter_data:
-            chapter_view.render_chapter(
-                console, state.chapter_data, t, state.chapter_typed_chars, state.chapter_elapsed_ms
-            )
-        else:
-            console.clear(bg=(0, 0, 0))
-            console.print(x=2, y=2, string="=== NO CHAPTER DATA ===", fg=(255, 0, 0))
-    elif state.screen is ScreenKind.MATRIX:
-        # ADR-0060: dungeon_view (NetHack-style 2D room grid) is the only mode.
-        # matrix_view (abstract node graph) has been removed.
-        dungeon_view.render_dungeon_matrix(console, t, state, prog_registry, ice_registry)
-    elif state.screen is ScreenKind.COMBAT:
-        if state.combat_state is not None:
-            combat_view.render_combat(console, t, state, state.combat_state)
-        else:
-            console.clear(bg=(0, 0, 0))
-            console.print(x=2, y=2, string="=== COMBAT ERROR ===", fg=(255, 0, 0))
-            console.print(x=2, y=4, string="No combat state loaded", fg=(128, 128, 128))
-    elif state.screen is ScreenKind.CINEMATIC:
-        if state.cinematic_state is not None:
-            # Calculate elapsed time (placeholder: use demo_elapsed_s)
-            elapsed_ms = int(state.demo_elapsed_s * 1000)
-            story_cinematic.render_cinematic(console, t, state, state.cinematic_state, elapsed_ms)
-        else:
-            console.clear(bg=(0, 0, 0))
-            console.print(x=2, y=2, string="=== CINEMATIC ERROR ===", fg=(255, 0, 0))
-            console.print(x=2, y=4, string="No cinematic state loaded", fg=(128, 128, 128))
-    elif state.screen is ScreenKind.DEATH:
-        from . import death as death_screen
-
-        death_screen.render_death_screen(console, state)
-    elif state.screen is ScreenKind.DEATH_SUMMARY:
-        from . import death as death_screen
-
-        death_screen.render_death_summary_screen(console, state)
-    elif state.screen is ScreenKind.HALL_OF_DEAD:
-        from . import death as death_screen
-
-        death_screen.render_hall_of_dead_screen(console, state)
-    elif state.screen is ScreenKind.JACK_OUT:
-        from . import jack_out_view
-
-        jack_out_view.render_jack_out(console, state)
-    elif state.screen is ScreenKind.REWARD:
-        from . import reward_view
-
-        reward_view.render_reward(console, state)
-    elif state.screen is ScreenKind.DEBRIEF:
-        from . import debrief_view
-
-        debrief_view.render_debrief(console, state)
-    elif state.screen is ScreenKind.SAVE_LOAD:
-        from . import save_load_view
-
-        save_load_view.render_save_load(console, state)
-    elif state.screen is ScreenKind.HELP:
-        from . import help_view
-
-        help_view.render_help(console, t, state)
-    elif state.screen is ScreenKind.SETTINGS:
-        from . import settings_view
-
-        settings_view.render_settings(console, t, state)
-    elif state.screen is ScreenKind.SALVATION_INTRO:
-        from . import salvation_view
-
-        salvation_view.render_salvation_intro(console, t, state)
-    elif state.screen is ScreenKind.SALVATION_EPILOGUE:
-        from . import salvation_view
-
-        salvation_view.render_salvation_epilogue(console, t, state)
-    elif state.screen is ScreenKind.SALVATION_ENDING:
-        from . import salvation_view
-
-        salvation_view.render_salvation_ending(console, t, state)
 
 
 def _handle_global_hotkeys(
