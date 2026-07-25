@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "generated": "2026-07-25T05:38:59.162972+00:00",
-  "count": 226,
+  "generated": "2026-07-25T14:51:59.445086+00:00",
+  "count": 236,
   "stories": [
     {
       "id": "2026-06-23_black_ice_dream",
@@ -2940,6 +2940,156 @@
       "missions": [],
       "trilogy": "sprawl",
       "url": "stories/2026-07-25_marlys_window_ko.html"
+    },
+    {
+      "id": "2026-07-25_soho_blackout",
+      "lang": "en",
+      "title": "Soho Blackout",
+      "subtitle": "Soho Blackout",
+      "character": "novice",
+      "cast": "case",
+      "word_count": "173",
+      "body_preview": "The lights went out in Soho at 0300, which in the Sprawl is the kind of thing that happens when a corporate district dec...",
+      "missions": [
+        "soho_blackout"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_soho_blackout_en.html"
+    },
+    {
+      "id": "2026-07-25_soho_blackout",
+      "lang": "ko",
+      "title": "Soho Blackout",
+      "subtitle": "Soho Blackout",
+      "character": "novice",
+      "cast": "case",
+      "word_count": "423",
+      "body_preview": "Soho의 불빛이 0300에 꺼졌다. 스프롤에서 그것은 기업 구역이 밝아지는 것이 지쳤다고 결정할 때 일어나는 종류의 일이다. 케이스는 일이 수당도 좋았고 픽서가 실망시키고 싶지 않은 사람이어서 그 일을 수락했다. ...",
+      "missions": [
+        "soho_blackout"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_soho_blackout_ko.html"
+    },
+    {
+      "id": "2026-07-25_tokyo_pachinko_run",
+      "lang": "en",
+      "title": "Tokyo Pachinko Run",
+      "subtitle": "Tokyo Pachinko Run",
+      "character": "veteran",
+      "cast": "sil",
+      "word_count": "162",
+      "body_preview": "Sil did not take jobs in Tokyo anymore. The Yakuza had a long memory and Sil had a longer one, and the two of them had b...",
+      "missions": [
+        "tokyo_pachinko_run"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_tokyo_pachinko_run_en.html"
+    },
+    {
+      "id": "2026-07-25_tokyo_pachinko_run",
+      "lang": "ko",
+      "title": "Tokyo Pachinko Run",
+      "subtitle": "Tokyo Pachinko Run",
+      "character": "veteran",
+      "cast": "sil",
+      "word_count": "433",
+      "body_preview": "실은 더 이상 도쿄에서 일을 받지 않았다. 야쿠자는 기억력이 오래되고 실의 기억력은 더 오래되었으며, 그 둘은 스프롤에 이름이 생기기 전부터 파친코 가게에서 만나고 있었다. 그 일은 배달이었다 — 메모리 크기의 데이...",
+      "missions": [
+        "tokyo_pachinko_run"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_tokyo_pachinko_run_ko.html"
+    },
+    {
+      "id": "2026-07-25_freeside_payroll",
+      "lang": "en",
+      "title": "Freeside Payroll",
+      "subtitle": "Freeside Payroll",
+      "character": "suit",
+      "cast": "suit",
+      "word_count": "172",
+      "body_preview": "The Suit had been sent to Freeside for a payroll job, which in corporate language means: someone at the orbital colony h...",
+      "missions": [
+        "freeside_payroll"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_freeside_payroll_en.html"
+    },
+    {
+      "id": "2026-07-25_freeside_payroll",
+      "lang": "ko",
+      "title": "Freeside Payroll",
+      "subtitle": "Freeside Payroll",
+      "character": "suit",
+      "cast": "suit",
+      "word_count": "463",
+      "body_preview": "수트는 급여 작업을 위해 프리사이드로 보내졌다. 기업 용어로 그것은: 궤도 식민지의 누군가가 자신에게 그들에게 지급된 숫자와 일치하지 않는 숫자를 지급하고 있었다는 것을 의미했다. 수트는 재활용된 공기와 오래된 커피...",
+      "missions": [
+        "freeside_payroll"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_freeside_payroll_ko.html"
+    },
+    {
+      "id": "2026-07-25_straylight_inquiry",
+      "lang": "en",
+      "title": "Straylight Inquiry",
+      "subtitle": "Straylight Inquiry",
+      "character": "heretic",
+      "cast": "kas",
+      "word_count": "208",
+      "body_preview": "The T-A orbital habitat called Straylight was a kind of museum of a family that had decided to live forever, which in th...",
+      "missions": [
+        "straylight_inquiry"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_straylight_inquiry_en.html"
+    },
+    {
+      "id": "2026-07-25_straylight_inquiry",
+      "lang": "ko",
+      "title": "Straylight Inquiry",
+      "subtitle": "Straylight Inquiry",
+      "character": "heretic",
+      "cast": "kas",
+      "word_count": "515",
+      "body_preview": "T-A 궤도 주거지 Straylight는 영원히 살기로 결정한 가족의 박물관 같은 것이었다. 스프롤에서 그것은 아직 죽기로 결정하지 않은 사람들의 박물관 같은 것이다. 카스는 가족이 가족 금고에 묻어둔 데이터 한 조...",
+      "missions": [
+        "straylight_inquiry"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_straylight_inquiry_ko.html"
+    },
+    {
+      "id": "2026-07-25_core_memory_dump",
+      "lang": "en",
+      "title": "Core Memory Dump",
+      "subtitle": "Core Memory Dump",
+      "character": "suit",
+      "cast": "suit",
+      "word_count": "243",
+      "body_preview": "The core memory was the kind of job that the Suit did not usually take, because the core memory was the kind of job that...",
+      "missions": [
+        "core_memory_dump"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_core_memory_dump_en.html"
+    },
+    {
+      "id": "2026-07-25_core_memory_dump",
+      "lang": "ko",
+      "title": "Core Memory Dump",
+      "subtitle": "Core Memory Dump",
+      "character": "suit",
+      "cast": "suit",
+      "word_count": "611",
+      "body_preview": "코어 메모리는 수트가 보통 맡지 않는 종류의 일이었는데, 코어 메모리가 보통 돌아오지 않는 종류의 일이기 때문이었다. 코어 메모리는 매트릭스가 이름을 갖기 전부터 매트릭스에 있었던 존재의 것이었는데, 그것은 존재들이...",
+      "missions": [
+        "core_memory_dump"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_core_memory_dump_ko.html"
     }
   ]
 }

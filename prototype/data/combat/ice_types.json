@@ -1203,5 +1203,135 @@
         "quantity": 1
       }
     ]
+  },
+  "chinese_ice": {
+    "name": "ICE — Chinese (Mao security)",
+    "portrait": "ice.standard",
+    "hp_base": 70,
+    "hp_per_grade": 12,
+    "dmg_base": 4,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 3,
+    "speed": 6,
+    "skills": [],
+    "resistance": 0.1,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.7,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.25,
+        "quantity": 1
+      }
+    ]
+  },
+  "zombie": {
+    "name": "ICE — Zombie (viral)",
+    "portrait": "ice.standard",
+    "hp_base": 35,
+    "hp_per_grade": 6,
+    "dmg_base": 2,
+    "dmg_per_grade": 1,
+    "tier": 1,
+    "defense": 0,
+    "speed": 4,
+    "skills": [],
+    "resistance": 0.0,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.5,
+        "quantity": 1
+      }
+    ]
+  },
+  "hellhound": {
+    "name": "ICE — Hellhound (Kuang military)",
+    "portrait": "ice.standard",
+    "hp_base": 110,
+    "hp_per_grade": 18,
+    "dmg_base": 7,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 4,
+    "speed": 9,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.85,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
+  },
+  "morrison_echo": {
+    "name": "ICE — Morrison's Echo (Loa of deep architecture)",
+    "portrait": "ice.standard",
+    "hp_base": 160,
+    "hp_per_grade": 22,
+    "dmg_base": 6,
+    "dmg_per_grade": 2,
+    "tier": 4,
+    "defense": 6,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.95,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.5,
+        "quantity": 1
+      },
+      {
+        "item": "fragment.morrison_echo",
+        "chance": 0.1,
+        "quantity": 1
+      }
+    ]
+  },
+  "wintermute_prime": {
+    "name": "ICE — Wintermute Prime (boss-tier AI)",
+    "portrait": "ice.standard",
+    "hp_base": 320,
+    "hp_per_grade": 35,
+    "dmg_base": 14,
+    "dmg_per_grade": 3,
+    "tier": 6,
+    "defense": 10,
+    "speed": 12,
+    "skills": [],
+    "resistance": 0.5,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 3
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.8,
+        "quantity": 2
+      },
+      {
+        "item": "unique_construct",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
   }
 }

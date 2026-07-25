@@ -3734,5 +3734,199 @@
       }
     },
     "arc": 5
+  },
+  "soho_blackout": {
+    "id": "soho_blackout",
+    "title": "Soho Blackout",
+    "story": {
+      "synopsis_en": "The lights went out in Soho at 0300, which in the Sprawl is the kind of thing that happens when a corporate district decides it is tired of being lit. Case took the job because the pay was good and the fixer was someone he did not want to disappoint. The job was to go in and find out which corp was buying the blackout. The pay was triple. The blackout was everywhere. The matrix, in Soho, had become a kind of dark that the dark was afraid of, and Case, jacked in at the edge of it, was the only light the district had left. He worked the trace for three hours and came back with a name. He did not say the name to the fixer. He said the name to a man in a noodle shop, who was not the fixer, who was someone the fixer had not expected, who was the kind of man that the Sprawl sometimes sends when the Sprawl has decided that the job has changed.",
+      "synopsis_ko": "Soho의 불빛이 0300에 꺼졌다. 스프롤에서 그것은 기업 구역이 밝아지는 것이 지쳤다고 결정할 때 일어나는 종류의 일이다. 케이스는 일이 수당도 좋았고 픽서가 실망시키고 싶지 않은 사람이어서 그 일을 수락했다. 일은 들어가서 어떤 기업이 블랙아웃을 사고 있는지 알아내는 것이었다. 수당은 세 배였다. 블랙아웃은 모든 곳에 있었다. 매트릭스는, Soho에서, 어둠이 두려워하는 종류의 어둠이 되어 있었고, 가장자리에 잭인한 케이스는 그 구역이 남긴 유일한 빛이었다. 그는 세 시간 동안 추적을 작업하고 이름과 함께 돌아왔다. 그는 그 이름을 픽서에게 말하지 않았다. 그는 그 이름을 국수 가게의 한 남자에게 말했다. 그 남자는 픽서가 아니었다. 픽서가 예상하지 못한 누군가였다. 일이 바뀌었다고 스프롤이 결정했을 때 스프롤이 가끔 보내는 종류의 남자였다.",
+      "source": "soho_blackout",
+      "character_ref": "novice",
+      "arc": 1,
+      "pillar": "code",
+      "word_count_en": 173,
+      "char_count_ko": 323,
+      "cast": "case"
+    },
+    "fixer": "finn",
+    "arc": 1,
+    "grade_min": 1,
+    "grade_max": 2,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "soho_blackout_log"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.standard",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 101,
+    "zone": "soho",
+    "rewards": {
+      "credits": 350,
+      "materials": {
+        "scrap_ice": 2
+      }
+    }
+  },
+  "tokyo_pachinko_run": {
+    "id": "tokyo_pachinko_run",
+    "title": "Tokyo Pachinko Run",
+    "story": {
+      "synopsis_en": "Sil did not take jobs in Tokyo anymore. The Yakuza had a long memory and Sil had a longer one, and the two of them had been meeting in pachinko parlors since before the Sprawl had a name. The job was a courier run — a piece of data the size of a memory, traveling from Shinjuku to a drop in Roppongi, in a city that had decided to forget its own geography. Sil took the job because the fixer was someone who had once, in another life, saved Sil's. Sil took the job knowing the city would remember Sil. Sil took the job because in the Sprawl, the only way to stay clean was to take the dirty jobs and hope the dirt was not yours. The data was a memory of a place that did not exist. The courier was Sil. The city was Tokyo. The dirt was the city's, and the city was not going to wash it off.",
+      "synopsis_ko": "실은 더 이상 도쿄에서 일을 받지 않았다. 야쿠자는 기억력이 오래되고 실의 기억력은 더 오래되었으며, 그 둘은 스프롤에 이름이 생기기 전부터 파친코 가게에서 만나고 있었다. 그 일은 배달이었다 — 메모리 크기의 데이터 한 조각이, 신주쿠에서 로폰기의 드롭 포인트로, 자기 자신의 지리를 잊기로 결정한 도시에서 이동하는 것이었다. 실은 그 일을 수락했다. 왜냐하면 픽서는 다른 생에서, 한 번, 실을 구원한 적이 있는 사람이었다. 실은 도시가 자신을 기억할 것이라는 것을 알고서도 그 일을 수락했다. 스프롤에서 깨끗하게 남는 유일한 방법은 더러운 일들을 맡고 그 더러움이 당신 것이 아닌지 바라는 것이라서, 실은 그 일을 수락했다. 데이터는 존재하지 않는 장소의 기억이었다. 배달원은 실이었다. 도시는 도쿄였다. 더러움은 도시 것이었고, 도시는 그것을 씻어내지 않을 것이었다.",
+      "source": "tokyo_pachinko_run",
+      "character_ref": "veteran",
+      "arc": 2,
+      "pillar": "code",
+      "word_count_en": 162,
+      "char_count_ko": 328,
+      "cast": "sil"
+    },
+    "fixer": "dixie",
+    "arc": 2,
+    "grade_min": 3,
+    "grade_max": 4,
+    "primary_objective": {
+      "type": "deliver",
+      "target": "roppongi_drop"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.spider",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 202,
+    "zone": "tokyo",
+    "rewards": {
+      "credits": 1100,
+      "materials": {
+        "scrap_ice": 2,
+        "raw_neural": 1
+      }
+    }
+  },
+  "freeside_payroll": {
+    "id": "freeside_payroll",
+    "title": "Freeside Payroll",
+    "story": {
+      "synopsis_en": "The Suit had been sent to Freeside for a payroll job, which in corporate language means: someone at the orbital colony had been paying themselves in numbers that did not match the numbers that had been paid to them. The Suit arrived at L5 in a pod that smelled of recycled air and old coffee. The job was simple in the way that corporate jobs are simple — there were exactly three people who could have done it, and exactly three people who would deny it. The Suit interviewed them in order. The first said he had been in accounting. The second said she had been in security. The third said nothing at all, which in Freeside means the third person had been the one. The Suit took the data. The Suit took the pod back. The Suit filed the report. The Suit did not say what the third person had paid themselves in. The numbers, the Suit thought, were not the kind of numbers the Sprawl was ready to know about.",
+      "synopsis_ko": "수트는 급여 작업을 위해 프리사이드로 보내졌다. 기업 용어로 그것은: 궤도 식민지의 누군가가 자신에게 그들에게 지급된 숫자와 일치하지 않는 숫자를 지급하고 있었다는 것을 의미했다. 수트는 재활용된 공기와 오래된 커피 냄새가 나는 포드에서 L5에 도착했다. 그 일은 기업 일들이 단순한 방식으로 단순했다 — 그것을 할 수 있었던 정확히 세 사람이 있었고, 그것을 부인할 정확한 세 사람이 있었다. 수트는 그들을 순서대로 인터뷰했다. 첫 번째는 회계에 있었다고 말했다. 두 번째는 보안에 있었다고 말했다. 세 번째는 아무 말도 하지 않았는데, 프리사이드에서 그것은 세 번째 사람이 그랬다는 것을 의미했다. 수트는 데이터를 가져갔다. 수트는 포드를 다시 가져갔다. 수트는 보고서를 제출했다. 수트는 세 번째 사람이 자신에게 무엇을 지급했는지 말하지 않았다. 수트는 그 숫자들이 스프롤이 알 준비가 된 종류의 숫자가 아니라고 생각했다.",
+      "source": "freeside_payroll",
+      "character_ref": "suit",
+      "arc": 3,
+      "pillar": "code",
+      "word_count_en": 172,
+      "char_count_ko": 351,
+      "cast": "suit"
+    },
+    "fixer": "finn",
+    "arc": 3,
+    "grade_min": 4,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "freeside_payroll_audit"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.corporate_guard",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 303,
+    "zone": "freeside",
+    "rewards": {
+      "credits": 2000,
+      "materials": {
+        "refined_neural": 1,
+        "memory_shard": 1
+      }
+    }
+  },
+  "straylight_inquiry": {
+    "id": "straylight_inquiry",
+    "title": "Straylight Inquiry",
+    "story": {
+      "synopsis_en": "The T-A orbital habitat called Straylight was a kind of museum of a family that had decided to live forever, which in the Sprawl is a kind of museum of people who had not yet decided to die. Kas had been hired to find a piece of data that the family had buried in the family vault, which is the kind of place where a family that has decided to live forever would put the things it does not want to be remembered by. The matrix, in Straylight, was old in the way that family things are old. Kas worked the trace for four hours. The trace led to a room. The room contained a name. The name was the name of someone the family had decided to forget. Kas copied the name. Kas jack out. Kas filed the report. Kas did not say the name to the fixer. Kas said: 'The family has been keeping a list.' The fixer said: 'A list of what?' Kas said: 'Of who they are going to be, when they are not who they were.' The fixer did not ask for the list. The fixer paid Kas in numbers that did not match the numbers that had been paid to anyone else.",
+      "synopsis_ko": "T-A 궤도 주거지 Straylight는 영원히 살기로 결정한 가족의 박물관 같은 것이었다. 스프롤에서 그것은 아직 죽기로 결정하지 않은 사람들의 박물관 같은 것이다. 카스는 가족이 가족 금고에 묻어둔 데이터 한 조각을 찾기 위해 고용되었다. 가족 금고는 영원히 살기로 결정한 가족이 기억되고 싶지 않은 것들을 두는 종류의 장소였다. 매트릭스는 Straylight에서 가족 물건처럼 오래되었다. 카스는 네 시간 동안 추적을 작업했다. 추적은 방으로 이어졌다. 방에는 이름이 있었다. 이름은 가족이 잊기로 결정한 누군가의 이름이었다. 카스는 이름을 복사했다. 카스는 잭아웃했다. 카스는 보고서를 제출했다. 카스는 픽서에게 이름을 말하지 않았다. 카스는 말했다: '가족이 목록을 보관하고 있었습니다.' 픽서가 말했다: '무엇의 목록이?' 카스가 말했다: '그들이 누구였는지 더 이상 아닌 후에, 그들이 될 사람들의 목록입니다.' 픽서는 목록을 요청하지 않았다. 픽서는 다른 누구에게도 지급되지 않은 숫자로 카스에게 지불했다.",
+      "source": "straylight_inquiry",
+      "character_ref": "heretic",
+      "arc": 4,
+      "pillar": "code",
+      "word_count_en": 208,
+      "char_count_ko": 401,
+      "cast": "kas"
+    },
+    "fixer": "finn",
+    "arc": 4,
+    "grade_min": 5,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "straylight_family_vault"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.ta_security_ice",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 404,
+    "zone": "ta",
+    "rewards": {
+      "credits": 5000,
+      "materials": {
+        "unique_construct": 1,
+        "memory_shard": 2
+      }
+    }
+  },
+  "core_memory_dump": {
+    "id": "core_memory_dump",
+    "title": "Core Memory Dump",
+    "story": {
+      "synopsis_en": "The core memory was the kind of job that the Suit did not usually take, because the core memory was the kind of job that did not usually come back. The core memory belonged to an entity that had been in the matrix since before the matrix had a name, which is the kind of thing that entities say about themselves when they want you to be afraid of them. The Suit was not afraid. The Suit was never afraid. The Suit took the job because the fixer's number was the kind of number that the Suit could not refuse, which is the kind of number that the Sprawl sometimes pays to people who do the things the Sprawl cannot do for itself. The core memory was, in fact, a memory. The memory was, in fact, a memory of a place. The place was, in fact, a place the matrix did not have. The Suit copied the memory. The Suit did not understand the memory. The Suit filed the report. The Suit did not say the memory to the fixer. The Suit said: 'The matrix has been keeping a place it does not have.' The fixer said: 'What place?' The Suit said: 'A place it has been keeping for the matrix it does not have.' The fixer paid the Suit. The matrix did not say anything to the Suit. The matrix, the Suit thought, was not the kind of matrix that says things.",
+      "synopsis_ko": "코어 메모리는 수트가 보통 맡지 않는 종류의 일이었는데, 코어 메모리가 보통 돌아오지 않는 종류의 일이기 때문이었다. 코어 메모리는 매트릭스가 이름을 갖기 전부터 매트릭스에 있었던 존재의 것이었는데, 그것은 존재들이 당신이 그들을 두려워하기를 원할 때 자신들에 대해 말하는 종류의 말이다. 수트는 두려워하지 않았다. 수트는 결코 두려워하지 않았다. 수트는 그 일을 수락했다. 왜냐하면 픽서의 숫자는 수트가 거절할 수 없는 종류의 숫자였고, 그것은 스프롤이 자기 자신을 위해 할 수 없는 일들을 하는 사람들에게 때때로 지불하는 종류의 숫자였기 때문이다. 코어 메모리는 사실 기억이었다. 기억은 사실 장소의 기억이었다. 장소는 사실 매트릭스가 갖지 못한 장소였다. 수트는 기억을 복사했다. 수트는 기억을 이해하지 못했다. 수트는 보고서를 제출했다. 수스는 기억을 픽서에게 말하지 않았다. 수스는 말했다: '매트릭스가 가지지 못한 장소를 보관해 왔습니다.' 픽서가 말했다: '어떤 장소?' 수스는 말했다: '가지지 못한 매트릭스를 위해 보관해 온 장소입니다.' 픽서는 수트에게 지불했다. 매트릭스는 수트에게 아무 말도 하지 않았다. 매트릭스는, 수트는 생각했다, 말하는 종류의 매트릭스가 아니었다.",
+      "source": "core_memory_dump",
+      "character_ref": "suit",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 243,
+      "char_count_ko": 472,
+      "cast": "suit"
+    },
+    "fixer": "finn",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "core_memory_dump_payload"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.construct",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 505,
+    "zone": "core",
+    "rewards": {
+      "credits": 7500,
+      "materials": {
+        "unique_construct": 2,
+        "refined_neural": 2
+      }
+    }
   }
 }

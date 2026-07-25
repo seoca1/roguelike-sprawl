@@ -1,5 +1,5 @@
 {
-  "mission_count": 92,
+  "mission_count": 97,
   "character_count": 4,
   "character_ids": [
     "heretic",
@@ -15,14 +15,14 @@
     5
   ],
   "arc_distribution": {
-    "4": 14,
-    "3": 15,
-    "2": 21,
-    "1": 19,
-    "5": 23
+    "4": 15,
+    "3": 16,
+    "2": 22,
+    "1": 20,
+    "5": 24
   },
-  "ice_unique_count": 42,
-  "stage_count": 14,
+  "ice_unique_count": 47,
+  "stage_count": 16,
   "sound_wav_count": 46,
   "gn_scenes_by_char": {
     "3jane": 9,
@@ -43,6 +43,6 @@
   "cyberspace_sectors_total": 8,
   "cyberspace_servers_total": 184,
   "skill_effect_count": 16,
-  "test_count_collected": 2771,
-  "_generated_at": "2026-07-25T05:38:58+00:00"
+  "test_count_collected": 2806,
+  "_generated_at": "2026-07-25T14:54:32+00:00"
 }
