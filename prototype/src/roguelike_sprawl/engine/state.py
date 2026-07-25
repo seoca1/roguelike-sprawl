@@ -225,6 +225,11 @@ class AppState:
     # v0.5: Data Fragment collection (collectible lore from missions)
     # Set of collected fragment_ids. Each unlocks wiki lore and a discovery flag.
     data_fragments: set[str] = field(default_factory=set)
+    # v0.5: Movement stats (mobility feedback in matrix/dungeon view)
+    # Total cardinal-direction steps taken in current run.
+    movement_step_count: int = 0
+    # Set of node_ids visited during current run (for visited-count display).
+    nodes_visited: set[str] = field(default_factory=set)
     # Jack Out animation state (Stage.JACK_OUT)
     jack_out_started_at: float = 0.0
     jack_out_frame_index: int = 0

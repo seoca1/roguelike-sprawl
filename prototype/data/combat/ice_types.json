@@ -1333,5 +1333,140 @@
         "quantity": 1
       }
     ]
+  },
+  "ice_tessier_construct": {
+    "name": "ICE — Tessier Construct (T-A family construct)",
+    "portrait": "ice.standard",
+    "hp_base": 130,
+    "hp_per_grade": 20,
+    "dmg_base": 7,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 5,
+    "speed": 8,
+    "skills": [],
+    "resistance": 0.25,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.85,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.35,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_neuromancer_warden": {
+    "name": "ICE — Neuromancer Warden (AI guardian)",
+    "portrait": "ice.standard",
+    "hp_base": 180,
+    "hp_per_grade": 25,
+    "dmg_base": 8,
+    "dmg_per_grade": 2,
+    "tier": 4,
+    "defense": 7,
+    "speed": 9,
+    "skills": [],
+    "resistance": 0.35,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.9,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.4,
+        "quantity": 1
+      },
+      {
+        "item": "fragment.tessier_archive",
+        "chance": 0.15,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_cebu_pacific": {
+    "name": "ICE — Cebu Pacific (blueant data courier)",
+    "portrait": "ice.standard",
+    "hp_base": 60,
+    "hp_per_grade": 10,
+    "dmg_base": 4,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 2,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.1,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.7,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_ghost_grid": {
+    "name": "ICE — Ghost Grid (Loa proximity alarm)",
+    "portrait": "ice.standard",
+    "hp_base": 75,
+    "hp_per_grade": 12,
+    "dmg_base": 5,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 3,
+    "speed": 6,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.75,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.25,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_dixie_echo": {
+    "name": "ICE — Dixie's Echo (dead construct ghost)",
+    "portrait": "ice.standard",
+    "hp_base": 95,
+    "hp_per_grade": 14,
+    "dmg_base": 5,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 4,
+    "speed": 8,
+    "skills": [],
+    "resistance": 0.15,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.4,
+        "quantity": 1
+      },
+      {
+        "item": "fragment.morrison_echo",
+        "chance": 0.2,
+        "quantity": 1
+      }
+    ]
   }
 }

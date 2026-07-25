@@ -570,6 +570,8 @@ def _handle_cardinal_movement(
 
     current_id = state.current_node_id
     neighbors = matrix.neighbors(current_id)
+    state.movement_step_count += 1
+    state.nodes_visited.add(current_id)
 
     direction_name = {
         KeySym.UP: "NORTH",

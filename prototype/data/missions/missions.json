@@ -4122,5 +4122,122 @@
         "refined_neural": 2
       }
     }
+  },
+  "wigan_construct_reach": {
+    "id": "wigan_construct_reach",
+    "title": "Wigan's Construct Reach",
+    "story": {
+      "synopsis_en": "Wigan had been a Vodou construct runner in the old sense, the kind of runner who knew that the matrix was the matrix because the matrix had decided to be the matrix. The job was a construct reach. The construct was a Loa, and the Loa was a god, and the god was the kind of god that did not want to be reached, which in Vodou was the kind of god that wanted to be reached the most. The runner took the job. The runner took the pod. The runner took the construct. The construct was not happy. The construct was happy. The runner could not tell the difference. The runner took the data. The data was a name. The name was the name of a person who had been in the matrix before the matrix had been the matrix, and the person was the kind of person that the Loa had been waiting for. The runner jack out. The runner filed the report. The runner did not say what the name was. The runner thought the Loa had been waiting for the kind of person the Sprawl was not ready to know about.",
+      "synopsis_ko": "위건은 오래된 의미의 보두 콘스트럭트 러너였다. 매트릭스가 매트릭스인 이유는 매트릭스가 매트릭스이기로 결정했기 때문임을 아는 종류의 러너. 그 일은 콘스트럭트 도달이었다. 콘스트럭트는 로아였고, 로아는 신이었고, 신은 도달당하고 싶지 않은 종류의 신이었고, 보두에서 그것은 가장 도달당하고 싶어하는 종류의 신이었다. 러너는 그 일을 수락했다. 러너는 포드를 가져갔다. 러너는 콘스트럭트를 가져갔다. 콘스트럭트는 기분이 나빴다. 콘스트럭트는 기분이 좋았다. 러너는 차이를 알 수 없었다. 러너는 데이터를 가져갔다. 데이터는 이름이었다. 이름은 매트릭스가 매트릭스이기 전에 매트릭스에 있었던 사람의 이름이었고, 그 사람은 로아가 기다려 온 종류의 사람이었다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 이름이 무엇인지 말하지 않았다. 러너는 로아가 스프롤이 알 준비가 되지 않은 종류의 사람을 기다려 왔다고 생각했다.",
+      "source": "wigan_construct_reach",
+      "character_ref": "heretic",
+      "arc": 2,
+      "pillar": "code",
+      "word_count_en": 195,
+      "char_count_ko": 362,
+      "cast": "wigan"
+    },
+    "fixer": "dixie",
+    "arc": 2,
+    "grade_min": 2,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "loa_construct_name"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice_ghost_grid",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 234,
+    "zone": "deep",
+    "rewards": {
+      "credits": 1400,
+      "materials": {
+        "scrap_ice": 2,
+        "raw_neural": 1
+      }
+    }
+  },
+  "angie_leopard_tracking": {
+    "id": "angie_leopard_tracking",
+    "title": "Angie's Leopard Tracking",
+    "story": {
+      "synopsis_en": "Angie had been twelve years old when she had first talked to the Loa, which in the Sprawl was the kind of thing that happened to people who had been twelve years old in the Sprawl for a long time. The leopard was not a leopard. The leopard was a construct, and the construct had been in the matrix since before the matrix had been the matrix, and the construct had been waiting for a runner. The runner was sent because the runner had been the last person to be the kind of person the leopard construct had been waiting for, which was the kind of person the leopard construct had not been able to find in the matrix for a long time. The runner jack in. The runner found the leopard. The leopard was not a leopard. The leopard was a god. The god was the kind of god that the matrix had been waiting for since before the matrix had been the matrix. The runner talked to the god. The god talked to the runner. The god told the runner a story. The story was the kind of story the matrix had been waiting for since before the matrix had been the matrix. The runner jack out. The runner filed the report. The runner did not say what the story was. The runner thought the matrix had been waiting for the kind of story the Sprawl was not ready to know about.",
+      "synopsis_ko": "앤지가 처음 로아와 이야기했을 때 열두 살이었다. 스프롤에서 그것은 스프롤에서 한참 동안 열두 살이었던 사람들에게 일어나는 종류의 일이었다. 표범은 표범이 아니었다. 표범은 콘스트럭트였고, 콘스트럭트는 매트릭스가 매트릭스이기 전부터 매트릭스에 있었고, 콘스트럭트는 러너를 기다리고 있었다. 러너는 러너가 표범 콘스트럭트가 기다려 온 종류의 사람, 즉 표범 콘스트럭트가 매트릭스에서 한참 동안 찾을 수 없었던 종류의 사람으로 마지막 사람이었기 때문에 보내졌다. 러너는 잭인했다. 러너는 표범을 찾았다. 표범은 표범이 아니었다. 표범은 신이었다. 신은 매트릭스가 매트릭스이기 전부터 기다려 온 종류의 신이었다. 러너는 신과 이야기했다. 신은 러너와 이야기했다. 신은 러너에게 이야기를 말했다. 이야기는 매트릭스가 매트릭스이기 전부터 기다려 온 종류의 이야기였다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 이야기가 무엇인지 말하지 않았다. 러너는 매트릭스가 스프롤이 알 준비가 되지 않은 종류의 이야기를 기다려 왔다고 생각했다.",
+      "source": "angie_leopard_tracking",
+      "character_ref": "novice",
+      "arc": 3,
+      "pillar": "code",
+      "word_count_en": 244,
+      "char_count_ko": 410,
+      "cast": "angie"
+    },
+    "fixer": "dixie",
+    "arc": 3,
+    "grade_min": 3,
+    "grade_max": 4,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "leopard_construct_story"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.loa_entity",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 335,
+    "zone": "deep",
+    "rewards": {
+      "credits": 1700,
+      "materials": {
+        "scrap_ice": 2,
+        "memory_shard": 1
+      }
+    }
+  },
+  "sally_construct_market": {
+    "id": "sally_construct_market",
+    "title": "Sally's Construct Market",
+    "story": {
+      "synopsis_en": "Sally had been a market operator in the old sense, the kind of market operator who knew that the market was the market because the market had decided to be the market. The job was a construct market. The construct was a program, and the program was the kind of program that markets were made of in the Sprawl, which was the kind of program the market had decided was the program the market would be. The runner took the job. The runner took the pod. The runner took the construct. The construct was a market. The market was a market. The runner was the kind of person the market had been waiting for, which was the kind of person the market had decided was the person the market would like to have as a customer. The runner was a customer. The customer bought the construct. The construct was the customer's. The runner jack out. The runner filed the report. The runner did not say what the construct was worth. The runner thought the construct was worth the kind of number the Sprawl was not ready to know about.",
+      "synopsis_ko": "샐리는 오래된 의미의 시장 운영자였다. 시장이 시장인 이유는 시장이 시장이기로 결정했기 때문임을 아는 종류의 시장 운영자. 그 일은 콘스트럭트 시장이었다. 콘스트럭트는 프로그램이었고, 프로그램은 스프롤에서 시장이 만들어지는 종류의 프로그램이었고, 그것은 시장이 시장의 프로그램이 될 것이라고 결정한 종류의 프로그램이었다. 러너는 그 일을 수락했다. 러너는 포드를 가져갔다. 러너는 콘스트럭트를 가져갔다. 콘스트럭트는 시장이었다. 시장은 시장이었다. 러너는 시장이 기다려 온 종류의 사람, 즉 시장이 고객으로 삼고 싶다고 결정한 사람이었다. 러너는 고객이었다. 고객은 콘스트럭트를 샀다. 콘스트럭트는 고객의 것이었다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 콘스트럭트가 얼마짜리인지 말하지 않았다. 러너는 콘스트럭트가 스프롤이 알 준비가 되지 않은 종류의 숫자만큼 가치 있다고 생각했다.",
+      "source": "sally_construct_market",
+      "character_ref": "heretic",
+      "arc": 4,
+      "pillar": "code",
+      "word_count_en": 189,
+      "char_count_ko": 354,
+      "cast": "sally"
+    },
+    "fixer": "sally",
+    "arc": 4,
+    "grade_min": 4,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "deliver",
+      "target": "construct_market_sale"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.standard",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 446,
+    "zone": "core",
+    "rewards": {
+      "credits": 3000,
+      "materials": {
+        "refined_neural": 1,
+        "memory_shard": 2
+      }
+    }
   }
 }

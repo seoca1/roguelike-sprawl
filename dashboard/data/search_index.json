@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "generated": "2026-07-25T14:58:20.026080+00:00",
-  "count": 246,
+  "generated": "2026-07-25T15:05:44.331156+00:00",
+  "count": 252,
   "stories": [
     {
       "id": "2026-06-23_black_ice_dream",
@@ -3240,6 +3240,96 @@
       ],
       "trilogy": "sprawl",
       "url": "stories/short-stories/2026-07-25_wintermute_witness_ko.html"
+    },
+    {
+      "id": "2026-07-25_wigan_construct_reach",
+      "lang": "en",
+      "title": "Wigan's Construct Reach",
+      "subtitle": "Wigan's Construct Reach",
+      "character": "heretic",
+      "cast": "wigan",
+      "word_count": "222",
+      "body_preview": "Wigan had been a Vodou construct runner in the old sense, the kind of runner who knew that the matrix was the matrix bec...",
+      "missions": [
+        "wigan_construct_reach"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_wigan_construct_reach_en.html"
+    },
+    {
+      "id": "2026-07-25_wigan_construct_reach",
+      "lang": "ko",
+      "title": "Wigan's Construct Reach",
+      "subtitle": "Wigan's Construct Reach",
+      "character": "heretic",
+      "cast": "wigan",
+      "word_count": "362",
+      "body_preview": "위건은 오래된 의미의 보두 콘스트럭트 러너였다. 매트릭스가 매트릭스인 이유는 매트릭스가 매트릭스이기로 결정했기 때문임을 아는 종류의 러너. 그 일은 콘스트럭트 도달이었다. 콘스트럭트는 로아였고, 로아는 신이었고, 신...",
+      "missions": [
+        "wigan_construct_reach"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_wigan_construct_reach_ko.html"
+    },
+    {
+      "id": "2026-07-25_angie_leopard_tracking",
+      "lang": "en",
+      "title": "Angie's Leopard Tracking",
+      "subtitle": "Angie's Leopard Tracking",
+      "character": "novice",
+      "cast": "angie",
+      "word_count": "245",
+      "body_preview": "Angie had been twelve years old when she had first talked to the Loa, which in the Sprawl was the kind of thing that hap...",
+      "missions": [
+        "angie_leopard_tracking"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_angie_leopard_tracking_en.html"
+    },
+    {
+      "id": "2026-07-25_angie_leopard_tracking",
+      "lang": "ko",
+      "title": "Angie's Leopard Tracking",
+      "subtitle": "Angie's Leopard Tracking",
+      "character": "novice",
+      "cast": "angie",
+      "word_count": "410",
+      "body_preview": "앤지가 처음 로아와 이야기했을 때 열두 살이었다. 스프롤에서 그것은 스프롤에서 한참 동안 열두 살이었던 사람들에게 일어나는 종류의 일이었다. 표범은 표범이 아니었다. 표범은 콘스트럭트였고, 콘스트럭트는 매트릭스가 매...",
+      "missions": [
+        "angie_leopard_tracking"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_angie_leopard_tracking_ko.html"
+    },
+    {
+      "id": "2026-07-25_sally_construct_market",
+      "lang": "en",
+      "title": "Sally's Construct Market",
+      "subtitle": "Sally's Construct Market",
+      "character": "heretic",
+      "cast": "sally",
+      "word_count": "217",
+      "body_preview": "Sally had been a market operator in the old sense, the kind of market operator who knew that the market was the market b...",
+      "missions": [
+        "sally_construct_market"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_sally_construct_market_en.html"
+    },
+    {
+      "id": "2026-07-25_sally_construct_market",
+      "lang": "ko",
+      "title": "Sally's Construct Market",
+      "subtitle": "Sally's Construct Market",
+      "character": "heretic",
+      "cast": "sally",
+      "word_count": "354",
+      "body_preview": "샐리는 오래된 의미의 시장 운영자였다. 시장이 시장인 이유는 시장이 시장이기로 결정했기 때문임을 아는 종류의 시장 운영자. 그 일은 콘스트럭트 시장이었다. 콘스트럭트는 프로그램이었고, 프로그램은 스프롤에서 시장이 만...",
+      "missions": [
+        "sally_construct_market"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_sally_construct_market_ko.html"
     }
   ]
 }
