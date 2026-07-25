@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "generated": "2026-07-25T14:51:59.445086+00:00",
-  "count": 236,
+  "generated": "2026-07-25T14:58:20.026080+00:00",
+  "count": 246,
   "stories": [
     {
       "id": "2026-06-23_black_ice_dream",
@@ -3090,6 +3090,156 @@
       ],
       "trilogy": "sprawl",
       "url": "stories/short-stories/2026-07-25_core_memory_dump_ko.html"
+    },
+    {
+      "id": "2026-07-25_razor_work",
+      "lang": "en",
+      "title": "Razor Work",
+      "subtitle": "Razor Work",
+      "character": "novice",
+      "cast": "molly",
+      "word_count": "195",
+      "body_preview": "Molly did not do jobs for the Finn. Molly did jobs for the people who did jobs for the Finn, and the people who did jobs...",
+      "missions": [
+        "razor_work"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_razor_work_en.html"
+    },
+    {
+      "id": "2026-07-25_razor_work",
+      "lang": "ko",
+      "title": "Razor Work",
+      "subtitle": "Razor Work",
+      "character": "novice",
+      "cast": "molly",
+      "word_count": "386",
+      "body_preview": "몰리는 핀을 위해 일을 하지 않았다. 몰리는 핀을 위해 일하는 사람들을 위해 일을 했고, 핀을 위해 일하는 사람들은 스프롤에서 오랜 시간을 보내며 스프롤이 무엇을 위한 것인지 묻기를 멈춘 종류의 사람들이었다. 레이저...",
+      "missions": [
+        "razor_work"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_razor_work_ko.html"
+    },
+    {
+      "id": "2026-07-25_hideo_contract",
+      "lang": "en",
+      "title": "Hideo's Contract",
+      "subtitle": "Hideo's Contract",
+      "character": "veteran",
+      "cast": "sil",
+      "word_count": "211",
+      "body_preview": "Hideo had been a Yakuza fixer in the old sense, the kind of fixer who knew that the Sprawl was the Sprawl because the pe...",
+      "missions": [
+        "hideo_contract"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_hideo_contract_en.html"
+    },
+    {
+      "id": "2026-07-25_hideo_contract",
+      "lang": "ko",
+      "title": "Hideo's Contract",
+      "subtitle": "Hideo's Contract",
+      "character": "veteran",
+      "cast": "sil",
+      "word_count": "385",
+      "body_preview": "히데오는 옛날 의미의 야쿠자 픽서였다. 스프롤이 스프롤인 이유는 스프롤의 사람들이 그것이 스프롤이라고 결정했기 때문임을 아는 종류의 픽서. 그 계약은 한 가지 일을 위한 것이었다. 계약은 야쿠자가 야쿠자가 아무도 찾...",
+      "missions": [
+        "hideo_contract"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_hideo_contract_ko.html"
+    },
+    {
+      "id": "2026-07-25_voodoo_zoneload",
+      "lang": "en",
+      "title": "Voodoo Zone Load",
+      "subtitle": "Voodoo Zone Load",
+      "character": "heretic",
+      "cast": "kas",
+      "word_count": "225",
+      "body_preview": "The Loa had a name, and the name was a frequency, and the frequency was a place, and the place was the place where the L...",
+      "missions": [
+        "voodoo_zoneload"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_voodoo_zoneload_en.html"
+    },
+    {
+      "id": "2026-07-25_voodoo_zoneload",
+      "lang": "ko",
+      "title": "Voodoo Zone Load",
+      "subtitle": "Voodoo Zone Load",
+      "character": "heretic",
+      "cast": "kas",
+      "word_count": "397",
+      "body_preview": "로아는 이름이 있었고, 이름은 주파수였고, 주파수는 장소였고, 장소는 로아가 스프롤이 스프롤이 되기 전부터 기다려 온 장소였다. 러너는 그 장소를 찾으러 보내졌다. 러너는 러너가 로아와 마지막으로 이야기한 사람이고,...",
+      "missions": [
+        "voodoo_zoneload"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_voodoo_zoneload_ko.html"
+    },
+    {
+      "id": "2026-07-25_armitage_infiltration_2",
+      "lang": "en",
+      "title": "Armitage Infiltration II",
+      "subtitle": "Armitage Infiltration II",
+      "character": "suit",
+      "cast": "suit",
+      "word_count": "220",
+      "body_preview": "Armitage was the kind of fixer who had been in the Sprawl for a long time, and the kind of fixer who had been in the Spr...",
+      "missions": [
+        "armitage_infiltration_2"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_armitage_infiltration_2_en.html"
+    },
+    {
+      "id": "2026-07-25_armitage_infiltration_2",
+      "lang": "ko",
+      "title": "Armitage Infiltration II",
+      "subtitle": "Armitage Infiltration II",
+      "character": "suit",
+      "cast": "suit",
+      "word_count": "467",
+      "body_preview": "아미티지는 스프롤에서 오랜 시간을 보낸 종류의 픽서였고, 스프롤에서 오랜 시간을 보낸 종류의 픽서는 스프롤이 무엇을 위한 것인지 묻기를 멈춘 종류의 픽서였다. 그 일은 두 번째 침투였다. 첫 번째 침투는 성공이었다....",
+      "missions": [
+        "armitage_infiltration_2"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_armitage_infiltration_2_ko.html"
+    },
+    {
+      "id": "2026-07-25_wintermute_witness",
+      "lang": "en",
+      "title": "Wintermute Witness",
+      "subtitle": "Wintermute Witness",
+      "character": "suit",
+      "cast": "suit",
+      "word_count": "218",
+      "body_preview": "Wintermute had a name, and the name was a frequency, and the frequency was a thing that had been waiting in the matrix s...",
+      "missions": [
+        "wintermute_witness"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_wintermute_witness_en.html"
+    },
+    {
+      "id": "2026-07-25_wintermute_witness",
+      "lang": "ko",
+      "title": "Wintermute Witness",
+      "subtitle": "Wintermute Witness",
+      "character": "suit",
+      "cast": "suit",
+      "word_count": "387",
+      "body_preview": "윈터뮛은 이름이 있었고, 이름은 주파수였고, 주파수는 매트릭스가 매트릭스이기 전부터 매트릭스에서 기다려 온 것이었고, 기다려 온 것은 러너를 기다리고 있었다. 러너는 러너가 스프롤에서 윈터뮛이 기다려 온 종류의 사람...",
+      "missions": [
+        "wintermute_witness"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_wintermute_witness_ko.html"
     }
   ]
 }

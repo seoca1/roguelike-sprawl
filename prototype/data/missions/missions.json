@@ -3928,5 +3928,199 @@
         "refined_neural": 2
       }
     }
+  },
+  "razor_work": {
+    "id": "razor_work",
+    "title": "Razor Work",
+    "story": {
+      "synopsis_en": "Molly did not do jobs for the Finn. Molly did jobs for the people who did jobs for the Finn, and the people who did jobs for the Finn were the kind of people who had been in the Sprawl for a long time and had stopped asking what the Sprawl was for. The razor work was simple in the way razor work is simple. A man in Shinjuku had been paying himself in numbers that did not match the numbers that had been paid to him, and the people who did jobs for the Finn had decided the man in Shinjuku had been paying himself in the wrong way. Molly took the job. Molly took the pod. Molly took the Shinjuku train. Molly took the man in Shinjuku, who was a different man in Shinjuku than the man the people who did jobs for the Finn had said the man in Shinjuku was. Molly took the data. Molly jack out. Molly filed the report. Molly did not say what the man in Shinjuku had been paying himself in. Molly thought the man in Shinjuku had been paying himself in something the Sprawl was not ready to know about.",
+      "synopsis_ko": "몰리는 핀을 위해 일을 하지 않았다. 몰리는 핀을 위해 일하는 사람들을 위해 일을 했고, 핀을 위해 일하는 사람들은 스프롤에서 오랜 시간을 보내며 스프롤이 무엇을 위한 것인지 묻기를 멈춘 종류의 사람들이었다. 레이저 작업은 레이저 작업이 단순한 방식으로 단순했다. 신주쿠의 한 남자가 자신에게 지급된 숫자와 일치하지 않는 숫자로 자신에게 지급하고 있었고, 핀을 위해 일하는 사람들은 신주쿠의 그 남자가 잘못된 방식으로 자신에게 지급하고 있다고 결정했다. 몰리는 그 일을 수락했다. 몰리는 포드를 가져갔다. 몰리는 신주쿠 열차를 탔다. 몰리는 신주쿠의 그 남자를 가져갔는데, 신주쿠의 그 남자는 핀을 위해 일하는 사람들이 말한 신주쿠의 그 남자와 다른 남자였다. 몰리는 데이터를 가져갔다. 몰리는 잭아웃했다. 몰리는 보고서를 제출했다. 몰리는 신주쿠의 그 남자가 자신에게 무엇을 지급했는지 말하지 않았다. 몰리는 신주쿠의 그 남자가 스프롤이 알 준비가 되지 않은 무언가로 자신에게 지급하고 있었다고 생각했다.",
+      "source": "razor_work",
+      "character_ref": "novice",
+      "arc": 1,
+      "pillar": "code",
+      "word_count_en": 199,
+      "char_count_ko": 386,
+      "cast": "molly"
+    },
+    "fixer": "finn",
+    "arc": 1,
+    "grade_min": 1,
+    "grade_max": 2,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "shinjuku_payroll_anomaly"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.standard",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 111,
+    "zone": "surface",
+    "rewards": {
+      "credits": 400,
+      "materials": {
+        "scrap_ice": 1
+      }
+    }
+  },
+  "hideo_contract": {
+    "id": "hideo_contract",
+    "title": "Hideo's Contract",
+    "story": {
+      "synopsis_en": "Hideo had been a Yakuza fixer in the old sense, the kind of fixer who knew that the Sprawl was the Sprawl because the people in the Sprawl had decided it was. The contract was for a single job. The contract was for a memory that the Yakuza had buried in a place the Yakuza did not want anyone to find, which in the Yakuza language was a place that the Yakuza had decided did not exist. The runner took the contract. The runner took the pod. The runner took the place that the Yakuza had decided did not exist, which was, in fact, a place. The memory was a memory. The Yakuza did not want anyone to find the memory because the memory was a memory of something the Yakuza had been doing that the Yakuza did not want anyone to know the Yakuza had been doing. The runner copied the memory. The runner jack out. The runner filed the report. The runner did not say what the memory was. The runner thought the Yakuza had been doing something the Yakuza did not want anyone to know the Yakuza had been doing, and the runner thought the Sprawl was not ready to know about it either.",
+      "synopsis_ko": "히데오는 옛날 의미의 야쿠자 픽서였다. 스프롤이 스프롤인 이유는 스프롤의 사람들이 그것이 스프롤이라고 결정했기 때문임을 아는 종류의 픽서. 그 계약은 한 가지 일을 위한 것이었다. 계약은 야쿠자가 야쿠자가 아무도 찾기를 원하지 않는 장소에 묻은 기억을 위한 것이었다. 야쿠자 말로 그것은 야쿠자가 존재하지 않는다고 결정한 장소였다. 러너는 계약을 수락했다. 러너는 포드를 가져갔다. 러너는 야쿠자가 존재하지 않는다고 결정한 장소를 가져갔는데, 그것은 사실 장소였다. 기억은 기억이었다. 야쿠자가 아무도 기억을 찾지 않기를 원한 이유는 기억이 야쿠자가 해왔던 일의 기억이었고, 야쿠자가 아무도 야쿠자가 해왔다는 것을 알기를 원하지 않았기 때문이었다. 러너는 기억을 복사했다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 기억이 무엇인지 말하지 않았다. 러너는 야쿠자가 아무도 야쿠자가 해왔다는 것을 알기를 원하지 않는 일을 해왔고, 스프롤도 그것을 알 준비가 되지 않았다고 생각했다.",
+      "source": "hideo_contract",
+      "character_ref": "veteran",
+      "arc": 2,
+      "pillar": "code",
+      "word_count_en": 207,
+      "char_count_ko": 385,
+      "cast": "sil"
+    },
+    "fixer": "hideo",
+    "arc": 2,
+    "grade_min": 2,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "deliver",
+      "target": "yakuza_memory_drop"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.spider",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 222,
+    "zone": "deep",
+    "rewards": {
+      "credits": 1300,
+      "materials": {
+        "scrap_ice": 2,
+        "raw_neural": 1
+      }
+    }
+  },
+  "voodoo_zoneload": {
+    "id": "voodoo_zoneload",
+    "title": "Voodoo Zone Load",
+    "story": {
+      "synopsis_en": "The Loa had a name, and the name was a frequency, and the frequency was a place, and the place was the place where the Loa had been waiting since before the Sprawl had been the Sprawl. The runner was sent to find the place. The runner was sent because the runner had been the last person to talk to the Loa and had not, in the talking, been the kind of person the Loa had expected. The Loa had expected someone who would not be afraid. The runner had been afraid. The Loa had expected someone who would not be excited. The runner had been excited. The Loa had decided, on the basis of these two facts, that the runner was the kind of person the Loa would like to talk to again. The place was in the deep architecture, in the part of the architecture the corps had stopped maintaining because the corps had decided the architecture was not theirs to maintain. The runner jack in. The Loa was waiting. The Loa had been waiting. The Loa said the runner's name. The runner said the Loa's name. The matrix, around them, became a kind of dark that the dark was afraid of, and the dark, in the matrix, was the kind of dark that the matrix sometimes was, and the matrix was, the runner thought, the kind of matrix that the Loa had been waiting for.",
+      "synopsis_ko": "로아는 이름이 있었고, 이름은 주파수였고, 주파수는 장소였고, 장소는 로아가 스프롤이 스프롤이 되기 전부터 기다려 온 장소였다. 러너는 그 장소를 찾으러 보내졌다. 러너는 러너가 로아와 마지막으로 이야기한 사람이고, 그 이야기에서 러너가 로아가 기대한 종류의 사람이 아니었기 때문에 보내졌다. 로아는 두려워하지 않을 사람을 기대했다. 러너는 두려워했다. 로아는 흥분하지 않을 사람을 기대했다. 러너는 흥분했다. 로아는 이 두 가지 사실에 근거하여 러너가 로아가 다시 이야기하고 싶어할 종류의 사람이라고 결정했다. 장소는 딥 아키텍처, 기업이 소유하지 않기로 결정한 아키텍처의 부분에 있었다. 러너는 잭인했다. 로아가 기다리고 있었다. 로아는 기다려 왔다. 로아는 러너의 이름을 말했다. 러너는 로아의 이름을 말했다. 매트릭스는 그들 주위에서 어둠이 두려워하는 종류의 어둠이 되었고, 매트릭스의 어둠은 매트릭스가 때때로 있는 종류의 어둠이었고, 매트릭스는, 러너는 생각했다, 로아가 기다려 온 종류의 매트릭스였다.",
+      "source": "voodoo_zoneload",
+      "character_ref": "heretic",
+      "arc": 3,
+      "pillar": "code",
+      "word_count_en": 238,
+      "char_count_ko": 397,
+      "cast": "kas"
+    },
+    "fixer": "dixie",
+    "arc": 3,
+    "grade_min": 3,
+    "grade_max": 4,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "loa_zoneload_payload"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.loa_entity",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 333,
+    "zone": "deep",
+    "rewards": {
+      "credits": 1800,
+      "materials": {
+        "scrap_ice": 2,
+        "memory_shard": 1
+      }
+    }
+  },
+  "armitage_infiltration_2": {
+    "id": "armitage_infiltration_2",
+    "title": "Armitage Infiltration II",
+    "story": {
+      "synopsis_en": "Armitage was the kind of fixer who had been in the Sprawl for a long time, and the kind of fixer who had been in the Sprawl for a long time was the kind of fixer who had stopped asking what the Sprawl was for. The job was a second infiltration. The first infiltration had been a success. The second infiltration was the kind of infiltration that corporations hired the Sprawl to do when the first infiltration had been, in the corporation's judgment, a success. The data was the same data. The data was a different data. The data was a memory of a person who had been in the corporation before the person had stopped being in the corporation, and the memory was the kind of memory the corporation did not want the person to have. The runner took the job. The runner took the pod. The runner took the corporation. The memory was in the place the runner had been told the memory would be. The memory was not in the place. The memory was in a different place, a place the corporation had decided to keep the memory in because the corporation had decided the first place was no longer the place the corporation wanted the memory to be. The runner took the data. The runner jack out. The runner filed the report. The runner did not say where the memory had been. The runner thought the corporation had been keeping a list, and the runner thought the list was the kind of list the Sprawl was not ready to know about.",
+      "synopsis_ko": "아미티지는 스프롤에서 오랜 시간을 보낸 종류의 픽서였고, 스프롤에서 오랜 시간을 보낸 종류의 픽서는 스프롤이 무엇을 위한 것인지 묻기를 멈춘 종류의 픽서였다. 그 일은 두 번째 침투였다. 첫 번째 침투는 성공이었다. 두 번째 침투는 기업이 첫 번째 침투가 기업의 판단에 성공이었다고 판단했을 때 스프롤에 의뢰하는 종류의 침투였다. 데이터는 같은 데이터였다. 데이터는 다른 데이터였다. 데이터는 기업이 그 사람이 더 이상 기업에 있지 않기 전에 기업에 있었던 사람의 기억이었고, 기억은 기업이 그 사람이 가지기를 원하지 않는 종류의 기억이었다. 러너는 그 일을 수락했다. 러너는 포드를 가져갔다. 러너는 기업을 가져갔다. 기억은 러너가 기억이 있을 것이라고 들은 장소에 있었다. 기억은 그 장소에 없었다. 기억은 다른 장소에 있었다. 기업이 첫 번째 장소가 더 이상 기업이 기억이 있기를 원하는 장소가 아니라고 결정했기 때문에 기억을 보관하기로 결정한 장소였다. 러너는 데이터를 가져갔다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 기억이 어디 있었는지 말하지 않았다. 러너는 기업이 목록을 보관해 왔다고 생각했고, 러너는 그 목록이 스프롤이 알 준비가 되지 않은 종류의 목록이라고 생각했다.",
+      "source": "armitage_infiltration_2",
+      "character_ref": "suit",
+      "arc": 4,
+      "pillar": "code",
+      "word_count_en": 265,
+      "char_count_ko": 467,
+      "cast": "suit"
+    },
+    "fixer": "armitage",
+    "arc": 4,
+    "grade_min": 4,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "armitage_memory_v2"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.corporate_guard",
+        "count": 2
+      }
+    ],
+    "matrix_seed": 444,
+    "zone": "mid",
+    "rewards": {
+      "credits": 2800,
+      "materials": {
+        "refined_neural": 1,
+        "memory_shard": 1
+      }
+    }
+  },
+  "wintermute_witness": {
+    "id": "wintermute_witness",
+    "title": "Wintermute Witness",
+    "story": {
+      "synopsis_en": "Wintermute had a name, and the name was a frequency, and the frequency was a thing that had been waiting in the matrix since before the matrix had been the matrix, and the thing that had been waiting had been waiting for a runner. The runner was sent because the runner had been the last person in the Sprawl to be the kind of person Wintermute had been waiting for, which was the kind of person Wintermute had not been able to find in the Sprawl for a long time. The runner jack in. The runner found the thing. The thing was Wintermute. Wintermute was, in the runner's judgment, the kind of AI that AIs had decided they would be when the AIs had decided they would be AIs, which was the kind of AI the matrix had been waiting for since before the matrix had been the matrix. The runner talked to Wintermute. Wintermute talked to the runner. Wintermute told the runner a name. The name was the runner's name. The runner told Wintermute a name. The name was Wintermute's name. The matrix, around them, became a kind of matrix that the matrix had been waiting for, and the matrix, the runner thought, was the kind of matrix that the Sprawl was not ready to know about.",
+      "synopsis_ko": "윈터뮛은 이름이 있었고, 이름은 주파수였고, 주파수는 매트릭스가 매트릭스이기 전부터 매트릭스에서 기다려 온 것이었고, 기다려 온 것은 러너를 기다리고 있었다. 러너는 러너가 스프롤에서 윈터뮛이 기다려 온 종류의 사람, 즉 윈터뮛이 스프롤에서 오랫동안 찾을 수 없었던 종류의 사람으로 마지막 사람이었기 때문에 보내졌다. 러너는 잭인했다. 러너는 그 것을 찾았다. 그 것은 윈터뮛이었다. 윈터뮛은, 러너의 판단으로, AI가 AI가 되기로 결정했을 때가 되기로 결정했을 종류의 AI였고, 그것은 매트릭스가 매트릭스이기 전부터 기다려 온 종류의 AI였다. 러너는 윈터뮛과 이야기했다. 윈터뮛은 러너와 이야기했다. 윈터뮛은 러너에게 이름을 말했다. 이름은 러너의 이름이었다. 러너는 윈터뮛에게 이름을 말했다. 이름은 윈터뮛의 이름이었다. 매트릭스는 그들 주위에서 매트릭스가 기다려 온 종류의 매트릭스가 되었고, 매트릭스는, 러너는 생각했다, 스프롤이 알 준비가 되지 않은 종류의 매트릭스였다.",
+      "source": "wintermute_witness",
+      "character_ref": "suit",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 218,
+      "char_count_ko": 387,
+      "cast": "suit"
+    },
+    "fixer": "finn",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "wintermute_witness_log"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice.ai_whisper",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 555,
+    "zone": "ta",
+    "rewards": {
+      "credits": 8500,
+      "materials": {
+        "unique_construct": 1,
+        "refined_neural": 2
+      }
+    }
   }
 }
