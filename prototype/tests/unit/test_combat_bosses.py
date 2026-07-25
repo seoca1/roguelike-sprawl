@@ -584,6 +584,32 @@ class TestBossB3Enhancements:
         assert dealt == 15
         assert state.player.hp == original_hp - 15
 
+    def test_apply_phase_aoe_triggers_visual_effects(self) -> None:
+        """Phase B-3.5: apply_phase_aoe triggers screen shake + hit flash."""
+        from roguelike_sprawl.combat.boss import (
+            PhaseProfile,
+            apply_phase_aoe,
+        )
+        from roguelike_sprawl.combat.effects import CombatEffects
+
+        phase = PhaseProfile(
+            phase=3,
+            hp_threshold=0.33,
+            damage_multiplier=2.0,
+            color=(255, 50, 50),
+            glyph="*",
+            intro_text="Phase 3 AoE",
+            aoe_damage=15,
+        )
+        boss = _make_boss_for_minion_test()
+        state = _make_combat_state_with_boss(boss)
+        state.combat_effects = CombatEffects()
+
+        apply_phase_aoe(phase, state)
+        # Visual effects triggered: shake and hit_flash active
+        assert state.combat_effects.shake.intensity > 0
+        assert state.combat_effects.hit_flash.is_active
+
     def test_apply_phase_aoe_zero_damage_noop(self) -> None:
         """apply_phase_aoe() with aoe_damage=0 deals nothing."""
         from roguelike_sprawl.combat.boss import (

@@ -448,10 +448,36 @@ def spawn_phase_minions(
     return spawned
 
 
-def apply_phase_aoe(phase: PhaseProfile, state: CombatState) -> int:
-    """Phase B-3: apply AoE damage from boss phase transition."""
+def apply_phase_aoe(
+    phase: PhaseProfile, state: CombatState
+) -> int:
+    """Phase B-3: apply AoE damage from boss phase transition.
+
+    Phase B-3.5 (ADR-0125 M2): also triggers visual effects:
+      - Screen shake (intensity scales with aoe_damage)
+      - Hit flash (red overlay)
+    """
     if phase.aoe_damage <= 0:
         return 0
     state.player.hp = max(0, state.player.hp - phase.aoe_damage)
     state.push(f"!! {phase.aoe_damage} AoE damage from phase {phase.phase}!")
+    # Phase B-3.5: visual effects
+    _trigger_aoe_visuals(phase, state)
     return phase.aoe_damage
+
+
+def _trigger_aoe_visuals(phase: PhaseProfile, state: CombatState) -> None:
+    """Phase B-3.5: trigger screen shake + hit flash for AoE burst.
+
+    Intensity scales with aoe_damage (capped at 8.0 to avoid extreme
+    shaking). Hit flash uses the phase's color.
+    """
+    fx = getattr(state, "combat_effects", None)
+    if fx is None:
+        return
+    # Screen shake: 1.5x aoe_damage, capped at 8.0
+    intensity = min(8.0, 1.5 * phase.aoe_damage)
+    duration = 250 + int(phase.aoe_damage * 10)  # 250-450ms
+    fx.shake.trigger(intensity, duration)
+    # Hit flash: red overlay using phase color
+    fx.hit_flash.trigger(phase.color, duration)

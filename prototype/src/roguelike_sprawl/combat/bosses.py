@@ -116,6 +116,8 @@ GOLIATH_PRIME = BossSpec(
             speed_bonus_pct=20,
             screen_shake_intensity=3.0,
             special_ability="ground_slam",
+            # Phase I: GOLIATH phase 2 spawns watchdog adds
+            spawn_minions=("watchdog", "watchdog"),
         ),
         BossPhase(
             index=3,
@@ -127,6 +129,9 @@ GOLIATH_PRIME = BossSpec(
             speed_bonus_pct=40,
             screen_shake_intensity=4.5,
             special_ability="desperate_strike",
+            # Phase I: GOLIATH phase 3 self-destruct AoE (high damage)
+            aoe_damage=25,
+            spawn_minions=("corporate_guard",),
         ),
     ),
     death_lines=(
@@ -170,6 +175,8 @@ BLACK_ICE_LORD = BossSpec(
             attack_bonus_pct=30,
             screen_shake_intensity=1.5,
             special_ability="glitch_burst",
+            # Phase I: BLACK phase 1 spawns a construct echo
+            spawn_minions=("romantics_ice",),
         ),
         BossPhase(
             index=2,
@@ -181,6 +188,9 @@ BLACK_ICE_LORD = BossSpec(
             speed_bonus_pct=30,
             screen_shake_intensity=3.0,
             special_ability="corrupt_payload",
+            # Phase I: BLACK phase 2 corruption AoE
+            aoe_damage=10,
+            spawn_minions=("romantics_ice_elite",),
         ),
     ),
     death_lines=(
@@ -234,6 +244,8 @@ WATCHDOG_ALPHA = BossSpec(
             speed_bonus_pct=20,
             screen_shake_intensity=3.5,
             special_ability="alpha_strike",
+            # Phase I: WATCHDOG ALPHA phase 2 calls pack members
+            spawn_minions=("watchdog", "watchdog"),
         ),
     ),
     death_lines=(
