@@ -432,6 +432,28 @@ def _draw_breadcrumb(
     )
 
 
+def _draw_mobility_stats(
+    console: tcod.console.Console,
+    state: AppState,
+    side: Region,
+) -> None:
+    """Render movement step count and visited-node count in the SIDE region.
+
+    Placed above the breadcrumb (y = side.y2 - 1) so the player can see
+    how far they have walked this run and how many distinct nodes they
+    have visited.
+    """
+    steps = state.movement_step_count
+    visited = len(state.nodes_visited)
+    line = f"Steps: {steps}   Visited: {visited}"
+    console.print(
+        x=side.x + 2,
+        y=side.y2 - 1,
+        string=line[: side.w - 4],
+        fg=(128, 200, 255),
+    )
+
+
 def _compute_direction_hints(
     matrix: MatrixGraph,
     state: AppState,
@@ -582,6 +604,7 @@ def _render_matrix_side_panel(
     elif use_fog and expl is not None:
         _draw_minimap(console, matrix, expl, side_r)
         _draw_breadcrumb(console, matrix, expl, side_r)
+        _draw_mobility_stats(console, state, side_r)
 
 
 def _render_matrix_message_log(
