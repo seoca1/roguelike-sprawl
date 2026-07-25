@@ -210,6 +210,8 @@ class AppState:
     mission_progress: dict[str, int] = field(default_factory=dict)
     # Completed mission IDs (so we don't re-offer them)
     completed_missions: set[str] = field(default_factory=set)
+    # Phase E-2: first-combat tutorial overlay (dismissed on Space)
+    show_first_combat_tutorial: bool = True
     # Faction reputation (Phase 6+): persisted across runs in save.
     # See run/reputation.py for tier system + event integration.
     reputation: ReputationState = field(default_factory=ReputationState)

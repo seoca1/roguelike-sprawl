@@ -115,10 +115,20 @@ def render_hub(console: tcod.console.Console, t: Translator, state: AppState) ->
         ],
     )
 
-    # Footer
-    draw_footer(
-        console, foot_r, text=f"Hub  |  Step {state.demo_step}  T+{state.demo_elapsed_s:.1f}s"
-    )
+    # Footer with phase progress (Phase C-3)
+    if state.run_state is not None:
+        progress = state.run_state.progress_fraction()
+        completed = state.run_state.stages_completed()
+        total = state.run_state.stages_total()
+        progress_text = (
+            f"Hub  |  Phase {completed}/{total} "
+            f"({int(progress * 100):3d}%)  T+{state.demo_elapsed_s:.1f}s"
+        )
+    else:
+        progress_text = (
+            f"Hub  |  Step {state.demo_step}  T+{state.demo_elapsed_s:.1f}s"
+        )
+    draw_footer(console, foot_r, text=progress_text)
 
 
 def _draw_4panel(

@@ -5,6 +5,8 @@ from __future__ import annotations
 import random
 from pathlib import Path
 
+import pytest
+
 from roguelike_sprawl.combat import (
     Combatant,
     CombatState,
@@ -1123,7 +1125,6 @@ def _two_phase_profile() -> object:
 
 def test_boss_phase_advances_when_hp_drops_below_threshold() -> None:
     """HP fraction ≤ 0.5 should advance current_phase from 1 → 2."""
-    from roguelike_sprawl.combat.boss import BossProfile
 
     p = build_default_player(max_hp=100, max_ap=6, programs=ProgramRegistry({}))
     p.skills = (_strike_skill(damage=10),)
@@ -1525,7 +1526,7 @@ def test_crit_variance_single_sample_in_range() -> None:
             assert CRIT_MULTIPLIER_MIN * 1000 * 0.8 <= dmg
             assert dmg <= CRIT_MULTIPLIER_MAX * 1000 * 1.2
             return
-    assert False, "No crit observed in 100 samples"
+    pytest.fail("No crit observed in 100 samples")
 
 
 # ----------------------------------------------------------------------------

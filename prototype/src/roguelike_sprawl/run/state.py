@@ -358,6 +358,9 @@ StageSequence = tuple[StageInfo, ...]
 # Each mission has its own stage sequence.
 # Watchdog Patrol skips EXTRACT_DATA (no data to extract).
 # Ice Run has same flow as First Jack but different ICE count.
+# Phase C-1: 3 canonical entries below; per-mission flows now live in
+# missions.json `stage_flow` field (data-driven). The dict below is the
+# fallback for missions that don't declare their own flow.
 MISSION_FLOWS: dict[str, StageSequence] = {
     "first_jack": (
         DEFAULT_FLOW[Stage.BRIEFING],
@@ -393,11 +396,50 @@ MISSION_FLOWS: dict[str, StageSequence] = {
 }
 
 
-def get_mission_flow(mission_id: str) -> StageSequence:
+def _resolve_stage_flow_from_mission_data(
+    mission_entry: dict[str, object] | None,
+) -> StageSequence | None:
+    """Phase C-1: read stage_flow from mission JSON if declared.
+
+    Format: list[str] of Stage names (e.g. ["BRIEFING", "TRAVEL", ...]).
+    Returns None if not declared or invalid.
+    """
+    if not isinstance(mission_entry, dict):
+        return None
+    raw = mission_entry.get("stage_flow")
+    if not isinstance(raw, list):
+        return None
+    sequence: list[StageInfo] = []
+    for name in raw:
+        if not isinstance(name, str):
+            return None
+        try:
+            stage = Stage(name.lower())
+        except ValueError:
+            return None
+        info = DEFAULT_FLOW.get(stage)
+        if info is None:
+            return None
+        sequence.append(info)
+    return tuple(sequence) if sequence else None
+
+
+def get_mission_flow(
+    mission_id: str,
+    missions_data: dict[str, dict[str, object]] | None = None,
+) -> StageSequence:
     """Return the stage sequence for a given mission.
 
     Falls back to first_jack's flow if mission_id is unknown.
+    Phase C-1: if missions_data is provided, check mission's
+    `stage_flow` field before the MISSION_FLOWS dict.
     """
+    if missions_data is not None:
+        from_mission = _resolve_stage_flow_from_mission_data(
+            missions_data.get(mission_id)
+        )
+        if from_mission is not None:
+            return from_mission
     return MISSION_FLOWS.get(mission_id, MISSION_FLOWS["first_jack"])
 
 
@@ -635,39 +677,31 @@ class RunState:
 
     # --- Chapter transitions ---
 
-    def start_chapter_1(self) -> None:
-        """Transition from PROLOGUE to IN_CHAPTER_1."""
-        self.chapter_state = ChapterState.IN_CHAPTER_1
+    def start_chapter(self, chapter_num: int) -> None:
+        """Phase C-2: Transition to IN_CHAPTER_N (table-driven).
+
+        Validates chapter_num (1-5). Sets chapter_state, current_stage
+        to PENDING, and resets phase index. Replaces the 5 separate
+        start_chapter_N() methods.
+        """
+        if not 1 <= chapter_num <= 5:
+            raise ValueError(f"chapter_num must be 1..5, got {chapter_num}")
+        new_state = ChapterState(f"in_chapter_{chapter_num}")
+        self.chapter_state = new_state
         self.current_stage = Stage.PENDING
         self.reset_phase()
 
-    def complete_chapter_1(self) -> None:
-        """Mark Chapter 1 complete."""
-        self.chapter_state = ChapterState.CHAPTER_1_COMPLETE
+    def complete_chapter(self, chapter_num: int) -> None:
+        """Phase C-2: Mark chapter N complete (table-driven).
 
-    def start_chapter_2(self) -> None:
-        """Transition from CHAPTER_1_COMPLETE to IN_CHAPTER_2."""
-        self.chapter_state = ChapterState.IN_CHAPTER_2
-        self.current_stage = Stage.PENDING
-        self.reset_phase()
-
-    def start_chapter_3(self) -> None:
-        """Transition from CHAPTER_2_COMPLETE to IN_CHAPTER_3."""
-        self.chapter_state = ChapterState.IN_CHAPTER_3
-        self.current_stage = Stage.PENDING
-        self.reset_phase()
-
-    def start_chapter_4(self) -> None:
-        """Transition from CHAPTER_3_COMPLETE to IN_CHAPTER_4."""
-        self.chapter_state = ChapterState.IN_CHAPTER_4
-        self.current_stage = Stage.PENDING
-        self.reset_phase()
-
-    def start_chapter_5(self) -> None:
-        """Transition from CHAPTER_4_COMPLETE to IN_CHAPTER_5."""
-        self.chapter_state = ChapterState.IN_CHAPTER_5
-        self.current_stage = Stage.PENDING
-        self.reset_phase()
+        Validates chapter_num (1-5). Sets chapter_state to
+        CHAPTER_N_COMPLETE. Replaces the 5 separate complete_chapter_N()
+        methods.
+        """
+        if not 1 <= chapter_num <= 5:
+            raise ValueError(f"chapter_num must be 1..5, got {chapter_num}")
+        complete_state = ChapterState(f"chapter_{chapter_num}_complete")
+        self.chapter_state = complete_state
 
     def is_chapter_complete(self) -> bool:
         """Check if current chapter is complete (chapter end phase)."""
@@ -692,22 +726,6 @@ class RunState:
     def is_in_chapter_5(self) -> bool:
         """Player is currently in Chapter 5."""
         return self.chapter_state is ChapterState.IN_CHAPTER_5
-
-    def complete_chapter_2(self) -> None:
-        """Mark Chapter 2 complete and advance to Chapter 3."""
-        self.chapter_state = ChapterState.CHAPTER_2_COMPLETE
-
-    def complete_chapter_3(self) -> None:
-        """Mark Chapter 3 complete and advance to Chapter 4."""
-        self.chapter_state = ChapterState.CHAPTER_3_COMPLETE
-
-    def complete_chapter_4(self) -> None:
-        """Mark Chapter 4 complete and advance to Chapter 5."""
-        self.chapter_state = ChapterState.CHAPTER_4_COMPLETE
-
-    def complete_chapter_5(self) -> None:
-        """Mark Chapter 5 complete."""
-        self.chapter_state = ChapterState.CHAPTER_5_COMPLETE
 
     def is_at_prologue(self) -> bool:
         """Player is currently in the Prologue."""

@@ -211,26 +211,28 @@ def _draw_reward_materials(console: Any, box_x: int, box_y: int, state: Any) -> 
             string="  (none)",
             fg=(150, 150, 150),
         )
-        return
+    else:
+        for i, (mat_id, qty) in enumerate(sorted(state.inventory.items())):
+            mat_line = f"  • {qty}x {mat_id}"
+            console.print(
+                x=box_x + 4,
+                y=mat_y + 1 + i,
+                string=mat_line,
+                fg=(100, 200, 255),
+            )
+            if i >= 3:
+                remaining = len(state.inventory) - 4
+                if remaining > 0:
+                    console.print(
+                        x=box_x + 4,
+                        y=mat_y + 2 + i,
+                        string=f"  • ... and {remaining} more",
+                        fg=(150, 150, 150),
+                    )
+                break
 
-    for i, (mat_id, qty) in enumerate(sorted(state.inventory.items())):
-        mat_line = f"  • {qty}x {mat_id}"
-        console.print(
-            x=box_x + 4,
-            y=mat_y + 1 + i,
-            string=mat_line,
-            fg=(100, 200, 255),
-        )
-        if i >= 3:
-            remaining = len(state.inventory) - 4
-            if remaining > 0:
-                console.print(
-                    x=box_x + 4,
-                    y=mat_y + 2 + i,
-                    string=f"  • ... and {remaining} more",
-                    fg=(150, 150, 150),
-                )
-            break
+    # Phase E-1: AAR (After Action Report) — combat statistics summary
+    _draw_aar_stats(console, box_x, mat_y, state)
 
 
 def _draw_reward_bottom_accent(console: Any, box_x: int, box_y: int, box_h: int) -> None:
@@ -241,6 +243,36 @@ def _draw_reward_bottom_accent(console: Any, box_x: int, box_y: int, box_h: int)
         string="─" * 48,
         fg=(0, 200, 80),
     )
+
+
+def _draw_aar_stats(console: Any, box_x: int, mat_y: int, state: Any) -> None:
+    """Phase E-1: After Action Report — combat statistics summary.
+
+    Shows damage dealt/received, crits, max combo, peak alarm from
+    the most recent combat_state.stats if available.
+    """
+    cs = getattr(state, "combat_state", None)
+    if cs is None or not hasattr(cs, "stats"):
+        return
+    stats = cs.stats
+    aar_y = mat_y + 6
+    lines = [
+        "── Combat Report ──",
+        f"  Damage dealt:    {stats.damage_dealt}",
+        f"  Damage received: {stats.damage_received}",
+        f"  Crits (you/them):{stats.crits_landed}/{stats.crits_received}",
+        f"  Max combo:       {stats.max_combo_reached}",
+        f"  Peak alarm:      {stats.peak_alarm_level}/5",
+        f"  Duration:        {cs.tick_ms // 1000}s",
+    ]
+    for i, line in enumerate(lines):
+        fg = (200, 200, 100) if i == 0 else (180, 180, 180)
+        console.print(
+            x=box_x + 4,
+            y=aar_y + i,
+            string=line,
+            fg=fg,
+        )
 
 
 def _draw_reward_prompt(

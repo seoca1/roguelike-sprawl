@@ -21,33 +21,13 @@ from ..portraits import PortraitManager
 from . import combat_view, config, dungeon_view, hacking_view, story_cinematic
 from . import hub as hub_screen
 from . import menu as menu_screen
+from .combat_tick import maybe_boss_phase_transition
 from .state import AppState, ScreenKind
 
 
 def _load_job_board() -> JobBoard:
     """Load the mission JSON if present; return an empty board otherwise."""
     return JobBoard.load(config.DATA_DIR / "missions" / "missions.json")
-
-
-def _maybe_boss_phase_transition(state: AppState) -> None:
-    """Check and apply boss phase transitions after each combat tick."""
-    cs = state.combat_state
-    if cs is None or cs.boss_profile is None or cs.finished:
-        return
-    from ..combat.boss import phase_transition
-
-    new_phase = phase_transition(cs.enemy, cs.boss_profile)
-    if new_phase is not None:
-        from ..combat.boss import apply_phase_to_combatant
-        from ..combat.effects import IceType
-
-        apply_phase_to_combatant(cs.enemy, cs.boss_profile)
-        cs.push(f">>> {new_phase.intro_text}")
-        try:
-            ice_type = IceType(cs.enemy.id)
-        except ValueError:
-            ice_type = IceType.BLACK
-        combat_view.spawn_phase_transition(state.combat_effects, new_phase, ice_type)
 
 
 def main() -> int:
@@ -168,7 +148,7 @@ def _main_inner() -> int:
 
                 if state.screen is ScreenKind.COMBAT and state.combat_state is not None:
                     step_combat(state.combat_state)
-                    _maybe_boss_phase_transition(state)
+                    maybe_boss_phase_transition(state)
 
                 if state.screen is ScreenKind.HACK:
                     hacking_view.step_hack(state, delta_s)

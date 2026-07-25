@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from roguelike_sprawl.black_market import (
-    BlackMarketCategory,
     MARKET_INVENTORY,
+    BlackMarketCategory,
     list_by_category,
 )
 

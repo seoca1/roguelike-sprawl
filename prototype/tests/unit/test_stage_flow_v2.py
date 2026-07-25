@@ -266,6 +266,27 @@ class TestRunStateLifecycle:
         assert run.current_stage is Stage.COMPLETE
         assert run.completed_stages == before
 
+    def test_mark_advance_documents_intentional_non_idempotency(self) -> None:
+        """mark_advance() is NOT idempotent by design.
+
+        Calling twice advances twice (records the same stage twice in
+        completed_stages). Call sites must gate the call with check
+        helpers (e.g. is_complete). This test documents the behavior
+        so regressions are caught if it changes accidentally.
+        """
+        run = start_run("first_jack")
+        # Start: BRIEFING (initial)
+        assert run.current_stage is Stage.BRIEFING
+        # First mark_advance: BRIEFING → TRAVEL
+        run.mark_advance()
+        assert run.current_stage is Stage.TRAVEL
+        first_advance_count = len(run.completed_stages)
+        # Double-call (bug scenario): advances again from TRAVEL
+        run.mark_advance()
+        # Confirms non-idempotent behavior: stage recorded twice
+        assert len(run.completed_stages) == first_advance_count + 1
+        # Site must guard with check before calling
+
     def test_death_restart_transition(self) -> None:
         run = start_run("first_jack")
         run.mark_failed()

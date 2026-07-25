@@ -388,10 +388,13 @@ def build_ice_enemy(
     *,
     portraits: PortraitManager | None = None,
     player_grade: int | None = None,
+    program_registry: ProgramRegistry | None = None,
 ) -> Combatant:
     """Build an ICE enemy from the registry.
 
     If player_grade is provided, stats are scaled according to the difficulty formula.
+    Phase B-1: optional program_registry loads ICE skills from ice_types.json
+    "skills" field (currently unused; reserved for future boss/elite ICE).
     """
     data = registry.get(ice_id)
     if data is None:
@@ -412,6 +415,17 @@ def build_ice_enemy(
         hp = int(data.get("hp_base", data.get("hp", 80)))
         dmg = int(data.get("dmg_base", data.get("base_damage", 3)))
 
+    # Phase B-1: load ICE skills (currently only used if ice_types.json
+    # declares non-empty skills; reserved for boss/elite variants)
+    ice_skills: tuple[Skill, ...] = ()
+    raw_skills = data.get("skills", [])
+    if program_registry is not None and isinstance(raw_skills, list):
+        loaded = []
+        for sid in raw_skills:
+            if isinstance(sid, str) and program_registry.get(sid) is not None:
+                loaded.append(program_registry.get(sid))  # type: ignore[arg-type]
+        ice_skills = tuple(loaded)
+
     return Combatant(
         id=ice_id,
         name=str(data.get("name", ice_id)),
@@ -422,9 +436,11 @@ def build_ice_enemy(
         ap=0,
         max_ap=0,
         auto_attack_damage=dmg,
-        skills=(),
+        skills=ice_skills,
         team="enemy",
-        ice_kind=ice_id,
+        ice_kind=str(data.get("ice_kind", ice_id)),
         ice_resistance=float(data.get("resistance", 0.0)),
-        alarm_speed=ALARM_SPEED_BY_ICE.get(ice_id, DEFAULT_ALARM_SPEED),
+        alarm_speed=ALARM_SPEED_BY_ICE.get(
+            str(data.get("ice_kind", ice_id)), DEFAULT_ALARM_SPEED
+        ),
     )

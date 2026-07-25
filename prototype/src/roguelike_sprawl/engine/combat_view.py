@@ -170,6 +170,10 @@ def render_combat(
         status_messages=state.status_messages,
     )
 
+    # Phase E-2: first-combat tutorial overlay
+    if getattr(state, "show_first_combat_tutorial", False):
+        _draw_first_combat_tutorial(console, main_r)
+
 
 def _draw_vfx_overlay(
     console: tcod.console.Console,
@@ -421,6 +425,9 @@ def _draw_skills_menu(
         cursor = ">" if is_selected else " "
         glyph = skill.effect_glyph
 
+        # Tier badge: T1 grey → T6 gold (ADR-0008)
+        tier_badge = f"T{skill.tier}"
+
         # Color and status based on state
         if cooldown_remaining > 0:
             fg = (80, 80, 80)  # Dark gray for cooldown
@@ -435,8 +442,8 @@ def _draw_skills_menu(
             fg = (200, 200, 200)  # Light gray for normal
             status = f"[{skill.ap_cost} AP]"
 
-        # Build line: cursor + key + glyph + name + status
-        line = f"{cursor} [{i + 1}] {glyph} {skill.name} {status}"
+        # Build line: cursor + key + glyph + tier + name + status
+        line = f"{cursor} [{i + 1}] {glyph} {tier_badge} {skill.name} {status}"
         console.print(x=x, y=y + i, string=line, fg=fg)
 
         # Show effect type as small subtitle (if selected)
@@ -884,6 +891,27 @@ def _defeat_current_ice_node(state: AppState) -> None:
             state.current_node_id = neighbors[0].id
         else:
             state.current_node_id = state.matrix.entry_id
+
+
+def _draw_first_combat_tutorial(
+    console: tcod.console.Console, region: Region
+) -> None:
+    """Phase E-2: brief tutorial overlay for first combat encounter.
+
+    Shows 4 lines of keyboard hints centered in the main region.
+    Dismissed by pressing Space/Enter (handled in input layer).
+    """
+    lines = [
+        "── FIRST COMBAT ──",
+        "[SPACE] open skill menu",
+        "[1-9] quick-use skill",
+        "[ESC] disengage",
+    ]
+    cx = region.x + (region.w - 22) // 2
+    cy = region.y + region.h // 2
+    for i, line in enumerate(lines):
+        fg = (255, 255, 100) if i == 0 else (200, 200, 200)
+        console.print(x=cx, y=cy + i, string=line, fg=fg)
 
 
 def _remove_node_from_graph(matrix: MatrixGraph | None, node_id: str) -> MatrixGraph | None:

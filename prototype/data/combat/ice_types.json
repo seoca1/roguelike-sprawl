@@ -22,7 +22,8 @@
         "chance": 0.2,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "watchdog": {
     "name": "ICE — Watchdog",
@@ -47,7 +48,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "watchdog"
   },
   "spider": {
     "name": "ICE — Spider",
@@ -72,7 +74,8 @@
         "chance": 0.4,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "watchdog"
   },
   "wisp": {
     "name": "ICE — Wisp",
@@ -92,7 +95,8 @@
         "chance": 0.5,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "raven": {
     "name": "ICE — Raven",
@@ -122,7 +126,8 @@
         "chance": 0.15,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "black": {
     "name": "ICE — Black",
@@ -152,7 +157,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "black"
   },
   "goliath": {
     "name": "ICE — Goliath",
@@ -182,7 +188,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "goliath"
   },
   "dixie": {
     "name": "Construct — Dixie",
@@ -212,7 +219,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "ice_wisp_t1": {
     "name": "ICE — Wisp (ice_wisp_t1)",
@@ -234,7 +242,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "wisp"
+    "base_type": "wisp",
+    "ice_kind": "standard"
   },
   "ice_watchdog": {
     "name": "ICE — Watchdog (ice_watchdog)",
@@ -261,7 +270,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "watchdog"
+    "base_type": "watchdog",
+    "ice_kind": "watchdog"
   },
   "ice_worm": {
     "name": "ICE — Spider (ice_worm)",
@@ -288,7 +298,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "spider"
+    "base_type": "spider",
+    "ice_kind": "watchdog"
   },
   "ice_unknown": {
     "name": "ICE — Standard (ice_unknown)",
@@ -315,7 +326,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "standard"
+    "base_type": "standard",
+    "ice_kind": "standard"
   },
   "loa_entity": {
     "name": "ICE — Raven (loa_entity)",
@@ -347,7 +359,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "raven"
+    "base_type": "raven",
+    "ice_kind": "construct"
   },
   "loa_priest": {
     "name": "ICE — Raven (loa_priest)",
@@ -379,7 +392,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "raven"
+    "base_type": "raven",
+    "ice_kind": "construct"
   },
   "loa_betrayer": {
     "name": "ICE — Black (loa_betrayer)",
@@ -411,7 +425,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "black"
+    "base_type": "black",
+    "ice_kind": "construct"
   },
   "loa_disguised": {
     "name": "ICE — Standard (loa_disguised)",
@@ -438,7 +453,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "standard"
+    "base_type": "standard",
+    "ice_kind": "construct"
   },
   "romantics_ice": {
     "name": "ICE — Raven (romantics_ice)",
@@ -470,7 +486,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "raven"
+    "base_type": "raven",
+    "ice_kind": "construct"
   },
   "romantics_ice_elite": {
     "name": "ICE — Black (romantics_ice_elite)",
@@ -502,7 +519,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "black"
+    "base_type": "black",
+    "ice_kind": "construct"
   },
   "oua_entity": {
     "name": "ICE — Goliath (oua_entity)",
@@ -534,7 +552,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "goliath"
+    "base_type": "goliath",
+    "ice_kind": "goliath"
   },
   "prime_loa": {
     "name": "Construct — Dixie (prime_loa)",
@@ -566,7 +585,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "dixie"
+    "base_type": "dixie",
+    "ice_kind": "construct"
   },
   "ta_security_ice": {
     "name": "ICE — Watchdog (ta_security_ice)",
@@ -593,7 +613,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "watchdog"
+    "base_type": "watchdog",
+    "ice_kind": "watchdog"
   },
   "blank_entity": {
     "name": "Construct — Dixie (blank_entity)",
@@ -625,7 +646,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "dixie"
+    "base_type": "dixie",
+    "ice_kind": "construct"
   },
   "ice_harrow_3": {
     "name": "ICE — Raven (ice_harrow_3)",
@@ -657,7 +679,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "raven"
+    "base_type": "raven",
+    "ice_kind": "standard"
   },
   "ice_feedback_loop": {
     "name": "ICE — Spider (ice_feedback_loop)",
@@ -684,7 +707,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "spider"
+    "base_type": "spider",
+    "ice_kind": "watchdog"
   },
   "ice_shadow_variant": {
     "name": "ICE — Standard (ice_shadow_variant)",
@@ -711,7 +735,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "standard"
+    "base_type": "standard",
+    "ice_kind": "standard"
   },
   "ice_burned_cowboy": {
     "name": "ICE — Black (ice_burned_cowboy)",
@@ -743,7 +768,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "black"
+    "base_type": "black",
+    "ice_kind": "black"
   },
   "ice_weapon_construct": {
     "name": "ICE — Goliath (ice_weapon_construct)",
@@ -775,7 +801,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "goliath"
+    "base_type": "goliath",
+    "ice_kind": "construct"
   },
   "ice_wheel_children": {
     "name": "ICE — Raven (ice_wheel_children)",
@@ -807,7 +834,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "raven"
+    "base_type": "raven",
+    "ice_kind": "watchdog"
   },
   "ice_wheel_guardians": {
     "name": "Construct — Dixie (ice_wheel_guardians)",
@@ -839,7 +867,8 @@
       }
     ],
     "is_alias": true,
-    "base_type": "dixie"
+    "base_type": "dixie",
+    "ice_kind": "construct"
   },
   "construct": {
     "name": "Construct — Generic",
@@ -864,7 +893,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "boss": {
     "name": "ICE — Boss Tier",
@@ -894,7 +924,8 @@
         "chance": 1.0,
         "quantity": 3
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "revelation": {
     "name": "ICE — Revelation",
@@ -919,7 +950,8 @@
         "chance": 0.8,
         "quantity": 2
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "neuromancer": {
     "name": "ICE — Neuromancer",
@@ -949,7 +981,8 @@
         "chance": 1.0,
         "quantity": 5
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "ai_whisper": {
     "name": "ICE — AI Whisper",
@@ -974,7 +1007,8 @@
         "chance": 0.6,
         "quantity": 2
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "surveillance": {
     "name": "ICE — Surveillance",
@@ -999,7 +1033,8 @@
         "chance": 0.4,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "wintermute": {
     "name": "ICE — Wintermute",
@@ -1029,7 +1064,8 @@
         "chance": 1.0,
         "quantity": 3
       }
-    ]
+    ],
+    "ice_kind": "wintermute"
   },
   "zion_defense": {
     "name": "ICE — Zion Defense",
@@ -1054,7 +1090,8 @@
         "chance": 0.9,
         "quantity": 3
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "loa": {
     "name": "ICE — Loa Entity",
@@ -1079,7 +1116,8 @@
         "chance": 0.5,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "corporate_guard": {
     "name": "ICE — Corporate Guard",
@@ -1108,7 +1146,8 @@
         "chance": 0.2,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "goliath"
   },
   "archive_sentinel": {
     "name": "ICE — Archive Sentinel",
@@ -1142,7 +1181,8 @@
         "chance": 0.1,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "goliath"
   },
   "wintermute_proxy": {
     "name": "ICE — Wintermute Proxy",
@@ -1177,7 +1217,8 @@
         "chance": 0.15,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "wintermute"
   },
   "voodoo": {
     "name": "ICE — Voodoo Construct",
@@ -1202,7 +1243,8 @@
         "chance": 0.6,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "chinese_ice": {
     "name": "ICE — Chinese (Mao security)",
@@ -1227,7 +1269,8 @@
         "chance": 0.25,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "zombie": {
     "name": "ICE — Zombie (viral)",
@@ -1247,7 +1290,8 @@
         "chance": 0.5,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "hellhound": {
     "name": "ICE — Hellhound (Kuang military)",
@@ -1272,7 +1316,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "morrison_echo": {
     "name": "ICE — Morrison's Echo (Loa of deep architecture)",
@@ -1302,7 +1347,8 @@
         "chance": 0.1,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "wintermute_prime": {
     "name": "ICE — Wintermute Prime (boss-tier AI)",
@@ -1332,7 +1378,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "wintermute"
   },
   "ice_tessier_construct": {
     "name": "ICE — Tessier Construct (T-A family construct)",
@@ -1357,7 +1404,8 @@
         "chance": 0.35,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "ice_neuromancer_warden": {
     "name": "ICE — Neuromancer Warden (AI guardian)",
@@ -1387,7 +1435,8 @@
         "chance": 0.15,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "ice_cebu_pacific": {
     "name": "ICE — Cebu Pacific (blueant data courier)",
@@ -1412,7 +1461,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "watchdog"
   },
   "ice_ghost_grid": {
     "name": "ICE — Ghost Grid (Loa proximity alarm)",
@@ -1437,7 +1487,8 @@
         "chance": 0.25,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "ice_dixie_echo": {
     "name": "ICE — Dixie's Echo (dead construct ghost)",
@@ -1467,7 +1518,8 @@
         "chance": 0.2,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "ice_3jane_maid": {
     "name": "ICE — 3Jane's Maid (Straylight servant)",
@@ -1492,7 +1544,8 @@
         "chance": 0.3,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "standard"
   },
   "ice_wintermute_sentinel": {
     "name": "ICE — Wintermute Sentinel (AI guardian)",
@@ -1517,7 +1570,8 @@
         "chance": 0.4,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "wintermute"
   },
   "ice_loa_zombie": {
     "name": "ICE — Loa Zombie (possessed dead runner)",
@@ -1542,7 +1596,8 @@
         "chance": 0.35,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "ice_pazuzu_guard": {
     "name": "ICE — Pazuzu Guard (Loa protector)",
@@ -1572,7 +1627,8 @@
         "chance": 0.15,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "construct"
   },
   "ice_wintermute_fragment": {
     "name": "ICE — Wintermute Fragment (AI sub-personality)",
@@ -1602,7 +1658,8 @@
         "chance": 0.2,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "wintermute"
   },
   "ice_screaming_fist": {
     "name": "ICE — Screaming Fist (military boss-tier)",
@@ -1627,6 +1684,7 @@
         "chance": 0.35,
         "quantity": 1
       }
-    ]
+    ],
+    "ice_kind": "black"
   }
 }

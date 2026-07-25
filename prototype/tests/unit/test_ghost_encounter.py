@@ -5,7 +5,6 @@ from __future__ import annotations
 from roguelike_sprawl.ghost_encounter import (
     GHOST_CATALOG,
     GhostChoice,
-    GhostEncounter,
     get_for_zone,
 )
 

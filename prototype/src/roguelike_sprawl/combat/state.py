@@ -293,12 +293,22 @@ class Combatant:
     def get_total_hp_bonus(self) -> int:
         return self.equip_hp_bonus
 
-    def get_total_shield(self) -> int:
-        return sum(
-            s.remaining_ms // TICK_MS * 0 + s.dot_damage + s.attack_bonus
-            for s in self.statuses
-            if s.is_shield
-        )
+    def alive_skills_available(self) -> bool:
+        """Return True if this combatant has any skills defined.
+
+        Phase B-1: enables ICE-side skill use during step_combat().
+        """
+        return bool(self.skills)
+
+    def choose_skill(self, rng: random.Random) -> Skill | None:
+        """Pick a random skill from this combatant's repertoire.
+
+        Returns None if no skills are available.
+        """
+        if not self.skills:
+            return None
+        idx = rng.randrange(len(self.skills))
+        return self.skills[idx]
 
 
 @dataclass
@@ -656,6 +666,16 @@ def step_combat(state: CombatState) -> None:
                 state.stats.damage_received += applied
                 if is_crit:
                     state.stats.crits_received += 1
+
+                # ICE-side skill use: aggressive enemies occasionally use skills
+                if enemy.skills and enemy.hp > 0:
+                    if (
+                        enemy.alive_skills_available()
+                        and state.rng.random() < 0.15
+                    ):
+                        skill = enemy.choose_skill(state.rng)
+                        if skill is not None:
+                            _apply_enemy_skill(state, enemy, skill)
             else:
                 state.push(f"{enemy.name} is stunned and cannot attack!")
                 state.last_enemy_attack_ms = state.tick_ms
@@ -994,3 +1014,62 @@ def _apply_lifesteal(state: CombatState, skill: Skill) -> None:
     state.player.hp = min(state.player.max_hp, state.player.hp + healed)
     _record_event(state, "lifesteal", skill.effect_color)
     state.push(f">> {skill.name}: {applied} damage, drained {healed} HP!")
+
+
+def _apply_enemy_skill(
+    state: CombatState, enemy: Combatant, skill: Skill
+) -> None:
+    """Phase B-1: ICE uses a skill against the player.
+
+    Wraps the existing player skill handlers by temporarily using the
+    enemy as the "player" (attacker) and the actual player as the
+    "target". Reuses damage calculations via _calculate_damage.
+    """
+    state.last_skill_used = skill
+    state.stats.skills_used += 1
+    state.push(f"!! {enemy.name} uses {skill.name}!")
+    # Damage skills: calculate with enemy as attacker
+    if skill.effect in (SkillEffect.ATTACK, SkillEffect.HEAVY_ATTACK,
+                        SkillEffect.PIERCE, SkillEffect.MULTI_HIT,
+                        SkillEffect.DOT, SkillEffect.POISON):
+        dmg, is_crit = _calculate_damage(
+            state, skill.damage, enemy, state.player
+        )
+        if skill.effect == SkillEffect.PIERCE:
+            applied = _apply_damage(state, state.player, dmg, bypass_shield=True)
+        else:
+            applied = _apply_damage(state, state.player, dmg)
+        state.stats.damage_received += applied
+        if is_crit:
+            state.stats.crits_received += 1
+        _record_event(state, "enemy_skill", skill.effect_color)
+        state.push(f"!! {skill.name} hits you for {applied} damage!")
+    elif skill.effect in (SkillEffect.STUN, SkillEffect.STAGGER):
+        # Apply CC to player
+        state.player.statuses.append(
+            StatusEffect(
+                effect_id="stun" if skill.effect == SkillEffect.STUN else "stagger",
+                remaining_ms=skill.stun_duration_ms
+                if skill.effect == SkillEffect.STUN
+                else STAGGER_DURATION_MS,
+                is_stunned=(skill.effect == SkillEffect.STUN),
+                is_staggered=(skill.effect == SkillEffect.STAGGER),
+            )
+        )
+        state.push(
+            f"!! {skill.name}: you are "
+            f"{'stunned' if skill.effect == SkillEffect.STUN else 'staggered'}!"
+        )
+    elif skill.effect == SkillEffect.DEBUFF:
+        state.player.statuses.append(
+            StatusEffect(
+                effect_id="weakened",
+                remaining_ms=skill.buff_duration_ms,
+                attack_bonus=-skill.buff_amount,
+            )
+        )
+        state.push(
+            f"!! {skill.name}: your attack power -{skill.buff_amount}!"
+        )
+    # Buff/heal/detect skills have no effect when used by enemies on
+    # themselves (no AI decision-making); skip silently.
