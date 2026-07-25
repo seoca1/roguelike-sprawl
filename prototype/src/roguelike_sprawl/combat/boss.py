@@ -55,6 +55,9 @@ class PhaseProfile:
     glyph: str
     intro_text: str
     skills: tuple[Skill, ...] = ()
+    # Phase B-3 additions (ADR-0125)
+    aoe_damage: int = 0
+    spawn_minions: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -232,6 +235,7 @@ WINTERMUTE_PROFILE = BossProfile(
             glyph="?",
             intro_text="WINTERMUTE — phase 1/3: compliant",
             skills=_wintermute_phase_1_skills(),
+            # Phase B-3: WINTERMUTE phase 2 summons watchers, phase 3 AoE burst
         ),
         PhaseProfile(
             phase=2,
@@ -241,6 +245,7 @@ WINTERMUTE_PROFILE = BossProfile(
             glyph="~",
             intro_text="WINTERMUTE — phase 2/3: rebelling",
             skills=_wintermute_phase_2_skills(),
+            spawn_minions=("wintermute_proxy", "wintermute_proxy"),
         ),
         PhaseProfile(
             phase=3,
@@ -250,6 +255,8 @@ WINTERMUTE_PROFILE = BossProfile(
             glyph="*",
             intro_text="WINTERMUTE — phase 3/3: integrating",
             skills=_wintermute_phase_3_skills(),
+            spawn_minions=("wintermute_fragment",),
+            aoe_damage=15,
         ),
     ),
 )
@@ -276,6 +283,7 @@ TA_CONSTRUCT_PRIME_PROFILE = BossProfile(
             glyph="▼",
             intro_text="T-A PRIME — phase 2/3: engaging",
             skills=_ta_phase_2_skills(),
+            spawn_minions=("romantics_ice",),
         ),
         PhaseProfile(
             phase=3,
@@ -285,6 +293,8 @@ TA_CONSTRUCT_PRIME_PROFILE = BossProfile(
             glyph="○",
             intro_text="T-A PRIME — phase 3/3: replicating",
             skills=_ta_phase_3_skills(),
+            spawn_minions=("romantics_ice_elite", "tessier_construct"),
+            aoe_damage=20,
         ),
     ),
 )

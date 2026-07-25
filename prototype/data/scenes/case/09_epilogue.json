@@ -1,6 +1,7 @@
 {
   "id": "scene_case_epilogue",
   "character": "novice",
+  "mission_id": "final_choice",
   "order": 9,
   "ending": "A",
   "title_en": "THE NEXT JACK",

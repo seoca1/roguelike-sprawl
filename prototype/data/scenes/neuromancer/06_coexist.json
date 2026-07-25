@@ -1,6 +1,7 @@
 {
   "id": "scene_neuromancer_coexist",
   "character": "neuromancer",
+  "mission_id": "wintermute_negotiation",
   "order": 6,
   "ending": "B",
   "title_en": "COEXISTENCE",

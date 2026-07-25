@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_epilogue",
   "character": "suit",
+  "mission_id": "final_choice",
   "order": 9,
   "ending": "B",
   "title_en": "THE EMPTY CHAIR",

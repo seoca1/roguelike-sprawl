@@ -231,11 +231,14 @@ class TestGetMissionForScene:
         assert result["title"] == "First Jack"
 
     def test_scene_without_mission_id(self) -> None:
-        """mission_id 없는 scene → None."""
+        """All GN scenes now have mission_id (Phase G completion).
+
+        As of 2026-07-26, GN-81 achieved 81/81 mission_id coverage.
+        This test now verifies a nonexistent scene file → None.
+        """
         from roguelike_sprawl.data.story_resolver import get_mission_for_scene
 
-        # angie/08_third_room.json does not have mission_id
-        result = get_mission_for_scene("08_third_room", "angie", ROOT_PROJECT)
+        result = get_mission_for_scene("nonexistent_scene_file", "angie", ROOT_PROJECT)
         assert result is None
 
     def test_nonexistent_scene(self) -> None:
@@ -246,14 +249,13 @@ class TestGetMissionForScene:
         assert result is None
 
     def test_wigan_zavijava_scene(self) -> None:
-        """wigan/01_zavijava.json — no mission_id currently (next_scene ref)."""
+        """wigan/01_zavijava.json — has mission_id (Phase G: 81/81 coverage)."""
         from roguelike_sprawl.data.story_resolver import get_mission_for_scene
 
-        # 01_zavijava doesn't currently have mission_id field
-        # (was an earlier false assumption — only the 6 mappings from
-        # β-2 actually carry mission_id today)
+        # As of Phase G, 01_zavijava now carries mission_id=wigan_call
         result = get_mission_for_scene("01_zavijava", "wigan", ROOT_PROJECT)
-        assert result is None
+        assert result is not None
+        assert result["id"] == "wigan_call"
 
     def test_angie_zavijava_scene(self) -> None:
         """angie/04_zavijava.json → wigan_call (Phase β-2 mapping)."""

@@ -1,6 +1,7 @@
 {
   "id": "scene_angie_epilogue",
   "character": "angie",
+  "mission_id": "final_choice",
   "order": 9,
   "ending": "A",
   "title_en": "THIRD ROOM",

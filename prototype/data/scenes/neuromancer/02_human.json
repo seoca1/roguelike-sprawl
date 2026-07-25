@@ -1,6 +1,7 @@
 {
   "id": "scene_neuromancer_human",
   "character": "neuromancer",
+  "mission_id": "neuromancer_whisper",
   "order": 2,
   "title_en": "HUMAN",
   "title_ko": "인간",

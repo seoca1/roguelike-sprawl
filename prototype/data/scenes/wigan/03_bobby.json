@@ -1,6 +1,7 @@
 {
   "id": "scene_wigan_bobby",
   "character": "wigan",
+  "mission_id": "ta_defection",
   "order": 3,
   "title_en": "BOBBY'S BURIAL",
   "title_ko": "바비의 장례",

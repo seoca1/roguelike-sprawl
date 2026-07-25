@@ -1,6 +1,7 @@
 {
   "id": "scene_kas_silence",
   "character": "heretic",
+  "mission_id": "ice_run",
   "order": 5,
   "ending": "B",
   "title_en": "THE SILENCE",

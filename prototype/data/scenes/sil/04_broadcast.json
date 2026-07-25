@@ -1,6 +1,7 @@
 {
   "id": "scene_sil_broadcast",
   "character": "veteran",
+  "mission_id": "wintermute_negotiation",
   "order": 4,
   "title_en": "THE BROADCAST",
   "title_ko": "폭로",

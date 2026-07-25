@@ -1,6 +1,7 @@
 {
   "id": "scene_3jane_recording",
   "character": "3jane",
+  "mission_id": "ta_heist",
   "order": 2,
   "ending": "A",
   "title_en": "BOBBY'S RECORDING",

@@ -1,6 +1,7 @@
 {
   "id": "scene_wigan_zavijava",
   "character": "wigan",
+  "mission_id": "wigan_call",
   "order": 1,
   "title_en": "ZAVIJAVA",
   "title_ko": "자비야바",

@@ -1,6 +1,7 @@
 {
   "id": "scene_wigan_family",
   "character": "wigan",
+  "mission_id": "tessier_sleeper_arc",
   "order": 8,
   "ending": "C",
   "title_en": "THE FAMILY",

@@ -1,6 +1,7 @@
 {
   "id": "scene_neuromancer_beyond",
   "character": "neuromancer",
+  "mission_id": "neuromancer_merger",
   "order": 4,
   "title_en": "BEYOND",
   "title_ko": "바깥",

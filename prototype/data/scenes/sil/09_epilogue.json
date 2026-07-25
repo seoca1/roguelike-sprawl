@@ -1,6 +1,7 @@
 {
   "id": "scene_sil_epilogue",
   "character": "veteran",
+  "mission_id": "final_choice",
   "order": 9,
   "ending": "A",
   "title_en": "ALL THE NAMES",

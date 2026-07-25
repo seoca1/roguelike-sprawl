@@ -1,6 +1,7 @@
 {
   "id": "scene_3jane_epilogue",
   "character": "3jane",
+  "mission_id": "final_choice",
   "order": 9,
   "ending": "A",
   "title_en": "STRAYLIGHT CLOSED",

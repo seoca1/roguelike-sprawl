@@ -1,6 +1,7 @@
 {
   "id": "scene_angie_third_room",
   "character": "angie",
+  "mission_id": "voodoo_loa_encounter",
   "order": 8,
   "ending": "C",
   "title_en": "THE THIRD ROOM",

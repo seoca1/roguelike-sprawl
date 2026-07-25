@@ -1,6 +1,7 @@
 {
   "id": "scene_sally_single_desk",
   "character": "sally",
+  "mission_id": "sally_sandii_3am",
   "order": 8,
   "ending": "C",
   "title_en": "THE SINGLE DESK",

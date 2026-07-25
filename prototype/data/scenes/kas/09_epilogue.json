@@ -1,6 +1,7 @@
 {
   "id": "scene_kas_epilogue",
   "character": "heretic",
+  "mission_id": "final_choice",
   "order": 9,
   "ending": "C",
   "title_en": "THE WHEEL",

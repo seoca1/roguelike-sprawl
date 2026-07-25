@@ -1,6 +1,7 @@
 {
   "id": "scene_kas_shadow",
   "character": "heretic",
+  "mission_id": "winter_infiltrate",
   "order": 6,
   "ending": "B",
   "title_en": "THE SHADOW",

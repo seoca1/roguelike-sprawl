@@ -1,6 +1,7 @@
 {
   "id": "scene_sil_insider",
   "character": "veteran",
+  "mission_id": "ta_defection",
   "order": 6,
   "ending": "B",
   "title_en": "THE INSIDER",

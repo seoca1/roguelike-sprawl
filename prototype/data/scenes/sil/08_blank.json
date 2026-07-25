@@ -1,6 +1,7 @@
 {
   "id": "scene_sil_blank",
   "character": "veteran",
+  "mission_id": "final_choice",
   "order": 8,
   "ending": "C",
   "title_en": "THE BLANK",

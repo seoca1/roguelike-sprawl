@@ -425,83 +425,107 @@ def _render(
         salvation_view.render_salvation_ending(console, t, state)
 
 
+def _handle_global_hotkeys(
+    event: object,
+    state: AppState,
+) -> bool | None:
+    """Phase D-2 deep: process global hotkeys (work on all screens).
+
+    Returns:
+        True: hotkey handled (event consumed)
+        False: global quit signal
+        None: not a hotkey, defer to per-screen handler
+    """
+    import tcod.event
+    if not isinstance(event, tcod.event.KeyDown):
+        return None
+
+    if event.sym is tcod.event.KeySym.F5:
+        from .save_manager import SaveManager, SaveSlotEmptyError
+
+        manager = SaveManager()
+        try:
+            meta = manager.save(1, state, elapsed_seconds=int(state.demo_elapsed_s))
+            state.status_messages.append(
+                f">>> Quicksaved to slot 1 ({meta.size_bytes} bytes)"
+            )
+        except Exception as e:
+            state.status_messages.append(f">>> Quicksave failed: {e}")
+        return True
+
+    if event.sym is tcod.event.KeySym.F9:
+        from .save_manager import SaveError, SaveManager, SaveSlotEmptyError
+
+        manager = SaveManager()
+        try:
+            manager.restore_state(1, state)
+        except SaveSlotEmptyError:
+            state.status_messages.append(">>> Quickload failed: slot 1 is empty")
+        except SaveError as e:
+            state.status_messages.append(f">>> Quickload failed: {e}")
+        return True
+
+    if event.sym is tcod.event.KeySym.M:
+        muted = sound_manager.toggle_mute()
+        label = "MUTED" if muted else "UNMUTED"
+        state.status_messages.append(f">>> Audio {label}")
+        return True
+
+    if event.sym in (
+        tcod.event.KeySym.EQUALS,
+        tcod.event.KeySym.PLUS,
+        tcod.event.KeySym.KP_PLUS,
+    ):
+        from .settings_ui import adjust_volume
+
+        new_vol = adjust_volume(+0.1)
+        state.status_messages.append(f">>> Volume: {int(new_vol * 100)}%")
+        return True
+
+    if event.sym in (tcod.event.KeySym.MINUS, tcod.event.KeySym.KP_MINUS):
+        from .settings_ui import adjust_volume
+
+        new_vol = adjust_volume(-0.1)
+        state.status_messages.append(f">>> Volume: {int(new_vol * 100)}%")
+        return True
+
+    # Per-category sound toggles
+    from ..audio.config import SoundCategory
+    from .settings_ui import toggle_category
+
+    category_by_key = {
+        tcod.event.KeySym.T: SoundCategory.THEME,
+        tcod.event.KeySym.E: SoundCategory.EVENTS,
+        tcod.event.KeySym.K: SoundCategory.KEYS,
+        tcod.event.KeySym.B: SoundCategory.COMBAT,
+        tcod.event.KeySym.V: SoundCategory.MOVEMENT,
+        tcod.event.KeySym.I: SoundCategory.ITEMS,
+    }
+    if event.sym in category_by_key:
+        category = category_by_key[event.sym]
+        new_state = toggle_category(category)
+        label = "ON" if new_state else "OFF"
+        state.status_messages.append(
+            f">>> Sound category '{category.value}' toggled: {label}"
+        )
+        return True
+
+    return None
+
+
 def _handle_input(
     event: object,
     state: AppState,
     prog_registry: ProgramRegistry,
     ice_registry: IceRegistry,
 ) -> bool:
-    """Dispatch an event to the current screen's handler. False = quit."""
-    import tcod.event
+    """Dispatch an event to the current screen's handler. False = quit.
 
-    # Global hotkeys (work on all screens)
-    if isinstance(event, tcod.event.KeyDown):
-        # F5: quick save (slot 1)
-        if event.sym is tcod.event.KeySym.F5:
-            from .save_manager import SaveManager, SaveSlotEmptyError
-
-            manager = SaveManager()
-            try:
-                meta = manager.save(1, state, elapsed_seconds=int(state.demo_elapsed_s))
-                state.status_messages.append(f">>> Quicksaved to slot 1 ({meta.size_bytes} bytes)")
-            except Exception as e:
-                state.status_messages.append(f">>> Quicksave failed: {e}")
-            return True
-
-        # F9: quick load (slot 1)
-        if event.sym is tcod.event.KeySym.F9:
-            from .save_manager import SaveError, SaveManager, SaveSlotEmptyError
-
-            manager = SaveManager()
-            try:
-                manager.restore_state(1, state)
-            except SaveSlotEmptyError:
-                state.status_messages.append(">>> Quickload failed: slot 1 is empty")
-            except SaveError as e:
-                state.status_messages.append(f">>> Quickload failed: {e}")
-            return True
-
-        if event.sym is tcod.event.KeySym.M:
-            muted = sound_manager.toggle_mute()
-            label = "MUTED" if muted else "UNMUTED"
-            state.status_messages.append(f">>> Audio {label}")
-            return True
-        if event.sym in (
-            tcod.event.KeySym.EQUALS,
-            tcod.event.KeySym.PLUS,
-            tcod.event.KeySym.KP_PLUS,
-        ):
-            from .settings_ui import adjust_volume
-
-            new_vol = adjust_volume(+0.1)
-            state.status_messages.append(f">>> Volume: {int(new_vol * 100)}%")
-            return True
-        if event.sym in (tcod.event.KeySym.MINUS, tcod.event.KeySym.KP_MINUS):
-            from .settings_ui import adjust_volume
-
-            new_vol = adjust_volume(-0.1)
-            state.status_messages.append(f">>> Volume: {int(new_vol * 100)}%")
-            return True
-
-        # Per-category sound toggles
-        # T = theme, E = events, K = keys, B = combat, V = movement, I = items
-        from ..audio.config import SoundCategory
-        from .settings_ui import toggle_category
-
-        category_by_key = {
-            tcod.event.KeySym.T: SoundCategory.THEME,
-            tcod.event.KeySym.E: SoundCategory.EVENTS,
-            tcod.event.KeySym.K: SoundCategory.KEYS,
-            tcod.event.KeySym.B: SoundCategory.COMBAT,
-            tcod.event.KeySym.V: SoundCategory.MOVEMENT,
-            tcod.event.KeySym.I: SoundCategory.ITEMS,
-        }
-        if event.sym in category_by_key:
-            category = category_by_key[event.sym]
-            new_state = toggle_category(category)
-            label = "ON" if new_state else "OFF"
-            state.status_messages.append(f">>> Sound category '{category.value}' toggled: {label}")
-            return True
+    Phase D-2 deep: delegates global hotkeys to _handle_global_hotkeys.
+    """
+    global_result = _handle_global_hotkeys(event, state)
+    if global_result is not None:
+        return global_result
 
     if state.screen is ScreenKind.MENU:
         return menu_screen.handle_menu_input(event, state)  # type: ignore[arg-type]
