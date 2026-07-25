@@ -1,3 +1,30 @@
+## [2026-07-25] meta | SESSION_HANDOVER v0.8.0 (handoff 갱신)
+
+**Status**: Complete
+
+### Changes
+
+- **SESSION_HANDOVER.md** v0.7 (2026-07-04, Phase 9 Salvation) → v0.8.0 (2026-07-25, 3 세션 통합)
+- 핵심 메트릭 갱신: 4225 → 3096 tests, 60+1 → 54 Accepted ADR
+- 9자키 / 47 미션 / 41 ICE / 10+1 슬롯 안정
+- 신규 섹션: 2026-07-25 세션 작업 (ADR-0104 Accept, save_slot_demo.py)
+- 누적 작업 (07-11/12/13) 통합
+- 디렉토리 상태 트리 갱신
+- 47 pre-existing 이슈 → 220 passed, 0 failed 해소
+
+### 영향 파일
+
+- `Game/roguelike_sprawl/SESSION_HANDOVER.md` (v0.7 → v0.8.0)
+- `Game/roguelike_sprawl/log.md` (이 항목)
+
+### 후속
+
+- 다음 세션 시작점: SESSION_HANDOVER.md (이 문서) + SESSION_SUMMARY.md v0.8.0
+- 첫 명령: `git status --short` + `uv run pytest -q` (3096 passed 확인)
+- 미해결 작업: Notion 발행, v1.0.0 final release, pre-v2.0 단편 5편 보강
+
+---
+
 ## [2026-07-25] meta | SESSION_SUMMARY v0.8.0 + ADR-0104 Accepted + save_slot_demo
 
 **Status**: Complete
