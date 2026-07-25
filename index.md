@@ -14,7 +14,7 @@
 
 ## 세계관 (World)
 - [Sprawl Universe](wiki/world/sprawl_universe.md) - 시간/공간, 기본 컨셉
-- [Cyberspace](wiki/world/cyberspace.md) - 매트릭스의 정의와 작동
+- [Cyberspace](../../Fiction/wiki/settings/cyberspace.md) - 매트릭스의 정의와 작동
 - [Factions](wiki/world/factions.md) - 주요 세력
 - [Glossary](wiki/world/glossary.md) - 용어 사전
 - [Style Guide](wiki/world/style_guide.md) - 톤과 미적 가이드

@@ -8,7 +8,13 @@ from pathlib import Path
 
 from ..matrix.ppl import Loadout, Program
 from ..portraits import PortraitManager
-from .state import Combatant, Skill, SkillEffect
+from .state import (
+    ALARM_SPEED_BY_ICE,
+    DEFAULT_ALARM_SPEED,
+    Combatant,
+    Skill,
+    SkillEffect,
+)
 
 
 class ProgramRegistry:
@@ -63,6 +69,7 @@ class ProgramRegistry:
                     hit_count=int(value.get("hit_count", 1)),
                     cooldown_ms=int(value.get("cooldown_ms", 0)),
                     crit_bonus=float(value.get("crit_bonus", 0)),
+                    role=(str(value["role"]) if value.get("role") is not None else None),
                     effect_color=color,
                     effect_glyph=str(value.get("glyph", "*")),
                 )
@@ -417,4 +424,7 @@ def build_ice_enemy(
         auto_attack_damage=dmg,
         skills=(),
         team="enemy",
+        ice_kind=ice_id,
+        ice_resistance=float(data.get("resistance", 0.0)),
+        alarm_speed=ALARM_SPEED_BY_ICE.get(ice_id, DEFAULT_ALARM_SPEED),
     )

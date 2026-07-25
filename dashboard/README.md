@@ -126,3 +126,24 @@ prototype/.venv/bin/python tools/build_dashboard.py
 - **2026-06-30 (commit b91b7cc)** — Dead links (dungeon 3 / novel 3 / story 2) + stats sync (stages 26→29 / stories 32→29).
 - **2026-06-30 (commit 89f156c)** — `stage_structure.json` missions 26→29 (3 추가: flatline_call, sally_returns_arc3, sally_sandii_3am).
 - **2026-06-30** — Dashboard `data-status` audit + `dashboard/README.md` 작성.
+
+---
+
+## Dashboard Update Log (2026-07-25)
+
+- **search_index.json**: Fixed novelette indexing bug. Previously only Bridge novelettes were processed; Blue Ant and Sprawl novelettes were excluded by missing directory constants. Added `SPRAWL_NV_EN_DIR`, `SPRAWL_NV_KO_DIR`, `BLUE_ANT_NV_EN_DIR`, `BLUE_ANT_NV_KO_DIR` constants and updated the for-loops in `load_all_stories()` and the trilogy classification in `gen_search_index()`. Result: search_index grew from 218 → 226 entries (all 7 novelettes now indexed in EN+KO).
+- **game_facts.json**: Refreshed via `sync_dashboard_facts.py`.
+- **All 10 dashboard JSON stats**: Regenerated via `build_dashboard.py`.
+- **story HTML**: Regenerated for all short-stories via `markdown_to_story_html.py` (both EN and KO). Novelettes are NOT currently rendered to HTML — would require extending `markdown_to_story_html.py` to handle the `novelettes/` directories.
+
+## Current Coverage
+
+- EN stories: 113 (84 Sprawl ss + 86 = ... — see search_index)
+- KO stories: 113
+- Search index: 226 entries
+- Short-stories HTML: 222 files (111 × 2 langs) in `stories/short-stories/`
+- Novelette HTML: 14 files (7 × 2 langs) in `stories/novelettes/` — auto-generated as of 2026-07-25
+
+## Updated CI Workflow (2026-07-25)
+
+`.github/workflows/dashboard-build.yml` `Generate story HTML pages` step was generalized from explicit per-trilogy/per-lang calls to a loop over all 3 trilogies × short-stories + novelettes × EN + KO. Future content additions automatically get HTML pages without CI changes.

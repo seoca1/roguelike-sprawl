@@ -37,12 +37,16 @@ DASH = REPO / "Game/roguelike_sprawl/dashboard"
 DATA = DASH / "data"
 SPRAWL_EN_DIR = REPO / "Fiction/derivative/sprawl-trilogy/short-stories/en"
 SPRAWL_KO_DIR = REPO / "Fiction/derivative/sprawl-trilogy/short-stories/ko"
+SPRAWL_NV_EN_DIR = REPO / "Fiction/derivative/sprawl-trilogy/novelettes/en"
+SPRAWL_NV_KO_DIR = REPO / "Fiction/derivative/sprawl-trilogy/novelettes/ko"
 BRIDGE_EN_DIR = REPO / "Fiction/derivative/bridge-trilogy/short-stories/en"
 BRIDGE_KO_DIR = REPO / "Fiction/derivative/bridge-trilogy/short-stories/ko"
 BRIDGE_NV_EN_DIR = REPO / "Fiction/derivative/bridge-trilogy/novelettes/en"
 BRIDGE_NV_KO_DIR = REPO / "Fiction/derivative/bridge-trilogy/novelettes/ko"
 BLUE_ANT_EN_DIR = REPO / "Fiction/derivative/blue-ant/short-stories/en"
 BLUE_ANT_KO_DIR = REPO / "Fiction/derivative/blue-ant/short-stories/ko"
+BLUE_ANT_NV_EN_DIR = REPO / "Fiction/derivative/blue-ant/novelettes/en"
+BLUE_ANT_NV_KO_DIR = REPO / "Fiction/derivative/blue-ant/novelettes/ko"
 MISSIONS = REPO / "Game/roguelike_sprawl/prototype/data/missions/missions.json"
 GLOSSARY_WIKI = REPO / "Fiction/wiki"
 
@@ -69,14 +73,16 @@ def load_all_stories() -> tuple[dict, dict]:
     en_out = {}
     ko_out = {}
 
-    # Sprawl Trilogy (short-stories only)
-    if SPRAWL_EN_DIR.exists():
-        for f in sorted(SPRAWL_EN_DIR.glob("*.md")):
-            if not f.name.endswith(".ko.md"):
-                en_out[f.stem] = parse_story(f.read_text(encoding="utf-8"), "en")
-    if SPRAWL_KO_DIR.exists():
-        for f in sorted(SPRAWL_KO_DIR.glob("*.ko.md")):
-            ko_out[f.stem.replace(".ko", "")] = parse_story(f.read_text(encoding="utf-8"), "ko")
+    # Sprawl Trilogy (short-stories + novelettes)
+    for src_dir in (SPRAWL_EN_DIR, SPRAWL_NV_EN_DIR):
+        if src_dir.exists():
+            for f in sorted(src_dir.glob("*.md")):
+                if not f.name.endswith(".ko.md"):
+                    en_out[f.stem] = parse_story(f.read_text(encoding="utf-8"), "en")
+    for src_dir in (SPRAWL_KO_DIR, SPRAWL_NV_KO_DIR):
+        if src_dir.exists():
+            for f in sorted(src_dir.glob("*.ko.md")):
+                ko_out[f.stem.replace(".ko", "")] = parse_story(f.read_text(encoding="utf-8"), "ko")
 
     # Bridge Trilogy (short-stories + novelettes)
     for src_dir in (BRIDGE_EN_DIR, BRIDGE_NV_EN_DIR):
@@ -89,14 +95,16 @@ def load_all_stories() -> tuple[dict, dict]:
             for f in sorted(src_dir.glob("*.ko.md")):
                 ko_out[f.stem.replace(".ko", "")] = parse_story(f.read_text(encoding="utf-8"), "ko")
 
-    # Blue Ant Trilogy
-    if BLUE_ANT_EN_DIR.exists():
-        for f in sorted(BLUE_ANT_EN_DIR.glob("*.md")):
-            if not f.name.endswith(".ko.md"):
-                en_out[f.stem] = parse_story(f.read_text(encoding="utf-8"), "en")
-    if BLUE_ANT_KO_DIR.exists():
-        for f in sorted(BLUE_ANT_KO_DIR.glob("*.ko.md")):
-            ko_out[f.stem.replace(".ko", "")] = parse_story(f.read_text(encoding="utf-8"), "ko")
+    # Blue Ant Trilogy (short-stories + novelettes)
+    for src_dir in (BLUE_ANT_EN_DIR, BLUE_ANT_NV_EN_DIR):
+        if src_dir.exists():
+            for f in sorted(src_dir.glob("*.md")):
+                if not f.name.endswith(".ko.md"):
+                    en_out[f.stem] = parse_story(f.read_text(encoding="utf-8"), "en")
+    for src_dir in (BLUE_ANT_KO_DIR, BLUE_ANT_NV_KO_DIR):
+        if src_dir.exists():
+            for f in sorted(src_dir.glob("*.ko.md")):
+                ko_out[f.stem.replace(".ko", "")] = parse_story(f.read_text(encoding="utf-8"), "ko")
 
     return en_out, ko_out
 
@@ -192,12 +200,16 @@ def gen_search_index(en_stories: dict, ko_stories: dict,
                 if "bridge" in str(d).lower() or any("bridge" in p.name for p in [d]):
                     if f.suffix == ".md":
                         bridge_stems.add(stem)
-    if BLUE_ANT_EN_DIR.exists():
-        for f in BLUE_ANT_EN_DIR.glob("*.md"):
-            blueant_stems.add(f.stem)
-    if SPRAWL_EN_DIR.exists():
-        for f in SPRAWL_EN_DIR.glob("*.md"):
-            sprawl_stems.add(f.stem)
+    for d in (BLUE_ANT_EN_DIR, BLUE_ANT_NV_EN_DIR):
+        if d.exists():
+            for f in d.glob("*.md"):
+                if f.suffix == ".md":
+                    blueant_stems.add(f.stem)
+    for d in (SPRAWL_EN_DIR, SPRAWL_NV_EN_DIR):
+        if d.exists():
+            for f in d.glob("*.md"):
+                if f.suffix == ".md":
+                    sprawl_stems.add(f.stem)
 
     for stem, info in en_stories.items():
         if stem in bridge_stems:
@@ -383,7 +395,7 @@ def gen_health(en_stories: dict, ko_stories: dict, missions: dict,
             "only_ko": sorted(ko_keys - en_keys),
         })
     # Collect all EN directories
-    en_dirs = [SPRAWL_EN_DIR, BRIDGE_EN_DIR, BRIDGE_NV_EN_DIR, BLUE_ANT_EN_DIR]
+    en_dirs = [SPRAWL_EN_DIR, SPRAWL_NV_EN_DIR, BRIDGE_EN_DIR, BRIDGE_NV_EN_DIR, BLUE_ANT_EN_DIR, BLUE_ANT_NV_EN_DIR]
     for mid, m in missions.items():
         src = (m.get("story") or {}).get("source", "")
         if not src:

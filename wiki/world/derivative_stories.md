@@ -222,24 +222,24 @@ dashboard/stories/short-stories/*.html (정적 카드)
 
 | stem | 챕터 enrichment | 파일 | 캐릭터 | arc | 모티프 | 시퀀스 |
 |---|---|---|---|---|---|---|
-| `casey_leaves` | 3jane | [2026-07-13](../sprawl-trilogy/short-stories/en/2026-07-13_casey_leaves.md) | heretic | 5 | departure | post-merger ending |
-| `construct_asks` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_construct_asks.md) | heretic | 5 | question | Construct 5 |
-| `construct_dawn` | case | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_construct_dawn.md) | veteran | 5 | dawn | Construct 0 |
-| `construct_named` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_construct_named.md) | heretic | 5 | name | Construct 1 |
-| `molly_meets_casey` | sil | [2026-07-13](../sprawl-trilogy/short-stories/en/2026-07-13_molly_meets_casey.md) | veteran | 4 | recognition | Molly arc |
-| `molly_decides` | sil | [2026-07-14](../sprawl-trilogy/short-stories/en/2026-07-14_molly_decides.md) | veteran | 2 | decision | Molly arc |
-| `molly_returns` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_molly_returns.md) | heretic | 4 | return | Molly arc |
-| `tessier_archive` | suit | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_tessier_archive.md) | heretic | 5 | archive | 3Jane POV |
-| `the_answer` | suit | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_answer.md) | heretic | 5 | answer | Construct 5 (final) |
-| `the_first_walk` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_first_walk.md) | heretic | 5 | walk | Construct 1 |
-| `the_fourth_word` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_fourth_word.md) | heretic | 5 | word | Construct 2 |
-| `the_full_name` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_full_name.md) | heretic | 5 | name | Construct 3 |
-| `the_leaving` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_leaving.md) | heretic | 5 | leaving | Construct 4 (epilogue) |
-| `the_naming` | kas | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_the_naming.md) | heretic | 5 | kitchen | Construct 3 (parallel) |
-| `wigan_zavijava` | wigan | [2026-06-23](../sprawl-trilogy/short-stories/en/2026-06-23_wigan_zavijava.md) | heretic | 4 | matrix | Count Zero |
-| `wigan_zavijava` | wigan | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_wigan_zavijava.md) | heretic | 4 | matrix | Count Zero (07-11 rewrite, KO ✓) |
-| `winters_child` | case | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_winters_child.md) | veteran | 5 | winter | post-merger ending |
-| `winters_morning` | sil | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_winters_morning.md) | heretic | 5 | morning | post-merger ending |
+| `casey_leaves` | 3jane | [2026-07-13](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-13_casey_leaves.md) | heretic | 5 | departure | post-merger ending |
+| `construct_asks` | kas | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_construct_asks.md) | heretic | 5 | question | Construct 5 |
+| `construct_dawn` | case | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_construct_dawn.md) | veteran | 5 | dawn | Construct 0 |
+| `construct_named` | kas | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_construct_named.md) | heretic | 5 | name | Construct 1 |
+| `molly_meets_casey` | sil | [2026-07-13](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-13_molly_meets_casey.md) | veteran | 4 | recognition | Molly arc |
+| `molly_decides` | sil | [2026-07-14](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-14_molly_decides.md) | veteran | 2 | decision | Molly arc |
+| `molly_returns` | kas | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_molly_returns.md) | heretic | 4 | return | Molly arc |
+| `tessier_archive` | suit | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_tessier_archive.md) | heretic | 5 | archive | 3Jane POV |
+| `the_answer` | suit | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_the_answer.md) | heretic | 5 | answer | Construct 5 (final) |
+| `the_first_walk` | kas | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_the_first_walk.md) | heretic | 5 | walk | Construct 1 |
+| `the_fourth_word` | kas | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_the_fourth_word.md) | heretic | 5 | word | Construct 2 |
+| `the_full_name` | kas | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_the_full_name.md) | heretic | 5 | name | Construct 3 |
+| `the_leaving` | kas | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_the_leaving.md) | heretic | 5 | leaving | Construct 4 (epilogue) |
+| `the_naming` | kas | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_the_naming.md) | heretic | 5 | kitchen | Construct 3 (parallel) |
+| `wigan_zavijava` | wigan | [2026-06-23](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-06-23_wigan_zavijava.md) | heretic | 4 | matrix | Count Zero |
+| `wigan_zavijava` | wigan | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_wigan_zavijava.md) | heretic | 4 | matrix | Count Zero (07-11 rewrite, KO ✓) |
+| `winters_child` | case | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_winters_child.md) | veteran | 5 | winter | post-merger ending |
+| `winters_morning` | sil | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_winters_morning.md) | heretic | 5 | morning | post-merger ending |
 
 **Construct 5단계 학습 시퀀스** (kas 챕터 epilogue):
 ```
@@ -249,7 +249,7 @@ dashboard/stories/short-stories/*.html (정적 카드)
 4. the_naming        — 이름 짓기
 5. the_answer        — 대답 ('out')
 ```
-| `winters_morning` | [2026-07-11](../sprawl-trilogy/short-stories/en/2026-07-11_winters_morning.md) | heretic | 5 | Winter의 아침 |
+| `winters_morning` | [2026-07-11](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-07-11_winters_morning.md) | heretic | 5 | Winter의 아침 |
 
 **대시보드 카드**: 모두 자동 생성됨 (`Game/roguelike_sprawl/dashboard/stories/short-stories/{stem}.html`, `{stem}.ko.html`)
 

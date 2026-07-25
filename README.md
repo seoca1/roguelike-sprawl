@@ -68,7 +68,7 @@
 - **3 ICE 추가**: corporate_guard (MID), archive_sentinel (CORE), wintermute_proxy (TA boss)
 - **세이브 시스템**: 5슬롯 → 10슬롯 + 자동저장 슬롯
 
-상세: [`SESSION_SUMMARY.md`](./SESSION_SUMMARY.md), [`ROADMAP.md`](./ROADMAP.md), [`log.md`](./log.md).
+상세: [`SESSION_SUMMARY.md`](./SESSION_SUMMARY.md), [`ROADMAP.md`](./ROADMAP.md), [`log.md`](../../Fiction/wiki/log.md).
 
 ## 개발 추적
 

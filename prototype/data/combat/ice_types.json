@@ -1178,5 +1178,30 @@
         "quantity": 1
       }
     ]
+  },
+  "voodoo": {
+    "name": "ICE — Voodoo Construct",
+    "portrait": "ice.loa",
+    "hp_base": 130,
+    "hp_per_grade": 28,
+    "dmg_base": 6,
+    "dmg_per_grade": 2,
+    "tier": 4,
+    "defense": 4,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.25,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.95,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.6,
+        "quantity": 1
+      }
+    ]
   }
 }

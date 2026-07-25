@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated": "2026-07-18T16:37:12.846049+00:00",
+  "generated": "2026-07-25T05:38:59.162972+00:00",
   "by_source": {
     "aleph_fragment": [
       {
@@ -685,6 +685,500 @@
         "grade_max": 2,
         "fixer": "masahiko"
       }
+    ],
+    "bigend-laney-lunch": [
+      {
+        "id": "bigend_laney_lunch",
+        "title": "Bigend Meets Laney",
+        "character_ref": "veteran",
+        "cast": "laney, bigend",
+        "arc": 1,
+        "pillar": "memory",
+        "grade_min": 5,
+        "grade_max": 6,
+        "fixer": "bigend"
+      }
+    ],
+    "coolhunter-laney-tokyo": [
+      {
+        "id": "coolhunter_laney_tokyo",
+        "title": "Coolhunter Meets Laney",
+        "character_ref": "novice",
+        "cast": "cayce, laney",
+        "arc": 2,
+        "pillar": "people",
+        "grade_min": 5,
+        "grade_max": 6,
+        "fixer": "bigend"
+      }
+    ],
+    "case-meets-cayce": [
+      {
+        "id": "case_meets_cayce",
+        "title": "Case Meets Cayce",
+        "character_ref": "veteran",
+        "cast": "case, cayce",
+        "arc": 4,
+        "pillar": "identity",
+        "grade_min": 5,
+        "grade_max": 6,
+        "fixer": "bigend"
+      }
+    ],
+    "panther_negotiate": [
+      {
+        "id": "panther_negotiate",
+        "title": "Panther Negotiate",
+        "character_ref": "veteran",
+        "cast": "sil",
+        "arc": 2,
+        "pillar": "power",
+        "grade_min": 2,
+        "grade_max": 3,
+        "fixer": "finn"
+      }
+    ],
+    "heretic_loa_conscription": [
+      {
+        "id": "heretic_loa_conscription",
+        "title": "Loa Conscription",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 4,
+        "pillar": "code",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "finn"
+      }
+    ],
+    "ono_sendai_repair": [
+      {
+        "id": "ono_sendai_repair",
+        "title": "Ono-Sendai Repair",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "purpose",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "hosaka_terminal_supply": [
+      {
+        "id": "hosaka_terminal_supply",
+        "title": "Hosaka Terminal Supply",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "purpose",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "sense_net_archive_intrusion": [
+      {
+        "id": "sense_net_archive_intrusion",
+        "title": "Sense/Net Archive Intrusion",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 4,
+        "pillar": "purpose",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "zion_vote_observation": [
+      {
+        "id": "zion_vote_observation",
+        "title": "Zion Vote Observation",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 5,
+        "pillar": "purpose",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "finn"
+      }
+    ],
+    "cortex_hound_recovery": [
+      {
+        "id": "cortex_hound_recovery",
+        "title": "Cortex-Hound Recovery",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "power",
+        "grade_min": 1,
+        "grade_max": 3,
+        "fixer": "finn"
+      }
+    ],
+    "zaibatsu_statework": [
+      {
+        "id": "zaibatsu_statework",
+        "title": "Zaibatsu Statework",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "purpose",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "finn_factory_labour_run": [
+      {
+        "id": "finn_factory_labour_run",
+        "title": "Finn's Factory Labour Run",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 2,
+        "pillar": "purpose",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "bing_statework": [
+      {
+        "id": "bing_statework",
+        "title": "Bing Statework",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 2,
+        "pillar": "power",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "finn"
+      }
+    ],
+    "chevette_nightshift_run": [
+      {
+        "id": "chevette_nightshift_run",
+        "title": "Chevette Nightshift Run",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "people",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "cayce_footage_audit_run": [
+      {
+        "id": "cayce_footage_audit_run",
+        "title": "Cayce Footage Audit Run",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 1,
+        "pillar": "purpose",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "fido_statework": [
+      {
+        "id": "fido_statework",
+        "title": "Fido Statework",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "purpose",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "chickenhead_rickshaw_run": [
+      {
+        "id": "chickenhead_rickshaw_run",
+        "title": "Chickenhead Rickshaw Run",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "people",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "surface_mail_run": [
+      {
+        "id": "surface_mail_run",
+        "title": "Surface Mail Run",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "people",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "bama_statework": [
+      {
+        "id": "bama_statework",
+        "title": "BAMA Statework",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "purpose",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "trauma_squads_audit": [
+      {
+        "id": "trauma_squads_audit",
+        "title": "Trauma-Squads Audit",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "purpose",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "laney_node_signal_run": [
+      {
+        "id": "laney_node_signal_run",
+        "title": "Laney Node Signal Run",
+        "character_ref": "veteran",
+        "cast": "k",
+        "arc": 2,
+        "pillar": "power",
+        "grade_min": 2,
+        "grade_max": 3,
+        "fixer": "finn"
+      }
+    ],
+    "pan_mannerist_audit": [
+      {
+        "id": "pan_mannerist_audit",
+        "title": "Pan-Mannerist Audit",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "trauma_squads_pair_arc": [
+      {
+        "id": "trauma_squads_pair_arc",
+        "title": "Trauma-Squads Pair Arc",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 4,
+        "pillar": "power",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "finn"
+      }
+    ],
+    "idoru_wedding_arc": [
+      {
+        "id": "idoru_wedding_arc",
+        "title": "Idoru Wedding Arc",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 3,
+        "pillar": "power",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "finn"
+      }
+    ],
+    "yanaka_family_power_arc": [
+      {
+        "id": "yanaka_family_power_arc",
+        "title": "Yanaka Family-Power Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "fukuoka_ridership_arc": [
+      {
+        "id": "fukuoka_ridership_arc",
+        "title": "Fukuoka Ridership Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "eurydice_arc": [
+      {
+        "id": "eurydice_arc",
+        "title": "Eurydice Arc",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 2,
+        "pillar": "power",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "finn"
+      }
+    ],
+    "working_class_ridership_arc": [
+      {
+        "id": "working_class_ridership_arc",
+        "title": "Working-Class Ridership Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "virtual_light_data_key_arc": [
+      {
+        "id": "virtual_light_data_key_arc",
+        "title": "Virtual Light Data-Key Arc",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "people",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "wendell_suburban_arc": [
+      {
+        "id": "wendell_suburban_arc",
+        "title": "Wendell Suburban Arc",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "power",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "boone_tokyo_electronics_arc": [
+      {
+        "id": "boone_tokyo_electronics_arc",
+        "title": "Boone Tokyo-Electronics Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "g_boys_arc": [
+      {
+        "id": "g_boys_arc",
+        "title": "G-Boys Arc",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 3,
+        "pillar": "power",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "finn"
+      }
+    ],
+    "pacific_empire_arc": [
+      {
+        "id": "pacific_empire_arc",
+        "title": "Pacific-Empire Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "w_anchor_arc": [
+      {
+        "id": "w_anchor_arc",
+        "title": "W-Anchor Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "viktor_orbit_arc": [
+      {
+        "id": "viktor_orbit_arc",
+        "title": "Viktor Orbit Arc",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "purpose",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "tessier_sleeper_arc": [
+      {
+        "id": "tessier_sleeper_arc",
+        "title": "Tessier-Ashpool Sleeper Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "mona_bridge_arc": [
+      {
+        "id": "mona_bridge_arc",
+        "title": "Mona Bridge Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
+    ],
+    "hounds_arc": [
+      {
+        "id": "hounds_arc",
+        "title": "Hounds Arc",
+        "character_ref": "suit",
+        "cast": "slick_henry",
+        "arc": 5,
+        "pillar": "power",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "slick-henry"
+      }
     ]
   },
   "by_character": {
@@ -702,7 +1196,14 @@
       "dixies_last_run": "Construct Memory Rescue",
       "ta_defection": "3Jane's Betrayal",
       "beijing_memory_courier": "Beijing Memory Courier",
-      "idoru-wedding-protocol": "Idoru Wedding Protocol"
+      "idoru-wedding-protocol": "Idoru Wedding Protocol",
+      "heretic_loa_conscription": "Loa Conscription",
+      "bing_statework": "Bing Statework",
+      "cayce_footage_audit_run": "Cayce Footage Audit Run",
+      "trauma_squads_pair_arc": "Trauma-Squads Pair Arc",
+      "idoru_wedding_arc": "Idoru Wedding Arc",
+      "eurydice_arc": "Eurydice Arc",
+      "g_boys_arc": "G-Boys Arc"
     },
     "novice": {
       "black_ice_dream": "Black Ice Dream",
@@ -721,7 +1222,18 @@
       "ta_defection": "Hosaka Corporate Infiltration",
       "yakuza_deal": "Yakuza Loan Shark",
       "tokyo-courier-run": "Tokyo Courier Run",
-      "chevette-run": "Chevette Run"
+      "chevette-run": "Chevette Run",
+      "coolhunter-laney-tokyo": "Coolhunter Meets Laney",
+      "ono_sendai_repair": "Ono-Sendai Repair",
+      "hosaka_terminal_supply": "Hosaka Terminal Supply",
+      "zion_vote_observation": "Zion Vote Observation",
+      "cortex_hound_recovery": "Cortex-Hound Recovery",
+      "chevette_nightshift_run": "Chevette Nightshift Run",
+      "chickenhead_rickshaw_run": "Chickenhead Rickshaw Run",
+      "surface_mail_run": "Surface Mail Run",
+      "virtual_light_data_key_arc": "Virtual Light Data-Key Arc",
+      "wendell_suburban_arc": "Wendell Suburban Arc",
+      "viktor_orbit_arc": "Viktor Orbit Arc"
     },
     "veteran": {
       "marly_louisiana-god": "Delivery to Finn",
@@ -738,14 +1250,34 @@
       "zion_express": "Zion Express",
       "straylight_approach": "Straylight Archive",
       "hosaka_extraction": "Sense/Net Media Extract",
-      "bridge-construct": "Bridge Construct"
+      "bridge-construct": "Bridge Construct",
+      "bigend-laney-lunch": "Bigend Meets Laney",
+      "case-meets-cayce": "Case Meets Cayce",
+      "panther_negotiate": "Panther Negotiate",
+      "laney_node_signal_run": "Laney Node Signal Run"
     },
     "suit": {
       "armitage_infiltration": "Armitage's First Infiltration",
       "hosaka_extraction": "Hosaka Internal Extraction",
       "ta_defection": "Tessier-Ashpool Defection",
       "wintermute_negotiation": "Wintermute Direct",
-      "kombinat-node-hack": "Kombinat Node Hack"
+      "kombinat-node-hack": "Kombinat Node Hack",
+      "sense_net_archive_intrusion": "Sense/Net Archive Intrusion",
+      "zaibatsu_statework": "Zaibatsu Statework",
+      "finn_factory_labour_run": "Finn's Factory Labour Run",
+      "fido_statework": "Fido Statework",
+      "bama_statework": "BAMA Statework",
+      "trauma_squads_audit": "Trauma-Squads Audit",
+      "pan_mannerist_audit": "Pan-Mannerist Audit",
+      "yanaka_family_power_arc": "Yanaka Family-Power Arc",
+      "fukuoka_ridership_arc": "Fukuoka Ridership Arc",
+      "working_class_ridership_arc": "Working-Class Ridership Arc",
+      "boone_tokyo_electronics_arc": "Boone Tokyo-Electronics Arc",
+      "pacific_empire_arc": "Pacific-Empire Arc",
+      "w_anchor_arc": "W-Anchor Arc",
+      "tessier_sleeper_arc": "Tessier-Ashpool Sleeper Arc",
+      "mona_bridge_arc": "Mona Bridge Arc",
+      "hounds_arc": "Hounds Arc"
     }
   }
 }

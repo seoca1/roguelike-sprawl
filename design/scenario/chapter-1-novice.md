@@ -181,6 +181,6 @@ Dixie Flatline (construct) 등장:
 
 - 단편: [`../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-06-23_case_jackout-30sec.md`](../../../../Fiction/derivative/sprawl-trilogy/short-stories/en/2026-06-23_case_jackout-30sec.md)
 - 미션 데이터: `data/missions/missions.json` (`first_jack`)
-- 위키: [`../../wiki/world/cyberspace.md`](../../wiki/world/cyberspace.md)
+- 위키: [`../../wiki/world/cyberspace.md`](../../../../Fiction/wiki/settings/cyberspace.md)
 - 모듈: `engine/original_story.py:NOVICE_PROLOGUE_EVENT`
 - 단편 페이지: `dashboard/stories.html`

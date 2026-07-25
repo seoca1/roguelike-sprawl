@@ -20,6 +20,12 @@
   let pinMode = false;
   let running = true;
   let currentTrilogyFilter = "all";
+  let zoom = { x: 0, y: 0, scale: 1 };
+  let isPanning = false;
+  let lastMousePos = { x: 0, y: 0 };
+
+  const view = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  svg.appendChild(view);
 
   function loadData() {
     return fetch(DATA_PATH, { cache: "no-store" })
@@ -27,8 +33,63 @@
       .then((d) => {
         data = d;
         buildGraph();
+        setupInteractions();
         animate();
       });
+  }
+
+  function setupInteractions() {
+    svg.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? 0.9 : 1.1;
+      const newScale = Math.max(0.2, Math.min(5, zoom.scale * delta));
+      
+      const rect = svg.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      
+      zoom.x = mouseX - (mouseX - zoom.x) * (newScale / zoom.scale);
+      zoom.y = mouseY - (mouseY - zoom.y) * (newScale / zoom.scale);
+      zoom.scale = newScale;
+      updateViewTransform();
+    });
+
+    svg.addEventListener("mousedown", (e) => {
+      if (e.target === svg || e.target === view) {
+        isPanning = true;
+        lastMousePos = { x: e.clientX, y: e.clientY };
+      }
+    });
+
+    document.addEventListener("mousemove", (e) => {
+      if (isPanning) {
+        zoom.x += e.clientX - lastMousePos.x;
+        zoom.y += e.clientY - lastMousePos.y;
+        lastMousePos = { x: e.clientX, y: e.clientY };
+        updateViewTransform();
+      }
+    });
+
+    document.addEventListener("mouseup", () => {
+      isPanning = false;
+    });
+
+    document.getElementById("search-input").addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase();
+      nodes.forEach(n => {
+        const match = n.name.toLowerCase().includes(query);
+        n.el.classList.toggle("highlight", query && match);
+        n.el.classList.toggle("dimmed", query && !match);
+      });
+    });
+
+    document.querySelectorAll(".trilogy-btn").forEach(btn => {
+      btn.addEventListener("click", () => applyTrilogyFilter(btn.dataset.trilogy));
+    });
+  }
+
+  function updateViewTransform() {
+    view.setAttribute("transform", `translate(${zoom.x},${zoom.y}) scale(${zoom.scale})`);
   }
 
   function applyTrilogyFilter(trilogy) {
@@ -38,24 +99,18 @@
     nodes.forEach((n) => {
       if (n.el) {
         if (trilogy === "all" || n.trilogy === trilogy) {
-          n.el.style.opacity = "1";
-          n.el.style.pointerEvents = "auto";
+          n.el.style.display = "";
         } else {
-          n.el.style.opacity = "0.1";
-          n.el.style.pointerEvents = "none";
+          n.el.style.display = "none";
         }
       }
     });
 
     edges.forEach((e) => {
-      if (e.line) {
+      if (e.container) {
         const sourceVisible = trilogy === "all" || e.source.trilogy === trilogy;
         const targetVisible = trilogy === "all" || e.target.trilogy === trilogy;
-        if (sourceVisible && targetVisible) {
-          e.line.style.opacity = "";
-        } else {
-          e.line.style.opacity = "0.05";
-        }
+        e.container.style.display = (sourceVisible && targetVisible) ? "" : "none";
       }
     });
 
@@ -65,7 +120,7 @@
   }
 
   function buildGraph() {
-    svg.innerHTML = "";
+    view.innerHTML = "";
     const rect = svg.getBoundingClientRect();
     const width = rect.width;
     const height = rect.height;
@@ -76,6 +131,7 @@
       arc: c.arc,
       trilogy: c.trilogy || "sprawl",
       wiki: c.wiki,
+      arc_description: c.arc_description,
       x: width / 2 + Math.cos((i / data.characters.length) * Math.PI * 2) * 240,
       y: height / 2 + Math.sin((i / data.characters.length) * Math.PI * 2) * 180,
       vx: 0, vy: 0,
@@ -93,12 +149,22 @@
       }));
 
     edges.forEach((e) => {
+      const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+      g.setAttribute("class", "edge-container");
+      
       const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
       line.setAttribute("class", "edge weight-" + e.weight);
-      line.dataset.source = e.source.id;
-      line.dataset.target = e.target.id;
-      svg.appendChild(line);
+      g.appendChild(line);
+      
+      const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+      text.setAttribute("class", "edge-label");
+      text.textContent = e.label;
+      g.appendChild(text);
+
+      view.appendChild(g);
+      e.container = g;
       e.line = line;
+      e.text = text;
     });
 
     nodes.forEach((n) => {
@@ -120,13 +186,18 @@
       label.textContent = n.name;
       g.appendChild(label);
 
-      g.addEventListener("mousedown", (e) => startDrag(e, n));
+      g.addEventListener("mousedown", (e) => {
+        e.stopPropagation();
+        startDrag(e, n);
+      });
       g.addEventListener("click", (e) => showInfo(e, n));
 
-      svg.appendChild(g);
+      view.appendChild(g);
       n.el = g;
       n.circle = circle;
     });
+    
+    updateViewTransform();
   }
 
   function startDrag(e, n) {
@@ -156,8 +227,10 @@
   document.addEventListener("mousemove", (e) => {
     if (!draggedNode) return;
     const rect = svg.getBoundingClientRect();
-    draggedNode.x = (e.clientX - rect.left) * (parseFloat(svg.getAttribute("width") || rect.width) / rect.width);
-    draggedNode.y = (e.clientY - rect.top) * (parseFloat(svg.getAttribute("height") || rect.height) / rect.height);
+    const mouseX = (e.clientX - rect.left - zoom.x) / zoom.scale;
+    const mouseY = (e.clientY - rect.top - zoom.y) / zoom.scale;
+    draggedNode.x = mouseX;
+    draggedNode.y = mouseY;
     draggedNode.vx = 0;
     draggedNode.vy = 0;
   });
@@ -226,6 +299,11 @@
       e.line.setAttribute("y1", e.source.y);
       e.line.setAttribute("x2", e.target.x);
       e.line.setAttribute("y2", e.target.y);
+      
+      const midX = (e.source.x + e.target.x) / 2;
+      const midY = (e.source.y + e.target.y) / 2;
+      e.text.setAttribute("x", midX);
+      e.text.setAttribute("y", midY);
     });
   }
 

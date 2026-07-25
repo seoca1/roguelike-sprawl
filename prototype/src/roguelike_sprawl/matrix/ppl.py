@@ -57,10 +57,12 @@ MAX_TIER = 6
 
 
 def calculate_ppl(loadout: Loadout) -> int:
-    """Compute PPL for a loadout (ADR-0012).
+    """Compute PPL for a loadout (ADR-0012, F1-1 rebalanced).
 
-    Formula: (deck * 3) + sum(prog * 2) + wetware + (construct * 3).
+    Formula: (deck * 3) + sum(prog * 2) + wetware + (construct * 1).
 
+    F1-1 reduced the construct multiplier from 3× to 1× to compress the
+    5-up curve (was 9.4× of 1-up, now ~7.5×). 1-up PPL is unchanged at 8.
     For T6 master gear the same formula applies — T6 simply produces
     higher PPL naturally via the multiplier (e.g. T6 deck → 18 PPL).
     """
@@ -68,7 +70,7 @@ def calculate_ppl(loadout: Loadout) -> int:
     ppl += sum(p.tier for p in loadout.programs) * 2
     ppl += loadout.wetware_tier
     if loadout.construct_tier > 0:
-        ppl += loadout.construct_tier * 3
+        ppl += loadout.construct_tier
     return ppl
 
 

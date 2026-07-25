@@ -23,7 +23,9 @@ Pillar 4 (The Build) — *성장감*의 핵심 표현.
 | **2-up 일반** | T2 | Wisp T2, Hammer T2 | T2 | — | 16 | 120 | 7 | T1~T2 |
 | **3-up 숙련** | T3 | Wisp T3, Goliath T3 | T3 | — | 24 | 150 | 9 | T3 |
 | **4-up 베테랑** | T4 | Wisp T4, Goliath T4, Wardrone T4 | T4 | — | 40 | 200 | 12 | T3~T4 |
-| **5-up 전설** | T5 | Kraken T5, Goliath T5, Wisp T5, Wardrone T5 | T5 | Dixie T5 | 75 | 300 | 15 | T3~T5 |
+| **5-up 전설** | T5 | Kraken T5, Goliath T5, Wisp T5, Wardrone T5 | T5 | Dixie T5 | 60 | 300 | 15 | T3~T5 |
+
+> **F1-1 rebalance (2026-07-22)**: construct multiplier reduced from 3× to 1× to compress 5-up dominance. 5-up PPL: 75 → 60 (was 9.4× of 1-up, now 7.5×). All other grade values unchanged. 1-up PPL still 8.
 
 **PPL 공식** (ADR-0012): `PPL = deck*3 + sum(prog*2) + wetware + (construct*3)`
 

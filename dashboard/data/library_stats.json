@@ -1,8 +1,8 @@
 {
-  "short_stories_en": 48,
-  "short_stories_ko": 48,
-  "novelettes_en": 9,
-  "novelettes_ko": 9,
+  "short_stories_en": 51,
+  "short_stories_ko": 51,
+  "novelettes_en": 34,
+  "novelettes_ko": 34,
   "hook_kinds": 6,
   "hook_kind_names": [
     "narrative",
@@ -15,8 +15,8 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-19T01:37:12",
-  "catalog_entries": 57,
+  "_generated_at": "2026-07-25T14:38:58",
+  "catalog_entries": 85,
   "catalog_entries_list": [
     {
       "stem": "aleph_fragment",
@@ -31,10 +31,22 @@
       "title_ko": "아미티지 침투"
     },
     {
+      "stem": "bama_statework",
+      "type": "novelette",
+      "title_en": "Bama Statework",
+      "title_ko": "이야기 기록"
+    },
+    {
       "stem": "beijing_memory_courier",
       "type": "short_story",
       "title_en": "Beijing Memory Courier",
       "title_ko": "베이징 메모리 쿠리어 (Beijing Memory Courier)"
+    },
+    {
+      "stem": "bing_statework",
+      "type": "novelette",
+      "title_en": "Bing Statework",
+      "title_ko": "빙 국가-작업"
     },
     {
       "stem": "black_ice_dream",
@@ -49,6 +61,12 @@
       "title_ko": "브리지 인식 (Bridge Recognition)"
     },
     {
+      "stem": "case-meets-cayce",
+      "type": "short_story",
+      "title_en": "Case-Meets-Cayce",
+      "title_ko": "케이스, 케이스를 만나다"
+    },
+    {
       "stem": "case_jackout-30sec",
       "type": "short_story",
       "title_en": "Case Jackout-30Sec",
@@ -59,6 +77,12 @@
       "type": "short_story",
       "title_en": "Casey Leaves",
       "title_ko": "Casey의 첫 밖 (Casey Leaves)"
+    },
+    {
+      "stem": "chickenhead_rickshaw_run",
+      "type": "novelette",
+      "title_en": "Chickenhead Rickshaw Run",
+      "title_ko": "치킨헤드 인력거"
     },
     {
       "stem": "construct_asks",
@@ -79,6 +103,12 @@
       "title_ko": "콘스트럭트의 이름 (Construct Named)"
     },
     {
+      "stem": "cortex_hound_recovery",
+      "type": "novelette",
+      "title_en": "Cortex Hound Recovery",
+      "title_ko": "치바 대기실"
+    },
+    {
       "stem": "data_retrieval",
       "type": "short_story",
       "title_en": "Data Retrieval",
@@ -95,6 +125,36 @@
       "type": "short_story",
       "title_en": "Dixies Last Run",
       "title_ko": "딕시의 마지막 달림"
+    },
+    {
+      "stem": "eurydice_arc",
+      "type": "novelette",
+      "title_en": "Eurydice Arc",
+      "title_ko": "Eurydice, 감사됨"
+    },
+    {
+      "stem": "fido_statework",
+      "type": "novelette",
+      "title_en": "Fido Statework",
+      "title_ko": "이야기 기록"
+    },
+    {
+      "stem": "finn_factory_labour_run",
+      "type": "novelette",
+      "title_en": "Finn Factory Labour Run",
+      "title_ko": "이야기 기록"
+    },
+    {
+      "stem": "finns_factory_labour",
+      "type": "short_story",
+      "title_en": "Finns Factory Labour",
+      "title_ko": "핀의 공장 노동"
+    },
+    {
+      "stem": "finns_room",
+      "type": "novelette",
+      "title_en": "Finns Room",
+      "title_ko": "핀의 방 (Finn's Room)"
     },
     {
       "stem": "first_contact",
@@ -115,6 +175,18 @@
       "title_ko": "플랫라인 Again"
     },
     {
+      "stem": "g_boys_arc",
+      "type": "novelette",
+      "title_en": "G Boys Arc",
+      "title_ko": "이야기 기록"
+    },
+    {
+      "stem": "heretic_loa_conscription",
+      "type": "novelette",
+      "title_en": "Heretic Loa Conscription",
+      "title_ko": "VODOO가 구성체를 편집하다"
+    },
+    {
       "stem": "hosaka_core",
       "type": "short_story",
       "title_en": "Hosaka Core",
@@ -127,16 +199,40 @@
       "title_ko": "호사카 추출"
     },
     {
+      "stem": "hosaka_terminal_supply",
+      "type": "novelette",
+      "title_en": "Hosaka Terminal Supply",
+      "title_ko": "Hosaka 페어링"
+    },
+    {
+      "stem": "hounds_arc",
+      "type": "novelette",
+      "title_en": "Hounds Arc",
+      "title_ko": "감사된 하운드들"
+    },
+    {
       "stem": "ice_run",
       "type": "short_story",
       "title_en": "Ice Run",
       "title_ko": "얼음 달콤 (Ice Run)"
     },
     {
+      "stem": "idoru_wedding_arc",
+      "type": "novelette",
+      "title_en": "Idoru Wedding Arc",
+      "title_ko": "이도루 결혼"
+    },
+    {
       "stem": "kumiko_manarase-midnight",
       "type": "short_story",
       "title_en": "Kumiko Manarase-Midnight",
       "title_ko": "자정의 매나리사"
+    },
+    {
+      "stem": "laney_node_signal_run",
+      "type": "novelette",
+      "title_en": "Laney Node Signal Run",
+      "title_ko": "노드 인식자"
     },
     {
       "stem": "loa_voodoo_contact",
@@ -155,6 +251,12 @@
       "type": "short_story",
       "title_en": "Marly Louisiana-God",
       "title_ko": "루이지아나의 신"
+    },
+    {
+      "stem": "marlys_window",
+      "type": "novelette",
+      "title_en": "Marlys Window",
+      "title_ko": "마를리, 비렉의 창에서 (Marly at Virek's Window)"
     },
     {
       "stem": "matrix_revelation",
@@ -205,6 +307,24 @@
       "title_ko": "뉴로맨서 속삭임"
     },
     {
+      "stem": "ono_sendai_repair",
+      "type": "novelette",
+      "title_en": "Ono Sendai Repair",
+      "title_ko": "80 퍼센트 기질"
+    },
+    {
+      "stem": "pan_mannerist_audit",
+      "type": "novelette",
+      "title_en": "Pan Mannerist Audit",
+      "title_ko": "이야기 기록"
+    },
+    {
+      "stem": "panther_negotiate",
+      "type": "novelette",
+      "title_en": "Panther Negotiate",
+      "title_ko": "팬서 모던스의 리테이너"
+    },
+    {
       "stem": "sally_returns",
       "type": "short_story",
       "title_en": "Sally Returns",
@@ -235,6 +355,12 @@
       "title_ko": "스트레이라이트 접근"
     },
     {
+      "stem": "surface_mail_run",
+      "type": "novelette",
+      "title_en": "Surface Mail Run",
+      "title_ko": "저 대역폭"
+    },
+    {
       "stem": "ta_defection",
       "type": "short_story",
       "title_en": "Ta Defection",
@@ -251,6 +377,12 @@
       "type": "short_story",
       "title_en": "Tessier Archive",
       "title_ko": "테시에 아카이브 (Tessier Archive)"
+    },
+    {
+      "stem": "tessier_sleeper_arc",
+      "type": "novelette",
+      "title_en": "Tessier Sleeper Arc",
+      "title_ko": "이야기 기록"
     },
     {
       "stem": "the_answer",
@@ -293,6 +425,18 @@
       "type": "novelette",
       "title_en": "The Naming",
       "title_ko": "이름 (The Naming)"
+    },
+    {
+      "stem": "trauma_squads_audit",
+      "type": "novelette",
+      "title_en": "Trauma Squads Audit",
+      "title_ko": "이야기 기록"
+    },
+    {
+      "stem": "trauma_squads_pair_arc",
+      "type": "novelette",
+      "title_en": "Trauma Squads Pair Arc",
+      "title_ko": "감사된 페어링"
     },
     {
       "stem": "tutorial_maze",
@@ -349,16 +493,40 @@
       "title_ko": "윈터의 아침 (Winter's Morning)"
     },
     {
+      "stem": "working_class_ridership_arc",
+      "type": "novelette",
+      "title_en": "Working Class Ridership Arc",
+      "title_ko": "이야기 기록"
+    },
+    {
       "stem": "yakuza_deal",
       "type": "short_story",
       "title_en": "Yakuza Deal",
       "title_ko": "야쿠자 거래"
     },
     {
+      "stem": "zaibatsu_statework",
+      "type": "novelette",
+      "title_en": "Zaibatsu Statework",
+      "title_ko": "이야기 기록"
+    },
+    {
+      "stem": "zion-vote",
+      "type": "short_story",
+      "title_en": "Zion-Vote",
+      "title_ko": "자이온 투표"
+    },
+    {
       "stem": "zion_express",
       "type": "short_story",
       "title_en": "Zion Express",
       "title_ko": "자이온 익스프레스"
+    },
+    {
+      "stem": "zion_vote_observation",
+      "type": "novelette",
+      "title_en": "Zion Vote Observation",
+      "title_ko": "매 7년마다"
     }
   ]
 }

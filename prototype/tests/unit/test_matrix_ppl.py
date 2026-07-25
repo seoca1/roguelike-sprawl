@@ -52,8 +52,7 @@ def test_ppl_with_construct() -> None:
         wetware_tier=5,
         construct_tier=5,
     )
-    # 5*3 + (5+3+3+3)*2 + 5 + 5*3 = 15 + 28 + 5 + 15 = 63
-    assert calculate_ppl(loadout) == 63
+    assert calculate_ppl(loadout) == 53
 
 
 def test_ppl_no_construct_zero_tier() -> None:
@@ -91,8 +90,7 @@ def test_ppl_t6_master_deck_supported() -> None:
         wetware_tier=6,
         construct_tier=6,
     )
-    # 6*3 + 6*2 + 6 + 6*3 = 18 + 12 + 6 + 18 = 54
-    assert calculate_ppl(loadout) == 54
+    assert calculate_ppl(loadout) == 42
 
 
 def test_ppl_t6_full_loadout_outperforms_t5() -> None:

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated": "2026-07-18T16:37:12.846049+00:00",
+  "generated": "2026-07-25T05:38:59.162972+00:00",
   "characters": [
     {
       "id": "case",
@@ -146,7 +146,11 @@
       "name": "Mona Lisa",
       "arc": "core",
       "wiki": "characters/mona-lisa-mlo.md",
-      "trilogy": "sprawl"
+      "trilogy": "sprawl",
+      "related": [
+        "kumiko-yanaka",
+        "slick-henry"
+      ]
     },
     {
       "id": "sally",
@@ -674,7 +678,7 @@
     }
   ],
   "enrichment": {
-    "wiki_char_pages_scanned": 77,
-    "relationships_from_wiki": 12
+    "wiki_char_pages_scanned": 98,
+    "relationships_from_wiki": 14
   }
 }

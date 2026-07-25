@@ -12,7 +12,8 @@
 - 🌐 **세계관 위키** — 사이버스페이스, Faction, Glossary, Style Guide
 - ⚙️ **디자인 노트** — GDD, Pillars, 시스템 명세
 - 📋 **결정 기록** — 60+ ADR (libtcod, RT-MS 전투, Faction Reputation 등)
-- 🗺️ **로드맵** — Phase 1~10 (Phase 7 완료, Phase 10 작업 중)
+- 🗺️ **[[ROADMAP]]** — Phase 1~10 (Phase 7 완료, Phase 10 작업 중)
+- 🔧 **[[IMPROVEMENTS]]** — 누적 개선 아이디어
 
 ## 세계관 위키 (world/)
 
@@ -20,12 +21,12 @@
 
 | 페이지 | 주제 | Primary Source |
 |---|---|---|
-| [[world/cyberspace]] | 사이버스페이스 / 매트릭스 | `../../../../Fiction/wiki/settings/cyberspace.md` |
-| [[world/factions]] | Faction (Tessier-Ashpool, Yakuza 등) | `../../../../Fiction/wiki/works/neuromancer.md` |
-| [[world/glossary]] | 용어집 (ICE, deck, construct 등) | `../../../../Fiction/wiki/works/` |
-| [[world/style_guide]] | 글쓰기 스타일 가이드 | `../../../../Fiction/wiki/authors/william-gibson.md` |
-| [[world/sprawl_universe]] | Sprawl 세계관 개요 | `../../../../Fiction/wiki/works/` |
-| [[world/derivative_stories]] | 2차 창작 단편 목록 | (자체 작성) |
+| [[cyberspace]] | 사이버스페이스 / 매트릭스 | `../../../../Fiction/wiki/settings/cyberspace.md` |
+| [factions](world/factions.md) | Faction (Tessier-Ashpool, Yakuza 등) | `../../../../Fiction/wiki/works/neuromancer.md` |
+| [glossary](world/glossary.md) | 용어집 (ICE, deck, construct 등) | `../../../../Fiction/wiki/works/` |
+| [style_guide](world/style_guide.md) | 글쓰기 스타일 가이드 | `../../../../Fiction/wiki/authors/william-gibson.md` |
+| [sprawl_universe](world/sprawl_universe.md) | Sprawl 세계관 개요 | `../../../../Fiction/wiki/works/` |
+| [derivative_stories](world/derivative_stories.md) | 2차 창작 단편 목록 | (자체 작성) |
 
 > **경고**: Fiction wiki (`../../../../Fiction/wiki/`)는 이 프로젝트의 **읽기 전용** primary source입니다. 절대 수정하지 마세요.
 
