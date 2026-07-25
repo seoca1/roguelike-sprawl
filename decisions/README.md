@@ -51,6 +51,15 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | 0060 | Dungeon Exploration Redesign (NetHack + VFX) | **Accepted** | 2026-06-30 | P2 |
 | 0061 | Novel Integration Architecture (Hook 디스패치) | **Accepted** | 2026-06-30 | P2 |
 | 0090 | Salvation Phase Integration (9자 × epilogue + ChapterState 3개 + Stage 1개) | **Accepted** | 2026-07-07 | P2 |
+| 0101 | Fiction Metadata 보강 계획 (status report, not ADR) | (status doc) | — | P3 |
+| 0102 | v1.0.0 Release Decision | **Accepted** | 2026-07-08 | P2 |
+| 0103 | Dungeon-only Mode — `D` 토글 제거, `matrix_view` 폐기 | **Accepted** | 2026-07-10 | P2 (The Matrix) |
+| 0110 | 모듈 사이즈 정책 (현행 250 LOC) | **Accepted (Option 4)** | 2026-07-12 | P3 (The Build) |
+| 0111 | graphic_novel_view.py (1,510 LOC) — 정당화 or 분할 | **Accepted (Option 4)** | 2026-07-12 | P3 (The Build) |
+| 0112 | combat/effects.py (1,246 LOC) — 5-Layer VFX 시스템 | **Accepted (Option 4)** | 2026-07-12 | P3 (The Build) |
+| 0113 | combat_view.py (1,053 LOC) — 전투 화면 렌더링 | **Accepted (Option 4)** | 2026-07-12 | P3 (The Build) |
+| 0120 | M2 14 파일 docstring 보강 — 일괄 작업 | **Accepted (Option 1)** | 2026-07-12 | P3 (The Build) |
+| 0104 | GN Save Slot 확장 (3 슬롯) | **Accepted (2026-07-25)** | 2026-06-21 | P2 |
 
 ### 2026-07-01 통합 작업 (P1~P4 + B)
 
@@ -158,3 +167,21 @@ i18n + Content Pipeline:
 - **반복 보강** — 무한 side content, faction 뉴스, world events
 
 상세는 `decisions/0010-i18n-content-pipeline.md` 및 `design/story_skeleton.md` 참조.
+
+---
+
+## ADR 인덱스 보강 (2026-07-25)
+
+- **0051 번호 충돌 해결** (2026-07-25): 두 파일이 동일 번호 `0051` 사용 중이었음. Draft 파일 `0051-gn-save-slots.md`를 `0104-gn-save-slots.md`로 번호 이동. Accepted 결정(`0051-mission-story-metadata.md`) immutable 규칙 영향 없음.
+- **0101-fiction-metadata-backfill.md** (status document): 전통적 ADR 형식(status/날짜 라인) 미사용 — `Fiction` 메타데이터 보강 진행 상황 추적용 status report. ADR 카운트에서 제외하거나, 별도 "Status Reports" 절로 분리 검토 가능.
+- **신규 ADR 8개 추가 (2026-07-08 ~ 2026-07-12)**: 0102, 0103, 0110, 0111, 0112, 0113, 0120 + 0104-gn-save-slots.
+
+## ADR-0104 Accepted (2026-07-25, Sisyphus + 사용자)
+
+- **Status**: Draft → **Accepted**
+- **구현 검증 완료**: 8개 파일에서 API 사용 중 (`engine/graphic_novel_save.py`, `state.py`, `app.py`, `menu.py`, `save_manager.py`, `scripts/graphic_novel.py`)
+- **Save 파일**: `data/saves/gn_progress_slot_{1,2,3}.json` (3개 slot 파일 존재) + legacy `gn_progress.json` (보존)
+- **신규 도구**: `prototype/scripts/save_slot_demo.py` (list / fill / load / delete / migrate / auto) — `--save-dir` 옵션으로 격리 테스트 가능
+- **테스트**: `test_graphic_novel_save.py` (slot API + 마이그레이션) — ruff ✅, mypy ✅
+- **코드 주석 보강**: `state.py:88, 265` — "ADR-0051 infra + ADR-0104 extension" 명시
+- **Decisions**: Option 1 (3 슬롯 고정) — 9 결말 조합 시도 (3 chars × 3 endings) 인프라

@@ -85,7 +85,7 @@ class ScreenKind(StrEnum):
     MENU = "menu"
     GRAPHIC_NOVEL_MENU = "graphic_novel_menu"  # Graphic novel entry menu (ADR-0032)
     GRAPHIC_NOVEL_ENDING_MENU = "graphic_novel_ending_menu"  # Ending A/B selection (ADR-0048)
-    SAVE_SLOT_SELECT = "save_slot_select"  # 3-slot picker (ADR-0051)
+    SAVE_SLOT_SELECT = "save_slot_select"  # 3-slot picker (ADR-0051 infra + ADR-0104 extension)
     GRAPHIC_NOVEL = "graphic_novel"  # Auto-play graphic novel scenes (ADR-0032)
     SAVED_PROGRESS = "saved_progress"  # Save progress card after graphic novel (ADR-0032)
     CHARACTER_SELECT = "character_select"  # Original jockey pick (ADR-0031)
@@ -262,7 +262,7 @@ class AppState:
     gn_mode: str = "prologue"  # "prologue" | "novice" | "veteran" | "heretic"
     gn_scene_chain: list[str] = field(default_factory=list)  # scene IDs in order
     gn_ending_choice: str = "A"  # "A" | "B" — which ending variant (ADR-0048)
-    gn_save_slot_selected: int = 0  # 0=none, 1..3 for slot picker (ADR-0051)
+    gn_save_slot_selected: int = 0  # 0=none, 1..3 for slot picker (ADR-0051 infra + ADR-0104 extension)
     # Jockey cycle (ADR-0040) — Hall of Dead Jockeys
     jockey_history_loaded: bool = False  # whether archive is loaded from disk
     total_runs: int = 0
