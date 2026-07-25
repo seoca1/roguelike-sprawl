@@ -1,3 +1,42 @@
+## [2026-07-25] docs(notion) | PROGRESS_REPORT_2026-07-25 v1.1 Notion 발행 (P9 5편 보강 추가)
+
+**Status**: Complete
+
+### Changes
+
+- **v1.1 발행 페이지**: `3a8f643d-3530-81f3-9bde-f6b7a798e17b`
+- **URL**: https://app.notion.com/p/Projects-Progress-2026-07-25-3a8f643d353081f39bdef6b7a798e17b
+- **Parent**: `38df643d-3530-8103-af2c-e2277b4bcdfa` (Roguelike Sprawl - 프로젝트 가이드)
+- **블록**: 183 (page create 100 + append 83)
+- **소스**: `docs/notion-reflects/PROGRESS_REPORT_2026-07-25_NOTION_READY.md` (v1.1, 392 lines)
+- **토큰**: `Language/_publish/scripts/.env` 의 `NOTION_TOKEN` 환경변수 (vault secrets, 실값은 .env에만 보관)
+- **v1.0 보존**: `3a8f643d-3530-8189-b6f0-ebe5ab250347` (이전 발행, v1.1과 별도 페이지)
+
+### v1.0 → v1.1 갱신
+
+- **P9 신규 섹션**: Pre-v2.0 단편 5편 보강 (Fiction side cross-project)
+  - first_trace, flatline_again, sense_net_trace, loa_voodoo_contact, hosaka_extraction
+  - 5/5 A-grade (verify_derivative + story_check 검증)
+  - 10 files, 408 insertions (commit ddb6b48) + 1 word_count fix (commit f5c5f53)
+- **Commits 통계 확장**: 7 → 9 commits (roguelike_sprawl 7 + Fiction 2)
+- **Verification 확장**: 12 → 14 항목
+- **테이블 5셀 수정**: 누계 row 4 cells → 5 cells (header 일치)
+- **dry-run 통과 후 실제 발행**: `publish_to_notion.py` 1회차 실패 (테이블 셀 수), 2회차 성공
+
+### 영향 파일
+
+- `docs/notion-reflects/PROGRESS_REPORT_2026-07-25_NOTION_READY.md` (v1.0 → v1.1, 314 → 392 lines)
+- `docs/notion-reflects/README.md` (v1.1 + v1.0 두 entry 추가, 보존)
+- `Game/roguelike_sprawl/log.md` (이 항목)
+- 후속: `decisions/0104-gn-save-slots.md` Notion URL v1.1 추가 (예정)
+- 후속: `SESSION_SUMMARY.md` v0.8.0 §5 Notion 발행 v1.1 표시 (예정)
+
+### 보안 노트
+
+log.md 본문에서 실 토큰 값 노출 시도는 하지 않음 (환경변수명만 참조, .env 파일에 보관).
+
+---
+
 ## [2026-07-25] docs(notion) | PROGRESS_REPORT_2026-07-25_NOTION_READY.md Notion 발행 완료
 
 **Status**: Complete

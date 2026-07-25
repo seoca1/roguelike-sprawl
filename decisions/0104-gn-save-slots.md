@@ -5,7 +5,9 @@
 **결정자**: 사용자
 **우선순위**: P2
 **관련 ADR**: ADR-0044 (원래 단일 슬롯, 마이그레이션 대상), ADR-0051 (save system infrastructure — 본 ADR의 predecessor)
-**Notion 발행**: https://app.notion.com/p/Projects-Progress-2026-07-25-3a8f643d35308189b6f0ebe5ab250347 (2026-07-25, 페이지 ID `3a8f643d-3530-8189-b6f0-ebe5ab250347`)
+**Notion 발행**:
+- v1.0 (2026-07-25, P0~P8): https://app.notion.com/p/Projects-Progress-2026-07-25-3a8f643d35308189b6f0ebe5ab250347 — 페이지 ID `3a8f643d-3530-8189-b6f0-ebe5ab250347`
+- v1.1 (2026-07-25, P0~P9 + 5편 보강): https://app.notion.com/p/Projects-Progress-2026-07-25-3a8f643d353081f39bdef6b7a798e17b — 페이지 ID `3a8f643d-3530-81f3-9bde-f6b7a798e17b` (최신)
 
 ## 컨텍스트 (Context)
 

@@ -157,9 +157,16 @@
 
 ### 결정 대기 (사용자)
 
-1. ✅ **Notion 발행** (2026-07-25 완료) — `PROGRESS_REPORT_2026-07-25_NOTION_READY.md` (P7/P8 dashboard 갱신 포함), 157 blocks, 페이지 ID `3a8f643d-3530-8189-b6f0-ebe5ab250347`, Parent `38df643d-3530-8103-af2c-e2277b4bcdfa`
-2. **v1.0.0 final release** — b1 (2026-07-08) 다음 단계
-3. **pre-v2.0 단편 5편 보강** — first_trace, flatline_call, hosaka_corporate_infiltration, sense_net_media_extract, voodoo_loa_encounter (Fiction side, SESSION_SUMMARY_2026-07-13 권고)
+1. ✅ **Notion 발행** (2026-07-25 완료, v1.0 + v1.1):
+   - **v1.1 (최신)**: `PROGRESS_REPORT_2026-07-25_NOTION_READY.md` v1.1 (P9 5편 보강 추가), 183 blocks, 페이지 ID `3a8f643d-3530-81f3-9bde-f6b7a798e17b`, URL `https://app.notion.com/p/Projects-Progress-2026-07-25-3a8f643d353081f39bdef6b7a798e17b`
+   - **v1.0 (초기)**: 페이지 ID `3a8f643d-3530-8189-b6f0-ebe5ab250347` (P0~P8 dashboard 갱신까지)
+   - Parent `38df643d-3530-8103-af2c-e2277b4bcdfa` (Roguelike Sprawl - 프로젝트 가이드)
+2. ✅ **pre-v2.0 단편 5편 보강** (2026-07-25 완료, Fiction side):
+   - first_trace, flatline_again, sense_net_trace, loa_voodoo_contact, hosaka_extraction
+   - 5/5 A-grade (verify_derivative + story_check)
+   - 10 files, 408 insertions (commit ddb6b48) + 1 word_count fix (commit f5c5f53)
+   - Fiction repo local-only commit
+3. **v1.0.0 final release** — b1 (2026-07-08) 다음 단계
 
 ### 후속 (큰 작업)
 
