@@ -1,3 +1,32 @@
+## [2026-07-25] docs(notion) | PROGRESS_REPORT_2026-07-25_NOTION_READY.md Notion 발행 완료
+
+**Status**: Complete
+
+### Changes
+
+- **발행 페이지**: `3a8f643d-3530-8189-b6f0-ebe5ab250347`
+- **URL**: https://app.notion.com/p/Projects-Progress-2026-07-25-3a8f643d35308189b6f0ebe5ab250347
+- **Parent**: `38df643d-3530-8103-af2c-e2277b4bcdfa` (Roguelike Sprawl - 프로젝트 가이드)
+- **블록**: 157 (page create 100 + append 57)
+- **소스**: `docs/notion-reflects/PROGRESS_REPORT_2026-07-25_NOTION_READY.md` (248 lines)
+- **토큰**: `Language/_publish/scripts/.env` 의 `NOTION_TOKEN` 환경변수 (vault secrets, 실값은 .env에만 보관)
+- **이전 토큰** (`Fiction/_publish/scripts/.env`) 는 **Unauthorized** 실패 → Language 토큰으로 fallback
+
+### P7/P8 추가 (PROGRESS_REPORT)
+
+- P7: Dashboard 9자키 통합 (b9d612e)
+- P8: Dashboard stats regen (01134fd, 12 files)
+- Commits 통계: 7 commits, 229 files, +18,789/-3,203
+- Verification 12 항목 (이전 7 + 5 dashboard)
+
+### 후속
+
+- `docs/notion-reflects/README.md` 활성 페이지 섹션에 entry 추가 ✅
+- `decisions/0104-gn-save-slots.md` Notion URL 추가 (진행)
+- `SESSION_SUMMARY.md` v0.8.0 Notion 발행 항목 ✅ 표시 (진행)
+
+---
+
 ## [2026-07-25] feat(dashboard) | 9자키 통합 갱신 (character_stats + play_game + play.html)
 
 **Status**: Complete

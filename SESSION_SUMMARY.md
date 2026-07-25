@@ -157,7 +157,7 @@
 
 ### 결정 대기 (사용자)
 
-1. **Notion 발행** — `PROGRESS_REPORT_2026-07-13_NOTION_READY.md` 작성 (B→A 6편 + cross-project CI)
+1. ✅ **Notion 발행** (2026-07-25 완료) — `PROGRESS_REPORT_2026-07-25_NOTION_READY.md` (P7/P8 dashboard 갱신 포함), 157 blocks, 페이지 ID `3a8f643d-3530-8189-b6f0-ebe5ab250347`, Parent `38df643d-3530-8103-af2c-e2277b4bcdfa`
 2. **v1.0.0 final release** — b1 (2026-07-08) 다음 단계
 3. **pre-v2.0 단편 5편 보강** — first_trace, flatline_call, hosaka_corporate_infiltration, sense_net_media_extract, voodoo_loa_encounter (Fiction side, SESSION_SUMMARY_2026-07-13 권고)
 
