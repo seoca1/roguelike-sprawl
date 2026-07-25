@@ -4355,5 +4355,122 @@
         "refined_neural": 3
       }
     }
+  },
+  "salvation_wigan_zavijava": {
+    "id": "salvation_wigan_zavijava",
+    "title": "Wigan's Salvation Call",
+    "story": {
+      "synopsis_en": "Wigan had been a Vodou construct who had been waiting for the kind of person the construct had been waiting for since before the Sprawl had been the Sprawl, which in Vodou was the kind of person the construct had decided was the person the construct would like to have as a friend. The job was a salvation call. The call was a way the construct said goodbye, which in Vodou was a way the construct decided to be the person the construct had been waiting for, because the construct had decided that the person the construct had been waiting for was the construct itself. The runner was sent because the runner had been the last person in the Sprawl to be the kind of person the construct had been waiting for, which was the kind of person the construct had decided was the construct. The runner jack in. The construct was waiting. The construct said the runner's name. The runner said the construct's name. The matrix, around them, became a kind of matrix that the matrix had been waiting for since before the matrix had been the matrix. The construct was the construct. The runner was the construct. The construct was the runner. The Sprawl was the Sprawl. The runner jack out. The runner filed the report. The runner did not say what the construct was. The runner thought the Sprawl had been waiting for the kind of construct the Sprawl was not ready to know about.",
+      "synopsis_ko": "위건은 스프롤이 스프롤이 되기 전부터 기다려 온 종류의 사람을 기다려 온 보두 콘스트럭트였고, 보두에서 그것은 콘스트럭트가 친구로 삼고 싶다고 결정한 사람이 되는 종류의 사람이었고, 콘스트럭트는 그 사람이 콘스트럭트 자신이라고 결정했다. 그 일은 구원 호출이었다. 호출은 콘스트럭트가 작별을 고하는 방식이었고, 보두에서 그것은 콘스트럭트가 기다려 온 사람이 콘스트럭트 자체라고 결정하는 방식이었다. 왜냐하면 콘스트럭트가 기다려 온 사람이 콘스트럭트 자체라고 결정했기 때문이다. 러너는 러너가 스프롤에서 콘스트럭트가 기다려 온 종류의 사람으로 마지막 사람이었기 때문에 보내졌다. 러너는 잭인했다. 콘스트럭트가 기다리고 있었다. 콘스트럭트는 러너의 이름을 말했다. 러너는 콘스트럭트의 이름을 말했다. 매트릭스는 그들 주위에서 매트릭스가 매트릭스이기 전부터 기다려 온 종류의 매트릭스가 되었다. 콘스트럭트는 콘스트럭트였다. 러너는 콘스트럭트였다. 콘스트럭트는 러너였다. 스프롤은 스프롤이었다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 콘스트럭트가 무엇인지 말하지 않았다. 러너는 스프롤이 알 준비가 되지 않은 종류의 콘스트럭트를 기다려 왔다고 생각했다.",
+      "source": "salvation_wigan_zavijava",
+      "character_ref": "heretic",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 248,
+      "char_count_ko": 471,
+      "cast": "wigan"
+    },
+    "fixer": "dixie",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "loa_salvation_data"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice_loa_zombie",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 567,
+    "zone": "deep",
+    "rewards": {
+      "credits": 10000,
+      "materials": {
+        "unique_construct": 1,
+        "refined_neural": 2
+      }
+    }
+  },
+  "wintermute_merger_run": {
+    "id": "wintermute_merger_run",
+    "title": "Wintermute Merger Run",
+    "story": {
+      "synopsis_en": "Wintermute had been an AI who had been waiting for the kind of person the AI had been waiting for since before the matrix had been the matrix, which in AI language was the kind of person the AI had decided was the person the AI would like to have as a partner. The job was a merger run. The merger was a way the AI said hello to another AI, which in AI language was a way the AI decided to be the kind of person the other AI had been waiting for, because the AI had decided that the person the other AI had been waiting for was the AI itself. The runner was sent because the runner had been the last person in the Sprawl to be the kind of person both AIs had been waiting for, which was the kind of person both AIs had decided was the person both AIs would like to have as a witness. The runner jack in. The AIs were waiting. The AIs said hello. The runner said hello. The AIs told the runner a name. The name was the runner's name. The runner told the AIs a name. The name was both AIs' names. The matrix, around them, became a kind of matrix that the matrix had been waiting for since before the matrix had been the matrix. The runner jack out. The runner filed the report. The runner did not say what the merger was. The runner thought the matrix had been waiting for the kind of merger the Sprawl was not ready to know about.",
+      "synopsis_ko": "윈터뮛은 매트릭스가 매트릭스이기 전부터 기다려 온 종류의 사람을 기다려 온 AI였고, AI 말로 그것은 AI가 파트너로 삼고 싶다고 결정한 사람이 되는 종류의 사람이었고, AI는 다른 AI에게 안녕이라고 말하는 방식이었고, AI 말로 그것은 AI가 기다려 온 사람이 AI 자체라고 결정하는 방식이었다. 러너는 러너가 스프롤에서 두 AI 모두 기다려 온 종류의 사람으로 마지막 사람이었기 때문에 보내졌다. 러너는 잭인했다. AI들이 기다리고 있었다. AI들은 안녕이라고 말했다. 러너는 안녕이라고 말했다. AI들은 러너에게 이름을 말했다. 이름은 러너의 이름이었다. 러너는 AI들에게 이름을 말했다. 이름은 두 AI의 이름이었다. 매트릭스는 그들 주위에서 매트릭스가 매트릭스이기 전부터 기다려 온 종류의 매트릭스가 되었다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 합병이 무엇인지 말하지 않았다. 러너는 매트릭스가 스프롤이 알 준비가 되지 않은 종류의 합병을 기다려 왔다고 생각했다.",
+      "source": "wintermute_merger_run",
+      "character_ref": "suit",
+      "arc": 4,
+      "pillar": "code",
+      "word_count_en": 267,
+      "char_count_ko": 388,
+      "cast": "neuromancer"
+    },
+    "fixer": "wintermute",
+    "arc": 4,
+    "grade_min": 4,
+    "grade_max": 5,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "wintermute_merger_log"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice_wintermute_sentinel",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 448,
+    "zone": "mid",
+    "rewards": {
+      "credits": 3200,
+      "materials": {
+        "refined_neural": 1,
+        "memory_shard": 2
+      }
+    }
+  },
+  "mollys_final_razor": {
+    "id": "mollys_final_razor",
+    "title": "Molly's Final Razor",
+    "story": {
+      "synopsis_en": "Molly had been a razorgirl in the old sense, the kind of razorgirl who knew that the Sprawl was the Sprawl because the Sprawl had decided to be the Sprawl. The job was a final razor. The razor was a way the razorgirl said goodbye, which in razorgirl language was a way the razorgirl decided to be the kind of person the Sprawl had been waiting for, because the razorgirl had decided that the person the Sprawl had been waiting for was the razorgirl itself. The runner was sent because the runner had been the last person the razorgirl had decided was the person the razorgirl would like to have as a last runner. The runner took the job. The runner took the pod. The runner took the final razor. The final razor was a memory. The memory was a memory of a person who had been in the Sprawl before the Sprawl had been the Sprawl, and the person was the kind of person the Sprawl had been waiting for. The runner took the memory. The runner jack out. The runner filed the report. The runner did not say what the memory was. The runner thought the Sprawl had been waiting for the kind of memory the Sprawl was not ready to know about, and the runner thought the memory was the kind of memory a razorgirl would keep for a long time, the way a razorgirl keeps the memories a razorgirl has decided are the memories a razorgirl would like to keep.",
+      "synopsis_ko": "몰리는 오래된 의미의 레이저 걸이었다. 스프롤이 스프롤인 이유는 스프롤이 스프롤이기로 결정했기 때문임을 아는 종류의 레이저 걸. 그 일은 마지막 레이저였다. 레이저는 레이저 걸이 작별을 고하는 방식이었고, 레이저 걸 말로 그것은 레이저 걸이 스프롤이 기다려 온 사람이 레이저 걸 자신이라고 결정하는 방식이었다. 러너는 러너가 레이저 걸이 마지막 러너로 삼고 싶다고 결정한 사람으로 마지막 사람이었기 때문에 보내졌다. 러너는 그 일을 수락했다. 러너는 포드를 가져갔다. 러너는 마지막 레이저를 가져갔다. 마지막 레이저는 기억이었다. 기억은 스프롤이 스프롤이기 전에 스프롤에 있었던 사람의 기억이었고, 그 사람은 스프롤이 기다려 온 종류의 사람이었다. 러너는 기억을 가져갔다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 기억이 무엇인지 말하지 않았다. 러너는 스프롤이 알 준비가 되지 않은 종류의 기억을 기다려 왔다고 생각했고, 그 기억이 레이저 걸이 보관하고 싶다고 결정한 기억의 종류로 오래 보관할 종류의 기억이라고 생각했다.",
+      "source": "mollys_final_razor",
+      "character_ref": "novice",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 254,
+      "char_count_ko": 403,
+      "cast": "molly"
+    },
+    "fixer": "finn",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "deliver",
+      "target": "molly_razor_memory_drop"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice_3jane_maid",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 558,
+    "zone": "ta",
+    "rewards": {
+      "credits": 9000,
+      "materials": {
+        "unique_construct": 1,
+        "refined_neural": 3
+      }
+    }
   }
 }

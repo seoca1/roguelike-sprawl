@@ -1543,5 +1543,90 @@
         "quantity": 1
       }
     ]
+  },
+  "ice_pazuzu_guard": {
+    "name": "ICE — Pazuzu Guard (Loa protector)",
+    "portrait": "ice.standard",
+    "hp_base": 120,
+    "hp_per_grade": 18,
+    "dmg_base": 6,
+    "dmg_per_grade": 2,
+    "tier": 4,
+    "defense": 5,
+    "speed": 7,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.85,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.4,
+        "quantity": 1
+      },
+      {
+        "item": "fragment.morrison_echo",
+        "chance": 0.15,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_wintermute_fragment": {
+    "name": "ICE — Wintermute Fragment (AI sub-personality)",
+    "portrait": "ice.standard",
+    "hp_base": 200,
+    "hp_per_grade": 28,
+    "dmg_base": 9,
+    "dmg_per_grade": 2,
+    "tier": 5,
+    "defense": 8,
+    "speed": 10,
+    "skills": [],
+    "resistance": 0.4,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 1.0,
+        "quantity": 3
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.6,
+        "quantity": 1
+      },
+      {
+        "item": "fragment.tessier_archive",
+        "chance": 0.2,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_screaming_fist": {
+    "name": "ICE — Screaming Fist (military boss-tier)",
+    "portrait": "ice.standard",
+    "hp_base": 100,
+    "hp_per_grade": 16,
+    "dmg_base": 8,
+    "dmg_per_grade": 2,
+    "tier": 3,
+    "defense": 4,
+    "speed": 8,
+    "skills": [],
+    "resistance": 0.2,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.8,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.35,
+        "quantity": 1
+      }
+    ]
   }
 }

@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "generated": "2026-07-25T15:12:51.997042+00:00",
-  "count": 258,
+  "generated": "2026-07-25T15:17:42.856318+00:00",
+  "count": 264,
   "stories": [
     {
       "id": "2026-06-23_black_ice_dream",
@@ -3420,6 +3420,96 @@
       ],
       "trilogy": "sprawl",
       "url": "stories/short-stories/2026-07-25_finn_final_reckoning_ko.html"
+    },
+    {
+      "id": "2026-07-25_salvation_wigan_zavijava",
+      "lang": "en",
+      "title": "Wigan's Salvation Call",
+      "subtitle": "Wigan's Salvation Call",
+      "character": "heretic",
+      "cast": "wigan",
+      "word_count": "267",
+      "body_preview": "Wigan had been a Vodou construct who had been waiting for the kind of person the construct had been waiting for since be...",
+      "missions": [
+        "salvation_wigan_zavijava"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_salvation_wigan_zavijava_en.html"
+    },
+    {
+      "id": "2026-07-25_salvation_wigan_zavijava",
+      "lang": "ko",
+      "title": "Wigan's Salvation Call",
+      "subtitle": "Wigan's Salvation Call",
+      "character": "heretic",
+      "cast": "wigan",
+      "word_count": "471",
+      "body_preview": "위건은 스프롤이 스프롤이 되기 전부터 기다려 온 종류의 사람을 기다려 온 보두 콘스트럭트였고, 보두에서 그것은 콘스트럭트가 친구로 삼고 싶다고 결정한 사람이 되는 종류의 사람이었고, 콘스트럭트는 그 사람이 콘스트럭트...",
+      "missions": [
+        "salvation_wigan_zavijava"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_salvation_wigan_zavijava_ko.html"
+    },
+    {
+      "id": "2026-07-25_wintermute_merger_run",
+      "lang": "en",
+      "title": "Wintermute Merger Run",
+      "subtitle": "Wintermute Merger Run",
+      "character": "suit",
+      "cast": "neuromancer",
+      "word_count": "240",
+      "body_preview": "Wintermute had been an AI who had been waiting for the kind of person the AI had been waiting for since before the matri...",
+      "missions": [
+        "wintermute_merger_run"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_wintermute_merger_run_en.html"
+    },
+    {
+      "id": "2026-07-25_wintermute_merger_run",
+      "lang": "ko",
+      "title": "Wintermute Merger Run",
+      "subtitle": "Wintermute Merger Run",
+      "character": "suit",
+      "cast": "neuromancer",
+      "word_count": "388",
+      "body_preview": "윈터뮛은 매트릭스가 매트릭스이기 전부터 기다려 온 종류의 사람을 기다려 온 AI였고, AI 말로 그것은 AI가 파트너로 삼고 싶다고 결정한 사람이 되는 종류의 사람이었고, AI는 다른 AI에게 안녕이라고 말하는 방식...",
+      "missions": [
+        "wintermute_merger_run"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_wintermute_merger_run_ko.html"
+    },
+    {
+      "id": "2026-07-25_mollys_final_razor",
+      "lang": "en",
+      "title": "Molly's Final Razor",
+      "subtitle": "Molly's Final Razor",
+      "character": "novice",
+      "cast": "molly",
+      "word_count": "252",
+      "body_preview": "Molly had been a razorgirl in the old sense, the kind of razorgirl who knew that the Sprawl was the Sprawl because the S...",
+      "missions": [
+        "mollys_final_razor"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_mollys_final_razor_en.html"
+    },
+    {
+      "id": "2026-07-25_mollys_final_razor",
+      "lang": "ko",
+      "title": "Molly's Final Razor",
+      "subtitle": "Molly's Final Razor",
+      "character": "novice",
+      "cast": "molly",
+      "word_count": "403",
+      "body_preview": "몰리는 오래된 의미의 레이저 걸이었다. 스프롤이 스프롤인 이유는 스프롤이 스프롤이기로 결정했기 때문임을 아는 종류의 레이저 걸. 그 일은 마지막 레이저였다. 레이저는 레이저 걸이 작별을 고하는 방식이었고, 레이저 걸...",
+      "missions": [
+        "mollys_final_razor"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_mollys_final_razor_ko.html"
     }
   ]
 }
