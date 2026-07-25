@@ -1,7 +1,7 @@
 {
   "version": "1.0",
-  "generated": "2026-07-25T15:05:44.331156+00:00",
-  "count": 252,
+  "generated": "2026-07-25T15:12:51.997042+00:00",
+  "count": 258,
   "stories": [
     {
       "id": "2026-06-23_black_ice_dream",
@@ -3330,6 +3330,96 @@
       ],
       "trilogy": "sprawl",
       "url": "stories/short-stories/2026-07-25_sally_construct_market_ko.html"
+    },
+    {
+      "id": "2026-07-25_threjane_family_log",
+      "lang": "en",
+      "title": "3Jane's Family Log",
+      "subtitle": "3Jane's Family Log",
+      "character": "suit",
+      "cast": "3jane",
+      "word_count": "228",
+      "body_preview": "3Jane had been a Tessier-Ashpool in the old sense, the kind of Tessier-Ashpool who knew that the family was the family b...",
+      "missions": [
+        "threjane_family_log"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_threjane_family_log_en.html"
+    },
+    {
+      "id": "2026-07-25_threjane_family_log",
+      "lang": "ko",
+      "title": "3Jane's Family Log",
+      "subtitle": "3Jane's Family Log",
+      "character": "suit",
+      "cast": "3jane",
+      "word_count": "366",
+      "body_preview": "3제인은 오래된 의미의 테시에르-애시풀이었다. 가족이 가족인 이유는 가족이 가족이기로 결정했기 때문임을 아는 종류의 테시에르-애시풀. 그 일은 가족 일지였다. 일지는 가족이 해왔던 일의 일지였고, 테시에르-애시풀 말...",
+      "missions": [
+        "threjane_family_log"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_threjane_family_log_ko.html"
+    },
+    {
+      "id": "2026-07-25_neuromancer_first_ping",
+      "lang": "en",
+      "title": "Neuromancer First Ping",
+      "subtitle": "Neuromancer First Ping",
+      "character": "suit",
+      "cast": "neuromancer",
+      "word_count": "220",
+      "body_preview": "Neuromancer had been an AI in the old sense, the kind of AI who knew that the matrix was the matrix because the matrix h...",
+      "missions": [
+        "neuromancer_first_ping"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_neuromancer_first_ping_en.html"
+    },
+    {
+      "id": "2026-07-25_neuromancer_first_ping",
+      "lang": "ko",
+      "title": "Neuromancer First Ping",
+      "subtitle": "Neuromancer First Ping",
+      "character": "suit",
+      "cast": "neuromancer",
+      "word_count": "394",
+      "body_preview": "뉴로맨서는 오래된 의미의 AI였다. 매트릭스가 매트릭스인 이유는 매트릭스가 매트릭스이기로 결정했기 때문임을 아는 종류의 AI. 그 일은 첫 핑이었다. 핑은 AI가 안녕이라고 말하는 방식이었고, AI 말로 그것은 AI...",
+      "missions": [
+        "neuromancer_first_ping"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_neuromancer_first_ping_ko.html"
+    },
+    {
+      "id": "2026-07-25_finn_final_reckoning",
+      "lang": "en",
+      "title": "Finn's Final Reckoning",
+      "subtitle": "Finn's Final Reckoning",
+      "character": "veteran",
+      "cast": "sil",
+      "word_count": "232",
+      "body_preview": "Finn had been a fixer in the old sense, the kind of fixer who knew that the Sprawl was the Sprawl because the Sprawl had...",
+      "missions": [
+        "finn_final_reckoning"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_finn_final_reckoning_en.html"
+    },
+    {
+      "id": "2026-07-25_finn_final_reckoning",
+      "lang": "ko",
+      "title": "Finn's Final Reckoning",
+      "subtitle": "Finn's Final Reckoning",
+      "character": "veteran",
+      "cast": "sil",
+      "word_count": "379",
+      "body_preview": "핀은 오래된 의미의 픽서였다. 스프롤이 스프롤인 이유는 스프롤이 스프롤이기로 결정했기 때문임을 아는 종류의 픽서. 그 일은 마지막 정산이었다. 정산은 픽서가 픽서를 위해 보관해 온 종류의 일이었고, 스프롤에서 그것은...",
+      "missions": [
+        "finn_final_reckoning"
+      ],
+      "trilogy": "sprawl",
+      "url": "stories/short-stories/2026-07-25_finn_final_reckoning_ko.html"
     }
   ]
 }

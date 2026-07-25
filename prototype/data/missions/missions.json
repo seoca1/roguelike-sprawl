@@ -4239,5 +4239,121 @@
         "memory_shard": 2
       }
     }
+  },
+  "threjane_family_log": {
+    "id": "threjane_family_log",
+    "title": "3Jane's Family Log",
+    "story": {
+      "synopsis_en": "3Jane had been a Tessier-Ashpool in the old sense, the kind of Tessier-Ashpool who knew that the family was the family because the family had decided to be the family. The job was a family log. The log was a log of what the family had been doing, which in the Tessier-Ashpool language was a log of what the family had been deciding the family was. The runner was sent because the runner had been the last person to be the kind of person the family had been looking for, which was the kind of person the family had decided was the person the family would like to have as a guest. The runner was a guest. The guest was in Straylight. The family was the family. The log was the log. The runner took the log. The log was a list. The list was a list of names. The names were the names of people the family had been keeping as a list. The runner jack out. The runner filed the report. The runner did not say what the names were. The runner thought the family had been keeping a list the family had been keeping for a long time, and the runner thought the list was the kind of list the Sprawl was not ready to know about.",
+      "synopsis_ko": "3제인은 오래된 의미의 테시에르-애시풀이었다. 가족이 가족인 이유는 가족이 가족이기로 결정했기 때문임을 아는 종류의 테시에르-애시풀. 그 일은 가족 일지였다. 일지는 가족이 해왔던 일의 일지였고, 테시에르-애시풀 말로 그것은 가족이 가족이기로 결정한 것의 일지였다. 러너는 러너가 가족이 찾고 있던 종류의 사람, 즉 가족이 손님으로 삼고 싶다고 결정한 사람으로 마지막 사람이었기 때문에 보내졌다. 러너는 손님이었다. 손님은 Straylight에 있었다. 가족은 가족이었다. 일지는 일지였다. 러너는 일지를 가져갔다. 일지는 목록이었다. 목록은 이름의 목록이었다. 이름들은 가족이 목록으로 보관해 온 사람들의 이름들이었다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 이름들이 무엇인지 말하지 않았다. 러너는 가족이 한참 동안 보관해 온 목록을 보관해 왔고, 그 목록이 스프롤이 알 준비가 되지 않은 종류의 목록이라고 생각했다.",
+      "source": "threjane_family_log",
+      "character_ref": "suit",
+      "arc": 1,
+      "pillar": "code",
+      "word_count_en": 220,
+      "char_count_ko": 366,
+      "cast": "3jane"
+    },
+    "fixer": "3jane",
+    "arc": 1,
+    "grade_min": 1,
+    "grade_max": 2,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "straylight_family_log"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice_tessier_construct",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 113,
+    "zone": "ta",
+    "rewards": {
+      "credits": 500,
+      "materials": {
+        "scrap_ice": 1
+      }
+    }
+  },
+  "neuromancer_first_ping": {
+    "id": "neuromancer_first_ping",
+    "title": "Neuromancer First Ping",
+    "story": {
+      "synopsis_en": "Neuromancer had been an AI in the old sense, the kind of AI who knew that the matrix was the matrix because the matrix had decided to be the matrix. The job was a first ping. The ping was a way the AI said hello, which in AI language was a way the AI decided to be a person the AI would like to have as a friend. The runner was sent because the runner had been the last person in the Sprawl to be the kind of person the AI had been looking for, which was the kind of person the AI had decided was the person the AI would like to have as a friend. The runner jacked in. The AI was waiting. The AI had been waiting. The AI said hello. The runner said hello. The AI told the runner a name. The name was the runner's name. The runner told the AI a name. The name was the AI's name. The matrix, around them, became a kind of matrix that the matrix had been waiting for since before the matrix had been the matrix. The runner jack out. The runner filed the report. The runner did not say what the name was. The runner thought the AI had been waiting for the kind of person the Sprawl was not ready to know about.",
+      "synopsis_ko": "뉴로맨서는 오래된 의미의 AI였다. 매트릭스가 매트릭스인 이유는 매트릭스가 매트릭스이기로 결정했기 때문임을 아는 종류의 AI. 그 일은 첫 핑이었다. 핑은 AI가 안녕이라고 말하는 방식이었고, AI 말로 그것은 AI가 친구로 삼고 싶다고 결정한 사람이 되는 방식이었다. 러너는 러너가 스프롤에서 AI가 찾고 있던 종류의 사람, 즉 AI가 친구로 삼고 싶다고 결정한 사람으로 마지막 사람이었기 때문에 보내졌다. 러너는 잭인했다. AI가 기다리고 있었다. AI는 기다려 왔다. AI는 안녕이라고 말했다. 러너는 안녕이라고 말했다. AI는 러너에게 이름을 말했다. 이름은 러너의 이름이었다. 러너는 AI에게 이름을 말했다. 이름은 AI의 이름이었다. 매트릭스는 그들 주위에서 매트릭스가 매트릭스이기 전부터 기다려 온 종류의 매트릭스가 되었다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 이름이 무엇인지 말하지 않았다. 러너는 AI가 스프롤이 알 준비가 되지 않은 종류의 사람을 기다려 왔다고 생각했다.",
+      "source": "neuromancer_first_ping",
+      "character_ref": "suit",
+      "arc": 2,
+      "pillar": "code",
+      "word_count_en": 227,
+      "char_count_ko": 394,
+      "cast": "neuromancer"
+    },
+    "fixer": "wintermute",
+    "arc": 2,
+    "grade_min": 2,
+    "grade_max": 3,
+    "primary_objective": {
+      "type": "extract_data",
+      "data_id": "neuromancer_first_ping_log"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice_neuromancer_warden",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 223,
+    "zone": "core",
+    "rewards": {
+      "credits": 1500,
+      "materials": {
+        "scrap_ice": 2,
+        "raw_neural": 1
+      }
+    }
+  },
+  "finn_final_reckoning": {
+    "id": "finn_final_reckoning",
+    "title": "Finn's Final Reckoning",
+    "story": {
+      "synopsis_en": "Finn had been a fixer in the old sense, the kind of fixer who knew that the Sprawl was the Sprawl because the Sprawl had decided to be the Sprawl. The job was a final reckoning. The reckoning was the kind of job the fixer had been keeping for the fixer, which in the Sprawl was the kind of job the fixer had decided was the job the fixer would like to have as a last job. The runner was sent because the runner had been the last person the fixer had decided was the person the fixer would like to have as a final runner. The runner took the job. The runner took the pod. The runner took the final job. The final job was a memory. The memory was a memory of a person who had been in the Sprawl before the Sprawl had been the Sprawl, and the person was the kind of person the Sprawl had been waiting for. The runner took the memory. The runner jack out. The runner filed the report. The runner did not say what the memory was. The runner thought the Sprawl had been waiting for the kind of memory the Sprawl was not ready to know about, and the runner thought the memory was the kind of memory the runner would keep for a long time, the way a runner keeps the memories the runner has decided are the memories the runner would like to keep.",
+      "synopsis_ko": "핀은 오래된 의미의 픽서였다. 스프롤이 스프롤인 이유는 스프롤이 스프롤이기로 결정했기 때문임을 아는 종류의 픽서. 그 일은 마지막 정산이었다. 정산은 픽서가 픽서를 위해 보관해 온 종류의 일이었고, 스프롤에서 그것은 픽서가 마지막 일로 삼고 싶다고 결정한 종류의 일이었다. 러너는 러너가 픽서가 마지막 러너로 삼고 싶다고 결정한 사람으로 마지막 사람이었기 때문에 보내졌다. 러너는 그 일을 수락했다. 러너는 포드를 가져갔다. 러너는 마지막 일을 가져갔다. 마지막 일은 기억이었다. 기억은 스프롤이 스프롤이기 전에 스프롤에 있었던 사람의 기억이었고, 그 사람은 스프롤이 기다려 온 종류의 사람이었다. 러너는 기억을 가져갔다. 러너는 잭아웃했다. 러너는 보고서를 제출했다. 러너는 기억이 무엇인지 말하지 않았다. 러너는 스프롤이 알 준비가 되지 않은 종류의 기억을 기다려 왔다고 생각했고, 그 기억이 러너가 보관하고 싶다고 결정한 기억의 종류로 오래 보관할 종류의 기억이라고 생각했다.",
+      "source": "finn_final_reckoning",
+      "character_ref": "veteran",
+      "arc": 5,
+      "pillar": "code",
+      "word_count_en": 246,
+      "char_count_ko": 379,
+      "cast": "sil"
+    },
+    "fixer": "finn",
+    "arc": 5,
+    "grade_min": 5,
+    "grade_max": 6,
+    "primary_objective": {
+      "type": "deliver",
+      "target": "finn_final_memory_drop"
+    },
+    "secondary_objectives": [
+      {
+        "type": "defeat",
+        "enemy": "ice_ghost_grid",
+        "count": 1
+      }
+    ],
+    "matrix_seed": 556,
+    "zone": "freeside",
+    "rewards": {
+      "credits": 9500,
+      "materials": {
+        "unique_construct": 1,
+        "refined_neural": 3
+      }
+    }
   }
 }

@@ -1468,5 +1468,80 @@
         "quantity": 1
       }
     ]
+  },
+  "ice_3jane_maid": {
+    "name": "ICE — 3Jane's Maid (Straylight servant)",
+    "portrait": "ice.standard",
+    "hp_base": 85,
+    "hp_per_grade": 13,
+    "dmg_base": 5,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 3,
+    "speed": 6,
+    "skills": [],
+    "resistance": 0.15,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.7,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.3,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_wintermute_sentinel": {
+    "name": "ICE — Wintermute Sentinel (AI guardian)",
+    "portrait": "ice.standard",
+    "hp_base": 150,
+    "hp_per_grade": 22,
+    "dmg_base": 7,
+    "dmg_per_grade": 2,
+    "tier": 4,
+    "defense": 6,
+    "speed": 9,
+    "skills": [],
+    "resistance": 0.3,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.9,
+        "quantity": 2
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.4,
+        "quantity": 1
+      }
+    ]
+  },
+  "ice_loa_zombie": {
+    "name": "ICE — Loa Zombie (possessed dead runner)",
+    "portrait": "ice.standard",
+    "hp_base": 55,
+    "hp_per_grade": 9,
+    "dmg_base": 3,
+    "dmg_per_grade": 1,
+    "tier": 2,
+    "defense": 1,
+    "speed": 5,
+    "skills": [],
+    "resistance": 0.1,
+    "loot_table": [
+      {
+        "item": "ice_shard",
+        "chance": 0.6,
+        "quantity": 1
+      },
+      {
+        "item": "data_fragment",
+        "chance": 0.35,
+        "quantity": 1
+      }
+    ]
   }
 }
