@@ -1,3 +1,72 @@
+## [2026-07-25] feat(dashboard) | 9자키 통합 갱신 (character_stats + play_game + play.html)
+
+**Status**: Complete
+
+### Changes
+
+사용자 "대시보드 갱신" 요청 — 9자키 시스템이 dashboard data에 완전 반영되도록 통합.
+
+- **build_dashboard.py** `load_character_stats` 확장 (379 lines):
+  - Source 1: `CHARACTER_PATHS.md` §1.1 테이블 (9자 brief — archetype/POV/motivation/tone/deck)
+  - Source 2: `characters.md` (3자 detailed — 이름/나이/출신/직업/데크/주무기)
+  - 두 source 병합: 3자 = detailed + brief / 6자 = brief only
+  - Helper functions: `_load_brief_character_entries`, `_load_detailed_character_entries`, `_extract_section_text`
+  - 9자 정확 매칭 검증 완료 (3 detailed + 6 brief)
+
+- **character_stats.json** (regenerated):
+  - Before: 3 characters (케이/실/카스) with 5 attributes each
+  - After: 9 characters (케이/실/카스/수트/위건/앤지/샐리/3Jane/Neuromancer)
+  - 3자: 10 attributes (detailed + brief merged)
+  - 6자: 5 attributes (brief only)
+  - `total_characters: 9` field 추가
+
+- **play_game.json** (6자 추가):
+  - suit (Armitage) — Corporate, 3인칭 cold, T2-T3 keyboard
+  - wigan (Wigan Ludgate) — Vodou Construct, 1인칭 loa, T2-T3
+  - angie (Angie Mitchell) — Loa Receiver, 1인칭 12세, T2-T3 Loa-Bound
+  - sally (Sally Shears) — Market Operator, 1인칭 cold, T5-T6 Master
+  - 3jane (3Jane Tessier-Ashpool) — Family Heir, aristocratic, T5-T6
+  - neuromancer (Neuromancer) — Merged AI, 1인칭 AI, T6+ AI-Ascended
+  - 각자 deck/summary 필드 (CHARACTER_PATHS.md §1.1 기반)
+
+- **play.html** 갱신:
+  - `<span data-stat="characters">3개</span> 캐릭터` → `9개 자키`
+  - FALLBACK_DATA 3자 → 9자 확장
+  - Length check `>= 3` → `>= 9` (load data validation)
+  - Status text: "4 CHARS" → "9 JOCKEYS"
+  - 주석: "3 × 5 × 15 × 2" → "9 × 15 × 15 × 2"
+
+- **missions.html**:
+  - Line 1853: "3명 캐릭터 선택 (병렬 방식)" → "9명 자키 선택 (3 canonical + 6 extension)"
+
+- **journey/README.html** (description meta):
+  - "케이/실/카스 3 캐릭터 진행 데모" → "9 자키 (case/sil/kas/suit/wigan/angie/sally/3jane/neuromancer) 진행 데모"
+
+### Verification
+
+- `pytest`: 3096 passed, 664 skipped (no regression)
+- `pytest tests/integration/test_dashboard_integrity.py tests/integration/test_dashboard_facts.py tests/unit/test_dashboard_meta.py tests/unit/test_dashboard_metadata.py tests/unit/test_mission_rep_filter.py`: 56 passed
+- ruff check: 1 pre-existing error (B005 line 948, not from this session)
+- ruff format: applied (auto-fix)
+- mypy: 42 pre-existing errors (object type indexed assignment), 0 in new code
+
+### 영향 파일
+
+- `tools/build_dashboard.py` (load_character_stats 확장, helper functions)
+- `dashboard/data/character_stats.json` (9자)
+- `dashboard/data/play_game.json` (6자 추가)
+- `dashboard/play.html` (3→9)
+- `dashboard/missions.html` (decisions 섹션)
+- `dashboard/stories/journey/README.html` (description)
+
+### 후속
+
+- 9자키 완전 통합 — playable demo (play.html) + story dashboard (missions.html) + character_stats + play_game 모두 일치
+- 미커밋 다른 data 파일들 (combat_stats, library_stats 등) — concurrent work (07-13 Fiction 단편 reclassification, 51→59 short_stories)
+- 다음: 다른 dashboard data 파일들도 미커밋 상태 — 사용자 일괄 commit 결정 대기
+
+---
+
 ## [2026-07-25] docs | PROGRESS_REPORT_2026-07-25_NOTION_READY.md (Notion 발행용)
 
 **Status**: Complete (dry-run 검증, Notion 발행 대기)

@@ -28,6 +28,7 @@ siblings and a tiny inline ``<script>fetch(...)</script>`` that
 populates them at load time.  See dashboard/README.md for the full
 page ↔ source map.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -44,6 +45,7 @@ DASHBOARD_DATA = REPO / "dashboard" / "data"
 # ---------------------------------------------------------------------------
 # Loaders — each returns a dict suitable for JSON serialization.
 # ---------------------------------------------------------------------------
+
 
 def load_combat_stats(repo: Path) -> dict[str, object]:
     """Pull ICE types, skill effects, programs, and the RT-MS / PPL / ZDR labels."""
@@ -107,8 +109,12 @@ def load_library_stats(repo: Path) -> dict[str, object]:
         "novelettes_ko": 0,
         "hook_kinds": 6,
         "hook_kind_names": [
-            "narrative", "excerpt", "event",
-            "combat", "item", "cinematic",
+            "narrative",
+            "excerpt",
+            "event",
+            "combat",
+            "item",
+            "cinematic",
         ],
         "layers": 4,
         "tests_passing": 39,
@@ -133,9 +139,9 @@ def load_library_stats(repo: Path) -> dict[str, object]:
             is_ko = name.endswith(".ko.md")
             stem = re.sub(r"^\d{4}-\d{2}-\d{2}_", "", name)
             if is_ko:
-                stem = stem[:-len(".ko.md")]
+                stem = stem[: -len(".ko.md")]
             else:
-                stem = stem[:-len(".md")]
+                stem = stem[: -len(".md")]
             stems.add(stem)
             title = stem.replace("_", " ").title()
             dtype = "short_story"  # default
@@ -174,7 +180,10 @@ def load_library_stats(repo: Path) -> dict[str, object]:
     if not short_dir.exists():
         for cand in [
             repo / "Fiction" / "derivative" / "sprawl-trilogy" / "short-stories",
-            Path("/Users/emilio/projects/Projects/Fiction") / "derivative" / "sprawl-trilogy" / "short-stories",
+            Path("/Users/emilio/projects/Projects/Fiction")
+            / "derivative"
+            / "sprawl-trilogy"
+            / "short-stories",
         ]:
             if cand.exists():
                 short_dir = cand
@@ -182,7 +191,10 @@ def load_library_stats(repo: Path) -> dict[str, object]:
     if not novel_dir.exists():
         for cand in [
             repo / "Fiction" / "derivative" / "sprawl-trilogy" / "novelettes",
-            Path("/Users/emilio/projects/Projects/Fiction") / "derivative" / "sprawl-trilogy" / "novelettes",
+            Path("/Users/emilio/projects/Projects/Fiction")
+            / "derivative"
+            / "sprawl-trilogy"
+            / "novelettes",
         ]:
             if cand.exists():
                 novel_dir = cand
@@ -308,9 +320,7 @@ def load_mission_stats(repo: Path) -> dict[str, object]:
             if isinstance(am, dict):
                 out["aftermath_events"] = len(am)
                 out["total_rewards"] = sum(
-                    len(v.get("rewards", []))
-                    for v in am.values()
-                    if isinstance(v, dict)
+                    len(v.get("rewards", [])) for v in am.values() if isinstance(v, dict)
                 )
                 out["hub_visit_events"] = sum(
                     1
@@ -343,8 +353,10 @@ def load_mission_stats(repo: Path) -> dict[str, object]:
     if not short.exists():
         for cand in [
             repo / "Fiction" / "derivative" / "sprawl-trilogy" / "short-stories",
-            Path("/Users/emilio/projects/Projects/Fiction") / "derivative"
-            / "sprawl-trilogy" / "short-stories",
+            Path("/Users/emilio/projects/Projects/Fiction")
+            / "derivative"
+            / "sprawl-trilogy"
+            / "short-stories",
         ]:
             if cand.exists():
                 short = cand
@@ -414,9 +426,7 @@ def _collect_event_trigger_names(repo: Path) -> list[str]:
         r"^class\s+EventTrigger\b.*?:\s*$(.*?)(?=^class\s|\Z)",
         _re.MULTILINE | _re.DOTALL,
     )
-    member_re = _re.compile(
-        r"^\s{4}(\w+)\s*=\s*['\"]([^'\"]+)['\"]", _re.MULTILINE
-    )
+    member_re = _re.compile(r"^\s{4}(\w+)\s*=\s*['\"]([^'\"]+)['\"]", _re.MULTILINE)
     match = class_re.search(text)
     if not match:
         return fallback
@@ -509,9 +519,7 @@ def load_stages_stats(repo: Path) -> dict[str, object]:
             r"^class\s+(\w+).*?:\s*$(.*?)(?=^class\s|\Z)",
             _re.MULTILINE | _re.DOTALL,
         )
-        member_re = _re.compile(
-            r"^\s{4}(\w+)\s*=\s*['\"]([^'\"]+)['\"]", _re.MULTILINE
-        )
+        member_re = _re.compile(r"^\s{4}(\w+)\s*=\s*['\"]([^'\"]+)['\"]", _re.MULTILINE)
 
         for match in pattern.finditer(text):
             class_name = match.group(1)
@@ -571,13 +579,13 @@ def load_run_stats(repo: Path) -> dict[str, object]:
     def _enum_block(name: str) -> list[str]:
         m = re.search(
             rf"^class\s+{name}\s*\(\s*StrEnum\s*\):.*?(?=^\nclass\s+\w+|\Z)",
-            src, re.M | re.S,
+            src,
+            re.M | re.S,
         )
         if not m:
             return []
         block = m.group(0)
-        return re.findall(r"^\s+([A-Z][A-Z0-9_]*)\s*=\s*\"[a-z0-9_]+\"",
-                           block, re.M)
+        return re.findall(r"^\s+([A-Z][A-Z0-9_]*)\s*=\s*\"[a-z0-9_]+\"", block, re.M)
 
     out["stage_enum_names"] = _enum_block("Stage")
     out["stage_enum_count"] = len(out["stage_enum_names"])  # type: ignore[assignment]
@@ -588,79 +596,180 @@ def load_run_stats(repo: Path) -> dict[str, object]:
         # Match 'Foo (optional)' or '(debatable)' / '(conditional)'.
         m = re.search(
             rf"^\s+{name}\s*=\s*\"[a-z_]+\"\s*#\s*(optional|conditional|debatable)",
-            src, re.M,
+            src,
+            re.M,
         )
         if m:
             optional.append(name)
     out["stage_optional"] = optional
 
     out["chapter_state_enum_names"] = _enum_block("ChapterState")
-    out["chapter_state_enum_count"] = (
-        len(out["chapter_state_enum_names"])  # type: ignore[assignment]
-    )
+    out["chapter_state_enum_count"] = len(out["chapter_state_enum_names"])  # type: ignore[assignment]
     out["objective_kind_enum_names"] = _enum_block("ObjectiveKind")
-    out["objective_kind_enum_count"] = (
-        len(out["objective_kind_enum_names"])  # type: ignore[assignment]
-    )
+    out["objective_kind_enum_count"] = len(out["objective_kind_enum_names"])  # type: ignore[assignment]
     return out
 
 
 def load_character_stats(repo: Path) -> dict[str, object]:
-    """Pull canonical character data from design/story/characters.md.
+    """Pull canonical character data from design/story/characters.md + CHARACTER_PATHS.md.
 
-    Source markdown uses a table format::
+    Two-source merge:
+    - characters.md (3 canonical: case/sil/kas) — detailed attributes
+      from '| **<key>** | <val> |' rows under '## N. <name> (<EN>) — Novice/Veteran/Heretic'
+    - CHARACTER_PATHS.md (all 9) — archetype/POV/motivation/tone/deck
+      from the §1.1 table: '| `id` | 이름 | 아키타입 | 시점 | 동기 | 톤 | Deck Tier |'
 
-        ## 1. 케이 (Case) — Novice / 초짜
-        | **나이** | 22 |
-        | **데크** | Ono-Sendai Cyberspace 7 (T1) |
-        ...
-
-    We regex the section heading + every subsequent '| **<key>** | <val> |'
-    row until the next '## ' / end-of-file.  Falls back to the
-    original case.md / sil.md / kas.md if those exist.
+    Merge: the 3 canonical characters get full attributes (detailed + brief).
+    The 6 extension characters (suit/wigan/angie/sally/3jane/neuromancer) get
+    only the brief row from CHARACTER_PATHS.md.
     """
     out: dict[str, object] = {
         "characters": [],
         "source": "",
+        "sources": [],
         "_generated_at": "",
     }
+    brief_entries = _load_brief_character_entries(repo, out)
+    detailed_entries = _load_detailed_character_entries(repo, out)
+    final_chars: list[dict[str, object]] = []
+    seen_ids: set[str] = set()
+    for char_id, det in detailed_entries.items():
+        merged = dict(det)
+        if char_id in brief_entries:
+            brief_attrs = dict(brief_entries[char_id]["attributes"])  # type: ignore[arg-type]
+            for k, v in brief_attrs.items():
+                if k not in merged["attributes"]:  # type: ignore[operator]
+                    merged["attributes"][k] = v  # type: ignore[index]
+        merged["id"] = char_id
+        final_chars.append(merged)
+        seen_ids.add(char_id)
+    for char_id, brief in brief_entries.items():
+        if char_id in seen_ids:
+            continue
+        final_chars.append(brief)
+    out["characters"] = final_chars
+    out["source"] = " + ".join(out["sources"]) if out["sources"] else "none"
+    out["total_characters"] = len(final_chars)
+    return out
+
+
+def _load_brief_character_entries(
+    repo: Path, out: dict[str, object]
+) -> dict[str, dict[str, object]]:
+    """Parse CHARACTER_PATHS.md §1.1 table — archetype/POV/motivation/tone/deck for 9 chars."""
+    brief_entries: dict[str, dict[str, object]] = {}
+    cp_path = repo / "design" / "CHARACTER_PATHS.md"
+    if not cp_path.exists():
+        return brief_entries
+    out["sources"].append(str(cp_path.relative_to(repo)))
+    text = cp_path.read_text(encoding="utf-8")
+    section = _extract_section_text(text, "1.1 캐릭터 구성")
+    if section is None:
+        return brief_entries
+    row_re = re.compile(
+        r"^\|\s*`(?P<id>[^`]+)`\s*\|"
+        r"\s*(?P<name_ko>[^|]+?)\s*\|"
+        r"\s*(?P<archetype>[^|]+?)\s*\|"
+        r"\s*(?P<pov>[^|]+?)\s*\|"
+        r"\s*(?P<motivation>[^|]+?)\s*\|"
+        r"\s*(?P<tone>[^|]+?)\s*\|"
+        r"\s*(?P<deck>[^|]+?)\s*\|\s*$",
+        re.M,
+    )
+    arc_key_map = {
+        "Novice": "novice",
+        "Veteran": "veteran",
+        "Heretic": "heretic",
+        "Corporate": "suit",
+        "Vodou Construct": "wigan",
+        "Loa Receiver": "angie",
+        "Market Operator": "sally",
+        "Family Heir": "3jane",
+        "Merged AI": "neuromancer",
+    }
+    for m in row_re.finditer(section):
+        char_id = m.group("id").strip()
+        archetype = m.group("archetype").strip()
+        arc = arc_key_map.get(archetype, char_id)
+        brief_entries[char_id] = {
+            "id": char_id,
+            "name_ko": m.group("name_ko").strip(),
+            "name_en": "3Jane" if char_id == "3jane" else char_id.capitalize(),
+            "arc": arc,
+            "arc_label": archetype,
+            "attributes": {
+                "시점": m.group("pov").strip(),
+                "동기": m.group("motivation").strip(),
+                "톤": m.group("tone").strip(),
+                "데크": m.group("deck").strip(),
+                "아키타입": archetype,
+            },
+        }
+    return brief_entries
+
+
+def _extract_section_text(text: str, heading_keyword: str) -> str | None:
+    """Extract text from '### <keyword>...' until the next '###' heading or EOF."""
+    pattern = re.compile(
+        r"^###\s+" + re.escape(heading_keyword) + r".*?(?=^###\s+|\Z)",
+        re.M | re.S,
+    )
+    m = pattern.search(text)
+    return m.group(0) if m else None
+
+
+def _load_detailed_character_entries(
+    repo: Path, out: dict[str, object]
+) -> dict[str, dict[str, object]]:
+    """Parse characters.md — detailed attributes for case/sil/kas."""
+    detailed_entries: dict[str, dict[str, object]] = {}
     md_path = repo / "design" / "story" / "characters.md"
     if not md_path.exists():
-        return out
-    out["source"] = str(md_path.relative_to(repo))
+        return detailed_entries
+    out["sources"].append(str(md_path.relative_to(repo)))
     text = md_path.read_text(encoding="utf-8")
-    # Split on '## N. <name> ...' headings; each becomes a character
-    # entry if the section header contains 'Novice' / 'Veteran' / 'Heretic'.
     section_re = re.compile(
         r"^##\s+\d+\.\s+([^\n]+?)\s*\(([^)]+)\)\s*[—-]\s*(Novice|Veteran|Heretic)",
         re.M,
     )
     matches = list(section_re.finditer(text))
     arc_to_key = {"Novice": "novice", "Veteran": "veteran", "Heretic": "heretic"}
+    name_to_id = {
+        "Case": "novice",
+        "Sil": "veteran",
+        "Kas": "heretic",
+        "케이": "novice",
+        "실": "veteran",
+        "카스": "heretic",
+    }
+    row_re = re.compile(
+        r"\s*\|\s*\*\*(?P<k>[^*]+)\*\*\s*\|\s*(?P<v>[^|]+?)\s*\|\s*$",
+    )
     for i, m in enumerate(matches):
         start = m.end()
         end = matches[i + 1].start() if i + 1 < len(matches) else len(text)
         body = text[start:end]
-        entry: dict[str, object] = {
-            "name_ko": m.group(1).strip(),
-            "name_en": m.group(2).strip(),
-            "arc": arc_to_key[m.group(3)],
-            "arc_label": m.group(3),
-            "attributes": {},
-        }
-        # Pull known attributes via '| **<key>** | <val> |' rows.
+        name_ko = m.group(1).strip()
+        name_en = m.group(2).strip()
+        char_id = name_to_id.get(name_en) or name_to_id.get(name_ko)
+        if not char_id:
+            continue
+        attributes: dict[str, object] = {}
         for line in body.splitlines():
-            row = re.match(
-                r"\s*\|\s*\*\*(?P<k>[^*]+)\*\*\s*\|\s*(?P<v>[^|]+?)\s*\|\s*$",
-                line,
-            )
+            row = row_re.match(line)
             if not row:
                 continue
             key = row.group("k").strip().lower().replace(" ", "_")
             val = row.group("v").strip().strip("*")
-            entry["attributes"][key] = val  # type: ignore[index]
-        out["characters"].append(entry)  # type: ignore[attr-defined]
-    return out
+            attributes[key] = val
+        detailed_entries[char_id] = {
+            "name_ko": name_ko,
+            "name_en": name_en,
+            "arc": arc_to_key[m.group(3)],
+            "arc_label": m.group(3),
+            "attributes": attributes,
+        }
+    return detailed_entries
 
 
 def load_index_stats(repo: Path) -> dict[str, object]:
@@ -680,15 +789,17 @@ def load_index_stats(repo: Path) -> dict[str, object]:
     if tests_dir.exists():
         # Cheap, fast, cross-platform: spawn the prototype venv's pytest.
         import subprocess
+
         venv_py = repo / "prototype" / ".venv" / "bin" / "python"
         if not venv_py.exists():
             venv_py = repo / "prototype" / ".venv" / "Scripts" / "python.exe"  # type: ignore[assignment]  # noqa
         if venv_py.exists():
             try:
                 res = subprocess.run(
-                    [str(venv_py), "-m", "pytest", str(tests_dir),
-                     "--collect-only", "-q"],
-                    check=False, capture_output=True, text=True,
+                    [str(venv_py), "-m", "pytest", str(tests_dir), "--collect-only", "-q"],
+                    check=False,
+                    capture_output=True,
+                    text=True,
                     timeout=60,
                 )
                 m = re.search(r"(\d+)\s+tests?\s+collected", res.stdout)
@@ -776,13 +887,10 @@ def load_cyberspace_stats(repo: Path) -> dict[str, object]:
             if isinstance(worlds, dict):
                 out["worlds"] = len(worlds)
                 out["world_names"] = [
-                    w.get("name", k) for k, w in worlds.items()
-                    if isinstance(w, dict)
+                    w.get("name", k) for k, w in worlds.items() if isinstance(w, dict)
                 ]
                 out["sectors"] = sum(
-                    len(w.get("sectors", {}))
-                    for w in worlds.values()
-                    if isinstance(w, dict)
+                    len(w.get("sectors", {})) for w in worlds.values() if isinstance(w, dict)
                 )
                 out["servers"] = sum(
                     len(s.get("servers", []))
@@ -794,18 +902,15 @@ def load_cyberspace_stats(repo: Path) -> dict[str, object]:
     nk = repo / "prototype" / "src" / "roguelike_sprawl" / "matrix" / "node.py"
     if nk.exists():
         src = nk.read_text(encoding="utf-8")
-        out["node_kinds"] = len(
-            re.findall(r"^\s+([A-Z_]+)\s*=\s*\"[a-z_]+\"\s*$",
-                       src, re.M)
-        )
+        out["node_kinds"] = len(re.findall(r"^\s+([A-Z_]+)\s*=\s*\"[a-z_]+\"\s*$", src, re.M))
         for cls_name in ("class NodeKind", "class ZoneDepth"):
             m = re.search(
                 rf"{cls_name}\(StrEnum\):.*?(?=\n\nclass |\Z)",
-                src, re.S,
+                src,
+                re.S,
             )
             if m:
-                count = len(re.findall(r"^\s+([A-Z_]+)\s*=\s*\"[a-z_]+\"",
-                                       m.group(0), re.M))
+                count = len(re.findall(r"^\s+([A-Z_]+)\s*=\s*\"[a-z_]+\"", m.group(0), re.M))
                 if cls_name == "class NodeKind":
                     out["node_kinds"] = count
                 else:
@@ -821,17 +926,31 @@ def load_journey_stats(repo: Path) -> dict[str, object]:
     the original hand-crafted defaults (20,050 / 27,500 / 20,100 cr).
     """
     out: dict[str, object] = {
-        "novice": {"credits": 20050, "missions": 0, "deaths": 0,
-                   "final_grade": 0, "deck_progression": ""},
-        "veteran": {"credits": 27500, "missions": 0, "deaths": 0,
-                    "final_grade": 0, "deck_progression": ""},
-        "heretic": {"credits": 20100, "missions": 0, "deaths": 0,
-                    "final_grade": 0, "deck_progression": ""},
+        "novice": {
+            "credits": 20050,
+            "missions": 0,
+            "deaths": 0,
+            "final_grade": 0,
+            "deck_progression": "",
+        },
+        "veteran": {
+            "credits": 27500,
+            "missions": 0,
+            "deaths": 0,
+            "final_grade": 0,
+            "deck_progression": "",
+        },
+        "heretic": {
+            "credits": 20100,
+            "missions": 0,
+            "deaths": 0,
+            "final_grade": 0,
+            "deck_progression": "",
+        },
         "_generated_at": "",
     }
     path = repo / "dashboard" / "stories" / "journey"
-    char_map = {"novice": "novice.md", "veteran": "veteran.md",
-                "heretic": "heretic.md"}
+    char_map = {"novice": "novice.md", "veteran": "veteran.md", "heretic": "heretic.md"}
     for char_key, filename in char_map.items():
         p = path / filename
         if not p.exists():
@@ -874,7 +993,8 @@ def load_faction_stats(repo: Path) -> dict[str, object]:
             src = nk.read_text(encoding="utf-8")
             m = re.search(
                 r"class\s+Faction\s*\([^)]+\):.*?(?=^class\s|\Z)",
-                src, re.S | re.M,
+                src,
+                re.S | re.M,
             )
             if m:
                 faction_re = re.compile(
@@ -894,15 +1014,18 @@ def load_faction_stats(repo: Path) -> dict[str, object]:
             # Tier thresholds
             m = re.search(
                 r"TIER_THRESHOLDS\s*:\s*list\[tuple\[int,\s*str\]\]\s*=\s*\[(.*?)\]",
-                src, re.S,
+                src,
+                re.S,
             )
             if m:
                 tier_re = re.compile(r"\(\s*(-?\d+)\s*,\s*\"([A-Z_]+)\"\s*\)")
                 for threshold, label in tier_re.findall(m.group(1)):
-                    out["tier_thresholds"].append({
-                        "threshold": int(threshold),
-                        "label": label,
-                    })
+                    out["tier_thresholds"].append(
+                        {
+                            "threshold": int(threshold),
+                            "label": label,
+                        }
+                    )
             m2 = re.search(r"MAX_DELTA_PER_EVENT\s*=\s*(\d+)", src)
             if m2:
                 out["max_delta_per_event"] = int(m2.group(1))
@@ -941,7 +1064,10 @@ def load_design_system(repo: Path) -> dict[str, object]:
                 "tagline_ko": "사이버스페이스가 유일한 시각적 공간",
                 "tagline_en": "Cyberspace is the only visual space",
                 "color": "#00ccff",
-                "mechanics_ko": ["meatspace 절대 시각화 안함", "ASCII portrait는 cyberspace 안의 존재만"],
+                "mechanics_ko": [
+                    "meatspace 절대 시각화 안함",
+                    "ASCII portrait는 cyberspace 안의 존재만",
+                ],
                 "anti_these_ko": ["meatspace 메인 게임", "현실 세계 직접 묘사"],
             },
             {
@@ -959,7 +1085,10 @@ def load_design_system(repo: Path) -> dict[str, object]:
                 "tagline_ko": "런 사이 진행은 더 좋은 도구로",
                 "tagline_en": "Between runs, better tools",
                 "color": "#ffaa55",
-                "mechanics_ko": ["레벨업 = 아이템/장비 티어 (T1-T6)", "combat 강도는 program tier에 비례"],
+                "mechanics_ko": [
+                    "레벨업 = 아이템/장비 티어 (T1-T6)",
+                    "combat 강도는 program tier에 비례",
+                ],
                 "anti_these_ko": ["스탯 누적", "XP/레벨 시스템", "지속적 난이도 하락"],
             },
             {
@@ -984,9 +1113,20 @@ def load_design_system(repo: Path) -> dict[str, object]:
         "core_loop": {
             "macro_ko": "Hub → Run(매트릭스 진입) → Extraction/Death → Result → Hub",
             "stages": [
-                "PENDING", "BRIEFING", "TRAVEL", "MEET_NPC", "EXTRACT_DATA",
-                "BYPASS_SECURITY", "DEFEAT_ICE", "JACK_OUT", "REWARD",
-                "DEBRIEF", "COMPLETE", "DEATH_RESTART", "FAILED", "SALVATION_EPILOGUE",
+                "PENDING",
+                "BRIEFING",
+                "TRAVEL",
+                "MEET_NPC",
+                "EXTRACT_DATA",
+                "BYPASS_SECURITY",
+                "DEFEAT_ICE",
+                "JACK_OUT",
+                "REWARD",
+                "DEBRIEF",
+                "COMPLETE",
+                "DEATH_RESTART",
+                "FAILED",
+                "SALVATION_EPILOGUE",
             ],
             "micro_ko": "Navigation → Node 발견 → Decision → Action → Combat(RT-MS) → State Update",
             "alarm_levels": [0, 1, 2, 3, 4, 5],
@@ -1039,8 +1179,18 @@ def load_design_system(repo: Path) -> dict[str, object]:
                 {"level": 1, "name_ko": "인지", "ice_ko": "기본 배치", "risk_ko": "낮음"},
                 {"level": 2, "name_ko": "정찰", "ice_ko": "watchdog", "risk_ko": "중간"},
                 {"level": 3, "name_ko": "추적", "ice_ko": "hellhound", "risk_ko": "높음"},
-                {"level": 4, "name_ko": "黑色ICE", "ice_ko": "black ICE, trace 진행", "risk_ko": "매우 높음"},
-                {"level": 5, "name_ko": "trace 완료", "ice_ko": "flatline 임박", "risk_ko": "치명적"},
+                {
+                    "level": 4,
+                    "name_ko": "黑色ICE",
+                    "ice_ko": "black ICE, trace 진행",
+                    "risk_ko": "매우 높음",
+                },
+                {
+                    "level": 5,
+                    "name_ko": "trace 완료",
+                    "ice_ko": "flatline 임박",
+                    "risk_ko": "치명적",
+                },
             ],
         },
         "_source_files": [
@@ -1089,8 +1239,7 @@ def load_design_system(repo: Path) -> dict[str, object]:
                         continue
                     story = v.get("story", {})
                     pillar = (
-                        story.get("pillar", "unknown")
-                        if isinstance(story, dict) else "unknown"
+                        story.get("pillar", "unknown") if isinstance(story, dict) else "unknown"
                     )
                     arc = v.get("arc", 0)
                     zone = v.get("zone", "unknown")
@@ -1106,9 +1255,7 @@ def load_design_system(repo: Path) -> dict[str, object]:
                     str(k): v for k, v in sorted(by_arc.items())
                 }
                 out["mission_distribution"]["by_zone"] = dict(sorted(by_zone.items()))
-                out["mission_distribution"]["by_grade_range"] = dict(
-                    sorted(by_grade.items())
-                )
+                out["mission_distribution"]["by_grade_range"] = dict(sorted(by_grade.items()))
         except (json.JSONDecodeError, OSError):
             pass
 
@@ -1122,8 +1269,7 @@ def load_design_system(repo: Path) -> dict[str, object]:
                 if isinstance(worlds, dict):
                     out["world_hierarchy"]["world_count"] = len(worlds)
                     out["world_hierarchy"]["world_names"] = [
-                        w.get("name", k) for k, w in worlds.items()
-                        if isinstance(w, dict)
+                        w.get("name", k) for k, w in worlds.items() if isinstance(w, dict)
                     ]
                     world_list: list[dict[str, object]] = []
                     sector_count = 0
@@ -1139,18 +1285,22 @@ def load_design_system(repo: Path) -> dict[str, object]:
                             if not isinstance(sinfo, dict):
                                 continue
                             servers = sinfo.get("servers", [])
-                            sector_list.append({
-                                "id": sid,
-                                "name": sinfo.get("name", sid),
-                                "server_count": len(servers),
-                            })
+                            sector_list.append(
+                                {
+                                    "id": sid,
+                                    "name": sinfo.get("name", sid),
+                                    "server_count": len(servers),
+                                }
+                            )
                             server_count += len(servers)
                             sector_count += 1
-                        world_list.append({
-                            "id": wid,
-                            "name": winfo.get("name", wid),
-                            "sectors": sector_list,
-                        })
+                        world_list.append(
+                            {
+                                "id": wid,
+                                "name": winfo.get("name", wid),
+                                "sectors": sector_list,
+                            }
+                        )
                     out["world_hierarchy"]["worlds"] = world_list
                     out["world_hierarchy"]["sector_count"] = sector_count
                     out["world_hierarchy"]["server_count"] = server_count
@@ -1164,12 +1314,11 @@ def load_design_system(repo: Path) -> dict[str, object]:
             src = nk.read_text(encoding="utf-8")
             m = re.search(
                 r"class\s+ZoneDepth\s*\(\s*StrEnum\s*\):.*?(?=\n\nclass |\Z)",
-                src, re.S,
+                src,
+                re.S,
             )
             if m:
-                cnt = len(re.findall(
-                    r"^\s+[A-Z_]+\s*=\s*\"[a-z_]+\"", m.group(0), re.M
-                ))
+                cnt = len(re.findall(r"^\s+[A-Z_]+\s*=\s*\"[a-z_]+\"", m.group(0), re.M))
                 out["world_hierarchy"]["zone_depths"] = cnt
         except OSError:
             pass
@@ -1180,6 +1329,7 @@ def load_design_system(repo: Path) -> dict[str, object]:
 # ---------------------------------------------------------------------------
 # Driver
 # ---------------------------------------------------------------------------
+
 
 def _stamp(d: dict[str, object]) -> None:
     d["_generated_at"] = _dt.datetime.now().isoformat(timespec="seconds")
@@ -1204,7 +1354,8 @@ TARGETS = {
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
-        "--dry-run", action="store_true",
+        "--dry-run",
+        action="store_true",
         help="print stats without writing JSON files",
     )
     args = parser.parse_args()

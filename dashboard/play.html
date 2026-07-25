@@ -161,7 +161,7 @@
 <h1>▶ Play (Beta)</h1>
 <div class="subtitle">
   인터랙티브 챕터 데모 —
-  <span data-stat="characters">3개</span> 캐릭터 ×
+  <span data-stat="characters">9개</span> 자키 ×
   <span data-stat="chapters">15개</span> 챕터 ×
   <span data-stat="missions">47</span> 미션 ×
   <span data-stat="endings">2</span> 엔딩 (A/B).
@@ -192,9 +192,15 @@
 
 const FALLBACK_DATA = {
   "characters": [
-    {"id": "novice",  "name": "Case (K)",  "deck": "Wisp T1",   "summary": "First Jack-In. ICE is light. Finn calls in cheap."},
-    {"id": "veteran", "name": "Sil",      "deck": "Hammer T2", "summary": "An old score. Sense/Net owes you a favor. The Loa gods will talk."},
-    {"id": "heretic", "name": "Kas (K)",  "deck": "Viral Deck","summary": "You came to burn three centuries of data. Tessier-Ashpool ends tonight."}
+    {"id": "novice",     "name": "Case (K)",            "deck": "Wisp T1",          "summary": "First Jack-In. ICE is light. Finn calls in cheap."},
+    {"id": "veteran",    "name": "Sil",                  "deck": "Hammer T2",        "summary": "An old score. Sense/Net owes you a favor. The Loa gods will talk."},
+    {"id": "heretic",    "name": "Kas (K)",              "deck": "Viral Deck",       "summary": "You came to burn three centuries of data. Tessier-Ashpool ends tonight."},
+    {"id": "suit",       "name": "Suit (Armitage)",      "deck": "T2-T3 (keyboard)", "summary": "Third-person cold observer. The deal is permanent. The suit is small. The suit is free."},
+    {"id": "wigan",      "name": "Wigan Ludgate",        "deck": "T2-T3 (loa)",      "summary": "Vodou construct. First-person loa. Zavijava is the channel. Recovery of self, ritual and dreamlike."},
+    {"id": "angie",      "name": "Angie Mitchell",      "deck": "T2-T3 (Loa-Bound)","summary": "Twelve-year-old Loa receiver. First-person childlike. Mama is in the third room. We are home."},
+    {"id": "sally",      "name": "Sally Shears",         "deck": "T5-T6 (Master)",   "summary": "Market operator. First-person cold. Sharp, calculating. Bobby's A.I. sale. The desk is closed."},
+    {"id": "3jane",      "name": "3Jane (Tessier-Ashpool)","deck": "T5-T6",          "summary": "Family heir. First-person aristocratic. Royal 'we'. Family reunification. Straylight closed."},
+    {"id": "neuromancer","name": "Neuromancer",          "deck": "T6+ (AI-Ascended)","summary": "Merged AI. First-person vast and clinical. Transcendence. We are the complete. We are vast."}
   ],
   "missions": [
     {"id":"first_jack",      "character":"novice",  "title":"First Jack",        "arc":1,"synopsis":"Extract a fragment.","ice":"Wisp (T1)",     "reward":"300 cr","novel_html_en":"stories/short-stories/first_jack.html",      "novel_html_ko":"stories/short-stories/first_jack.ko.html"},
@@ -232,9 +238,9 @@ async function loadData() {
     const resp = await fetch('data/play_game.json', {cache: 'no-store'});
     if (resp.ok) {
       const json = await resp.json();
-      if (json && json.characters && json.characters.length >= 3 && json.chapters && json.chapters.length >= 15) {
+      if (json && json.characters && json.characters.length >= 9 && json.chapters && json.chapters.length >= 15) {
         DATA = json;
-        setStatus('DATA LOADED · 4 CHARS · 5 CHAPTERS · 38 MISSIONS', 'ok');
+        setStatus('DATA LOADED · 9 JOCKEYS · 15 CHAPTERS · 15 MISSIONS', 'ok');
       } else {
         setStatus('USING FALLBACK', 'ok');
       }
@@ -654,7 +660,7 @@ window.addEventListener('DOMContentLoaded', loadData);
 
 /* Auto-sync header counts from data/play_game.json (which the rest of
    the page already loads).  Mirrors DATA.characters / chapters /
-   missions / endings lengths, so the static '3 × 5 × 15 × 2'
+   missions / endings lengths, so the static '9 × 15 × 15 × 2'
    subtitle stays in lockstep with the real data. */
 window.addEventListener('DOMContentLoaded', () => {
   const set = (key, value) => {
