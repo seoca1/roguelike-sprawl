@@ -1,0 +1,172 @@
+{
+  "generated_at": "2026-07-26",
+  "phase": "α (cross-project integrity)",
+  "description": "Missions whose story.source references a non-existent Fiction EN derivative file",
+  "total_orphans": 19,
+  "classification": {
+    "bridge_trilogy": [
+      {
+        "mission_id": "idoru_wedding",
+        "source": "idoru-wedding-protocol",
+        "title": "Idoru Wedding Protocol",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "bridge_scaffold",
+        "source": "bridge-construct",
+        "title": "Bridge Construct",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "chevette_run",
+        "source": "chevette-run",
+        "title": "Chevette Run",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "chevette_nightshift_run",
+        "source": "chevette_nightshift_run",
+        "title": "Chevette Nightshift Run",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "yanaka_family_power_arc",
+        "source": "yanaka_family_power_arc",
+        "title": "Yanaka Family-Power Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "fukuoka_ridership_arc",
+        "source": "fukuoka_ridership_arc",
+        "title": "Fukuoka Ridership Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "virtual_light_data_key_arc",
+        "source": "virtual_light_data_key_arc",
+        "title": "Virtual Light Data-Key Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "wendell_suburban_arc",
+        "source": "wendell_suburban_arc",
+        "title": "Wendell Suburban Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "boone_tokyo_electronics_arc",
+        "source": "boone_tokyo_electronics_arc",
+        "title": "Boone Tokyo-Electronics Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "pacific_empire_arc",
+        "source": "pacific_empire_arc",
+        "title": "Pacific-Empire Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "w_anchor_arc",
+        "source": "w_anchor_arc",
+        "title": "W-Anchor Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "viktor_orbit_arc",
+        "source": "viktor_orbit_arc",
+        "title": "Viktor Orbit Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "mona_bridge_arc",
+        "source": "mona_bridge_arc",
+        "title": "Mona Bridge Arc",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      }
+    ],
+    "blue_ant": [
+      {
+        "mission_id": "kombinat_node_hack",
+        "source": "kombinat-node-hack",
+        "title": "Kombinat Node Hack",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "bigend_laney_lunch",
+        "source": "bigend-laney-lunch",
+        "title": "Bigend Meets Laney",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "coolhunter_laney_tokyo",
+        "source": "coolhunter-laney-tokyo",
+        "title": "Coolhunter Meets Laney",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "cayce_footage_audit_run",
+        "source": "cayce_footage_audit_run",
+        "title": "Cayce Footage Audit Run",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      }
+    ],
+    "sprawl_uncertain": [
+      {
+        "mission_id": "tokyo_courier_run",
+        "source": "tokyo-courier-run",
+        "title": "Tokyo Courier Run",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      },
+      {
+        "mission_id": "sense_net_archive_intrusion",
+        "source": "sense_net_archive_intrusion",
+        "title": "Sense/Net Archive Intrusion",
+        "arc": "?",
+        "tier": "?",
+        "archetype": "?"
+      }
+    ]
+  },
+  "recommendation": {
+    "bridge_trilogy": "Bridge 3부작 캐릭터 (2026-07-10 정책으로 게임 스코프 제외). missions.json source 제거 또는 Fiction 단편 작성.",
+    "blue_ant": "Blue Ant 트릴로지 캐릭터 (게임 스코프 제외). 동일 권장.",
+    "sprawl_uncertain": "Sprawl 세계관 캐릭터지만 Fiction 단편 미작성. 단편 작성 권장 또는 source 제거."
+  },
+  "verification_command": "python3 scripts/verify_story_links.py --missing-only"
+}

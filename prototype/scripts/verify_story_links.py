@@ -57,19 +57,23 @@ def main() -> int:
     available = list_available_stems(ROOT)
     gmi_report = validate_game_mission_id_links(missions, ROOT)
 
+    mission_issue_count = sum(1 for r in report if r["issues"])
+    gmi_issue_count = sum(1 for r in gmi_report if r["issues"])
+    any_issues = mission_issue_count > 0 or gmi_issue_count > 0
+
     if args.json:
-        print(
-            json.dumps(
-                {
-                    "missions_total": len(missions),
-                    "stories_available": len(available),
-                    "report": report,
-                    "game_mission_id_report": gmi_report,
-                },
-                ensure_ascii=False,
-                indent=2,
-            )
-        )
+        output = {
+            "missions_total": len(missions),
+            "stories_available": len(available),
+            "issues": {
+                "mission_sources": mission_issue_count,
+                "game_mission_id_orphans": gmi_issue_count,
+            },
+            "report": report,
+            "game_mission_id_report": gmi_report,
+        }
+        print(json.dumps(output, ensure_ascii=False, indent=2))
+        return 1 if any_issues else 0
     else:
         print(f"Missions: {len(missions)}")
         print(f"Available stories: {len(available)}")

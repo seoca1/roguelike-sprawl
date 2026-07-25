@@ -15,8 +15,8 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-26T00:59:56",
-  "stories_with_mission_link": 83,
+  "_generated_at": "2026-07-26T01:04:22",
+  "stories_with_mission_link": 98,
   "catalog_entries": 104,
   "catalog_entries_list": [
     {
@@ -101,7 +101,7 @@
       "type": "short_story",
       "title_en": "Casey Leaves",
       "title_ko": "Casey의 첫 밖 (Casey Leaves)",
-      "game_mission_id": null
+      "game_mission_id": "flatline_call"
     },
     {
       "stem": "chickenhead_rickshaw_run",
@@ -115,21 +115,21 @@
       "type": "short_story",
       "title_en": "Construct Asks",
       "title_ko": "콘스트럭트의 질문 (Construct Asks)",
-      "game_mission_id": null
+      "game_mission_id": "dixies_choice"
     },
     {
       "stem": "construct_dawn",
       "type": "short_story",
       "title_en": "Construct Dawn",
       "title_ko": "콘스트럭트의 새벽 (Construct Dawn)",
-      "game_mission_id": null
+      "game_mission_id": "construct_memory_rescue"
     },
     {
       "stem": "construct_named",
       "type": "novelette",
       "title_en": "Construct Named",
       "title_ko": "콘스트럭트의 이름 (Construct Named)",
-      "game_mission_id": null
+      "game_mission_id": "aleph_fragment"
     },
     {
       "stem": "core_memory_dump",
@@ -360,14 +360,14 @@
       "type": "short_story",
       "title_en": "Molly Meets Casey",
       "title_ko": "Molly가 Casey를 만나다 (Molly Meets Casey)",
-      "game_mission_id": null
+      "game_mission_id": "first_contact"
     },
     {
       "stem": "molly_returns",
       "type": "short_story",
       "title_en": "Molly Returns",
       "title_ko": "몰리의 귀환 (Molly Returns)",
-      "game_mission_id": null
+      "game_mission_id": "mollys_final_razor"
     },
     {
       "stem": "mollys_final_razor",
@@ -528,7 +528,7 @@
       "type": "short_story",
       "title_en": "Tessier Archive",
       "title_ko": "테시에 아카이브 (Tessier Archive)",
-      "game_mission_id": null
+      "game_mission_id": "ta_payroll_archive"
     },
     {
       "stem": "tessier_sleeper_arc",
@@ -542,7 +542,7 @@
       "type": "short_story",
       "title_en": "The Answer",
       "title_ko": "The Answer",
-      "game_mission_id": null
+      "game_mission_id": "aleph_fragment"
     },
     {
       "stem": "the_choice",
@@ -556,35 +556,35 @@
       "type": "short_story",
       "title_en": "The First Walk",
       "title_ko": "첫 발걸음 (The First Walk)",
-      "game_mission_id": null
+      "game_mission_id": "first_jack"
     },
     {
       "stem": "the_fourth_word",
       "type": "short_story",
       "title_en": "The Fourth Word",
       "title_ko": "The Fourth Word",
-      "game_mission_id": null
+      "game_mission_id": "first_trace"
     },
     {
       "stem": "the_full_name",
       "type": "novelette",
       "title_en": "The Full Name",
       "title_ko": "풀 네임 (The Full Name)",
-      "game_mission_id": null
+      "game_mission_id": "construct_memory_rescue"
     },
     {
       "stem": "the_leaving",
       "type": "novelette",
       "title_en": "The Leaving",
       "title_ko": "떠남 (The Leaving)",
-      "game_mission_id": null
+      "game_mission_id": "final_choice"
     },
     {
       "stem": "the_naming",
       "type": "novelette",
       "title_en": "The Naming",
       "title_ko": "이름 (The Naming)",
-      "game_mission_id": null
+      "game_mission_id": "aleph_fragment"
     },
     {
       "stem": "threjane_family_log",
@@ -696,14 +696,14 @@
       "type": "short_story",
       "title_en": "Winters Child",
       "title_ko": "윈터의 자식 (Winter's Child)",
-      "game_mission_id": null
+      "game_mission_id": "neuromancer_merger"
     },
     {
       "stem": "winters_morning",
       "type": "novelette",
       "title_en": "Winters Morning",
       "title_ko": "윈터의 아침 (Winter's Morning)",
-      "game_mission_id": null
+      "game_mission_id": "neuromancer_first_ping"
     },
     {
       "stem": "working_class_ridership_arc",
