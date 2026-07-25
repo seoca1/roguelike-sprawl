@@ -453,5 +453,5 @@ def apply_phase_aoe(phase: PhaseProfile, state: CombatState) -> int:
     if phase.aoe_damage <= 0:
         return 0
     state.player.hp = max(0, state.player.hp - phase.aoe_damage)
-    state.push(f"!! {phase.aoe_damage} AoE damage from {phase.name}!")
+    state.push(f"!! {phase.aoe_damage} AoE damage from phase {phase.phase}!")
     return phase.aoe_damage

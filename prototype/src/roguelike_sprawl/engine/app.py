@@ -148,7 +148,12 @@ def _main_inner() -> int:
 
                 if state.screen is ScreenKind.COMBAT and state.combat_state is not None:
                     step_combat(state.combat_state)
-                    maybe_boss_phase_transition(state)
+                    # Phase H: pass registries so B-3 spawn_minions can build ICE
+                    maybe_boss_phase_transition(
+                        state,
+                        ice_registry=ice_registry,
+                        program_registry=prog_registry,
+                    )
 
                 if state.screen is ScreenKind.HACK:
                     hacking_view.step_hack(state, delta_s)

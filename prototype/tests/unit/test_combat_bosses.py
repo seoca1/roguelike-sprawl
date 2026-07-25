@@ -16,6 +16,7 @@ Validates:
 from __future__ import annotations
 
 import dataclasses
+from pathlib import Path
 
 import pytest
 
@@ -38,6 +39,8 @@ from roguelike_sprawl.combat.bosses import (
     spawn_boss_phase_transition,
 )
 from roguelike_sprawl.combat.effects import CombatEffects, IceType
+from roguelike_sprawl.combat.registry import ProgramRegistry, build_default_player
+from roguelike_sprawl.combat.state import Combatant, CombatState
 
 ALL_BOSS_IDS = ["goliath_prime", "black_ice_lord", "watchdog_alpha"]
 
@@ -480,3 +483,168 @@ class TestPerformance:
             if fx.cinematic is None:
                 break
         assert fx.cinematic is None
+
+
+class TestBossB3Enhancements:
+    """Phase H: tests for B-3 spawn_minions + aoe_damage helpers (ADR-0125)."""
+
+    def test_spawn_phase_minions_appends_to_state_enemies(self) -> None:
+        """spawn_phase_minions() adds minion Combatants to state.enemies."""
+        from roguelike_sprawl.combat.boss import (
+            PhaseProfile,
+            spawn_phase_minions,
+        )
+        from roguelike_sprawl.combat.registry import (
+            IceRegistry,
+            ProgramRegistry,
+        )
+
+        phase = PhaseProfile(
+            phase=2,
+            hp_threshold=0.66,
+            damage_multiplier=1.0,
+            color=(255, 0, 0),
+            glyph="*",
+            intro_text="Phase 2",
+            skills=(),
+            spawn_minions=("watchdog",),
+        )
+        boss = _make_boss_for_minion_test()
+        state = _make_combat_state_with_boss(boss)
+        ice_reg = IceRegistry.load(
+            Path(__file__).resolve().parent.parent.parent
+            / "data"
+            / "combat"
+            / "ice_types.json"
+        )
+        prog_reg = ProgramRegistry({})
+
+        before_enemies = len(state.enemies)
+        spawned = spawn_phase_minions(boss, phase, state, ice_reg, prog_reg)
+        assert len(spawned) == 1
+        assert len(state.enemies) == before_enemies + 1
+        assert isinstance(spawned[0], Combatant)
+        assert spawned[0].team == "enemy"
+
+    def test_spawn_phase_minions_invalid_id_skipped(self) -> None:
+        """Invalid ICE id in spawn_minions is silently skipped (no crash)."""
+        from roguelike_sprawl.combat.boss import (
+            PhaseProfile,
+            spawn_phase_minions,
+        )
+        from roguelike_sprawl.combat.registry import (
+            IceRegistry,
+            ProgramRegistry,
+        )
+
+        phase = PhaseProfile(
+            phase=1,
+            hp_threshold=1.0,
+            damage_multiplier=1.0,
+            color=(255, 0, 0),
+            glyph="?",
+            intro_text="Phase 1",
+            spawn_minions=("nonexistent_ice_id_xyz",),
+        )
+        boss = _make_boss_for_minion_test()
+        state = _make_combat_state_with_boss(boss)
+        ice_reg = IceRegistry.load(
+            Path(__file__).resolve().parent.parent.parent
+            / "data"
+            / "combat"
+            / "ice_types.json"
+        )
+        prog_reg = ProgramRegistry({})
+        before = len(state.enemies)
+        spawned = spawn_phase_minions(boss, phase, state, ice_reg, prog_reg)
+        assert spawned == []
+        assert len(state.enemies) == before
+
+    def test_apply_phase_aoe_decreases_player_hp(self) -> None:
+        """apply_phase_aoe() applies aoe_damage to player and returns it."""
+        from roguelike_sprawl.combat.boss import (
+            PhaseProfile,
+            apply_phase_aoe,
+        )
+
+        phase = PhaseProfile(
+            phase=3,
+            hp_threshold=0.33,
+            damage_multiplier=2.0,
+            color=(255, 50, 50),
+            glyph="*",
+            intro_text="Phase 3 AoE",
+            aoe_damage=15,
+        )
+        boss = _make_boss_for_minion_test()
+        state = _make_combat_state_with_boss(boss)
+        original_hp = state.player.hp
+
+        dealt = apply_phase_aoe(phase, state)
+        assert dealt == 15
+        assert state.player.hp == original_hp - 15
+
+    def test_apply_phase_aoe_zero_damage_noop(self) -> None:
+        """apply_phase_aoe() with aoe_damage=0 deals nothing."""
+        from roguelike_sprawl.combat.boss import (
+            PhaseProfile,
+            apply_phase_aoe,
+        )
+
+        phase = PhaseProfile(
+            phase=1,
+            hp_threshold=1.0,
+            damage_multiplier=1.0,
+            color=(120, 120, 220),
+            glyph="?",
+            intro_text="Phase 1 (no AoE)",
+            aoe_damage=0,
+        )
+        boss = _make_boss_for_minion_test()
+        state = _make_combat_state_with_boss(boss)
+        original_hp = state.player.hp
+
+        dealt = apply_phase_aoe(phase, state)
+        assert dealt == 0
+        assert state.player.hp == original_hp
+
+    def test_wintermute_phase_3_has_aoe_and_minion(self) -> None:
+        """WINTERMUTE phase 3 should have aoe_damage + spawn_minions populated."""
+        from roguelike_sprawl.combat.boss import WINTERMUTE_PROFILE
+
+        phase_3 = WINTERMUTE_PROFILE.phases[2]
+        assert phase_3.aoe_damage > 0
+        assert len(phase_3.spawn_minions) > 0
+
+    def test_ta_prime_phase_3_has_aoe_and_minion(self) -> None:
+        """T-A CONSTRUCT PRIME phase 3 should have aoe_damage + spawn_minions."""
+        from roguelike_sprawl.combat.boss import TA_CONSTRUCT_PRIME_PROFILE
+
+        phase_3 = TA_CONSTRUCT_PRIME_PROFILE.phases[2]
+        assert phase_3.aoe_damage > 0
+        assert len(phase_3.spawn_minions) >= 1
+
+
+def _make_boss_for_minion_test() -> Combatant:
+    """Create a minimal boss Combatant for testing."""
+    return Combatant(
+        id="test_boss",
+        name="Test Boss",
+        portrait="▲BOSS▲",
+        color=(255, 0, 0),
+        hp=200,
+        max_hp=200,
+        ap=0,
+        max_ap=0,
+        auto_attack_damage=10,
+        skills=(),
+        team="enemy",
+        ice_kind="standard",
+    )
+
+
+def _make_combat_state_with_boss(boss: Combatant) -> CombatState:
+    """Create a minimal CombatState with the given boss."""
+    player = build_default_player(max_hp=100, max_ap=6, programs=ProgramRegistry({}))
+    player.skills = ()
+    return CombatState(player=player, enemy=boss)
