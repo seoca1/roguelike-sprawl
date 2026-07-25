@@ -1,8 +1,8 @@
 {
-  "version": "0.4.0",
+  "version": "0.5.0",
   "title": "Stage Structure & Progression",
   "title_ko": "스테이지 구조 & 진행",
-  "description": "Single Run = BRIEFING → TRAVEL → Mission flow (per-mission) → COMPLETE/FAILED. v0.4: 13 stages (added BRIEFING/TRAVEL/BYPASS_SECURITY), 38 missions.",
+  "description": "Single Run = BRIEFING → TRAVEL → Mission flow (per-mission) → COMPLETE/FAILED. v0.5: 16 stages (added BLACKMARKET vendor, GHOST_ENCOUNTER Loa event, DATA_FRAGMENT collectible lore system), 38 missions.",
   "stages": [
     {
       "id": "briefing",
@@ -317,8 +317,72 @@
         "death_screen",
         "jack_out_to_hub"
       ]
+    },
+    {
+      "id": "black_market",
+      "name_en": "Black Market",
+      "name_ko": "블랙 마켓",
+      "type": "hub",
+      "is_terminal": false,
+      "objective_kind": "none",
+      "description_en": "Hub-side vendor. Trade credits and materials for programs, deck upgrades, and intel. Reachable from the Hub between runs.",
+      "description_ko": "Hub 측 상인. 프로그램, 데크 업그레이드, 인텔을 위해 크레딧과 재료를 교환한다. Run 사이 Hub에서 접근 가능.",
+      "next_stage": "pending",
+      "trigger_en": "Player enters the black market from the Hub.",
+      "trigger_ko": "플레이어가 Hub에서 블랙 마켓에 진입.",
+      "ascii_art": [
+        "  ┌──────────────────────────┐",
+        "  │  ░▒▓█  BLACK MARKET  █▓▒░  │",
+        "  │  ────────────────────     │",
+        "  │  'Cash, credits, code'    │",
+        "  │   — the silent menu       │",
+        "  │   of the Sprawl.         │",
+        "  └──────────────────────────┘"
+      ],
+      "ui_elements": [
+        "market_browser",
+        "item_detail_panel",
+        "category_tabs"
+      ]
+    },
+    {
+      "id": "ghost_encounter",
+      "name_en": "Loa Encounter",
+      "name_ko": "로아 조우",
+      "type": "matrix",
+      "is_terminal": false,
+      "objective_kind": "npc",
+      "description_en": "Rare matrix event in deep architecture. Encounter a ghost-god (Loa) of the matrix. Choose: talk, fight, or leave. Talk yields a data fragment.",
+      "description_ko": "딥 아키텍처의 희귀 매트릭스 이벤트. 매트릭스의 유령신(로아)을 조우한다. 선택: 대화, 전투, 이탈. 대화는 데이터 프래그먼트를 보상한다.",
+      "next_stage": "defeat_ice",
+      "trigger_en": "Random encounter during matrix run in DEEP/CORE/TA zones.",
+      "trigger_ko": "DEEP/CORE/TA 존 매트릭스 런 중 무작위 조우.",
+      "ascii_art": [
+        "  ░░░░░░░░░░░░░░░░░░░░░░░░░░",
+        "  ░   ◢◣  GHOST  IN  ▒░░  ░",
+        "  ░  ──  THE  MACHINE  ──  ░",
+        "  ░  ░▒▓  IT  WATCHES  ▓▒░ ░",
+        "  ░░░░░░░░░░░░░░░░░░░░░░░░░░"
+      ],
+      "ui_elements": [
+        "loa_dialogue",
+        "ghost_choice_menu",
+        "loa_ascii_portrait"
+      ]
     }
   ],
+  "gameplay_systems": {
+    "data_fragment": {
+      "name_en": "Data Fragment Collection",
+      "name_ko": "데이터 프래그먼트 수집",
+      "description_en": "v0.5 game play: collectible lore items found in missions. Each fragment unlocks a wiki page and provides narrative context for the Sprawl universe.",
+      "description_ko": "v0.5 게임 플레이: 미션에서 발견되는 수집형 로어 아이템. 각 프래그먼트는 위키 페이지를 해제하고 스프롤 세계관에 대한 서사적 맥락을 제공한다.",
+      "module": "roguelike_sprawl.data_fragment",
+      "appstate_field": "data_fragments",
+      "catalog_size": 5,
+      "rarity_tiers": ["common", "uncommon", "rare", "legendary"]
+    }
+  },
   "transitions": [
     {
       "from": "pending",

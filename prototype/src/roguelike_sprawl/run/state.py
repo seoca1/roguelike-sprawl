@@ -83,6 +83,9 @@ class Stage(StrEnum):
     FAILED = "failed"  # Player flatlined
     # Phase 9: Salvation epilogue (ADR-0090)
     SALVATION_EPILOGUE = "salvation_epilogue"  # Epilogue scene playing
+    # v0.5 expansion
+    BLACKMARKET = "black_market"  # Hub: vendor for programs/deck upgrades
+    GHOST_ENCOUNTER = "ghost_encounter"  # Matrix: Loa event in deep architecture
 
 
 Phase = Stage
@@ -299,6 +302,38 @@ DEFAULT_FLOW: dict[Stage, StageInfo] = {
         objective_kind=ObjectiveKind.NONE,
         hint="Choose an epilogue character to play the final scene.",
         next_stage=Stage.SALVATION_EPILOGUE,
+    ),
+    Stage.BLACKMARKET: StageInfo(
+        stage=Stage.BLACKMARKET,
+        title="Black Market",
+        objective_kind=ObjectiveKind.NONE,
+        hint="Trade credits and materials for programs, deck upgrades, and intel.",
+        next_stage=Stage.PENDING,
+        on_enter="The back-alley vendor counts your creds twice. 'Cash only, cowboy.'",
+        ascii_art=(
+            "  ┌──────────────────────────┐",
+            "  │  ░▒▓█  BLACK MARKET  █▓▒░  │",
+            "  │  ────────────────────     │",
+            "  │  'Cash, credits, code'    │",
+            "  │   — the silent menu       │",
+            "  │   of the Sprawl.         │",
+            "  └──────────────────────────┘",
+        ),
+    ),
+    Stage.GHOST_ENCOUNTER: StageInfo(
+        stage=Stage.GHOST_ENCOUNTER,
+        title="Loa Encounter",
+        objective_kind=ObjectiveKind.NPC,
+        hint="A ghost-god in the deep architecture. Talk, fight, or leave with empty hands.",
+        next_stage=Stage.DEFEAT_ICE,
+        on_enter="Something old. Something that has been waiting in the dark.",
+        ascii_art=(
+            "  ░░░░░░░░░░░░░░░░░░░░░░░░░░",
+            "  ░   ◢◣  GHOST  IN  ▒░░  ░",
+            "  ░  ──  THE  MACHINE  ──  ░",
+            "  ░  ░▒▓  IT  WATCHES  ▓▒░ ░",
+            "  ░░░░░░░░░░░░░░░░░░░░░░░░░░",
+        ),
     ),
 }
 

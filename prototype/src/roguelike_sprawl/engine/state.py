@@ -222,6 +222,9 @@ class AppState:
     run_state: RunState | None = None
     # Sound configuration (per-category on/off + master volume)
     sound_config: SoundConfig | None = None
+    # v0.5: Data Fragment collection (collectible lore from missions)
+    # Set of collected fragment_ids. Each unlocks wiki lore and a discovery flag.
+    data_fragments: set[str] = field(default_factory=set)
     # Jack Out animation state (Stage.JACK_OUT)
     jack_out_started_at: float = 0.0
     jack_out_frame_index: int = 0
