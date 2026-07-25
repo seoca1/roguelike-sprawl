@@ -518,6 +518,16 @@ def handle_combat_input(
     if not isinstance(event, KeyDown):
         return True
 
+    # Phase E-2: first-combat tutorial dismissed on Space/Enter
+    if getattr(state, "show_first_combat_tutorial", False) and event.sym in (
+        KeySym.SPACE,
+        KeySym.RETURN,
+        KeySym.ENTER,
+    ):
+        state.show_first_combat_tutorial = False
+        state.status_messages.append(">>> Tutorial dismissed. Good luck, cowboy.")
+        return True
+
     # System keys (quit / escape / continue) have priority.
     if event.sym is KeySym.Q:
         return False

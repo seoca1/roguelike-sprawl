@@ -27,6 +27,8 @@ RenderFn = Callable[..., None]
 def _build_dispatch() -> dict[ScreenKind, RenderFn]:
     """Build the screen→render dispatch table (lazy import)."""
     from . import (
+        chapter_view,
+        config,
         cyberspace_browser,
         debrief_view,
         dungeon_view,
@@ -34,21 +36,23 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
         graphic_novel_view,
         hacking_view,
         help_view,
-        hub as hub_screen,
         jack_out_view,
-        menu as menu_screen,
         npc_view,
+        phase_view,
         reward_view,
-        save_load_view,
         salvation_view,
+        save_load_view,
+        save_progress,
         settings_view,
         story_cinematic,
     )
-    from . import chapter_view
-    from . import config
     from . import death as death_screen
-    from . import phase_view
-    from . import save_progress
+    from . import (
+        hub as hub_screen,
+    )
+    from . import (
+        menu as menu_screen,
+    )
     from . import story_view as story_screen
     from .graphic_novel_view import render_graphic_novel_screen
 
@@ -246,7 +250,7 @@ _DISPATCH: dict[ScreenKind, RenderFn] | None = None
 
 def render_current_screen(
     console: tcod.console.Console,
-    t: "Translator",
+    t: Translator,
     state: AppState,
     prog_registry=None,
     ice_registry=None,
