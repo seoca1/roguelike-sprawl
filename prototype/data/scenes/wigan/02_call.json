@@ -1,6 +1,7 @@
 {
   "id": "scene_wigan_call",
   "character": "wigan",
+  "mission_id": "voodoo_loa_encounter",
   "order": 2,
   "title_en": "ANGIE'S CALL",
   "title_ko": "앤지의 호출",

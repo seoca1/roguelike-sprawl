@@ -1,6 +1,7 @@
 {
   "id": "scene_3jane_integration",
   "character": "3jane",
+  "mission_id": "neuromancer_merger",
   "order": 5,
   "ending": "B",
   "title_en": "INTEGRATION",

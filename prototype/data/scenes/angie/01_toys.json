@@ -1,6 +1,7 @@
 {
   "id": "scene_angie_toys",
   "character": "angie",
+  "mission_id": "voodoo_loa_encounter",
   "order": 1,
   "title_en": "THE TOYS",
   "title_ko": "장난감",

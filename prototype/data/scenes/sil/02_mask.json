@@ -1,6 +1,7 @@
 {
   "id": "scene_sil_mask",
   "character": "veteran",
+  "mission_id": "ta_heist",
   "order": 2,
   "title_en": "THE MASK",
   "title_ko": "마스크",

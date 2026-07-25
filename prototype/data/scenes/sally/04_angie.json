@@ -1,6 +1,7 @@
 {
   "id": "scene_sally_angie",
   "character": "sally",
+  "mission_id": "voodoo_loa_encounter",
   "order": 4,
   "title_en": "ANGIE'S THREAT",
   "title_ko": "앤지의 위협",

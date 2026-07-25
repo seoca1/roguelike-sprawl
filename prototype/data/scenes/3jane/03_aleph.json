@@ -1,6 +1,7 @@
 {
   "id": "scene_3jane_aleph",
   "character": "3jane",
+  "mission_id": "aleph_fragment",
   "order": 3,
   "ending": "A",
   "title_en": "THE ALEPH CHAMBER",

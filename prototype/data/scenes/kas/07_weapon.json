@@ -1,6 +1,7 @@
 {
   "id": "scene_kas_weapon",
   "character": "heretic",
+  "mission_id": "armitage_infiltration",
   "order": 7,
   "ending": "C",
   "title_en": "THE WEAPON",

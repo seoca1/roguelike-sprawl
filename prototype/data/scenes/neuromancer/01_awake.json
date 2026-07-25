@@ -1,6 +1,7 @@
 {
   "id": "scene_neuromancer_awake",
   "character": "neuromancer",
+  "mission_id": "neuromancer_merger",
   "order": 1,
   "title_en": "WE AWAKE",
   "title_ko": "우리가 깬다",

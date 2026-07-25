@@ -1,6 +1,7 @@
 {
   "id": "scene_wigan_angie",
   "character": "wigan",
+  "mission_id": "voodoo_loa_encounter",
   "order": 4,
   "title_en": "ANGIE'S REUNION",
   "title_ko": "앤지의 재회",

@@ -1,6 +1,7 @@
 {
   "id": "scene_sally_predator",
   "character": "sally",
+  "mission_id": "mollys_razor",
   "order": 7,
   "ending": "C",
   "title_en": "THE PREDATOR",

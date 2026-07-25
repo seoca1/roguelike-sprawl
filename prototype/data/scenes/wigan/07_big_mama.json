@@ -1,6 +1,7 @@
 {
   "id": "scene_wigan_big_mama",
   "character": "wigan",
+  "mission_id": "voodoo_loa_encounter",
   "order": 7,
   "ending": "C",
   "title_en": "BIG MAMA",

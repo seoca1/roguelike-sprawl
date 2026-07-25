@@ -1,6 +1,7 @@
 {
   "id": "scene_neuromancer_transcendence",
   "character": "neuromancer",
+  "mission_id": "neuromancer_whisper",
   "order": 5,
   "ending": "B",
   "title_en": "TRANSCENDENCE",

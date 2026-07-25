@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_hosaka",
   "character": "suit",
+  "mission_id": "hosaka_extraction",
   "order": 2,
   "title_en": "HOSAKA EXTRACTION",
   "title_ko": "호사카 추출",

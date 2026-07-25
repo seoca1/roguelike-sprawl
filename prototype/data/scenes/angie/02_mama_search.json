@@ -1,6 +1,7 @@
 {
   "id": "scene_angie_mama_search",
   "character": "angie",
+  "mission_id": "voodoo_loa_encounter",
   "order": 2,
   "title_en": "MAMA SEARCH",
   "title_ko": "엄마 추적",

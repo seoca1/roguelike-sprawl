@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_aritage",
   "character": "suit",
+  "mission_id": "armitage_infiltration",
   "order": 1,
   "title_en": "ARMITAGE BRIEFING",
   "title_ko": "아미티지 브리핑",

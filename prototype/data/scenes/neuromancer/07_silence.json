@@ -1,6 +1,7 @@
 {
   "id": "scene_neuromancer_silence",
   "character": "neuromancer",
+  "mission_id": "neuromancer_whisper",
   "order": 7,
   "ending": "C",
   "title_en": "SILENCE",

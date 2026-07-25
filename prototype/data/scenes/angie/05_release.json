@@ -1,6 +1,7 @@
 {
   "id": "scene_angie_release",
   "character": "angie",
+  "mission_id": "winter_infiltrate",
   "order": 5,
   "ending": "B",
   "title_en": "THE RELEASE",

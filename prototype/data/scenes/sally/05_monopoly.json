@@ -1,6 +1,7 @@
 {
   "id": "scene_sally_monopoly",
   "character": "sally",
+  "mission_id": "mollys_market",
   "order": 5,
   "ending": "B",
   "title_en": "THE MONOPOLY",

@@ -1,6 +1,7 @@
 {
   "id": "scene_neuromancer_matrix",
   "character": "neuromancer",
+  "mission_id": "matrix_revelation",
   "order": 3,
   "title_en": "THE MATRIX",
   "title_ko": "매트릭스",

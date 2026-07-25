@@ -1,6 +1,7 @@
 {
   "id": "scene_kas_intro",
   "character": "heretic",
+  "mission_id": "craft_job",
   "order": 1,
   "title_en": "MANARASE MIDNIGHT",
   "title_ko": "매나리사 자정",

@@ -1,6 +1,7 @@
 {
   "id": "scene_sally_bobby",
   "character": "sally",
+  "mission_id": "mollys_razor",
   "order": 2,
   "title_en": "BOBBY'S BETRAYAL",
   "title_ko": "바비의 배신",

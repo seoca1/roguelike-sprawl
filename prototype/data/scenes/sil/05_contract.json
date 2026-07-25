@@ -1,6 +1,7 @@
 {
   "id": "scene_sil_contract",
   "character": "veteran",
+  "mission_id": "ta_defection",
   "order": 5,
   "ending": "B",
   "title_en": "THE CONTRACT",

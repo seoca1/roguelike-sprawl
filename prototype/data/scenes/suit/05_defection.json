@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_defection",
   "character": "suit",
+  "mission_id": "ta_defection",
   "order": 5,
   "ending": "B",
   "title_en": "THE DEFECTION",

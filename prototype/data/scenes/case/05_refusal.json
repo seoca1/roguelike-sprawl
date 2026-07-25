@@ -1,6 +1,7 @@
 {
   "id": "scene_case_refusal",
   "character": "novice",
+  "mission_id": "data_retrieval",
   "order": 5,
   "ending": "B",
   "title_en": "THE REFUSAL",

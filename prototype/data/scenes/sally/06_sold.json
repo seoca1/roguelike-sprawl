@@ -1,6 +1,7 @@
 {
   "id": "scene_sally_sold",
   "character": "sally",
+  "mission_id": "yakuza_deal",
   "order": 6,
   "ending": "B",
   "title_en": "SOLD OUT",

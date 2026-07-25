@@ -1,6 +1,7 @@
 {
   "id": "scene_case_freeside",
   "character": "novice",
+  "mission_id": "first_contact",
   "order": 8,
   "ending": "C",
   "title_en": "THE MORNING AFTER",

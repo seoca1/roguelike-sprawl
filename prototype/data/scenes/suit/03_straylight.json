@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_straylight",
   "character": "suit",
+  "mission_id": "ta_defection",
   "order": 3,
   "title_en": "T-A DEFECTION",
   "title_ko": "T-A 이탈",

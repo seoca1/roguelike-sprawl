@@ -1,6 +1,7 @@
 {
   "id": "scene_sil_erase",
   "character": "veteran",
+  "mission_id": "final_choice",
   "order": 7,
   "ending": "C",
   "title_en": "THE ERASE",

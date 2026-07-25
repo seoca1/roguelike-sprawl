@@ -1,6 +1,7 @@
 {
   "id": "scene_3jane_sale",
   "character": "3jane",
+  "mission_id": "ta_heist",
   "order": 7,
   "ending": "C",
   "title_en": "FAMILY SALE",

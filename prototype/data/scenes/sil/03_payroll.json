@@ -1,6 +1,7 @@
 {
   "id": "scene_sil_payroll",
   "character": "veteran",
+  "mission_id": "hosaka_extraction",
   "order": 3,
   "title_en": "T-A PAYROLL",
   "title_ko": "T-A PAYROLL",

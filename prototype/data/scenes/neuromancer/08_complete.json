@@ -1,6 +1,7 @@
 {
   "id": "scene_neuromancer_complete",
   "character": "neuromancer",
+  "mission_id": "neuromancer_merger",
   "order": 8,
   "ending": "C",
   "title_en": "THE COMPLETE",

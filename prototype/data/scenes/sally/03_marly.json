@@ -1,6 +1,7 @@
 {
   "id": "scene_sally_marly",
   "character": "sally",
+  "mission_id": "watchdog_patrol",
   "order": 3,
   "title_en": "MARLY MEETING",
   "title_ko": "마리와의 만남",

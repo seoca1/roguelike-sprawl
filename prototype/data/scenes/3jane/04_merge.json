@@ -1,6 +1,7 @@
 {
   "id": "scene_3jane_merge",
   "character": "3jane",
+  "mission_id": "neuromancer_merger",
   "order": 4,
   "ending": "A",
   "title_en": "WINTERMUTE MERGE",

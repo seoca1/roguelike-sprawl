@@ -1,6 +1,7 @@
 {
   "id": "scene_case_disappear",
   "character": "novice",
+  "mission_id": "ice_run",
   "order": 7,
   "ending": "C",
   "title_en": "THE DISAPPEARANCE",

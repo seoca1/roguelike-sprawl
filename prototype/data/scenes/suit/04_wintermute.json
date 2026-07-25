@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_wintermute",
   "character": "suit",
+  "mission_id": "wintermute_negotiation",
   "order": 4,
   "title_en": "WINTERMUTE NEGOTIATION",
   "title_ko": "윈터뮤트 협상",

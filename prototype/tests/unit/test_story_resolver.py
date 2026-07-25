@@ -234,8 +234,8 @@ class TestGetMissionForScene:
         """mission_id 없는 scene → None."""
         from roguelike_sprawl.data.story_resolver import get_mission_for_scene
 
-        # case/05_refusal.json does not have mission_id
-        result = get_mission_for_scene("05_refusal", "case", ROOT_PROJECT)
+        # angie/08_third_room.json does not have mission_id
+        result = get_mission_for_scene("08_third_room", "angie", ROOT_PROJECT)
         assert result is None
 
     def test_nonexistent_scene(self) -> None:

@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_negotiation",
   "character": "suit",
+  "mission_id": "wintermute_negotiation",
   "order": 7,
   "ending": "C",
   "title_en": "THE NEGOTIATION",

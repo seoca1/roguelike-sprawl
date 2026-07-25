@@ -1,6 +1,7 @@
 {
   "id": "scene_3jane_straylight",
   "character": "3jane",
+  "mission_id": "ta_defection",
   "order": 1,
   "ending": "A",
   "title_en": "STRAYLIGHT DAWN",

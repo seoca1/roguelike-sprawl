@@ -1,6 +1,7 @@
 {
   "id": "scene_wigan_offering",
   "character": "wigan",
+  "mission_id": "voodoo_loa_encounter",
   "order": 5,
   "ending": "B",
   "title_en": "THE OFFERING",

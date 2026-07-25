@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_constellation",
   "character": "suit",
+  "mission_id": "ta_defection",
   "order": 8,
   "ending": "C",
   "title_en": "THE CONSTELLATION",

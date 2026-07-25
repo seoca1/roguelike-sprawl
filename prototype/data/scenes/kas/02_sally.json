@@ -1,6 +1,7 @@
 {
   "id": "scene_kas_sally",
   "character": "heretic",
+  "mission_id": "sally_returns_arc3",
   "order": 2,
   "title_en": "SALLY",
   "title_ko": "샐리",

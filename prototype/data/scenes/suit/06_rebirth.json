@@ -1,6 +1,7 @@
 {
   "id": "scene_suit_rebirth",
   "character": "suit",
+  "mission_id": "neuromancer_merger",
   "order": 6,
   "ending": "B",
   "title_en": "THE REBIRTH",

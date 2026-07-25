@@ -1,6 +1,7 @@
 {
   "id": "scene_kas_declaration",
   "character": "heretic",
+  "mission_id": "final_choice",
   "order": 3,
   "title_en": "THE DECLARATION",
   "title_ko": "선언",

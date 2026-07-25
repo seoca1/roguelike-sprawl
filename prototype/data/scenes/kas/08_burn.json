@@ -1,6 +1,7 @@
 {
   "id": "scene_kas_burn",
   "character": "heretic",
+  "mission_id": "first_trace",
   "order": 8,
   "ending": "C",
   "title_en": "THE BURN",
