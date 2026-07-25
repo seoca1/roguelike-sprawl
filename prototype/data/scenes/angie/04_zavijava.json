@@ -1,6 +1,7 @@
 {
   "id": "scene_angie_zavijava",
   "character": "angie",
+  "mission_id": "wigan_call",
   "order": 4,
   "title_en": "ZAVIJAVA MEETING",
   "title_ko": "자비야바 만남",

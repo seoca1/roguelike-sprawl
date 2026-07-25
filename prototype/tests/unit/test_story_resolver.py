@@ -169,3 +169,96 @@ class TestCanonicalDates:
     def test_includes_2026_06_23(self) -> None:
         """2026-06-23 (현재 canonical) 포함."""
         assert "2026-06-23" in CANONICAL_DATES
+
+
+class TestGetFictionStoryForMission:
+    """get_fiction_story_for_mission() Phase β-1 helper 테스트."""
+
+    def test_known_mission_with_fiction(self) -> None:
+        """aleph_fragment 미션 → Aleph Fragment Fiction."""
+        from roguelike_sprawl.data.story_resolver import (
+            get_fiction_story_for_mission,
+        )
+
+        result = get_fiction_story_for_mission("aleph_fragment", ROOT_PROJECT)
+        assert result is not None
+        assert result["title_en"] == "Aleph Fragment"
+        assert "aleph_fragment" in result["file"]
+        assert result["trilogy"] == "sprawl-trilogy"
+        assert result["word_count"] > 0
+
+    def test_mission_with_indirect_fiction(self) -> None:
+        """first_jack mission_id → linked Fiction (Phase α Tier 1 mapping)."""
+        from roguelike_sprawl.data.story_resolver import (
+            get_fiction_story_for_mission,
+        )
+
+        result = get_fiction_story_for_mission("first_jack", ROOT_PROJECT)
+        # first_jack linked via Tier 1 to the_first_walk; should resolve
+        # to a Fiction file with title matching that stem
+        assert result is not None
+        assert result["title_en"] == "The First Walk"
+
+    def test_out_of_scope_mission(self) -> None:
+        """Bridge/Blue Ant mission (no Fiction source) → None."""
+        from roguelike_sprawl.data.story_resolver import (
+            get_fiction_story_for_mission,
+        )
+
+        result = get_fiction_story_for_mission("idoru_wedding", ROOT_PROJECT)
+        assert result is None
+
+    def test_nonexistent_mission(self) -> None:
+        """존재하지 않는 mission_id → None."""
+        from roguelike_sprawl.data.story_resolver import (
+            get_fiction_story_for_mission,
+        )
+
+        result = get_fiction_story_for_mission("nonexistent_mission_xyz", ROOT_PROJECT)
+        assert result is None
+
+
+class TestGetMissionForScene:
+    """get_mission_for_scene() Phase β-2 helper 테스트."""
+
+    def test_scene_with_mission_id(self) -> None:
+        """case/01_chattos.json → first_jack mission."""
+        from roguelike_sprawl.data.story_resolver import get_mission_for_scene
+
+        result = get_mission_for_scene("01_chattos", "case", ROOT_PROJECT)
+        assert result is not None
+        assert result["id"] == "first_jack"
+        assert result["title"] == "First Jack"
+
+    def test_scene_without_mission_id(self) -> None:
+        """mission_id 없는 scene → None."""
+        from roguelike_sprawl.data.story_resolver import get_mission_for_scene
+
+        # case/05_refusal.json does not have mission_id
+        result = get_mission_for_scene("05_refusal", "case", ROOT_PROJECT)
+        assert result is None
+
+    def test_nonexistent_scene(self) -> None:
+        """존재하지 않는 scene 파일 → None."""
+        from roguelike_sprawl.data.story_resolver import get_mission_for_scene
+
+        result = get_mission_for_scene("nonexistent", "case", ROOT_PROJECT)
+        assert result is None
+
+    def test_wigan_zavijava_scene(self) -> None:
+        """wigan/01_zavijava.json — no mission_id currently (next_scene ref)."""
+        from roguelike_sprawl.data.story_resolver import get_mission_for_scene
+
+        # 01_zavijava doesn't currently have mission_id field
+        # (was an earlier false assumption — only the 6 mappings from
+        # β-2 actually carry mission_id today)
+        result = get_mission_for_scene("01_zavijava", "wigan", ROOT_PROJECT)
+        assert result is None
+
+    def test_angie_zavijava_scene(self) -> None:
+        """angie/04_zavijava.json → wigan_call (Phase β-2 mapping)."""
+        from roguelike_sprawl.data.story_resolver import get_mission_for_scene
+
+        result = get_mission_for_scene("04_zavijava", "angie", ROOT_PROJECT)
+        assert result is not None
+        assert result["id"] == "wigan_call"

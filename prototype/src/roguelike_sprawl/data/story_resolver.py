@@ -17,6 +17,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 # 가장 최근 canonical 날짜 (v2.1). 새 버전 출시 시 갱신.
@@ -243,3 +244,129 @@ def validate_game_mission_id_links(
             issues.append("ORPHAN_MISSION_ID")
         report.append({**row, "issues": issues})
     return report
+
+
+def get_mission_for_scene(
+    scene_id: str, jockey: str, repo_root: Path
+) -> dict[str, object] | None:
+    """Look up the mission linked to a GN scene via its `mission_id` field.
+
+    Phase β-2: GN scene JSON files may declare a `mission_id` field to
+    link a character arc scene with its gameplay mission counterpart.
+    Only 7 of 81 scenes currently have this field (mostly case/01-04
+    → first_jack and sally/01 → sally_returns_arc3).
+
+    Args:
+        scene_id: Scene id (e.g. "scene_case_jackin") or scene file stem
+        jockey: Jockey identifier ("case", "sil", etc.)
+        repo_root: Project root (Projects/)
+
+    Returns:
+        Mission dict from missions.json or None if no link.
+    """
+    import json as _json
+
+    scene_path = (
+        repo_root
+        / "Game"
+        / "roguelike_sprawl"
+        / "prototype"
+        / "data"
+        / "scenes"
+        / jockey
+        / f"{scene_id}.json"
+    )
+    if not scene_path.exists():
+        return None
+    try:
+        scene = _json.loads(scene_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    mid = scene.get("mission_id")
+    if not mid:
+        return None
+    missions_path = (
+        repo_root
+        / "Game"
+        / "roguelike_sprawl"
+        / "prototype"
+        / "data"
+        / "missions"
+        / "missions.json"
+    )
+    if not missions_path.exists():
+        return None
+    try:
+        missions = _json.loads(missions_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    mission = missions.get(mid)
+    if not isinstance(mission, dict):
+        return None
+    return {"id": mid, **mission}
+
+
+def get_fiction_story_for_mission(
+    mission_id: str, repo_root: Path
+) -> dict[str, object] | None:
+    """Resolve mission_id → Fiction derivative story metadata.
+
+    Looks up the Fiction file declared via game_mission_id frontmatter
+    matching the given mission_id. Returns None if no Fiction story
+    references this mission (either the mission is out-of-scope or the
+    Fiction link is missing).
+
+    Returns dict with keys:
+        - file (relative path to Fiction EN file)
+        - stem (Fiction stem)
+        - title_en (English title)
+        - title_ko (Korean title)
+        - character_ref (POV character: novice/veteran/heretic/etc.)
+        - derivative_type (short_story/novelette)
+        - word_count (EN)
+        - trilogy (sprawl-trilogy / bridge-trilogy / blue-ant)
+    """
+    fm_pattern = re.compile(r"^game_mission_id:\s*(\S+)\s*$", re.MULTILINE)
+    title_en_pattern = re.compile(
+        r"^title:\s*\n\s*en:\s*['\"]?([^'\"\n]+?)['\"]?\s*$", re.MULTILINE
+    )
+    title_ko_pattern = re.compile(
+        r"^title:\s*\n\s*ko:\s*['\"]?([^'\"\n]+?)['\"]?\s*$", re.MULTILINE
+    )
+    char_pattern = re.compile(r"^character_ref:\s*['\"]?(\w+)", re.MULTILINE)
+    type_pattern = re.compile(r"^derivative_type:\s*(\S+)", re.MULTILINE)
+    wc_pattern = re.compile(r"^word_count:\s*(\d+)", re.MULTILINE)
+
+    trilogies = ("sprawl-trilogy", "bridge-trilogy", "blue-ant")
+    novel_subdirs = ("short-stories", "novelettes", "novellas")
+    derivative_root = repo_root / "Fiction" / "derivative"
+
+    for trilogy in trilogies:
+        for subdir in novel_subdirs:
+            en_dir = derivative_root / trilogy / subdir / "en"
+            if not en_dir.exists():
+                continue
+            for f in en_dir.glob("*.md"):
+                try:
+                    text = f.read_text(encoding="utf-8")
+                except OSError:
+                    continue
+                m = fm_pattern.search(text)
+                if not m or m.group(1).strip().strip('"') != mission_id:
+                    continue
+                title_en_m = title_en_pattern.search(text)
+                title_ko_m = title_ko_pattern.search(text)
+                char_m = char_pattern.search(text)
+                type_m = type_pattern.search(text)
+                wc_m = wc_pattern.search(text)
+                return {
+                    "file": str(f.relative_to(repo_root)),
+                    "stem": f.stem.split("_", 1)[-1] if "_" in f.stem else f.stem,
+                    "title_en": title_en_m.group(1) if title_en_m else f.stem,
+                    "title_ko": title_ko_m.group(1) if title_ko_m else "",
+                    "character_ref": char_m.group(1) if char_m else "",
+                    "derivative_type": type_m.group(1) if type_m else "short_story",
+                    "word_count": int(wc_m.group(1)) if wc_m else 0,
+                    "trilogy": trilogy,
+                }
+    return None

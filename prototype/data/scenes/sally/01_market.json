@@ -1,6 +1,7 @@
 {
   "id": "scene_sally_market",
   "character": "sally",
+  "mission_id": "sally_returns_arc3",
   "order": 1,
   "title_en": "THE MARKET OPENS",
   "title_ko": "시장 개장",

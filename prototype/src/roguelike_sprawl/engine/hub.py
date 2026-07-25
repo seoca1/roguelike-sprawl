@@ -72,16 +72,31 @@ def render_hub(console: tcod.console.Console, t: Translator, state: AppState) ->
         selected = available[state.hub_selected_index]
         zdr = _preview_zdr(selected)
         status = calculate_status(ppl, zdr)
+        detail_lines = [
+            f"Title: {selected.title}",
+            f"Objective: {selected.objective}",
+            f"ZDR: {zdr}  Status: {status.value.upper()}",
+            f"Reward: T{selected.reward_tier} + {selected.reward_credits} cr",
+        ]
+        # Phase β-1: Fiction cross-reference link (if available)
+        from pathlib import Path as _Path
+
+        from ..data.story_resolver import (  # type: ignore[import-not-found]  # noqa: E402
+            get_fiction_story_for_mission,
+        )
+
+        repo_root = _Path(__file__).resolve().parents[4]
+        fiction = get_fiction_story_for_mission(selected.id, repo_root)
+        if fiction is not None:
+            detail_lines.append("")
+            detail_lines.append(f"Fiction: {fiction['title_en']}")
+            detail_lines.append(f"  ({fiction['word_count']}w, {fiction['character_ref']} POV)")
+            detail_lines.append(f"  → {fiction['file']}")
         draw_side(
             console,
             side_r,
             label="Mission Details",
-            lines=[
-                f"Title: {selected.title}",
-                f"Objective: {selected.objective}",
-                f"ZDR: {zdr}  Status: {status.value.upper()}",
-                f"Reward: T{selected.reward_tier} + {selected.reward_credits} cr",
-            ],
+            lines=detail_lines,
         )
     else:
         draw_side(console, side_r, label="Mission Details", lines=["No mission selected"])
