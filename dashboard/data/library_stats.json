@@ -1,8 +1,8 @@
 {
-  "short_stories_en": 51,
-  "short_stories_ko": 51,
-  "novelettes_en": 34,
-  "novelettes_ko": 34,
+  "short_stories_en": 59,
+  "short_stories_ko": 59,
+  "novelettes_en": 26,
+  "novelettes_ko": 26,
   "hook_kinds": 6,
   "hook_kind_names": [
     "narrative",
@@ -15,7 +15,7 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-25T14:38:58",
+  "_generated_at": "2026-07-25T23:06:31",
   "catalog_entries": 85,
   "catalog_entries_list": [
     {
@@ -80,9 +80,9 @@
     },
     {
       "stem": "chickenhead_rickshaw_run",
-      "type": "novelette",
+      "type": "short_story",
       "title_en": "Chickenhead Rickshaw Run",
-      "title_ko": "치킨헤드 인력거"
+      "title_ko": "치킨헤드 인력거 (Chickenhead Rickshaw)"
     },
     {
       "stem": "construct_asks",
@@ -128,9 +128,9 @@
     },
     {
       "stem": "eurydice_arc",
-      "type": "novelette",
+      "type": "short_story",
       "title_en": "Eurydice Arc",
-      "title_ko": "Eurydice, 감사됨"
+      "title_ko": "Eurydice, 감사됨 (Eurydice, Audited)"
     },
     {
       "stem": "fido_statework",
@@ -148,7 +148,7 @@
       "stem": "finns_factory_labour",
       "type": "short_story",
       "title_en": "Finns Factory Labour",
-      "title_ko": "핀의 공장 노동"
+      "title_ko": "핀의 공장 노동 (Finn's Factory Labour)"
     },
     {
       "stem": "finns_room",
@@ -206,9 +206,9 @@
     },
     {
       "stem": "hounds_arc",
-      "type": "novelette",
+      "type": "short_story",
       "title_en": "Hounds Arc",
-      "title_ko": "감사된 하운드들"
+      "title_ko": "감사된 하운드들 (The Hounds Audited)"
     },
     {
       "stem": "ice_run",
@@ -218,9 +218,9 @@
     },
     {
       "stem": "idoru_wedding_arc",
-      "type": "novelette",
+      "type": "short_story",
       "title_en": "Idoru Wedding Arc",
-      "title_ko": "이도루 결혼"
+      "title_ko": "이도루 결혼 (The Idoru-Wedding)"
     },
     {
       "stem": "kumiko_manarase-midnight",
@@ -230,9 +230,9 @@
     },
     {
       "stem": "laney_node_signal_run",
-      "type": "novelette",
+      "type": "short_story",
       "title_en": "Laney Node Signal Run",
-      "title_ko": "노드 인식자"
+      "title_ko": "노드 인식자 (Nodal Perceiver)"
     },
     {
       "stem": "loa_voodoo_contact",
@@ -356,9 +356,9 @@
     },
     {
       "stem": "surface_mail_run",
-      "type": "novelette",
+      "type": "short_story",
       "title_en": "Surface Mail Run",
-      "title_ko": "저 대역폭"
+      "title_ko": "저 대역폭 (The Low Bandwidth)"
     },
     {
       "stem": "ta_defection",
@@ -434,9 +434,9 @@
     },
     {
       "stem": "trauma_squads_pair_arc",
-      "type": "novelette",
+      "type": "short_story",
       "title_en": "Trauma Squads Pair Arc",
-      "title_ko": "감사된 페어링"
+      "title_ko": "감사된 페어링 (The Pairing Audited)"
     },
     {
       "stem": "tutorial_maze",
@@ -494,9 +494,9 @@
     },
     {
       "stem": "working_class_ridership_arc",
-      "type": "novelette",
+      "type": "short_story",
       "title_en": "Working Class Ridership Arc",
-      "title_ko": "이야기 기록"
+      "title_ko": "노동자 계급 승차 아크 (Working Class Ridership Arc)"
     },
     {
       "stem": "yakuza_deal",
@@ -514,7 +514,7 @@
       "stem": "zion-vote",
       "type": "short_story",
       "title_en": "Zion-Vote",
-      "title_ko": "자이온 투표"
+      "title_ko": "자이온 투표 (Zion Vote)"
     },
     {
       "stem": "zion_express",
