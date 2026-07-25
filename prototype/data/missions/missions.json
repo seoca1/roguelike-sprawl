@@ -36,7 +36,9 @@
         "unique_construct": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "black_ice_dream": {
     "id": "black_ice_dream",
@@ -76,7 +78,9 @@
         "upgrade_t3": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "craft_job": {
     "id": "craft_job",
@@ -117,7 +121,9 @@
       }
     },
     "fixer": "finn",
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "data_retrieval": {
     "id": "data_retrieval",
@@ -156,7 +162,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "delivery_to_finn": {
     "id": "delivery_to_finn",
@@ -196,7 +204,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "dixies_choice": {
     "id": "dixies_choice",
@@ -235,7 +245,9 @@
       }
     },
     "arc": 4,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "dixies_offer": {
     "id": "dixies_offer",
@@ -274,7 +286,9 @@
         "construct_fragment": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "final_choice": {
     "id": "final_choice",
@@ -313,7 +327,9 @@
         "ending_token": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "first_contact": {
     "id": "first_contact",
@@ -352,7 +368,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "first_jack": {
     "id": "first_jack",
@@ -391,7 +409,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "first_trace": {
     "id": "first_trace",
@@ -430,7 +450,9 @@
         "data_fragment": 3
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "flatline_call": {
     "id": "flatline_call",
@@ -470,7 +492,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "ice_run": {
     "id": "ice_run",
@@ -510,7 +534,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "matrix_revelation": {
     "id": "matrix_revelation",
@@ -549,7 +575,9 @@
       }
     },
     "arc": 4,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "mollys_market": {
     "id": "mollys_market",
@@ -588,7 +616,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "molly_decides": {
     "id": "molly_decides",
@@ -643,7 +673,9 @@
       "family"
     ],
     "character_ref": "veteran",
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "mollys_razor": {
     "id": "mollys_razor",
@@ -682,7 +714,9 @@
         "unique_program": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "neuromancer_merger": {
     "id": "neuromancer_merger",
@@ -721,7 +755,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "neuromancer_whisper": {
     "id": "neuromancer_whisper",
@@ -760,7 +796,9 @@
       }
     },
     "arc": 3,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "sally_returns_arc3": {
     "id": "sally_returns_arc3",
@@ -798,7 +836,9 @@
       }
     },
     "arc": 3,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "sally_sandii_3am": {
     "id": "sally_sandii_3am",
@@ -836,7 +876,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "sense_net_tip": {
     "id": "sense_net_tip",
@@ -875,7 +917,9 @@
         "upgrade_t2": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "ta_heist": {
     "id": "ta_heist",
@@ -914,7 +958,9 @@
         "upgrade_t4": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "tutorial_maze": {
     "id": "tutorial_maze",
@@ -953,7 +999,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "vegas_stakeout": {
     "id": "vegas_stakeout",
@@ -992,7 +1040,9 @@
       }
     },
     "arc": 3,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "voodoo_loa_encounter": {
     "id": "voodoo_loa_encounter",
@@ -1032,7 +1082,9 @@
         "loa_fragment": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "watchdog_patrol": {
     "id": "watchdog_patrol",
@@ -1072,7 +1124,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "winter_infiltrate": {
     "id": "winter_infiltrate",
@@ -1111,7 +1165,9 @@
       }
     },
     "arc": 4,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "yakuza_deal": {
     "id": "yakuza_deal",
@@ -1151,7 +1207,9 @@
         "upgrade_t2": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "zion_express": {
     "id": "zion_express",
@@ -1190,7 +1248,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "armitage_infiltration": {
     "id": "armitage_infiltration",
@@ -1230,7 +1290,9 @@
         "wetware_data": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "hosaka_extraction": {
     "id": "hosaka_extraction",
@@ -1270,7 +1332,9 @@
         "rom_echo": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "ta_defection": {
     "id": "ta_defection",
@@ -1311,7 +1375,9 @@
         "biosoft_agent": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "wintermute_negotiation": {
     "id": "wintermute_negotiation",
@@ -1351,7 +1417,9 @@
         "biosoft_agent": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "sense_net_infiltration": {
     "id": "sense_net_infiltration",
@@ -1390,7 +1458,9 @@
         "upgrade_t2": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "wigan_call": {
     "id": "wigan_call",
@@ -1429,7 +1499,9 @@
         "loa_chip": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "hosaka_core": {
     "id": "hosaka_core",
@@ -1468,7 +1540,9 @@
         "upgrade_t3": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "straylight_approach": {
     "id": "straylight_approach",
@@ -1507,7 +1581,9 @@
         "t_a_data_fragment": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "maas_heist": {
     "id": "maas_heist",
@@ -1546,7 +1622,9 @@
         "bio_chip": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "hosaka_corporate_infiltration": {
     "id": "hosaka_corporate_infiltration",
@@ -1585,7 +1663,9 @@
         "upgrade_t2": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "sense_net_media_extract": {
     "id": "sense_net_media_extract",
@@ -1624,7 +1704,9 @@
         "upgrade_t3": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "yakuza_loan_shark": {
     "id": "yakuza_loan_shark",
@@ -1663,7 +1745,9 @@
         "upgrade_t2": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "ta_payroll_archive": {
     "id": "ta_payroll_archive",
@@ -1703,7 +1787,9 @@
         "loa_chip": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "maas_neural_extract": {
     "id": "maas_neural_extract",
@@ -1743,7 +1829,9 @@
         "bio_chip": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "construct_memory_rescue": {
     "id": "construct_memory_rescue",
@@ -1782,7 +1870,9 @@
         "unique_construct": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "ta_straylight_archive": {
     "id": "ta_straylight_archive",
@@ -1822,7 +1912,9 @@
         "t_a_data_fragment": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "ta_3jane_betrayal": {
     "id": "ta_3jane_betrayal",
@@ -1862,7 +1954,9 @@
         "t_a_data_fragment": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "ta_wintermute_direct": {
     "id": "ta_wintermute_direct",
@@ -1902,7 +1996,9 @@
         "t_a_data_fragment": 3
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "beijing_memory_courier": {
     "id": "beijing_memory_courier",
@@ -1942,7 +2038,9 @@
         "memory_fragment": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "tokyo_courier_run": {
     "id": "tokyo_courier_run",
@@ -1982,7 +2080,9 @@
         "memory_fragment": 1
       }
     },
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "idoru_wedding": {
     "id": "idoru_wedding",
@@ -2244,7 +2344,9 @@
         "soho_pass": 1
       }
     },
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "panther_negotiate": {
     "id": "panther_negotiate",
@@ -2289,7 +2391,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "heretic_loa_conscription": {
     "id": "heretic_loa_conscription",
@@ -2334,7 +2438,9 @@
       }
     },
     "arc": 4,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "ono_sendai_repair": {
     "id": "ono_sendai_repair",
@@ -2379,7 +2485,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "hosaka_terminal_supply": {
     "id": "hosaka_terminal_supply",
@@ -2424,7 +2532,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "sense_net_archive_intrusion": {
     "id": "sense_net_archive_intrusion",
@@ -2469,7 +2579,9 @@
       }
     },
     "arc": 4,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "zion_vote_observation": {
     "id": "zion_vote_observation",
@@ -2514,7 +2626,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "cortex_hound_recovery": {
     "id": "cortex_hound_recovery",
@@ -2559,7 +2673,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "zaibatsu_statework": {
     "id": "zaibatsu_statework",
@@ -2604,7 +2720,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "finn_factory_labour_run": {
     "id": "finn_factory_labour_run",
@@ -2649,7 +2767,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "bing_statework": {
     "id": "bing_statework",
@@ -2694,7 +2814,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "chevette_nightshift_run": {
     "id": "chevette_nightshift_run",
@@ -2827,7 +2949,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "chickenhead_rickshaw_run": {
     "id": "chickenhead_rickshaw_run",
@@ -2872,7 +2996,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "surface_mail_run": {
     "id": "surface_mail_run",
@@ -2917,7 +3043,9 @@
       }
     },
     "arc": 1,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "bama_statework": {
     "id": "bama_statework",
@@ -2962,7 +3090,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "trauma_squads_audit": {
     "id": "trauma_squads_audit",
@@ -3007,7 +3137,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "laney_node_signal_run": {
     "id": "laney_node_signal_run",
@@ -3052,7 +3184,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "pan_mannerist_audit": {
     "id": "pan_mannerist_audit",
@@ -3097,7 +3231,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "trauma_squads_pair_arc": {
     "id": "trauma_squads_pair_arc",
@@ -3142,7 +3278,9 @@
       }
     },
     "arc": 4,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "idoru_wedding_arc": {
     "id": "idoru_wedding_arc",
@@ -3187,7 +3325,9 @@
       }
     },
     "arc": 3,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "yanaka_family_power_arc": {
     "id": "yanaka_family_power_arc",
@@ -3320,7 +3460,9 @@
       }
     },
     "arc": 2,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "working_class_ridership_arc": {
     "id": "working_class_ridership_arc",
@@ -3365,7 +3507,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "virtual_light_data_key_arc": {
     "id": "virtual_light_data_key_arc",
@@ -3542,7 +3686,9 @@
       }
     },
     "arc": 3,
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "pacific_empire_arc": {
     "id": "pacific_empire_arc",
@@ -3719,7 +3865,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "mona_bridge_arc": {
     "id": "mona_bridge_arc",
@@ -3808,7 +3956,9 @@
       }
     },
     "arc": 5,
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "soho_blackout": {
     "id": "soho_blackout",
@@ -3847,7 +3997,9 @@
         "scrap_ice": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "tokyo_pachinko_run": {
     "id": "tokyo_pachinko_run",
@@ -3887,7 +4039,9 @@
         "raw_neural": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "freeside_payroll": {
     "id": "freeside_payroll",
@@ -3927,7 +4081,9 @@
         "memory_shard": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "straylight_inquiry": {
     "id": "straylight_inquiry",
@@ -3967,7 +4123,9 @@
         "memory_shard": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "core_memory_dump": {
     "id": "core_memory_dump",
@@ -4007,7 +4165,9 @@
         "refined_neural": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "razor_work": {
     "id": "razor_work",
@@ -4046,7 +4206,9 @@
         "scrap_ice": 1
       }
     },
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "hideo_contract": {
     "id": "hideo_contract",
@@ -4086,7 +4248,9 @@
         "raw_neural": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "voodoo_zoneload": {
     "id": "voodoo_zoneload",
@@ -4126,7 +4290,9 @@
         "memory_shard": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "armitage_infiltration_2": {
     "id": "armitage_infiltration_2",
@@ -4166,7 +4332,9 @@
         "memory_shard": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "wintermute_witness": {
     "id": "wintermute_witness",
@@ -4206,7 +4374,9 @@
         "refined_neural": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "wigan_construct_reach": {
     "id": "wigan_construct_reach",
@@ -4246,7 +4416,9 @@
         "raw_neural": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "angie_leopard_tracking": {
     "id": "angie_leopard_tracking",
@@ -4286,7 +4458,9 @@
         "memory_shard": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 300,
+    "reward_tier": 2
   },
   "sally_construct_market": {
     "id": "sally_construct_market",
@@ -4326,7 +4500,9 @@
         "memory_shard": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "threjane_family_log": {
     "id": "threjane_family_log",
@@ -4365,7 +4541,9 @@
         "scrap_ice": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 75,
+    "reward_tier": 1
   },
   "neuromancer_first_ping": {
     "id": "neuromancer_first_ping",
@@ -4405,7 +4583,9 @@
         "raw_neural": 1
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 150,
+    "reward_tier": 1
   },
   "finn_final_reckoning": {
     "id": "finn_final_reckoning",
@@ -4445,7 +4625,9 @@
         "refined_neural": 3
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "salvation_wigan_zavijava": {
     "id": "salvation_wigan_zavijava",
@@ -4485,7 +4667,9 @@
         "refined_neural": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 1100,
+    "reward_tier": 3
   },
   "wintermute_merger_run": {
     "id": "wintermute_merger_run",
@@ -4525,7 +4709,9 @@
         "memory_shard": 2
       }
     },
-    "is_canonical_cast": true
+    "is_canonical_cast": true,
+    "reward_credits": 600,
+    "reward_tier": 2
   },
   "mollys_final_razor": {
     "id": "mollys_final_razor",
@@ -4565,6 +4751,8 @@
         "refined_neural": 3
       }
     },
-    "is_canonical_cast": false
+    "is_canonical_cast": false,
+    "reward_credits": 1100,
+    "reward_tier": 3
   }
 }
