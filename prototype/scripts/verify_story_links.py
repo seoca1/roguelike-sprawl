@@ -24,6 +24,7 @@ sys.path.insert(0, str(ROOT / "Game" / "roguelike_sprawl" / "prototype" / "src")
 
 from roguelike_sprawl.data.story_resolver import (  # type: ignore[import-not-found]  # noqa: E402
     list_available_stems,
+    validate_game_mission_id_links,
     validate_mission_sources,
 )
 
@@ -54,6 +55,7 @@ def main() -> int:
 
     report = validate_mission_sources(missions, ROOT)
     available = list_available_stems(ROOT)
+    gmi_report = validate_game_mission_id_links(missions, ROOT)
 
     if args.json:
         print(
@@ -62,6 +64,7 @@ def main() -> int:
                     "missions_total": len(missions),
                     "stories_available": len(available),
                     "report": report,
+                    "game_mission_id_report": gmi_report,
                 },
                 ensure_ascii=False,
                 indent=2,
@@ -81,11 +84,32 @@ def main() -> int:
                 continue
             print(f"  {r['mission_id']:<20} {r['source']:<28} {en:<8} {ko:<8} {issues}")
         print()
+        print("Cross-project: Fiction → roguelike_sprawl mission links")
+        gmi_issues = sum(1 for r in gmi_report if r["issues"])
+        gmi_ok = len(gmi_report) - gmi_issues
+        print(f"  Fiction stories with game_mission_id: {len(gmi_report)}")
+        print(f"  Resolved (mission exists): {gmi_ok}")
+        print(f"  Orphan (mission missing): {gmi_issues}")
+        if gmi_issues > 0:
+            print()
+            print(f"  {'file':<60} {'game_mission_id':<22} {'issues'}")
+            print("  " + "-" * 90)
+            for r in gmi_report:
+                if not r["issues"]:
+                    continue
+                print(
+                    f"  {str(r['file']):<60} {str(r['game_mission_id']):<22} {','.join(r['issues'])}"
+                )
+        print()
         issues_count = sum(1 for r in report if r["issues"])
         if issues_count > 0:
             print(f"⚠️  {issues_count} missions have issues")
             return 1
+        if gmi_issues > 0:
+            print(f"⚠️  {gmi_issues} Fiction→mission cross-refs are orphans")
+            return 1
         print("✓ All mission sources resolve correctly")
+        print("✓ All Fiction→mission cross-refs resolve correctly")
     return 0
 
 

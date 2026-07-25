@@ -43,6 +43,13 @@ jobs:
           python3 Fiction/tools/verify_derivative.py --all --json > /tmp/derivative.json || true
           python3 -c "import json; d=json.load(open('/tmp/derivative.json')); print('summary:', d.get('summary'))"
 
+      - name: Fiction→Game mission link lint
+        # Verifies every Fiction frontmatter `game_mission_id` references
+        # a real roguelike_sprawl mission. Phase α cross-project integrity.
+        working-directory: Game/roguelike_sprawl/prototype
+        run: uv run python scripts/verify_story_links.py --json > /tmp/cross_refs.json
+        # This step is non-blocking for now (informational); enable when α stabilises.
+
   game-verify:
     name: Game structure
     runs-on: ubuntu-latest

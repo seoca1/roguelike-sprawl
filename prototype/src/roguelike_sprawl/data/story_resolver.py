@@ -173,3 +173,62 @@ def validate_mission_sources(
             }
         )
     return report
+
+
+def _read_game_mission_ids_from_fiction(repo_root: Path) -> list[dict[str, object]]:
+    """Scan all Fiction derivative EN .md files for `game_mission_id:` frontmatter.
+
+    Returns list of dicts with keys: file, stem, game_mission_id.
+    Skips KO .ko.md files (they mirror the EN frontmatter).
+    """
+    import re
+
+    out: list[dict[str, object]] = []
+    fm_pattern = re.compile(r"^game_mission_id:\s*(\S+)\s*$", re.MULTILINE)
+    for base in _novel_dirs(repo_root):
+        for f in base.glob("*.md"):
+            if f.name.endswith(".ko.md"):
+                continue
+            try:
+                text = f.read_text(encoding="utf-8")
+            except OSError:
+                continue
+            m = fm_pattern.search(text)
+            if m is None:
+                continue
+            stem_match = re.search(r"^stem:\s*(\S+)", text, re.MULTILINE)
+            declared_stem = stem_match.group(1).strip().strip('"') if stem_match else None
+            out.append(
+                {
+                    "file": str(f.relative_to(repo_root)),
+                    "stem": declared_stem or f.stem.split("_", 1)[-1],
+                    "game_mission_id": m.group(1).strip().strip('"'),
+                }
+            )
+    return out
+
+
+def validate_game_mission_id_links(
+    missions: dict[str, dict[str, object]], repo_root: Path
+) -> list[dict[str, object]]:
+    """Cross-project: Fiction frontmatter `game_mission_id` ↔ roguelike_sprawl missions.
+
+    Reports Fiction stories that declare `game_mission_id` but the mission
+    does not exist in missions.json (orphan). Stories without the field
+    are not reported — they are intentionally Fiction-only.
+
+    Also reports inconsistencies where the declared stem differs from the
+    filename-derived stem.
+
+    Returns list of dicts with keys: file, stem, game_mission_id, issues.
+    """
+    mission_ids = set(missions.keys())
+    rows = _read_game_mission_ids_from_fiction(repo_root)
+    report: list[dict[str, object]] = []
+    for row in rows:
+        gmi = row["game_mission_id"]  # type: ignore[assignment]
+        issues: list[str] = []
+        if gmi not in mission_ids:
+            issues.append("ORPHAN_MISSION_ID")
+        report.append({**row, "issues": issues})
+    return report

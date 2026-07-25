@@ -1,5 +1,5 @@
 {
-  "stage_enum_count": 14,
+  "stage_enum_count": 16,
   "stage_enum_names": [
     "PENDING",
     "BRIEFING",
@@ -14,7 +14,9 @@
     "COMPLETE",
     "DEATH_RESTART",
     "FAILED",
-    "SALVATION_EPILOGUE"
+    "SALVATION_EPILOGUE",
+    "BLACKMARKET",
+    "GHOST_ENCOUNTER"
   ],
   "stage_optional": [],
   "chapter_state_enum_count": 18,
@@ -46,5 +48,5 @@
     "NONE"
   ],
   "source": "prototype/src/roguelike_sprawl/run/state.py",
-  "_generated_at": "2026-07-25T23:06:32"
+  "_generated_at": "2026-07-26T00:59:56"
 }

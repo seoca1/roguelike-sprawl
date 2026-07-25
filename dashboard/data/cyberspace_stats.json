@@ -3,10 +3,10 @@
   "sectors": 4,
   "servers": 6,
   "node_kinds": 8,
-  "zone_depths": 6,
+  "zone_depths": 8,
   "world_names": [
     "Chiba City",
     "Night City"
   ],
-  "_generated_at": "2026-07-25T23:06:31"
+  "_generated_at": "2026-07-26T00:59:56"
 }

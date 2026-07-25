@@ -122,18 +122,23 @@ def load_library_stats(repo: Path) -> dict[str, object]:
         "_generated_at": "",
     }
 
-    def _scan_dir(dir_path: Path) -> tuple[set[str], dict[str, dict[str, str]], dict[str, str]]:
+    def _scan_dir(
+        dir_path: Path,
+    ) -> tuple[set[str], dict[str, dict[str, str]], dict[str, str], dict[str, str]]:
         """Scan a derivative subdirectory for EN/KO pairs.
 
-        Returns (stems, titles, derivative_types).
+        Returns (stems, titles, derivative_types, game_mission_ids).
         derivative_types maps stem -> 'short_story' or 'novelette' (from frontmatter).
+        game_mission_ids maps stem -> mission id when the story is referenced by
+        roguelike_sprawl's missions.json (cross-project link, ADR-0042 + Phase α).
         """
         if not dir_path.exists():
-            return set(), {}, {}
+            return set(), {}, {}, {}
         md_files = list(dir_path.glob("*.md"))
         stems: set[str] = set()
         per_stem_titles: dict[str, dict[str, str]] = {}
         derivative_types: dict[str, str] = {}
+        game_mission_ids: dict[str, str] = {}
         for f in md_files:
             name = f.name
             is_ko = name.endswith(".ko.md")
@@ -144,7 +149,8 @@ def load_library_stats(repo: Path) -> dict[str, object]:
                 stem = stem[: -len(".md")]
             stems.add(stem)
             title = stem.replace("_", " ").title()
-            dtype = "short_story"  # default
+            dtype = "short_story"
+            gmi: str | None = None
             try:
                 text = f.read_text(encoding="utf-8")
                 lines = text.splitlines()
@@ -160,7 +166,9 @@ def load_library_stats(repo: Path) -> dict[str, object]:
                 fm_match = re.search(r"derivative_type:\s*(\S+)", fm_text)
                 if fm_match:
                     dtype = fm_match.group(1).strip().strip('"')
-                # Extract title from first # heading
+                gmi_match = re.search(r"^game_mission_id:\s*(\S+)", fm_text, re.MULTILINE)
+                if gmi_match:
+                    gmi = gmi_match.group(1).strip().strip('"')
                 for line in text.splitlines()[1:]:
                     if line.startswith("# "):
                         title = line[2:].strip()
@@ -170,7 +178,9 @@ def load_library_stats(repo: Path) -> dict[str, object]:
             slot = per_stem_titles.setdefault(stem, {})
             slot["ko" if is_ko else "en"] = title
             derivative_types[stem] = dtype
-        return stems, per_stem_titles, derivative_types
+            if gmi is not None and not is_ko:
+                game_mission_ids[stem] = gmi
+        return stems, per_stem_titles, derivative_types, game_mission_ids
 
     base = repo.parent / "Fiction" / "derivative" / "sprawl-trilogy"
     short_dir = base / "short-stories"
@@ -205,19 +215,19 @@ def load_library_stats(repo: Path) -> dict[str, object]:
     novel_en_dir = novel_dir / "en"
     novel_ko_dir = novel_dir / "ko"
 
-    short_stems, short_titles, short_dtypes = _scan_dir(short_en_dir)
-    short_ko_stems, short_ko_titles, short_ko_dtypes = _scan_dir(short_ko_dir)
+    short_stems, short_titles, short_dtypes, short_gmis = _scan_dir(short_en_dir)
+    short_ko_stems, short_ko_titles, short_ko_dtypes, _ = _scan_dir(short_ko_dir)
     short_stems |= short_ko_stems
     short_titles.update(short_ko_titles)
     short_dtypes.update(short_ko_dtypes)
-    novel_stems, novel_titles, novel_dtypes = _scan_dir(novel_en_dir)
-    novel_ko_stems, novel_ko_titles, novel_ko_dtypes = _scan_dir(novel_ko_dir)
+    novel_stems, novel_titles, novel_dtypes, novel_gmis = _scan_dir(novel_en_dir)
+    novel_ko_stems, novel_ko_titles, novel_ko_dtypes, _ = _scan_dir(novel_ko_dir)
     novel_stems |= novel_ko_stems
     novel_titles.update(novel_ko_titles)
     novel_dtypes.update(novel_ko_dtypes)
 
-    # Use frontmatter derivative_type as source of truth, not directory name
     all_dtypes = {**short_dtypes, **novel_dtypes}
+    all_gmis = {**short_gmis, **novel_gmis}
 
     en_stems = set()
     ko_stems = set()
@@ -248,6 +258,8 @@ def load_library_stats(repo: Path) -> dict[str, object]:
     # Combined catalog — use frontmatter type
     all_stems = short_stems | novel_stems
     all_titles = {**short_titles, **novel_titles}
+    all_gmis_dict = all_gmis
+    out["stories_with_mission_link"] = len(all_gmis_dict)
     out["catalog_entries"] = len(all_stems)
     out["catalog_entries_list"] = [
         {
@@ -255,6 +267,7 @@ def load_library_stats(repo: Path) -> dict[str, object]:
             "type": all_dtypes.get(s, "short_story"),
             "title_en": all_titles.get(s, {}).get("en", s.replace("_", " ").title()),
             "title_ko": all_titles.get(s, {}).get("ko", ""),
+            "game_mission_id": all_gmis.get(s),
         }
         for s in sorted(all_stems)
     ]
