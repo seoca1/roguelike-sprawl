@@ -37,6 +37,9 @@ from typing import TYPE_CHECKING
 import tcod.console
 
 if TYPE_CHECKING:
+    from .state import AppState
+
+if TYPE_CHECKING:
     from ..i18n import Translator
 
 

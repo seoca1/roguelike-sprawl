@@ -415,7 +415,7 @@ def spawn_phase_minions(
     state: CombatState,
     ice_registry: IceRegistry,
     program_registry: ProgramRegistry,
-    portraits: "PortraitManager | None" = None,
+    portraits: PortraitManager | None = None,
 ) -> list[Combatant]:
     """Phase B-3: spawn minion ICE at phase transition."""
     from .registry import build_ice_enemy

@@ -310,8 +310,12 @@ def _render(
             if state.current_chapter_index < len(arc.chapters):
                 chapter = arc.chapters[state.current_chapter_index]
                 if state.current_phase_index < len(chapter.phases):
-                    phase = chapter.phases[state.current_phase_index]
-                    _render_arc_phase(
+                    phase = chapter.phapters[state.current_chapter_index].phases[
+                        state.current_phase_index
+                    ]
+                    from . import phase_view
+
+                    phase_view.render_arc_phase(
                         console,
                         phase,
                         state.current_beat_index,
