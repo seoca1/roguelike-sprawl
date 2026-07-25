@@ -48,6 +48,10 @@ class BossPhase:
     speed_bonus_pct: int = 0  # +X% attack speed
     screen_shake_intensity: float = 0.0  # Shake on phase change
     special_ability: str | None = None  # e.g. "ground_slam", "glitch_burst"
+    # Phase B-3: AoE attack damage at phase transition
+    aoe_damage: int = 0  # Damage dealt to player at phase start (0 = no AoE)
+    # Phase B-3: minion spawn — phase spawns these ICE IDs as adds
+    spawn_minions: tuple[str, ...] = ()  # ICE ids spawned at phase start
 
 
 @dataclass(frozen=True, slots=True)

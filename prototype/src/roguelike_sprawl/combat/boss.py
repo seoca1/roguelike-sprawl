@@ -23,9 +23,14 @@ Adding new boss types requires:
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from .effects import IceType
-from .state import Combatant, Skill, SkillEffect
+from .registry import IceRegistry, ProgramRegistry
+from .state import Combatant, CombatState, Skill, SkillEffect
+
+if TYPE_CHECKING:
+    from ..portraits import PortraitManager
 
 
 @dataclass(frozen=True, slots=True)
@@ -401,3 +406,42 @@ def apply_phase_to_combatant(boss: Combatant, profile: BossProfile) -> PhaseProf
     boss.color = phase.color
     boss.current_phase = phase.phase
     return phase
+
+
+
+def spawn_phase_minions(
+    boss: Combatant,
+    phase: PhaseProfile,
+    state: CombatState,
+    ice_registry: IceRegistry,
+    program_registry: ProgramRegistry,
+    portraits: "PortraitManager | None" = None,
+) -> list[Combatant]:
+    """Phase B-3: spawn minion ICE at phase transition."""
+    from .registry import build_ice_enemy
+
+    spawned: list[Combatant] = []
+    for ice_id in phase.spawn_minions:
+        try:
+            minion = build_ice_enemy(
+                ice_id,
+                ice_registry,
+                portraits=portraits,
+                program_registry=program_registry,
+                player_grade=boss.equip_attack_bonus or 1,
+            )
+        except KeyError:
+            continue
+        spawned.append(minion)
+    if spawned:
+        state.enemies = state.enemies + tuple(spawned)
+    return spawned
+
+
+def apply_phase_aoe(phase: PhaseProfile, state: CombatState) -> int:
+    """Phase B-3: apply AoE damage from boss phase transition."""
+    if phase.aoe_damage <= 0:
+        return 0
+    state.player.hp = max(0, state.player.hp - phase.aoe_damage)
+    state.push(f"!! {phase.aoe_damage} AoE damage from {phase.name}!")
+    return phase.aoe_damage
