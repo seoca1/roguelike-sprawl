@@ -1,3 +1,32 @@
+## [2026-07-25] docs | PROGRESS_REPORT_2026-07-25_NOTION_READY.md (Notion 발행용)
+
+**Status**: Complete (dry-run 검증, Notion 발행 대기)
+
+### Changes
+
+- **신규**: `docs/notion-reflects/PROGRESS_REPORT_2026-07-25_NOTION_READY.md` (workspace-level, 11.6 KB)
+- **3 세션 통합 보고서 (07-10 → 07-13)** + 2026-07-25 세션 작업 (ADR-0104 Accept, save_slot_demo)
+- **dry-run 검증**: `publish_to_notion.py` 통과 (129 blocks, heading/table/quote/paragraph 지원)
+- **워크플로우**: 파일은 workspace root (`Projects/docs/notion-reflects/`)에 위치 — git 추적 안 됨 (기존 07-10/11/12 보고서와 동일 패턴)
+
+### 발행 절차 (사용자 액션)
+
+1. `NOTION_TOKEN` 환경변수 등록 (vault `Fiction/_publish/scripts/.env`)
+2. `cd /Users/emilio/projects/Projects/Language/_publish/scripts && python3 publish_to_notion.py /Users/emilio/projects/Projects/docs/notion-reflects/PROGRESS_REPORT_2026-07-25_NOTION_READY.md --parent 38df643d-3530-8103-af2c-e2277b4bcdfa`
+3. `docs/notion-reflects/README.md` 활성 페이지 섹션에 entry 추가 (BGM v3 Final 다음)
+
+### 영향 파일
+
+- `docs/notion-reflects/PROGRESS_REPORT_2026-07-25_NOTION_READY.md` (신규, 11.6 KB, 250+ lines, 129 blocks)
+- `Game/roguelike_sprawl/log.md` (이 항목)
+
+### 후속
+
+- v0.8.0 프로젝트 상태 외부 공유 가능 (Notion 발행 시)
+- 다음 세션 시작점: SESSION_HANDOVER.md v0.8.0 + 이 보고서 (발행 후)
+
+---
+
 ## [2026-07-25] meta | SESSION_HANDOVER v0.8.0 (handoff 갱신)
 
 **Status**: Complete
