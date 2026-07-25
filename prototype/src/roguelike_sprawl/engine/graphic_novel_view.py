@@ -1519,3 +1519,73 @@ def _console_to_text(console: tcod.console.Console) -> str:
             chars.append(chr(code) if 0 < code < 0x110000 else " ")
         lines.append("".join(chars).rstrip())
     return "\n".join(lines)
+
+
+def render_graphic_novel_screen(
+    console: tcod.console.Console,
+    state: AppState,
+    translator: Translator,
+) -> None:
+    """Phase D-2: extracted GRAPHIC_NOVEL screen render logic.
+
+    Renders current scene + dialogue with background/portrait loading
+    and typing animation. Replaces 50 LOC of inline code in app.py.
+    """
+    scenes = state.gn_scenes
+    if scenes and 0 <= state.gn_scene_index < len(scenes):
+        scene = scenes[state.gn_scene_index]
+        if scene.dialogue and 0 <= state.gn_dialogue_index < len(scene.dialogue):
+            dialogue = scene.dialogue[state.gn_dialogue_index]
+            bg = None
+            if scene.background_id:
+                try:
+                    from . import config as _gn_config
+
+                    bg = load_background(
+                        _gn_config.DATA_DIR / "art", scene.background_id
+                    )
+                except Exception:
+                    pass
+            p_l = None
+            p_r = None
+            if scene.portrait_left:
+                try:
+                    from . import config as _gn_config
+
+                    p_l = load_portrait(
+                        _gn_config.DATA_DIR / "art", scene.portrait_left
+                    )
+                except Exception:
+                    pass
+            if scene.portrait_right:
+                try:
+                    from . import config as _gn_config
+
+                    p_r = load_portrait(
+                        _gn_config.DATA_DIR / "art", scene.portrait_right
+                    )
+                except Exception:
+                    pass
+            typed = dialogue_typed_chars(
+                dialogue.duration_ms, state.gn_elapsed_ms, len(dialogue.text_en)
+            )
+            render_scene(
+                console,
+                scene,
+                dialogue,
+                bg,
+                p_l,
+                p_r,
+                translator,
+                typed,
+                state.gn_scene_index,
+                len(scenes),
+                paused=state.gn_paused,
+            )
+        else:
+            console.clear(bg=(0, 0, 0))
+            console.print(x=2, y=2, string="=== NO DIALOGUE ===", fg=(255, 0, 0))
+    else:
+        console.clear(bg=(0, 0, 0))
+        console.print(x=2, y=2, string="=== NO SCENES LOADED ===", fg=(255, 0, 0))
+

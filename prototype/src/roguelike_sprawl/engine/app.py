@@ -182,110 +182,17 @@ def _main_inner() -> int:
 
 
 def _render_cyberspace_map(console: tcod.console.Console, t: Translator, state: AppState) -> None:
-    """Render CYBERSPACE_MAP as a tree view of worlds/sectors/servers."""
-    console.clear(bg=(0, 0, 0))
-    width = console.width
+    """Render CYBERSPACE_MAP (Phase D-2: thin wrapper, see cyberspace_map_view)."""
+    from .cyberspace_map_view import render_cyberspace_map as _do_render
 
-    title = "CYBERSPACE — World Map"
-    console.print(0, 0, "═" * width)
-    console.print((width - len(title)) // 2, 0, f" {title} ")
-    console.print(0, 1, "─" * width)
-
-    wm = state.world_map
-    if wm is None:
-        return
-
-    y = 3
-    for world_id, world in wm.worlds.items():
-        marker = "▸ " if world_id == wm.current_world else "  "
-        console.print(x=2, y=y, string=f"{marker}WORLD: {world.name}", fg=(255, 255, 0))
-        y += 1
-        for sector_id, sector in world.sectors.items():
-            s_marker = "→ " if sector_id == wm.current_sector else "  "
-            server_count = len(sector.servers)
-            console.print(
-                x=6,
-                y=y,
-                string=f"{s_marker}SECTOR: {sector.name} [{server_count} servers]",
-                fg=(180, 180, 100),
-            )
-            y += 1
-            for server in sector.servers[:5]:
-                sv_marker = "• " if server.id == wm.current_server else "  "
-                console.print(x=10, y=y, string=f"{sv_marker}{server.name}", fg=(200, 200, 200))
-                y += 1
-            if len(sector.servers) > 5:
-                console.print(
-                    x=10,
-                    y=y,
-                    string=f"  ... and {len(sector.servers) - 5} more",
-                    fg=(100, 100, 100),
-                )
-                y += 1
-        y += 1
-
-    console.print(0, console.height - 1, "═" * width)
-    console.print(x=2, y=console.height - 1, string="[ESC] Back to Hub", fg=(128, 128, 128))
-
-
-def _render_arc_phase(
-    console: tcod.console.Console,
-    phase: object,
-    beat_index: int,
-    typed_chars: int,
-    beat_elapsed_ms: float,
-    phase_elapsed_ms: float,
-    translator: Translator,
-) -> None:
-    """Render an arc phase using phase_view.render_arc_phase."""
-    from typing import cast
-
-    from . import phase_view
-    from .chapter_cutscene import PhaseData
-
-    phase_view.render_arc_phase(
-        console,
-        cast(PhaseData, phase),
-        beat_index,
-        typed_chars,
-        beat_elapsed_ms,
-        phase_elapsed_ms,
-        translator,
-    )
+    _do_render(console, state)
 
 
 def _advance_arc_phase(state: AppState) -> None:
-    """Advance to the next beat, phase, or chapter in ARC_PHASE."""
-    arc = state.current_arc
-    if arc is None:
-        state.screen = ScreenKind.MENU
-        return
+    """Advance arc phase (Phase D-2: thin wrapper, see arc_phase)."""
+    from .arc_phase import advance_arc_phase as _do_advance
 
-    if state.current_chapter_index >= len(arc.chapters):
-        state.screen = ScreenKind.MENU
-        return
-
-    chapter = arc.chapters[state.current_chapter_index]
-    if state.current_phase_index >= len(chapter.phases):
-        state.current_chapter_index += 1
-        state.current_phase_index = 0
-        state.current_beat_index = 0
-        state.phase_elapsed_ms = 0.0
-        state.phase_typed_chars = 0
-        if state.current_chapter_index >= len(arc.chapters):
-            state.screen = ScreenKind.MENU
-        return
-
-    phase = chapter.phases[state.current_phase_index]
-    if state.current_beat_index >= len(phase.beats):
-        state.current_phase_index += 1
-        state.current_beat_index = 0
-        state.phase_elapsed_ms = 0.0
-        state.phase_typed_chars = 0
-        return
-
-    state.current_beat_index += 1
-    state.phase_typed_chars = 0
+    _do_advance(state)
 
 
 def _render(
@@ -313,56 +220,9 @@ def _render(
         has_save = getattr(state, "has_save", False)
         graphic_novel_view.render_graphic_novel_menu(console, t, state.gn_menu_selected, has_save)
     elif state.screen is ScreenKind.GRAPHIC_NOVEL:
-        from . import graphic_novel_view as gn_view
-        from .graphic_novel_view import load_background, load_portrait
+        from .graphic_novel_view import render_graphic_novel_screen as _render_gn
 
-        scenes = state.gn_scenes
-        if scenes and 0 <= state.gn_scene_index < len(scenes):
-            scene = scenes[state.gn_scene_index]
-            if scene.dialogue and 0 <= state.gn_dialogue_index < len(scene.dialogue):
-                dialogue = scene.dialogue[state.gn_dialogue_index]
-                bg = None
-                if scene.background_id:
-                    try:
-                        from . import config
-
-                        bg = load_background(config.DATA_DIR / "art", scene.background_id)
-                    except Exception:
-                        pass
-                p_l = None
-                p_r = None
-                if scene.portrait_left:
-                    try:
-                        p_l = load_portrait(config.DATA_DIR / "art", scene.portrait_left)
-                    except Exception:
-                        pass
-                if scene.portrait_right:
-                    try:
-                        p_r = load_portrait(config.DATA_DIR / "art", scene.portrait_right)
-                    except Exception:
-                        pass
-                typed = gn_view.dialogue_typed_chars(
-                    dialogue.duration_ms, state.gn_elapsed_ms, len(dialogue.text_en)
-                )
-                gn_view.render_scene(
-                    console,
-                    scene,
-                    dialogue,
-                    bg,
-                    p_l,
-                    p_r,
-                    t,
-                    typed,
-                    state.gn_scene_index,
-                    len(scenes),
-                    paused=state.gn_paused,
-                )
-            else:
-                console.clear(bg=(0, 0, 0))
-                console.print(x=2, y=2, string="=== NO DIALOGUE ===", fg=(255, 0, 0))
-        else:
-            console.clear(bg=(0, 0, 0))
-            console.print(x=2, y=2, string="=== NO SCENES LOADED ===", fg=(255, 0, 0))
+        _render_gn(console, state, t)
     elif state.screen is ScreenKind.SAVED_PROGRESS:
         from . import config, save_progress
 
