@@ -1,6 +1,6 @@
 {
-  "short_stories_en": 78,
-  "short_stories_ko": 78,
+  "short_stories_en": 80,
+  "short_stories_ko": 80,
   "novelettes_en": 26,
   "novelettes_ko": 26,
   "hook_kinds": 6,
@@ -15,9 +15,9 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-26T01:04:22",
-  "stories_with_mission_link": 98,
-  "catalog_entries": 104,
+  "_generated_at": "2026-07-26T01:13:41",
+  "stories_with_mission_link": 100,
+  "catalog_entries": 106,
   "catalog_entries_list": [
     {
       "stem": "aleph_fragment",
@@ -468,6 +468,13 @@
       "game_mission_id": "salvation_wigan_zavijava"
     },
     {
+      "stem": "sense_net_archive_intrusion",
+      "type": "short_story",
+      "title_en": "Sense Net Archive Intrusion",
+      "title_ko": "센스넷 데이터 보관소 침투",
+      "game_mission_id": "sense_net_archive_intrusion"
+    },
+    {
       "stem": "sense_net_infiltration",
       "type": "short_story",
       "title_en": "Sense Net Infiltration",
@@ -592,6 +599,13 @@
       "title_en": "Threjane Family Log",
       "title_ko": "=== 이야기 본문 (stub) ===",
       "game_mission_id": "threjane_family_log"
+    },
+    {
+      "stem": "tokyo_courier_run",
+      "type": "short_story",
+      "title_en": "Tokyo Courier Run",
+      "title_ko": "도쿄 쿠리어 운반",
+      "game_mission_id": "tokyo_courier_run"
     },
     {
       "stem": "tokyo_pachinko_run",

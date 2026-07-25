@@ -57,23 +57,29 @@ def main() -> int:
     available = list_available_stems(ROOT)
     gmi_report = validate_game_mission_id_links(missions, ROOT)
 
-    mission_issue_count = sum(1 for r in report if r["issues"])
+    blocking_mission_count = sum(
+        1 for r in report if r.get("severity") == "blocking"
+    )
+    info_mission_count = sum(
+        1 for r in report if r.get("severity") == "info"
+    )
     gmi_issue_count = sum(1 for r in gmi_report if r["issues"])
-    any_issues = mission_issue_count > 0 or gmi_issue_count > 0
+    any_blocking = blocking_mission_count > 0 or gmi_issue_count > 0
 
     if args.json:
         output = {
             "missions_total": len(missions),
             "stories_available": len(available),
             "issues": {
-                "mission_sources": mission_issue_count,
+                "mission_sources_blocking": blocking_mission_count,
+                "mission_sources_info": info_mission_count,
                 "game_mission_id_orphans": gmi_issue_count,
             },
             "report": report,
             "game_mission_id_report": gmi_report,
         }
         print(json.dumps(output, ensure_ascii=False, indent=2))
-        return 1 if any_issues else 0
+        return 1 if any_blocking else 0
     else:
         print(f"Missions: {len(missions)}")
         print(f"Available stories: {len(available)}")
@@ -105,9 +111,12 @@ def main() -> int:
                     f"  {str(r['file']):<60} {str(r['game_mission_id']):<22} {','.join(r['issues'])}"
                 )
         print()
-        issues_count = sum(1 for r in report if r["issues"])
-        if issues_count > 0:
-            print(f"⚠️  {issues_count} missions have issues")
+        blocking_count = sum(1 for r in report if r.get("severity") == "blocking")
+        info_count = sum(1 for r in report if r.get("severity") == "info")
+        if info_count > 0:
+            print(f"ℹ️  {info_count} missions intentionally have no Fiction source (out-of-scope)")
+        if blocking_count > 0:
+            print(f"⚠️  {blocking_count} missions have blocking source issues")
             return 1
         if gmi_issues > 0:
             print(f"⚠️  {gmi_issues} Fiction→mission cross-refs are orphans")

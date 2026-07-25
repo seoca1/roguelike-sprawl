@@ -138,6 +138,12 @@ def validate_mission_sources(
             - en_path (or None)
             - ko_path (or None)
             - issues (list of issue strings)
+            - severity: "ok" | "info" | "blocking"
+
+        Severity:
+            - "ok": no issues
+            - "info": MISSING_SOURCE (intentional — out-of-scope mission, no Fiction source expected)
+            - "blocking": EN_NOT_FOUND or KO_NOT_FOUND (orphaned reference)
     """
     report = []
     for mid, m in missions.items():
@@ -153,16 +159,20 @@ def validate_mission_sources(
                     "en_path": None,
                     "ko_path": None,
                     "issues": ["MISSING_SOURCE"],
+                    "severity": "info",
                 }
             )
             continue
         en = resolve_story_path(source, repo_root)
         ko = resolve_ko_translation(source, repo_root)
         issues = []
+        severity = "ok"
         if en is None:
             issues.append("EN_NOT_FOUND")
+            severity = "blocking"
         if ko is None:
             issues.append("KO_NOT_FOUND")
+            severity = "blocking"
         report.append(
             {
                 "mission_id": mid,
@@ -170,6 +180,7 @@ def validate_mission_sources(
                 "en_path": str(en) if en else None,
                 "ko_path": str(ko) if ko else None,
                 "issues": issues,
+                "severity": severity,
             }
         )
     return report

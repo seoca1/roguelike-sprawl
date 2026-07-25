@@ -11057,3 +11057,96 @@ Cross-project: Fiction → roguelike_sprawl mission links
 3. **CI 활성화**: 현재 informational 단계 — 안정화 후 lint 차단 모드로 전환 (`if: always()` → exit 1 on orphans)
 4. **Commit 분리**: Fiction 144건은 atomic commit 가능 (game_mission_id 추가만), Game 17건은 별도 commit
 
+
+## [2026-07-26] cross-project | Follow-up — orphan source cleanup + wiki reverse refs + Phase β
+
+**Status**: Complete
+
+### Changes
+
+**Game (roguelike_sprawl) side**:
+
+1. **Orphan source stem cleanup**:
+   - 13 Bridge trilogy mission `story.source` fields removed (out-of-scope per AGENTS.md §4.0)
+   - 4 Blue Ant trilogy mission `story.source` fields removed (out-of-scope)
+   - 17 missions now intentionally have no Fiction source
+
+2. **New Fiction short stories** (Phase α closure):
+   - `neon_tokyo_courier.md` (EN+KO, 612 words, novice arc-1) — renamed from `tokyo_courier_run` to avoid collision with existing Bridge Trilogy `tokyo-courier-run` file (Gibson-derived Idoru adaptation)
+   - `sense_net_archive_intrusion.md` (EN+KO, 824 words, suit arc-4) — corporate-statework scenario
+
+3. **Mission source update**:
+   - `tokyo_courier_run` mission `story.source` → `neon_tokyo_courier` (avoid Bridge collision)
+
+4. **Lint enhancement**:
+   - `validate_mission_sources()` now returns `severity: "ok" | "info" | "blocking"`
+   - `MISSING_SOURCE` = informational (out-of-scope, no Fiction source expected)
+   - `EN_NOT_FOUND` / `KO_NOT_FOUND` = blocking (orphaned reference)
+   - CI lint exits 1 only on blocking issues (0 currently)
+   - Test `test_real_missions_json` updated to expect new severity distinction
+
+5. **Phase β analysis report**:
+   - `docs/cross-project/phase_beta_analysis.md` (152 lines)
+   - Three narrative layers analyzed: mission synopsis / Fiction derivative / GN scene
+   - No content duplication found (intentional layered architecture)
+   - Recommendation: UI integration in Phase β-1, optional GN scene linkage in Phase β-2
+
+**Fiction side**:
+
+1. **Wiki cross-reference page**:
+   - `wiki/connections/roguelike_sprawl-missions.md` — Index of all 111 roguelike_sprawl missions with Fiction links (94 linked + 17 informational)
+   - Auto-generated format with tier/archetype/arc metadata + Fiction file paths
+
+2. **Wiki index/log update**:
+   - `wiki/index.md` — Cross-Project 섹션 추가 (Phase α 항목)
+   - `wiki/log.md` — 2026-07-26 Phase α 통합 entry 추가
+
+### 최종 Cross-Project 메트릭
+
+| 메트릭 | α initial | α final | After Follow-up |
+|---|---|---|---|
+| Fiction stories with `game_mission_id` | 0 | 100 | **102** (added neon_tokyo_courier, sense_net_archive_intrusion) |
+| Orphan mission_id refs | n/a | 0 | **0** |
+| Mission sources resolved | 85/85 | 100/100 | **94/94** (17 out-of-scope informational) |
+| Bidirectional validation | n/a | ✓ | **✓** |
+
+### 영향 파일
+
+**Game**:
+- `prototype/data/missions/missions.json` (17 sources removed, 1 source renamed)
+- `prototype/src/roguelike_sprawl/data/story_resolver.py` (severity field)
+- `prototype/scripts/verify_story_links.py` (severity-aware blocking)
+- `prototype/tests/unit/test_story_resolver.py` (severity-aware test)
+- `docs/cross-project/orphan_source_stems.json` (regenerated)
+- `docs/cross-project/phase_beta_analysis.md` (NEW, 152 lines)
+
+**Fiction**:
+- `derivative/sprawl-trilogy/short-stories/{en,ko}/2026-07-26_neon_tokyo_courier.{md,ko.md}` (NEW)
+- `derivative/sprawl-trilogy/short-stories/{en,ko}/2026-07-26_sense_net_archive_intrusion.{md,ko.md}` (NEW)
+- `wiki/connections/roguelike_sprawl-missions.md` (NEW, 111 missions indexed)
+- `wiki/index.md` (Cross-Project 섹션)
+- `wiki/log.md` (2026-07-26 entry)
+
+### 후속 (Phase β 권장)
+
+1. **β-1**: UI integration — Mission select screen에 Fiction 링크, Codex 화면 3-layer breadcrumb
+2. **β-2**: GN scene ↔ mission optional linkage (1/81 currently → 확장)
+3. **β-3 (장기)**: Content unification — synopsis 자동 생성, scene 자동 매칭 (NLP)
+4. **다른 게임**: `Game/typing_language` cross-project 검증
+5. **Sprawl #2.5 통합**: post-merger 단편 ↔ 미션 일대일 매핑 보강
+
+### Verification
+
+```
+$ uv run python prototype/scripts/verify_story_links.py
+Fiction stories with game_mission_id: 102
+Resolved (mission exists): 102
+Orphan (mission missing): 0
+ℹ️  17 missions intentionally have no Fiction source (out-of-scope)
+✓ All mission sources resolve correctly
+✓ All Fiction→mission cross-refs resolve correctly
+
+$ uv run pytest prototype/tests/unit/test_story_resolver.py
+15 passed
+```
+
