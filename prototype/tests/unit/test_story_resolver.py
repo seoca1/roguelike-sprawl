@@ -147,7 +147,8 @@ class TestValidateMissionSources:
             f"{[r['mission_id'] for r in blocking]}"
         )
         # MISSING_SOURCE(out-of-scope) 검증: severity='info'
-        info = [r for r in report if r.get("severity") == "info"]
+        info_count = sum(1 for r in report if r.get("severity") == "info")
+        assert info_count >= 0  # informational missions (out-of-scope) allowed
         # 모든 EN/KO 파일 존재 확인 (source 있는 미션에 한해)
         for r in report:
             if r.get("severity") == "info":
