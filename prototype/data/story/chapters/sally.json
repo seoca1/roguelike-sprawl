@@ -37,12 +37,18 @@
       "sally_angie_threat"
     ],
     "character_ref": "sally",
-    "fixers_used": ["bobby_quine", "marly", "angie"]
+    "fixers_used": [
+      "bobby_quine",
+      "marly",
+      "angie"
+    ]
   },
   "_play_notes": {
     "narrative_role": "Sally is the 7th character — a cold A.I. market operator from Count Zero. Phase 8 adds her as the antagonist POV. Her 4 missions trace her arc: 1) Market opens, 2) Bobby's betrayal, 3) Marly meeting, 4) Angie threat.",
     "ending": "Her ending is the market — whether she controls it, sells it, or dies in it.",
     "tone": "Sharp, calculating. Short sentences. Every word is a transaction.",
     "replaces_heretic": "Opposite of Kas: Kas is an artist who wants to destroy the family, Sally is a merchant who wants to own the market."
-  }
+  },
+  "word_count_en": 128,
+  "char_count_ko": 224
 }

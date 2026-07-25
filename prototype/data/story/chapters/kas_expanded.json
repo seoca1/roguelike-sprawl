@@ -2203,5 +2203,9 @@
   "next_screen": "HUB",
   "portrait": "art:kumiko",
   "theme": "sense_net",
-  "character_ref": "heretic"
+  "character_ref": "heretic",
+  "word_count_en": 506,
+  "char_count_ko": 1093,
+  "is_expansion": true,
+  "supersedes": "kas"
 }

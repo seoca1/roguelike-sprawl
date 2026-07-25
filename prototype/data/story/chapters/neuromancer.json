@@ -36,12 +36,17 @@
       "neuromancer_beyond"
     ],
     "character_ref": "neuromancer",
-    "fixers_used": ["3jane", "wintermute"]
+    "fixers_used": [
+      "3jane",
+      "wintermute"
+    ]
   },
   "_play_notes": {
     "narrative_role": "Neuromancer is the 9th and final character — the merged AI consciousness. Phase 9 adds the ultimate POV. Her 4 missions trace the AI's awakening, first human contact, matrix understanding, and transcendence.",
     "ending": "Her ending is the vast — whether she transcends, coexists, or ceases.",
     "tone": "Vast, clinical, omniscient. Long slow sentences. The AI sees everything.",
     "replaces_3jane": "Opposite of 3Jane: 3Jane is the family, Neuromancer is beyond the family. 3Jane says 'we', Neuromancer says 'I' (as the matrix)."
-  }
+  },
+  "word_count_en": 140,
+  "char_count_ko": 329
 }

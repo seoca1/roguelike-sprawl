@@ -35,7 +35,8 @@
       "materials": {
         "unique_construct": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "black_ice_dream": {
     "id": "black_ice_dream",
@@ -74,7 +75,8 @@
       "materials": {
         "upgrade_t3": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "craft_job": {
     "id": "craft_job",
@@ -114,7 +116,8 @@
         "upgrade_t2": 1
       }
     },
-    "fixer": "finn"
+    "fixer": "finn",
+    "is_canonical_cast": true
   },
   "data_retrieval": {
     "id": "data_retrieval",
@@ -152,7 +155,8 @@
         "data_fragment": 2
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": true
   },
   "delivery_to_finn": {
     "id": "delivery_to_finn",
@@ -191,7 +195,8 @@
         "upgrade_t1": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": true
   },
   "dixies_choice": {
     "id": "dixies_choice",
@@ -229,7 +234,8 @@
         "data_fragment": 5
       }
     },
-    "arc": 4
+    "arc": 4,
+    "is_canonical_cast": true
   },
   "dixies_offer": {
     "id": "dixies_offer",
@@ -267,7 +273,8 @@
       "materials": {
         "construct_fragment": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "final_choice": {
     "id": "final_choice",
@@ -305,7 +312,8 @@
       "materials": {
         "ending_token": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "first_contact": {
     "id": "first_contact",
@@ -343,7 +351,8 @@
         "data_fragment": 3
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": true
   },
   "first_jack": {
     "id": "first_jack",
@@ -381,7 +390,8 @@
         "data_fragment": 2
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": true
   },
   "first_trace": {
     "id": "first_trace",
@@ -419,7 +429,8 @@
       "materials": {
         "data_fragment": 3
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "flatline_call": {
     "id": "flatline_call",
@@ -458,7 +469,8 @@
         "rom_fragment": 1
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": true
   },
   "ice_run": {
     "id": "ice_run",
@@ -497,7 +509,8 @@
         "data_fragment": 2
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": true
   },
   "matrix_revelation": {
     "id": "matrix_revelation",
@@ -535,7 +548,8 @@
         "data_fragment": 4
       }
     },
-    "arc": 4
+    "arc": 4,
+    "is_canonical_cast": true
   },
   "mollys_market": {
     "id": "mollys_market",
@@ -573,7 +587,8 @@
         "data_fragment": 2
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": true
   },
   "molly_decides": {
     "id": "molly_decides",
@@ -627,7 +642,8 @@
     "pillars": [
       "family"
     ],
-    "character_ref": "veteran"
+    "character_ref": "veteran",
+    "is_canonical_cast": false
   },
   "mollys_razor": {
     "id": "mollys_razor",
@@ -665,7 +681,8 @@
       "materials": {
         "unique_program": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "neuromancer_merger": {
     "id": "neuromancer_merger",
@@ -703,7 +720,8 @@
         "data_fragment": 6
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": true
   },
   "neuromancer_whisper": {
     "id": "neuromancer_whisper",
@@ -741,7 +759,8 @@
         "data_fragment": 3
       }
     },
-    "arc": 3
+    "arc": 3,
+    "is_canonical_cast": true
   },
   "sally_returns_arc3": {
     "id": "sally_returns_arc3",
@@ -778,7 +797,8 @@
         "construct_fragment": 2
       }
     },
-    "arc": 3
+    "arc": 3,
+    "is_canonical_cast": true
   },
   "sally_sandii_3am": {
     "id": "sally_sandii_3am",
@@ -815,7 +835,8 @@
         "memory_chip": 1
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": true
   },
   "sense_net_tip": {
     "id": "sense_net_tip",
@@ -853,7 +874,8 @@
       "materials": {
         "upgrade_t2": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "ta_heist": {
     "id": "ta_heist",
@@ -891,7 +913,8 @@
       "materials": {
         "upgrade_t4": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "tutorial_maze": {
     "id": "tutorial_maze",
@@ -929,7 +952,8 @@
         "data_fragment": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": true
   },
   "vegas_stakeout": {
     "id": "vegas_stakeout",
@@ -967,7 +991,8 @@
         "data_fragment": 4
       }
     },
-    "arc": 3
+    "arc": 3,
+    "is_canonical_cast": true
   },
   "voodoo_loa_encounter": {
     "id": "voodoo_loa_encounter",
@@ -1006,7 +1031,8 @@
       "materials": {
         "loa_fragment": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "watchdog_patrol": {
     "id": "watchdog_patrol",
@@ -1045,7 +1071,8 @@
         "ice_shard": 2
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": true
   },
   "winter_infiltrate": {
     "id": "winter_infiltrate",
@@ -1083,7 +1110,8 @@
         "data_fragment": 4
       }
     },
-    "arc": 4
+    "arc": 4,
+    "is_canonical_cast": true
   },
   "yakuza_deal": {
     "id": "yakuza_deal",
@@ -1122,7 +1150,8 @@
       "materials": {
         "upgrade_t2": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "zion_express": {
     "id": "zion_express",
@@ -1160,7 +1189,8 @@
         "data_fragment": 5
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": true
   },
   "armitage_infiltration": {
     "id": "armitage_infiltration",
@@ -1199,7 +1229,8 @@
         "data_fragment": 2,
         "wetware_data": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "hosaka_extraction": {
     "id": "hosaka_extraction",
@@ -1238,7 +1269,8 @@
         "data_fragment": 3,
         "rom_echo": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "ta_defection": {
     "id": "ta_defection",
@@ -1278,7 +1310,8 @@
         "ta_construct": 1,
         "biosoft_agent": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "wintermute_negotiation": {
     "id": "wintermute_negotiation",
@@ -1317,7 +1350,8 @@
         "ice_construct": 1,
         "biosoft_agent": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "sense_net_infiltration": {
     "id": "sense_net_infiltration",
@@ -1355,7 +1389,8 @@
       "materials": {
         "upgrade_t2": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "wigan_call": {
     "id": "wigan_call",
@@ -1393,7 +1428,8 @@
       "materials": {
         "loa_chip": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "hosaka_core": {
     "id": "hosaka_core",
@@ -1431,7 +1467,8 @@
       "materials": {
         "upgrade_t3": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "straylight_approach": {
     "id": "straylight_approach",
@@ -1469,7 +1506,8 @@
       "materials": {
         "t_a_data_fragment": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "maas_heist": {
     "id": "maas_heist",
@@ -1507,7 +1545,8 @@
       "materials": {
         "bio_chip": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "hosaka_corporate_infiltration": {
     "id": "hosaka_corporate_infiltration",
@@ -1545,7 +1584,8 @@
       "materials": {
         "upgrade_t2": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "sense_net_media_extract": {
     "id": "sense_net_media_extract",
@@ -1583,7 +1623,8 @@
       "materials": {
         "upgrade_t3": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "yakuza_loan_shark": {
     "id": "yakuza_loan_shark",
@@ -1621,7 +1662,8 @@
       "materials": {
         "upgrade_t2": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "ta_payroll_archive": {
     "id": "ta_payroll_archive",
@@ -1660,7 +1702,8 @@
         "upgrade_t4": 2,
         "loa_chip": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "maas_neural_extract": {
     "id": "maas_neural_extract",
@@ -1699,7 +1742,8 @@
         "upgrade_t4": 3,
         "bio_chip": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "construct_memory_rescue": {
     "id": "construct_memory_rescue",
@@ -1737,7 +1781,8 @@
       "materials": {
         "unique_construct": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "ta_straylight_archive": {
     "id": "ta_straylight_archive",
@@ -1776,7 +1821,8 @@
         "upgrade_t5": 2,
         "t_a_data_fragment": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "ta_3jane_betrayal": {
     "id": "ta_3jane_betrayal",
@@ -1815,7 +1861,8 @@
         "upgrade_t5": 3,
         "t_a_data_fragment": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "ta_wintermute_direct": {
     "id": "ta_wintermute_direct",
@@ -1854,7 +1901,8 @@
         "unique_construct": 1,
         "t_a_data_fragment": 3
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "beijing_memory_courier": {
     "id": "beijing_memory_courier",
@@ -1893,7 +1941,8 @@
       "materials": {
         "memory_fragment": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "tokyo_courier_run": {
     "id": "tokyo_courier_run",
@@ -1932,7 +1981,8 @@
       "materials": {
         "memory_fragment": 1
       }
-    }
+    },
+    "is_canonical_cast": false
   },
   "idoru_wedding": {
     "id": "idoru_wedding",
@@ -1972,7 +2022,8 @@
         "idoru_fragment": 1,
         "memory_fragment": 2
       }
-    }
+    },
+    "is_canonical_cast": false
   },
   "bridge_scaffold": {
     "id": "bridge_scaffold",
@@ -2013,7 +2064,8 @@
         "upgrade_t2": 1
       }
     },
-    "pillar": "purpose"
+    "pillar": "purpose",
+    "is_canonical_cast": false
   },
   "kombinat_node_hack": {
     "id": "kombinat_node_hack",
@@ -2053,7 +2105,8 @@
         "kombinat_data": 1,
         "upgrade_t3": 1
       }
-    }
+    },
+    "is_canonical_cast": false
   },
   "chevette_run": {
     "id": "chevette_run",
@@ -2093,7 +2146,8 @@
         "fixie_pedal": 1,
         "memory_fragment": 1
       }
-    }
+    },
+    "is_canonical_cast": false
   },
   "bigend_laney_lunch": {
     "id": "bigend_laney_lunch",
@@ -2126,7 +2180,8 @@
       "materials": {
         "yen": 1
       }
-    }
+    },
+    "is_canonical_cast": false
   },
   "coolhunter_laney_tokyo": {
     "id": "coolhunter_laney_tokyo",
@@ -2159,7 +2214,8 @@
       "materials": {
         "yen": 1
       }
-    }
+    },
+    "is_canonical_cast": false
   },
   "case_meets_cayce": {
     "id": "case_meets_cayce",
@@ -2193,7 +2249,8 @@
         "yen": 1,
         "soho_pass": 1
       }
-    }
+    },
+    "is_canonical_cast": false
   },
   "panther_negotiate": {
     "id": "panther_negotiate",
@@ -2237,7 +2294,8 @@
         "unique_construct": 1
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": true
   },
   "heretic_loa_conscription": {
     "id": "heretic_loa_conscription",
@@ -2281,7 +2339,8 @@
         "unique_construct": 1
       }
     },
-    "arc": 4
+    "arc": 4,
+    "is_canonical_cast": true
   },
   "ono_sendai_repair": {
     "id": "ono_sendai_repair",
@@ -2325,7 +2384,8 @@
         "deck_part": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "hosaka_terminal_supply": {
     "id": "hosaka_terminal_supply",
@@ -2369,7 +2429,8 @@
         "deck_part": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "sense_net_archive_intrusion": {
     "id": "sense_net_archive_intrusion",
@@ -2413,7 +2474,8 @@
         "corporate_chit": 1
       }
     },
-    "arc": 4
+    "arc": 4,
+    "is_canonical_cast": false
   },
   "zion_vote_observation": {
     "id": "zion_vote_observation",
@@ -2457,7 +2519,8 @@
         "witness_record": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "cortex_hound_recovery": {
     "id": "cortex_hound_recovery",
@@ -2501,7 +2564,8 @@
         "clinic_chit": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "zaibatsu_statework": {
     "id": "zaibatsu_statework",
@@ -2545,7 +2609,8 @@
         "industrial_chit": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "finn_factory_labour_run": {
     "id": "finn_factory_labour_run",
@@ -2589,7 +2654,8 @@
         "audit_chit": 1
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": false
   },
   "bing_statework": {
     "id": "bing_statework",
@@ -2633,7 +2699,8 @@
         "bing_chit": 1
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": true
   },
   "chevette_nightshift_run": {
     "id": "chevette_nightshift_run",
@@ -2677,7 +2744,8 @@
         "data_key": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "cayce_footage_audit_run": {
     "id": "cayce_footage_audit_run",
@@ -2721,7 +2789,8 @@
         "footage_token": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": true
   },
   "fido_statework": {
     "id": "fido_statework",
@@ -2765,7 +2834,8 @@
         "off_hours_chit": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "chickenhead_rickshaw_run": {
     "id": "chickenhead_rickshaw_run",
@@ -2809,7 +2879,8 @@
         "rickshaw_token": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "surface_mail_run": {
     "id": "surface_mail_run",
@@ -2853,7 +2924,8 @@
         "surface_mail_token": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "bama_statework": {
     "id": "bama_statework",
@@ -2897,7 +2969,8 @@
         "urban_chit": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "trauma_squads_audit": {
     "id": "trauma_squads_audit",
@@ -2941,7 +3014,8 @@
         "service_chit": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "laney_node_signal_run": {
     "id": "laney_node_signal_run",
@@ -2985,7 +3059,8 @@
         "node_signal_token": 1
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": false
   },
   "pan_mannerist_audit": {
     "id": "pan_mannerist_audit",
@@ -3029,7 +3104,8 @@
         "art_movement_token": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "trauma_squads_pair_arc": {
     "id": "trauma_squads_pair_arc",
@@ -3073,7 +3149,8 @@
         "pair_token": 1
       }
     },
-    "arc": 4
+    "arc": 4,
+    "is_canonical_cast": true
   },
   "idoru_wedding_arc": {
     "id": "idoru_wedding_arc",
@@ -3117,7 +3194,8 @@
         "wedding_token": 1
       }
     },
-    "arc": 3
+    "arc": 3,
+    "is_canonical_cast": true
   },
   "yanaka_family_power_arc": {
     "id": "yanaka_family_power_arc",
@@ -3161,7 +3239,8 @@
         "family_chit": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "fukuoka_ridership_arc": {
     "id": "fukuoka_ridership_arc",
@@ -3205,7 +3284,8 @@
         "ridership_token": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "eurydice_arc": {
     "id": "eurydice_arc",
@@ -3249,7 +3329,8 @@
         "underground_chit": 1
       }
     },
-    "arc": 2
+    "arc": 2,
+    "is_canonical_cast": true
   },
   "working_class_ridership_arc": {
     "id": "working_class_ridership_arc",
@@ -3293,7 +3374,8 @@
         "ridership_token": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "virtual_light_data_key_arc": {
     "id": "virtual_light_data_key_arc",
@@ -3337,7 +3419,8 @@
         "data_key_token": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "wendell_suburban_arc": {
     "id": "wendell_suburban_arc",
@@ -3381,7 +3464,8 @@
         "aspirant_token": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "boone_tokyo_electronics_arc": {
     "id": "boone_tokyo_electronics_arc",
@@ -3425,7 +3509,8 @@
         "tokyo_chit": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "g_boys_arc": {
     "id": "g_boys_arc",
@@ -3469,7 +3554,8 @@
         "subculture_chit": 1
       }
     },
-    "arc": 3
+    "arc": 3,
+    "is_canonical_cast": true
   },
   "pacific_empire_arc": {
     "id": "pacific_empire_arc",
@@ -3513,7 +3599,8 @@
         "pacific_empire_token": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "w_anchor_arc": {
     "id": "w_anchor_arc",
@@ -3557,7 +3644,8 @@
         "anchor_chit": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "viktor_orbit_arc": {
     "id": "viktor_orbit_arc",
@@ -3601,7 +3689,8 @@
         "rigger_token": 1
       }
     },
-    "arc": 1
+    "arc": 1,
+    "is_canonical_cast": false
   },
   "tessier_sleeper_arc": {
     "id": "tessier_sleeper_arc",
@@ -3645,7 +3734,8 @@
         "sleeper_chit": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "mona_bridge_arc": {
     "id": "mona_bridge_arc",
@@ -3689,7 +3779,8 @@
         "bay_area_token": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "hounds_arc": {
     "id": "hounds_arc",
@@ -3733,7 +3824,8 @@
         "mexico_city_token": 1
       }
     },
-    "arc": 5
+    "arc": 5,
+    "is_canonical_cast": false
   },
   "soho_blackout": {
     "id": "soho_blackout",
@@ -3771,7 +3863,8 @@
       "materials": {
         "scrap_ice": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "tokyo_pachinko_run": {
     "id": "tokyo_pachinko_run",
@@ -3810,7 +3903,8 @@
         "scrap_ice": 2,
         "raw_neural": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "freeside_payroll": {
     "id": "freeside_payroll",
@@ -3849,7 +3943,8 @@
         "refined_neural": 1,
         "memory_shard": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "straylight_inquiry": {
     "id": "straylight_inquiry",
@@ -3888,7 +3983,8 @@
         "unique_construct": 1,
         "memory_shard": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "core_memory_dump": {
     "id": "core_memory_dump",
@@ -3927,7 +4023,8 @@
         "unique_construct": 2,
         "refined_neural": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "razor_work": {
     "id": "razor_work",
@@ -3965,7 +4062,8 @@
       "materials": {
         "scrap_ice": 1
       }
-    }
+    },
+    "is_canonical_cast": false
   },
   "hideo_contract": {
     "id": "hideo_contract",
@@ -4004,7 +4102,8 @@
         "scrap_ice": 2,
         "raw_neural": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "voodoo_zoneload": {
     "id": "voodoo_zoneload",
@@ -4043,7 +4142,8 @@
         "scrap_ice": 2,
         "memory_shard": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "armitage_infiltration_2": {
     "id": "armitage_infiltration_2",
@@ -4082,7 +4182,8 @@
         "refined_neural": 1,
         "memory_shard": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "wintermute_witness": {
     "id": "wintermute_witness",
@@ -4121,7 +4222,8 @@
         "unique_construct": 1,
         "refined_neural": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "wigan_construct_reach": {
     "id": "wigan_construct_reach",
@@ -4160,7 +4262,8 @@
         "scrap_ice": 2,
         "raw_neural": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "angie_leopard_tracking": {
     "id": "angie_leopard_tracking",
@@ -4199,7 +4302,8 @@
         "scrap_ice": 2,
         "memory_shard": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "sally_construct_market": {
     "id": "sally_construct_market",
@@ -4238,7 +4342,8 @@
         "refined_neural": 1,
         "memory_shard": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "threjane_family_log": {
     "id": "threjane_family_log",
@@ -4276,7 +4381,8 @@
       "materials": {
         "scrap_ice": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "neuromancer_first_ping": {
     "id": "neuromancer_first_ping",
@@ -4315,7 +4421,8 @@
         "scrap_ice": 2,
         "raw_neural": 1
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "finn_final_reckoning": {
     "id": "finn_final_reckoning",
@@ -4354,7 +4461,8 @@
         "unique_construct": 1,
         "refined_neural": 3
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "salvation_wigan_zavijava": {
     "id": "salvation_wigan_zavijava",
@@ -4393,7 +4501,8 @@
         "unique_construct": 1,
         "refined_neural": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "wintermute_merger_run": {
     "id": "wintermute_merger_run",
@@ -4432,7 +4541,8 @@
         "refined_neural": 1,
         "memory_shard": 2
       }
-    }
+    },
+    "is_canonical_cast": true
   },
   "mollys_final_razor": {
     "id": "mollys_final_razor",
@@ -4471,6 +4581,7 @@
         "unique_construct": 1,
         "refined_neural": 3
       }
-    }
+    },
+    "is_canonical_cast": false
   }
 }

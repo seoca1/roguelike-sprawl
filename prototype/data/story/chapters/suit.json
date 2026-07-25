@@ -61,5 +61,7 @@
       "title_ko": "대답",
       "relation": "Construct 5-step sequence final step: 'out' — the answer to the construct's first self-posed question"
     }
-  ]
+  ],
+  "word_count_en": 274,
+  "char_count_ko": 591
 }

@@ -2053,5 +2053,9 @@
   "next_screen": "HUB",
   "portrait": "art:case",
   "theme": "matrix_rain",
-  "character_ref": "novice"
+  "character_ref": "novice",
+  "word_count_en": 902,
+  "char_count_ko": 1666,
+  "is_expansion": true,
+  "supersedes": "case"
 }
