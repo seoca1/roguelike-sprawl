@@ -14,14 +14,12 @@ import tcod.tileset
 
 from ..audio import sound_manager
 from ..combat.registry import IceRegistry, ProgramRegistry
-from ..combat.state import step_combat
 from ..i18n import Translator
 from ..missions import JobBoard
 from ..portraits import PortraitManager
 from . import combat_view, config, dungeon_view, hacking_view, story_cinematic
 from . import hub as hub_screen
 from . import menu as menu_screen
-from .combat_tick import maybe_boss_phase_transition
 from .state import AppState, ScreenKind
 
 
@@ -57,6 +55,7 @@ def main() -> int:
 def _main_inner() -> int:
     """Inner main function where crash reporter is not yet active."""
     from .font_loader import load_font
+    from .main_loop import tick_current_screen
 
     tileset, is_ttf = load_font()
 
@@ -88,75 +87,12 @@ def _main_inner() -> int:
                 now = time.monotonic()
                 delta_s = now - last_time
                 last_time = now
-                if state.screen is ScreenKind.GRAPHIC_NOVEL and state.gn_scenes:
-                    state.gn_elapsed_ms += delta_s * 1000
-                    if not state.gn_paused:
-                        scenes = state.gn_scenes
-                        if scenes and 0 <= state.gn_scene_index < len(scenes):
-                            scene = scenes[state.gn_scene_index]
-                            if scene.dialogue and 0 <= state.gn_dialogue_index < len(
-                                scene.dialogue
-                            ):
-                                dialogue = scene.dialogue[state.gn_dialogue_index]
-                                if state.gn_elapsed_ms >= dialogue.duration_ms:
-                                    if state.gn_dialogue_index < len(scene.dialogue) - 1:
-                                        state.gn_dialogue_index += 1
-                                        state.gn_elapsed_ms = 0.0
-                                    elif state.gn_scene_index < len(scenes) - 1:
-                                        state.gn_scene_index += 1
-                                        state.gn_dialogue_index = 0
-                                        state.gn_elapsed_ms = 0.0
-                                    else:
-                                        state.screen = ScreenKind.MENU
-                if state.screen is ScreenKind.CHAPTER and state.chapter_data:
-                    state.chapter_elapsed_ms += delta_s * 1000
-                    cd = state.chapter_data
-                    typed = int(state.chapter_elapsed_ms / cd.char_delay_ms)
-                    state.chapter_typed_chars = min(typed, len(cd.excerpt_en))
-                    if state.chapter_elapsed_ms >= cd.duration_ms:
-                        if state.current_arc is not None:
-                            state.current_chapter_index = 0
-                            state.current_phase_index = 0
-                            state.current_beat_index = 0
-                            state.phase_elapsed_ms = 0.0
-                            state.phase_typed_chars = 0
-                            state.screen = ScreenKind.ARC_PHASE
-                        else:
-                            state.screen = ScreenKind.HUB
-
-                if state.screen is ScreenKind.ARC_PHASE and state.current_arc is not None:
-                    arc = state.current_arc
-                    if state.current_chapter_index < len(arc.chapters):
-                        chapter = arc.chapters[state.current_chapter_index]
-                        if state.current_phase_index < len(chapter.phases):
-                            phase = chapter.phases[state.current_phase_index]
-                            if phase.beats:
-                                if state.current_beat_index < len(phase.beats):
-                                    state.phase_elapsed_ms += delta_s * 1000
-                                    beat = phase.beats[state.current_beat_index]
-                                    text = beat.text_en
-                                    typed = int(state.phase_elapsed_ms / 30)
-                                    state.phase_typed_chars = min(typed, len(text))
-                                    typecomplete_ms = len(text) * 30
-                                    if state.phase_elapsed_ms >= typecomplete_ms + 50:
-                                        state.phase_elapsed_ms = 0.0
-                                        state.phase_typed_chars = 0
-                                        _advance_arc_phase(state)
-                                else:
-                                    # All beats done — accumulate elapsed time so SPACE advances
-                                    state.phase_elapsed_ms += delta_s * 1000
-
-                if state.screen is ScreenKind.COMBAT and state.combat_state is not None:
-                    step_combat(state.combat_state)
-                    # Phase H: pass registries so B-3 spawn_minions can build ICE
-                    maybe_boss_phase_transition(
-                        state,
-                        ice_registry=ice_registry,
-                        program_registry=prog_registry,
-                    )
-
-                if state.screen is ScreenKind.HACK:
-                    hacking_view.step_hack(state, delta_s)
+                # Phase D-2 deep3: per-screen tick dispatch (extracted)
+                tick_current_screen(
+                    state, delta_s,
+                    ice_registry=_global_ice_registry,
+                    program_registry=_global_prog_registry,
+                )
 
                 _render(
                     root_console, t, portraits, state, _global_prog_registry, _global_ice_registry

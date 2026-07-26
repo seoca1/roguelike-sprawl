@@ -11150,3 +11150,114 @@ $ uv run pytest prototype/tests/unit/test_story_resolver.py
 15 passed
 ```
 
+
+## [2026-07-26] refactor+features | Phase J-K — C-1 stage_flow + D-2 deep2/3 + E-2 tutorial
+
+**Status**: Complete
+
+### Changes
+
+**Game (roguelike_sprawl) side (5 commits: d885695, 2ec6120, bfec587, 2ec6120-bonus, current)**:
+
+1. **C-1 data-driven stage_flow backfill** (d885695):
+   - 4 missions get stage_flow field in missions.json:
+     - first_jack, ice_run: default 8-stage flow
+     - watchdog_patrol: includes bypass_security
+     - data_retrieval: includes black_market
+   - Mission designers can now declare per-mission stage flow without code changes
+   - Tests: 4 new (TestDataDrivenStageFlow class)
+
+2. **D-2 deep2: extract screen_dispatch.py** (2ec6120):
+   - app.py: 718 → 519 LOC (-199, -27.7%)
+   - 30-branch if/elif chain in _render() → dict-based dispatch
+   - Lazy import: _build_dispatch() runs on first call
+   - All 30+ screen types mapped to render functions
+
+3. **E-2 first-combat tutorial dismissal** (bfec587):
+   - handle_combat_input() now checks show_first_combat_tutorial flag
+   - Pressing SPACE / ENTER / RETURN dismisses tutorial overlay
+   - Pushes status message: ">>> Tutorial dismissed. Good luck, cowboy."
+
+4. **D-2 deep3: extract main_loop.py** (this commit):
+   - app.py: 519 → 457 LOC (-62)
+   - Per-screen tick dispatch (GRAPHIC_NOVEL, CHAPTER, ARC_PHASE, COMBAT, HACK)
+   - 5 tick handlers as named functions
+   - main loop now only 30 LOC (just event loop + render + input)
+   - Unused imports removed (step_combat, hacking_view, etc.)
+   - ruff: All checks passed
+
+5. **Cross-project wiki update**:
+   - cross-project-integration.md: Phase α-J status, stage_flow guide
+   - Added "Add new mission with custom stage flow" section
+   - Listed all available stages
+
+### Final Statistics (Phase J-K)
+
+| 항목 | 값 |
+|---|---|
+| **pytest** | **3123 passed**, 592 skipped |
+| **ruff** | All checks passed |
+| **app.py LOC** | **457** (was 519, -12%) |
+| **New modules** | main_loop.py (148 LOC) |
+| **C-1 missions with stage_flow** | 4 (was 0) |
+| **All cross-project artifacts** | 102 stories + 94 missions + 81 GN scenes |
+
+### 영향 파일
+
+- prototype/data/missions/missions.json (4 stage_flow 추가)
+- prototype/src/roguelike_sprawl/engine/main_loop.py (NEW, 148 LOC)
+- prototype/src/roguelike_sprawl/engine/app.py (519 → 457 LOC)
+- prototype/src/roguelike_sprawl/engine/combat_view.py (E-2 tutorial dismissal)
+- prototype/src/roguelike_sprawl/engine/screen_dispatch.py (Phase J)
+- prototype/tests/unit/test_stage_flow_v2.py (4 new tests)
+- wiki/world/cross-project-integration.md (Phase J update)
+
+### 후속 (Phase L+, 사용자 요청 시)
+
+1. **app.py <450 LOC**: extract _handle_input (still 250 LOC) and crash_reporter
+2. **E-3 follow**: surface zone rebalancing (27 → 18)
+3. **B-3 more**: visual effect color/intensity based on phase tier
+4. **CI**: integrate pre-commit hook into actual workflow
+
+## [2026-07-26] refactor+features | Phase J-K — C-1 stage_flow + D-2 deep2/3 + E-2 tutorial
+
+**Status**: Complete
+
+### Changes
+
+1. **C-1 data-driven stage_flow backfill** (d885695):
+   - 4 missions get stage_flow field in missions.json
+   - Mission designers can now declare per-mission stage flow without code changes
+   - Tests: 4 new (TestDataDrivenStageFlow class)
+
+2. **D-2 deep2: extract screen_dispatch.py** (2ec6120):
+   - app.py: 718 → 519 LOC (-199, -27.7%)
+   - 30-branch if/elif chain in _render() → dict-based dispatch
+
+3. **E-2 first-combat tutorial dismissal** (bfec587):
+   - handle_combat_input() now checks show_first_combat_tutorial flag
+   - Pressing SPACE / ENTER / RETURN dismisses tutorial overlay
+
+4. **D-2 deep3: extract main_loop.py** (Phase K):
+   - app.py: 519 → 457 LOC (-62)
+   - Per-screen tick dispatch (GRAPHIC_NOVEL, CHAPTER, ARC_PHASE, COMBAT, HACK)
+   - 5 tick handlers as named functions
+   - main loop now only 30 LOC (just event loop + render + input)
+
+5. **Cross-project wiki update**:
+   - cross-project-integration.md: Phase α-J status, stage_flow guide
+
+### Final Statistics (Phase J-K)
+
+| 항목 | 값 |
+|---|---|
+| **pytest** | **3123 passed**, 592 skipped |
+| **ruff** | All checks passed |
+| **app.py LOC** | **457** |
+| **C-1 missions with stage_flow** | 4 (was 0) |
+
+### 후속 (Phase L+, 사용자 요청 시)
+
+1. **app.py <450 LOC**: extract _handle_input (still 250 LOC) and crash_reporter
+2. **E-3 follow**: surface zone rebalancing (27 → 18)
+3. **B-3 more**: visual effect color/intensity based on phase tier

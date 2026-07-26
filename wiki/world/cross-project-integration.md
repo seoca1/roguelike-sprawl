@@ -3,7 +3,7 @@ title:
   en: "Cross-Project Integration: Fiction ↔ roguelike_sprawl"
   ko: "크로스 프로젝트 통합: Fiction ↔ 로그라이크 스프롤"
 created: 2026-07-26
-phase: "Phase α-G completion summary"
+phase: "Phase α-J completion summary (cross-project + combat + UI refactor)"
 description:
   en: "How roguelike_sprawl integrates with the Fiction derivative short story corpus. Two-way link mechanics, validation, and known orphan references."
   ko: "로그라이크 스프롤이 Fiction 파생 단편 코퍼스와 어떻게 통합되는지 정리. 양방향 링크 메커니즘, 검증, 알려진 orphan 참조."
@@ -16,7 +16,9 @@ related:
 
 # Cross-Project Integration: Fiction ↔ roguelike_sprawl
 
-> **Phase α-G status (2026-07-26)**: Bidirectional link established.
+> **Phase α-J status (2026-07-26)**: Bidirectional link established.
+> 100 Fiction stories linked to missions, 81/81 GN scenes linked to missions,
+> 0 orphan references. Boss B-3 features wired across 5/5 boss profiles.
 > 100 Fiction stories linked to missions, 81/81 GN scenes linked to missions,
 > 0 orphan references. All verified by `verify_story_links.py`.
 
@@ -164,6 +166,33 @@ reference each story.
 1. Find the existing Fiction stem (e.g. from `Fiction/derivative/sprawl-trilogy/short-stories/en/`)
 2. Add mission entry with `story.source = "<stem>"`
 3. Verify with `verify_story_links.py`
+
+### To add a new mission with custom stage flow:
+
+1. Add mission entry to `prototype/data/missions/missions.json`:
+   ```json
+   {
+     "my_mission": {
+       "id": "my_mission",
+       "title": "My Mission",
+       "story": {
+         "source": "my_mission",
+         ...
+       },
+       "stage_flow": [
+         "briefing", "travel", "meet_npc", "bypass_security",
+         "defeat_ice", "jack_out", "reward", "complete"
+       ]
+     }
+   }
+   ```
+2. Verify with `verify_story_links.py` (also validates stage_flow)
+
+Available stages (from `run/state.py`):
+- briefing, travel, meet_npc, extract_data, defeat_ice,
+  bypass_security, black_market, ghost_encounter,
+  jack_out, reward, debrief, complete
+- Special: salvation_epilogue (Phase 9)
 
 ## E-3 balance audit
 
