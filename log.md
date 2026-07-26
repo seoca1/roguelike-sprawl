@@ -11261,3 +11261,26 @@ $ uv run pytest prototype/tests/unit/test_story_resolver.py
 1. **app.py <450 LOC**: extract _handle_input (still 250 LOC) and crash_reporter
 2. **E-3 follow**: surface zone rebalancing (27 → 18)
 3. **B-3 more**: visual effect color/intensity based on phase tier
+
+### 2026-07-27 | Phase B-3.5: Per-Boss VFX Themes + ZDR Zone Fix
+
+**작업 내용**:
+1. **Per-Boss VFX Themes (Phase B-3.5+)** — `prototype/src/roguelike_sprawl/combat/boss.py`:
+   - `VFXTheme` dataclass (frozen, slots=True) with shake/hit_flash/particle/flash configs
+   - `BOSS_VFX_THEMES` dict: 6 themes (wintermute, goliath, black_ice, watchdog, ta_construct, default)
+   - `ICE_TYPE_TO_VFX_KEY` mapping + `get_vfx_config()` lookup
+   - `_trigger_aoe_visuals()` now applies per-boss shake intensity multiplier, custom colors/durations
+   - `BossPhase` / `BossSpec` in `bosses.py` gain `vfx_theme` field
+
+2. **ZDR Base Values for SOHO/TOKYO** — `prototype/src/roguelike_sprawl/matrix/zdr.py`:
+   - Added `ZoneDepth.SOHO: 3` (London-style black market, depth 3-5)
+   - Added `ZoneDepth.TOKYO: 6` (Yakuza underworld, depth 5-8)
+   - Per `design/scenario/zone-expansion.md` v0.1.0
+
+**검증**:
+- 3161 unit tests pass (4 pre-existing integration failures unrelated)
+- ruff check ✅ / mypy strict ✅
+- All 19 matrix node tests pass
+- All 100 boss combat tests pass
+
+**커밋**: 39bdf55 (B-3.5 VFX), daf4fb7 (SOHO/TOKYO ZDR)
