@@ -20,6 +20,8 @@ from ..portraits import PortraitManager
 from . import config
 from .state import AppState, ScreenKind
 
+__all__ = ["AppState", "ScreenKind"]
+
 
 def _load_job_board() -> JobBoard:
     """Load the mission JSON if present; return an empty board otherwise."""

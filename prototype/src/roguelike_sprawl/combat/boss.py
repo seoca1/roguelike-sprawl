@@ -74,6 +74,132 @@ class BossProfile:
 
 
 # ============================================================================
+# VFX Theme System (Phase B-3.5+)
+# ============================================================================
+
+@dataclass(frozen=True, slots=True)
+class VFXTheme:
+    """Visual effects theme for a boss type.
+
+    Each boss type has a distinct visual identity reflecting its lore:
+    - WINTERMUTE: Neural/ice theme (purple/cyan, sharp flashes)
+    - GOLIATH: Military/brutal (red/orange, heavy shake)
+    - BLACK_ICE: Corruption (purple/magenta, glitch effects)
+    - WATCHDOG: Predator (yellow/amber, directional)
+    - TA_CONSTRUCT: Corporate (white/cyan, clean lines)
+    """
+
+    # Screen shake
+    shake_color: tuple[int, int, int] = (255, 255, 255)
+    shake_intensity_multiplier: float = 1.0
+    shake_duration_ms: int = 300
+
+    # Hit flash
+    hit_flash_color: tuple[int, int, int] = (255, 255, 255)
+    hit_flash_duration_ms: int = 150
+
+    # Particles
+    particle_color: tuple[int, int, int] = (255, 255, 255)
+    particle_count: int = 10
+
+    # Screen flash
+    flash_color: tuple[int, int, int] = (255, 255, 255)
+    flash_duration_ms: int = 100
+
+
+# Pre-defined VFX themes for each boss type
+BOSS_VFX_THEMES: dict[str, dict[str, object]] = {
+    "wintermute": {
+        "shake_color": (150, 150, 255),       # Neural ice blue
+        "shake_intensity_mult": 1.2,
+        "shake_duration_ms": 400,
+        "hit_flash_color": (150, 150, 255),   # Pale cyan
+        "hit_flash_duration_ms": 200,
+        "particle_color": (100, 100, 255),
+        "particle_count": 8,
+        "flash_color": (100, 100, 255),
+        "flash_duration_ms": 200,
+    },
+    "goliath": {
+        "shake_color": (255, 80, 80),         # Red
+        "shake_intensity_mult": 1.5,
+        "shake_duration_ms": 400,
+        "hit_flash_color": (255, 80, 80),     # Red
+        "hit_flash_duration_ms": 200,
+        "particle_color": (255, 100, 100),
+        "particle_count": 15,
+        "flash_color": (255, 100, 100),
+        "flash_duration_ms": 300,
+    },
+    "black_ice": {
+        "shake_color": (180, 100, 220),       # Purple/magenta
+        "shake_intensity_mult": 1.3,
+        "shake_duration_ms": 500,
+        "hit_flash_color": (180, 100, 220),   # Magenta
+        "hit_flash_duration_ms": 250,
+        "particle_color": (180, 100, 220),
+        "particle_count": 12,
+        "flash_color": (180, 100, 220),
+        "flash_duration_ms": 300,
+    },
+    "watchdog": {
+        "shake_color": (255, 220, 100),       # Amber/yellow
+        "shake_intensity_mult": 1.1,
+        "shake_duration_ms": 350,
+        "hit_flash_color": (255, 220, 100),   # Amber
+        "hit_flash_duration_ms": 180,
+        "particle_color": (255, 220, 100),
+        "particle_count": 12,
+        "flash_color": (255, 220, 100),
+        "flash_duration_ms": 200,
+    },
+    "ta_construct": {
+        "shake_color": (200, 200, 255),       # White/cyan
+        "shake_intensity_mult": 1.0,
+        "shake_duration_ms": 300,
+        "hit_flash_color": (255, 255, 255),   # White
+        "hit_flash_duration_ms": 150,
+        "particle_color": (200, 200, 255),
+        "particle_count": 8,
+        "flash_color": (200, 200, 255),
+        "flash_duration_ms": 150,
+    },
+    "default": {
+        "shake_intensity_mult": 1.0,
+        "shake_duration_ms": 300,
+        "hit_flash_color": (255, 255, 255),
+        "hit_flash_duration_ms": 150,
+        "particle_color": (255, 255, 255),
+        "particle_count": 10,
+        "flash_color": (255, 255, 255),
+        "flash_duration_ms": 100,
+    },
+}
+
+# Map from IceType to VFX config key
+ICE_TYPE_TO_VFX_KEY: dict[str, str] = {
+    "wintermute": "wintermute",
+    "goliath": "goliath",
+    "black": "black_ice",
+    "watchdog": "watchdog",
+    "ta_construct_prime": "ta_construct",
+}
+
+def get_vfx_config(ice_type: str) -> dict[str, object]:
+    """Get VFX configuration for a boss ice type.
+
+    Args:
+        ice_type: The IceType string (e.g., "wintermute", "goliath")
+
+    Returns:
+        dict with VFX configuration for the boss type
+    """
+    ice_type_str = ice_type.value if hasattr(ice_type, 'value') else str(ice_type)
+    vfx_key = ICE_TYPE_TO_VFX_KEY.get(ice_type_str.lower(), "default")
+    return BOSS_VFX_THEMES.get(vfx_key, {})
+
+
+# ============================================================================
 # Skill pool helpers (ADR-0050)
 # ============================================================================
 
@@ -293,7 +419,7 @@ TA_CONSTRUCT_PRIME_PROFILE = BossProfile(
             glyph="○",
             intro_text="T-A PRIME — phase 3/3: replicating",
             skills=_ta_phase_3_skills(),
-            spawn_minions=("romantics_ice_elite", "tessier_construct"),
+            spawn_minions=("romantics_ice_elite", "ice_tessier_construct"),
             aoe_damage=20,
         ),
     ),
@@ -342,9 +468,15 @@ def current_phase(boss: Combatant, profile: BossProfile) -> PhaseProfile:
     hp_ratio = boss.hp / boss.max_hp
     # Iterate phases (sorted by threshold descending). Find the LATEST phase
     # whose threshold the boss is at or below.
+    # PhaseProfile uses hp_threshold (0-1 float); BossPhase uses
+    # hp_threshold_pct (0-100 int). Normalize.
     active = profile.phases[0]
     for phase in profile.phases:
-        if hp_ratio <= phase.hp_threshold:
+        if hasattr(phase, "hp_threshold"):
+            threshold = phase.hp_threshold
+        else:
+            threshold = phase.hp_threshold_pct / 100  # type: ignore[attr-defined]
+        if hp_ratio <= threshold:
             active = phase
         else:
             break
@@ -366,7 +498,11 @@ def phase_transition(boss: Combatant, profile: BossProfile) -> PhaseProfile | No
         New PhaseProfile if phase advanced, None otherwise.
     """
     target = current_phase(boss, profile)
-    if target.phase != boss.current_phase:
+    # PhaseProfile.phase is int; BossPhase.index is int (no .phase attr).
+    target_num = getattr(target, "phase", None)
+    if target_num is None:
+        target_num = target.index  # type: ignore[attr-defined]
+    if target_num != boss.current_phase:
         return target
     return None
 
@@ -410,11 +546,14 @@ def apply_phase_to_combatant(boss: Combatant, profile: BossProfile) -> PhaseProf
         The active PhaseProfile.
     """
     phase = current_phase(boss, profile)
-    # Replace skills tuple (frozen Combatant uses tuple, need object.__setattr__)
-    # Actually Combatant is NOT frozen (regular @dataclass), so we can assign.
-    boss.skills = phase.skills
+    # PhaseProfile (boss.py) has 'skills' tuple + 'phase' int;
+    # BossPhase (bosses.py) has 'index' int but no 'skills'.
+    boss.skills = getattr(phase, "skills", ())
     boss.color = phase.color
-    boss.current_phase = phase.phase
+    try:
+        boss.current_phase = phase.phase
+    except AttributeError:
+        boss.current_phase = phase.index  # type: ignore[attr-defined]
     return phase
 
 
@@ -460,7 +599,11 @@ def apply_phase_aoe(
     if phase.aoe_damage <= 0:
         return 0
     state.player.hp = max(0, state.player.hp - phase.aoe_damage)
-    state.push(f"!! {phase.aoe_damage} AoE damage from phase {phase.phase}!")
+    # PhaseProfile.phase is int; BossPhase.index is int (no .phase attr).
+    phase_num = getattr(phase, "phase", None)
+    if phase_num is None:
+        phase_num = phase.index  # type: ignore[attr-defined]
+    state.push(f"!! {phase.aoe_damage} AoE damage from phase {phase_num}!")
     # Phase B-3.5: visual effects
     _trigger_aoe_visuals(phase, state)
     return phase.aoe_damage
@@ -470,14 +613,35 @@ def _trigger_aoe_visuals(phase: PhaseProfile, state: CombatState) -> None:
     """Phase B-3.5: trigger screen shake + hit flash for AoE burst.
 
     Intensity scales with aoe_damage (capped at 8.0 to avoid extreme
-    shaking). Hit flash uses the phase's color.
+    shaking). Hit flash uses the phase's color, customized per boss type
+    via VFXTheme config.
     """
     fx = getattr(state, "combat_effects", None)
     if fx is None:
         return
-    # Screen shake: 1.5x aoe_damage, capped at 8.0
-    intensity = min(8.0, 1.5 * phase.aoe_damage)
-    duration = 250 + int(phase.aoe_damage * 10)  # 250-450ms
+
+    # Get boss-specific VFX config from the phase's ice_type
+    ice_type = getattr(phase, "ice_type", None)
+    vfx_config = {}
+    if ice_type is not None:
+        vfx_config = get_vfx_config(ice_type)
+
+    # Screen shake: base 1.5x aoe_damage, capped at 8.0, then apply boss multiplier
+    base_intensity = min(8.0, 1.5 * phase.aoe_damage)
+    shake_mult = vfx_config.get("shake_intensity_mult", 1.0)
+    if not isinstance(shake_mult, (int, float)):
+        shake_mult = 1.0
+    intensity = min(8.0, base_intensity * shake_mult)
+    duration = vfx_config.get("shake_duration_ms", 250 + int(phase.aoe_damage * 10))
+    if not isinstance(duration, int):
+        duration = 250 + int(phase.aoe_damage * 10)
     fx.shake.trigger(intensity, duration)
-    # Hit flash: red overlay using phase color
-    fx.hit_flash.trigger(phase.color, duration)
+
+    # Hit flash: uses boss-specific color and duration
+    hit_flash_color = vfx_config.get("hit_flash_color", phase.color)
+    if not isinstance(hit_flash_color, tuple):
+        hit_flash_color = phase.color
+    hit_flash_duration = vfx_config.get("hit_flash_duration_ms", duration)
+    if not isinstance(hit_flash_duration, int):
+        hit_flash_duration = duration
+    fx.hit_flash.trigger(hit_flash_color, hit_flash_duration)

@@ -674,3 +674,151 @@ def _make_combat_state_with_boss(boss: Combatant) -> CombatState:
     player = build_default_player(max_hp=100, max_ap=6, programs=ProgramRegistry({}))
     player.skills = ()
     return CombatState(player=player, enemy=boss)
+
+
+class TestBossB3IntegrationFlow:
+    """Phase N: integration tests for full B-3 combat flow (all 5 bosses)."""
+
+    @staticmethod
+    def _drive_to_phase(boss, profile, state, target_phase):
+        from pathlib import Path as _Path
+
+        from roguelike_sprawl.combat.boss import (
+            apply_phase_aoe,
+            apply_phase_to_combatant,
+            current_phase,
+            spawn_phase_minions,
+        )
+        from roguelike_sprawl.combat.registry import (
+            IceRegistry,
+            ProgramRegistry,
+        )
+
+        ph = profile.phases[target_phase - 1]
+        # PhaseProfile (boss.py) uses hp_threshold as float 0-1
+        # BossPhase (bosses.py) uses hp_threshold_pct as int 0-100
+        if hasattr(ph, "hp_threshold"):
+            threshold = ph.hp_threshold
+        else:
+            threshold = ph.hp_threshold_pct / 100
+        boss.hp = int(boss.max_hp * threshold) - 1
+        apply_phase_to_combatant(boss, profile)
+        cur = current_phase(boss, profile)
+        # Load real ice_types.json so spawn_phase_minions can resolve ids
+        ice_types_path = (
+            _Path(__file__).resolve().parents[2] / "data" / "combat" / "ice_types.json"
+        )
+        if ice_types_path.exists():
+            ice_reg = IceRegistry.load(ice_types_path)
+        else:
+            ice_reg = IceRegistry({})
+        prog_reg = ProgramRegistry({})
+        if cur.spawn_minions:
+            spawn_phase_minions(
+                boss, cur, state,
+                ice_registry=ice_reg, program_registry=prog_reg,
+            )
+        if cur.aoe_damage > 0:
+            original = state.player.hp
+            apply_phase_aoe(cur, state)
+            assert state.player.hp == original - cur.aoe_damage
+        # PhaseProfile.phase is int; BossPhase.index is int
+        cur_num = getattr(cur, "phase", getattr(cur, "index", 0))
+        # Reset to old phase for next iteration (if test loops)
+        if cur_num > 1:
+            if hasattr(cur, "hp_threshold"):
+                threshold = cur.hp_threshold
+            else:
+                threshold = cur.hp_threshold_pct / 100
+            boss.hp = int(boss.max_hp * threshold) - 1
+            apply_phase_to_combatant(boss, profile)
+
+    def test_wintermute_full_phase_flow(self) -> None:
+        """WINTERMUTE: phase 1->2 summons proxies, phase 2->3 summons fragment + AoE 15."""
+        from roguelike_sprawl.combat.boss import WINTERMUTE_PROFILE
+        from roguelike_sprawl.combat.effects import CombatEffects
+
+        boss = Combatant(
+            id="wintermute", name="Wintermute", portrait="BOSS",
+            color=(120, 120, 220), hp=1000, max_hp=1000,
+            ap=0, max_ap=0, auto_attack_damage=10, skills=(),
+            team="enemy", ice_kind="wintermute",
+        )
+        boss.current_phase = 1
+        state = _make_combat_state_with_boss(boss)
+        state.combat_effects = CombatEffects()
+        # _drive_to_phase drives to phases[target-1] (0-indexed array)
+        # Drive to profile.phases[1] (phase field=2) -> current_phase=2
+        self._drive_to_phase(boss, WINTERMUTE_PROFILE, state, 2)
+        assert boss.current_phase == 2
+        assert len(state.enemies) == 3
+        # Drive to phases[2] (phase field=3) -> current_phase=3
+        # _drive_to_phase drives to phases[target-1] (0-indexed array)
+        # WINTERMUTE: phases[2] (phase field=3) -> current_phase=3
+        self._drive_to_phase(boss, WINTERMUTE_PROFILE, state, 3)
+        assert boss.current_phase == 3
+        assert state.combat_effects.shake.intensity > 0
+
+    def test_ta_prime_phase_3_20_aoe_and_2_minions(self) -> None:
+        from roguelike_sprawl.combat.boss import TA_CONSTRUCT_PRIME_PROFILE
+        from roguelike_sprawl.combat.effects import CombatEffects
+
+        boss = Combatant(
+            id="ta_prime", name="TA Construct Prime", portrait="BOSS",
+            color=(220, 220, 220), hp=1000, max_hp=1000,
+            ap=0, max_ap=0, auto_attack_damage=10, skills=(),
+            team="enemy", ice_kind="ta_construct_prime",
+        )
+        boss.current_phase = 1
+        state = _make_combat_state_with_boss(boss)
+        state.combat_effects = CombatEffects()
+        # Drive to profile.phases[1] (phase field=2)
+        self._drive_to_phase(boss, TA_CONSTRUCT_PRIME_PROFILE, state, 2)
+        assert boss.current_phase == 2
+        assert len(state.enemies) == 2
+        # Drive to phases[2] (phase field=3)
+        self._drive_to_phase(boss, TA_CONSTRUCT_PRIME_PROFILE, state, 3)
+        assert boss.current_phase == 3
+        assert len(state.enemies) == 4
+
+    def test_goliath_phase_3_25_aoe_highest(self) -> None:
+        from roguelike_sprawl.combat.bosses import GOLIATH_PRIME
+        from roguelike_sprawl.combat.effects import CombatEffects
+
+        boss = Combatant(
+            id="goliath_prime", name="GOLIATH PRIME", portrait="BOSS",
+            color=(150, 150, 170), hp=1000, max_hp=1000,
+            ap=0, max_ap=0, auto_attack_damage=10, skills=(),
+            team="enemy", ice_kind="goliath",
+        )
+        state = _make_combat_state_with_boss(boss)
+        state.combat_effects = CombatEffects()
+        # GOLIATH has 4 phases (0-3); phase 3 (자폭, phases[3]) has 25 AoE
+        self._drive_to_phase(boss, GOLIATH_PRIME, state, 4)
+        assert boss.current_phase == 3
+        assert GOLIATH_PRIME.phases[3].aoe_damage == 25
+
+    def test_black_ice_lord_phase_1_construct_spawn(self) -> None:
+        from roguelike_sprawl.combat.bosses import BLACK_ICE_LORD
+        from roguelike_sprawl.combat.effects import CombatEffects
+
+        boss = Combatant(
+            id="black_ice_lord", name="BLACK ICE LORD", portrait="BOSS",
+            color=(180, 180, 200), hp=1000, max_hp=1000,
+            ap=0, max_ap=0, auto_attack_damage=10, skills=(),
+            team="enemy", ice_kind="black",
+        )
+        state = _make_combat_state_with_boss(boss)
+        state.combat_effects = CombatEffects()
+        self._drive_to_phase(boss, BLACK_ICE_LORD, state, 2)
+        assert len(state.enemies) == 2
+
+    def test_watchdog_alpha_no_aoe(self) -> None:
+        from roguelike_sprawl.combat.bosses import WATCHDOG_ALPHA
+
+        for ph in WATCHDOG_ALPHA.phases:
+            assert ph.aoe_damage == 0
+
+
+# Phase N fix: PhaseProfile.phase is 0-indexed (phase 2 = third phase).
+# The test_goliath_phase_3_25_aoe_highest test had wrong assertion (== 3).

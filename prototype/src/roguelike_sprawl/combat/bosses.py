@@ -52,6 +52,8 @@ class BossPhase:
     aoe_damage: int = 0  # Damage dealt to player at phase start (0 = no AoE)
     # Phase B-3: minion spawn — phase spawns these ICE IDs as adds
     spawn_minions: tuple[str, ...] = ()  # ICE ids spawned at phase start
+    # Phase B-3: VFX theme for this phase
+    vfx_theme: str = "default"  # "default", "wintermute", "goliath", "black_ice", "watchdog", "ta_construct"
 
 
 @dataclass(frozen=True, slots=True)
@@ -67,6 +69,8 @@ class BossSpec:
     phases: tuple[BossPhase, ...]  # Ordered high-to-low HP
     intro_lines: tuple[str, ...]  # Multi-line intro text
     death_lines: tuple[str, ...]  # Multi-line death text
+    # Phase B-3: default VFX theme for this boss
+    vfx_theme: str = "default"  # "default", "wintermute", "goliath", "black_ice", "watchdog", "ta_construct"
 
 
 # ----------------------------------------------------------------------------
