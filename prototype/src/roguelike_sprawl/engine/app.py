@@ -17,9 +17,7 @@ from ..combat.registry import IceRegistry, ProgramRegistry
 from ..i18n import Translator
 from ..missions import JobBoard
 from ..portraits import PortraitManager
-from . import combat_view, config, dungeon_view, hacking_view, story_cinematic
-from . import hub as hub_screen
-from . import menu as menu_screen
+from . import config
 from .state import AppState, ScreenKind
 
 
@@ -264,191 +262,17 @@ def _handle_input(
     """Dispatch an event to the current screen's handler. False = quit.
 
     Phase D-2 deep: delegates global hotkeys to _handle_global_hotkeys.
+    Phase D-2 deep4: delegates screen-specific input to input_dispatch.
     """
     global_result = _handle_global_hotkeys(event, state)
     if global_result is not None:
         return global_result
 
-    if state.screen is ScreenKind.MENU:
-        return menu_screen.handle_menu_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.GRAPHIC_NOVEL_MENU:
-        return menu_screen.handle_graphic_novel_menu_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.GRAPHIC_NOVEL:
-        action = menu_screen.handle_graphic_novel_input(event, state)  # type: ignore[arg-type]
-        if action == "menu":
-            state.screen = ScreenKind.MENU
-            return True
-        if action == "next":
-            scenes = state.gn_scenes
-            if scenes and 0 <= state.gn_scene_index < len(scenes):
-                scene = scenes[state.gn_scene_index]
-                if scene.dialogue and state.gn_dialogue_index < len(scene.dialogue) - 1:
-                    state.gn_dialogue_index += 1
-                    state.gn_elapsed_ms = 0.0
-                elif state.gn_scene_index < len(scenes) - 1:
-                    state.gn_scene_index += 1
-                    state.gn_dialogue_index = 0
-                    state.gn_elapsed_ms = 0.0
-                else:
-                    state.screen = ScreenKind.MENU
-            else:
-                state.screen = ScreenKind.MENU
-            return True
-        if action == "skip":
-            scenes = state.gn_scenes
-            if scenes and state.gn_scene_index < len(scenes) - 1:
-                state.gn_scene_index += 1
-                state.gn_dialogue_index = 0
-                state.gn_elapsed_ms = 0.0
-            else:
-                state.screen = ScreenKind.MENU
-            return True
-        if action == "pause":
-            state.gn_paused = not state.gn_paused
-            return True
-        return True
-    if state.screen is ScreenKind.SAVED_PROGRESS:
-        return menu_screen.handle_saved_progress_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.HUB:
-        return hub_screen.handle_hub_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.CHAPTER:
-        from . import chapter_view
+    from .input_dispatch import handle_current_screen_input
 
-        chapter_view.handle_chapter_input(event, state)
-        return True
-    if state.screen is ScreenKind.CHARACTER_SELECT:
-        menu_screen.handle_character_select_input(event, state)
-        return True
-    if state.screen is ScreenKind.ENDING:
-        menu_screen.handle_ending_input(event, state)
-        return True
-    if state.screen is ScreenKind.GRAPHIC_NOVEL_ENDING_MENU:
-        import tcod.event
-
-        if isinstance(event, tcod.event.KeyDown):
-            if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
-                state.screen = ScreenKind.MENU
-                return True
-        return True
-    if state.screen is ScreenKind.SAVE_SLOT_SELECT:
-        from . import save_load_view
-
-        return save_load_view.handle_save_load_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.EVENT:
-        from . import event_view
-
-        if state.active_event is not None:
-            return event_view.handle_event_input(event, state, state.active_event)  # type: ignore[arg-type]
-        return True
-    if state.screen is ScreenKind.STORY:
-        from . import story_view as story_screen
-
-        return story_screen.handle_story_input(event, state)
-    if state.screen is ScreenKind.ARC_PHASE:
-        import tcod.event
-
-        if isinstance(event, tcod.event.KeyDown):
-            if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
-                state.screen = ScreenKind.MENU
-                return True
-            if event.sym in (
-                tcod.event.KeySym.SPACE,
-                tcod.event.KeySym.RETURN,
-                tcod.event.KeySym.RIGHT,
-            ):
-                _advance_arc_phase(state)
-                return True
-            if event.sym in (tcod.event.KeySym.S,):
-                state.phase_elapsed_ms = float("inf")
-                state.phase_typed_chars = 9999
-                _advance_arc_phase(state)
-                return True
-        return True
-    if state.screen is ScreenKind.CYBERSPACE_BROWSER:
-        from . import cyberspace_browser as cb_screen
-
-        return cb_screen.handle_browser_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.CYBERSPACE_MAP:
-        import tcod.event
-
-        if isinstance(event, tcod.event.KeyDown):
-            if event.sym in (tcod.event.KeySym.ESCAPE, tcod.event.KeySym.Q):
-                state.screen = ScreenKind.MENU
-                return True
-        return True
-    if state.screen is ScreenKind.NPC:
-        from . import npc_view
-
-        if state.npc_state is not None:
-            npc_view.handle_npc_input(event, state, state.npc_state)  # type: ignore[arg-type]
-        return True
-    if state.screen is ScreenKind.HACK:
-        hacking_view.handle_hack_input(event, state)  # type: ignore[arg-type]
-        return True
-    if state.screen is ScreenKind.MATRIX:
-        return dungeon_view.handle_dungeon_input(
-            event,  # type: ignore[arg-type]
-            state,
-            prog_registry,
-            ice_registry,
-        )
-    if state.screen is ScreenKind.COMBAT:
-        if state.combat_state is not None:
-            return combat_view.handle_combat_input(event, state, state.combat_state)  # type: ignore[arg-type]
-        return True
-    if state.screen is ScreenKind.CINEMATIC:
-        if state.cinematic_state is not None:
-            return story_cinematic.handle_cinematic_input(event, state, state.cinematic_state)
-        return True
-    if state.screen is ScreenKind.DEATH:
-        from . import death as death_screen
-
-        return death_screen.handle_death_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.DEATH_SUMMARY:
-        from . import death as death_screen
-
-        return death_screen.handle_death_summary_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.HALL_OF_DEAD:
-        from . import death as death_screen
-
-        return death_screen.handle_hall_of_dead_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.JACK_OUT:
-        from . import jack_out_view
-
-        return jack_out_view.handle_jack_out_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.REWARD:
-        from . import reward_view
-
-        return reward_view.handle_reward_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.DEBRIEF:
-        from . import debrief_view
-
-        return debrief_view.handle_debrief_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.SAVE_LOAD:
-        from . import save_load_view
-
-        return save_load_view.handle_save_load_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.HELP:
-        from . import help_view
-
-        return help_view.handle_help_input(event, state)  # type: ignore[arg-type,return-value]
-    if state.screen is ScreenKind.SETTINGS:
-        from . import settings_view
-
-        return settings_view.handle_settings_input(event, state)  # type: ignore[arg-type,return-value]
-    if state.screen is ScreenKind.SALVATION_INTRO:
-        from . import salvation_view
-
-        return salvation_view.handle_salvation_intro_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.SALVATION_EPILOGUE:
-        from . import salvation_view
-
-        return salvation_view.handle_salvation_epilogue_input(event, state)  # type: ignore[arg-type]
-    if state.screen is ScreenKind.SALVATION_ENDING:
-        from . import salvation_view
-
-        return salvation_view.handle_salvation_ending_input(event, state)  # type: ignore[arg-type]
-    return True
+    return handle_current_screen_input(
+        event, state, prog_registry, ice_registry
+    )
 
 
 if __name__ == "__main__":
