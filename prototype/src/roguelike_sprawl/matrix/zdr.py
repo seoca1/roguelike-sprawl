@@ -18,6 +18,8 @@ _BASE_ZDR: dict[ZoneDepth, int] = {
     ZoneDepth.CORE: 12,
     ZoneDepth.TA: 25,
     ZoneDepth.FREESIDE: 30,  # Orbital colonies (hardest)
+    ZoneDepth.SOHO: 3,   # 3-5 (London-style black market district)
+    ZoneDepth.TOKYO: 6,  # 5-8 (Yakuza-adjacent underworld district)
 }
 
 # --- ICE modifier (per ADR-0012) ---
