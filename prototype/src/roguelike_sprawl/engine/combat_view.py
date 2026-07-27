@@ -253,6 +253,8 @@ def _draw_combatants(
     """Draw player and enemy portraits + HP bars."""
     player = combat_state.player
     enemy = combat_state.enemy
+    if enemy is None:
+        return
 
     # Player (left side)
     x = main.x + 4
@@ -522,7 +524,6 @@ def handle_combat_input(
     if getattr(state, "show_first_combat_tutorial", False) and event.sym in (
         KeySym.SPACE,
         KeySym.RETURN,
-        KeySym.ENTER,
     ):
         state.show_first_combat_tutorial = False
         state.status_messages.append(">>> Tutorial dismissed. Good luck, cowboy.")
@@ -646,14 +647,17 @@ def _execute_skill(
     sound_name = _SKILL_SOUND_MAP.get(skill.effect, "combat/skill_physical")
     _sm.get_sound_manager().play(sound_name)
 
+    enemy = combat_state.enemy
+    if enemy is None:
+        return
     _player_hp_before = combat_state.player.hp
-    _enemy_hp_before = combat_state.enemy.hp
+    _enemy_hp_before = enemy.hp
     use_skill(combat_state, skill)
     _spawn_skill_vfx(
         state,
         skill,
         combat_state,
-        enemy_delta=_enemy_hp_before - combat_state.enemy.hp,
+        enemy_delta=_enemy_hp_before - enemy.hp,
         player_delta=_player_hp_before - combat_state.player.hp,
     )
 
@@ -746,10 +750,11 @@ def _spawn_skill_vfx(
 
 def _end_combat(state: AppState, combat_state: CombatState) -> None:
     """Transition from Combat to next state with rewards."""
-    if combat_state.outcome == "victory":
+    enemy = combat_state.enemy
+    if combat_state.outcome == "victory" and enemy is not None:
         # VFX: ICE death cinematic (per ICE type)
         try:
-            ice_type = IceType(combat_state.enemy.id)
+            ice_type = IceType(enemy.id)
         except ValueError:
             ice_type = IceType.STANDARD
         spawn_ice_death(state.combat_effects, ice_type)
@@ -1064,7 +1069,7 @@ def start_combat(
 
     from ..combat.boss import get_boss_profile, is_boss
 
-    if is_boss(ice_type):
+    if is_boss(ice_type) and cs.enemy is not None:
         profile = get_boss_profile(ice_type)
         if profile is not None:
             from ..combat.boss import apply_phase_to_combatant
