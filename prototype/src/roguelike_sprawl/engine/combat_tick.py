@@ -45,11 +45,11 @@ def maybe_boss_phase_transition(
                     f">>> {new_phase.name} summons "
                     f"{len(spawned)} minion(s)!"
                 )
-        # Phase H: B-3 aoe_damage — AoE burst on phase change
-        if new_phase.aoe_damage > 0:
-            _boss.apply_phase_aoe(new_phase, cs)
         try:
             ice_type = _effects.IceType(cs.enemy.id)
         except ValueError:
             ice_type = _effects.IceType.BLACK
+        # Phase H: B-3 aoe_damage — AoE burst on phase change
+        if new_phase.aoe_damage > 0:
+            _boss.apply_phase_aoe(new_phase, cs, ice_type)
         combat_view.spawn_phase_transition(state.combat_effects, new_phase, ice_type)

@@ -605,7 +605,7 @@ class TestBossB3Enhancements:
         state = _make_combat_state_with_boss(boss)
         state.combat_effects = CombatEffects()
 
-        apply_phase_aoe(phase, state)
+        apply_phase_aoe(phase, state, IceType.WINTERMUTE)
         # Visual effects triggered: shake and hit_flash active
         assert state.combat_effects.shake.intensity > 0
         assert state.combat_effects.hit_flash.is_active

@@ -588,7 +588,9 @@ def spawn_phase_minions(
 
 
 def apply_phase_aoe(
-    phase: PhaseProfile, state: CombatState
+    phase: PhaseProfile,
+    state: CombatState,
+    ice_type: IceType | None = None,
 ) -> int:
     """Phase B-3: apply AoE damage from boss phase transition.
 
@@ -605,11 +607,13 @@ def apply_phase_aoe(
         phase_num = phase.index  # type: ignore[attr-defined]
     state.push(f"!! {phase.aoe_damage} AoE damage from phase {phase_num}!")
     # Phase B-3.5: visual effects
-    _trigger_aoe_visuals(phase, state)
+    _trigger_aoe_visuals(phase, state, ice_type)
     return phase.aoe_damage
 
 
-def _trigger_aoe_visuals(phase: PhaseProfile, state: CombatState) -> None:
+def _trigger_aoe_visuals(
+    phase: PhaseProfile, state: CombatState, ice_type: IceType | None = None
+) -> None:
     """Phase B-3.5: trigger screen shake + hit flash for AoE burst.
 
     Intensity scales with aoe_damage (capped at 8.0 to avoid extreme
@@ -620,9 +624,8 @@ def _trigger_aoe_visuals(phase: PhaseProfile, state: CombatState) -> None:
     if fx is None:
         return
 
-    # Get boss-specific VFX config from the phase's ice_type
-    ice_type = getattr(phase, "ice_type", None)
-    vfx_config = {}
+    # Get boss-specific VFX config from the ice_type (passed by caller)
+    vfx_config: dict[str, object] = {}
     if ice_type is not None:
         vfx_config = get_vfx_config(ice_type)
 
