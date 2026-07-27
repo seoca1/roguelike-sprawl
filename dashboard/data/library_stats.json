@@ -15,7 +15,7 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-26T01:13:41",
+  "_generated_at": "2026-07-27T18:50:36",
   "stories_with_mission_link": 100,
   "catalog_entries": 106,
   "catalog_entries_list": [
@@ -391,6 +391,13 @@
       "game_mission_id": "mollys_razor"
     },
     {
+      "stem": "neon_tokyo_courier",
+      "type": "short_story",
+      "title_en": "Neon Tokyo Courier",
+      "title_ko": "도쿄 쿠리어 운반",
+      "game_mission_id": "tokyo_courier_run"
+    },
+    {
       "stem": "neuromancer_first_ping",
       "type": "short_story",
       "title_en": "Neuromancer First Ping",
@@ -599,13 +606,6 @@
       "title_en": "Threjane Family Log",
       "title_ko": "=== 이야기 본문 (stub) ===",
       "game_mission_id": "threjane_family_log"
-    },
-    {
-      "stem": "tokyo_courier_run",
-      "type": "short_story",
-      "title_en": "Tokyo Courier Run",
-      "title_ko": "도쿄 쿠리어 운반",
-      "game_mission_id": "tokyo_courier_run"
     },
     {
       "stem": "tokyo_pachinko_run",
