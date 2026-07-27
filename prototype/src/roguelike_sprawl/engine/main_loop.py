@@ -10,6 +10,7 @@ no-ops and don't appear in the dispatch table.
 """
 from __future__ import annotations
 
+from ..combat.registry import IceRegistry, ProgramRegistry
 from ..combat.state import step_combat
 from . import hacking_view
 from .arc_phase import advance_arc_phase
@@ -97,8 +98,8 @@ def _advance_arc_phase_screen(state: AppState, delta_s: float) -> None:
 def _advance_combat(
     state: AppState,
     delta_s: float,
-    ice_registry,
-    program_registry,
+    ice_registry: IceRegistry | None,
+    program_registry: ProgramRegistry | None,
 ) -> None:
     """Tick COMBAT: step_combat + boss phase transition."""
     if state.combat_state is None:
@@ -118,7 +119,11 @@ def _advance_hack(state: AppState, delta_s: float) -> None:
 
 # Dispatch table: ScreenKind -> tick function (state, delta_s) -> None
 # (combat + boss phase transition need extra args; pass through)
-def _combat_handler_with_args(state, delta_s, **_):
+def _combat_handler_with_args(
+    state: AppState,
+    delta_s: float,
+    **_: object,
+) -> None:
     """Combat handler signature includes registries."""
     pass  # not used directly; main_loop handles
 
@@ -126,8 +131,8 @@ def _combat_handler_with_args(state, delta_s, **_):
 def tick_current_screen(
     state: AppState,
     delta_s: float,
-    ice_registry=None,
-    program_registry=None,
+    ice_registry: IceRegistry | None = None,
+    program_registry: ProgramRegistry | None = None,
 ) -> None:
     """Phase D-2 deep3: dispatch tick handler to current screen.
 
