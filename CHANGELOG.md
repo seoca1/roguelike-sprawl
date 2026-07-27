@@ -6,6 +6,53 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased] — Phase α-L (2026-07-26)
 
+### Per-Boss VFX Themes (Phase B-3.5+, 2026-07-27)
+
+- **6 boss VFX themes** in `BOSS_VFX_THEMES` dict:
+  - WINTERMUTE: neural/ice blue (1.2x shake, RGB 150,150,255)
+  - GOLIATH: military/red (1.5x shake, RGB 255,80,80)
+  - BLACK_ICE: corruption/magenta (1.3x shake, RGB 180,100,220)
+  - WATCHDOG: predator/amber (1.1x shake, RGB 255,220,100)
+  - TA_CONSTRUCT: corporate/white (1.0x shake, RGB 255,255,255)
+  - DEFAULT: fallback
+- `VFXTheme` dataclass (frozen, slots=True) with per-theme shake
+  intensity multiplier + hit flash color/duration + particle config
+- `get_vfx_config(ice_type)` lookup; `ICE_TYPE_TO_VFX_KEY` mapping
+- `_trigger_aoe_visuals()` applies per-boss shake multiplier and
+  custom hit flash color/duration
+- `BossPhase` and `BossSpec` gain `vfx_theme` field
+
+### VFX Bug Fix (2026-07-27)
+
+- `apply_phase_aoe()` now accepts optional `ice_type` parameter
+- `_trigger_aoe_visuals()` uses passed `ice_type` (was incorrectly
+  reading `phase.ice_type` which doesn't exist on `PhaseProfile`)
+- `combat_tick.py`: computes `IceType` BEFORE `apply_phase_aoe()` and
+  passes it. Without this fix, all bosses fell back to `phase.color`
+  and the per-boss VFX theme colors never triggered.
+- Verified: Wintermute phase 3 → hit_flash_color=(150,150,255),
+  TA_Prime phase 3 → hit_flash_color=(255,255,255), per-boss shake
+  multipliers applied.
+
+### Matrix Zone Depth Fix (2026-07-27)
+
+- `ZoneDepth.SOHO` (3-5, London-style black market): base ZDR 3
+- `ZoneDepth.TOKYO` (5-8, Yakuza underworld): base ZDR 6
+- Both zones were defined in `ZoneDepth` enum but missing from
+  `_BASE_ZDR` dict → would raise `KeyError` if those zones were used
+
+### Mission Source Field (18 missions, 2026-07-27)
+
+- Added `story.source` field to 18 Bridge/Blue Ant era missions
+  (previously missing → broke 3 integration tests)
+- Source values mapped to existing `search_index.json` slugs:
+  - `bridge_scaffold` → `bridge-construct`
+  - `chevette_run` → `chevette-run`
+  - `kombinat_node_hack` → `kombinat-node-hack`
+  - `bigend_laney_lunch` → `bigend-laney-lunch`
+  - `coolhunter_laney_tokyo` → `coolhunter-laney-tokyo`
+  - `tokyo_courier_run` → `tokyo-courier-run`
+
 ### Cross-Project Integration (Fiction ↔ roguelike_sprawl)
 
 - **Phase α** (initial bidirectional): 100 Fiction stories now linked to
