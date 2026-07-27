@@ -81,7 +81,7 @@ def render_hub(console: tcod.console.Console, t: Translator, state: AppState) ->
         # Phase β-1: Fiction cross-reference link (if available)
         from pathlib import Path as _Path
 
-        from ..data.story_resolver import (  # type: ignore[import-not-found]  # noqa: E402
+        from ..data.story_resolver import (  # noqa: E402
             get_fiction_story_for_mission,
         )
 

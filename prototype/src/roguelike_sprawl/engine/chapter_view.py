@@ -60,7 +60,7 @@ class ChapterData:
     duration_ms: int
     next_screen: str
     char_delay_ms: int = 60
-    epilogue_supplement: tuple = ()
+    epilogue_supplement: tuple[str, ...] = ()
 
 
 def load_chapter(path: Path) -> ChapterData:
@@ -110,7 +110,7 @@ PERSONA_TO_CHAPTER = {
 }
 
 
-def epilogue_supplement_for(stem: str, data_dir: Path) -> tuple:
+def epilogue_supplement_for(stem: str, data_dir: Path) -> tuple[dict[str, object], ...]:
     """Look up the epilogue_supplement entry for a given story stem.
 
     ADR-0006 (canonical continuity): the 16 standalone orphans in

@@ -238,7 +238,7 @@ def validate_game_mission_id_links(
     rows = _read_game_mission_ids_from_fiction(repo_root)
     report: list[dict[str, object]] = []
     for row in rows:
-        gmi = row["game_mission_id"]  # type: ignore[assignment]
+        gmi = row["game_mission_id"]
         issues: list[str] = []
         if gmi not in mission_ids:
             issues.append("ORPHAN_MISSION_ID")
