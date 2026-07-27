@@ -15,10 +15,14 @@ from typing import TYPE_CHECKING
 from .state import AppState, ScreenKind
 
 if TYPE_CHECKING:
+    import tcod.event
+
     from ..combat.registry import IceRegistry, ProgramRegistry
 
+import tcod.event
+
 # Input handler signature: (event, state, prog, ice) -> bool
-InputFn = Callable[..., bool]
+InputFn = Callable[..., object]
 
 
 def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
@@ -53,7 +57,7 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
     )
     from . import story_view as story_screen
 
-    def _gn_screen(event, state, prog, ice):
+    def _gn_screen(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
         action = menu_screen.handle_graphic_novel_input(event, state)
         if action == "menu":
             state.screen = ScreenKind.MENU
@@ -69,7 +73,7 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
             return True
         return True
 
-    def _gn_ending(event, state, prog, ice):
+    def _gn_ending(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
         import tcod.event as _tcevent
 
         if isinstance(event, _tcevent.KeyDown):
@@ -78,7 +82,7 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
                 return True
         return True
 
-    def _cyberspace_map(event, state, prog, ice):
+    def _cyberspace_map(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
         import tcod.event as _tcevent
 
         if isinstance(event, _tcevent.KeyDown):
@@ -87,7 +91,7 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
                 return True
         return True
 
-    def _arc_phase(event, state, prog, ice):
+    def _arc_phase(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
         import tcod.event as _tcevent
 
         from .arc_phase import advance_arc_phase
@@ -110,21 +114,21 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
                 return True
         return True
 
-    def _chapter(event, state, prog, ice):
+    def _chapter(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
         chapter_view.handle_chapter_input(event, state)
         return True
 
-    def _event(event, state, prog, ice):
+    def _event(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
         if state.active_event is not None:
             return event_view.handle_event_input(event, state, state.active_event)
         return True
 
-    def _npc(event, state, prog, ice):
+    def _npc(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
         if state.npc_state is not None:
             npc_view.handle_npc_input(event, state, state.npc_state)
         return True
 
-    def _cinematic(event, state, prog, ice):
+    def _cinematic(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
         if state.cinematic_state is not None:
             return story_cinematic.handle_cinematic_input(
                 event, state, state.cinematic_state
@@ -221,4 +225,5 @@ def handle_current_screen_input(
     fn = _DISPATCH.get(state.screen)
     if fn is None:
         return True
-    return fn(event, state, prog_registry, ice_registry)
+    result = fn(event, state, prog_registry, ice_registry)
+    return bool(result) if result is not None else True
