@@ -11284,3 +11284,69 @@ $ uv run pytest prototype/tests/unit/test_story_resolver.py
 - All 100 boss combat tests pass
 
 **커밋**: 39bdf55 (B-3.5 VFX), daf4fb7 (SOHO/TOKYO ZDR)
+
+### 2026-07-27 | Session v0.9.0 마감 — VFX 버그 수정 + mypy 0 달성
+
+**세션 요약** (15 commits, 3 bugs fixed, mypy 51→0):
+
+#### Phase B-3.5 (계속)
+
+1. **VFX 색상 미적용 버그 수정** (81d8d65):
+   - `apply_phase_aoe(phase, state)`가 `ice_type` 파라미터 누락
+   - `_trigger_aoe_visuals`의 `getattr(phase, "ice_type", None)` 항상 None → fallback phase.color
+   - 수정: ice_type을 apply_phase_aoe 시그니처에 추가, combat_tick.py에서 먼저 계산 후 전달
+   - 검증: Wintermute (150,150,255), TA_Prime (255,255,255) 정상 적용
+
+2. **18개 미션 story.source 추가** (c0351ef):
+   - Bridge/Blue Ant era 미션의 story.source 필드 추가
+   - search_index.json slugs로 매핑 (bridge-construct, chevette-run 등)
+   - 3개 통합 테스트 자동 해결
+
+#### 코드 품질 마감 (mypy 51→0)
+
+3. **combat_tick.py** (1fa76df): 7→0 — cs.enemy None 체크, portraits 타입
+4. **chapter_view, story_resolver, hub** (fc889e9): 4→0 — tuple 어노테이션, unused ignore 제거
+5. **status_panel.py** (7d50e2b): 5→0 — enemy is None 체크
+6. **combat/registry.py** (24e81f5): 3→0 — var 타입 어노테이션
+7. **screen_dispatch.py** (16e0223): 15→0 — inner 함수 타입 일괄
+8. **main_loop.py** (f1a0702): 3→0 — IceRegistry/ProgramRegistry 타입
+9. **input_dispatch.py** (aa4c993): 10→0 — InputFn Callable[..., object] + bool() coercion
+10. **combat_view.py** (d11d135): 13→0 — Combatant | None 체크 일괄
+
+#### 빌드 & 릴리스
+
+11. **wheel 빌드 검증** (1.0.0a1, 395KB, 134 파일, Python 3.11/3.12, MIT)
+12. **CHANGELOG 갱신** (627abda): B-3.5 VFX, 버그 수정, ZDR, story.source 항목
+
+#### 대시보드 적용
+
+13. **build_dashboard.py 실행** (a717998): 13 stats JSON 갱신
+    - combat_stats, library_stats, mission_stats, event_dialogues_stats,
+      stages_stats, cyberspace_stats, journey_stats, index_stats,
+      character_stats, run_stats, design_system, faction_stats, data_index
+14. **sync_dashboard_facts.py 실행**: game_facts.json 2026-07-27T09:51:08 갱신
+
+#### 문서화
+
+15. **SESSION_SUMMARY_2026-07-27.md** 작성 (v0.9.0)
+    - 15 commits 요약
+    - Phase B-3.5 VFX 구현 + 버그 수정
+    - mypy 51→0 마감
+    - 게임플레이 검증 결과
+
+### 최종 통계 (v0.9.0)
+
+| 메트릭 | 값 |
+|---|---|
+| **pytest** | **3165 passed**, 0 failed, 664 skipped |
+| **ruff check** | All checks passed |
+| **mypy strict** | **0 errors** (130 소스 파일) |
+| **wheel** | 1.0.0a1 (395KB) |
+| **Ahead of origin** | **36 commits** |
+| **Working tree** | clean |
+
+### 후속 (사용자 액션)
+
+- `git push origin main` (36 commits)
+- Notion 발행 (`NOTION_TOKEN` 필요)
+- PyPI v1.0.0 final release (b1 다음 단계)
