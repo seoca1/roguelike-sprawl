@@ -2058,7 +2058,7 @@
     "story": {
       "synopsis_en": "Rain hit the neon in Shibuya. A courier on a fixed-gear bike carries a package that shouldn't exist — warm, alive, humming with data that organizes itself. The Yakuza want it. The Kombinat want it. But the package knows where it's going, and it's not the drop point. A fixie ride through post-quake Tokyo where the delivery chooses the courier.",
       "synopsis_ko": "시부야에 비가 네온을 번지게 했다. 픽시 자전거를 탄 쿠리어가 존재해선 안 될 패키지를 운반한다 — 따뜻하고, 살아있고, 스스로 조직화되는 데이터로 윙윙거리는. 야쿠자가 원한다. 콤비나트가 원한다. 하지만 패키지는 자신이 어디로 가는지 알고 있고, 그것은 배달 지점이 아니다. 배달이 쿠리어를 선택하는, 지진 후 도쿄를 가로지르는 픽시 라이드.",
-      "source": "neon_tokyo_courier",
+      "source": "tokyo-courier-run",
       "character_ref": "novice",
       "arc": 1,
       "pillar": "power",
@@ -2105,7 +2105,8 @@
       "pillar": "purpose",
       "word_count_en": 57,
       "char_count_ko": 115,
-      "cast": "rei-toi"
+      "cast": "rei-toi",
+      "source": "idoru_wedding_arc"
     },
     "fixer": "yamazaki",
     "arc": 2,
@@ -2145,7 +2146,8 @@
       "pillar": "purpose",
       "word_count_en": 55,
       "char_count_ko": 125,
-      "cast": "berry-rydell"
+      "cast": "berry-rydell",
+      "source": "bridge-construct"
     },
     "fixer": "masahiko",
     "arc": 3,
@@ -2186,7 +2188,8 @@
       "pillar": "power",
       "word_count_en": 48,
       "char_count_ko": 123,
-      "cast": "yamazaki"
+      "cast": "yamazaki",
+      "source": "kombinat-node-hack"
     },
     "fixer": "yamazaki",
     "arc": 4,
@@ -2226,7 +2229,8 @@
       "pillar": "power",
       "word_count_en": 54,
       "char_count_ko": 123,
-      "cast": "chevette"
+      "cast": "chevette",
+      "source": "chevette-run"
     },
     "fixer": "masahiko",
     "arc": 1,
@@ -2266,7 +2270,8 @@
       "pillar": "memory",
       "word_count_en": 84,
       "char_count_ko": 175,
-      "cast": "laney, bigend"
+      "cast": "laney, bigend",
+      "source": "bigend-laney-lunch"
     },
     "fixer": "bigend",
     "arc": 1,
@@ -2299,7 +2304,8 @@
       "pillar": "people",
       "word_count_en": 63,
       "char_count_ko": 145,
-      "cast": "cayce, laney"
+      "cast": "cayce, laney",
+      "source": "coolhunter-laney-tokyo"
     },
     "fixer": "bigend",
     "arc": 2,
@@ -2839,7 +2845,8 @@
       "pillar": "people",
       "word_count_en": 364,
       "char_count_ko": 796,
-      "cast": "k"
+      "cast": "k",
+      "source": "chevette_nightshift_run"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -2883,7 +2890,8 @@
       "pillar": "purpose",
       "word_count_en": 232,
       "char_count_ko": 602,
-      "cast": "kas"
+      "cast": "kas",
+      "source": "cayce_footage_audit_run"
     },
     "fixer": "slick-henry",
     "grade_min": 4,
@@ -3350,7 +3358,8 @@
       "pillar": "power",
       "word_count_en": 548,
       "char_count_ko": 32060,
-      "cast": "slick_henry"
+      "cast": "slick_henry",
+      "source": "yanaka_family_power_arc"
     },
     "fixer": "slick-henry",
     "grade_min": 5,
@@ -3394,7 +3403,8 @@
       "pillar": "power",
       "word_count_en": 309,
       "char_count_ko": 1140,
-      "cast": "slick_henry"
+      "cast": "slick_henry",
+      "source": "fukuoka_ridership_arc"
     },
     "fixer": "slick-henry",
     "grade_min": 5,
@@ -3532,7 +3542,8 @@
       "pillar": "people",
       "word_count_en": 360,
       "char_count_ko": 1069,
-      "cast": "k"
+      "cast": "k",
+      "source": "virtual_light_data_key_arc"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -3576,7 +3587,8 @@
       "pillar": "power",
       "word_count_en": 207,
       "char_count_ko": 732,
-      "cast": "k"
+      "cast": "k",
+      "source": "wendell_suburban_arc"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -3620,7 +3632,8 @@
       "pillar": "power",
       "word_count_en": 201,
       "char_count_ko": 660,
-      "cast": "slick_henry"
+      "cast": "slick_henry",
+      "source": "boone_tokyo_electronics_arc"
     },
     "fixer": "slick-henry",
     "grade_min": 5,
@@ -3711,7 +3724,8 @@
       "pillar": "power",
       "word_count_en": 174,
       "char_count_ko": 585,
-      "cast": "slick_henry"
+      "cast": "slick_henry",
+      "source": "pacific_empire_arc"
     },
     "fixer": "slick-henry",
     "grade_min": 5,
@@ -3755,7 +3769,8 @@
       "pillar": "power",
       "word_count_en": 361,
       "char_count_ko": 1299,
-      "cast": "slick_henry"
+      "cast": "slick_henry",
+      "source": "w_anchor_arc"
     },
     "fixer": "slick-henry",
     "grade_min": 5,
@@ -3799,7 +3814,8 @@
       "pillar": "purpose",
       "word_count_en": 256,
       "char_count_ko": 995,
-      "cast": "k"
+      "cast": "k",
+      "source": "viktor_orbit_arc"
     },
     "fixer": "finn",
     "grade_min": 1,
@@ -3890,7 +3906,8 @@
       "pillar": "power",
       "word_count_en": 136,
       "char_count_ko": 779,
-      "cast": "slick_henry"
+      "cast": "slick_henry",
+      "source": "mona_bridge_arc"
     },
     "fixer": "slick-henry",
     "grade_min": 5,
