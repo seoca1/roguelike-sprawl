@@ -418,12 +418,15 @@ def build_ice_enemy(
     # Phase B-1: load ICE skills (currently only used if ice_types.json
     # declares non-empty skills; reserved for boss/elite variants)
     ice_skills: tuple[Skill, ...] = ()
-    raw_skills = data.get("skills", [])
-    if program_registry is not None and isinstance(raw_skills, list):
-        loaded = []
+    raw_skills_obj: object = data.get("skills", [])
+    raw_skills: list[object] = raw_skills_obj if isinstance(raw_skills_obj, list) else []
+    if program_registry is not None:
+        loaded: list[Skill] = []
         for sid in raw_skills:
             if isinstance(sid, str) and program_registry.get(sid) is not None:
-                loaded.append(program_registry.get(sid))  # type: ignore[arg-type]
+                skill = program_registry.get(sid)
+                if skill is not None:
+                    loaded.append(skill)
         ice_skills = tuple(loaded)
 
     return Combatant(
