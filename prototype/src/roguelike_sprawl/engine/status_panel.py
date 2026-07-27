@@ -305,16 +305,17 @@ def _draw_current_screen(
 
     elif state.screen.value == "combat" and state.combat_state is not None:
         enemy = state.combat_state.enemy
-        console.print(x=x, y=y, string=f"Enemy: {enemy.name[: max_width - 7]}", fg=(255, 100, 100))
-        y += 1
-        hp_pct = (enemy.hp / enemy.max_hp * 100) if enemy.max_hp > 0 else 0
-        console.print(
-            x=x,
-            y=y,
-            string=f"EHp:   {enemy.hp}/{enemy.max_hp}",
-            fg=_get_hp_color(hp_pct),
-        )
-        y += 1
+        if enemy is not None:
+            console.print(x=x, y=y, string=f"Enemy: {enemy.name[: max_width - 7]}", fg=(255, 100, 100))
+            y += 1
+            hp_pct = (enemy.hp / enemy.max_hp * 100) if enemy.max_hp > 0 else 0
+            console.print(
+                x=x,
+                y=y,
+                string=f"EHp:   {enemy.hp}/{enemy.max_hp}",
+                fg=_get_hp_color(hp_pct),
+            )
+            y += 1
 
     elif state.screen.value == "hub":
         console.print(x=x, y=y, string="At: The Sprawl Hub", fg=(180, 180, 180))
