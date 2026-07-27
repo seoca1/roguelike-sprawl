@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 
 import tcod.console
 
+from ..combat.registry import IceRegistry, ProgramRegistry
 from .state import AppState, ScreenKind
 
 if TYPE_CHECKING:
@@ -56,7 +57,7 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
     from . import story_view as story_screen
     from .graphic_novel_view import render_graphic_novel_screen
 
-    def _arc_phase(console, t, state):
+    def _arc_phase(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.current_arc is None:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO ARC DATA ===", fg=(255, 0, 0))
@@ -83,7 +84,7 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
             t,
         )
 
-    def _cyberspace_map(console, t, state):
+    def _cyberspace_map(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if not hasattr(state, "world_map") or state.world_map is None:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO WORLD DATA ===", fg=(255, 0, 0))
@@ -95,44 +96,44 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
 
         cyberspace_map_view.render_cyberspace_map(console, state)
 
-    def _graphic_novel_menu(console, t, state):
+    def _graphic_novel_menu(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         has_save = getattr(state, "has_save", False)
         graphic_novel_view.render_graphic_novel_menu(
             console, t, state.gn_menu_selected, has_save
         )
 
-    def _graphic_novel_ending(console, t, state):
+    def _graphic_novel_ending(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         graphic_novel_view.render_graphic_novel_ending_menu(
             console, t, state.gn_mode, state.menu_selected_index
         )
 
-    def _gn_screen(console, t, state):
+    def _gn_screen(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         render_graphic_novel_screen(console, state, t)
 
-    def _hub(console, t, state):
+    def _hub(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         hub_screen.render_hub(console, t, state)
 
-    def _npc(console, t, state):
+    def _npc(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.npc_state is not None:
             npc_view.render_npc(console, t, state, state.npc_state)
         else:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO NPC STATE ===", fg=(255, 0, 0))
 
-    def _event(console, t, state):
+    def _event(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.active_event is not None:
             event_view.render_event_story(console, t, state, state.active_event)
         else:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO ACTIVE EVENT ===", fg=(255, 0, 0))
 
-    def _story(console, t, state):
+    def _story(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         registry = story_screen.StoryRegistry.load(config.DATA_DIR)
         story_screen.render_story(
             console, state, registry, state.story_aftermath_id
         )
 
-    def _chapter(console, t, state):
+    def _chapter(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.chapter_data:
             chapter_view.render_chapter(
                 console,
@@ -145,7 +146,7 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== NO CHAPTER DATA ===", fg=(255, 0, 0))
 
-    def _saved_progress(console, t, state):
+    def _saved_progress(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         save_dir = config.DATA_DIR / "saves"
         summary = save_progress.get_progress_summary(save_dir=save_dir)
         console.clear()
@@ -183,12 +184,18 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
             for i, opt in enumerate(opts):
                 console.print(4, y + i * 2, opt)
 
-    def _matrix(console, t, state, **kwargs):
+    def _matrix(
+        console: tcod.console.Console,
+        t: Translator,
+        state: AppState,
+        prog_registry: ProgramRegistry | None = None,
+        ice_registry: IceRegistry | None = None,
+    ) -> None:
         dungeon_view.render_dungeon_matrix(
-            console, t, state, kwargs.get("prog_registry"), kwargs.get("ice_registry")
+            console, t, state, prog_registry, ice_registry
         )
 
-    def _combat(console, t, state):
+    def _combat(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.combat_state is not None:
             from . import combat_view
 
@@ -198,7 +205,7 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
             console.print(x=2, y=2, string="=== COMBAT ERROR ===", fg=(255, 0, 0))
             console.print(x=2, y=4, string="No combat state loaded", fg=(128, 128, 128))
 
-    def _cinematic(console, t, state):
+    def _cinematic(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.cinematic_state is not None:
             elapsed_ms = int(state.demo_elapsed_s * 1000)
             story_cinematic.render_cinematic(
@@ -252,8 +259,8 @@ def render_current_screen(
     console: tcod.console.Console,
     t: Translator,
     state: AppState,
-    prog_registry=None,
-    ice_registry=None,
+    prog_registry: ProgramRegistry | None = None,
+    ice_registry: IceRegistry | None = None,
 ) -> None:
     """Phase D-2 deep2: dispatch to current screen's render function.
 
