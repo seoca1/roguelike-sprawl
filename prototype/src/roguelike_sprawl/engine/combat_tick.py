@@ -9,6 +9,7 @@ from __future__ import annotations
 from ..combat import boss as _boss
 from ..combat import effects as _effects
 from ..combat.registry import IceRegistry, ProgramRegistry
+from ..portraits import PortraitManager
 from . import combat_view
 from .state import AppState
 
@@ -17,7 +18,7 @@ def maybe_boss_phase_transition(
     state: AppState,
     ice_registry: IceRegistry | None = None,
     program_registry: ProgramRegistry | None = None,
-    portraits=None,
+    portraits: PortraitManager | None = None,
 ) -> None:
     """Check and apply boss phase transitions after each combat tick.
 
@@ -29,20 +30,30 @@ def maybe_boss_phase_transition(
     production callers in app.py pass them in.
     """
     cs = state.combat_state
-    if cs is None or cs.boss_profile is None or cs.finished:
+    if (
+        cs is None
+        or cs.boss_profile is None
+        or cs.enemy is None
+        or cs.finished
+    ):
         return
     new_phase = _boss.phase_transition(cs.enemy, cs.boss_profile)
     if new_phase is not None:
         _boss.apply_phase_to_combatant(cs.enemy, cs.boss_profile)
         cs.push(f">>> {new_phase.intro_text}")
         # Phase H: B-3 spawn_minions — adds on phase change
-        if new_phase.spawn_minions and ice_registry is not None:
+        if (
+            new_phase.spawn_minions
+            and ice_registry is not None
+            and program_registry is not None
+        ):
             spawned = _boss.spawn_phase_minions(
                 cs.enemy, new_phase, cs, ice_registry, program_registry, portraits
             )
             if spawned:
+                boss_label = getattr(new_phase, "name", "boss")
                 cs.push(
-                    f">>> {new_phase.name} summons "
+                    f">>> {boss_label} summons "
                     f"{len(spawned)} minion(s)!"
                 )
         try:
