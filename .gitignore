@@ -1,6 +1,15 @@
-# MkDocs build artifacts
-/site/
-/.venv-mkdocs/
+# Build artifacts
+site/
+.venv/
+dist/
+build/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyc
+*.egg-info/
+*.egg
 
 # OS
 .DS_Store
@@ -12,32 +21,21 @@ Thumbs.db
 *.swp
 *~
 
-# Secrets
+# Secrets (CRITICAL — never commit)
 .env
 
 # Local-only data (not in repo — project data lives under prototype/data/)
 /data/
 
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-*.egg-info/
-*.egg
-dist/
-build/
-
 # Local test artifacts (intentional runtime accumulation)
 prototype/data/jockeys/deceased.json
 prototype/data/saves/*.json
-!prototype/data/saves/.gitkeep
 
 # Cache directories
 .pytest_cache/
 .ruff_cache/
 .mypy_cache/
+
 # Local BGM backups (v1 originals — restored on next regeneration)
 dashboard/sounds/*.v1_backup.wav
 dashboard/sounds/*_v1_orig.wav
