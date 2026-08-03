@@ -89,7 +89,8 @@ def _main_inner() -> int:
                 last_time = now
                 # Phase D-2 deep3: per-screen tick dispatch (extracted)
                 tick_current_screen(
-                    state, delta_s,
+                    state,
+                    delta_s,
                     ice_registry=_global_ice_registry,
                     program_registry=_global_prog_registry,
                 )
@@ -160,11 +161,12 @@ def _render(
     from .screen_dispatch import render_current_screen
 
     render_current_screen(
-        console, t, state,
+        console,
+        t,
+        state,
         prog_registry=prog_registry,
         ice_registry=ice_registry,
     )
-
 
 
 def _handle_global_hotkeys(
@@ -179,6 +181,7 @@ def _handle_global_hotkeys(
         None: not a hotkey, defer to per-screen handler
     """
     import tcod.event
+
     if not isinstance(event, tcod.event.KeyDown):
         return None
 
@@ -188,9 +191,7 @@ def _handle_global_hotkeys(
         manager = SaveManager()
         try:
             meta = manager.save(1, state, elapsed_seconds=int(state.demo_elapsed_s))
-            state.status_messages.append(
-                f">>> Quicksaved to slot 1 ({meta.size_bytes} bytes)"
-            )
+            state.status_messages.append(f">>> Quicksaved to slot 1 ({meta.size_bytes} bytes)")
         except Exception as e:
             state.status_messages.append(f">>> Quicksave failed: {e}")
         return True
@@ -247,9 +248,7 @@ def _handle_global_hotkeys(
         category = category_by_key[event.sym]
         new_state = toggle_category(category)
         label = "ON" if new_state else "OFF"
-        state.status_messages.append(
-            f">>> Sound category '{category.value}' toggled: {label}"
-        )
+        state.status_messages.append(f">>> Sound category '{category.value}' toggled: {label}")
         return True
 
     return None
@@ -272,9 +271,7 @@ def _handle_input(
 
     from .input_dispatch import handle_current_screen_input
 
-    return handle_current_screen_input(
-        event, state, prog_registry, ice_registry
-    )
+    return handle_current_screen_input(event, state, prog_registry, ice_registry)
 
 
 if __name__ == "__main__":

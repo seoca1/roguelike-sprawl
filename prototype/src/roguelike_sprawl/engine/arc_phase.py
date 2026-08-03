@@ -3,6 +3,7 @@
 Phase D-2: extracted from app.py to reduce main dispatcher size.
 Handles beat/phase/chapter transitions in ARC_PHASE screen.
 """
+
 from __future__ import annotations
 
 from .state import AppState, ScreenKind

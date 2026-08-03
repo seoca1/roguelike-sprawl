@@ -38,7 +38,9 @@ class TestGetForZone:
 
     def test_surface_zone_empty(self) -> None:
         ghosts = get_for_zone("SURFACE")
-        assert all(g.zone_requirement == "SURFACE" for g in ghosts), "Surface only has surface ghosts"
+        assert all(g.zone_requirement == "SURFACE" for g in ghosts), (
+            "Surface only has surface ghosts"
+        )
 
     def test_unknown_zone_falls_back(self) -> None:
         # Unknown zone names default to SURFACE

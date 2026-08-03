@@ -435,9 +435,7 @@ def get_mission_flow(
     `stage_flow` field before the MISSION_FLOWS dict.
     """
     if missions_data is not None:
-        from_mission = _resolve_stage_flow_from_mission_data(
-            missions_data.get(mission_id)
-        )
+        from_mission = _resolve_stage_flow_from_mission_data(missions_data.get(mission_id))
         if from_mission is not None:
             return from_mission
     return MISSION_FLOWS.get(mission_id, MISSION_FLOWS["first_jack"])

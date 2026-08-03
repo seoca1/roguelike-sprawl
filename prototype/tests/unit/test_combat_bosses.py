@@ -512,10 +512,7 @@ class TestBossB3Enhancements:
         boss = _make_boss_for_minion_test()
         state = _make_combat_state_with_boss(boss)
         ice_reg = IceRegistry.load(
-            Path(__file__).resolve().parent.parent.parent
-            / "data"
-            / "combat"
-            / "ice_types.json"
+            Path(__file__).resolve().parent.parent.parent / "data" / "combat" / "ice_types.json"
         )
         prog_reg = ProgramRegistry({})
 
@@ -549,10 +546,7 @@ class TestBossB3Enhancements:
         boss = _make_boss_for_minion_test()
         state = _make_combat_state_with_boss(boss)
         ice_reg = IceRegistry.load(
-            Path(__file__).resolve().parent.parent.parent
-            / "data"
-            / "combat"
-            / "ice_types.json"
+            Path(__file__).resolve().parent.parent.parent / "data" / "combat" / "ice_types.json"
         )
         prog_reg = ProgramRegistry({})
         before = len(state.enemies)
@@ -705,9 +699,7 @@ class TestBossB3IntegrationFlow:
         apply_phase_to_combatant(boss, profile)
         cur = current_phase(boss, profile)
         # Load real ice_types.json so spawn_phase_minions can resolve ids
-        ice_types_path = (
-            _Path(__file__).resolve().parents[2] / "data" / "combat" / "ice_types.json"
-        )
+        ice_types_path = _Path(__file__).resolve().parents[2] / "data" / "combat" / "ice_types.json"
         if ice_types_path.exists():
             ice_reg = IceRegistry.load(ice_types_path)
         else:
@@ -715,8 +707,11 @@ class TestBossB3IntegrationFlow:
         prog_reg = ProgramRegistry({})
         if cur.spawn_minions:
             spawn_phase_minions(
-                boss, cur, state,
-                ice_registry=ice_reg, program_registry=prog_reg,
+                boss,
+                cur,
+                state,
+                ice_registry=ice_reg,
+                program_registry=prog_reg,
             )
         if cur.aoe_damage > 0:
             original = state.player.hp
@@ -739,10 +734,18 @@ class TestBossB3IntegrationFlow:
         from roguelike_sprawl.combat.effects import CombatEffects
 
         boss = Combatant(
-            id="wintermute", name="Wintermute", portrait="BOSS",
-            color=(120, 120, 220), hp=1000, max_hp=1000,
-            ap=0, max_ap=0, auto_attack_damage=10, skills=(),
-            team="enemy", ice_kind="wintermute",
+            id="wintermute",
+            name="Wintermute",
+            portrait="BOSS",
+            color=(120, 120, 220),
+            hp=1000,
+            max_hp=1000,
+            ap=0,
+            max_ap=0,
+            auto_attack_damage=10,
+            skills=(),
+            team="enemy",
+            ice_kind="wintermute",
         )
         boss.current_phase = 1
         state = _make_combat_state_with_boss(boss)
@@ -764,10 +767,18 @@ class TestBossB3IntegrationFlow:
         from roguelike_sprawl.combat.effects import CombatEffects
 
         boss = Combatant(
-            id="ta_prime", name="TA Construct Prime", portrait="BOSS",
-            color=(220, 220, 220), hp=1000, max_hp=1000,
-            ap=0, max_ap=0, auto_attack_damage=10, skills=(),
-            team="enemy", ice_kind="ta_construct_prime",
+            id="ta_prime",
+            name="TA Construct Prime",
+            portrait="BOSS",
+            color=(220, 220, 220),
+            hp=1000,
+            max_hp=1000,
+            ap=0,
+            max_ap=0,
+            auto_attack_damage=10,
+            skills=(),
+            team="enemy",
+            ice_kind="ta_construct_prime",
         )
         boss.current_phase = 1
         state = _make_combat_state_with_boss(boss)
@@ -786,10 +797,18 @@ class TestBossB3IntegrationFlow:
         from roguelike_sprawl.combat.effects import CombatEffects
 
         boss = Combatant(
-            id="goliath_prime", name="GOLIATH PRIME", portrait="BOSS",
-            color=(150, 150, 170), hp=1000, max_hp=1000,
-            ap=0, max_ap=0, auto_attack_damage=10, skills=(),
-            team="enemy", ice_kind="goliath",
+            id="goliath_prime",
+            name="GOLIATH PRIME",
+            portrait="BOSS",
+            color=(150, 150, 170),
+            hp=1000,
+            max_hp=1000,
+            ap=0,
+            max_ap=0,
+            auto_attack_damage=10,
+            skills=(),
+            team="enemy",
+            ice_kind="goliath",
         )
         state = _make_combat_state_with_boss(boss)
         state.combat_effects = CombatEffects()
@@ -803,10 +822,18 @@ class TestBossB3IntegrationFlow:
         from roguelike_sprawl.combat.effects import CombatEffects
 
         boss = Combatant(
-            id="black_ice_lord", name="BLACK ICE LORD", portrait="BOSS",
-            color=(180, 180, 200), hp=1000, max_hp=1000,
-            ap=0, max_ap=0, auto_attack_damage=10, skills=(),
-            team="enemy", ice_kind="black",
+            id="black_ice_lord",
+            name="BLACK ICE LORD",
+            portrait="BOSS",
+            color=(180, 180, 200),
+            hp=1000,
+            max_hp=1000,
+            ap=0,
+            max_ap=0,
+            auto_attack_damage=10,
+            skills=(),
+            team="enemy",
+            ice_kind="black",
         )
         state = _make_combat_state_with_boss(boss)
         state.combat_effects = CombatEffects()

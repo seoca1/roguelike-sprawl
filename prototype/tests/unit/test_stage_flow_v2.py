@@ -487,10 +487,7 @@ class TestDataDrivenStageFlow:
         from roguelike_sprawl.run.state import get_mission_flow
 
         # Load missions.json
-        missions_path = (
-            Path(__file__).resolve().parents[2]
-            / "data" / "missions" / "missions.json"
-        )
+        missions_path = Path(__file__).resolve().parents[2] / "data" / "missions" / "missions.json"
         with missions_path.open() as f:
             data = json.load(f)
 
@@ -509,10 +506,7 @@ class TestDataDrivenStageFlow:
 
         from roguelike_sprawl.run.state import get_mission_flow
 
-        missions_path = (
-            Path(__file__).resolve().parents[2]
-            / "data" / "missions" / "missions.json"
-        )
+        missions_path = Path(__file__).resolve().parents[2] / "data" / "missions" / "missions.json"
         with missions_path.open() as f:
             data = json.load(f)
 
@@ -528,10 +522,7 @@ class TestDataDrivenStageFlow:
 
         from roguelike_sprawl.run.state import get_mission_flow
 
-        missions_path = (
-            Path(__file__).resolve().parents[2]
-            / "data" / "missions" / "missions.json"
-        )
+        missions_path = Path(__file__).resolve().parents[2] / "data" / "missions" / "missions.json"
         with missions_path.open() as f:
             data = json.load(f)
 
@@ -547,10 +538,7 @@ class TestDataDrivenStageFlow:
 
         from roguelike_sprawl.run.state import get_mission_flow
 
-        missions_path = (
-            Path(__file__).resolve().parents[2]
-            / "data" / "missions" / "missions.json"
-        )
+        missions_path = Path(__file__).resolve().parents[2] / "data" / "missions" / "missions.json"
         with missions_path.open() as f:
             data = json.load(f)
 
@@ -559,6 +547,12 @@ class TestDataDrivenStageFlow:
         stage_values = [s.stage.value for s in flow]
         # ice_run uses same flow as first_jack
         assert stage_values == [
-            "briefing", "travel", "meet_npc", "extract_data",
-            "defeat_ice", "jack_out", "reward", "complete",
+            "briefing",
+            "travel",
+            "meet_npc",
+            "extract_data",
+            "defeat_ice",
+            "jack_out",
+            "reward",
+            "complete",
         ]

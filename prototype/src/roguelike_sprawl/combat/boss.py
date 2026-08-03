@@ -77,6 +77,7 @@ class BossProfile:
 # VFX Theme System (Phase B-3.5+)
 # ============================================================================
 
+
 @dataclass(frozen=True, slots=True)
 class VFXTheme:
     """Visual effects theme for a boss type.
@@ -110,10 +111,10 @@ class VFXTheme:
 # Pre-defined VFX themes for each boss type
 BOSS_VFX_THEMES: dict[str, dict[str, object]] = {
     "wintermute": {
-        "shake_color": (150, 150, 255),       # Neural ice blue
+        "shake_color": (150, 150, 255),  # Neural ice blue
         "shake_intensity_mult": 1.2,
         "shake_duration_ms": 400,
-        "hit_flash_color": (150, 150, 255),   # Pale cyan
+        "hit_flash_color": (150, 150, 255),  # Pale cyan
         "hit_flash_duration_ms": 200,
         "particle_color": (100, 100, 255),
         "particle_count": 8,
@@ -121,10 +122,10 @@ BOSS_VFX_THEMES: dict[str, dict[str, object]] = {
         "flash_duration_ms": 200,
     },
     "goliath": {
-        "shake_color": (255, 80, 80),         # Red
+        "shake_color": (255, 80, 80),  # Red
         "shake_intensity_mult": 1.5,
         "shake_duration_ms": 400,
-        "hit_flash_color": (255, 80, 80),     # Red
+        "hit_flash_color": (255, 80, 80),  # Red
         "hit_flash_duration_ms": 200,
         "particle_color": (255, 100, 100),
         "particle_count": 15,
@@ -132,10 +133,10 @@ BOSS_VFX_THEMES: dict[str, dict[str, object]] = {
         "flash_duration_ms": 300,
     },
     "black_ice": {
-        "shake_color": (180, 100, 220),       # Purple/magenta
+        "shake_color": (180, 100, 220),  # Purple/magenta
         "shake_intensity_mult": 1.3,
         "shake_duration_ms": 500,
-        "hit_flash_color": (180, 100, 220),   # Magenta
+        "hit_flash_color": (180, 100, 220),  # Magenta
         "hit_flash_duration_ms": 250,
         "particle_color": (180, 100, 220),
         "particle_count": 12,
@@ -143,10 +144,10 @@ BOSS_VFX_THEMES: dict[str, dict[str, object]] = {
         "flash_duration_ms": 300,
     },
     "watchdog": {
-        "shake_color": (255, 220, 100),       # Amber/yellow
+        "shake_color": (255, 220, 100),  # Amber/yellow
         "shake_intensity_mult": 1.1,
         "shake_duration_ms": 350,
-        "hit_flash_color": (255, 220, 100),   # Amber
+        "hit_flash_color": (255, 220, 100),  # Amber
         "hit_flash_duration_ms": 180,
         "particle_color": (255, 220, 100),
         "particle_count": 12,
@@ -154,10 +155,10 @@ BOSS_VFX_THEMES: dict[str, dict[str, object]] = {
         "flash_duration_ms": 200,
     },
     "ta_construct": {
-        "shake_color": (200, 200, 255),       # White/cyan
+        "shake_color": (200, 200, 255),  # White/cyan
         "shake_intensity_mult": 1.0,
         "shake_duration_ms": 300,
-        "hit_flash_color": (255, 255, 255),   # White
+        "hit_flash_color": (255, 255, 255),  # White
         "hit_flash_duration_ms": 150,
         "particle_color": (200, 200, 255),
         "particle_count": 8,
@@ -185,6 +186,7 @@ ICE_TYPE_TO_VFX_KEY: dict[str, str] = {
     "ta_construct_prime": "ta_construct",
 }
 
+
 def get_vfx_config(ice_type: str) -> dict[str, object]:
     """Get VFX configuration for a boss ice type.
 
@@ -194,7 +196,7 @@ def get_vfx_config(ice_type: str) -> dict[str, object]:
     Returns:
         dict with VFX configuration for the boss type
     """
-    ice_type_str = ice_type.value if hasattr(ice_type, 'value') else str(ice_type)
+    ice_type_str = ice_type.value if hasattr(ice_type, "value") else str(ice_type)
     vfx_key = ICE_TYPE_TO_VFX_KEY.get(ice_type_str.lower(), "default")
     return BOSS_VFX_THEMES.get(vfx_key, {})
 
@@ -555,7 +557,6 @@ def apply_phase_to_combatant(boss: Combatant, profile: BossProfile) -> PhaseProf
     except AttributeError:
         boss.current_phase = phase.index  # type: ignore[attr-defined]
     return phase
-
 
 
 def spawn_phase_minions(

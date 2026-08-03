@@ -7,6 +7,7 @@ screen_dispatch.py (which handles render dispatch).
 Each ScreenKind maps to a callable (event, state, prog_registry,
 ice_registry) -> bool (False = quit game).
 """
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -57,7 +58,12 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
     )
     from . import story_view as story_screen
 
-    def _gn_screen(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
+    def _gn_screen(
+        event: tcod.event.Event,
+        state: AppState,
+        prog: ProgramRegistry | None,
+        ice: IceRegistry | None,
+    ) -> bool:
         action = menu_screen.handle_graphic_novel_input(event, state)
         if action == "menu":
             state.screen = ScreenKind.MENU
@@ -73,7 +79,12 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
             return True
         return True
 
-    def _gn_ending(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
+    def _gn_ending(
+        event: tcod.event.Event,
+        state: AppState,
+        prog: ProgramRegistry | None,
+        ice: IceRegistry | None,
+    ) -> bool:
         import tcod.event as _tcevent
 
         if isinstance(event, _tcevent.KeyDown):
@@ -82,7 +93,12 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
                 return True
         return True
 
-    def _cyberspace_map(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
+    def _cyberspace_map(
+        event: tcod.event.Event,
+        state: AppState,
+        prog: ProgramRegistry | None,
+        ice: IceRegistry | None,
+    ) -> bool:
         import tcod.event as _tcevent
 
         if isinstance(event, _tcevent.KeyDown):
@@ -91,7 +107,12 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
                 return True
         return True
 
-    def _arc_phase(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
+    def _arc_phase(
+        event: tcod.event.Event,
+        state: AppState,
+        prog: ProgramRegistry | None,
+        ice: IceRegistry | None,
+    ) -> bool:
         import tcod.event as _tcevent
 
         from .arc_phase import advance_arc_phase
@@ -114,25 +135,43 @@ def _build_input_dispatch() -> dict[ScreenKind, InputFn]:
                 return True
         return True
 
-    def _chapter(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
+    def _chapter(
+        event: tcod.event.Event,
+        state: AppState,
+        prog: ProgramRegistry | None,
+        ice: IceRegistry | None,
+    ) -> bool:
         chapter_view.handle_chapter_input(event, state)
         return True
 
-    def _event(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
+    def _event(
+        event: tcod.event.Event,
+        state: AppState,
+        prog: ProgramRegistry | None,
+        ice: IceRegistry | None,
+    ) -> bool:
         if state.active_event is not None:
             return event_view.handle_event_input(event, state, state.active_event)
         return True
 
-    def _npc(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
+    def _npc(
+        event: tcod.event.Event,
+        state: AppState,
+        prog: ProgramRegistry | None,
+        ice: IceRegistry | None,
+    ) -> bool:
         if state.npc_state is not None:
             npc_view.handle_npc_input(event, state, state.npc_state)
         return True
 
-    def _cinematic(event: tcod.event.Event, state: AppState, prog: ProgramRegistry | None, ice: IceRegistry | None) -> bool:
+    def _cinematic(
+        event: tcod.event.Event,
+        state: AppState,
+        prog: ProgramRegistry | None,
+        ice: IceRegistry | None,
+    ) -> bool:
         if state.cinematic_state is not None:
-            return story_cinematic.handle_cinematic_input(
-                event, state, state.cinematic_state
-            )
+            return story_cinematic.handle_cinematic_input(event, state, state.cinematic_state)
         return True
 
     return {

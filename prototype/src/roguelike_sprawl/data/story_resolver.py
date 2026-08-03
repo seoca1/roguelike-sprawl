@@ -246,9 +246,7 @@ def validate_game_mission_id_links(
     return report
 
 
-def get_mission_for_scene(
-    scene_id: str, jockey: str, repo_root: Path
-) -> dict[str, object] | None:
+def get_mission_for_scene(scene_id: str, jockey: str, repo_root: Path) -> dict[str, object] | None:
     """Look up the mission linked to a GN scene via its `mission_id` field.
 
     Phase β-2: GN scene JSON files may declare a `mission_id` field to
@@ -306,9 +304,7 @@ def get_mission_for_scene(
     return {"id": mid, **mission}
 
 
-def get_fiction_story_for_mission(
-    mission_id: str, repo_root: Path
-) -> dict[str, object] | None:
+def get_fiction_story_for_mission(mission_id: str, repo_root: Path) -> dict[str, object] | None:
     """Resolve mission_id → Fiction derivative story metadata.
 
     Looks up the Fiction file declared via game_mission_id frontmatter

@@ -1544,9 +1544,7 @@ def render_graphic_novel_screen(
                 try:
                     from . import config as _gn_config
 
-                    bg = load_background(
-                        _gn_config.DATA_DIR / "art", scene.background_id
-                    )
+                    bg = load_background(_gn_config.DATA_DIR / "art", scene.background_id)
                 except Exception:
                     pass
             p_l = None
@@ -1555,18 +1553,14 @@ def render_graphic_novel_screen(
                 try:
                     from . import config as _gn_config
 
-                    p_l = load_portrait(
-                        _gn_config.DATA_DIR / "art", scene.portrait_left
-                    )
+                    p_l = load_portrait(_gn_config.DATA_DIR / "art", scene.portrait_left)
                 except Exception:
                     pass
             if scene.portrait_right:
                 try:
                     from . import config as _gn_config
 
-                    p_r = load_portrait(
-                        _gn_config.DATA_DIR / "art", scene.portrait_right
-                    )
+                    p_r = load_portrait(_gn_config.DATA_DIR / "art", scene.portrait_right)
                 except Exception:
                     pass
             typed = dialogue_typed_chars(
@@ -1591,4 +1585,3 @@ def render_graphic_novel_screen(
     else:
         console.clear(bg=(0, 0, 0))
         console.print(x=2, y=2, string="=== NO SCENES LOADED ===", fg=(255, 0, 0))
-

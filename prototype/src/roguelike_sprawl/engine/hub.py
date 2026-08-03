@@ -125,9 +125,7 @@ def render_hub(console: tcod.console.Console, t: Translator, state: AppState) ->
             f"({int(progress * 100):3d}%)  T+{state.demo_elapsed_s:.1f}s"
         )
     else:
-        progress_text = (
-            f"Hub  |  Step {state.demo_step}  T+{state.demo_elapsed_s:.1f}s"
-        )
+        progress_text = f"Hub  |  Step {state.demo_step}  T+{state.demo_elapsed_s:.1f}s"
     draw_footer(console, foot_r, text=progress_text)
 
 

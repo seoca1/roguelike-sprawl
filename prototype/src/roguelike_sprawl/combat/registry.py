@@ -443,7 +443,5 @@ def build_ice_enemy(
         team="enemy",
         ice_kind=str(data.get("ice_kind", ice_id)),
         ice_resistance=float(data.get("resistance", 0.0)),
-        alarm_speed=ALARM_SPEED_BY_ICE.get(
-            str(data.get("ice_kind", ice_id)), DEFAULT_ALARM_SPEED
-        ),
+        alarm_speed=ALARM_SPEED_BY_ICE.get(str(data.get("ice_kind", ice_id)), DEFAULT_ALARM_SPEED),
     )

@@ -395,9 +395,7 @@ def test_weakness_matrix_multipliers_in_range() -> None:
 
     for ice_kind, mapping in WEAKNESS_BY_ICE.items():
         for role, mult in mapping.items():
-            assert 0.0 < mult <= 2.0, (
-                f"{ice_kind}/{role} multiplier {mult} out of bounds"
-            )
+            assert 0.0 < mult <= 2.0, f"{ice_kind}/{role} multiplier {mult} out of bounds"
 
 
 def test_default_weakness_multiplier_is_neutral() -> None:
@@ -1630,9 +1628,7 @@ def test_multi_ice_target_property_returns_indexed_enemy() -> None:
     p = build_default_player(max_hp=100, max_ap=6, programs=ProgramRegistry({}))
     e1 = _enemy(max_hp=80, base_damage=5)
     e2 = _enemy(max_hp=120, base_damage=3)
-    state = CombatState(
-        player=p, enemies=(e1, e2), target_index=1, rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2), target_index=1, rng=random.Random(0))
 
     assert state.target is e2
     state.target_index = 0
@@ -1646,9 +1642,7 @@ def test_multi_ice_all_enemies_auto_attack() -> None:
     e1 = _enemy(max_hp=10_000, base_damage=10)
     e2 = _enemy(max_hp=10_000, base_damage=15)
     e3 = _enemy(max_hp=10_000, base_damage=20)
-    state = CombatState(
-        player=p, enemies=(e1, e2, e3), rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2, e3), rng=random.Random(0))
 
     hp_before = p.hp
     for _ in range(AUTO_ATTACK_INTERVAL_MS // 100):
@@ -1663,9 +1657,7 @@ def test_multi_ice_victory_only_when_all_dead() -> None:
     p.auto_attack_damage = 0
     e1 = _enemy(max_hp=1, base_damage=0)
     e2 = _enemy(max_hp=100, base_damage=0)
-    state = CombatState(
-        player=p, enemies=(e1, e2), rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2), rng=random.Random(0))
 
     e1.hp = 0
     step_combat(state)
@@ -1683,9 +1675,7 @@ def test_multi_ice_player_attacks_current_target_only() -> None:
     p.auto_attack_damage = 50
     e1 = _enemy(max_hp=1000, base_damage=0)
     e2 = _enemy(max_hp=1000, base_damage=0)
-    state = CombatState(
-        player=p, enemies=(e1, e2), target_index=0, rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2), target_index=0, rng=random.Random(0))
 
     for _ in range(AUTO_ATTACK_INTERVAL_MS // 100):
         step_combat(state)
@@ -1737,9 +1727,7 @@ def test_aoe_skill_hits_all_enemies() -> None:
     e1 = _enemy(max_hp=1000, base_damage=0)
     e2 = _enemy(max_hp=1000, base_damage=0)
     e3 = _enemy(max_hp=1000, base_damage=0)
-    state = CombatState(
-        player=p, enemies=(e1, e2, e3), rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2, e3), rng=random.Random(0))
 
     use_skill(state, p.skills[0])
 
@@ -1766,9 +1754,7 @@ def test_aoe_skill_skips_dead_enemies() -> None:
     e1 = _enemy(max_hp=1000, base_damage=0)
     e2 = _enemy(max_hp=1000, base_damage=0)
     e2.hp = 0  # already dead
-    state = CombatState(
-        player=p, enemies=(e1, e2), rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2), rng=random.Random(0))
 
     e1_hp_before = e1.hp
     use_skill(state, p.skills[0])
@@ -1816,9 +1802,7 @@ def test_aoe_dot_applies_burn_to_all() -> None:
     )
     e1 = _enemy(max_hp=1000, base_damage=0)
     e2 = _enemy(max_hp=1000, base_damage=0)
-    state = CombatState(
-        player=p, enemies=(e1, e2), rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2), rng=random.Random(0))
 
     use_skill(state, p.skills[0])
     assert any(s.effect_id == "burn" for s in e1.statuses)
@@ -1831,9 +1815,7 @@ def test_non_aoe_skill_still_targets_only_one_enemy() -> None:
     p.skills = (_strike_skill(damage=50),)
     e1 = _enemy(max_hp=1000, base_damage=0)
     e2 = _enemy(max_hp=1000, base_damage=0)
-    state = CombatState(
-        player=p, enemies=(e1, e2), target_index=0, rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2), target_index=0, rng=random.Random(0))
 
     use_skill(state, p.skills[0])
     assert e1.hp < 1000
@@ -1922,9 +1904,7 @@ def test_stagger_aoe_skips_all_enemies() -> None:
     p.skills = (_stagger_skill(),)
     e1 = _enemy(max_hp=10_000, base_damage=30)
     e2 = _enemy(max_hp=10_000, base_damage=40)
-    state = CombatState(
-        player=p, enemies=(e1, e2), rng=random.Random(0)
-    )
+    state = CombatState(player=p, enemies=(e1, e2), rng=random.Random(0))
 
     e1.statuses.append(
         StatusEffect(

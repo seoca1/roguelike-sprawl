@@ -137,14 +137,9 @@ class TestValidateMissionSources:
         # 모든 미션 검증
         assert len(report) == len(missions)
         # Blocking 이슈만 실패로 간주 (MISSING_SOURCE는 informational)
-        blocking = [
-            r
-            for r in report
-            if r["issues"] and r.get("severity") == "blocking"
-        ]
+        blocking = [r for r in report if r["issues"] and r.get("severity") == "blocking"]
         assert len(blocking) == 0, (
-            f"예상치 못한 blocking 매핑 실패: "
-            f"{[r['mission_id'] for r in blocking]}"
+            f"예상치 못한 blocking 매핑 실패: {[r['mission_id'] for r in blocking]}"
         )
         # MISSING_SOURCE(out-of-scope) 검증: severity='info'
         info_count = sum(1 for r in report if r.get("severity") == "info")

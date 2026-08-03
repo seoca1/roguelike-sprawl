@@ -8,6 +8,7 @@ Each screen that needs frame-by-frame state advancement registers a
 handler here. Screens that don't need it (e.g. MENU, HUB, SETTINGS) are
 no-ops and don't appear in the dispatch table.
 """
+
 from __future__ import annotations
 
 from ..combat.registry import IceRegistry, ProgramRegistry

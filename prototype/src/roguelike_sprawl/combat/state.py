@@ -255,9 +255,7 @@ class Combatant:
 
     def consume_stagger(self) -> None:
         """Clear stagger flags after enemy skips one attack."""
-        self.statuses = [
-            s for s in self.statuses if not s.is_staggered
-        ]
+        self.statuses = [s for s in self.statuses if not s.is_staggered]
 
     def get_attack_bonus(self) -> int:
         # Buffs + equipment
@@ -392,9 +390,7 @@ def _calculate_damage(
         and defender.ice_kind is not None
     ):
         role = state.last_skill_used.role
-        weakness = WEAKNESS_BY_ICE.get(defender.ice_kind, {}).get(
-            role, DEFAULT_WEAKNESS_MULTIPLIER
-        )
+        weakness = WEAKNESS_BY_ICE.get(defender.ice_kind, {}).get(role, DEFAULT_WEAKNESS_MULTIPLIER)
         dmg *= weakness
 
     if attacker.team == "player" and state.last_skill_used is not None:
@@ -422,15 +418,10 @@ def _calculate_damage(
         crit_chance = CRIT_CHANCE
         if state.last_skill_used and state.last_skill_used.crit_bonus > 0:
             crit_chance += state.last_skill_used.crit_bonus
-        if (
-            state.last_skill_used is not None
-            and state.last_skill_used.role is not None
-        ):
+        if state.last_skill_used is not None and state.last_skill_used.role is not None:
             crit_chance += ROLE_CRIT_BONUSES.get(state.last_skill_used.role, 0.0)
         if state.rng.random() < crit_chance:
-            crit_mult = state.rng.uniform(
-                CRIT_MULTIPLIER_MIN, CRIT_MULTIPLIER_MAX
-            )
+            crit_mult = state.rng.uniform(CRIT_MULTIPLIER_MIN, CRIT_MULTIPLIER_MAX)
             dmg = int(dmg * crit_mult)
             is_crit = True
 
@@ -485,9 +476,7 @@ def _tick_alarm(state: CombatState) -> None:
     if state.tick_ms - state.last_alarm_tick_ms >= tick_interval:
         state.alarm_level += 1
         state.last_alarm_tick_ms = state.tick_ms
-        state.stats.peak_alarm_level = max(
-            state.stats.peak_alarm_level, state.alarm_level
-        )
+        state.stats.peak_alarm_level = max(state.stats.peak_alarm_level, state.alarm_level)
         state.push(f"TRACE WARNING: alarm level {state.alarm_level}/{ALARM_MAX_LEVEL}")
 
 
@@ -520,9 +509,7 @@ def _check_boss_phase_transition(state: CombatState) -> None:
     if target_phase > target.current_phase:
         old_phase = target.current_phase
         target.current_phase = target_phase
-        state.push(
-            f"{target.name} PHASE {old_phase} → {target_phase}"
-        )
+        state.push(f"{target.name} PHASE {old_phase} → {target_phase}")
 
 
 def get_combat_pressure(state: CombatState) -> dict[str, int | float | str | None]:
@@ -547,11 +534,13 @@ def get_combat_pressure(state: CombatState) -> dict[str, int | float | str | Non
         and state.last_skill_used.role is not None
         and target.ice_kind is not None
     ):
-        weakness_mult = WEAKNESS_BY_ICE.get(
-            target.ice_kind, {}
-        ).get(state.last_skill_used.role, DEFAULT_WEAKNESS_MULTIPLIER)
+        weakness_mult = WEAKNESS_BY_ICE.get(target.ice_kind, {}).get(
+            state.last_skill_used.role, DEFAULT_WEAKNESS_MULTIPLIER
+        )
 
-    boss_phase = target.current_phase if state.boss_profile is not None and target is not None else 0
+    boss_phase = (
+        target.current_phase if state.boss_profile is not None and target is not None else 0
+    )
 
     return {
         "alarm_level": state.alarm_level,
@@ -669,10 +658,7 @@ def step_combat(state: CombatState) -> None:
 
                 # ICE-side skill use: aggressive enemies occasionally use skills
                 if enemy.skills and enemy.hp > 0:
-                    if (
-                        enemy.alive_skills_available()
-                        and state.rng.random() < 0.15
-                    ):
+                    if enemy.alive_skills_available() and state.rng.random() < 0.15:
                         skill = enemy.choose_skill(state.rng)
                         if skill is not None:
                             _apply_enemy_skill(state, enemy, skill)
@@ -833,9 +819,7 @@ def _apply_heavy_attack(state: CombatState, skill: Skill) -> None:
 
 def _apply_pierce(state: CombatState, skill: Skill) -> None:
     if skill.aoe:
-        _apply_aoe_damage(
-            state, skill, "pierce", " [PIERCING!]", bypass_shield=True
-        )
+        _apply_aoe_damage(state, skill, "pierce", " [PIERCING!]", bypass_shield=True)
         return
     target = state.target
     if target is None:
@@ -854,9 +838,7 @@ def _apply_multi_hit(state: CombatState, skill: Skill) -> None:
     total = 0
     crit_hit = False
     for _ in range(skill.hit_count):
-        dmg, is_crit = _calculate_damage(
-            state, skill.damage, state.player, target, can_crit=False
-        )
+        dmg, is_crit = _calculate_damage(state, skill.damage, state.player, target, can_crit=False)
         total += _apply_damage(state, target, dmg)
         crit_hit = crit_hit or is_crit
     crit = " [ALL CRITS!]" if crit_hit else ""
@@ -866,9 +848,7 @@ def _apply_multi_hit(state: CombatState, skill: Skill) -> None:
 
 def _apply_dot(state: CombatState, skill: Skill) -> None:
     if skill.aoe:
-        _apply_aoe_damage(
-            state, skill, "dot", " [BURN ALL!]", apply_dot=True
-        )
+        _apply_aoe_damage(state, skill, "dot", " [BURN ALL!]", apply_dot=True)
         return
     target = state.target
     if target is None:
@@ -952,9 +932,7 @@ def _apply_stun(state: CombatState, skill: Skill) -> None:
         )
     )
     _record_event(state, "stun", skill.effect_color)
-    state.push(
-        f">> {skill.name}: {target.name} stunned for {skill.stun_duration_ms // 1000}s!"
-    )
+    state.push(f">> {skill.name}: {target.name} stunned for {skill.stun_duration_ms // 1000}s!")
 
 
 def _apply_stagger(state: CombatState, skill: Skill) -> None:
@@ -970,9 +948,7 @@ def _apply_stagger(state: CombatState, skill: Skill) -> None:
         )
     )
     _record_event(state, "stagger", skill.effect_color)
-    state.push(
-        f">> {skill.name}: {target.name} staggered (next attack skipped)!"
-    )
+    state.push(f">> {skill.name}: {target.name} staggered (next attack skipped)!")
 
 
 def _apply_detect(state: CombatState, skill: Skill) -> None:
@@ -994,9 +970,7 @@ def _apply_detect(state: CombatState, skill: Skill) -> None:
                 f">> {skill.name}: {target.name} RESISTS {best_role.upper()} ({pct}% reduction)"
             )
         else:
-            state.push(
-                f">> {skill.name}: {target.name} — no significant weakness"
-            )
+            state.push(f">> {skill.name}: {target.name} — no significant weakness")
     else:
         state.push(
             f">> {skill.name}: {target.name} HP {target.hp}/{target.max_hp}"
@@ -1016,9 +990,7 @@ def _apply_lifesteal(state: CombatState, skill: Skill) -> None:
     state.push(f">> {skill.name}: {applied} damage, drained {healed} HP!")
 
 
-def _apply_enemy_skill(
-    state: CombatState, enemy: Combatant, skill: Skill
-) -> None:
+def _apply_enemy_skill(state: CombatState, enemy: Combatant, skill: Skill) -> None:
     """Phase B-1: ICE uses a skill against the player.
 
     Wraps the existing player skill handlers by temporarily using the
@@ -1029,12 +1001,15 @@ def _apply_enemy_skill(
     state.stats.skills_used += 1
     state.push(f"!! {enemy.name} uses {skill.name}!")
     # Damage skills: calculate with enemy as attacker
-    if skill.effect in (SkillEffect.ATTACK, SkillEffect.HEAVY_ATTACK,
-                        SkillEffect.PIERCE, SkillEffect.MULTI_HIT,
-                        SkillEffect.DOT, SkillEffect.POISON):
-        dmg, is_crit = _calculate_damage(
-            state, skill.damage, enemy, state.player
-        )
+    if skill.effect in (
+        SkillEffect.ATTACK,
+        SkillEffect.HEAVY_ATTACK,
+        SkillEffect.PIERCE,
+        SkillEffect.MULTI_HIT,
+        SkillEffect.DOT,
+        SkillEffect.POISON,
+    ):
+        dmg, is_crit = _calculate_damage(state, skill.damage, enemy, state.player)
         if skill.effect == SkillEffect.PIERCE:
             applied = _apply_damage(state, state.player, dmg, bypass_shield=True)
         else:
@@ -1068,8 +1043,6 @@ def _apply_enemy_skill(
                 attack_bonus=-skill.buff_amount,
             )
         )
-        state.push(
-            f"!! {skill.name}: your attack power -{skill.buff_amount}!"
-        )
+        state.push(f"!! {skill.name}: your attack power -{skill.buff_amount}!")
     # Buff/heal/detect skills have no effect when used by enemies on
     # themselves (no AI decision-making); skip silently.

@@ -272,7 +272,9 @@ class AppState:
     gn_mode: str = "prologue"  # "prologue" | "novice" | "veteran" | "heretic"
     gn_scene_chain: list[str] = field(default_factory=list)  # scene IDs in order
     gn_ending_choice: str = "A"  # "A" | "B" — which ending variant (ADR-0048)
-    gn_save_slot_selected: int = 0  # 0=none, 1..3 for slot picker (ADR-0051 infra + ADR-0104 extension)
+    gn_save_slot_selected: int = (
+        0  # 0=none, 1..3 for slot picker (ADR-0051 infra + ADR-0104 extension)
+    )
     # Jockey cycle (ADR-0040) — Hall of Dead Jockeys
     jockey_history_loaded: bool = False  # whether archive is loaded from disk
     total_runs: int = 0

@@ -4,6 +4,7 @@ Phase D-1: extracted from app.py to reduce main dispatcher size.
 Phase H: wires B-3 boss enhancements (spawn_phase_minions + apply_phase_aoe)
 into the main loop so phase transitions actually trigger adds and AoE.
 """
+
 from __future__ import annotations
 
 from ..combat import boss as _boss
@@ -30,32 +31,20 @@ def maybe_boss_phase_transition(
     production callers in app.py pass them in.
     """
     cs = state.combat_state
-    if (
-        cs is None
-        or cs.boss_profile is None
-        or cs.enemy is None
-        or cs.finished
-    ):
+    if cs is None or cs.boss_profile is None or cs.enemy is None or cs.finished:
         return
     new_phase = _boss.phase_transition(cs.enemy, cs.boss_profile)
     if new_phase is not None:
         _boss.apply_phase_to_combatant(cs.enemy, cs.boss_profile)
         cs.push(f">>> {new_phase.intro_text}")
         # Phase H: B-3 spawn_minions — adds on phase change
-        if (
-            new_phase.spawn_minions
-            and ice_registry is not None
-            and program_registry is not None
-        ):
+        if new_phase.spawn_minions and ice_registry is not None and program_registry is not None:
             spawned = _boss.spawn_phase_minions(
                 cs.enemy, new_phase, cs, ice_registry, program_registry, portraits
             )
             if spawned:
                 boss_label = getattr(new_phase, "name", "boss")
-                cs.push(
-                    f">>> {boss_label} summons "
-                    f"{len(spawned)} minion(s)!"
-                )
+                cs.push(f">>> {boss_label} summons {len(spawned)} minion(s)!")
         try:
             ice_type = _effects.IceType(cs.enemy.id)
         except ValueError:

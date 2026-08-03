@@ -908,9 +908,7 @@ def _defeat_current_ice_node(state: AppState) -> None:
             state.current_node_id = state.matrix.entry_id
 
 
-def _draw_first_combat_tutorial(
-    console: tcod.console.Console, region: Region
-) -> None:
+def _draw_first_combat_tutorial(console: tcod.console.Console, region: Region) -> None:
     """Phase E-2: brief tutorial overlay for first combat encounter.
 
     Shows 4 lines of keyboard hints centered in the main region.

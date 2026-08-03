@@ -2,6 +2,7 @@
 
 Phase D-2: extracted from app.py to reduce main dispatcher size.
 """
+
 from __future__ import annotations
 
 import tcod.console
@@ -9,9 +10,7 @@ import tcod.console
 from .state import AppState
 
 
-def render_cyberspace_map(
-    console: tcod.console.Console, state: AppState
-) -> None:
+def render_cyberspace_map(console: tcod.console.Console, state: AppState) -> None:
     """Render CYBERSPACE_MAP as a tree view of worlds/sectors/servers."""
     console.clear(bg=(0, 0, 0))
     width = console.width
@@ -42,9 +41,7 @@ def render_cyberspace_map(
             y += 1
             for server in sector.servers[:5]:
                 sv_marker = "• " if server.id == wm.current_server else "  "
-                console.print(
-                    x=10, y=y, string=f"{sv_marker}{server.name}", fg=(200, 200, 200)
-                )
+                console.print(x=10, y=y, string=f"{sv_marker}{server.name}", fg=(200, 200, 200))
                 y += 1
             if len(sector.servers) > 5:
                 console.print(
@@ -57,6 +54,4 @@ def render_cyberspace_map(
         y += 1
 
     console.print(0, console.height - 1, "═" * width)
-    console.print(
-        x=2, y=console.height - 1, string="[ESC] Back to Hub", fg=(128, 128, 128)
-    )
+    console.print(x=2, y=console.height - 1, string="[ESC] Back to Hub", fg=(128, 128, 128))

@@ -57,12 +57,8 @@ def main() -> int:
     available = list_available_stems(ROOT)
     gmi_report = validate_game_mission_id_links(missions, ROOT)
 
-    blocking_mission_count = sum(
-        1 for r in report if r.get("severity") == "blocking"
-    )
-    info_mission_count = sum(
-        1 for r in report if r.get("severity") == "info"
-    )
+    blocking_mission_count = sum(1 for r in report if r.get("severity") == "blocking")
+    info_mission_count = sum(1 for r in report if r.get("severity") == "info")
     gmi_issue_count = sum(1 for r in gmi_report if r["issues"])
     any_blocking = blocking_mission_count > 0 or gmi_issue_count > 0
 

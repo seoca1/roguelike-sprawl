@@ -7,6 +7,7 @@ dict-based dispatch. Each ScreenKind maps to a callable that takes
 The dispatch table is built lazily on first call to avoid importing
 heavy modules at app.py load time.
 """
+
 from __future__ import annotations
 
 from collections.abc import Callable
@@ -98,11 +99,11 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
 
     def _graphic_novel_menu(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         has_save = getattr(state, "has_save", False)
-        graphic_novel_view.render_graphic_novel_menu(
-            console, t, state.gn_menu_selected, has_save
-        )
+        graphic_novel_view.render_graphic_novel_menu(console, t, state.gn_menu_selected, has_save)
 
-    def _graphic_novel_ending(console: tcod.console.Console, t: Translator, state: AppState) -> None:
+    def _graphic_novel_ending(
+        console: tcod.console.Console, t: Translator, state: AppState
+    ) -> None:
         graphic_novel_view.render_graphic_novel_ending_menu(
             console, t, state.gn_mode, state.menu_selected_index
         )
@@ -129,9 +130,7 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
 
     def _story(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         registry = story_screen.StoryRegistry.load(config.DATA_DIR)
-        story_screen.render_story(
-            console, state, registry, state.story_aftermath_id
-        )
+        story_screen.render_story(console, state, registry, state.story_aftermath_id)
 
     def _chapter(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.chapter_data:
@@ -191,9 +190,7 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
         prog_registry: ProgramRegistry | None = None,
         ice_registry: IceRegistry | None = None,
     ) -> None:
-        dungeon_view.render_dungeon_matrix(
-            console, t, state, prog_registry, ice_registry
-        )
+        dungeon_view.render_dungeon_matrix(console, t, state, prog_registry, ice_registry)
 
     def _combat(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.combat_state is not None:
@@ -208,9 +205,7 @@ def _build_dispatch() -> dict[ScreenKind, RenderFn]:
     def _cinematic(console: tcod.console.Console, t: Translator, state: AppState) -> None:
         if state.cinematic_state is not None:
             elapsed_ms = int(state.demo_elapsed_s * 1000)
-            story_cinematic.render_cinematic(
-                console, t, state, state.cinematic_state, elapsed_ms
-            )
+            story_cinematic.render_cinematic(console, t, state, state.cinematic_state, elapsed_ms)
         else:
             console.clear(bg=(0, 0, 0))
             console.print(x=2, y=2, string="=== CINEMATIC ERROR ===", fg=(255, 0, 0))
