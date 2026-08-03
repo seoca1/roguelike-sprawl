@@ -681,3 +681,55 @@ Wikilink resolution checked: from `wiki/world/`, relative paths via the wiki/dec
 - 17/17 active stat JSON + 1 alias (`dashboard/glossary.json`) 모두 fresh 상태로 dashboard HTML 페이지가 runtime 자동 동기화 가능
 - `play_game.json` 는 static (no `_generated_at` field) — 의도된 static resource
 - Story 150 개 (EN 150 + KO 150 = 300) 의 mission glossary ecosystem 일관성 확보
+
+---
+
+## [2026-08-03] session | v1.0.0 polish + v1.1.0 prep — 13 atomic commits
+
+**Context**: ROGUELIKE_SPRAWL had 93 modified files + 38 untracked files spanning 5 ADRs (0130, 0131, 0133, 0140, 0141) + ADR-0125 (Phase B-3) + v1.0.0 release + session docs. Workspace audit validated CLEAN state, then surfaced real ruff drift (5 I001 errors + 29 format issues). All fixes + uncommitted work committed in 13 atomic commits.
+
+### Commits (chronological)
+1. `e54c830` style: ruff --fix and format (25 files)
+2. `d23df11` docs: ADR index + 5 new ADRs (0125, 0130, 0131, 0133, 0140, 0141)
+3. `1637816` feat(meta): ADR-0131 MetaState + meta_state_manager (27 tests)
+4. `cf95147` refactor: ADR-0133 graphic_novel_view split (3 modules)
+5. `e3744fe` feat(lore): ADR-0140 Engagement Layer — Memory Fragments + Construct Whisper
+6. `08d66c3` refactor: ADR-0141 module splits (matrix_minimap + state_models)
+7. `4892eb6` feat(combat): ADR-0125 Boss Phase AoE + Minion Spawn (Phase B-3)
+8. `0ae72d7` chore: v1.0.0 release — version bump + dashboard data refresh
+9. `e73aa73` docs: session index + 2026-07-28/08-03 summaries + log compaction
+10. `6496685` docs(balance): ADR-0130 PPL/보상 sync (F1-1 반영)
+11. `4e00a33` docs(world): derivative_stories.md mission mapping + cross-project
+12. `e00fa20` feat(tools): tools/README.md + 46 WAV test fixtures (ADR-0043)
+13. `e8679f8` chore: .gitignore cleanup + fonts/.gitkeep removal
+
+### 발견
+- **Ruff drift**: HEAD (b787c95) 자체가 25 format issue + 0 lint. 이전 SESSION_HANDOVER 의 "ruff clean" 보고는 stale.
+- **Pre-existing uncommitted work**: 112 modified + 38 untracked files spanning multiple sessions (Phase B-3, M3, M4, fragment system, v1.1.0 cycle).
+- **Gitignore regression**: working tree .gitignore (8 lines) 가 HEAD (43 lines) 보다 .env / runtime data / cache dirs exclusion 모두 빠뜨림 — security regression.
+- **Stale docs**: NEXT_SESSION_TODO.md / workspace log.md 가 2026-07-30 close-out 이후 갱신 안 됨.
+
+### Stash-pop tactic (avoid pre-existing drift in ruff commit)
+- Stage 29 files → 996 lines mixed (pre-existing feature + ruff fixes)
+- Detected mixed content → user chose stash-pop: revert to HEAD, re-run ruff (25 files), commit, pop stash
+- 충돌 3 files (`combat/boss.py`, `combat/state.py`, `engine/graphic_novel_view.py`) — `--theirs` (stash) 로 해결, pre-existing feature work 보존
+- 결과: 25 files pure-ruff commit, pre-existing 112 files 손실 없이 유지
+
+### 검증
+- ruff check: ✅ All checks passed (142 files)
+- ruff format --check: ✅ 322 files already formatted
+- mypy strict: ✅ 0 errors (142 files)
+- pytest: ✅ 3278 passed, 664 skipped (25.64s)
+- audit_vault (workspace): ✅ CLEAN, 0 broken / 0 orphans
+
+### 의의
+- v1.0.0 polish + v1.1.0 prep 전체 cycle이 commit history에 반영됨 (이전엔 12+ 세션의 작업이 working tree에 미반영)
+- Origin main 대비 13 commits ahead (`b787c95` → `e8679f8`)
+- Working tree: 0 uncommitted items (clean state)
+- Push / PyPI / Notion 발행 ready
+
+### 다음 세션 (user action)
+- `git push origin main` (13 commits)
+- `twine upload dist/roguelike_sprawl-1.0.0*` (wheel ready)
+- Notion publish (PROGRESS_REPORT_2026-07-28_v1.0.0.md ready, NOTION_TOKEN 필요)
+- v1.1.0 cycle: ADR-0140 P2/P3 (Variable Reward Nodes, Faction Tension, Auto-Play Tempo, Near-Miss, Death Replay)
