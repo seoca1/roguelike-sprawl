@@ -1,5 +1,8 @@
 # Game Design Document (GDD)
 
+> **Last updated**: 2026-08-03 (Cycle 0 pre-release polish — content count sync from 2026-07-08 baseline)
+> **Version**: v1.0.0
+
 ## 1. Concept
 
 **One-liner**: 사이버스페이스에서 콘솔 카우보이로 플레이하는 로그라이크.
@@ -90,13 +93,13 @@
 | **ICE Bypass** | 방어선 뚫기 | ✅ |
 | **Counter-Intelligence** | 흔적 지우기 | ✅ |
 
-실제 미션 예시: `missions.json` (47 missions, 5 zones 균형)
+실제 미션 예시: `missions.json` (111 missions, 5 zones 균형)
 
 ### 적 유형 (구현됨)
 
 | 유형 | 설명 | 구현 |
 |------|------|------|
-| **ICE** | probe, watchdog, bulldog, asp, hellhound 등 41 types | ✅ |
+| **ICE** | probe, watchdog, bulldog, asp, hellhound 등 58 types | ✅ |
 | **Black ICE** | 치명적, trace 진행 | ✅ |
 | **Boss ICE** | Wintermute, T-A Prime 3-phase | ✅ (ADR-0050) |
 | **Hostile Deckers** | NPC 자키 (limited) | ✅ |
@@ -172,9 +175,19 @@
 상세: `design/story_skeleton.md`
 
 - **5 arcs**: First Run → The Sprawl → Corporate Ice → The AIs → The Choice
-- **4+ endings**: Sprawl Returns, AI Awakens, Lo Tek, Flatline
+- **9 endings**: 3 chars × 3 endings (A/B/C) — Sprawl Returns, AI Awakens, Lo Tek, Flatline
 - **초반 우선**: Arc 1 (1-3 jobs) — Phase 5에서 우선 구현
 - **반복 보강**: 무한 side content, faction 뉴스, world events
+
+**Content pillar totals (v1.0.0, 2026-08-03)**:
+- 111 missions (5 zones 균형)
+- 58 ICE types (incl. 14 skill effects + 15 skill animations)
+- 9 jockeys / 9 endings (3 × 3)
+- 81 GN scenes (12 prologue + 9 × 8 endings + epilogue)
+- 150+150 = 300 short stories (EN + KO)
+- 16 stages / 18 chapter states / 4 objectives
+- 5 NPCs / 14 dialogues / 51 lines
+- 8 node kinds / 8 zone depths
 
 ### 디자인 영향 (Accepted 결정으로 제약)
 - **Pillar 2 (The Matrix)**: ASCII 노드 그래프 + *유일한* 시각적 공간
@@ -183,7 +196,7 @@
 - **Pillar 5 (The Style)**: 깁슨 톤 + ASCII + mediated world + 다국어
 - **콘텐츠**: 데이터 주도, 초반 우선, plot bones 사전 정의
 
-### 미해결 / 열린 질문 (2026-07-08 기준)
+### 미해결 / 열린 질문 (2026-07-08 기준, partial update 2026-08-03)
 
 | 질문 | 상태 | 비고 |
 |------|------|------|
@@ -192,6 +205,10 @@
 | Arc trigger 조건 (등급/unlock/선택) | ✅ 해결 (ADR-0031) | 챕터 JSON + arc 데이터로 구현 |
 | Hub 표현 | ✅ 해결 | 텍스트 메뉴 + cyberspace construct |
 | Story Archive 카테고리/검색 | ✅ 해결 (ADR-0009) | 4 카테고리 + StoryEvents로 확장 |
+| Construct companion (Dixie-as-ally) | ⏳ 열린 질문 | 현재 dialogue only (core_loop.md) |
+| New Game+ / Hardcore mode | ⏳ 열린 질문 | Phase 10+ (core_loop.md) |
+| Pillar 4 — Grade 5→6 growth 1.20× | ⏳ 열린 질문 | ADR-0130 v1.1.0+ follow-up |
+| Pillar 5 — 보상 곡선 공식 vs 실제 55~96% | ⏳ 열린 질문 | ADR-0130 v1.1.0+ follow-up |
 | Construct 동료 시스템 | ✅ 해결 (limited) | Dixie Flatline dialogue만 구현 |
 
 ## 7. Living Spec
