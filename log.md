@@ -952,3 +952,38 @@ flag 활용.
 - **Cycle 4**: Construct companion, New Game+, Hardcore mode
 - **User action**: push (28+ commits), PyPI, Notion
 - **workspace log.md 갱신**: Cycle 3 options menu entry 추가 필요
+
+---
+
+## [2026-08-03] feat | Cycle 4 Hardcore mode (Pillar 3 reinforcement)
+
+**Context**: Cycle 4 endgame/retention 의 첫 deliverable. 기존 death flow
+에 1-life permadeath mode 추가. Pillar 3 (The Flatline) 의 "death has
+real weight" 강화 옵션. Pillar 4 (The Build) 의 unlock-only metaprogression
+과 일치 — ephemeral session preference, no meta-progression.
+
+### Commit
+- `adfa47e` feat(engine): Hardcore mode (Cycle 4: Pillar 3 reinforcement)
+  - 3 files, 169 insertions
+
+### 발견
+- **기존 AppState 활용**: 새 module 추가 없이 state.py 확장 (hardcore_mode 필드)
+- **Pillar 4 검증**: test_no_meta_state_write, test_does_not_persist_across_resets
+- **deferred work**: death.py integration (restart_with_new_jockey hardcore check),
+  death screen UI (PERMANENT DEATH vs NEW JOCKEY), New Game+, Construct companion
+
+### 검증
+- ruff check: ✅ All checks passed
+- mypy strict: ✅ 0 errors (150 source files)
+- pytest: ✅ 3422 passed (8 new), 664 skipped, 0 failed (3414 → +8)
+
+### 의의
+- **Cycle 4 1/3 시작**: Hardcore mode (Pillar 3 강화) 완료
+- **3 test class** (TestHardcoreModeField, TestPillar4Compliance, TestHardcoreModeBehavior)
+- **Pillar 4 검증 통과**: ephemeral, no meta-progression
+
+### 다음 세션
+- **Cycle 4 잔존 (2건)**: New Game+ (Salvation 완료 후 재시작), Construct companion
+  (Dixie 실제 전투 동료)
+- **User action**: push (31+ commits), PyPI, Notion
+- **workspace log.md 갱신**: Cycle 4 Hardcore mode entry 추가 필요
