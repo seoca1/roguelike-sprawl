@@ -11,7 +11,8 @@ module split scaffolding) 만 v1.0.0 cycle에서 구현. v1.1.0 cycle에서 P2/P
 5개 proposal (Variable Reward Nodes, Faction Tension, Auto-Play Tempo, Near-Miss,
 Death Replay) + ADR-0140 P3 (Grade 6 Master Whisper) 가 defer 됨.
 
-이 문서는 v1.1.0 P2 중 **Variable Reward Nodes (제안 6)** 의 디자인 스펙 + 구현 노트.
+이 문서는 v1.1.0 P2/P3 의 Variable Reward Nodes (제안 6) + Near-Miss Extraction (제안 3)
+디자인 스펙 + 구현 노트.
 
 ## Variable Reward Nodes (ADR-0140 §Proposal 6)
 
@@ -118,3 +119,86 @@ Matrix 안의 DATA node 일부가 **anomaly variant** 로 표시된다. Jack-in 
 - `decisions/0060-project-improvement-plans.md` — workspace-level improvement tracker
 - `IMPROVEMENTS.md` — historical 2026-07-01 cycle (Phase 5→6)
 - `log.md` — 2026-08-03 entry for this commit cycle
+
+---
+
+## Near-Miss Extraction (ADR-0140 §Proposal 3)
+
+### 골재
+
+Player 가 exit node 도달 시 HP 가 threshold (default 80%) 이상으로 남아있으면, bonus reward.
+**Death-avoidance payoff** — careful play 가 보상받음.
+
+### 게임 디자인
+
+- **Threshold**: 80% HP (default, configurable via `DEFAULT_NEAR_MISS_HP_THRESHOLD`)
+- **Trigger**: player enters an EXIT node (`NodeKind.EXIT`)
+- **One-shot per run**: `state.near_miss_triggered: bool` flag
+- **Reward**:
+  - +75 credits (in-run currency)
+  - +1 salvage fragment (in-run crafting material)
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: one-shot per run, 새 런 = 새 기회.
+- **Pillar 3 (The Flatline)**: HP > 80% 를 유지하는 것이 death avoidance 와 직접 연결.
+- **Pillar 4 (The Build)**: rewards 는 in-run, no cross-run inheritance.
+- **Pillar 5 (The Style)**: 깁슨 코퍼스 — "good contractor walks away with the prize" 톤.
+
+### 흐름
+
+```
+[Player navigates matrix with arrow keys]
+    |
+    v
+[Player enters EXIT node]
+    |
+    v
+[best_neighbor.kind == NodeKind.EXIT]
+    |
+    v
+[check_near_miss_extraction()]
+    |
+    +-- if state.player_hp / state.player_max_hp >= 0.80 AND not already_triggered:
+    |   +-- apply +75 credits + +1 salvage fragment
+    |   +-- append status message: ">>> Near-miss extraction (80% HP): ..."
+    |   +-- set state.near_miss_triggered = True
+    |
+    +-- else: no-op
+```
+
+### 구현 노트
+
+**파일**:
+- `matrix/near_miss.py` (NEW) — `NearMissRewardKind`, `NearMissReward`, `NearMissResult`,
+  `compute_hp_ratio`, `check_near_miss_extraction`
+- `engine/cyberspace_view.py` — `check_near_miss_extraction` hook on EXIT node entry
+- `engine/state.py` — `AppState.near_miss_triggered: bool = False` field
+- `tests/unit/test_near_miss.py` (NEW) — 24 tests across 6 classes
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (144 source files)
+- pytest: ✅ 3324 passed (24 new), 664 skipped, 0 failed
+
+**Test coverage**:
+- `TestComputeHpRatio` (6): clamping, edge cases (zero max_hp, overheal, negative HP)
+- `TestNearMissThreshold` (5): 80% boundary, custom threshold, full HP, zero HP
+- `TestNearMissRewards` (5): credits, salvage, missing fields, status message
+- `TestNearMissOneShot` (2): no double-reward, single status message
+- `TestNearMissIsPillar4Safe` (2): no meta_state write, death-reset behavior
+- `TestNearMissRewardIntegrity` (3): positive amounts, flat rewards
+
+### 향후 작업 (v1.1.0 ADR-0140 P2/P3 Deferred)
+
+- **Faction Tension Events** (제안 7): 15-25% mission 에서 faction conflict trigger
+- **Auto-Play Tempo Layering** (제안 8): graphic novel pacing variations
+- **Death Replay** (제안 5): Hall of Dead echo
+- **Tier scaling** for anomaly + near-miss rewards (grade 5+ = bigger bonuses)
+
+### Cross-Reference (Near-Miss)
+
+- `decisions/0140-engagement-layer.md` — proposal status
+- `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.near_miss_triggered`
+- `prototype/src/roguelike_sprawl/engine/cyberspace_view.py` — EXIT node hook
+- `prototype/src/roguelike_sprawl/matrix/near_miss.py` — implementation

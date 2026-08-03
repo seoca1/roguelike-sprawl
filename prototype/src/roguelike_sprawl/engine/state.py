@@ -217,6 +217,7 @@ class AppState:
     memory_fragment_tracker: MemoryFragmentTracker = field(default_factory=MemoryFragmentTracker)
     construct_whisper_tracker: ConstructWhisper = field(default_factory=ConstructWhisper)
     anomaly_triggered: set[str] = field(default_factory=set)
+    near_miss_triggered: bool = False
     # Player is dead (flatline); True until reset
     is_dead: bool = False
     # Death reason (e.g. "Combat", "ICE breach", "Jack-out failure")

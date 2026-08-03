@@ -25,6 +25,7 @@ from ..lore import (
 from ..matrix import MatrixGraph, Node, NodeKind
 from ..matrix.anomaly_reward import check_anomaly_reward_on_node_entry
 from ..matrix.cyberspace_generator import CyberspaceLayout, DepthLevel
+from ..matrix.near_miss import check_near_miss_extraction
 from . import action_menu
 from .config import DATA_DIR
 from .input_utils import is_confirm_key
@@ -560,6 +561,14 @@ def _handle_cyberspace_movement(state: AppState, sym: KeySym) -> None:
             random.Random(),
             already_triggered=state.anomaly_triggered,
         )
+        # ADR-0140 P3.6 — Near-Miss Extraction. Exit node entry with
+        # HP > 80% grants bonus reward (Pillar 4 safe, one-shot).
+        if best_neighbor.kind is NodeKind.EXIT:
+            check_near_miss_extraction(
+                state,
+                already_triggered=state.near_miss_triggered,
+            )
+            state.near_miss_triggered = True
     else:
         state.status_messages.append(f">>> No node in direction {direction_name}")
         safe_play("movement/nav_block")

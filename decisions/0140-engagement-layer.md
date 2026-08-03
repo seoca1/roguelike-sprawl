@@ -173,16 +173,27 @@ v1.0.0 release 후 사용자 consultation (2026-07-28) 에서 게임 중독성/�
 - Pillar 4 safe: no cross-run inheritance (all in-run, ephemeral)
 - Visual: anomaly = `◆` magenta `(255, 100, 255)` vs regular DATA = `$` gold
 
+### Phase P3 — Near-Miss Extraction (제안 3) ✅ (2026-08-03)
+- `matrix/near_miss.py` (NEW) — `NearMissRewardKind`, `NearMissReward`, `NearMissResult`,
+  `compute_hp_ratio`, `check_near_miss_extraction`
+- `engine/cyberspace_view.py` — `check_near_miss_extraction` hook on EXIT node entry
+- `engine/state.py` — `AppState.near_miss_triggered: bool = False` field (one-shot)
+- `tests/unit/test_near_miss.py` (NEW) — 24 tests across 6 classes
+- Reward: +75 credits + +1 salvage fragment when HP > 80% at exit
+- Threshold: 80% (configurable via `DEFAULT_NEAR_MISS_HP_THRESHOLD`)
+- Pillar 4 safe: no cross-run inheritance (death loses rewards)
+- Pillar 3 reinforcement: death-avoidance payoff
+
 ### 잔존 (v1.2.0+)
 - Phase P2: Faction Tension (제안 7), Auto-Play Tempo (제안 8) *(Variable Reward Nodes ✅ done)*
-- Phase P3: Near-Miss Extraction (제안 3), Death Replay (제안 5)
-- Tier scaling for anomaly rewards (deferred v1.1.0+)
+- Phase P3: Death Replay (제안 5) *(Near-Miss Extraction ✅ done)*
+- Tier scaling for anomaly + near-miss rewards (deferred v1.1.0+)
 
 ### 메트릭
-- 신규 파일: 7 (lore 모듈 6 + anomaly_reward.py 1)
-- 신규 테스트: 71 (Phase 1 27 + Phase 2 22 + Phase P2 22)
+- 신규 파일: 8 (lore 모듈 6 + anomaly_reward.py 1 + near_miss.py 1)
+- 신규 테스트: 95 (Phase 1 27 + Phase 2 22 + Phase P2 22 + Phase P3 24)
 - 회귀 위험: 낮음 (combat_view.py 변경 없음, cyberspace_view.py 만 hook 추가)
-- Pillar 정합: Pillar 4 (unlock-only) + Pillar 5 (Style: lore fragments/construct voice/anomaly glyph)
+- Pillar 정합: Pillar 3 (death-avoidance) + Pillar 4 (unlock-only) + Pillar 5 (Style)
 
 ---
 
