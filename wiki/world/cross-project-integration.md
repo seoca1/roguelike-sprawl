@@ -9,9 +9,9 @@ description:
   ko: "로그라이크 스프롤이 Fiction 파생 단편 코퍼스와 어떻게 통합되는지 정리. 양방향 링크 메커니즘, 검증, 알려진 orphan 참조."
 language: en
 related:
-  - "[[sprawl-universe]]"
-  - "[[derivative-stories]]"
-  - "[[Fiction wiki: roguelike_sprawl-missions|roguelike_sprawl-missions]]"
+  - "[[sprawl_universe]]"
+  - "[[derivative_stories]]"
+  - "[[connections/roguelike_sprawl-missions|roguelike_sprawl-missions]]"
 ---
 
 # Cross-Project Integration: Fiction ↔ roguelike_sprawl
