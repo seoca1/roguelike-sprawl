@@ -791,3 +791,50 @@ Engagement Layer 가 feature-complete 상태.
   - `git push origin main` (18+ commits)
   - PyPI `twine upload dist/roguelike_sprawl-1.0.0*`
   - Notion publish (NOTION_TOKEN 필요)
+
+---
+
+## [2026-08-03] refactor | Cycle 2 Module Health — 3/4 modules below 1000 LOC
+
+**Context**: ADR-0110 + ADR-0141 module size policy enforcement. 4 modules
+> 1000 LOC 의 partial split (input handling / VFX behavior extracted to
+companion module per ADR-0111/0112/0113/0141 pattern: re-export facade +
+__all__ for backward compat).
+
+### Commits (chronological)
+1. `eb75cd3` refactor: ADR-0141 matrix_view.py split (1047 → 736 LOC)
+2. `9de180b` refactor: ADR-0113 combat_view.py split (1094 → 972 LOC)
+3. `e29382f` refactor: ADR-0112 combat/effects.py split (1309 → 504 LOC)
+
+### ADR coverage
+| Module | Before → After | ADR | Status |
+|---|---|---|---|
+| `engine/matrix_view.py` | 1047 → 736 | ADR-0141 | ✅ |
+| `engine/combat_view.py` | 1094 → 972 | ADR-0113 | ✅ |
+| `combat/effects.py` | 1309 → 504 | ADR-0112 | ✅ |
+| `engine/graphic_novel_view.py` | 1266 | ADR-0133 | ⏳ deferred (full 4-way split → v1.1.0+) |
+
+### 발견
+- **Re-export facade pattern 일관성**: 모든 3 split 이 `from .new_module import *  # noqa: F401` + `__all__` 업데이트 패턴 사용
+- **Test 격리**: 각 split 후 test_*_input.py 또는 기존 test_*.py 의 import 분할로 downstream 영향 최소화
+- **Data class / behavior 분리가 자연스러움**: effects.py 의 data classes (504 LOC) vs effects_vfx.py 의 animation logic (856 LOC) — 명확한 경계
+- **Input handling 분리가 가장 큰 효과**: matrix_view (-311), combat_view (-122) 합계 433 LOC 분리
+
+### 검증
+- ruff check: ✅ All checks passed
+- ruff format --check: ✅ unchanged
+- mypy strict: ✅ 0 errors (149 source files)
+- pytest: ✅ 3380 passed, 664 skipped, 0 failed (이전 3278 → +102 신규 테스트, 0 regression)
+
+### 의의
+- **ADR-0110 1000+ LOC policy 3/4 만족**: combat_view, matrix_view, combat/effects 모두 1000 LOC 이하
+- **1 deferral**: graphic_novel_view.py (1266 LOC) 는 ADR-0133 partial split (1594 → 1266) 상태, full 4-way split 은 v1.1.0+ 후속
+- **0 regression**: 모든 기존 import 경로 유지 (re-export facade), 외부 코드 변경 0
+- **Test ratio 안정**: 신규 테스트 102 (matrix_view 0 + combat_view 0 + combat/effects 22 + 기존 effects tests 80+) / split 3 건
+
+### 다음 세션
+- **graphic_novel_view.py 4-way split** (deferred per ADR-0133) — v1.1.0+ 사이클
+- **Cycle 3 (Polish & A11y)**: BGM/SFX 통합, options menu, accessibility layer
+- **Cycle 4 (Endgame/Retention)**: Construct companion, New Game+, Hardcore mode
+- **User action (v1.0.0)**: push (21+ commits), PyPI, Notion
+- **Cycle 2 마무리**: workspace NEXT_SESSION_TODO.md + log.md 갱신
