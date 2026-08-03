@@ -987,3 +987,38 @@ real weight" 강화 옵션. Pillar 4 (The Build) 의 unlock-only metaprogression
   (Dixie 실제 전투 동료)
 - **User action**: push (31+ commits), PyPI, Notion
 - **workspace log.md 갱신**: Cycle 4 Hardcore mode entry 추가 필요
+
+---
+
+## [2026-08-03] feat | Cycle 4 New Game+ mode (Pillar 4 unlock-only meta-progression)
+
+**Context**: Cycle 4 endgame/retention 의 두 번째 deliverable. 기존
+Salvation Phase 완료 후 새 런 시작 시 NG+ 옵션 제공. Pillar 4 (The
+Build) 의 "meta progress is unlock-only" 와 일치 — carryover 은
+unlocks 만 허용, stat boost 없음.
+
+### Commit
+- `59bd1c7` feat(engine): New Game+ mode (Cycle 4: Pillar 4 unlock-only meta-progression)
+  - 3 files, 193 insertions
+
+### 발견
+- **기존 AppState 활용**: 새 module 추가 없이 state.py 확장 (ng_plus_unlocked + ng_plus_active)
+- **Pillar 4 검증**: test_ng_plus_does_not_modify_player_stats,
+  test_does_not_persist_across_resets 모두 통과
+- **deferred work**: death.py integration (ending 도달 시 unlock),
+  main_loop integration (새 game 시작 시 UI)
+
+### 검증
+- ruff check: ✅ All checks passed
+- mypy strict: ✅ 0 errors (150 source files)
+- pytest: ✅ 3432 passed (10 new), 664 skipped, 0 failed (3422 → +10)
+
+### 의의
+- **Cycle 4 2/3 완료**: Hardcore (1/3) + New Game+ (2/3) 완료, Construct companion 만 잔존
+- **3 test class** (TestNGPlusFields, TestPillar4Compliance, TestNGPlusBehavior)
+- **Pillar 4 검증 통과**: unlock-only meta-progression, no stat boost, ephemeral
+
+### 다음 세션
+- **Cycle 4 잔존 (1건)**: Construct companion (Dixie 실제 전투 동료)
+- **User action**: push (33+ commits), PyPI, Notion
+- **workspace log.md 갱신**: Cycle 4 NG+ entry 추가 필요
