@@ -722,3 +722,93 @@ over).
 - `prototype/src/roguelike_sprawl/engine/death.py` — `trigger_death`, `restart_with_new_jockey`
 - `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.hardcore_mode`
 - `tests/unit/test_hardcore_mode.py` — test coverage
+
+---
+
+## New Game+ Mode (Cycle 4: Pillar 4 unlock-only meta-progression)
+
+### 골재
+
+Salvation Phase 종료 후 다시 시작할 수 있는 New Game+ 모드. Pillar 4
+(The Build) 의 "meta progress is unlock-only" 와 일치 — carryover
+은 **unlocks** 만 허용, stat/stat boost 없음. Pillar 1 (The Run) 의
+"새 런 = 새 기회" 와 충돌하지 않도록 ng_plus_active 는 ephemeral
+(session preference) 로 운영.
+
+### 게임 디자인
+
+- **`ng_plus_unlocked: bool = False`**: Salvation Phase 완료 시 자동 True
+  (ending 도달 후 unlock, Pillar 4 unlock-only)
+- **`ng_plus_active: bool = False`**: 현재 run 에서 NG+ 적용 여부
+  (Pillar 4 ephemeral, death/new run 시 reset)
+- **Carryover 범위**: unlocks only (장비 access, faction access 등)
+  - **부정 예**: stat boost, HP boost, inventory 잔존, credit 잔존
+  - **긍정 예**: unlocked faction rep, unlocked equipment access,
+    unlocked mission types, unlocked area access
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: 새 런 = 새 기회 (stat/인벤토리 reset, NG+ unlock + active 만 carryover)
+- **Pillar 4 (The Build)**: unlock-only meta-progression, no stat boosts
+  - test_ng_plus_does_not_modify_player_stats 검증
+  - test_does_not_persist_across_resets 검증
+- **Pillar 5 (The Style)**: unlocked content 만 (새로운 unlock 이 아닌 기존 unlock 재진입)
+
+### 흐름
+
+```
+[Player completes Salvation Phase → ending]
+    |
+    v
+[ng_plus_unlocked = True]  (Pillar 4 unlock)
+    |
+    v
+[Player starts new run]
+    |
+    v
+[Player can opt into NG+ (ng_plus_active = True)]
+    |
+    +-- ng_plus_active True:  carryover unlocks apply
+    +-- ng_plus_active False: standard new run (no carryover)
+    |
+    v
+[Death or new game → reset ng_plus_active]
+    (ng_plus_unlocked remains True, Pillar 4 unlock persists)
+```
+
+### 구현 노트
+
+**파일**:
+- `engine/state.py` (NEW fields) — `ng_plus_unlocked: bool`, `ng_plus_active: bool`
+- `engine/death.py` (DEFERRED) — ending 도달 시 ng_plus_unlocked=True
+  (death.py 또는 salvation.py integration)
+- `engine/main_loop.py` (DEFERRED) — 새 game 시작 시 ng_plus_active 선택 UI
+- `tests/unit/test_ng_plus.py` (NEW) — 10 tests, 3 classes
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (150 source files)
+- pytest: ✅ 3432 passed (10 new), 664 skipped, 0 failed
+
+**Test coverage** (TestNGPlusFields, TestPillar4Compliance, TestNGPlusBehavior):
+- Default False for both fields
+- Can be enabled independently
+- Locked and active are independent fields
+- No meta_state write
+- Does not persist across resets
+- Does not modify player stats (Pillar 4: unlock-only)
+
+### 향후 작업 (Cycle 4 잔존)
+
+- **death.py integration**: ending 도달 시 ng_plus_unlocked=True 설정
+- **main_loop integration**: 새 game 시작 시 NG+ 선택 UI
+- **Construct companion**: Dixie 실제 전투 동료 (Cycle 4 3/3)
+- **Carryover 해부**: 어떤 unlock 이 carryover 되는지 명세화 (faction rep, equipment access 등)
+- **Death Replay** (Hall of Dead echo) — v1.2.0+
+- **Tier scaling** — v1.2.0+
+
+### Cross-Reference (New Game+)
+
+- `decisions/0140-engagement-layer.md` — Cycle 1 (complete)
+- `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.ng_plus_unlocked`, `AppState.ng_plus_active`
+- `tests/unit/test_ng_plus.py` — test coverage

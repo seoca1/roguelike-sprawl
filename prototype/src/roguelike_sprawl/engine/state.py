@@ -299,6 +299,9 @@ class AppState:
     keymap_customized: bool = False  # True if user has modified key bindings
     # Hardcore mode (Cycle 4: Pillar 3 reinforcement)
     hardcore_mode: bool = False  # 1-life permadeath (Pillar 4 compliant: ephemeral)
+    # New Game+ (Cycle 4: Pillar 4 unlock-only meta-progression)
+    ng_plus_unlocked: bool = False  # True after completing an ending (Pillar 4 compliant)
+    ng_plus_active: bool = False  # True for current run's New Game+ mode (Pillar 4 ephemeral)
     # Help screen state (Phase 7)
     help_page: int = 0  # current help page index (0-based)
     # Salvation Phase state (ADR-0090 Phase 9)
