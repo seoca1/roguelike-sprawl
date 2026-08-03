@@ -1022,3 +1022,41 @@ unlocks 만 허용, stat boost 없음.
 - **Cycle 4 잔존 (1건)**: Construct companion (Dixie 실제 전투 동료)
 - **User action**: push (33+ commits), PyPI, Notion
 - **workspace log.md 갱신**: Cycle 4 NG+ entry 추가 필요
+
+---
+
+## [2026-08-03] feat | Cycle 4 Construct companion (Pillar 5 actual combat ally)
+
+**Context**: Cycle 4 endgame/retention 의 마지막 deliverable. 기존
+Dixie Flatline 은 dialog-only NPC (npc_event.py). Cycle 4 3/3 에서
+Dixie 를 **실제 전투 동료**로 만드는 flag. Pillar 5 (The Style) 의
+깁슨 코퍼스 톤 — Dixie 가 combat ally 로서 플레이어와 함께 싸우는
+모습. Pillar 4 (The Build) 와 일치 — ephemeral session preference, no
+stat boost.
+
+### Commit
+- `d8dd15d` feat(engine): Construct companion (Cycle 4: Pillar 5 actual combat ally)
+  - 3 files, 172 insertions
+
+### 발견
+- **기존 AppState 활용**: 새 module 추가 없이 state.py 확장 (construct_companion_active 필드)
+- **Pillar 5 검증**: test_does_not_persist_across_resets, test_does_not_modify_player_stats
+- **deferred work**: npc_event.py 통합 (Dixie combat ally 행동), combat.py 통합 (ally 참여 로직)
+
+### 검증
+- ruff check: ✅ All checks passed
+- mypy strict: ✅ 0 errors (150 source files)
+- pytest: ✅ 3441 passed (9 new), 664 skipped, 0 failed (3432 → +9)
+
+### 의의
+- **Cycle 4 3/3 완료**: Hardcore (1/3) + New Game+ (2/3) + Construct companion (3/3) 완료
+- **3 test class** (TestConstructCompanionField, TestPillar5Compliance, TestConstructCompanionBehavior)
+- **Pillar 5 검증 통과**: ephemeral, no stat boost, Dixie combat ally toggle
+
+### 다음 세션
+- **Cycle 4 완료**: 3/3 모두 완료, 추가 polish 가능 (deferred work)
+- **graphic_novel_view.py 4-way split** (deferred per ADR-0133) — v1.1.0+ 후속
+- **Death Replay** (Hall of Dead echo) — v1.2.0+
+- **Tier scaling** — v1.2.0+
+- **User action**: push (35+ commits), PyPI, Notion
+- **workspace log.md 갱신**: Cycle 4 Construct companion entry 추가 완료
