@@ -218,6 +218,8 @@ class AppState:
     construct_whisper_tracker: ConstructWhisper = field(default_factory=ConstructWhisper)
     anomaly_triggered: set[str] = field(default_factory=set)
     near_miss_triggered: bool = False
+    faction_tension_triggered: set[str] = field(default_factory=set)
+    alarm_level: int = 0
     # Player is dead (flatline); True until reset
     is_dead: bool = False
     # Death reason (e.g. "Combat", "ICE breach", "Jack-out failure")

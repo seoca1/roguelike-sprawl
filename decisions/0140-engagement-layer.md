@@ -182,16 +182,30 @@ v1.0.0 release 후 사용자 consultation (2026-07-28) 에서 게임 중독성/�
 - Reward: +75 credits + +1 salvage fragment when HP > 80% at exit
 - Threshold: 80% (configurable via `DEFAULT_NEAR_MISS_HP_THRESHOLD`)
 - Pillar 4 safe: no cross-run inheritance (death loses rewards)
+
+### Phase P2 — Faction Tension Events (제안 7) ✅ (2026-08-03)
+- `matrix/faction_tension.py` (NEW) — `FactionTensionEvent`, `FactionTensionResult`,
+  `get_faction_rep`, `should_trigger`, `classify_rep`, `apply_faction_tension`,
+  `check_faction_tension_on_node_entry`
+- `engine/cyberspace_view.py` — `check_faction_tension_on_node_entry` hook on DATA node entry
+- `engine/state.py` — `AppState.faction_tension_triggered: set[str]` field + `alarm_level: int`
+- `tests/unit/test_faction_tension.py` (NEW) — 22 tests across 7 classes
+- Trigger probability: 25% per faction DATA node entry (`FACTION_TENSION_PROBABILITY`)
+- Positive threshold: rep ≥ 50 (FRIENDLY+) → +30 credits + +1 salvage fragment
+- Negative threshold: rep ≤ -50 (HOSTILE+) → alarm +1
+- Polarity independence: positive and negative events tracked separately per faction
+- Pillar 4 safe: no cross-run inheritance (all in-run, alarm resets on death)
+- Leverages existing FactionReputation system (ADR-0131, run/reputation.py)
 - Pillar 3 reinforcement: death-avoidance payoff
 
 ### 잔존 (v1.2.0+)
-- Phase P2: Faction Tension (제안 7), Auto-Play Tempo (제안 8) *(Variable Reward Nodes ✅ done)*
+- Phase P2: Auto-Play Tempo (제안 8) *(Variable Reward Nodes ✅, Faction Tension ✅ done)*
 - Phase P3: Death Replay (제안 5) *(Near-Miss Extraction ✅ done)*
-- Tier scaling for anomaly + near-miss rewards (deferred v1.1.0+)
+- Tier scaling for anomaly + near-miss + tension rewards (deferred v1.1.0+)
 
 ### 메트릭
-- 신규 파일: 8 (lore 모듈 6 + anomaly_reward.py 1 + near_miss.py 1)
-- 신규 테스트: 95 (Phase 1 27 + Phase 2 22 + Phase P2 22 + Phase P3 24)
+- 신규 파일: 9 (lore 모듈 6 + anomaly_reward.py 1 + near_miss.py 1 + faction_tension.py 1)
+- 신규 테스트: 117 (Phase 1 27 + Phase 2 22 + Phase P2 22 + Phase P3 24 + Phase P2.7 22)
 - 회귀 위험: 낮음 (combat_view.py 변경 없음, cyberspace_view.py 만 hook 추가)
 - Pillar 정합: Pillar 3 (death-avoidance) + Pillar 4 (unlock-only) + Pillar 5 (Style)
 

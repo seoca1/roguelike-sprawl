@@ -25,6 +25,7 @@ from ..lore import (
 from ..matrix import MatrixGraph, Node, NodeKind
 from ..matrix.anomaly_reward import check_anomaly_reward_on_node_entry
 from ..matrix.cyberspace_generator import CyberspaceLayout, DepthLevel
+from ..matrix.faction_tension import check_faction_tension_on_node_entry
 from ..matrix.near_miss import check_near_miss_extraction
 from . import action_menu
 from .config import DATA_DIR
@@ -561,6 +562,16 @@ def _handle_cyberspace_movement(state: AppState, sym: KeySym) -> None:
             random.Random(),
             already_triggered=state.anomaly_triggered,
         )
+        # ADR-0140 P2.7 — Faction Tension Events. Per-faction DATA node
+        # entry has 25% chance of triggering +ve (high rep) or -ve (low rep)
+        # event based on FactionReputation (Pillar 4 safe, one-shot).
+        if best_neighbor.kind is NodeKind.DATA:
+            check_faction_tension_on_node_entry(
+                state,
+                best_neighbor.faction,
+                random.Random(),
+                already_triggered=state.faction_tension_triggered,
+            )
         # ADR-0140 P3.6 — Near-Miss Extraction. Exit node entry with
         # HP > 80% grants bonus reward (Pillar 4 safe, one-shot).
         if best_neighbor.kind is NodeKind.EXIT:

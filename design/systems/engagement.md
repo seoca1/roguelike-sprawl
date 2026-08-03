@@ -202,3 +202,109 @@ Player 가 exit node 도달 시 HP 가 threshold (default 80%) 이상으로 남�
 - `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.near_miss_triggered`
 - `prototype/src/roguelike_sprawl/engine/cyberspace_view.py` — EXIT node hook
 - `prototype/src/roguelike_sprawl/matrix/near_miss.py` — implementation
+
+---
+
+## Faction Tension Events (ADR-0140 §Proposal 7)
+
+### 골재
+
+Per DATA node entry, 25% chance of triggering a faction-aware event. Uses
+existing **FactionReputation** (ADR-0131) to resolve outcome:
+- High rep (≥ 50, FRIENDLY+): positive event (credits + salvage fragment)
+- Low rep (≤ -50, HOSTILE+): negative event (alarm +1)
+- Mid rep: no event (NEUTRAL zone)
+
+### 게임 디자인
+
+- **Trigger probability**: 25% per faction node entry (Faction != NONE)
+- **Faction scope**: Hosaka, T-A, Sense/Net, Maas (5 factions tracked)
+- **Polarity**: positive (high rep) vs negative (low rep) — tracked independently
+- **One-shot**: per (faction, polarity) pair per run
+- **Pillar 4 safe**: all rewards in-run, alarm resets on death
+
+### Reward / Penalty Constants
+
+| Event Type | Effect | Constant |
+|---|---|---|
+| Positive (high rep) | +30 credits + +1 salvage fragment | `POSITIVE_CREDITS`, `POSITIVE_SALVAGE` |
+| Negative (low rep) | alarm +1 | `NEGATIVE_ALARM_DELTA` |
+
+### Reputation Thresholds
+
+| Threshold | Value | Effect |
+|---|---|---|
+| Positive | `>= 50` (FRIENDLY+) | bonus reward |
+| Negative | `<= -50` (HOSTILE+) | alarm penalty |
+| Mid (NEUTRAL, TRUSTED) | -50..49 | no event |
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: one-shot per run per faction polarity.
+- **Pillar 4 (The Build)**: rewards are in-run + ephemeral (no cross-run inheritance).
+- **Pillar 5 (The Style)**: faction awareness — "your rep precedes you" 깁슨 톤.
+
+### 흐름
+
+```
+[Player navigates matrix with arrow keys]
+    |
+    v
+[Player enters DATA node with faction=X]
+    |
+    v
+[check_faction_tension_on_node_entry()]
+    |
+    +-- if faction == NONE: skip
+    +-- if rng.random() >= 0.25: skip (75% no event)
+    +-- read reputation.get(X).score
+    +-- if score >= 50: positive event
+    |   +-- apply: +30 credits + +1 salvage fragment
+    |   +-- status msg: ">>> Faction tension: hosaka assistance — +30 credits, +1 salvage fragment"
+    |   +-- mark "{faction}:{True}" as triggered
+    |
+    +-- if score <= -50: negative event
+    |   +-- apply: alarm +1
+    |   +-- status msg: ">>> Faction tension: ta interference — alarm +1"
+    |   +-- mark "{faction}:{False}" as triggered
+    |
+    +-- else: no event (NEUTRAL rep)
+```
+
+### 구현 노트
+
+**파일**:
+- `matrix/faction_tension.py` (NEW) — `FactionTensionEvent`, `FactionTensionResult`,
+  `get_faction_rep`, `should_trigger`, `classify_rep`, `apply_faction_tension`,
+  `check_faction_tension_on_node_entry`
+- `engine/cyberspace_view.py` — `check_faction_tension_on_node_entry` hook on DATA node entry
+- `engine/state.py` — `AppState.faction_tension_triggered: set[str]` field + `alarm_level: int`
+- `tests/unit/test_faction_tension.py` (NEW) — 22 tests across 7 classes
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (145 source files)
+- pytest: ✅ 3346 passed (22 new), 664 skipped, 0 failed
+
+**Test coverage**:
+- `TestTriggerProbability` (2): 25% constant, empirical 200-300/1000
+- `TestClassifyRep` (4): high-rep positive, low-rep negative, neutral no-event, boundary
+- `TestGetFactionRep` (2): state access, direct score-set
+- `TestApplyFactionTension` (4): positive reward, negative penalty, missing fields, status msg
+- `TestCheckOnNodeEntry` (5): NONE faction, neutral rep, high rep, low rep, empirical probability
+- `TestFactionTensionOneShot` (2): no double reward, polarity independence
+- `TestFactionTensionIsPillar4Safe` (2): no meta_state write, alarm resets on death
+
+### 향후 작업 (v1.1.0 ADR-0140 P2/P3 Deferred)
+
+- **Auto-Play Tempo Layering** (제안 8): graphic novel pacing variations
+- **Death Replay** (제안 5): Hall of Dead echo
+- **Tier scaling** for anomaly + near-miss + tension rewards (grade 5+ = bigger effects)
+
+### Cross-Reference (Faction Tension)
+
+- `decisions/0140-engagement-layer.md` — proposal status
+- `prototype/src/roguelike_sprawl/run/reputation.py` — FactionReputation source
+- `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.faction_tension_triggered`
+- `prototype/src/roguelike_sprawl/engine/cyberspace_view.py` — DATA node hook
+- `prototype/src/roguelike_sprawl/matrix/faction_tension.py` — implementation
