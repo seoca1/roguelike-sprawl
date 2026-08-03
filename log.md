@@ -733,3 +733,61 @@ Wikilink resolution checked: from `wiki/world/`, relative paths via the wiki/dec
 - `twine upload dist/roguelike_sprawl-1.0.0*` (wheel ready)
 - Notion publish (PROGRESS_REPORT_2026-07-28_v1.0.0.md ready, NOTION_TOKEN 필요)
 - v1.1.0 cycle: ADR-0140 P2/P3 (Variable Reward Nodes, Faction Tension, Auto-Play Tempo, Near-Miss, Death Replay)
+
+---
+
+## [2026-08-03] session | Cycle 1 Engagement Layer v1.1.0 P2/P3 — 5 atomic commits
+
+**Context**: ADR-0140 의 5개 P2/P3 proposal 모두 구현 완료. v1.1.0 cycle 의
+Engagement Layer 가 feature-complete 상태.
+
+### Commits (chronological)
+1. `9af6bf6` feat(matrix): Variable Reward Nodes (ADR-0140 P2.6) — 8 files, 611 +/9 -
+2. `9616549` feat(matrix): Near-Miss Extraction (ADR-0140 P3.6) — 6 files, 558 +/6 -
+3. `e73992c` feat(matrix): Faction Tension Events (ADR-0140 P2.7) — 6 files, 796 +/4 -
+4. `0cae511` feat(engine): Auto-Play Tempo Layering (ADR-0140 P2.8) — 6 files, 351 +/5 -
+5. `fa39fea` feat(lore): Grade 6 Master Whisper (ADR-0140 §Proposal 4) — 5 files, 352 +/7 -
+
+### ADR-0140 Status Update
+| Phase | Status | Implementation |
+|---|---|---|
+| Phase 1 — Memory Fragments | ✅ Done (2026-07-28) | src/roguelike_sprawl/lore/memory_fragment.py + fragment_tracker.py + fragment_hook.py |
+| Phase 2 — Construct Whisper | ✅ Done (2026-07-28) | src/roguelike_sprawl/lore/construct_whisper.py + construct_whisper_hook.py |
+| Phase P2.6 — Variable Reward Nodes | ✅ Done (2026-08-03) | matrix/node.py + generator.py + anomaly_reward.py |
+| Phase P3.6 — Near-Miss Extraction | ✅ Done (2026-08-03) | matrix/near_miss.py |
+| Phase P2.7 — Faction Tension Events | ✅ Done (2026-08-03) | matrix/faction_tension.py |
+| Phase P2.8 — Auto-Play Tempo | ✅ Done (2026-08-03) | engine/auto_play_tempo.py + main_loop.py |
+| Phase 3 — Grade 6 Master Whisper | ✅ Done (2026-08-03) | construct_whisper.py (master voice) + construct_whisper_hook.py |
+| Phase P3.5 — Death Replay | ⏳ v1.2.0+ | Hall of Dead echo (recording + replay) |
+| Tier scaling | ⏳ v1.2.0+ | grade 5+ bigger rewards (anomaly + near-miss + tension) |
+
+### 발견
+- **Pillar 4 경계 (모든 5 feature)**: rewards 는 in-run + ephemeral (death = loss),
+  no cross-run inheritance. Faction Tension 은 `run/meta_state` 미사용 확인 (테스트 검증).
+- **Test ratio**: 신규 테스트 138 (Variable 22 + Near-Miss 24 + Faction 22 + Auto-Play 19 + Master 15) — 모든 feature 13+ tests/test class
+- **ruff/mypy clean**: 모든 commit 후 ruff + mypy strict 0 errors
+- **Hook pattern 일관성**: cyberspace_view.py 의 5개 hook (fragment, anomaly, faction_tension, near-miss) 모두 2-line inline ADR + Pillar 4 reference — 일관성 유지
+
+### 검증
+- ruff check: ✅ All checks passed (146 source files)
+- ruff format --check: ✅ 322 files already formatted
+- mypy strict: ✅ 0 errors (146 source files)
+- pytest: ✅ 3380 passed, 664 skipped (26.33s)
+- audit_vault (workspace): ✅ CLEAN
+
+### 의의
+- **Engagement Layer v1.1.0 feature-complete**: 5/5 P2/P3 proposals implemented
+- **Total v1.0.0 polish + v1.1.0 prep + Cycle 1**: 18 commits (`e8679f8` → `fa39fea`)
+- **ADR-0140 metrics**: 10 new files, 151 new tests across 7 phases
+- **Death Replay + Tier scaling** 만 v1.2.0+ 로 defer
+
+### 다음 세션 (Cycle 2 시작)
+- **Cycle 2 (Module Health)**: 4 modules > 1000 LOC → 4-way split per ADR-0112/0113/0141
+  - `combat/effects.py` (1309 LOC) — ADR-0112 (5-Layer VFX + Boss themes)
+  - `engine/graphic_novel_view.py` (1266 LOC) — full 4-way split (ADR-0133 partial, ADR-0141)
+  - `engine/combat_view.py` (1094 LOC) — ADR-0113 (HUD + status + log)
+  - `engine/matrix_view.py` (1047 LOC) — full 4-way split (ADR-0141)
+- **User action (pending from v1.0.0)**:
+  - `git push origin main` (18+ commits)
+  - PyPI `twine upload dist/roguelike_sprawl-1.0.0*`
+  - Notion publish (NOTION_TOKEN 필요)
