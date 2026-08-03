@@ -5,6 +5,19 @@
 > **커밋 누적**: +27 (이번 사이클)
 > **대상**: `Game/roguelike_sprawl/` 깁슨 스프롤 로그라이크
 
+> **📌 헤더 노트 (2026-08-03)**: 본 문서는 2026-07-01 시점의 Phase 5→6 P0/P1/P2 cycle 결과입니다.
+> 이후 v1.0.0 (2026-07-28) polish + v1.1.0 prep (2026-07-28~) 으로 code/test/design 이 모두 갱신되었습니다.
+>
+> **현재 상태 (v1.0.0 FINAL, 2026-08-03)**:
+> - 3,278 tests pass / 664 skipped (vs 3,442 + 35 skip + 15 xfail at 2026-07-01)
+> - 142 source files / 39,166 LOC (vs 108 files / 28,000 at 2026-07-01)
+> - 5 ADRs 신규 (0125, 0130, 0131, 0133, 0140, 0141) — Engagement Layer + module splits
+> - 111 missions / 58 ICE / 9 jockeys / 81 GN scenes (대폭 증가)
+> - Dashboard 갱신: 17 stat JSON 2026-08-03 fresh
+>
+> **계획**: 본 log.md 와 design/GDD.md 가 v1.0.0 상태로 sync 됨 (2026-08-03).
+> Game quality assessment + upgrade plan (4-cycle roadmap) 진행 중.
+
 ---
 
 ## 요약
