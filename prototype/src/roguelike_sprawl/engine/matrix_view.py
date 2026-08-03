@@ -56,6 +56,12 @@ from .layout import (
     draw_title,
     make_shell,
 )
+from .matrix_minimap import (
+    _draw_breadcrumb,
+    _draw_minimap,
+    _draw_mobility_stats,
+    _short_kind,
+)
 from .state import AppState, ScreenKind
 from .status_panel import render_status_panel
 
@@ -81,20 +87,6 @@ _STATUS_GLYPH: dict[Status, str] = {
     Status.DEADLY: "!",
     Status.FUTILE: "X",
 }
-
-
-def _short_kind(kind: NodeKind) -> str:
-    """Return a short human-readable label for a :class:`NodeKind`.
-
-    Falls back to the enum value capitalized when the kind is unknown.
-
-    Args:
-        kind: Node kind to label.
-
-    Returns:
-        Short label string (e.g. "Entry", "ICE", "Construct").
-    """
-    return _KIND_LABEL.get(kind, kind.value.capitalize())
 
 
 def _status_glyph(status: Status) -> str:
@@ -386,72 +378,6 @@ def _draw_edge_line(
     else:
         for r in range(cny + 1, tny):
             console.print(x=tnx, y=r, string="|", fg=line_color)
-
-
-def _draw_minimap(
-    console: tcod.console.Console,
-    matrix: MatrixGraph,
-    exploration: ExplorationState,
-    side: Region,
-) -> None:
-    """Render the minimap in the SIDE region."""
-    lines: list[str] = []
-    for node in matrix.nodes:
-        vis = exploration.visibility(matrix, node.id)
-        if vis is Visibility.UNKNOWN:
-            glyph, suffix = "?", ""
-        elif vis is Visibility.CURRENT:
-            glyph, suffix = "●", " (you)"
-        elif vis is Visibility.ADJACENT:
-            glyph, suffix = "○", " ?"
-        else:  # discovered
-            glyph, suffix = "●", ""
-        lines.append(f"{glyph} {_short_kind(node.kind)}{suffix}")
-    draw_side(console, side, label="Map", lines=lines[: side.h - 1])
-
-
-def _draw_breadcrumb(
-    console: tcod.console.Console,
-    matrix: MatrixGraph,
-    exploration: ExplorationState,
-    side: Region,
-) -> None:
-    """Render the breadcrumb (path) in the SIDE region, below minimap."""
-    if not exploration.path:
-        return
-    labels: list[str] = []
-    for nid in exploration.path:
-        node = matrix.get(nid)
-        labels.append(_short_kind(node.kind) if node is not None else "?")
-    path_text = " → ".join(labels)
-    console.print(
-        x=side.x + 2,
-        y=side.y2,
-        string=f"Path: {path_text[: side.w - 10]}",
-        fg=(96, 96, 96),
-    )
-
-
-def _draw_mobility_stats(
-    console: tcod.console.Console,
-    state: AppState,
-    side: Region,
-) -> None:
-    """Render movement step count and visited-node count in the SIDE region.
-
-    Placed above the breadcrumb (y = side.y2 - 1) so the player can see
-    how far they have walked this run and how many distinct nodes they
-    have visited.
-    """
-    steps = state.movement_step_count
-    visited = len(state.nodes_visited)
-    line = f"Steps: {steps}   Visited: {visited}"
-    console.print(
-        x=side.x + 2,
-        y=side.y2 - 1,
-        string=line[: side.w - 4],
-        fg=(128, 200, 255),
-    )
 
 
 def _compute_direction_hints(
