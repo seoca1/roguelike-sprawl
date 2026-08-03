@@ -370,6 +370,52 @@ class HitFlash:
         return max(0.0, 1.0 - self.elapsed_ms / self.duration_ms)
 
 
+@dataclass(slots=True)
+class ScreenFlash:
+    """Full-screen flash effect for AoE damage / boss phase transitions (ADR-0125 follow-up).
+
+    Unlike HitFlash (tile-level), ScreenFlash covers the entire viewport.
+    Used by boss phase AoE bursts and dramatic combat moments.
+
+    Alpha fades from 1.0 (peak) to 0.0 over duration_ms.
+    """
+
+    duration_ms: int = 0
+    elapsed_ms: int = 0
+    color: tuple[int, int, int] = (255, 255, 255)
+
+    def trigger(
+        self, color: tuple[int, int, int] = (255, 255, 255), duration_ms: int = 250
+    ) -> None:
+        """Start a new full-screen flash; replaces any existing flash."""
+        self.color = color
+        self.duration_ms = duration_ms
+        self.elapsed_ms = 0
+
+    def step(self, dt_ms: int) -> None:
+        if self.duration_ms > 0:
+            self.elapsed_ms += dt_ms
+
+    @property
+    def is_active(self) -> bool:
+        return self.elapsed_ms < self.duration_ms
+
+    @property
+    def alpha(self) -> float:
+        """Current alpha (1.0 = full flash, 0.0 = faded out).
+
+        Uses a sharp attack + ease-out curve: fast spike (first 15%)
+        then linear fade. Avoids the harsh look of pure linear decay.
+        """
+        if self.duration_ms == 0:
+            return 0.0
+        progress = self.elapsed_ms / self.duration_ms
+        if progress < 0.15:
+            return 1.0
+        fade = (progress - 0.15) / 0.85
+        return max(0.0, 1.0 - fade * fade)
+
+
 # ----------------------------------------------------------------------------
 # Cinematic intro / death sequences
 # ----------------------------------------------------------------------------
@@ -937,13 +983,13 @@ class CombatEffects:
     shake: ScreenShake = field(default_factory=ScreenShake)
     floating_numbers: list[FloatingNumber] = field(default_factory=list)
     hit_flash: HitFlash = field(default_factory=HitFlash)
+    screen_flash: ScreenFlash = field(default_factory=ScreenFlash)
     cinematic: CinematicSequence | None = None
     combo: ComboCounter = field(default_factory=ComboCounter)
     slow_motion_ms: int = 0  # When > 0, time runs at half speed
 
     def step(self, dt_ms: int) -> None:
         """Step all effects forward by dt_ms."""
-        # Apply slow motion
         if self.slow_motion_ms > 0:
             dt_ms = dt_ms // 2
             self.slow_motion_ms = max(0, self.slow_motion_ms - 16)
@@ -956,6 +1002,7 @@ class CombatEffects:
         self.floating_numbers = [f for f in self.floating_numbers if f.is_alive]
         self.shake.step(dt_ms)
         self.hit_flash.step(dt_ms)
+        self.screen_flash.step(dt_ms)
         if self.cinematic is not None:
             self.cinematic.step(dt_ms)
             if self.cinematic.is_finished:
@@ -968,6 +1015,7 @@ class CombatEffects:
         self.floating_numbers.clear()
         self.shake = ScreenShake()
         self.hit_flash = HitFlash()
+        self.screen_flash = ScreenFlash()
         self.cinematic = None
         self.combo.reset()
         self.slow_motion_ms = 0
@@ -980,6 +1028,7 @@ class CombatEffects:
             or self.floating_numbers
             or self.shake.intensity > 0
             or self.hit_flash.is_active
+            or self.screen_flash.is_active
             or self.cinematic is not None
         )
 
@@ -1156,6 +1205,20 @@ def spawn_room_flash(
         life_ms=160,
         spread=math.pi,
     )
+
+
+def spawn_aoe_screen_flash(
+    effects: CombatEffects,
+    color: tuple[int, int, int] = (255, 80, 80),
+    duration_ms: int = 280,
+) -> None:
+    """Spawn a full-screen flash for AoE damage events (ADR-0125 follow-up).
+
+    Triggers ScreenFlash (full-viewport, distinct from tile-level HitFlash),
+    paired with screen shake for impact.
+    """
+    effects.screen_flash.trigger(color=color, duration_ms=duration_ms)
+    effects.shake.trigger(intensity=0.6, duration_ms=duration_ms)
 
 
 def spawn_data_acquired(effects: CombatEffects, x: float = 0.0, y: float = 0.0) -> None:

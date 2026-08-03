@@ -979,7 +979,7 @@ def start_combat(
     base_attack = 5
     base_max_ap = 6
     equip_attack_bonus = 0
-    equip_defense = 0
+    equip_defense_bonus = 0
     equip_hp_bonus = 0
     equip_shield_bonus = 0
     equip_ap_bonus = 0
@@ -999,7 +999,7 @@ def start_combat(
         stats = raw_stats if isinstance(raw_stats, EquipStats) else None
         if stats is not None:
             equip_attack_bonus = stats.attack_bonus
-            equip_defense = stats.defense
+            equip_defense_bonus = stats.defense
             equip_hp_bonus = stats.hp_bonus
             equip_shield_bonus = stats.shield_bonus
             equip_ap_bonus = stats.ap_bonus
@@ -1033,7 +1033,7 @@ def start_combat(
         team="player",
         # Apply equipment stats
         equip_attack_bonus=equip_attack_bonus,
-        equip_defense=equip_defense,
+        equip_defense_bonus=equip_defense_bonus,
         equip_hp_bonus=equip_hp_bonus,
         equip_shield_bonus=equip_shield_bonus,
         equip_ap_bonus=equip_ap_bonus,

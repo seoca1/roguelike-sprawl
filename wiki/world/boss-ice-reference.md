@@ -9,9 +9,9 @@ description:
   ko: "roguelike_sprawl의 5개 보스 ICE 프로필: phase 진행, 스탯, Phase B-3 기능 (AoE 대미지 + 미니언 소환)."
 language: en
 related:
-  - "[[boss-ice-system]]"
-  - "[[ADR-0050]]"
-  - "[[ADR-0125]]"
+  - "[[../decisions/0050-boss-ice-system]]"
+  - "[[../decisions/0050-boss-ice-system|ADR-0050]]"
+  - "[[../decisions/0125-boss-aoe-minion-spawn|ADR-0125]]"
 ---
 
 # Boss ICE Reference
@@ -187,8 +187,8 @@ Visual intensity scales with damage:
 
 ## See Also
 
-- [[boss-ice-system]] — Original boss ICE design (Phase 5 ADR-0050)
-- [[combat-system]] — Combat system overview
-- [[phase-b3-visual-effects]] — B-3.5 screen shake + hit flash
+- [[../decisions/0050-boss-ice-system]] — Original boss ICE design (Phase 5 ADR-0050)
+- [[../design/systems/combat]] — Combat system overview
+- [[../design/systems/animations]] — B-3.5 screen shake + hit flash
 - `decisions/0125-boss-aoe-minion-spawn.md` — ADR
 - `design/systems/combat.md` — Combat design doc

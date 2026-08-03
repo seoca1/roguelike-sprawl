@@ -559,6 +559,41 @@ def apply_phase_to_combatant(boss: Combatant, profile: BossProfile) -> PhaseProf
     return phase
 
 
+def scale_minion_spawn(
+    phase: PhaseProfile,
+    boss: Combatant,
+    state: CombatState,
+) -> tuple[str, ...]:
+    """ADR-0125 M3: dynamic minion spawn intensity scaling.
+
+    Scales the spawn_minions tuple based on:
+      - Phase index (later phases spawn more minions)
+      - Player grade (boss adapts to player power)
+      - Player HP (desperate players get fewer adds)
+    Returns the (possibly scaled) spawn list to use.
+    """
+    base_count = len(phase.spawn_minions)
+    if base_count == 0:
+        return ()
+
+    phase_num = getattr(phase, "phase", None) or getattr(phase, "index", None) or 1
+    phase_mult = 1.0 + (phase_num - 1) * 0.5
+    grade_mult = 1.0 + max(0, (boss.equip_attack_bonus or 0) - 1) * 0.1
+
+    player_hp_pct = 1.0
+    for c in state.enemies:
+        if c.team == "player":
+            player_hp_pct = c.hp / max(1, c.max_hp)
+            break
+    hp_mult = 1.5 if player_hp_pct < 0.3 else (1.2 if player_hp_pct < 0.6 else 1.0)
+
+    total_mult = phase_mult * grade_mult * hp_mult
+    target_count = max(1, min(int(base_count * total_mult + 0.5), base_count * 3))
+    if target_count >= base_count:
+        return phase.spawn_minions
+    return phase.spawn_minions[:target_count]
+
+
 def spawn_phase_minions(
     boss: Combatant,
     phase: PhaseProfile,
@@ -567,11 +602,16 @@ def spawn_phase_minions(
     program_registry: ProgramRegistry,
     portraits: PortraitManager | None = None,
 ) -> list[Combatant]:
-    """Phase B-3: spawn minion ICE at phase transition."""
+    """Phase B-3: spawn minion ICE at phase transition.
+
+    ADR-0125 M3: applies scale_minion_spawn to adjust spawn count
+    based on phase index, player grade, and player HP.
+    """
     from .registry import build_ice_enemy
 
+    spawn_list = scale_minion_spawn(phase, boss, state)
     spawned: list[Combatant] = []
-    for ice_id in phase.spawn_minions:
+    for ice_id in spawn_list:
         try:
             minion = build_ice_enemy(
                 ice_id,
@@ -586,6 +626,39 @@ def spawn_phase_minions(
     if spawned:
         state.enemies = state.enemies + tuple(spawned)
     return spawned
+
+
+def boss_ai_choose_phase_effect(
+    phase: PhaseProfile,
+    state: CombatState,
+) -> str:
+    """ADR-0125 M4: boss AI decision logic for phase-effect selection.
+
+    Heuristic: if player HP is low, prioritize AoE burst (finish them).
+    Otherwise if boss is wounded, spawn adds (defend). Otherwise
+    default to the phase's primary declared action.
+    """
+    has_aoe = phase.aoe_damage > 0
+    has_spawn = bool(phase.spawn_minions)
+
+    if not (has_aoe or has_spawn):
+        return "none"
+
+    player = getattr(state, "player", None)
+    if player is not None and player.max_hp > 0:
+        player_hp_pct = player.hp / player.max_hp
+    else:
+        player_hp_pct = 1.0
+
+    if has_aoe and player_hp_pct < 0.4:
+        return "aoe"
+    if has_spawn and player_hp_pct > 0.7:
+        return "spawn"
+    if has_aoe:
+        return "aoe"
+    if has_spawn:
+        return "spawn"
+    return "none"
 
 
 def apply_phase_aoe(

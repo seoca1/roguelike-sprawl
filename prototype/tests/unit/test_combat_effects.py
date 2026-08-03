@@ -605,3 +605,59 @@ class TestPerformance:
             e.combo.register_hit(i * 100)
         assert e.combo.count == 5
         assert "RAMPAGE" in e.combo.label
+
+
+class TestScreenFlash:
+    """Tests for full-screen flash effect (ADR-0125 follow-up: AoE visual effect)."""
+
+    def test_initial_state_inactive(self) -> None:
+        from roguelike_sprawl.combat.effects import ScreenFlash
+
+        sf = ScreenFlash()
+        assert sf.is_active is False
+        assert sf.alpha == 0.0
+
+    def test_trigger_activates_flash(self) -> None:
+        from roguelike_sprawl.combat.effects import ScreenFlash
+
+        sf = ScreenFlash()
+        sf.trigger(color=(255, 80, 80), duration_ms=200)
+        assert sf.is_active is True
+        assert sf.alpha == 1.0
+        assert sf.color == (255, 80, 80)
+
+    def test_attack_phase_holds_full_alpha(self) -> None:
+        from roguelike_sprawl.combat.effects import ScreenFlash
+
+        sf = ScreenFlash(duration_ms=200)
+        sf.elapsed_ms = 20  # 10% progress, within attack phase
+        assert sf.alpha == 1.0
+
+    def test_fade_phase_eases_out(self) -> None:
+        from roguelike_sprawl.combat.effects import ScreenFlash
+
+        sf = ScreenFlash(duration_ms=100)
+        sf.elapsed_ms = 80  # 80% progress, deep in fade
+        # Expected fade = (0.80 - 0.15) / 0.85 ≈ 0.765
+        # alpha = 1 - 0.765² ≈ 0.415
+        assert 0.4 < sf.alpha < 0.5
+
+    def test_expires_after_duration(self) -> None:
+        from roguelike_sprawl.combat.effects import ScreenFlash
+
+        sf = ScreenFlash(duration_ms=100)
+        sf.step(100)
+        assert sf.is_active is False
+        assert sf.alpha == 0.0
+
+    def test_spawn_aoe_screen_flash_triggers_both(self) -> None:
+        from roguelike_sprawl.combat.effects import (
+            CombatEffects,
+            spawn_aoe_screen_flash,
+        )
+
+        effects = CombatEffects()
+        spawn_aoe_screen_flash(effects, color=(255, 100, 100))
+        assert effects.screen_flash.is_active is True
+        assert effects.screen_flash.color == (255, 100, 100)
+        assert effects.shake.intensity > 0

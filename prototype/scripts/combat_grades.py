@@ -448,7 +448,7 @@ def main() -> int:
     print("- Higher grades unlock more powerful skills (Wisp T1 → Kraken T5).")
     print("- Higher grades need fewer skill uses because auto-attack is sufficient.")
     print("- HEAL via Data Salvage (ADR-0014) restores more HP at higher grades (20% of max_hp).")
-    print("- PPL climbs 6 → 63 (10x), so even matched enemies (1.0x) become trivial at high grade.")
+    print("- PPL climbs 8 → 65 (~8x), so even matched enemies (1.0x) become trivial at high grade.")
     print()
 
     if args.save:

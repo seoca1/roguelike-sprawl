@@ -849,3 +849,108 @@ class TestBossB3IntegrationFlow:
 
 # Phase N fix: PhaseProfile.phase is 0-indexed (phase 2 = third phase).
 # The test_goliath_phase_3_25_aoe_highest test had wrong assertion (== 3).
+
+
+class TestScaleMinionSpawn:
+    """Tests for M3: dynamic minion spawn intensity scaling (ADR-0125)."""
+
+    def test_empty_phase_returns_empty(self) -> None:
+        from roguelike_sprawl.combat.boss import PhaseProfile, scale_minion_spawn
+        from roguelike_sprawl.combat.state_models import Combatant, CombatState
+
+        phase = PhaseProfile(
+            phase=1,
+            hp_threshold=1.0,
+            damage_multiplier=1.0,
+            color=(0, 0, 0),
+            glyph="X",
+            intro_text="",
+            spawn_minions=(),
+        )
+        boss = Combatant(id="b", name="B", portrait="p", color=(0, 0, 0), hp=100, max_hp=100)
+        state = CombatState(player=boss)
+        result = scale_minion_spawn(phase, boss, state)
+        assert result == ()
+
+    def test_returns_subset_of_base_list(self) -> None:
+        from roguelike_sprawl.combat.boss import PhaseProfile, scale_minion_spawn
+        from roguelike_sprawl.combat.state_models import Combatant, CombatState
+
+        phase = PhaseProfile(
+            phase=2,
+            hp_threshold=0.5,
+            damage_multiplier=1.2,
+            color=(0, 0, 0),
+            glyph="X",
+            intro_text="",
+            spawn_minions=("m1", "m2", "m3", "m4"),
+        )
+        boss = Combatant(
+            id="b",
+            name="B",
+            portrait="p",
+            color=(0, 0, 0),
+            hp=100,
+            max_hp=100,
+            equip_attack_bonus=2,
+        )
+        state = CombatState(player=boss)
+        result = scale_minion_spawn(phase, boss, state)
+        assert 1 <= len(result) <= 4
+        assert all(m in phase.spawn_minions for m in result)
+
+
+class TestBossAiChoosePhaseEffect:
+    """Tests for M4: boss AI decision logic (ADR-0125)."""
+
+    def test_no_effects_returns_none(self) -> None:
+        from roguelike_sprawl.combat.boss import PhaseProfile, boss_ai_choose_phase_effect
+        from roguelike_sprawl.combat.state_models import Combatant, CombatState
+
+        phase = PhaseProfile(
+            phase=1,
+            hp_threshold=1.0,
+            damage_multiplier=1.0,
+            color=(0, 0, 0),
+            glyph="X",
+            intro_text="",
+        )
+        boss = Combatant(id="b", name="B", portrait="p", color=(0, 0, 0), hp=100, max_hp=100)
+        state = CombatState(player=boss)
+        assert boss_ai_choose_phase_effect(phase, state) == "none"
+
+    def test_low_hp_player_picks_aoe(self) -> None:
+        from roguelike_sprawl.combat.boss import PhaseProfile, boss_ai_choose_phase_effect
+        from roguelike_sprawl.combat.state_models import Combatant, CombatState
+
+        phase = PhaseProfile(
+            phase=2,
+            hp_threshold=0.5,
+            damage_multiplier=1.0,
+            color=(0, 0, 0),
+            glyph="X",
+            intro_text="",
+            spawn_minions=("m1",),
+            aoe_damage=20,
+        )
+        player = Combatant(id="p", name="P", portrait="x", color=(0, 0, 255), hp=20, max_hp=100)
+        state = CombatState(player=player)
+        assert boss_ai_choose_phase_effect(phase, state) == "aoe"
+
+    def test_high_hp_player_picks_spawn(self) -> None:
+        from roguelike_sprawl.combat.boss import PhaseProfile, boss_ai_choose_phase_effect
+        from roguelike_sprawl.combat.state_models import Combatant, CombatState
+
+        phase = PhaseProfile(
+            phase=2,
+            hp_threshold=0.5,
+            damage_multiplier=1.0,
+            color=(0, 0, 0),
+            glyph="X",
+            intro_text="",
+            spawn_minions=("m1", "m2"),
+            aoe_damage=20,
+        )
+        player = Combatant(id="p", name="P", portrait="x", color=(0, 0, 255), hp=100, max_hp=100)
+        state = CombatState(player=player)
+        assert boss_ai_choose_phase_effect(phase, state) == "spawn"
