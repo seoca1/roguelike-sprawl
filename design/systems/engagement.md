@@ -567,3 +567,72 @@ between themes. Wraps the existing `ThemePlayer` from `audio/theme.py`.
 - `prototype/src/roguelike_sprawl/audio/theme.py` — `ThemePlayer`, `play_theme`, `stop_theme`
 - `prototype/src/roguelike_sprawl/audio/config.py` — `SoundConfig`
 - `tests/unit/test_bgm_manager.py` — test coverage
+
+---
+
+## Accessibility Settings (Cycle 3 polish)
+
+### 골재
+
+기존 `settings_view.py` (audio + colorblind + keymap + resolution) 에 font_size
+와 high_contrast 두 가지 접근성 옵션 추가. Pillar 4 (The Build) 의 unlock-only
+metaprogression 과 일치 — ephemeral session preference, no meta-progression.
+
+### 게임 디자인
+
+- **font_size**: `"small"` / `"normal"` / `"large"` (3 modes, cycles on ENTER)
+  - 작게 (compact UI) / 보통 (default) / 크게 (접근성 — 노인/시력 약함)
+  - 향후 렌더링 훅 연동 (per-mode char_scale)
+- **high_contrast**: `bool` (toggles on ENTER)
+  - True 시 고대비 팔레트 적용 (colorblind mode 와 직교)
+  - 향후 렌더링 훅 연동 (per-mode palette override)
+
+### SETTINGS_OPTIONS 확장 (5 → 7)
+
+기존 5개 (audio / colorblind / keymap / resolution / back) 에 2개 추가:
+
+| opt_id | Label | Type | Action |
+|---|---|---|---|
+| `font_size` | Font Size | str | cycles small→normal→large |
+| `high_contrast` | High Contrast | bool | toggles |
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: font_size / high_contrast 모두 run 시작 시 default (normal / False)
+- **Pillar 3 (The Flatline)**: death 시 새 run → default 복귀
+- **Pillar 4 (The Build)**: ephemeral session preference, meta_state 미사용
+  - test_font_size_does_not_write_meta_state 검증
+  - test_high_contrast_does_not_write_meta_state 검증
+
+### 구현 노트
+
+**파일**:
+- `engine/state.py` (NEW fields) — `font_size: str = "normal"`, `high_contrast: bool = False`
+- `engine/settings_view.py` (MODIFIED) — SETTINGS_OPTIONS 확장, render handler 추가,
+  cycle logic (font_size: small→normal→large)
+- `tests/unit/test_accessibility_settings.py` (NEW) — 10 tests, 3 classes
+- `tests/unit/test_settings.py` (MODIFIED) — test_five_options → test_seven_options
+  (back option moved from index 4 → 6)
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (150 source files)
+- pytest: ✅ 3414 passed (10 new), 664 skipped, 0 failed
+
+**Test coverage** (TestPillar4Compliance class):
+- font_size_does_not_write_meta_state ✅
+- high_contrast_does_not_write_meta_state ✅
+- new_fields_dont_persist_across_resets ✅
+
+### 향후 작업 (Cycle 3 잔존)
+
+- **Options menu keyboard remapping** (per-game keymap customization)
+- **Accessibility layer** (rendering hooks for font_size + high_contrast)
+- **colorblind mode subtypes** (protanopia / deuteranopia / tritanopia)
+
+### Cross-Reference (Accessibility)
+
+- `decisions/0140-engagement-layer.md` — Cycle 1 (complete)
+- `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.font_size`, `AppState.high_contrast`
+- `prototype/src/roguelike_sprawl/engine/settings_view.py` — `SETTINGS_OPTIONS` (7 items)
+- `tests/unit/test_accessibility_settings.py` — test coverage

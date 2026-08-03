@@ -30,6 +30,8 @@ from .state import AppState, ScreenKind
 SETTINGS_OPTIONS = [
     ("audio", "Audio Volume"),
     ("colorblind", "Colorblind Mode"),
+    ("font_size", "Font Size"),
+    ("high_contrast", "High Contrast"),
     ("keymap", "Keymap"),
     ("resolution", "Resolution"),
     ("back", "Back to Menu"),
@@ -91,6 +93,12 @@ def render_settings(
         elif opt_id == "colorblind":
             cb = getattr(state, "colorblind_mode", False)
             value_str = t("settings.on") if cb else t("settings.off")
+        elif opt_id == "font_size":
+            fs = getattr(state, "font_size", "normal")
+            value_str = fs.capitalize()
+        elif opt_id == "high_contrast":
+            hc = getattr(state, "high_contrast", False)
+            value_str = t("settings.on") if hc else t("settings.off")
         elif opt_id == "keymap":
             value_str = t("settings.keymap_value")
         elif opt_id == "resolution":
@@ -145,6 +153,16 @@ def handle_settings_input(
         elif opt_id == "colorblind":
             current = getattr(state, "colorblind_mode", False)
             state.colorblind_mode = not current
+            return state
+        elif opt_id == "font_size":
+            cycle = ("small", "normal", "large")
+            current = getattr(state, "font_size", "normal")
+            idx = cycle.index(current) if current in cycle else 1
+            state.font_size = cycle[(idx + 1) % 3]
+            return state
+        elif opt_id == "high_contrast":
+            current = getattr(state, "high_contrast", False)
+            state.high_contrast = not current
             return state
         elif opt_id == "back":
             state.screen = ScreenKind.MENU

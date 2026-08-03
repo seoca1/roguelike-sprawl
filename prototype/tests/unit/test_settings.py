@@ -16,8 +16,8 @@ from roguelike_sprawl.engine.state import AppState, ScreenKind
 
 
 class TestSettingsOptions:
-    def test_five_options_defined(self) -> None:
-        assert len(SETTINGS_OPTIONS) == 5
+    def test_seven_options_defined(self) -> None:
+        assert len(SETTINGS_OPTIONS) == 7
 
     def test_options_have_ids_and_labels(self) -> None:
         for opt_id, label in SETTINGS_OPTIONS:
@@ -170,7 +170,7 @@ class TestHandleSettingsInput:
         assert result.colorblind_mode is True
 
     def test_enter_on_back_returns_to_menu(self, settings_state: AppState) -> None:
-        settings_state.settings_selected = 4  # back
+        settings_state.settings_selected = 6  # back
         result = handle_settings_input(self._key(KeySym.RETURN), settings_state)
         assert result is not None
         assert result.screen == ScreenKind.MENU

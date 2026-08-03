@@ -292,6 +292,9 @@ class AppState:
     # Settings screen state (Phase 7)
     settings_selected: int = 0  # selected option index in SETTINGS screen
     colorblind_mode: bool = False  # colorblind-friendly palette toggle
+    # Accessibility settings (Cycle 3 polish)
+    font_size: str = "normal"  # "small" / "normal" / "large"
+    high_contrast: bool = False  # high-contrast palette toggle
     # Help screen state (Phase 7)
     help_page: int = 0  # current help page index (0-based)
     # Salvation Phase state (ADR-0090 Phase 9)
