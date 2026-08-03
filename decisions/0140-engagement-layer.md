@@ -207,17 +207,29 @@ v1.0.0 release 후 사용자 consultation (2026-07-28) 에서 게임 중독성/�
 - Three modes: SLOW (0.7x), NORMAL (1.0x), FAST (1.5x) applied to elapsed_ms delta
 - Per-session preference (default NORMAL on new run)
 - Pillar 4 safe: ephemeral preference, no meta-progression
+
+### Phase 3 — Grade 6 Master Whisper ✅ (2026-08-03)
+- `lore/construct_whisper.py` — `MASTER_GRADE_THRESHOLD = 6`, `MASTER_HINTS_BY_FACTION`
+  dict (4 factions, more authoritative voice), `get_master_hint_for_faction`,
+  `is_player_master` helpers
+- `lore/construct_whisper_hook.py` — `check_construct_whisper_on_combat_start`
+  uses master voice when `is_player_master(state)` is True
+- `tests/unit/test_grade_6_master_whisper.py` (NEW) — 15 tests across 4 classes
+- Trigger: `player_grade >= 6` AND `rep >= TRUSTED` (replaces normal tier voice)
+- Voice difference: "construct whispers" → "master construct decrees"
+- One-shot per run (uses existing `ConstructWhisper` tracker)
+- Pillar 4 safe: ephemeral, no meta-progression (Grade 6 equipment is unlock)
 - Pillar 3 reinforcement: death-avoidance payoff
 
 ### 잔존 (v1.2.0+)
 - Phase P3: Death Replay (제안 5) *(Near-Miss Extraction ✅ done)*
 - Tier scaling for anomaly + near-miss + tension rewards (deferred v1.1.0+)
-- *(Variable Reward Nodes ✅, Faction Tension ✅, Auto-Play Tempo ✅ done)*
+- *(Variable Reward Nodes ✅, Faction Tension ✅, Auto-Play Tempo ✅, Grade 6 Master Whisper ✅ done)*
 
 ### 메트릭
 - 신규 파일: 10 (lore 모듈 6 + anomaly_reward.py 1 + near_miss.py 1 + faction_tension.py 1 + auto_play_tempo.py 1)
-- 신규 테스트: 136 (Phase 1 27 + Phase 2 22 + Phase P2 22 + Phase P3 24 + Phase P2.7 22 + Phase P2.8 19)
-- 회귀 위험: 낮음 (combat_view.py 변경 없음, cyberspace_view.py + main_loop.py 만 hook 추가)
+- 신규 테스트: 151 (Phase 1 27 + Phase 2 22 + Phase P2 22 + Phase P3 24 + Phase P2.7 22 + Phase P2.8 19 + Phase 3 15)
+- 회귀 위험: 낮음 (combat_view.py 변경 없음, cyberspace_view.py + main_loop.py + construct_whisper_hook.py 만 hook 추가)
 - Pillar 정합: Pillar 3 (death-avoidance) + Pillar 4 (unlock-only) + Pillar 5 (Style)
 
 ---

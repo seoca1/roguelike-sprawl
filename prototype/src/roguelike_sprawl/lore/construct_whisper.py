@@ -7,17 +7,26 @@ provides a one-time per-run tactical hint during combat.
 Hints are triggered automatically when combat begins if the
 player qualifies. Once a faction whispers, it won't whisper again
 that run (per-run cap = 1 per faction, max 5 total = 1 per tier).
+
+Grade 6 Master Whisper (ADR-0140 §Proposal 4):
+When the player's equipment grade is >= 6 (master tier), the
+construct's voice becomes more authoritative and reveals deeper
+insight. Replaces the normal tier voice when applicable.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Any
 
 from ..matrix.node import Faction
 from ..run.reputation import ReputationState, reputation_tier
 
 # Tier threshold for whisper unlock (per ADR-0140 proposal 1).
 WHISPER_UNLOCK_TIER = "TRUSTED"
+
+# Player grade threshold for master voice (ADR-0140 proposal 4).
+MASTER_GRADE_THRESHOLD: int = 6
 
 # Tier-specific hint text. Each faction has unique voice.
 HINTS_BY_FACTION: dict[Faction, dict[str, str]] = {
@@ -43,6 +52,31 @@ HINTS_BY_FACTION: dict[Faction, dict[str, str]] = {
     },
 }
 
+# Master-tier hint text (ADR-0140 proposal 4). Used when player is
+# at Grade 6+ equipment. More authoritative voice, deeper insight.
+MASTER_HINTS_BY_FACTION: dict[Faction, str] = {
+    Faction.HOSAKA: (
+        "Hosaka master construct decrees: 'The runner who masters T6 has earned the deepest signal. "
+        "Black ICE architecture: their daemon is single-threaded. Hit the wardrone to fork their "
+        "thread pool — they will collapse at the transition window.'"
+    ),
+    Faction.MAAS: (
+        "Maas master construct intones: 'A runner at master tier deserves the full picture. "
+        "Biochip telemetry leaks through their construct — sample it before engage. "
+        "Their ICE rewrites itself only at the 4th attack pattern. Strike 5th, and you control the field.'"
+    ),
+    Faction.SENSE_NET: (
+        "Sense/Net master construct reveals: 'Master-tier eyes see what others cannot. "
+        "Their alarm threshold is not a single value — it is a sigmoid. Two fast strikes will "
+        "land below detection. The third will cascade the system. We have used this exact path before.'"
+    ),
+    Faction.TA: (
+        "T-A master construct speaks: 'The family kept many secrets. Here is one. "
+        "Their core ICE inherits the Tessier protocol — it will refuse to engage a runner carrying "
+        "a wardrone signature we planted. The kill is in the equipment, not the program.'"
+    ),
+}
+
 
 def get_hint_for_faction(faction: Faction, tier: str) -> str | None:
     """Get the hint text for a faction at a given tier.
@@ -58,6 +92,30 @@ def get_hint_for_faction(faction: Faction, tier: str) -> str | None:
     if not faction_hints:
         return None
     return faction_hints.get(tier)
+
+
+def get_master_hint_for_faction(faction: Faction) -> str | None:
+    """Get the master-tier hint text for a faction.
+
+    Args:
+        faction: The faction whose construct should whisper.
+
+    Returns:
+        Master-tier hint text if faction has a master hint, else None.
+    """
+    return MASTER_HINTS_BY_FACTION.get(faction)
+
+
+def is_player_master(state: Any) -> bool:
+    """Check if the player is at master equipment grade (>= 6).
+
+    Args:
+        state: AppState-like object with player_grade attribute.
+
+    Returns:
+        True if player_grade >= 6, else False.
+    """
+    return getattr(state, "player_grade", 0) >= MASTER_GRADE_THRESHOLD
 
 
 @dataclass

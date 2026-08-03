@@ -393,3 +393,93 @@ Player가 graphic novel auto-play 중에 pacing 을 조정할 수 있다. 세 �
 - `prototype/src/roguelike_sprawl/engine/main_loop.py` — integration point
 - `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.tempo_mode`
 - `tests/unit/test_auto_play_tempo.py` — test coverage
+
+---
+
+## Grade 6 Master Whisper (ADR-0140 §Proposal 4)
+
+### 골재
+
+Grade 6+ master tier equipment 의 player 는 faction construct 의 *more
+authoritative voice* 를 받는다. Normal rep-tier hint 를 대체하는 master-tier
+hint — 더 깊은 통찰, 깁슨 톤의 "좋은 contractor 가 master 가 되는" 정합.
+
+### 게임 디자인
+
+- **Trigger condition**: `player_grade >= 6` AND `rep >= TRUSTED`
+- **Voice difference**: "construct whispers" → "master construct decrees"
+- **Content**: 각 faction 별 master-tier hint (4 factions × 1 hint)
+- **One-shot**: 기존 `ConstructWhisper` tracker 사용 (master voice 도 1회/run)
+- **Pillar 4 safe**: ephemeral, no meta-progression, death = reset
+
+### Master Hint Tone
+
+| Faction | Normal Voice | Master Voice (Grade 6+) |
+|---|---|---|
+| Hosaka | tactical advice | "decrees: the daemon is single-threaded..." |
+| Maas | biochip warning | "intones: biochip telemetry leaks through..." |
+| Sense/Net | alarm threshold | "reveals: alarm threshold is a sigmoid..." |
+| T-A | protocol hint | "speaks: the family kept many secrets..." |
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: master voice = same per-run semantics.
+- **Pillar 3 (The Flatline)**: death = reset (master voice is ephemeral).
+- **Pillar 4 (The Build)**: unlock-only — Grade 6 equipment is unlock, not strength boost.
+- **Pillar 5 (The Style)**: 깁슨 톤 — "good contractor earns the deepest signal" 정합.
+
+### 흐름
+
+```
+[Combat start → check_construct_whisper_on_combat_start(state)]
+    |
+    v
+[find_eligible_factions(reputation)]  # rep >= TRUSTED
+    |
+    v
+[is_player_master(state)?]  # player_grade >= 6
+    |
+    +-- YES: get_master_hint_for_faction(faction)  # master voice
+    +-- NO:  get_hint_for_faction(faction, tier)    # normal voice
+    |
+    v
+[record_whisper(faction)]  # one-shot per run
+    |
+    v
+[Append to status_messages with faction label]
+```
+
+### 구현 노트
+
+**파일**:
+- `lore/construct_whisper.py` — `MASTER_GRADE_THRESHOLD = 6`,
+  `MASTER_HINTS_BY_FACTION` dict (4 factions), `get_master_hint_for_faction`,
+  `is_player_master` helpers
+- `lore/construct_whisper_hook.py` — `check_construct_whisper_on_combat_start`
+  uses master voice when `is_player_master(state)` is True
+- `tests/unit/test_grade_6_master_whisper.py` (NEW) — 15 tests across 4 classes
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (146 source files)
+- pytest: ✅ 3380 passed (15 new), 664 skipped, 0 failed
+
+**Test coverage**:
+- `TestMasterHintsTable` (2): all factions have master hints, threshold = 6
+- `TestGetMasterHintForFaction` (3): known faction, NONE → None, unique voice
+- `TestIsPlayerMaster` (5): grade 6+, 7, 5, 1, missing field
+- `TestCombatStartHookIntegration` (5): Grade 6 master voice, Grade 5 normal, one-shot, below TRUSTED, all factions
+
+### 향후 작업 (v1.1.0 ADR-0140 P2/P3 Deferred)
+
+- **Death Replay** (제안 5): Hall of Dead echo
+- **Tier scaling** for anomaly + near-miss + tension rewards (grade 5+ = bigger effects)
+- **Cycle 2 (Module Health)**: 4 modules > 1000 LOC → 4-way split per ADR-0112/0113/0141
+
+### Cross-Reference (Grade 6 Master Whisper)
+
+- `decisions/0140-engagement-layer.md` — proposal status
+- `prototype/src/roguelike_sprawl/lore/construct_whisper.py` — `MASTER_HINTS_BY_FACTION`
+- `prototype/src/roguelike_sprawl/lore/construct_whisper_hook.py` — `is_player_master` check
+- `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.player_grade`
+- `tests/unit/test_grade_6_master_whisper.py` — test coverage
