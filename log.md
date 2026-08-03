@@ -875,3 +875,43 @@ Per-screen BGM mapping + volume/mute control + simulated crossfade.
 - **Cycle 4**: Construct companion, New Game+, Hardcore mode
 - **User action**: push (23+ commits), PyPI, Notion
 - **workspace log.md 갱신**: Cycle 3 entry 추가 필요
+
+---
+
+## [2026-08-03] a11y | Cycle 3 Accessibility Settings — font_size + high_contrast
+
+**Context**: Cycle 3 polish 의 두 번째 deliverable. 기존 settings menu (audio +
+colorblind + keymap + resolution) 에 font_size 와 high_contrast 두 가지
+접근성 옵션 추가. Pillar 4 (The Build) 의 unlock-only metaprogression 과
+일치 — ephemeral session preference, no meta-progression.
+
+### Commit
+- `9bbba06` feat(engine): Accessibility settings — font_size + high_contrast
+  - 5 files, 173 insertions, 3 deletions
+
+### 발견
+- **기존 settings 인프라 재사용**: SETTINGS_OPTIONS 5개 → 7개 확장 (font_size, high_contrast)
+  - 순서: audio, colorblind, font_size, high_contrast, keymap, resolution, back
+  - back 옵션 index 4 → 6 변경
+- **font_size 사이클**: small → normal → large (ENTER 시마다)
+- **high_contrast 토글**: bool (True/False)
+- **Pillar 4 검증**: test_font_size_does_not_write_meta_state,
+  test_high_contrast_does_not_write_meta_state,
+  test_new_fields_dont_persist_across_resets 모두 통과
+
+### 검증
+- ruff check: ✅ All checks passed
+- mypy strict: ✅ 0 errors (150 source files)
+- pytest: ✅ 3414 passed (10 new), 664 skipped, 0 failed (3404 → +10)
+
+### 의의
+- **Cycle 3 2/3 진행**: BGM Manager + accessibility 완료, options menu (keymap remapping) 만 잔존
+- **기존 settings 인프라 활용**: 새 module 추가 없이 settings_view.py 확장
+- **Test 10 신규**: 3 test class (AppStateAccessibility, SettingsViewOptions, Pillar4Compliance)
+- **Test 6 갱신**: test_five_options → test_seven_options, back index 4→6
+
+### 다음 세션
+- **Cycle 3 잔존 (1건)**: options menu — keyboard remapping (per-game keymap customization)
+- **Cycle 4**: Construct companion, New Game+, Hardcore mode
+- **User action**: push (25+ commits), PyPI, Notion
+- **workspace log.md 갱신**: Cycle 3 accessibility entry 추가 필요
