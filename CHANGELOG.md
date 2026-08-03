@@ -235,3 +235,108 @@ uv run python -m pytest tests/unit/  # 3123 passed
 uv run ruff check src/ scripts/ tests/  # All checks passed
 uv run python scripts/verify_story_links.py  # 0 orphans
 ```
+
+## [1.1.0a1] — 2026-07-28
+
+### Engagement Layer (ADR-0140 Partial — Top 3)
+
+#### Memory Fragments (Phase 1)
+- **신규**: `wiki/lore/` (4 fragments + README)
+- **신규**: `data/lore/encounter_table.json` (zone/grade/faction matrix)
+- **신규**: `src/roguelike_sprawl/lore/memory_fragment.py` + `fragment_tracker.py` + `fragment_hook.py`
+- **Wired**: cyberspace_view.py:519 hook 호출
+- **Per-run cap**: 6 fragments (ADR-0140 default)
+- **Tests**: 27 (12 memory_fragment + 9 fragment_tracker + 6 fragment_hook)
+
+#### Construct Whisper (Phase 2)
+- **신규**: `src/roguelike_sprawl/lore/construct_whisper.py` (faction-tier-gated hints)
+- **신규**: `src/roguelike_sprawl/lore/construct_whisper_hook.py` (combat integration)
+- **HINTS_BY_FACTION**: 4 factions × 3 tiers = 12 hints
+- **Per-run cap**: 5 whispers (1 per faction)
+- **Tests**: 22 (14 core + 8 hook)
+
+### Module Splits (ADR-0141 Partial — Top 2)
+
+#### matrix_view.py split (Phase 3)
+- **신규**: `src/roguelike_sprawl/engine/matrix_minimap.py` (115 LOC)
+- **Extracted**: `_draw_minimap`, `_draw_breadcrumb`, `_draw_mobility_stats`, `_KIND_LABEL`, `_short_kind`
+- matrix_view.py: 1121 → **1047 LOC**
+
+#### combat/state.py split (Phase 4)
+- **신규**: `src/roguelike_sprawl/combat/state_models.py` (250 LOC)
+- **Extracted**: `SkillEffect`, `Skill`, `StatusEffect`, `CombatStats`, `Combatant`, `CombatState`
+- combat/state.py: 1075 → **859 LOC**
+- **Bug fix**: `equip_defense` kwarg → `equip_defense_bonus` (combat_view.py:1038)
+
+### Quality Gates
+
+| 게이트 | v1.0.0 | v1.1.0a1 | Delta |
+|---|---|---|---|
+| Tests | 3165 | **3227** | +62 |
+| Source files | 134 | **142** | +8 |
+| mypy strict | 0 errors | **0 errors** | — |
+| ruff check | clean | **clean** | — |
+| Wheel | 400KB | **~410KB** | +10KB |
+
+### User Action Required
+
+- [ ] `git push origin main`
+- [ ] `twine upload dist/roguelike_sprawl-1.1.0a1*`
+- [ ] Notion 발행
+
+---
+
+## [1.0.0] — 2026-07-27 (FINAL)
+
+### Phase 1: Balance Audit (ADR-0130 Accepted Option 1)
+
+- **PPL 곡선 표 동기화** — 3 docs (balance/progression/combat_grades) 모두 코드 (`matrix/ppl.py`) 기준 동기화
+  - Grade 5 PPL: 75 → **65** (F1-1 rebalance 반영)
+  - Grade 6 PPL: 120+ → **78** (공식 결과 명시)
+- **보상 필드 권위 명시** — `rewards.credits` (nested) 가 권위, `reward_credits` (top-level) 는 fallback. `missions/board.py:246` 우선 시도 확인.
+- 잔존 이슈: Grade 6 강화 (ADR-0131+), 보상 곡선 재설계 (ADR-0132+)
+
+### Phase 2: Integration Tests (23 신규)
+
+- `tests/unit/test_regression_phase_b35.py` (23 tests, 4 classes):
+  - `TestVFXIceTypePropagation`: VFX ice_type 파라미터 회귀 가드 (commit 81d8d65)
+  - `TestZoneDepthBaseZDRCoverage`: SOHO/TOKYO KeyError 회귀 가드 (commit daf4fb7)
+  - `TestMissionStorySourceCompleteness`: story.source 누락 회귀 가드 (commit c0351ef)
+  - `TestViewLayerImportSmoke`: 7 view 모듈 import smoke (장기 0-tests 추적용)
+- 효과: 2026-07-27 의 3개 integration bug 재발 방지 + view-layer 회귀 추적 가능
+
+### Phase 3: Meta State File (ADR-0131 Accepted Option 1)
+
+- **신규 모듈**: `src/roguelike_sprawl/run/meta_state.py` — `MetaState` dataclass (cross-run persistence)
+- **신규 모듈**: `src/roguelike_sprawl/engine/meta_state_manager.py` — atomic load/save + migration
+- **신규 테스트**: `tests/unit/test_meta_state.py` (27 tests, 5 classes)
+- Schema: `{version: 1, reputation: {...}, future_buckets: {...}}` — forward-compat 확장 가능
+- 사망 페널티 없음 (깁슨 톤 "trust persists"), Hardcore mode 격리 비활성 (v1.1.0+ 검토)
+- 잔존: AppState 부트스트랩 hook 미구현 (opt-in promote)
+
+### Phase 4: Module Split (ADR-0133 Accepted)
+
+- `graphic_novel_view.py` 1594 → **1272 LOC** (split)
+- **신규 모듈**: `src/roguelike_sprawl/engine/graphic_novel_data.py` (123 LOC) — Portrait, Background, DialogueLine, SceneData
+- **신규 모듈**: `src/roguelike_sprawl/engine/graphic_novel_loaders.py` (262 LOC) — JSON parsing + scene/art loaders
+- Backward compat: 기존 import (`from .graphic_novel_view import SceneData, load_prologue_chain` 등) 변경 없이 동작. `__all__` 명시 + `# noqa: F401`
+- 보류: `combat/effects.py` (1246 LOC, ADR-0112), `combat_view.py` (1053 LOC, ADR-0113) — v1.1.0+ 후속
+
+### Phase 5: Release Engineering
+
+- **Version**: `1.0.0-alpha.1` → **`1.0.0`**
+- Wheel: 400KB (`dist/roguelike_sprawl-1.0.0-py3-none-any.whl`)
+- Tarball: 3.7MB (`dist/roguelike_sprawl-1.0.0.tar.gz`)
+- Tests: **3178 passed** (+27 from Phase 3, +23 from Phase 2, +50 total), 592 skipped
+- ruff check ✓ / ruff format ✓ / mypy strict ✓ (134 source files)
+- Python 3.11, 3.12; macOS + Windows
+
+### 검증 종합
+
+```
+pytest       : 3178 passed, 592 skipped, 0 failed
+ruff check   : All checks passed
+ruff format  : 285 files OK (24 pre-existing test files need reformat — not blockers)
+mypy strict  : Success: no issues found in 134 source files
+wheel build  : 1.0.0 (400KB wheel, 3.7MB tarball)
+```

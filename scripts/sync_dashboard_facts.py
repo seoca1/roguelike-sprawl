@@ -49,6 +49,7 @@ PROGRAMS_JSON = PROTOTYPE / "data" / "programs" / "programs.json"
 CYBERSPACE_JSON = PROTOTYPE / "data" / "cyberspace" / "worlds.json"
 STATE_PY = SRC / "run" / "state.py"
 COMBAT_STATE_PY = SRC / "combat" / "state.py"
+COMBAT_STATE_MODELS_PY = SRC / "combat" / "state_models.py"
 
 
 def _count_missions() -> int:
@@ -121,9 +122,9 @@ def _cyberspace_stats() -> tuple[int, int, int]:
 
 
 def _count_skill_effects() -> int:
-    if not COMBAT_STATE_PY.exists():
+    if not COMBAT_STATE_MODELS_PY.exists():
         return 0
-    text = COMBAT_STATE_PY.read_text(encoding="utf-8")
+    text = COMBAT_STATE_MODELS_PY.read_text(encoding="utf-8")
     m = re.search(r"class SkillEffect[\s\S]+?(\nclass |\Z)", text)
     if not m:
         return 0

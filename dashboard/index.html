@@ -234,8 +234,58 @@
       <div class="value" id="stat-updated" style="font-size: 16px;">—</div>
       <div class="sub" id="stat-updated-sub"></div>
     </div>
+    <div class="status-item" style="border-color: #66ffcc;">
+      <div class="label">Release</div>
+      <div class="value" style="color: #66ffcc;">v1.1.0a1</div>
+      <div class="sub">2026-07-28 · Engagement + Splits</div>
+    </div>
   </div>
 </div>
+
+<section id="release-highlights" style="margin:24px 0;padding:16px;background:#0d1420;border:1px solid #1a4d2e;border-radius:6px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h2 style="margin:0;font-size:18px;color:#66ffcc">✨ v1.1.0a1 Highlights (2026-07-28)</h2>
+    <span style="font-size:11px;color:#6a7888">Engagement Layer Phase 1-2 · Module Splits Phase 3-4</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;font-size:13px;color:#aabbcc;">
+    <div style="padding:10px;background:#0a0e14;border:1px solid #1a4d2e;border-radius:4px;">
+      <strong style="color:#66ffcc">💾 Memory Fragments (Phase 1)</strong><br>
+      Ambient lore fragments (4 + encounter table)<br>
+      27 tests · matrix_view integration
+    </div>
+    <div style="padding:10px;background:#0a0e14;border:1px solid #1a4d2e;border-radius:4px;">
+      <strong style="color:#66ffcc">🗣️ Construct Whisper (Phase 2)</strong><br>
+      Faction-tier-gated combat hints<br>
+      22 tests · 12 hint texts (4×3)
+    </div>
+    <div style="padding:10px;background:#0a0e14;border:1px solid #1a4d2e;border-radius:4px;">
+      <strong style="color:#66ffcc">📦 matrix_view split (Phase 3)</strong><br>
+      matrix_minimap.py (115 LOC extracted)<br>
+      1121 → 1047 LOC (-74)
+    </div>
+    <div style="padding:10px;background:#0a0e14;border:1px solid #1a4d2e;border-radius:4px;">
+      <strong style="color:#66ffcc">📦 combat/state split (Phase 4)</strong><br>
+      state_models.py (250 LOC extracted)<br>
+      1075 → 859 LOC (-216)
+    </div>
+    <div style="padding:10px;background:#0a0e14;border:1px solid #1a4d2e;border-radius:4px;">
+      <strong style="color:#66ffcc">🐛 Bug Fix</strong><br>
+      combat_view: equip_defense → equip_defense_bonus<br>
+      (latent kwarg mismatch resolved)
+    </div>
+    <div style="padding:10px;background:#0a0e14;border:1px solid #1a4d2e;border-radius:4px;">
+      <strong style="color:#66ffcc">🎯 Quality Gates</strong><br>
+      pytest 3227 pass · mypy 142 files 0 errors<br>
+      ruff check ✓ · 71 new tests this cycle
+    </div>
+  </div>
+  <p style="margin:12px 0 0;font-size:11px;color:#6a7888">
+    Next: v1.1.0 final — ADR-0140 P2/P3 proposals (Variable Reward Nodes, Faction Tension,<br>
+    Auto-Play Tempo, Near-Miss, Death Replay) + remaining module splits.<br>
+    <a href="../CHANGELOG.md" style="color:#66ffcc">📜 CHANGELOG</a> ·
+    <a href="../log.md" style="color:#66ffcc">📋 Activity Log</a>
+  </p>
+</section>
 
 <section id="continue-reading" style="margin:24px 0;padding:16px;background:#0d1420;border:1px solid #1a2530;border-radius:6px;">
   <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">

@@ -15,7 +15,7 @@
   "layers": 4,
   "tests_passing": 39,
   "code_lines_approx": 900,
-  "_generated_at": "2026-07-27T18:50:36",
+  "_generated_at": "2026-08-03T19:46:02",
   "stories_with_mission_link": 100,
   "catalog_entries": 106,
   "catalog_entries_list": [
@@ -30,7 +30,7 @@
       "stem": "angie_leopard_tracking",
       "type": "short_story",
       "title_en": "Angie Leopard Tracking",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "angie_leopard_tracking"
     },
     {
@@ -44,7 +44,7 @@
       "stem": "armitage_infiltration_2",
       "type": "short_story",
       "title_en": "Armitage Infiltration 2",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "armitage_infiltration_2"
     },
     {
@@ -191,7 +191,7 @@
       "stem": "finn_final_reckoning",
       "type": "short_story",
       "title_en": "Finn Final Reckoning",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "finn_final_reckoning"
     },
     {
@@ -233,7 +233,7 @@
       "stem": "freeside_payroll",
       "type": "short_story",
       "title_en": "Freeside Payroll",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "freeside_payroll"
     },
     {
@@ -254,7 +254,7 @@
       "stem": "hideo_contract",
       "type": "short_story",
       "title_en": "Hideo Contract",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "hideo_contract"
     },
     {
@@ -373,7 +373,7 @@
       "stem": "mollys_final_razor",
       "type": "short_story",
       "title_en": "Mollys Final Razor",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "mollys_final_razor"
     },
     {
@@ -401,7 +401,7 @@
       "stem": "neuromancer_first_ping",
       "type": "short_story",
       "title_en": "Neuromancer First Ping",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "neuromancer_first_ping"
     },
     {
@@ -443,14 +443,14 @@
       "stem": "razor_work",
       "type": "short_story",
       "title_en": "Razor Work",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "razor_work"
     },
     {
       "stem": "sally_construct_market",
       "type": "short_story",
       "title_en": "Sally Construct Market",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "sally_construct_market"
     },
     {
@@ -471,7 +471,7 @@
       "stem": "salvation_wigan_zavijava",
       "type": "short_story",
       "title_en": "Salvation Wigan Zavijava",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "salvation_wigan_zavijava"
     },
     {
@@ -499,7 +499,7 @@
       "stem": "soho_blackout",
       "type": "short_story",
       "title_en": "Soho Blackout",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "soho_blackout"
     },
     {
@@ -513,7 +513,7 @@
       "stem": "straylight_inquiry",
       "type": "short_story",
       "title_en": "Straylight Inquiry",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "straylight_inquiry"
     },
     {
@@ -604,14 +604,14 @@
       "stem": "threjane_family_log",
       "type": "short_story",
       "title_en": "Threjane Family Log",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "threjane_family_log"
     },
     {
       "stem": "tokyo_pachinko_run",
       "type": "short_story",
       "title_en": "Tokyo Pachinko Run",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "tokyo_pachinko_run"
     },
     {
@@ -646,7 +646,7 @@
       "stem": "voodoo_zoneload",
       "type": "short_story",
       "title_en": "Voodoo Zoneload",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "voodoo_zoneload"
     },
     {
@@ -667,7 +667,7 @@
       "stem": "wigan_construct_reach",
       "type": "short_story",
       "title_en": "Wigan Construct Reach",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "wigan_construct_reach"
     },
     {
@@ -688,7 +688,7 @@
       "stem": "wintermute_merger_run",
       "type": "short_story",
       "title_en": "Wintermute Merger Run",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "wintermute_merger_run"
     },
     {
@@ -702,7 +702,7 @@
       "stem": "wintermute_witness",
       "type": "short_story",
       "title_en": "Wintermute Witness",
-      "title_ko": "=== 이야기 본문 (stub) ===",
+      "title_ko": "=== 이야기 본문 ===",
       "game_mission_id": "wintermute_witness"
     },
     {

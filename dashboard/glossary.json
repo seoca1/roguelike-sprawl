@@ -1,8 +1,8 @@
 {
   "version": "1.0",
-  "generated": "2026-07-25T05:38:59.162972+00:00",
+  "generated": "2026-08-03T10:47:45.280518+00:00",
   "wiki_base": "../../../Fiction/wiki/",
-  "term_count": 314,
+  "term_count": 318,
   "terms": [
     "working class ridership and late capitalist substrate",
     "Mona Lisa / \"Molly Millions\" (Mona Lisa Overdrive)",
@@ -117,6 +117,7 @@
     "smoke and shadow",
     "sprawl to bridge",
     "villa straylight",
+    "Jackpot Trilogy",
     "Masahiko (마사히코)",
     "Rei Toi (Idoru)",
     "Yamazaki (야마자키)",
@@ -127,12 +128,14 @@
     "havana locative",
     "hubertus bigend",
     "idolu the idoru",
+    "johnny mnemonic",
     "panther moderns",
     "reflex boosters",
     "tessier ashpool",
     "Andrew Pollard",
     "Burning Chrome",
     "New Rose Hotel",
+    "The Peripheral",
     "Wendell Wright",
     "ai as pantheon",
     "angie mitchell",
@@ -264,6 +267,7 @@
     "skinner",
     "the rez",
     "wetware",
+    "Agency",
     "Jackie",
     "Lo (로)",
     "Turner",
@@ -1475,6 +1479,11 @@
       "tooltip": "Marly",
       "text": "Marly"
     },
+    "johnny mnemonic": {
+      "page": "characters/molly-millions.md",
+      "tooltip": "johnny mnemonic",
+      "text": "johnny mnemonic"
+    },
     "independence vs connection": {
       "page": "characters/molly-millions.md",
       "tooltip": "independence vs connection",
@@ -1775,6 +1784,11 @@
       "tooltip": "William Gibson Reading Order & World Overview",
       "text": "William Gibson Reading Order & World Overview"
     },
+    "the peripheral": {
+      "page": "works/the-peripheral.md",
+      "tooltip": "The Peripheral",
+      "text": "The Peripheral"
+    },
     "the bridge trilogy": {
       "page": "works/bridge-trilogy.md",
       "tooltip": "The Bridge Trilogy",
@@ -1840,6 +1854,11 @@
       "tooltip": "Hinterlands",
       "text": "Hinterlands"
     },
+    "agency": {
+      "page": "works/agency.md",
+      "tooltip": "Agency",
+      "text": "Agency"
+    },
     "agrippa": {
       "page": "works/agrippa.md",
       "tooltip": "Agrippa",
@@ -1854,6 +1873,11 @@
       "page": "works/the-winter-market.md",
       "tooltip": "The Winter Market",
       "text": "The Winter Market"
+    },
+    "jackpot trilogy": {
+      "page": "works/jackpot-trilogy.md",
+      "tooltip": "Jackpot Trilogy",
+      "text": "Jackpot Trilogy"
     },
     "dogfight": {
       "page": "works/dogfight.md",

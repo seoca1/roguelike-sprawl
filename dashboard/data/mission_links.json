@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "generated": "2026-07-25T05:38:59.162972+00:00",
+  "generated": "2026-08-03T10:47:45.280518+00:00",
   "by_source": {
     "aleph_fragment": [
       {
@@ -634,7 +634,7 @@
         "fixer": "masahiko"
       }
     ],
-    "idoru-wedding-protocol": [
+    "idoru_wedding_arc": [
       {
         "id": "idoru_wedding",
         "title": "Idoru Wedding Protocol",
@@ -645,6 +645,17 @@
         "grade_min": 2,
         "grade_max": 3,
         "fixer": "yamazaki"
+      },
+      {
+        "id": "idoru_wedding_arc",
+        "title": "Idoru Wedding Arc",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 3,
+        "pillar": "power",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "finn"
       }
     ],
     "bridge-construct": [
@@ -673,7 +684,7 @@
         "fixer": "yamazaki"
       }
     ],
-    "chevette-run": [
+    "chevette_nightshift_run": [
       {
         "id": "chevette_run",
         "title": "Chevette Run",
@@ -684,6 +695,17 @@
         "grade_min": 1,
         "grade_max": 2,
         "fixer": "masahiko"
+      },
+      {
+        "id": "chevette_nightshift_run",
+        "title": "Chevette Nightshift Run",
+        "character_ref": "novice",
+        "cast": "k",
+        "arc": 1,
+        "pillar": "people",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
       }
     ],
     "bigend-laney-lunch": [
@@ -855,19 +877,6 @@
         "fixer": "finn"
       }
     ],
-    "chevette_nightshift_run": [
-      {
-        "id": "chevette_nightshift_run",
-        "title": "Chevette Nightshift Run",
-        "character_ref": "novice",
-        "cast": "k",
-        "arc": 1,
-        "pillar": "people",
-        "grade_min": 1,
-        "grade_max": 2,
-        "fixer": "finn"
-      }
-    ],
     "cayce_footage_audit_run": [
       {
         "id": "cayce_footage_audit_run",
@@ -982,19 +991,6 @@
         "pillar": "power",
         "grade_min": 4,
         "grade_max": 5,
-        "fixer": "finn"
-      }
-    ],
-    "idoru_wedding_arc": [
-      {
-        "id": "idoru_wedding_arc",
-        "title": "Idoru Wedding Arc",
-        "character_ref": "heretic",
-        "cast": "kas",
-        "arc": 3,
-        "pillar": "power",
-        "grade_min": 3,
-        "grade_max": 4,
         "fixer": "finn"
       }
     ],
@@ -1179,6 +1175,253 @@
         "grade_max": 5,
         "fixer": "slick-henry"
       }
+    ],
+    "soho_blackout": [
+      {
+        "id": "soho_blackout",
+        "title": "Soho Blackout",
+        "character_ref": "novice",
+        "cast": "case",
+        "arc": 1,
+        "pillar": "code",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "tokyo_pachinko_run": [
+      {
+        "id": "tokyo_pachinko_run",
+        "title": "Tokyo Pachinko Run",
+        "character_ref": "veteran",
+        "cast": "sil",
+        "arc": 2,
+        "pillar": "code",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "dixie"
+      }
+    ],
+    "freeside_payroll": [
+      {
+        "id": "freeside_payroll",
+        "title": "Freeside Payroll",
+        "character_ref": "suit",
+        "cast": "suit",
+        "arc": 3,
+        "pillar": "code",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "finn"
+      }
+    ],
+    "straylight_inquiry": [
+      {
+        "id": "straylight_inquiry",
+        "title": "Straylight Inquiry",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 4,
+        "pillar": "code",
+        "grade_min": 5,
+        "grade_max": 5,
+        "fixer": "finn"
+      }
+    ],
+    "core_memory_dump": [
+      {
+        "id": "core_memory_dump",
+        "title": "Core Memory Dump",
+        "character_ref": "suit",
+        "cast": "suit",
+        "arc": 5,
+        "pillar": "code",
+        "grade_min": 5,
+        "grade_max": 6,
+        "fixer": "finn"
+      }
+    ],
+    "razor_work": [
+      {
+        "id": "razor_work",
+        "title": "Razor Work",
+        "character_ref": "novice",
+        "cast": "molly",
+        "arc": 1,
+        "pillar": "code",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "finn"
+      }
+    ],
+    "hideo_contract": [
+      {
+        "id": "hideo_contract",
+        "title": "Hideo's Contract",
+        "character_ref": "veteran",
+        "cast": "sil",
+        "arc": 2,
+        "pillar": "code",
+        "grade_min": 2,
+        "grade_max": 3,
+        "fixer": "hideo"
+      }
+    ],
+    "voodoo_zoneload": [
+      {
+        "id": "voodoo_zoneload",
+        "title": "Voodoo Zone Load",
+        "character_ref": "heretic",
+        "cast": "kas",
+        "arc": 3,
+        "pillar": "code",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "dixie"
+      }
+    ],
+    "armitage_infiltration_2": [
+      {
+        "id": "armitage_infiltration_2",
+        "title": "Armitage Infiltration II",
+        "character_ref": "suit",
+        "cast": "suit",
+        "arc": 4,
+        "pillar": "code",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "armitage"
+      }
+    ],
+    "wintermute_witness": [
+      {
+        "id": "wintermute_witness",
+        "title": "Wintermute Witness",
+        "character_ref": "suit",
+        "cast": "suit",
+        "arc": 5,
+        "pillar": "code",
+        "grade_min": 5,
+        "grade_max": 6,
+        "fixer": "finn"
+      }
+    ],
+    "wigan_construct_reach": [
+      {
+        "id": "wigan_construct_reach",
+        "title": "Wigan's Construct Reach",
+        "character_ref": "heretic",
+        "cast": "wigan",
+        "arc": 2,
+        "pillar": "code",
+        "grade_min": 2,
+        "grade_max": 3,
+        "fixer": "dixie"
+      }
+    ],
+    "angie_leopard_tracking": [
+      {
+        "id": "angie_leopard_tracking",
+        "title": "Angie's Leopard Tracking",
+        "character_ref": "novice",
+        "cast": "angie",
+        "arc": 3,
+        "pillar": "code",
+        "grade_min": 3,
+        "grade_max": 4,
+        "fixer": "dixie"
+      }
+    ],
+    "sally_construct_market": [
+      {
+        "id": "sally_construct_market",
+        "title": "Sally's Construct Market",
+        "character_ref": "heretic",
+        "cast": "sally",
+        "arc": 4,
+        "pillar": "code",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "sally"
+      }
+    ],
+    "threjane_family_log": [
+      {
+        "id": "threjane_family_log",
+        "title": "3Jane's Family Log",
+        "character_ref": "suit",
+        "cast": "3jane",
+        "arc": 1,
+        "pillar": "code",
+        "grade_min": 1,
+        "grade_max": 2,
+        "fixer": "3jane"
+      }
+    ],
+    "neuromancer_first_ping": [
+      {
+        "id": "neuromancer_first_ping",
+        "title": "Neuromancer First Ping",
+        "character_ref": "suit",
+        "cast": "neuromancer",
+        "arc": 2,
+        "pillar": "code",
+        "grade_min": 2,
+        "grade_max": 3,
+        "fixer": "wintermute"
+      }
+    ],
+    "finn_final_reckoning": [
+      {
+        "id": "finn_final_reckoning",
+        "title": "Finn's Final Reckoning",
+        "character_ref": "veteran",
+        "cast": "sil",
+        "arc": 5,
+        "pillar": "code",
+        "grade_min": 5,
+        "grade_max": 6,
+        "fixer": "finn"
+      }
+    ],
+    "salvation_wigan_zavijava": [
+      {
+        "id": "salvation_wigan_zavijava",
+        "title": "Wigan's Salvation Call",
+        "character_ref": "heretic",
+        "cast": "wigan",
+        "arc": 5,
+        "pillar": "code",
+        "grade_min": 5,
+        "grade_max": 6,
+        "fixer": "dixie"
+      }
+    ],
+    "wintermute_merger_run": [
+      {
+        "id": "wintermute_merger_run",
+        "title": "Wintermute Merger Run",
+        "character_ref": "suit",
+        "cast": "neuromancer",
+        "arc": 4,
+        "pillar": "code",
+        "grade_min": 4,
+        "grade_max": 5,
+        "fixer": "wintermute"
+      }
+    ],
+    "mollys_final_razor": [
+      {
+        "id": "mollys_final_razor",
+        "title": "Molly's Final Razor",
+        "character_ref": "novice",
+        "cast": "molly",
+        "arc": 5,
+        "pillar": "code",
+        "grade_min": 5,
+        "grade_max": 6,
+        "fixer": "finn"
+      }
     ]
   },
   "by_character": {
@@ -1196,14 +1439,18 @@
       "dixies_last_run": "Construct Memory Rescue",
       "ta_defection": "3Jane's Betrayal",
       "beijing_memory_courier": "Beijing Memory Courier",
-      "idoru-wedding-protocol": "Idoru Wedding Protocol",
+      "idoru_wedding_arc": "Idoru Wedding Arc",
       "heretic_loa_conscription": "Loa Conscription",
       "bing_statework": "Bing Statework",
       "cayce_footage_audit_run": "Cayce Footage Audit Run",
       "trauma_squads_pair_arc": "Trauma-Squads Pair Arc",
-      "idoru_wedding_arc": "Idoru Wedding Arc",
       "eurydice_arc": "Eurydice Arc",
-      "g_boys_arc": "G-Boys Arc"
+      "g_boys_arc": "G-Boys Arc",
+      "straylight_inquiry": "Straylight Inquiry",
+      "voodoo_zoneload": "Voodoo Zone Load",
+      "wigan_construct_reach": "Wigan's Construct Reach",
+      "sally_construct_market": "Sally's Construct Market",
+      "salvation_wigan_zavijava": "Wigan's Salvation Call"
     },
     "novice": {
       "black_ice_dream": "Black Ice Dream",
@@ -1222,18 +1469,21 @@
       "ta_defection": "Hosaka Corporate Infiltration",
       "yakuza_deal": "Yakuza Loan Shark",
       "tokyo-courier-run": "Tokyo Courier Run",
-      "chevette-run": "Chevette Run",
+      "chevette_nightshift_run": "Chevette Nightshift Run",
       "coolhunter-laney-tokyo": "Coolhunter Meets Laney",
       "ono_sendai_repair": "Ono-Sendai Repair",
       "hosaka_terminal_supply": "Hosaka Terminal Supply",
       "zion_vote_observation": "Zion Vote Observation",
       "cortex_hound_recovery": "Cortex-Hound Recovery",
-      "chevette_nightshift_run": "Chevette Nightshift Run",
       "chickenhead_rickshaw_run": "Chickenhead Rickshaw Run",
       "surface_mail_run": "Surface Mail Run",
       "virtual_light_data_key_arc": "Virtual Light Data-Key Arc",
       "wendell_suburban_arc": "Wendell Suburban Arc",
-      "viktor_orbit_arc": "Viktor Orbit Arc"
+      "viktor_orbit_arc": "Viktor Orbit Arc",
+      "soho_blackout": "Soho Blackout",
+      "razor_work": "Razor Work",
+      "angie_leopard_tracking": "Angie's Leopard Tracking",
+      "mollys_final_razor": "Molly's Final Razor"
     },
     "veteran": {
       "marly_louisiana-god": "Delivery to Finn",
@@ -1254,7 +1504,10 @@
       "bigend-laney-lunch": "Bigend Meets Laney",
       "case-meets-cayce": "Case Meets Cayce",
       "panther_negotiate": "Panther Negotiate",
-      "laney_node_signal_run": "Laney Node Signal Run"
+      "laney_node_signal_run": "Laney Node Signal Run",
+      "tokyo_pachinko_run": "Tokyo Pachinko Run",
+      "hideo_contract": "Hideo's Contract",
+      "finn_final_reckoning": "Finn's Final Reckoning"
     },
     "suit": {
       "armitage_infiltration": "Armitage's First Infiltration",
@@ -1277,7 +1530,14 @@
       "w_anchor_arc": "W-Anchor Arc",
       "tessier_sleeper_arc": "Tessier-Ashpool Sleeper Arc",
       "mona_bridge_arc": "Mona Bridge Arc",
-      "hounds_arc": "Hounds Arc"
+      "hounds_arc": "Hounds Arc",
+      "freeside_payroll": "Freeside Payroll",
+      "core_memory_dump": "Core Memory Dump",
+      "armitage_infiltration_2": "Armitage Infiltration II",
+      "wintermute_witness": "Wintermute Witness",
+      "threjane_family_log": "3Jane's Family Log",
+      "neuromancer_first_ping": "Neuromancer First Ping",
+      "wintermute_merger_run": "Wintermute Merger Run"
     }
   }
 }

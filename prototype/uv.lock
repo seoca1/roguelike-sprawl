@@ -628,7 +628,7 @@ wheels = [
 
 [[package]]
 name = "roguelike-sprawl"
-version = "1.0.0a1"
+version = "1.1.0a1"
 source = { editable = "." }
 dependencies = [
     { name = "pyyaml" },

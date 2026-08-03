@@ -159,3 +159,42 @@ class TestCollectFactsShape:
         facts = sync_mod._collect_facts()
         # No ZeroDivisionError; default is 0.
         assert facts["cyberspace_sectors_per_world"] == 0
+
+
+# ---------------------------------------------------------------------------
+# Regression: skill_effect_count must scan state_models.py (ADR-0141 Phase 4)
+# ---------------------------------------------------------------------------
+
+
+class TestSkillEffectRegression:
+    """Lock the scan target after the Phase 4 combat/state.py split.
+
+    Background: prior to v1.1.0a1, ``SkillEffect`` lived in ``combat/state.py``.
+    The Phase 4 split moved it to ``combat/state_models.py``. The sync script
+    was originally hard-coded to scan ``state.py``, returning ``0`` — a silent
+    regression in the dashboard's ``skill_effect_count``. This regression
+    block exercises ``_count_skill_effects`` against the real source so a
+    similar future move would be caught immediately.
+    """
+
+    def test_returns_positive_from_real_source(self) -> None:
+        """``_count_skill_effects`` must read the source containing SkillEffect."""
+        count: int = sync_mod._count_skill_effects()
+        assert count > 0, (
+            "skill_effect_count regressed to 0 — _count_skill_effects is "
+            "scanning the wrong file (state.py vs state_models.py)."
+        )
+
+    def test_matches_actual_skill_effect_enum(self) -> None:
+        """Reported count must equal the SkillEffect enum size."""
+        from roguelike_sprawl.combat.state_models import SkillEffect  # type: ignore[import-untyped]
+
+        count: int = sync_mod._count_skill_effects()
+        assert count == len(list(SkillEffect))
+
+    def test_scan_target_points_to_state_models(self) -> None:
+        """The configured scan path must reference state_models.py."""
+        configured: str = str(sync_mod.COMBAT_STATE_MODELS_PY)
+        assert configured.endswith("state_models.py"), (
+            f"COMBAT_STATE_MODELS_PY = {configured!r} — expected to point at combat/state_models.py"
+        )
