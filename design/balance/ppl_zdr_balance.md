@@ -21,8 +21,11 @@ PPL = deck_tier * 3 + sum(prog_tier * 2) + wetware_tier + construct_tier * 3
 | 2 (일반) | T2 | Wisp T2, Hammer T2 (×2) | T2 | — | **16** |
 | 3 (숙련) | T3 | Wisp T3, Goliath T3 (×2) | T3 | — | **24** |
 | 4 (베테랑) | T4 | Wisp T4, Goliath T4, Wardrone T4 (×3) | T4 | — | **40** |
-| 5 (전설) | T5 | Kraken T5, Goliath T5, Wisp T5, Wardrone T5 (×4) | T5 | Dixie T5 | **75** |
-| 6 (마스터, Arc 5 finale) | T6 | Master programs (T6) (×4) | T6 | Dixie T6 | **120+** |
+| 5 (전설) | T5 | Kraken T5, Goliath T5, Wisp T5, Wardrone T5 (×4) | T5 | Dixie T5 | **65** |
+| 6 (마스터, Arc 5 finale) | T6 | Master programs (T6) (×4) | T6 | Dixie T6 | **78** |
+
+> **2026-07-27 sync (ADR-0130)**: F1-1 rebalance (2026-07-22, construct 3×→1×) 적용 후 코드 기준 값.
+> Grade 5 PPL: 75 → 65. Grade 6 PPL: 120+ → 78 (공식 결과).
 
 ### Grade 6 (Master) — Arc 5 Finale
 
@@ -34,8 +37,17 @@ T6 장비 3종이 `equipment/equipment.py` 에 추가됨:
 
 Loadout tier 검증: `0..6` 까지 허용. `MAX_TIER = 6` 상수.
 
-PPL 성장 곡선: 8 → 16 → 24 → 40 → 75 (2배, 1.5배, 1.67배, 1.88배)
-→ 가속 성장 — 메타 진행의 *성장감* 극대화.
+PPL 공식 (F1-1 후): `deck*3 + sum(prog*2) + wetware + construct*1`
+
+PPL 성장 곡선 (코드 기준):
+- 1 → 2: 8 → 16 (**2.00x**)
+- 2 → 3: 16 → 24 (**1.50x**)
+- 3 → 4: 24 → 40 (**1.67x**)
+- 4 → 5: 40 → 65 (**1.62x**)
+- 5 → 6: 65 → 78 (**1.20x**) ⚠
+
+> **잔존 이슈 (P2)**: Grade 5→6 성장이 1.20x로 정체. Master tier *특별함* 부족.
+> Option 2 (Grade 6 강화) 는 ADR-0130 범위 외. v1.0.0+ 별도 ADR-0131+ 에서 분리.
 
 ## ZDR 베이스 (ZoneDepth)
 
@@ -92,13 +104,17 @@ ICE / Alarm / Faction modifier 가 더해져 최종 ZDR 결정.
 credits = arc * 800 + (grade - 1) * 300
 ```
 
-| Arc | Grade | 공식 | 실제 평균 | 비율 |
+| Arc | Grade | 공식 | 실제 평균 (`rewards.credits`) | 비율 |
 |---|---|---:|---:|---:|
-| 1 | 1 | 800 | 550 | 69% |
-| 2 | 2 | 2,200 | 1,200 | 55% |
-| 3 | 3 | 3,300 | 2,200 | 67% |
-| 4 | 4 | 4,400 | 3,300 | 75% |
-| 5 | 5 | 5,200 | 5,000 | 96% |
+| 1 | 1 | 800 | 500~800 | 63~100% |
+| 2 | 2 | 2,200 | ~1,200 | ~55% |
+| 3 | 3 | 3,300 | ~2,200 | ~67% |
+| 4 | 4 | 4,400 | ~3,300 | ~75% |
+| 5 | 5 | 5,200 | ~5,000 | ~96% |
+
+> **2026-07-27 sync (ADR-0130)**: 권위 필드는 `rewards.credits` (nested) — `missions/board.py:246 _parse_rewards(value.get("rewards"))` 가 먼저 시도. `reward_credits` (top-level) 는 fallback (없거나 0일 때만).
+> 
+> **데이터 위생**: 111 missions 중 `reward_credits` (top) 와 `rewards.credits` 가 모두 존재하는 경우, JSON 정합성 위해 동일 값 권장. 향후 deprecation 검토 (P3).
 
 → **공식 대비 55~96%** 로 보수적 설정 (깁슨 톤: 런은 빡빡함).
    Arc 5 (finale) 만 공식 근접 — 엔딩 보상 풍성.
