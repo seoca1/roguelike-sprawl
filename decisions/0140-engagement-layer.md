@@ -196,17 +196,28 @@ v1.0.0 release 후 사용자 consultation (2026-07-28) 에서 게임 중독성/�
 - Polarity independence: positive and negative events tracked separately per faction
 - Pillar 4 safe: no cross-run inheritance (all in-run, alarm resets on death)
 - Leverages existing FactionReputation system (ADR-0131, run/reputation.py)
+
+### Phase P2 — Auto-Play Tempo Layering (제안 8) ✅ (2026-08-03)
+- `engine/auto_play_tempo.py` (NEW) — `TempoMode` enum, `TEMPO_MULTIPLIERS`,
+  `DEFAULT_TEMPO_MODE`, `get_tempo_multiplier`, `cycle_tempo_mode`
+- `engine/main_loop.py` — `_advance_graphic_novel` uses
+  `get_tempo_multiplier(state.tempo_mode)` to scale elapsed_ms
+- `engine/state.py` — `AppState.tempo_mode: str = "normal"` field
+- `tests/unit/test_auto_play_tempo.py` (NEW) — 19 tests across 4 classes
+- Three modes: SLOW (0.7x), NORMAL (1.0x), FAST (1.5x) applied to elapsed_ms delta
+- Per-session preference (default NORMAL on new run)
+- Pillar 4 safe: ephemeral preference, no meta-progression
 - Pillar 3 reinforcement: death-avoidance payoff
 
 ### 잔존 (v1.2.0+)
-- Phase P2: Auto-Play Tempo (제안 8) *(Variable Reward Nodes ✅, Faction Tension ✅ done)*
 - Phase P3: Death Replay (제안 5) *(Near-Miss Extraction ✅ done)*
 - Tier scaling for anomaly + near-miss + tension rewards (deferred v1.1.0+)
+- *(Variable Reward Nodes ✅, Faction Tension ✅, Auto-Play Tempo ✅ done)*
 
 ### 메트릭
-- 신규 파일: 9 (lore 모듈 6 + anomaly_reward.py 1 + near_miss.py 1 + faction_tension.py 1)
-- 신규 테스트: 117 (Phase 1 27 + Phase 2 22 + Phase P2 22 + Phase P3 24 + Phase P2.7 22)
-- 회귀 위험: 낮음 (combat_view.py 변경 없음, cyberspace_view.py 만 hook 추가)
+- 신규 파일: 10 (lore 모듈 6 + anomaly_reward.py 1 + near_miss.py 1 + faction_tension.py 1 + auto_play_tempo.py 1)
+- 신규 테스트: 136 (Phase 1 27 + Phase 2 22 + Phase P2 22 + Phase P3 24 + Phase P2.7 22 + Phase P2.8 19)
+- 회귀 위험: 낮음 (combat_view.py 변경 없음, cyberspace_view.py + main_loop.py 만 hook 추가)
 - Pillar 정합: Pillar 3 (death-avoidance) + Pillar 4 (unlock-only) + Pillar 5 (Style)
 
 ---

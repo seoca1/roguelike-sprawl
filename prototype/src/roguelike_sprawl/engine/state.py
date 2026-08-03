@@ -220,6 +220,7 @@ class AppState:
     near_miss_triggered: bool = False
     faction_tension_triggered: set[str] = field(default_factory=set)
     alarm_level: int = 0
+    tempo_mode: str = "normal"
     # Player is dead (flatline); True until reset
     is_dead: bool = False
     # Death reason (e.g. "Combat", "ICE breach", "Jack-out failure")

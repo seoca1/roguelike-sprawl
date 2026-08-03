@@ -15,6 +15,7 @@ from ..combat.registry import IceRegistry, ProgramRegistry
 from ..combat.state import step_combat
 from . import hacking_view
 from .arc_phase import advance_arc_phase
+from .auto_play_tempo import get_tempo_multiplier
 from .combat_tick import maybe_boss_phase_transition
 from .state import AppState, ScreenKind
 
@@ -23,7 +24,8 @@ def _advance_graphic_novel(state: AppState, delta_s: float) -> None:
     """Tick GN: dialogue timer, advance to next line/scene on completion."""
     if not state.gn_scenes:
         return
-    state.gn_elapsed_ms += delta_s * 1000
+    tempo_mult = get_tempo_multiplier(state.tempo_mode)
+    state.gn_elapsed_ms += delta_s * 1000 * tempo_mult
     if state.gn_paused:
         return
     scenes = state.gn_scenes

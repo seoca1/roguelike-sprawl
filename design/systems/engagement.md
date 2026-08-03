@@ -308,3 +308,88 @@ existing **FactionReputation** (ADR-0131) to resolve outcome:
 - `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.faction_tension_triggered`
 - `prototype/src/roguelike_sprawl/engine/cyberspace_view.py` — DATA node hook
 - `prototype/src/roguelike_sprawl/matrix/faction_tension.py` — implementation
+
+---
+
+## Auto-Play Tempo Layering (ADR-0140 §Proposal 8)
+
+### 골재
+
+Player가 graphic novel auto-play 중에 pacing 을 조정할 수 있다. 세 가지 mode
+(SLOW / NORMAL / FAST) 가 dialogue advancement rate 에 multiplier 적용.
+
+### 게임 디자인
+
+- **Three modes**: SLOW (0.7x), NORMAL (1.0x), FAST (1.5x)
+- **Multiplier 적용 위치**: `main_loop._advance_graphic_novel` 의 `delta_s * 1000 * multiplier`
+- **Player-facing**: UI 에 mode 표시 + 키 바인딩 (e.g. T key) 으로 cycle
+- **Persistence**: `AppState.tempo_mode` field (string, default "normal")
+- **Per-session**: 새 런 = NORMAL 로 reset (state init)
+
+### Tempo Mode Table
+
+| Mode | Multiplier | Real-time 1s → Effective | Pacing |
+|---|---|---|---|
+| SLOW | 0.7 | 700ms | 1.43x slower (longer dialogue display) |
+| NORMAL | 1.0 | 1000ms | 1.0x (default) |
+| FAST | 1.5 | 1500ms | 0.67x (faster dialogue display) |
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: tempo 는 player preference, in-run toggle 가능.
+- **Pillar 2 (The Matrix)**: pacing 은 UI/UX, 사이버스페이스 표현 무관.
+- **Pillar 3 (The Flatline)**: death = reset to NORMAL (no advantage from preferred tempo).
+- **Pillar 4 (The Build)**: tempo 는 ephemeral preference, no meta-progression.
+- **Pillar 5 (The Style)**: 깁슨 톤 — "good contractor controls the pace" 정합.
+
+### 흐름
+
+```
+[Player watches graphic novel auto-play]
+    |
+    v
+[main_loop ticks _advance_graphic_novel(state, delta_s)]
+    |
+    v
+[get_tempo_multiplier(state.tempo_mode)]
+    |
+    v
+[state.gn_elapsed_ms += delta_s * 1000 * tempo_multiplier]
+    |
+    v
+[If elapsed >= dialogue.duration_ms: advance to next dialogue]
+```
+
+### 구현 노트
+
+**파일**:
+- `engine/auto_play_tempo.py` (NEW) — `TempoMode` enum, `TEMPO_MULTIPLIERS`,
+  `DEFAULT_TEMPO_MODE`, `get_tempo_multiplier`, `cycle_tempo_mode`
+- `engine/main_loop.py` — `_advance_graphic_novel` uses `get_tempo_multiplier(state.tempo_mode)`
+- `engine/state.py` — `AppState.tempo_mode: str = "normal"` field
+- `tests/unit/test_auto_play_tempo.py` (NEW) — 19 tests across 4 classes
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (146 source files)
+- pytest: ✅ 3365 passed (19 new), 664 skipped, 0 failed
+
+**Test coverage**:
+- `TestTempoMode` (2): enum values, default is NORMAL
+- `TestTempoMultipliers` (8): 0.7/1.0/1.5 multipliers, string input, unknown fallback
+- `TestCycleTempoMode` (4): SLOW→NORMAL→FAST→SLOW
+- `TestMainLoopIntegration` (5): NORMAL full delta, SLOW reduced, FAST increased, FAST triggers sooner, unknown fallback
+
+### 향후 작업 (v1.1.0 ADR-0140 P2/P3 Deferred)
+
+- **Death Replay** (제안 5): Hall of Dead echo
+- **Tier scaling** for anomaly + near-miss + tension rewards (grade 5+ = bigger effects)
+- **Cycle 2 (Module Health)**: 4 modules > 1000 LOC → 4-way split per ADR-0112/0113/0141
+
+### Cross-Reference (Auto-Play Tempo)
+
+- `decisions/0140-engagement-layer.md` — proposal status
+- `prototype/src/roguelike_sprawl/engine/auto_play_tempo.py` — implementation
+- `prototype/src/roguelike_sprawl/engine/main_loop.py` — integration point
+- `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.tempo_mode`
+- `tests/unit/test_auto_play_tempo.py` — test coverage
