@@ -33,6 +33,7 @@ SETTINGS_OPTIONS = [
     ("font_size", "Font Size"),
     ("high_contrast", "High Contrast"),
     ("keymap", "Keymap"),
+    ("reset_keymap", "Reset Keymap to Defaults"),
     ("resolution", "Resolution"),
     ("back", "Back to Menu"),
 ]
@@ -100,7 +101,11 @@ def render_settings(
             hc = getattr(state, "high_contrast", False)
             value_str = t("settings.on") if hc else t("settings.off")
         elif opt_id == "keymap":
-            value_str = t("settings.keymap_value")
+            customized = getattr(state, "keymap_customized", False)
+            value_str = t("settings.keymap_custom") if customized else t("settings.keymap_default")
+        elif opt_id == "reset_keymap":
+            customized = getattr(state, "keymap_customized", False)
+            value_str = t("settings.keymap_apply") if customized else t("settings.keymap_default")
         elif opt_id == "resolution":
             from . import config as cfg
 
@@ -170,6 +175,9 @@ def handle_settings_input(
                 delattr(state, "settings_selected")
             return state
         elif opt_id == "keymap":
+            return state
+        elif opt_id == "reset_keymap":
+            state.keymap_customized = False
             return state
         elif opt_id == "resolution":
             return state
