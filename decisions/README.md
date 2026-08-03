@@ -59,6 +59,12 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | 0112 | combat/effects.py (1,246 LOC) — 5-Layer VFX 시스템 | **Accepted (Option 4)** | 2026-07-12 | P3 (The Build) |
 | 0113 | combat_view.py (1,053 LOC) — 전투 화면 렌더링 | **Accepted (Option 4)** | 2026-07-12 | P3 (The Build) |
 | 0120 | M2 14 파일 docstring 보강 — 일괄 작업 | **Accepted (Option 1)** | 2026-07-12 | P3 (The Build) |
+| 0125 | Boss Phase AoE + Minion Spawn (Phase B-3 Enhancement) | **Accepted (Option 4)** | 2026-07-26 | P3 (The Build) |
+| 0130 | Balance Audit + PPL/보상 동기화 (Phase 1 정리) | **Accepted (Option 1)** | 2026-07-27 | P1 (The Build) |
+| 0131 | Faction Reputation Cross-Run Persistence (Meta Progression) | **Accepted (Option 1)** | 2026-07-27 | P1 (The Build) |
+| 0133 | graphic_novel_view.py Split — Implementation (Supplements ADR-0111) | **Accepted** | 2026-07-27 | P2 (Build Health) |
+| 0140 | Engagement Layer for v1.1.0 (8 proposals) | **Accepted (Option 1 partial — Top 3)** | 2026-07-28 | P2 (v1.1.0 후보) |
+| 0141 | Additional Module Splits (matrix_view, combat/state) | **Accepted (Option 1 partial — Top 2)** | 2026-07-28 | P3 (v1.1.0+ backlog) |
 | 0104 | GN Save Slot 확장 (3 슬롯) | **Accepted (2026-07-25)** | 2026-06-21 | P2 |
 
 ### 2026-07-01 통합 작업 (P1~P4 + B)
