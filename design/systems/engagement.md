@@ -636,3 +636,89 @@ metaprogression 과 일치 — ephemeral session preference, no meta-progression
 - `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.font_size`, `AppState.high_contrast`
 - `prototype/src/roguelike_sprawl/engine/settings_view.py` — `SETTINGS_OPTIONS` (7 items)
 - `tests/unit/test_accessibility_settings.py` — test coverage
+
+---
+
+## Hardcore Mode (Cycle 4: Pillar 3 reinforcement)
+
+### 골재
+
+기존 death flow (death.py) 에 1-life permadeath mode 추가. Pillar 3 (The
+Flatline) 의 "death has real weight" 를 강화하는 옵션. Pillar 4 (The
+Build) 의 unlock-only metaprogression 과 일치 — ephemeral session
+preference, no meta-progression (no stat boosts, no unlocks carried
+over).
+
+### 게임 디자인
+
+- **Field**: `AppState.hardcore_mode: bool = False` (default)
+- **Effect**: True 일 때 death → restart_with_new_jockey 차단 (Pillar 3 강화)
+  - 기존 normal mode: death → DEATH_SUMMARY → HALL_OF_DEAD → new jockey 선택
+  - hardcore mode: death → permanent (no revival)
+- **Pillar 정합**:
+  - Pillar 1: 게임 시작 시 default (False) — 새 런 = 새 기회
+  - Pillar 3 강화: death = 진짜 끝 (permadeath)
+  - Pillar 4: ephemeral session preference, meta_state 미사용
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: death 발생 시 default는 new jockey로 복귀 (perma-death X)
+- **Pillar 3 강화 (The Flatline)**: hardcore mode 에서만 permadeath
+- **Pillar 4 (The Build)**: death 시 new run = default (unlock-only metaprogression)
+
+### 흐름
+
+```
+[Player death in combat]
+    |
+    v
+[trigger_death(state, reason)]
+    |
+    v
+[death.py logic: set is_dead=True, screen=DEATH]
+    |
+    v
+[if hardcore_mode is True:]
+    - block restart_with_new_jockey()
+    - show "PERMANENT DEATH" screen
+[else:]
+    - show DEATH_SUMMARY → HALL_OF_DEAD → new jockey 선택
+```
+
+### 구현 노트
+
+**파일**:
+- `engine/state.py` (NEW field) — `hardcore_mode: bool = False` (Pillar 4 ephemeral)
+- `engine/death.py` (DEFERRED) — restart_with_new_jockey() 에 hardcore_mode 체크
+  (Pillar 3 강화), 현재는 field + test + design doc 까지
+- `tests/unit/test_hardcore_mode.py` (NEW) — 8 tests, 3 classes
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (150 source files)
+- pytest: ✅ 3422 passed (8 new), 664 skipped, 0 failed
+
+**Test coverage** (TestHardcoreModeField, TestPillar4Compliance, TestHardcoreModeBehavior):
+- default is False
+- can be enabled
+- can be disabled
+- no meta_state write
+- does not persist across resets
+- is boolean type
+- default allows revival
+- hardcore blocks revival (behavioral stub)
+
+### 향후 작업 (Cycle 4 잔존)
+
+- **death.py integration**: restart_with_new_jockey() 에 hardcore_mode 체크
+  (Pillar 3 강화)
+- **death screen UI**: "PERMANENT DEATH" vs "NEW JOCKEY" 분기 표시
+- **New Game+ mode**: Salvation Phase 완료 후 재시작 (carryover options)
+- **Construct companion**: Dixie 실제 전투 동료 (현재 dialog-only)
+
+### Cross-Reference (Hardcore Mode)
+
+- `decisions/0140-engagement-layer.md` — Cycle 1 (complete)
+- `prototype/src/roguelike_sprawl/engine/death.py` — `trigger_death`, `restart_with_new_jockey`
+- `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.hardcore_mode`
+- `tests/unit/test_hardcore_mode.py` — test coverage

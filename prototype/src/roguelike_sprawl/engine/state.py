@@ -297,6 +297,8 @@ class AppState:
     high_contrast: bool = False  # high-contrast palette toggle
     # Keymap customization flag (Pillar 4 ephemeral)
     keymap_customized: bool = False  # True if user has modified key bindings
+    # Hardcore mode (Cycle 4: Pillar 3 reinforcement)
+    hardcore_mode: bool = False  # 1-life permadeath (Pillar 4 compliant: ephemeral)
     # Help screen state (Phase 7)
     help_page: int = 0  # current help page index (0-based)
     # Salvation Phase state (ADR-0090 Phase 9)
