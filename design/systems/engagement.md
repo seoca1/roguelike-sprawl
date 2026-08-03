@@ -483,3 +483,87 @@ hint — 더 깊은 통찰, 깁슨 톤의 "좋은 contractor 가 master 가 되�
 - `prototype/src/roguelike_sprawl/lore/construct_whisper_hook.py` — `is_player_master` check
 - `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.player_grade`
 - `tests/unit/test_grade_6_master_whisper.py` — test coverage
+
+---
+
+## BGM Manager (Cycle 3 polish)
+
+### 골재
+
+Per-screen background music controller. Centralized BGM that maps screen
+names to theme names, provides volume control, and simulates crossfade
+between themes. Wraps the existing `ThemePlayer` from `audio/theme.py`.
+
+### 게임 디자인
+
+- **Per-screen mapping**: 10 default screens registered
+  - `MENU`, `HUB` → `finn_office` (Finn's office ambient)
+  - `MATRIX` → `matrix_rain` (default cyberspace)
+  - `MATRIX_DEEP` → `cyberspace` (deeper zones)
+  - `COMBAT` → `industrial` (combat tension)
+  - `COMBAT_BOSS` → `hammer_alert` (boss encounter)
+  - `NPC` → `chiba` (street-level jazz)
+  - `SENSE_NET` → `sense_net` (corporate data fortress)
+  - `LOA` → `loa_drum` (Vodou construct zones)
+  - `CINEMATIC` → `loa_drum_fade` (slow-mo scenes)
+  - `SALVATION` → `manarase_drone` (ending zones)
+- **Volume control**: 0.0–1.0, clamped. Default 0.6.
+- **Mute control**: toggle, remembers last theme.
+- **Crossfade**: simulated (real crossfade requires async audio). `fade_out()` calls `stop_theme()`.
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: BGM state is per-session, reset on new run.
+- **Pillar 3 (The Flatline)**: death does NOT preserve BGM preferences.
+- **Pillar 4 (The Build)**: NO meta-progression. BGM is ephemeral session preference.
+
+### 흐름
+
+```
+[Screen transition detected]
+    |
+    v
+[bgm.play_for_screen("MATRIX")]
+    |
+    v
+[bgm._screen_themes["MATRIX"] → "matrix_rain"]
+    |
+    v
+[play_theme("matrix_rain", config)]  → [audio/theme.py]
+    |
+    v
+[bgm._settings.current_theme = "matrix_rain"]
+```
+
+### 구현 노트
+
+**파일**:
+- `audio/bgm_manager.py` (NEW, 246 LOC) — `BgmManager` class, `BgmSettings` dataclass,
+  `get_bgm_manager()` / `reset_bgm_manager()` singletons
+- `tests/unit/test_bgm_manager.py` (NEW) — 24 tests across 6 classes
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (150 source files)
+- pytest: ✅ 3404 passed (24 new), 664 skipped, 0 failed
+
+**Test coverage**:
+- `TestScreenRegistration` (4): register/overwrite, unknown theme raises, defaults cover all
+- `TestThemePlayback` (6): play_for_screen, play_theme (known/unknown), muted, stop, fade_out
+- `TestVolumeControl` (5): default, set, clamp low, clamp high, restart-on-set
+- `TestMuteControl` (4): default not muted, mute stops, idempotent, unmute no-resume, toggle
+- `TestSingleton` (2): same instance, reset creates new
+- `TestPillar4Compliance` (2): no meta_state, volume ephemeral on reset
+
+### 향후 작업 (v1.1.0+ Cycle 3 잔존)
+
+- **True crossfade** (async audio mixing)
+- **Per-region BGM** (not just per-screen — e.g. different BGM for Surface vs Deep matrix)
+- **Combat dynamic BGM** (intensity-based, Phase B-3 boss vs trash)
+
+### Cross-Reference (BGM Manager)
+
+- `decisions/0140-engagement-layer.md` — Cycle 1 (complete)
+- `prototype/src/roguelike_sprawl/audio/theme.py` — `ThemePlayer`, `play_theme`, `stop_theme`
+- `prototype/src/roguelike_sprawl/audio/config.py` — `SoundConfig`
+- `tests/unit/test_bgm_manager.py` — test coverage
