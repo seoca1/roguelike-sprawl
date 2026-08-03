@@ -11,6 +11,10 @@ import random
 from .graph import Edge, MatrixGraph
 from .node import Faction, IceKind, Node, NodeKind, ZoneDepth
 
+# ADR-0140 §Proposal 6 — Variable Reward Nodes. 30% of DATA nodes are
+# flagged as anomaly variants (visually distinct, bonus reward on entry).
+ANOMALY_PROBABILITY: float = 0.30
+
 
 class MatrixGenerator:
     """Deterministic procedural matrix generator.
@@ -30,6 +34,7 @@ class MatrixGenerator:
             - 1 entry, 2-3 routers, 1-2 data, 1 ice, 1 exit
             - Total: 5-7 nodes
             - Linear-ish tree layout
+            - 30% of DATA nodes flagged is_anomaly (ADR-0140)
 
         Higher grades (Phase 6+) will scale up.
         """
@@ -82,18 +87,20 @@ class MatrixGenerator:
                 )
             )
 
-        # Data nodes
+        # Data nodes — 30% flagged as anomaly (ADR-0140).
         data_ids: list[str] = []
         for i in range(n_data):
             did = f"D_{i}"
             data_ids.append(did)
+            is_anomaly = rng.random() < ANOMALY_PROBABILITY
             nodes.append(
                 Node(
                     id=did,
                     kind=NodeKind.DATA,
-                    label="Data",
+                    label="Anomaly" if is_anomaly else "Data",
                     zone=ZoneDepth.SURFACE,
                     faction=faction,
+                    is_anomaly=is_anomaly,
                 )
             )
 

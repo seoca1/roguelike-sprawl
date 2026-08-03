@@ -159,15 +159,30 @@ v1.0.0 release 후 사용자 consultation (2026-07-28) 에서 게임 중독성/�
 ### Phase 3 — Grade 6 Master Whisper ⏳
 - v1.1.0+ 후속 (현재 scope 외)
 
+### Phase P2 — Variable Reward Nodes (제안 6) ✅ (2026-08-03)
+- `matrix/node.py` — `is_anomaly: bool = False` field + DATA-only validation
+- `matrix/generator.py` — `ANOMALY_PROBABILITY = 0.30` constant + 30% per DATA node
+- `matrix/anomaly_reward.py` (NEW) — `AnomalyRewardKind` (CREDITS/SALVAGE/INFO),
+  `roll_anomaly_reward`, `apply_anomaly_reward`, `check_anomaly_reward_on_node_entry`
+- `engine/cyberspace_view.py` — `_ANOMALY_GLYPH`/`_ANOMALY_COLOR` constants +
+  `_draw_node` override + on_node_enter hook (applies reward on first entry)
+- `engine/state.py` — `AppState.anomaly_triggered: set[str]` field (one-shot)
+- `tests/unit/test_variable_reward.py` (NEW) — 22 tests across 5 classes
+- `design/systems/engagement.md` (NEW) — design spec
+- Reward weights: uniform (CREDITS 50 / SALVAGE 1 / INFO 1, 33% each)
+- Pillar 4 safe: no cross-run inheritance (all in-run, ephemeral)
+- Visual: anomaly = `◆` magenta `(255, 100, 255)` vs regular DATA = `$` gold
+
 ### 잔존 (v1.2.0+)
-- Phase P2: Variable Reward Nodes (제안 6), Faction Tension (제안 7), Auto-Play Tempo (제안 8)
+- Phase P2: Faction Tension (제안 7), Auto-Play Tempo (제안 8) *(Variable Reward Nodes ✅ done)*
 - Phase P3: Near-Miss Extraction (제안 3), Death Replay (제안 5)
+- Tier scaling for anomaly rewards (deferred v1.1.0+)
 
 ### 메트릭
-- 신규 파일: 6 (lore 모듈)
-- 신규 테스트: 49 (Phase 1 + 2)
-- 회귀 위험: 낮음 (combat_view.py 변경 없음, cyberspace_view.py만 1 hook 추가)
-- Pillar 정합: Pillar 4 (unlock-only) + Pillar 5 (Style: lore fragments/construct voice)
+- 신규 파일: 7 (lore 모듈 6 + anomaly_reward.py 1)
+- 신규 테스트: 71 (Phase 1 27 + Phase 2 22 + Phase P2 22)
+- 회귀 위험: 낮음 (combat_view.py 변경 없음, cyberspace_view.py 만 hook 추가)
+- Pillar 정합: Pillar 4 (unlock-only) + Pillar 5 (Style: lore fragments/construct voice/anomaly glyph)
 
 ---
 

@@ -87,6 +87,10 @@ class Node:
         ice: ICE present at this node (usually ``NONE`` for non-ice nodes).
         alarm: Alarm level.
         faction: Faction modifier.
+        is_anomaly: ``True`` if this DATA node is an anomaly variant (ADR-0140 P2.6
+            — Variable Reward Nodes). Visually distinct (glyph ``◆``, magenta
+            color) and grants bonus reward on entry. Only DATA nodes can be
+            anomaly (validated in __post_init__).
         x: Grid x coordinate (0 = leftmost column).
         y: Grid y coordinate (0 = topmost row).
     """
@@ -99,6 +103,7 @@ class Node:
     alarm: AlarmLevel = AlarmLevel.LOW
     faction: Faction = Faction.NONE
     room_type: RoomType | None = None
+    is_anomaly: bool = False
     x: int = 0
     y: int = 0
 
@@ -110,3 +115,8 @@ class Node:
         # ice nodes should have an IceKind != NONE
         if self.kind is NodeKind.ICE and self.ice is IceKind.NONE:
             raise ValueError(f"ICE node {self.id!r} must have an IceKind != NONE")
+        # anomaly flag is only valid for DATA nodes (ADR-0140)
+        if self.is_anomaly and self.kind is not NodeKind.DATA:
+            raise ValueError(
+                f"Non-DATA node {self.id!r} (kind={self.kind.value}) cannot be anomaly"
+            )

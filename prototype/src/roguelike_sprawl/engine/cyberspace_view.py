@@ -23,6 +23,7 @@ from ..lore import (
     load_encounter_table,
 )
 from ..matrix import MatrixGraph, Node, NodeKind
+from ..matrix.anomaly_reward import check_anomaly_reward_on_node_entry
 from ..matrix.cyberspace_generator import CyberspaceLayout, DepthLevel
 from . import action_menu
 from .config import DATA_DIR
@@ -59,6 +60,11 @@ _ROOM_GLYPHS = {
     NodeKind.SYSTEM: "▣",
     NodeKind.CORE: "◎",
 }
+
+# Anomaly variant overrides (ADR-0140 P2.6 — Variable Reward Nodes).
+# Applied to is_anomaly DATA nodes for visual distinction.
+_ANOMALY_GLYPH = "◆"
+_ANOMALY_COLOR = (255, 100, 255)
 
 # Colors by node type
 _NODE_COLORS = {
@@ -259,7 +265,8 @@ def _draw_node(
     is_current: bool,
 ) -> None:
     """Draw a single node at the given screen position."""
-    glyph = _ROOM_GLYPHS.get(node.kind, "?")
+    is_anomaly = bool(getattr(node, "is_anomaly", False))
+    glyph = _ANOMALY_GLYPH if is_anomaly else _ROOM_GLYPHS.get(node.kind, "?")
 
     if is_current:
         fg = (255, 255, 0)  # Yellow for current
@@ -276,7 +283,10 @@ def _draw_node(
         if main.contains(x, y):
             console.print(x=x, y=y, string="◉", fg=fg)
     else:
-        fg = _NODE_COLORS.get(node.kind, (200, 200, 200))
+        if is_anomaly:
+            fg = _ANOMALY_COLOR
+        else:
+            fg = _NODE_COLORS.get(node.kind, (200, 200, 200))
         if main.contains(x, y):
             console.print(x=x, y=y, string=glyph, fg=fg)
 
@@ -541,6 +551,14 @@ def _handle_cyberspace_movement(state: AppState, sym: KeySym) -> None:
             current_zone=best_neighbor.zone.value,
             current_grade=state.player_grade,
             faction=faction_str,
+        )
+        # ADR-0140 P2.6 — Variable Reward Nodes. Anomaly DATA nodes
+        # grant a one-shot bonus reward on entry (Pillar 4 safe).
+        check_anomaly_reward_on_node_entry(
+            state,
+            best_neighbor,
+            random.Random(),
+            already_triggered=state.anomaly_triggered,
         )
     else:
         state.status_messages.append(f">>> No node in direction {direction_name}")
