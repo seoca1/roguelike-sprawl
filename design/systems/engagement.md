@@ -812,3 +812,90 @@ Salvation Phase 종료 후 다시 시작할 수 있는 New Game+ 모드. Pillar 
 - `decisions/0140-engagement-layer.md` — Cycle 1 (complete)
 - `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.ng_plus_unlocked`, `AppState.ng_plus_active`
 - `tests/unit/test_ng_plus.py` — test coverage
+
+---
+
+## Construct Companion (Cycle 4: Pillar 5 actual combat ally)
+
+### 골재
+
+기존 Dixie Flatline 은 dialog-only NPC (npc_event.py: "ghost in the
+machine"). Cycle 4 의 마지막 deliverable 로 Dixie 를 **실제 전투 동료**로
+만드는 flag. Pillar 5 (The Style) 의 깁슨 코퍼스 톤 — Dixie 가 combat
+ally 로서 플레이어와 함께 싸우는 모습. Pillar 4 (The Build) 와 일치 —
+ephemeral session preference, no stat boost.
+
+### 게임 디자인
+
+- **`construct_companion_active: bool = False`**: Dixie 가 actual combat
+  ally 로 활동하는지 여부 (Pillar 4 ephemeral, death = reset)
+- **Default**: dialog-only (기존 npc_event.py 동작)
+- **Enabling 시**: combat 에서 Dixie 가 플레이어와 함께 싸움 (Pillar 5 톤)
+- **Pillar 정합**:
+  - Pillar 1 (The Run): 새 런 = 새 기회
+  - Pillar 4 (The Build): unlock-only meta-progression, no stat boost
+  - Pillar 5 (The Style): Dixie 가 combat ally 로서 깁슨 코퍼스 톤 반영
+
+### Pillar 정합 검증
+
+- **Pillar 1 (The Run)**: 새 런 = 새 기회 (Dixie 도 reset)
+- **Pillar 4 (The Build)**: ephemeral session preference, no meta-progression
+  - test_does_not_persist_across_resets 검증
+  - test_does_not_modify_player_stats 검증
+- **Pillar 5 (The Style)**: Dixie 가 combat ally 로서 깁슨 코퍼스 톤
+
+### 흐름
+
+```
+[Player encounters Dixie in dialog (npc_event.py)]
+    |
+    v
+[Player recruits Dixie: construct_companion_active = True]
+    |
+    v
+[Combat phase: Dixie fights alongside player (Pillar 5)]
+    |
+    v
+[Death or new game: construct_companion_active = False (reset)]
+    (dialog-only mode resumes — Pillar 1)
+```
+
+### 구현 노트
+
+**파일**:
+- `engine/state.py` (NEW field) — `construct_companion_active: bool = False`
+- `engine/npc_event.py` (DEFERRED) — Dixie combat ally 행동 추가
+- `engine/combat.py` (DEFERRED) — Dixie가 ally로 combat 참여하는 로직
+- `tests/unit/test_construct_companion.py` (NEW) — 9 tests, 3 classes
+
+**Quality gates**:
+- ruff: ✅ All checks passed
+- mypy: ✅ 0 errors (150 source files)
+- pytest: ✅ 3441 passed (9 new), 664 skipped, 0 failed
+
+**Test coverage** (TestConstructCompanionField, TestPillar5Compliance, TestConstructCompanionBehavior):
+- Default False (dialog-only)
+- Can be enabled (combat ally mode)
+- Can be disabled
+- is_boolean_type
+- No meta_state write
+- Does not persist across resets
+- Does not modify player stats
+- Default is dialog-only
+- Can be toggled to combat ally
+
+### 향후 작업 (Cycle 4 완료 후)
+
+- **graphic_novel_view.py 4-way split** (deferred per ADR-0133) — v1.1.0+ 후속
+- **Death Replay** (Hall of Dead echo) — v1.2.0+
+- **Tier scaling** — v1.2.0+
+- **Dixie combat ally 구현** (np_event.py, combat.py integration)
+- **Carryover 해부** (NG+ 에서 어떤 unlock carryover 되는지 명세화)
+- **User action**: push (34+ commits), PyPI, Notion
+
+### Cross-Reference (Construct Companion)
+
+- `decisions/0140-engagement-layer.md` — Cycle 1 (complete)
+- `prototype/src/roguelike_sprawl/engine/state.py` — `AppState.construct_companion_active`
+- `prototype/src/roguelike_sprawl/engine/npc_event.py` — `Dixie Flatline` (dialog-only by default)
+- `tests/unit/test_construct_companion.py` — test coverage
