@@ -915,3 +915,40 @@ colorblind + keymap + resolution) 에 font_size 와 high_contrast 두 가지
 - **Cycle 4**: Construct companion, New Game+, Hardcore mode
 - **User action**: push (25+ commits), PyPI, Notion
 - **workspace log.md 갱신**: Cycle 3 accessibility entry 추가 필요
+
+---
+
+## [2026-08-03] feat | Cycle 3 Options menu — Reset Keymap to Defaults (finish)
+
+**Context**: Cycle 3 polish 의 세 번째 (마지막) deliverable. 기존
+settings menu 에 "Reset Keymap to Defaults" 옵션 추가. 기존
+GameSettings.key_bindings (16 default bindings) 와 AppState.keymap_customized
+flag 활용.
+
+### Commit
+- `1714b3e` feat(engine): Options menu — Reset Keymap to Defaults (Cycle 3 finish)
+  - 4 files, 15 insertions, 5 deletions
+
+### 발견
+- **기존 settings 인프라 재사용**: 새 module 추가 없이 settings_view.py 확장
+  - SETTINGS_OPTIONS 7개 → 8개 (keymap 과 resolution 사이에 reset_keymap 추가)
+  - 기존 key_bindings field 와 통합 (16 default bindings)
+- **display: "Default" / "Custom"**: keymap_customized flag 기반
+- **handler: reset_keymap** sets keymap_customized = False
+
+### 검증
+- ruff check: ✅ All checks passed
+- mypy strict: ✅ 0 errors (150 source files)
+- pytest: ✅ 3414 passed, 664 skipped, 0 failed (3404 → +10 누적 신규)
+
+### 의의
+- **Cycle 3 100% 완료**: BGM Manager + Accessibility + Options menu 모두 CLOSED
+- **3개 polish feature** (Cycle 1-3 + v1.1.0 v1.0.0 polish 종합)
+  - 12 commits (bgm_manager + font_size/high_contrast + reset_keymap)
+  - settings.py 의 6개 category 중 Audio/Input/Display 3개 category 활용
+- **Pillar 4 검증**: keymap_customized 도 ephemeral (death = reset)
+
+### 다음 세션
+- **Cycle 4**: Construct companion, New Game+, Hardcore mode
+- **User action**: push (28+ commits), PyPI, Notion
+- **workspace log.md 갱신**: Cycle 3 options menu entry 추가 필요
