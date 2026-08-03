@@ -26,10 +26,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 from roguelike_sprawl.engine import matrix_view  # noqa: E402
 from roguelike_sprawl.engine.layout import Region  # noqa: E402
-from roguelike_sprawl.engine.matrix_view import (  # noqa: E402
+from roguelike_sprawl.engine.matrix_view import _draw_box  # noqa: E402
+from roguelike_sprawl.engine.matrix_view_input import (  # noqa: E402
     _DIRECTION_LABELS,
     _DIRECTION_VECTORS,
-    _draw_box,
     _handle_movement,
 )
 from roguelike_sprawl.matrix import (  # noqa: E402
