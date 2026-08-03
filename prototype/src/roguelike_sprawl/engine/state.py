@@ -14,6 +14,7 @@ from typing import TYPE_CHECKING
 
 from ..combat.effects import CombatEffects
 from ..combat.state import CombatState
+from ..lore import ConstructWhisper, MemoryFragmentTracker
 from ..matrix.exploration import ExplorationState
 from ..matrix.graph import MatrixGraph
 from ..matrix.ppl import Loadout, Program
@@ -212,9 +213,9 @@ class AppState:
     completed_missions: set[str] = field(default_factory=set)
     # Phase E-2: first-combat tutorial overlay (dismissed on Space)
     show_first_combat_tutorial: bool = True
-    # Faction reputation (Phase 6+): persisted across runs in save.
-    # See run/reputation.py for tier system + event integration.
     reputation: ReputationState = field(default_factory=ReputationState)
+    memory_fragment_tracker: MemoryFragmentTracker = field(default_factory=MemoryFragmentTracker)
+    construct_whisper_tracker: ConstructWhisper = field(default_factory=ConstructWhisper)
     # Player is dead (flatline); True until reset
     is_dead: bool = False
     # Death reason (e.g. "Combat", "ICE breach", "Jack-out failure")

@@ -9,6 +9,8 @@ Renders a large branching graph with:
 
 from __future__ import annotations
 
+import random
+
 import tcod.console
 import tcod.event
 from tcod.event import KeyDown, KeySym
@@ -16,9 +18,14 @@ from tcod.event import KeyDown, KeySym
 from ..audio import safe_play
 from ..combat.registry import IceRegistry, ProgramRegistry
 from ..i18n import Translator
+from ..lore import (
+    check_memory_fragment_on_node_entry,
+    load_encounter_table,
+)
 from ..matrix import MatrixGraph, Node, NodeKind
 from ..matrix.cyberspace_generator import CyberspaceLayout, DepthLevel
 from . import action_menu
+from .config import DATA_DIR
 from .input_utils import is_confirm_key
 from .layout import (
     Region,
@@ -33,6 +40,8 @@ from .layout import (
 from .npc_event import DIXIE_FLATLINE_EVENT, NPCState
 from .state import AppState, ScreenKind
 from .status_panel import render_status_panel
+
+_ENCOUNTER_TABLE = load_encounter_table(DATA_DIR / "lore" / "encounter_table.json")
 
 # Camera/viewport state
 _camera_x: float = 0.0
@@ -521,6 +530,17 @@ def _handle_cyberspace_movement(state: AppState, sym: KeySym) -> None:
             state.exploration.visit(best_neighbor.id)
         state.status_messages.append(
             f">>> Moved {direction_name} to {best_neighbor.label} ({best_neighbor.kind.value})"
+        )
+        faction_value = best_neighbor.faction.value
+        faction_str = None if faction_value == "none" else faction_value
+        check_memory_fragment_on_node_entry(
+            state,
+            _ENCOUNTER_TABLE,
+            state.memory_fragment_tracker,
+            random.Random(),
+            current_zone=best_neighbor.zone.value,
+            current_grade=state.player_grade,
+            faction=faction_str,
         )
     else:
         state.status_messages.append(f">>> No node in direction {direction_name}")
