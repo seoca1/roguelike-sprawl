@@ -838,3 +838,40 @@ __all__ for backward compat).
 - **Cycle 4 (Endgame/Retention)**: Construct companion, New Game+, Hardcore mode
 - **User action (v1.0.0)**: push (21+ commits), PyPI, Notion
 - **Cycle 2 마무리**: workspace NEXT_SESSION_TODO.md + log.md 갱신
+
+---
+
+## [2026-08-03] polish | Cycle 3 BGM Manager — per-screen BGM controller (feat/audio)
+
+**Context**: Cycle 3 polish 의 BGM/SFX 통합 첫 단계. 기존 ThemePlayer
+(audio/theme.py) 를 wrap 하는 centralized BGM controller 추가.
+Per-screen BGM mapping + volume/mute control + simulated crossfade.
+
+### Commit
+- `cb88948` feat(audio): BGM Manager (Cycle 3 polish) — per-screen BGM controller
+  - 3 files, 534 insertions
+
+### 발견
+- **기존 audio 인프라 충분**: `ThemePlayer` 가 이미 loop BGM playback 지원,
+  BGM Manager 는 screen→theme mapping + settings 만 추가하면 됨
+- **Pillar 4 경계 명확**: BGM settings 는 ephemeral session preference,
+  death = loss, meta_state 미사용 (test_no_meta_state_field 검증)
+- **Re-export facade 불필요**: BGM Manager 가 새 module 이라 기존 import
+  경로 변경 없음
+
+### 검증
+- ruff check: ✅ All checks passed
+- mypy strict: ✅ 0 errors (150 source files)
+- pytest: ✅ 3404 passed (24 new), 664 skipped, 0 failed (3278 → +126 신규)
+
+### 의의
+- **Cycle 3 1/3 진행**: BGM Manager 완료, 남은 2건 (options menu, accessibility layer)
+- **Per-screen BGM 10 매핑**: MENU/HUB/MATRIX/COMBAT/NPC/SENSE_NET/LOA/CINEMATIC/SALVATION
+- **Test 24 신규**: registration, playback, volume, mute, singleton, Pillar 4 coverage
+- **Cycle 1 + 2 + 3 누적**: 18 commits (b787c95 → cb88948)
+
+### 다음 세션
+- **Cycle 3 잔존**: options menu (keymap, colorblind, font size), accessibility layer
+- **Cycle 4**: Construct companion, New Game+, Hardcore mode
+- **User action**: push (23+ commits), PyPI, Notion
+- **workspace log.md 갱신**: Cycle 3 entry 추가 필요
