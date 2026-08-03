@@ -15,7 +15,7 @@
 | `design/` | 자유롭게 편집, 사용자 검토 영역 | 활성 스펙. 사용자가 직접 수정할 수 있음을 인지. |
 | `testcases/` | 자유롭게 편집, 템플릿 사용 | 디자인 변경 시 동기화 필요. |
 | `decisions/` | Draft 상태는 자유, Accepted는 immutable | 결정된 사항 임의 변경 금지, 새 결정은 신규 ADR로. |
-| `prototype/` | 미정 | 엔진 결정 후 생성. |
+| `prototype/` | Python 3.11 + python-tcod ECS + uv | 확정 (v1.1.0a1, 2026-07-28). 모든 변경 후 `ruff check` + `mypy` + `pytest` 통과 필수. |
 | 루트 메타 파일 | 신중히 수정 | README, AGENTS.md, index, log, ROADMAP, SETUP_LOG |
 
 ## 3. 작업 워크플로우

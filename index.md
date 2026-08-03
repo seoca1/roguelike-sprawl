@@ -10,7 +10,21 @@
 - [ROADMAP](ROADMAP.md) - 단계별 계획 (Phase 4 완료)
 - [SETUP_LOG](SETUP_LOG.md) - 환경 구축 기록
 - [log](log.md) - 활동 로그
+- [CHANGELOG](CHANGELOG.md) - 버전별 변경 이력
+- [GRAPHIC_NOVEL_ARCHITECTURE_ANALYSIS](GRAPHIC_NOVEL_ARCHITECTURE_ANALYSIS.md) - 그래픽 노블 아키텍처 분석
 - [prototype/](../prototype/) - **Phase 4: 코드 프로젝트**
+
+## 세션 / 릴리스 노트
+- [SESSION_SUMMARY_2026-07-11](SESSION_SUMMARY_2026-07-11.md)
+- [SESSION_SUMMARY_2026-07-12](SESSION_SUMMARY_2026-07-12.md)
+- [SESSION_SUMMARY_2026-07-13](SESSION_SUMMARY_2026-07-13.md)
+- [SESSION_SUMMARY_2026-07-27](SESSION_SUMMARY_2026-07-27.md) — v0.9.0 (per-boss VFX + mypy 0)
+- [SESSION_SUMMARY_2026-07-28](SESSION_SUMMARY_2026-07-28.md) — **v1.0.0 FINAL** (게임성 점검 5-phase)
+- [docs/PROGRESS_REPORT_2026-07-28_v1.0.0](docs/PROGRESS_REPORT_2026-07-28_v1.0.0.md) - Notion 발행용
+
+## 대시보드
+- [dashboard/DESIGN_METADATA_PLAN](dashboard/DESIGN_METADATA_PLAN.md) - 메타데이터 설계
+- [dashboard/REORGANIZE_PLAN](dashboard/REORGANIZE_PLAN.md) - 재구성 계획
 
 ## 세계관 (World)
 - [Sprawl Universe](wiki/world/sprawl_universe.md) - 시간/공간, 기본 컨셉
@@ -18,6 +32,9 @@
 - [Factions](wiki/world/factions.md) - 주요 세력
 - [Glossary](wiki/world/glossary.md) - 용어 사전
 - [Style Guide](wiki/world/style_guide.md) - 톤과 미적 가이드
+- [Boss ICE Reference](wiki/world/boss-ice-reference.md) - **Phase B-3 5개 보스 ICE 프로필 + AoE/미니언 스폰 (2026-07-26)**
+- [Derivative Stories](wiki/world/derivative_stories.md) - **이차 창작 단편 매핑 (⚠️ STALE 2026-07-21: 47/111 missions)**
+- [Cross-Project Integration](wiki/world/cross-project-integration.md) - **Fiction ↔ roguelike_sprawl 양방향 통합 (Phase α-J)**
 
 > **Primary source**: `../../../Fiction/wiki/` — 깁슨 원작 분석 (Sprawl Trilogy, characters, settings). 게임 wiki는 게임용 요약.
 
@@ -53,6 +70,144 @@
 
 ## 결정 기록 (Decisions)
 - [Index](decisions/README.md) - 모든 ADR 목록
+
+## Round 4 — Index Reconciliation (2026-07-30) — Operational Docs + Guides
+
+> Orphan pages reconciled from filesystem. Operational docs (DEPLOYMENT/NOTION/GitHub), character journey pages, prototype guides, session summaries.
+
+### 문서 (docs — added 15)
+- [docs/DEPLOYMENT_GUIDE](docs/DEPLOYMENT_GUIDE.md) — 배포 가이드 (GitHub Pages + 대안)
+- [docs/DUNGEON_EXPLORATION_REVIEW](docs/DUNGEON_EXPLORATION_REVIEW.md) — 던전 탐험 리뷰
+- [docs/DUNGEON_OPTION_B_NETHACK](docs/DUNGEON_OPTION_B_NETHACK.md) — NetHack BSP 옵션 분석 (ADR-0060)
+- [docs/DUNGEON_VERIFICATION_CHECKLIST](docs/DUNGEON_VERIFICATION_CHECKLIST.md) — 던전 검증 체크리스트
+- [docs/GITHUB_PROJECTS_SETUP](docs/GITHUB_PROJECTS_SETUP.md) — GitHub Projects 보드 설정
+- [docs/GITHUB_SETUP](docs/GITHUB_SETUP.md) — GitHub 저장소 설정
+- [docs/NOTION_IMPORT](docs/NOTION_IMPORT.md) — Notion 가져오기 절차
+- [docs/REMOTE_DEV_SETUP](docs/REMOTE_DEV_SETUP.md) — 원격 개발 환경 설정
+- [docs/REMOTE_DEV_SETUP_notion](docs/REMOTE_DEV_SETUP_notion.md) — 원격 개발 환경 설정 (Notion 발행용)
+- [docs/SESSION_HANDOVER_NOTION](docs/SESSION_HANDOVER_NOTION.md) — 세션 인수인계 (Notion 발행용)
+- [docs/audits/2026-07-27_balance](docs/audits/2026-07-27_balance.md) — 밸런스 감사 보고서 (2026-07-27)
+- [docs/bgm-external-generation-guide](docs/bgm-external-generation-guide.md) — BGM 외부 생성 가이드
+- [docs/cross-project/phase_beta_analysis](docs/cross-project/phase_beta_analysis.md) — 크로스 프로젝트 Phase β 분석
+- [docs/prose_quality_report_2026-07-25](docs/prose_quality_report_2026-07-25.md) — 산문 품질 보고서 (2026-07-25)
+- [docs/video-generation-guide](docs/video-generation-guide.md) — 비디오 생성 가이드
+
+### 자키 여정 (dashboard/stories/journey — added 3)
+- [dashboard/stories/journey/heretic](dashboard/stories/journey/heretic.md) — 카스 (Heretic) 자키 여정 페이지
+- [dashboard/stories/journey/novice](dashboard/stories/journey/novice.md) — 케이 (Novice) 자키 여정 페이지
+- [dashboard/stories/journey/veteran](dashboard/stories/journey/veteran.md) — 실 (Veteran) 자키 여정 페이지
+
+### 프로토타입 가이드 (prototype — added 9)
+- [prototype/CONTROLS](prototype/CONTROLS.md) — 조작 가이드
+- [prototype/DEMO_GUIDE](prototype/DEMO_GUIDE.md) — 데모 실행 가이드
+- [prototype/DUNGEON_NPC_GUIDE](prototype/DUNGEON_NPC_GUIDE.md) — 던전 NPC 가이드
+- [prototype/INTERACTIVE_GUIDE](prototype/INTERACTIVE_GUIDE.md) — 대화형 실행 가이드
+- [prototype/QUICK_START](prototype/QUICK_START.md) — 빠른 시작 가이드
+- [prototype/SOUND_PLAN](prototype/SOUND_PLAN.md) — 사운드 플랜
+- [prototype/STATUS_PANEL_GUIDE](prototype/STATUS_PANEL_GUIDE.md) — 상태 패널 가이드
+- [prototype/VISUAL_GUIDE](prototype/VISUAL_GUIDE.md) — 비주얼 가이드
+- [prototype/docs/balance/E3-balance-audit](prototype/docs/balance/E3-balance-audit.md) — E-3 밸런스 감사
+
+### 세션 요약 (root SESSION_SUMMARY — added 2)
+- [SESSION_SUMMARY](SESSION_SUMMARY.md) — 마지막 세션 요약
+- [SESSION_SUMMARY_2026-07-28_v1.1.0a1](SESSION_SUMMARY_2026-07-28_v1.1.0a1.md) — v1.1.0a1 세션 요약 (2026-07-28)
+
+## Round 2 — Index Reconciliation (2026-07-30)
+
+> Orphan pages reconciled from filesystem. ADR status from each file's **상태** field. Design doc descriptions from filename or first content line.
+
+### 결정 기록 (Decisions — added 54)
+- [decisions/0001-engine-framework](decisions/0001-engine-framework.md) — python-tcod ECS 기반 엔진 (Accepted)
+- [decisions/0002-rendering-style](decisions/0002-rendering-style.md) — ASCII 렌더링 스타일 (Accepted)
+- [decisions/0003-combat-system](decisions/0003-combat-system.md) — RT-MS 전투 시스템 (Accepted, Revised 2026-06-17)
+- [decisions/0004-code-architecture](decisions/0004-code-architecture.md) — 코드 아키텍처 (Accepted)
+- [decisions/0005-cyberspace-representation](decisions/0005-cyberspace-representation.md) — 사이버스페이스 표현 (Accepted)
+- [decisions/0006-run-structure](decisions/0006-run-structure.md) — 런 구조 (Accepted)
+- [decisions/0007-platform-target](decisions/0007-platform-target.md) — 플랫폼 타겟 (Accepted)
+- [decisions/0008-progression-system](decisions/0008-progression-system.md) — 메타 진행 시스템 (Accepted, Revised 2026-06-17)
+- [decisions/0009-story-news-system](decisions/0009-story-news-system.md) — 스토리/뉴스 시스템 (Accepted)
+- [decisions/0010-i18n-content-pipeline](decisions/0010-i18n-content-pipeline.md) — i18n 콘텐츠 파이프라인 (Accepted)
+- [decisions/0011-ascii-portraits](decisions/0011-ascii-portraits.md) — ASCII 초상화 (Accepted)
+- [decisions/0012-difficulty-rating](decisions/0012-difficulty-rating.md) — PPL/ZDR 난이도 등급 (Accepted)
+- [decisions/0013-story-events](decisions/0013-story-events.md) — 스토리 이벤트 시스템 (Accepted)
+- [decisions/0014-data-salvage](decisions/0014-data-salvage.md) — 데이터 살비지 (Draft)
+- [decisions/0015-crafting-system](decisions/0015-crafting-system.md) — 제작 시스템 (Draft)
+- [decisions/0016-jockey-avatar](decisions/0016-jockey-avatar.md) — 자키 아바타 (Draft)
+- [decisions/0017-mission-material-integration](decisions/0017-mission-material-integration.md) — 미션-재료 통합 (Draft)
+- [decisions/0018-combat-animation](decisions/0018-combat-animation.md) — 전투 애니메이션 (Draft)
+- [decisions/0019-combat-aftermath-subtitles](decisions/0019-combat-aftermath-subtitles.md) — 전투 후일담 + 한글 자막 (Draft)
+- [decisions/0020-fog-of-war-exploration](decisions/0020-fog-of-war-exploration.md) — 안개/탐험 메카닉 (Draft)
+- [decisions/0030-github-utilization](decisions/0030-github-utilization.md) — GitHub 활용 전략 (Accepted)
+- [decisions/0031-original-scenario-integration](decisions/0031-original-scenario-integration.md) — 오리지널 시나리오 통합 (Draft)
+- [decisions/0032-graphic-novel-mode](decisions/0032-graphic-novel-mode.md) — 그래픽 노블 모드 (Draft)
+- [decisions/0040-death-restart-cycle](decisions/0040-death-restart-cycle.md) — 사망-재시작 사이클 (Draft)
+- [decisions/0041-graphic-novel-content-expansion](decisions/0041-graphic-novel-content-expansion.md) — GN 콘텐츠 4× 확장 (Accepted)
+- [decisions/0042-chapter-title-cards](decisions/0042-chapter-title-cards.md) — 챕터 타이틀 카드 + fade (Accepted)
+- [decisions/0043-sound-cue-integration](decisions/0043-sound-cue-integration.md) — 사운드 큐 매핑 (Accepted)
+- [decisions/0044-graphic-novel-save](decisions/0044-graphic-novel-save.md) — GN 이어보기 save/load (Accepted)
+- [decisions/0046-graphic-novel-ending-b](decisions/0046-graphic-novel-ending-b.md) — 엔딩 B 분기 (Accepted)
+- [decisions/0047-text-visibility-typed-messages](decisions/0047-text-visibility-typed-messages.md) — 카테고리형 메시지 (Accepted)
+- [decisions/0048-gn-ending-menu-and-save-migration](decisions/0048-gn-ending-menu-and-save-migration.md) — GN 엔딩 메뉴 + save 마이그레이션 (Accepted)
+- [decisions/0049-graphic-novel-ending-c](decisions/0049-graphic-novel-ending-c.md) — 엔딩 C (소멸/망각/파괴) (Draft)
+- [decisions/0050-boss-ice-system](decisions/0050-boss-ice-system.md) — Boss ICE 3-phase (Draft)
+- [decisions/0051-mission-story-metadata](decisions/0051-mission-story-metadata.md) — 미션-단편 메타데이터 (Draft)
+- [decisions/0052-short-story-expansion-plan](decisions/0052-short-story-expansion-plan.md) — 단편 확장 플랜 A~E (Accepted, All Complete)
+- [decisions/0060-dungeon-exploration-redesign](decisions/0060-dungeon-exploration-redesign.md) — NetHack BSP 미로 (Accepted 2026-06-30)
+- [decisions/0061-novel-integration-architecture](decisions/0061-novel-integration-architecture.md) — Novel Hook Dispatch 4-layer (Accepted 2026-06-30)
+- [decisions/0090-salvation-phase-integration](decisions/0090-salvation-phase-integration.md) — Salvation 단계 통합 (Accepted)
+- [decisions/0101-fiction-metadata-backfill](decisions/0101-fiction-metadata-backfill.md) — Fiction 메타데이터 백필
+- [decisions/0102-v1-release-decision](decisions/0102-v1-release-decision.md) — v1.0.0 릴리스 결정 (Accepted)
+- [decisions/0103-dungeon-only-mode](decisions/0103-dungeon-only-mode.md) — 던전 전용 모드 (Accepted)
+- [decisions/0104-gn-save-slots](decisions/0104-gn-save-slots.md) — GN 세이브 슬롯 (Accepted 2026-07-25)
+- [decisions/0110-module-size-policy](decisions/0110-module-size-policy.md) — 모듈 사이즈 정책 (250/500/1000 LOC) (Accepted 2026-07-12)
+- [decisions/0111-graphic-novel-view-size](decisions/0111-graphic-novel-view-size.md) — GN view 사이즈 (Accepted 2026-07-12)
+- [decisions/0112-combat-effects-size](decisions/0112-combat-effects-size.md) — 전투 이펙트 사이즈 (Accepted 2026-07-12)
+- [decisions/0113-combat-view-size](decisions/0113-combat-view-size.md) — 전투 view 사이즈 (Accepted 2026-07-12)
+- [decisions/0120-m2-docstring-batch](decisions/0120-m2-docstring-batch.md) — M2 docstring 배치 (Accepted 2026-07-12)
+- [decisions/0125-boss-aoe-minion-spawn](decisions/0125-boss-aoe-minion-spawn.md) — Boss AoE 미니언 스폰 (Accepted 2026-07-26)
+- [decisions/0130-balance-audit-and-ppl-sync](decisions/0130-balance-audit-and-ppl-sync.md) — 밸런스 감사 + PPL 동기화 (Accepted)
+- [decisions/0131-faction-rep-cross-run-persistence](decisions/0131-faction-rep-cross-run-persistence.md) — Faction Rep cross-run 지속성 (Accepted)
+- [decisions/0133-graphic-novel-view-split](decisions/0133-graphic-novel-view-split.md) — GN view 분리 (Accepted)
+- [decisions/0140-engagement-layer](decisions/0140-engagement-layer.md) — Engagement Layer (Top 3 partial, Accepted)
+- [decisions/0141-additional-module-splits](decisions/0141-additional-module-splits.md) — 추가 모듈 분할 (Top 2 partial, Accepted)
+- [decisions/template](decisions/template.md) — ADR 작성 템플릿 (NNNN-short-title.md)
+
+### 디자인 (Design — added 35)
+- [design/CONTENT_EXPANSION_PLAN](design/CONTENT_EXPANSION_PLAN.md) — 콘텐츠 확장 플랜 (2026-06-25)
+- [design/research/unicode-block-art](design/research/unicode-block-art.md) — 유니코드 블록 아트 조사 (2026-07-10)
+- [design/research/UNICODE_BLOCK_ART_SUMMARY](design/research/UNICODE_BLOCK_ART_SUMMARY.md) — 유니코드 블록 아트 요약 (2026-07-10)
+- [design/balance/ppl_zdr_balance](design/balance/ppl_zdr_balance.md) — PPL/ZDR 밸런스 노트
+- [design/scenario/CHARACTER_METADATA](design/scenario/CHARACTER_METADATA.md) — 캐릭터 메타데이터 명세 (2026-06-23)
+- [design/scenario/chapter-4-bridge](design/scenario/chapter-4-bridge.md) — Chapter 4: Bridge
+- [design/scenario/chapter-4-suit](design/scenario/chapter-4-suit.md) — Chapter 4: Suit
+- [design/scenario/chapter-5-veteran](design/scenario/chapter-5-veteran.md) — Chapter 5: Veteran
+- [design/scenario/chapter-5-wigan](design/scenario/chapter-5-wigan.md) — Chapter 5: Wigan
+- [design/scenario/chapter-6-angie](design/scenario/chapter-6-angie.md) — Chapter 6: Angie
+- [design/scenario/chapter-6-veteran](design/scenario/chapter-6-veteran.md) — Chapter 6: Veteran
+- [design/scenario/chapter-7-sally](design/scenario/chapter-7-sally.md) — Chapter 7: Sally
+- [design/scenario/chapter-7-suit](design/scenario/chapter-7-suit.md) — Chapter 7: Suit
+- [design/scenario/chapter-8-3jane](design/scenario/chapter-8-3jane.md) — Chapter 8: 3Jane
+- [design/scenario/chapter-9-neuromancer](design/scenario/chapter-9-neuromancer.md) — Chapter 9: Neuromancer
+- [design/scenario/case-ch1-mapping](design/scenario/case-ch1-mapping.md) — Case Ch1 매핑 (UPDATED)
+- [design/scenario/case-ch1-expansion-plan](design/scenario/case-ch1-expansion-plan.md) — Case Ch1 확장 플랜 (DRAFT)
+- [design/scenario/short-story-metadata-schema](design/scenario/short-story-metadata-schema.md) — 단편 메타데이터 스키마
+- [design/scenario/short-story-metadata-design](design/scenario/short-story-metadata-design.md) — 단편 메타데이터 설계 (DRAFT)
+- [design/scenario/stat-difficulty-design](design/scenario/stat-difficulty-design.md) — 스탯/난이도 설계 (DRAFT)
+- [design/scenario/WORLD_RELATIONSHIP](design/scenario/WORLD_RELATIONSHIP.md) — 세계관 관계 (2026-06-23)
+- [design/scenario/zone-expansion](design/scenario/zone-expansion.md) — 존 확장 (v0.1.0)
+- [design/scenario/PROGRESS_DASHBOARD](design/scenario/PROGRESS_DASHBOARD.md) — 시나리오 진도 대시보드 (Phase 7 완료, 2026-07-08)
+- [design/scenario/SALVATION_PHASE_INTEGRATION](design/scenario/SALVATION_PHASE_INTEGRATION.md) — Salvation 단계 통합 (v0.1-0.1.0)
+- [design/scenario/save-data-structure](design/scenario/save-data-structure.md) — 세이브 데이터 구조 (DRAFT)
+- [design/systems/i18n](design/systems/i18n.md) — 국제화 시스템
+- [design/systems/dialogue](design/systems/dialogue.md) — 대화 시스템
+- [design/systems/inventory](design/systems/inventory.md) — 인벤토리 시스템 (ADR-0008 상속)
+- [design/systems/story-archive](design/systems/story-archive.md) — 스토리 아카이브 시스템
+- [design/systems/dungeon_events](design/systems/dungeon_events.md) — 던전 이벤트 시스템 (ADR-0060 상속)
+- [design/systems/economy](design/systems/economy.md) — 경제 시스템
+- [design/systems/progression](design/systems/progression.md) — 메타 진행 시스템 (ADR-0008 상속)
+- [design/systems/procgen](design/systems/procgen.md) — 절차적 생성 시스템
+- [design/story/prologue](design/story/prologue.md) — 프롤로그 — 오리지널 주인공 3인
+- [design/story/characters](design/story/characters.md) — 캐릭터 명세 — 오리지널 주인공 3인
 
 ## 테스트 케이스
 - [Index](testcases/README.md) - 모든 테스트 시나리오
