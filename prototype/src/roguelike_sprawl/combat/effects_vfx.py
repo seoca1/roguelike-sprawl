@@ -22,7 +22,7 @@ import math
 from collections.abc import Callable
 from dataclasses import dataclass, field
 
-from .effects import (
+from .effects_data import (
     Animation,
     AnimationFrame,
     CinematicSequence,
