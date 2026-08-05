@@ -73,3 +73,54 @@ graphic_novel_view.py 는 다음을 **재export**:
 - `__all__` + `# noqa: F401` 로 외부 API 변동 없음
 - 신규 import path (`graphic_novel_data`, `graphic_novel_loaders`) 도 사용 가능 (forward compat)
 - 잔존: import * 사용처는 영향 없음 (전체 grep 확인)
+
+---
+
+## Status (2026-08-04) — partial split, view portion still monolithic
+
+> **Cycle 4 polish (2026-08-03~04)**: 추가 분할 시도 (graphic_novel_types / graphic_novel_render / graphic_novel_menu 3개 신규 모듈) → 미완성 imports로 revert. working tree는 본 ADR 작성 시점 상태로 복원됨.
+
+### Current LOC (2026-08-04 audit)
+
+| 모듈 | LOC | ADR-0110 상태 |
+|---|---:|---|
+| `graphic_novel_data.py` | 123 | ✅ Well below 250 |
+| `graphic_novel_loaders.py` | 262 | ⚠️ Approaching 250 LOC ceiling (single file) |
+| `graphic_novel_view.py` | **1,266** | ❌ >1000 (this ADR's residual) |
+| **합계** | 1,651 | 분할 효과 유효 — view는 monolithic 유지 |
+
+### 4-way split attempt (2026-08-04) — reverted
+
+**시도**: `graphic_novel_types.py` (SceneData 등) + `graphic_novel_render.py` (render_scene 등) + `graphic_novel_menu.py` (menu + endings + main screen) 분리.
+
+**실패 원인**:
+- 신규 모듈의 dataclass / function import 누락 (특히 `Translator`, `AppState`, `SceneData`, `Background`, `Portrait`, `NOVEL_LEFT_MARGIN` / `NOVEL_RIGHT_MARGIN` / `wrap_text_for_novel` / `paginate_lines` / `compute_typed_page_index` 등)
+- 동적 attribute (`combat_state._dixie_last_attack_ms`와 유사 패턴) 사용 시 mypy attr-defined 경고
+- 한 세션에 너무 많은 변경 금지 (AGENTS.md §6)
+
+**조치**: `git checkout prototype/src/roguelike_sprawl/engine/graphic_novel_view.py && rm graphic_novel_types.py graphic_novel_render.py graphic_novel_menu.py` — pre-split 상태로 복원.
+
+### 향후 split 계획 (v1.2.0+ backlog)
+
+다음 우선순위:
+1. `graphic_novel_view.py` → `gn_render.py` (render_scene/chapter_card) + `gn_menu.py` (menu/endings/main screen) + `gn_input.py` (handle_*_input) — *render/menu 책임 분리*
+2. `graphic_novel_loaders.py` (262 LOC) → 분리 시점에 검토 (현재는 acceptable)
+3. **ADR-0133 보충 ADR** (split implementation 재시도 시): "graphic_novel_view split v2"
+
+### Justification for current monolithic view (1,266 LOC)
+
+- **Data + loaders는 ADR-0133으로 이미 분리됨** (graphic_novel_data.py, graphic_novel_loaders.py) — view만 monolithic
+- **Cycle 4 polish 통합**: Hardcore/NG+ menu UI가 graphic_novel_view에 추가되며 LOC 자연 증가 (1,272 → 1,266, 일부 polish로 LOC 감소했음)
+- **Pillar 5 (The Style)**: view는 *player-facing experience* — monolithic 구조가 narrative 흐름 파악에 유리 (단, contributor entry cost는 ↑)
+- **테스트 안정성**: 175 GN-related tests pass, 0 failed — 기능적 위험 없음
+
+### ADR-0110 / ADR-0111 정합
+
+- **ADR-0110** (Module Size Policy): 1000+ LOC requires ADR justification — **본 Status �션이 그 정당화**.
+- **ADR-0111** (graphic_novel_view size): Option 4 (정당화만) — 본 Status 추가.
+- **ADR-0113** (combat_view 1,053 LOC): 동일 패턴이지만 별도 ADR — 현재 보류.
+
+### 다음 사이클 검토 (v1.1.0+ 후속)
+
+- 그래픽 노블 view 진짜 분할이 필요해지면 **fresh ADR-0142 (graphic_novel_view split v2)** 작성 후 진행.
+- 1-모듈 1-cycle 원칙 유지 (한 세션 = 한 큰 변경).

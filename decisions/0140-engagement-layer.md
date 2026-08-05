@@ -238,3 +238,19 @@ v1.0.0 release 후 사용자 consultation (2026-07-28) 에서 게임 중독성/�
 
 - 2026-07-28: Draft 작성 (사용자 consultation 후속)
 - 2026-07-28: **Accepted (Option 1 partial — Top 3)** — Phase 1 (Memory Fragments) + Phase 2 (Construct Whisper) 구현 완료
+- 2026-08-03: Cycle 4 polish 1~4 (v1.1.0 final) — Engagement Layer 본 phase 완료 (Variable Reward + Near-Miss + Faction Tension + Auto-Play Tempo + Grade 6 Master Whisper)
+- 2026-08-04: Hardcore / NG+ / Construct companion polish 추가 — 본 ADR의 8 proposal과 *별도* 디자인 (Pillar 3/4/5 각각). 자세한 문서는 design/ 하위에서 관리 (아래 "연관 결정" 참조)
+
+---
+
+## 연관 결정 (Cycle 4 polish — Engagement Layer와 직교)
+
+본 ADR (Engagement Layer 8 proposals) 와 별도로, Cycle 4 polish (2026-08-03~04) 에서 추가된 3개 mechanic은 *다른 Pillar*를 다룬다. 본 ADR의 narrative alignment를 위해 cross-reference:
+
+| Polish | Pillar | 관련 문서 | 핵심 구현 |
+| --- | --- | --- | --- |
+| **Hardcore mode** (1-life permadeath) | Pillar 3 (death has weight) | [`design/scenario/death-restart.md §6.5 Hardcore Mode Override`](../design/scenario/death-restart.md) + [`design/GDD.md §3 난이도 모드`](../design/GDD.md) | `state.hardcore_mode` flag, `restart_with_new_jockey` raises ValueError, MENU routing in `handle_death_summary_choice` / `handle_death_input`, "PERMANENT DEATH" UI |
+| **NG+ mode** (Post-Salvation meta unlock) | Pillar 4 (unlock-only meta-progression) | [`design/systems/progression.md ## NG+ 라이프사이클`](../design/systems/progression.md) + [`design/scenario/SALVATION_PHASE_INTEGRATION.md §5.4`](../design/scenario/SALVATION_PHASE_INTEGRATION.md) | `state.ng_plus_unlocked` set in `salvation_view.handle_salvation_epilogue_input`, `state.ng_plus_active` toggle via N-key in `menu.handle_character_select_input`, lock gate enforcement |
+| **Construct companion (Dixie)** | Pillar 5 (Style — digital ghost) | [`design/systems/combat.md ### Construct Companion (Dixie)`](../design/systems/combat.md) | `state.construct_companion_active` flag, `combat/state.py::tick_dixie_ally` (2000ms tick, 5 dmg), wired in `engine/main_loop._advance_combat` |
+
+**의미**: 본 ADR의 8 proposal (Engagement — 즉각적 보상 + variety 강화) 과 polish 3 mechanic (Pillar 3/4/5 강화) 은 *직교 관계* — engagement는 "재미/중독성" 축, polish는 "의미/영속성" 축. 두 축이 함께 v1.1.0 의 *완성된* player experience 를 구성.
