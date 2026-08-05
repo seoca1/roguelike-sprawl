@@ -24,6 +24,15 @@ Game/roguelike_sprawl/tools/
 
 Both tools feed `data/` (consumed by prototype runtime) and `docs/dashboards/` (consumed by GitHub Pages deploy).
 
+## Audit
+
+| Tool | Purpose | Usage |
+|------|---------|-------|
+| **`audit_sprawl.py`** | Project-scoped wikilink integrity check (broken links + orphans) | `cd Game/roguelike_sprawl && python3 tools/audit_sprawl.py` |
+| **`find_broken_links.py`** | Find broken wikilinks with file:line:target detail | `cd Game/roguelike_sprawl && python3 tools/find_broken_links.py` |
+
+> Both scripts use `ROOT = Path(".")` — must be run from `Game/roguelike_sprawl/` directory. `audit_sprawl.py` is the more comprehensive tool; `find_broken_links.py` provides detailed per-line output for debugging.
+
 ## Conventions
 
 - Python 3.11+
