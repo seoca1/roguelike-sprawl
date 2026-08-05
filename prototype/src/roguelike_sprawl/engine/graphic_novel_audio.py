@@ -44,6 +44,7 @@ SCENE_SOUND_MAP: dict[str, str] = {
     "movement_neon_hum": "movement/neon_hum",
     # Atmospheric SFX
     "neon_hum": "movement/neon_hum",
+    "hvac_hum": "movement/neon_hum",  # Corporate building HVAC → ambient building hum
     # Jack-in/out
     "jack_in_zap": "movement/jack_in_zap",
     "jack_out_buzz": "movement/jack_out_buzz",
