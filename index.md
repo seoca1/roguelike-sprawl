@@ -15,11 +15,11 @@
 - [prototype/](../prototype/) - **Phase 4: 코드 프로젝트**
 
 ## 세션 / 릴리스 노트
-- [SESSION_SUMMARY_2026-07-11](SESSION_SUMMARY_2026-07-11.md)
-- [SESSION_SUMMARY_2026-07-12](SESSION_SUMMARY_2026-07-12.md)
-- [SESSION_SUMMARY_2026-07-13](SESSION_SUMMARY_2026-07-13.md)
-- [SESSION_SUMMARY_2026-07-27](SESSION_SUMMARY_2026-07-27.md) — v0.9.0 (per-boss VFX + mypy 0)
-- [SESSION_SUMMARY_2026-07-28](SESSION_SUMMARY_2026-07-28.md) — **v1.0.0 FINAL** (게임성 점검 5-phase)
+- [SESSION_SUMMARY_2026-07-11](_archive/sessions/SESSION_SUMMARY_2026-07-11.md)
+- [SESSION_SUMMARY_2026-07-12](_archive/sessions/SESSION_SUMMARY_2026-07-12.md)
+- [SESSION_SUMMARY_2026-07-13](_archive/sessions/SESSION_SUMMARY_2026-07-13.md)
+- [SESSION_SUMMARY_2026-07-27](_archive/sessions/SESSION_SUMMARY_2026-07-27.md) — v0.9.0 (per-boss VFX + mypy 0)
+- [SESSION_SUMMARY_2026-07-28](_archive/sessions/SESSION_SUMMARY_2026-07-28.md) — **v1.0.0 FINAL** (게임성 점검 5-phase)
 - [docs/PROGRESS_REPORT_2026-07-28_v1.0.0](docs/PROGRESS_REPORT_2026-07-28_v1.0.0.md) - Notion 발행용
 
 ## 대시보드
@@ -85,7 +85,7 @@
 - [docs/NOTION_IMPORT](docs/NOTION_IMPORT.md) — Notion 가져오기 절차
 - [docs/REMOTE_DEV_SETUP](docs/REMOTE_DEV_SETUP.md) — 원격 개발 환경 설정
 - [docs/REMOTE_DEV_SETUP_notion](docs/REMOTE_DEV_SETUP_notion.md) — 원격 개발 환경 설정 (Notion 발행용)
-- [docs/SESSION_HANDOVER_NOTION](docs/SESSION_HANDOVER_NOTION.md) — 세션 인수인계 (Notion 발행용)
+- [SESSION_HANDOVER_NOTION (archived)](_archive/sessions/SESSION_HANDOVER_NOTION.md) — 세션 인수인계 (Notion 발행용, 과거 — 2026-08-05 archive 이동)
 - [docs/audits/2026-07-27_balance](docs/audits/2026-07-27_balance.md) — 밸런스 감사 보고서 (2026-07-27)
 - [docs/bgm-external-generation-guide](docs/bgm-external-generation-guide.md) — BGM 외부 생성 가이드
 - [docs/cross-project/phase_beta_analysis](docs/cross-project/phase_beta_analysis.md) — 크로스 프로젝트 Phase β 분석
@@ -110,7 +110,7 @@
 
 ### 세션 요약 (root SESSION_SUMMARY — added 2)
 - [SESSION_SUMMARY](SESSION_SUMMARY.md) — 마지막 세션 요약
-- [SESSION_SUMMARY_2026-07-28_v1.1.0a1](SESSION_SUMMARY_2026-07-28_v1.1.0a1.md) — v1.1.0a1 세션 요약 (2026-07-28)
+- [SESSION_SUMMARY_2026-07-28_v1.1.0a1](_archive/sessions/SESSION_SUMMARY_2026-07-28_v1.1.0a1.md) — v1.1.0a1 세션 요약 (2026-07-28)
 
 ## Round 2 — Index Reconciliation (2026-07-30)
 

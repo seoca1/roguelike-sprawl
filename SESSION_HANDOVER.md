@@ -202,9 +202,10 @@ Game/roguelike_sprawl/
 ├── CHARACTER_PATHS.md (v0.5.0)
 ├── SESSION_SUMMARY.md (v0.8.0, 2026-07-25)  ← 갱신
 ├── SESSION_HANDOVER.md (이 문서, v0.8.0)     ← 갱신
-├── SESSION_SUMMARY_2026-07-11.md
-├── SESSION_SUMMARY_2026-07-12.md
-├── SESSION_SUMMARY_2026-07-13.md
+├── _archive/sessions/
+│   ├── SESSION_SUMMARY_2026-07-11.md
+│   ├── SESSION_SUMMARY_2026-07-12.md
+│   └── SESSION_SUMMARY_2026-07-13.md
 ├── SETUP_LOG.md
 ├── IMPROVEMENTS.md
 ├── COMMIT_MSG_2026-07-13.txt (참고)

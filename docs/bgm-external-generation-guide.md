@@ -328,7 +328,7 @@ done
 
 ```bash
 # 12개 WAV 일괄 검증
-python3 /Users/emilio/projects/Projects/scripts/verify_sounds.py
+python3 /Users/emilio/projects/Projects/Game/roguelike_sprawl/scripts/verify_sounds.py
 
 # 각 트랙 청취
 python3 /Users/emilio/projects/Projects/scripts/verify_sounds.py --play-all
