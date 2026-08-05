@@ -232,6 +232,49 @@ class Stage(StrEnum):
 3. **decisions/0090-salvation-phase.md** (신규 ADR)
 4. **GitHub Projects** 카드 이동 (Done)
 
+### 5.4 Cycle 4 polish: Meta Unlock NG+ (2026-08-03)
+
+> **ADR-0140 partial (Pillar 4 unlock-only meta-progression)**: Salvation Phase 완료가 *mechanical aftermath* — New Game+ mode를 unlock한다. narrative culmination이 structural replay로 이어지는 연결고리.
+
+**Unlock hook** (구현: `engine/salvation_view.py::handle_salvation_epilogue_input`):
+
+```python
+# Simplified
+if event.sym in (KeySym.RETURN, KeySym.SPACE):
+    if confirmed_runner and confirmed_runner.selection:
+        # ... existing salvation_epilogue transition
+        state.screen = ScreenKind.SALVATION_EPILOGUE
+        state.ng_plus_unlocked = True  # ← Cycle 4 polish: meta unlock trigger
+```
+
+**Lifecycle**: `Salvation Epilogue 확정 → ng_plus_unlocked=True → 메인 메뉴/CHARACTER_SELECT에서 N키 토글 → ng_plus_active=True → 새 런 시작`.
+
+**Player flow**:
+```
+[Salvation Phase 완료]
+        ↓ (자동 — unlock hook)
+state.ng_plus_unlocked = True
+        ↓ (메인 메뉴 복귀)
+[NEW RUN 선택]
+        ↓
+CHARACTER_SELECT (unlocked 상태)
+        ↓ [N키] — 토글
+state.ng_plus_active = not state.ng_plus_active
+        ↓ [Enter]
+[새 런 시작 — unlock 보존, stats reset]
+```
+
+**Lock gate**: locked (`ng_plus_unlocked = False`) 상태에서 캐릭터 확정 시 `ng_plus_active = False` force — locked 모드로 NG+ 시작 불가.
+
+**Pillar 4 정합**:
+- *Unlock-only meta-progression* — NG+는 unlock 대상이 아니라 replay escalation.
+- *No stat boost* — NG+ 런도 동일 stats.
+- *Ephemeral preference* — `ng_plus_active`는 런 시작 시점 snapshot, `ng_plus_unlocked`만 보존.
+
+**Cross-reference**: [`systems/progression.md ## NG+ 라이프사이클`](../systems/progression.md) — 전체 lifecycle + 구현 포인트 + 18 test coverage.
+
+**의의**: Salvation이 narrative closure가 아니라 *다음 시작*이 � — 플레이어가 *왜 다시 하는가*에 대한 mechanical answer.
+
 ---
 
 ## 6. 연계성 검증 (현재 상태)

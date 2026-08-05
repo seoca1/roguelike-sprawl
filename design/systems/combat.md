@@ -88,6 +88,53 @@ ADR-0003의 핵심. 한 줄 요약: **실시간 자동 공격 + 메뉴로 강력
 [매트릭스 복귀]
 ```
 
+### Construct Companion (Dixie — Pillar 5 actual combat ally)
+
+> **Cycle 4 polish (2026-08-03, ADR-0140 partial)**: Dixie Flatline은 기본적으로 dialog-only NPC이지만, `state.construct_companion_active = True`일 때 **실제 전투 동료**로 작동한다. 깁슨 코퍼스의 "digital ghost" 톤을 그대로 반영 — Dixie가 console cowboy와 함께 싸우는 모습.
+
+**Activation**: `state.construct_companion_active` (default `False`). 토글은 옵션/설정 화면 또는 construct_whisper UI에서 노출 (v1.2.0+).
+
+**Combat behavior** (구현: `combat/state.py::tick_dixie_ally`):
+
+| 항목 | 값 | 비고 |
+| --- | --- | --- |
+| Tick interval | **2000 ms** (`ALLY_AUTO_ATTACK_INTERVAL_MS`) | 플레이어 자동 공격(1500 ms)보다 느림 — 보조 딜러 포지션 |
+| Damage per tick | **5** (`DIXIE_ALLY_DAMAGE`) | 고정값 — Pillar 4 unlock-only meta-progression (stat boost 금지) |
+| Target | `combat_state.target` | 플레이어와 동일 대상 — focus fire |
+| Stunned check | None | Dixie는 status effect 면역 (구현 단순화) |
+
+**Wire-up**: `engine/main_loop.py::_advance_combat`이 `step_combat` 직후, `maybe_boss_phase_transition` 직전에 `tick_dixie_ally(state.combat_state, state)` 호출.
+
+**Ephemeral state**: `combat_state._dixie_last_attack_ms` (dynamic attribute, `CombatState` schema에 미포함 — ephemeral per-run).
+
+**Pillar 정합**:
+- **Pillar 4 (The Build)**: unlock-only meta-progression. Dixie ally는 stat boost 없이 *동일 stats + DPS 보조*. AppState() 생성 시 자동 reset (테스트로 검증: `test_does_not_modify_player_stats`).
+- **Pillar 5 (The Style)**: Dixie는 깁슨 코퍼스의 *construct* — 죽은 decker의 ROM에 저장된 인격. 전투에서 싸우는 것은 톤과 정합 ("Dixie strikes ..." 로그).
+
+**Combat log example**:
+```
+>>> Dixie strikes black-ice for 5
+>>> Dixie strikes black-ice for 5
+```
+
+**Test coverage** (`tests/unit/test_construct_companion.py::TestTickDixieAlly`, 5 tests):
+- `test_no_op_when_construct_companion_inactive` — default dialog-only
+- `test_attacks_when_construct_companion_active` — deals DIXIE_ALLY_DAMAGE
+- `test_no_op_when_combat_finished` — no attack after combat ends
+- `test_no_op_when_target_is_dead` — no attack when target HP <= 0
+- `test_respects_attack_interval` — consecutive calls don't double-attack
+
+**의도적 제약** (구현 단순화):
+- Dixie는 skill 사용 불가 (auto-attack만)
+- Dixie는 damage 받지 않음 (no HP, no death state)
+- Dixie는 target selection 로직 없음 (플레이어 target 그대로 따름)
+- Dixie는 status effect 면역
+
+향후 확장 (v1.2.0+ backlog):
+- Dixie skill set (예: `[[decompile]]`, `[[icebreaker_overdrive]]`)
+- Dixie HP / damage taken / player damage source 추적
+- AI target selection (lowest HP enemy)
+
 ## Data Salvage (ADR-0014)
 
 전투 승리 후 *데이터 회수* 흐름. Pillar 3의 무게를 일부 완화하되, *선택 + 승리 + 제한* 으로 무게 유지.

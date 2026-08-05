@@ -162,6 +162,56 @@ death_cause: str = ""  # "Combat" / "Black ICE" / "T-A ICE" / "Black ICE breach"
 - `DEATH_SUMMARY` (자키 리포트)
 - `HALL_OF_DEAD` (Archive)
 
+## 6.5 Hardcore Mode Override (1-life permadeath)
+
+> **Cycle 4 polish (2026-08-03, ADR-0140 partial)**: Pillar 3 (The Flatline)을 강화하는 *difficulty modifier* — Hardcore 모드가 활성화되면 모든 revival 경로가 차단되고 자키는 1회 death 후 영구 사망한다.
+
+**Activation**: `state.hardcore_mode` (default `False`). 토글 위치는 v1.2.0+ backlog (현재는 settings/character select 옵션 후보).
+
+**Behavior contract** (구현: `engine/death.py`):
+
+| 코드 위치 | 동작 |
+| --- | --- |
+| `restart_with_new_jockey(state, char_id)` | `state.hardcore_mode`가 True이면 `ValueError("Hardcore mode (1-life permadeath): restart_with_new_jockey blocked. Caller must route player to MENU.")` raise. Revival 차단. |
+| `handle_death_summary_choice(state, choice)` | `hardcore_mode=True` + choice ∈ {`new_jockey`, `same_jockey`} 일 때 자동으로 MENU로 라우팅 (`hall_of_dead` / `menu` choice는 허용). |
+| `handle_death_input(event, state)` | `hardcore_mode=True`일 때 ENTER/SPACE/KP_ENTER → `advance_to_death_summary()` 대신 MENU 직접 라우팅. Q/+/-/M/category 키는 unchanged. |
+| `render_death_screen(console, state)` | `hardcore_mode=True`일 때 title `"FLATLINE"` → `"PERMANENT DEATH"`, subtitle `"Static. Silence."` → `"1-life permadeath. No revival."`, option1 `"[ENTER] Continue — See Summary"` → `"[ENTER] Return to Menu"`. |
+
+**Death flow (Hardcore active)**:
+```
+COMBAT (HP=0)
+    ↓ trigger_death()
+DEATH (X 머리, "PERMANENT DEATH" 표시)
+    ↓ ENTER/SPACE → MENU로 직접 라우팅 (DEATH_SUMMARY skip)
+    ↓ Q → quit game
+
+[MENU] ← 영구 사망. 새 런 시작 시 hardcore_mode를 다시 토글해야 함.
+```
+
+**Death flow (Hardcore inactive)**:
+기존 ADR-0040 flow 그대로 — DEATH → DEATH_SUMMARY → new_jockey / same_jockey / hall_of_dead / menu 중 선택.
+
+**Pillar 정합**:
+- **Pillar 3 (The Flatline) 강화**: death has real weight — 1-life permadeath는 *되돌릴 수 없는* death를 의미.
+- **Pillar 4 (The Build) 준수**: ephemeral session preference (AppState() 재생성 시 자동 reset). unlock-only meta-progression — Hardcore 모드 자체는 unlock 대상 아님 (preference).
+- **Pillar 5 (The Style)**: 깁슨 톤 유지 — death는 *narrative moment*, 모드 선택이 이를 강화.
+
+**Test coverage** (`tests/unit/test_hardcore_mode.py`, 21 passed):
+
+| Test Class | Coverage |
+| --- | --- |
+| `TestHardcoreModeField` (4) | default False, can enable/disable, type check |
+| `TestPillar4Compliance` (3) | no meta_state write, doesn't persist across resets, type check |
+| `TestHardcoreModeBehavior` (3) | default allows revival, restart raises in hardcore, restart works when disabled |
+| `TestHardcoreDeathSummaryIntegration` (5) | locked routes new/same jockey → MENU, allows hall_of_dead/menu, non-hardcode proceeds |
+| `TestHardcoreDeathScreenInput` (5) | hardcore ENTER/SPACE/KP_ENTER → MENU, Q quits, normal flow regression |
+| `TestHardcoreDeathScreenRender` (2) | render smoke tests (hardcore + normal) |
+
+**의도적 제약** (구현 단순화):
+- Hardcore 모드는 *런 시작 시* 결정 (런 중 토글 불가)
+- Hardcore는 meta-progression 우회 없음 — death 후 메인 메뉴 복귀
+- 다른 difficulty modifier (예: 적 강화, 자원 감소)는 v1.2.0+ backlog
+
 ## 7. 화면 흐름 (상태 머신)
 
 ```

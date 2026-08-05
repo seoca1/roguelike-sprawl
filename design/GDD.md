@@ -52,6 +52,29 @@
 - 새 construct unlock (Dixie 류, 픽스처 AI)
 - 의뢰 라인 / 클라이언트 진행 (light, optional)
 
+### 난이도 모드 (Difficulty Modes)
+
+> **Cycle 4 polish (2026-08-03, ADR-0140 partial)**: 런 시작 시 difficulty modifier를 선택하여 Pillar 3 (The Flatline)의 무게를 조절. v1.1.0에서 Hardcore 모드 1종만 출시; 향후 확장 예정 (v1.2.0+).
+
+**현재 모드**:
+
+| 모드 | 설명 | Pillar 영향 | 구현 |
+| --- | --- | --- | --- |
+| **Normal** (default) | ADR-0040 death/restart cycle 그대로 — DEATH_SUMMARY에서 new_jockey/same_jockey/hall_of_dead/menu 선택 가능. | Pillar 3 (기본) | `state.hardcore_mode = False` |
+| **Hardcore** | 1-life permadeath — revival 경로 모두 차단. DEATH 시 PERMANENT DEATH 화면 → MENU 직접 라우팅. | Pillar 3 (강화) | `state.hardcore_mode = True` |
+
+**Hardcore mode 동작 (자세한 명세)**: [`scenario/death-restart.md §6.5 Hardcore Mode Override`](scenario/death-restart.md)
+
+**선택 시점**: 런 시작 시 (character select 직전 또는 settings에서). 런 중 토글 불가.
+
+**Ephemerality** (Pillar 4 준수): AppState() 재생성 시 자동 reset. meta_state에 저장되지 않음.
+
+**향후 확장** (v1.2.0+ backlog):
+- 적 강화 모드 (ZDR +1~2)
+- 자원 감소 모드 (시작 HP/AP 감소)
+- Iron Man (Hardcore + 자동저장 비활성화)
+- Custom Ruleset (multiplier 조합)
+
 ## 4. Core Systems
 
 자세한 명세는 `systems/` 참조. 모든 시스템이 문서화됨 (2026-07-08 기준).
