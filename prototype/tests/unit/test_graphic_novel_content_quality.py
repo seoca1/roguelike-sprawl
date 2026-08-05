@@ -75,7 +75,7 @@ class TestDialogueLength:
 
 
 class TestSceneTotalLength:
-    """Each scene total dialogue should be 1000-2500 chars."""
+    """Each scene total dialogue should be 1000-8000 chars (4× expansion per ADR-0032)."""
 
     @pytest.mark.parametrize("idx", range(len(_SCENES)), ids=_scene_id)
     def test_scene_total_range(self, idx: int) -> None:
@@ -84,7 +84,7 @@ class TestSceneTotalLength:
         if "09_epilogue" in path.name:
             return  # Skip epilogue length check (deliberately 1-line)
         total = sum(len(ln.get("text_en", "")) for ln in scene.get("dialogue", []))
-        assert 1000 <= total <= 2800, f"{path.name} total {total} chars outside 1000-2800 target"
+        assert 1000 <= total <= 8000, f"{path.name} total {total} chars outside 1000-8000 target"
 
 
 # ============================================================================

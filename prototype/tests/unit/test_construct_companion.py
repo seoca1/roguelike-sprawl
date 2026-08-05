@@ -4,11 +4,51 @@ Covers:
 - AppState.construct_companion_active default + boolean toggle
 - Pillar 5 compliance: Dixie as combat ally (not dialog-only)
 - Death/rebirth: combat ally is ephemeral (Pillar 4 unlock-only meta-progression)
+- Combat integration: tick_dixie_ally behavior (combat/state.py)
 """
 
 from __future__ import annotations
 
+from roguelike_sprawl.combat.state import Combatant, CombatState, tick_dixie_ally
 from roguelike_sprawl.engine.state import AppState
+
+
+def _make_enemy() -> Combatant:
+    return Combatant(
+        id="test_enemy",
+        name="Test Enemy",
+        portrait="X",
+        color=(255, 255, 255),
+        hp=100,
+        max_hp=100,
+        ap=0,
+        max_ap=0,
+        auto_attack_damage=5,
+        skills=(),
+        team="enemy",
+        ice_kind="standard",
+    )
+
+
+def _make_player() -> Combatant:
+    return Combatant(
+        id="test_player",
+        name="Test Player",
+        portrait="@",
+        color=(255, 255, 255),
+        hp=100,
+        max_hp=100,
+        ap=0,
+        max_ap=0,
+        auto_attack_damage=10,
+        skills=(),
+        team="player",
+        ice_kind="standard",
+    )
+
+
+def _make_combat_state() -> CombatState:
+    return CombatState(player=_make_player(), enemy=_make_enemy())
 
 
 class TestConstructCompanionField:
@@ -71,13 +111,77 @@ class TestConstructCompanionBehavior:
         """Enabling switches Dixie from dialog-only to actual combat ally."""
         state = AppState()
         state.construct_companion_active = True
-        # The actual combat behavior is handled in npc_event.py / combat/
-        # (deferred implementation — this is just the flag)
         assert state.construct_companion_active is True
+
+
+class TestTickDixieAlly:
+    """tick_dixie_ally: Dixie attacks alongside player when construct_companion_active."""
+
+    def test_no_op_when_construct_companion_inactive(self) -> None:
+        """Default: Dixie is dialog-only, no attacks."""
+        app = AppState()
+        cs = _make_combat_state()
+        original_hp = cs.enemy.hp
+        tick_dixie_ally(cs, app)
+        assert cs.enemy.hp == original_hp
+
+    def test_attacks_when_construct_companion_active(self) -> None:
+        """When enabled, Dixie strikes the target for DIXIE_ALLY_DAMAGE."""
+        from roguelike_sprawl.combat.state import DIXIE_ALLY_DAMAGE
+
+        app = AppState()
+        app.construct_companion_active = True
+        cs = _make_combat_state()
+        original_hp = cs.enemy.hp
+        cs.tick_ms = DIXIE_ALLY_DAMAGE + 5000
+        tick_dixie_ally(cs, app)
+        assert cs.enemy.hp == original_hp - DIXIE_ALLY_DAMAGE
+
+    def test_no_op_when_combat_finished(self) -> None:
+        """If combat ended, Dixie doesn't attack."""
+        from roguelike_sprawl.combat.state import DIXIE_ALLY_DAMAGE
+
+        app = AppState()
+        app.construct_companion_active = True
+        cs = _make_combat_state()
+        cs.finished = True
+        original_hp = cs.enemy.hp
+        cs.tick_ms = DIXIE_ALLY_DAMAGE + 5000
+        tick_dixie_ally(cs, app)
+        assert cs.enemy.hp == original_hp
+
+    def test_no_op_when_target_is_dead(self) -> None:
+        """If target hp <= 0, Dixie doesn't attack."""
+        from roguelike_sprawl.combat.state import DIXIE_ALLY_DAMAGE
+
+        app = AppState()
+        app.construct_companion_active = True
+        cs = _make_combat_state()
+        cs.enemy.hp = 0
+        original_hp = cs.enemy.hp
+        cs.tick_ms = DIXIE_ALLY_DAMAGE + 5000
+        tick_dixie_ally(cs, app)
+        assert cs.enemy.hp == original_hp
+
+    def test_respects_attack_interval(self) -> None:
+        """Dixie does not attack on every tick (interval respected)."""
+        from roguelike_sprawl.combat.state import DIXIE_ALLY_DAMAGE
+
+        app = AppState()
+        app.construct_companion_active = True
+        cs = _make_combat_state()
+        cs.tick_ms = DIXIE_ALLY_DAMAGE + 5000
+        original_hp = cs.enemy.hp
+        tick_dixie_ally(cs, app)
+        hp_after_first = cs.enemy.hp
+        tick_dixie_ally(cs, app)
+        assert cs.enemy.hp == hp_after_first
+        assert original_hp - hp_after_first == DIXIE_ALLY_DAMAGE
 
 
 __all__ = [
     "TestConstructCompanionField",
     "TestPillar5Compliance",
     "TestConstructCompanionBehavior",
+    "TestTickDixieAlly",
 ]

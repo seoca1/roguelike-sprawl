@@ -19,6 +19,9 @@ from .state_models import (  # ADR-0141 split — dataclasses live in state_mode
     StatusEffect,
 )
 
+if TYPE_CHECKING:
+    from ..engine.state import AppState
+
 __all__ = [
     "AP_REGEN_INTERVAL_MS",
     "AUTO_ATTACK_INTERVAL_MS",
@@ -832,3 +835,29 @@ def _apply_enemy_skill(state: CombatState, enemy: Combatant, skill: Skill) -> No
         state.push(f"!! {skill.name}: your attack power -{skill.buff_amount}!")
     # Buff/heal/detect skills have no effect when used by enemies on
     # themselves (no AI decision-making); skip silently.
+
+
+DIXIE_ALLY_DAMAGE = 5
+ALLY_AUTO_ATTACK_INTERVAL_MS = 2000
+
+
+def tick_dixie_ally(combat_state: CombatState, app_state: AppState) -> None:
+    """Cycle 4 Pillar 5: Dixie attacks alongside player when construct_companion_active.
+
+    Only active when the player toggled Dixie from dialog-only to combat ally.
+    Ephemeral: relies on ``app_state.construct_companion_active`` (Pillar 4 compliant,
+    no meta-progression; resets on AppState() construction).
+    """
+    if not getattr(app_state, "construct_companion_active", False):
+        return
+    if combat_state.finished:
+        return
+    target = combat_state.target
+    if target is None or target.hp <= 0:
+        return
+    last = getattr(combat_state, "_dixie_last_attack_ms", 0)
+    if combat_state.tick_ms - last < ALLY_AUTO_ATTACK_INTERVAL_MS:
+        return
+    _apply_damage(combat_state, target, DIXIE_ALLY_DAMAGE)
+    combat_state.push(f">>> Dixie strikes {target.id} for {DIXIE_ALLY_DAMAGE}")
+    combat_state._dixie_last_attack_ms = combat_state.tick_ms  # type: ignore[attr-defined]

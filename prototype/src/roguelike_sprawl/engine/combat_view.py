@@ -296,11 +296,11 @@ def _draw_combatants(
 
 
 def _hp_bar(hp: int, max_hp: int, width: int = 20) -> str:
-    """Generate an HP bar: [▓▓▓▓▓░░░░░]."""
+    """Generate an HP bar: [▓▓▓▓�░░░░░]."""
     if max_hp <= 0:
         return "[" + "░" * width + "]"
     ratio = hp / max_hp
-    filled = int(ratio * width)
+    filled = min(int(ratio * width), width)
     empty = width - filled
     return "[" + "▓" * filled + "░" * empty + "]"
 

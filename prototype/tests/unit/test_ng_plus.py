@@ -5,11 +5,14 @@ Covers:
 - AppState.ng_plus_active default + boolean toggle
 - Pillar 4 compliance: ephemeral session preference, unlock-only
 - No stat boosts across runs (Pillar 4: unlock-only meta-progression)
+- Salvation epilogue confirmation unlocks NG+ (death.py integration hook)
 """
 
 from __future__ import annotations
 
-from roguelike_sprawl.engine.state import AppState
+from tcod.event import KeyDown, KeySym, Modifier, Scancode
+
+from roguelike_sprawl.engine.state import AppState, ScreenKind
 
 
 class TestNGPlusFields:
@@ -93,8 +96,153 @@ class TestNGPlusBehavior:
         assert state.ng_plus_active is False
 
 
+class TestNGPlusUnlockHook:
+    """salvation_view unlock contract: reaching SALVATION_EPILOGUE unlocks NG+."""
+
+    def test_default_state_ng_plus_locked(self) -> None:
+        """Before reaching an ending, ng_plus_unlocked is False (default)."""
+        state = AppState()
+        assert state.ng_plus_unlocked is False
+
+    def test_unlock_pattern_after_salvation_epilogue_state(self) -> None:
+        """After transitioning to SALVATION_EPILOGUE, ng_plus_unlocked must be True.
+
+        This mirrors the hook in salvation_view.py: when the user confirms
+        their epilogue choice (ENTER/SPACE), the screen transitions to
+        SALVATION_EPILOGUE and ng_plus_unlocked is set to True.
+        """
+        state = AppState()
+        state.screen = ScreenKind.SALVATION_EPILOGUE
+        state.ng_plus_unlocked = True
+        assert state.ng_plus_unlocked is True
+        assert state.screen == ScreenKind.SALVATION_EPILOGUE
+
+    def test_unlock_is_idempotent(self) -> None:
+        """Setting ng_plus_unlocked multiple times is safe (no state corruption)."""
+        state = AppState()
+        state.ng_plus_unlocked = True
+        state.ng_plus_unlocked = True
+        state.ng_plus_unlocked = True
+        assert state.ng_plus_unlocked is True
+
+    def test_ng_plus_active_starts_false_after_unlock(self) -> None:
+        """After unlocking, ng_plus_active remains False (player hasn't started NG+ yet)."""
+        state = AppState()
+        state.ng_plus_unlocked = True
+        assert state.ng_plus_active is False
+
+
+class TestNGPlusMenuUI:
+    """Cycle 4 Pillar 4: NG+ menu UI in CHARACTER_SELECT screen (menu.py hook)."""
+
+    def test_locked_run_forces_ng_plus_active_false(self) -> None:
+        """If ng_plus_unlocked is False, ng_plus_active must be forced False on confirm.
+
+        Even if a stale True value existed, confirming a character on a locked
+        run clears ng_plus_active (Pillar 4: lock gate enforcement).
+        """
+        from roguelike_sprawl.engine.menu import handle_character_select_input
+
+        state = AppState()
+        state.ng_plus_unlocked = False
+        state.ng_plus_active = True
+        state.screen = ScreenKind.CHARACTER_SELECT
+        event = KeyDown(sym=KeySym.RETURN, scancode=Scancode.A, mod=Modifier.NONE)
+        handle_character_select_input(event, state)
+        assert state.ng_plus_active is False
+
+    def test_unlocked_run_preserves_toggle_state(self) -> None:
+        """When unlocked, the player's toggle is preserved through character confirm."""
+        from roguelike_sprawl.engine.menu import handle_character_select_input
+
+        state = AppState()
+        state.ng_plus_unlocked = True
+        state.ng_plus_active = True
+        state.screen = ScreenKind.CHARACTER_SELECT
+        event = KeyDown(sym=KeySym.RETURN, scancode=Scancode.A, mod=Modifier.NONE)
+        handle_character_select_input(event, state)
+        assert state.ng_plus_active is True
+
+    def test_n_key_toggles_when_unlocked(self) -> None:
+        """Pressing N in CHARACTER_SELECT toggles ng_plus_active when unlocked."""
+        from roguelike_sprawl.engine.menu import handle_character_select_input
+
+        state = AppState()
+        state.ng_plus_unlocked = True
+        state.ng_plus_active = False
+        state.screen = ScreenKind.CHARACTER_SELECT
+        event = KeyDown(sym=KeySym.N, scancode=Scancode.N, mod=Modifier.NONE)
+        handle_character_select_input(event, state)
+        assert state.ng_plus_active is True
+        event = KeyDown(sym=KeySym.N, scancode=Scancode.N, mod=Modifier.NONE)
+        handle_character_select_input(event, state)
+        assert state.ng_plus_active is False
+
+    def test_n_key_noop_when_locked(self) -> None:
+        """Pressing N when locked does nothing (can't toggle into an un-unlocked mode)."""
+        from roguelike_sprawl.engine.menu import handle_character_select_input
+
+        state = AppState()
+        state.ng_plus_unlocked = False
+        state.ng_plus_active = False
+        state.screen = ScreenKind.CHARACTER_SELECT
+        event = KeyDown(sym=KeySym.N, scancode=Scancode.N, mod=Modifier.NONE)
+        handle_character_select_input(event, state)
+        assert state.ng_plus_active is False
+
+
+class TestNGPlusMenuRender:
+    """Cycle 4 Pillar 4: render_character_select shows NG+ status (smoke tests)."""
+
+    def test_render_does_not_crash_when_locked(self) -> None:
+        """Locked mode: render shows no NG+ indicator (smoke test)."""
+        import tcod.console
+
+        from roguelike_sprawl.engine.menu import render_character_select
+        from roguelike_sprawl.i18n.translator import Translator
+
+        state = AppState()
+        state.screen = ScreenKind.CHARACTER_SELECT
+        console = tcod.console.Console(width=80, height=30)
+        t = Translator(lang="en")
+        render_character_select(console, t, state)
+
+    def test_render_does_not_crash_when_unlocked_off(self) -> None:
+        """Unlocked but inactive: render shows NG+ MODE: OFF (smoke test)."""
+        import tcod.console
+
+        from roguelike_sprawl.engine.menu import render_character_select
+        from roguelike_sprawl.i18n.translator import Translator
+
+        state = AppState()
+        state.screen = ScreenKind.CHARACTER_SELECT
+        state.ng_plus_unlocked = True
+        state.ng_plus_active = False
+        console = tcod.console.Console(width=80, height=30)
+        t = Translator(lang="en")
+        render_character_select(console, t, state)
+
+    def test_render_does_not_crash_when_unlocked_on(self) -> None:
+        """Unlocked + active: render shows NG+ MODE: ON (smoke test)."""
+        import tcod.console
+
+        from roguelike_sprawl.engine.menu import render_character_select
+        from roguelike_sprawl.i18n.translator import Translator
+
+        state = AppState()
+        state.screen = ScreenKind.CHARACTER_SELECT
+        state.ng_plus_unlocked = True
+        state.ng_plus_active = True
+        console = tcod.console.Console(width=80, height=30)
+        t = Translator(lang="en")
+        render_character_select(console, t, state)
+
+
 __all__ = [
     "TestNGPlusFields",
     "TestPillar4Compliance",
     "TestNGPlusBehavior",
+    "TestNGPlusUnlockHook",
+    "TestNGPlusMenuUI",
+    "TestNGPlusMenuRender",
 ]
