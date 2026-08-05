@@ -147,6 +147,7 @@ def handle_salvation_intro_input(
                 state.salvation_epilogue_elapsed_ms = 0.0
                 state.salvation_epilogue_typed_chars = 0
                 state.salvation_epilogue_dialogue_index = 0
+                state.ng_plus_unlocked = True
             return True
 
     return True

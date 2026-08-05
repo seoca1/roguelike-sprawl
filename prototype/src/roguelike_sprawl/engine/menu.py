@@ -474,21 +474,40 @@ def render_character_select(console: tcod.console.Console, t: Translator, state:
     selected = getattr(state, "character_select_index", 0)
     y = 6
     for i, (name, _char_id, desc) in enumerate(CHARACTER_OPTIONS):
-        marker = "▸ " if i == selected else "  "
+        marker = "▶ " if i == selected else "  "
         fg = (255, 255, 0) if i == selected else (200, 200, 200)
         console.print(x=4, y=y + i * 4, string=f"{marker}[{i + 1}] {name}", fg=fg)
         console.print(x=6, y=y + i * 4 + 1, string=desc, fg=(128, 128, 128))
         console.print(x=6, y=y + i * 4 + 2, string="─" * 50, fg=(60, 60, 60))
 
+    if state.ng_plus_unlocked:
+        ng_status = "NG+ MODE: ON" if state.ng_plus_active else "NG+ MODE: OFF"
+        ng_color = (255, 200, 80) if state.ng_plus_active else (120, 120, 120)
+        console.print(
+            x=(width - len(ng_status)) // 2,
+            y=console.height - 3,
+            string=ng_status,
+            fg=ng_color,
+        )
+
     footer_hint = "[↑↓] Navigate  [Enter] Confirm  [ESC] Back"
+    if state.ng_plus_unlocked:
+        footer_hint = "[↑↓] Navigate  [N] NG+  [Enter] Confirm  [ESC] Back"
     if t.lang == "ko":
         footer_hint = "[↑↓] 이동  [Enter] 확인  [ESC] 뒤로"
+        if state.ng_plus_unlocked:
+            footer_hint = "[↑↓] 이동  [N] NG+  [Enter] 확인  [ESC] 뒤로"
     console.print(0, console.height - 1, "═" * width)
     console.print((width - len(footer_hint)) // 2, console.height - 1, f" {footer_hint} ")
 
 
 def handle_character_select_input(event: object, state: AppState) -> bool:
-    """Handle input on CHARACTER_SELECT screen. Arrow keys navigate, Enter confirms."""
+    """Handle input on CHARACTER_SELECT screen. Arrow keys navigate, Enter confirms.
+
+    Cycle 4 Pillar 4: NG+ unlock hook — press N to toggle ng_plus_active when
+    ng_plus_unlocked is True. Confirming a character applies the toggle to
+    the new run (state.ng_plus_active reflects whether this is an NG+ run).
+    """
     import tcod.event
 
     if isinstance(event, tcod.event.KeyDown):
@@ -501,6 +520,9 @@ def handle_character_select_input(event: object, state: AppState) -> bool:
         if event.sym in (tcod.event.KeySym.DOWN, tcod.event.KeySym.S):
             state.character_select_index = (state.character_select_index + 1) % 3
             return True
+        if event.sym is tcod.event.KeySym.N and state.ng_plus_unlocked:
+            state.ng_plus_active = not state.ng_plus_active
+            return True
         if event.sym in (
             tcod.event.KeySym.RETURN,
             tcod.event.KeySym.KP_ENTER,
@@ -510,6 +532,8 @@ def handle_character_select_input(event: object, state: AppState) -> bool:
             char_id = CHARACTER_OPTIONS[idx][1]
             state.character_id = char_id
             state.chapter_id = f"chapter_{char_id}"
+            if not state.ng_plus_unlocked:
+                state.ng_plus_active = False
             _load_chapter(state, char_id)
             state.screen = ScreenKind.CHAPTER
             return True
@@ -519,6 +543,8 @@ def handle_character_select_input(event: object, state: AppState) -> bool:
             char_id = CHARACTER_OPTIONS[idx][1]
             state.character_id = char_id
             state.chapter_id = f"chapter_{char_id}"
+            if not state.ng_plus_unlocked:
+                state.ng_plus_active = False
             _load_chapter(state, char_id)
             state.screen = ScreenKind.CHAPTER
             return True

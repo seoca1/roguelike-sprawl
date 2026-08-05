@@ -223,7 +223,16 @@ def restart_with_new_jockey(state: AppState, new_character_id: str) -> None:
     Args:
         state: App state.
         new_character_id: "novice" | "veteran" | "heretic" (must differ from current).
+
+    Raises:
+        ValueError: If hardcore_mode is True (1-life permadeath — revival blocked).
     """
+    if state.hardcore_mode:
+        raise ValueError(
+            "Hardcore mode (1-life permadeath): restart_with_new_jockey blocked. "
+            "Caller must route player to MENU."
+        )
+
     if new_character_id == state.character_id:
         # Same character — use jack_out_to_hub
         jack_out_to_hub(state)
@@ -284,15 +293,21 @@ def render_death_screen(
 
     console.clear(bg=(0, 0, 0))
 
-    # Title
-    title = "FLATLINE"
+    if state.hardcore_mode:
+        title = "PERMANENT DEATH"
+        title_fg = (200, 30, 30)
+        subtitle = "1-life permadeath. No revival."
+    else:
+        title = "FLATLINE"
+        title_fg = (140, 0, 0)
+        subtitle = "Static. Silence."
+
     console.print(
         x=(SCREEN_WIDTH - len(title)) // 2,
         y=4,
         string=title,
-        fg=(140, 0, 0),
+        fg=title_fg,
     )
-    subtitle = "Static. Silence."
     console.print(
         x=(SCREEN_WIDTH - len(subtitle)) // 2,
         y=5,
@@ -344,13 +359,18 @@ def render_death_screen(
     )
 
     # Options
-    option1 = "[ENTER] Continue — See Summary"
+    if state.hardcore_mode:
+        option1 = "[ENTER] Return to Menu"
+        option1_fg = (200, 200, 200)
+    else:
+        option1 = "[ENTER] Continue — See Summary"
+        option1_fg = (200, 200, 200)
     option2 = "[Q] Quit Game"
     console.print(
         x=(SCREEN_WIDTH - len(option1)) // 2,
         y=SCREEN_HEIGHT // 2 + 6,
         string=option1,
-        fg=(200, 200, 200),
+        fg=option1_fg,
     )
     console.print(
         x=(SCREEN_WIDTH - len(option2)) // 2,
@@ -470,6 +490,7 @@ def handle_death_input(
     """Handle input on the death screen. Returns False to quit.
 
     ADR-0040: ENTER advances to DEATH_SUMMARY.
+    Hardcore mode (1-life permadeath): ENTER routes to MENU instead — no revival.
     """
     import tcod.event
 
@@ -480,7 +501,13 @@ def handle_death_input(
         return False
 
     if event.sym in (tcod.event.KeySym.RETURN, tcod.event.KeySym.SPACE, tcod.event.KeySym.KP_ENTER):
-        # Advance to DEATH_SUMMARY
+        if state.hardcore_mode:
+            state.screen = ScreenKind.MENU
+            state.is_dead = False
+            state.death_reason = ""
+            state.death_cause = ""
+            state.status_messages.append(">>> HARDCORE MODE: 1-life permadeath. No revival.")
+            return True
         advance_to_death_summary(state)
         return True
 
@@ -586,7 +613,19 @@ def handle_death_summary_choice(
     Args:
         state: App state.
         choice: "new_jockey" | "same_jockey" | "hall_of_dead" | "menu"
+
+    Hardcore mode (1-life permadeath): "new_jockey" and "same_jockey" choices
+    are routed to MENU instead of attempting restart (which would raise).
+    "hall_of_dead" and "menu" remain available.
     """
+    if state.hardcore_mode and choice in ("new_jockey", "same_jockey"):
+        state.status_messages.append(">>> HARDCORE MODE: 1-life permadeath. No revival.")
+        state.screen = ScreenKind.MENU
+        state.is_dead = False
+        state.death_reason = ""
+        state.death_cause = ""
+        return
+
     if choice == "new_jockey":
         # Pick a different character (any of the 3, not the current one)
         available = [c for c in ("novice", "veteran", "heretic") if c != state.character_id]

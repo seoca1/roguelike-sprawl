@@ -12,7 +12,7 @@ no-ops and don't appear in the dispatch table.
 from __future__ import annotations
 
 from ..combat.registry import IceRegistry, ProgramRegistry
-from ..combat.state import step_combat
+from ..combat.state import step_combat, tick_dixie_ally
 from . import hacking_view
 from .arc_phase import advance_arc_phase
 from .auto_play_tempo import get_tempo_multiplier
@@ -104,10 +104,11 @@ def _advance_combat(
     ice_registry: IceRegistry | None,
     program_registry: ProgramRegistry | None,
 ) -> None:
-    """Tick COMBAT: step_combat + boss phase transition."""
+    """Tick COMBAT: step_combat + boss phase transition + Dixie ally (Pillar 5)."""
     if state.combat_state is None:
         return
     step_combat(state.combat_state)
+    tick_dixie_ally(state.combat_state, state)
     maybe_boss_phase_transition(
         state,
         ice_registry=ice_registry,
