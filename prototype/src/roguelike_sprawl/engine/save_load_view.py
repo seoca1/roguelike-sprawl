@@ -13,7 +13,7 @@ References:
 
 from __future__ import annotations
 
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import tcod.console
 import tcod.event
@@ -21,6 +21,9 @@ import tcod.event
 from . import config as _engine_config
 from .save_manager import MAX_SLOTS, SaveError, SaveManager, SaveSlotEmptyError
 from .state import AppState, ScreenKind
+
+if TYPE_CHECKING:
+    from ..i18n import Translator
 
 # --- Selection state (per AppState) ---
 
@@ -109,7 +112,7 @@ def _format_elapsed(seconds: int) -> str:
     return f"{h}h {m:02d}m"
 
 
-def render_save_load(console: tcod.console.Console, state: AppState) -> None:
+def render_save_load(console: tcod.console.Console, state: AppState, t: Translator) -> None:
     """Render the Save/Load browser."""
     SCREEN_WIDTH = _engine_config.SCREEN_WIDTH  # noqa: N806
     SCREEN_HEIGHT = _engine_config.SCREEN_HEIGHT  # noqa: N806
@@ -121,7 +124,7 @@ def render_save_load(console: tcod.console.Console, state: AppState) -> None:
     selected = get_selected_slot(state)
     _draw_save_load_slots(console, SCREEN_WIDTH, slots, selected, state)
     _draw_save_load_controls(console, SCREEN_WIDTH, SCREEN_HEIGHT)
-    _draw_save_load_status(console, SCREEN_HEIGHT, state)
+    _draw_save_load_status(console, SCREEN_HEIGHT, state, t)
 
 
 # ------------------------------------------------------------------
@@ -254,8 +257,11 @@ def _draw_save_load_controls(console: Any, screen_width: int, screen_height: int
         )
 
 
-def _draw_save_load_status(console: Any, screen_height: int, state: AppState) -> None:
+def _draw_save_load_status(
+    console: Any, screen_height: int, state: AppState, t: Translator
+) -> None:
     """The last 3 status messages, dimmed, along the very bottom."""
+    del t  # Reserved for future i18n
     if not state.status_messages:
         return
     for i, msg in enumerate(state.status_messages[-3:]):

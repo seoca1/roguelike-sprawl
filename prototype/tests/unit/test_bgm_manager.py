@@ -84,9 +84,7 @@ class TestThemePlayback:
 
     def test_play_theme_success(self) -> None:
         bgm = BgmManager()
-        with patch(
-            "roguelike_sprawl.audio.bgm_manager.play_theme", return_value=True
-        ) as mock_play:
+        with patch("roguelike_sprawl.audio.bgm_manager.play_theme", return_value=True) as mock_play:
             assert bgm.play_theme("matrix_rain") is True
             assert bgm.current_theme == "matrix_rain"
             mock_play.assert_called_once()
@@ -144,9 +142,7 @@ class TestVolumeControl:
 
     def test_set_volume_with_current_theme_restarts(self) -> None:
         bgm = BgmManager()
-        with patch(
-            "roguelike_sprawl.audio.bgm_manager.play_theme", return_value=True
-        ) as mock_play:
+        with patch("roguelike_sprawl.audio.bgm_manager.play_theme", return_value=True) as mock_play:
             bgm.play_theme("matrix_rain")
             mock_play.reset_mock()
             bgm.set_volume(0.5)

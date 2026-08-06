@@ -350,7 +350,7 @@
       "name_en": "Loa Encounter",
       "name_ko": "로아 조우",
       "type": "matrix",
-      "is_terminal": false,
+      "is_terminal": true,
       "objective_kind": "npc",
       "description_en": "Rare matrix event in deep architecture. Encounter a ghost-god (Loa) of the matrix. Choose: talk, fight, or leave. Talk yields a data fragment.",
       "description_ko": "딥 아키텍처의 희귀 매트릭스 이벤트. 매트릭스의 유령신(로아)을 조우한다. 선택: 대화, 전투, 이탈. 대화는 데이터 프래그먼트를 보상한다.",
@@ -380,7 +380,12 @@
       "module": "roguelike_sprawl.data_fragment",
       "appstate_field": "data_fragments",
       "catalog_size": 5,
-      "rarity_tiers": ["common", "uncommon", "rare", "legendary"]
+      "rarity_tiers": [
+        "common",
+        "uncommon",
+        "rare",
+        "legendary"
+      ]
     }
   },
   "transitions": [
@@ -474,6 +479,14 @@
       "trigger_en": "Death screen dismissed",
       "trigger_ko": "사망 화면 닫기",
       "system": "RunState.mark_death_restart()"
+    },
+    {
+      "from": "black_market",
+      "to": "pending",
+      "condition": "after_vendor_exit",
+      "trigger_en": "Player exits the black market vendor screen",
+      "trigger_ko": "플레이어가 블랙 마켓 상인 화면 종료",
+      "system": "hub_loop → pending (between-runs)"
     }
   ],
   "missions": [

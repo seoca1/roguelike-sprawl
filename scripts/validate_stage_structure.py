@@ -56,6 +56,16 @@ def fail(msg: str) -> None:
     raise SystemExit(1)
 
 
+# Collect-only mode for non-fatal checks: surfaces ALL issues before exit.
+COLLECTED_FAILURES: list[str] = []
+
+
+def fail_collect(msg: str) -> None:
+    """Print + collect. Does NOT exit. Use for non-fatal structural checks."""
+    print(f"  [FAIL] {msg}")
+    COLLECTED_FAILURES.append(msg)
+
+
 def ok(msg: str) -> None:
     print(f"  [OK] {msg}")
 
@@ -107,8 +117,11 @@ def validate(data: dict) -> None:
             continue
         has_out = any(t["from"] == s["id"] for t in transitions)
         if not has_out:
-            fail(f"non-terminal stage '{s['id']}' has no outgoing transition")
-    ok("All non-terminal stages have transitions")
+            fail_collect(
+                f"non-terminal stage '{s['id']}' has no outgoing transition"
+            )
+    if not COLLECTED_FAILURES:
+        ok("All non-terminal stages have transitions")
 
     # Missions
     missions = data["missions"]
@@ -158,6 +171,11 @@ def main() -> int:
         fail(f"JSON parse error: {e}")
     ok("JSON parsed successfully")
     validate(data)
+    if COLLECTED_FAILURES:
+        print(f"\n[FAIL] {len(COLLECTED_FAILURES)} collected failure(s):")
+        for f in COLLECTED_FAILURES:
+            print(f"  - {f}")
+        return 1
     print("\n[PASS] All validations passed.")
     return 0
 

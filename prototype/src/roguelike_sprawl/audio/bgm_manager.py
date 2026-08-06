@@ -69,9 +69,7 @@ class BgmManager:
             theme_name: Theme name from THEMES dict (e.g. "matrix_rain", "finn_office").
         """
         if theme_name not in THEMES:
-            raise ValueError(
-                f"Unknown theme '{theme_name}'. Available: {sorted(THEMES.keys())}"
-            )
+            raise ValueError(f"Unknown theme '{theme_name}'. Available: {sorted(THEMES.keys())}")
         self._screen_themes[screen_name] = theme_name
         self._registered = True
 

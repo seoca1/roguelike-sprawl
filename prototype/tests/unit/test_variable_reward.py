@@ -144,9 +144,7 @@ class TestAnomalyReward:
 
     def test_apply_credits(self) -> None:
         state = type("S", (), {"credits": 100, "status_messages": []})()
-        reward = AnomalyReward(
-            kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits"
-        )
+        reward = AnomalyReward(kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits")
         result = apply_anomaly_reward(state, reward)
         assert state.credits == 150
         assert result.reward is reward
@@ -162,26 +160,20 @@ class TestAnomalyReward:
 
     def test_apply_info(self) -> None:
         state = type("S", (), {"info_pieces": 0, "status_messages": []})()
-        reward = AnomalyReward(
-            kind=AnomalyRewardKind.INFO, amount=1, label="+1 data fragment"
-        )
+        reward = AnomalyReward(kind=AnomalyRewardKind.INFO, amount=1, label="+1 data fragment")
         apply_anomaly_reward(state, reward)
         assert state.info_pieces == 1
 
     def test_apply_defensive_missing_fields(self) -> None:
         """State without any reward fields should still work (initializes 0)."""
         state = type("S", (), {"status_messages": []})()
-        reward = AnomalyReward(
-            kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits"
-        )
+        reward = AnomalyReward(kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits")
         apply_anomaly_reward(state, reward)
         assert state.credits == 50
 
     def test_apply_appends_status_message(self) -> None:
         state = type("S", (), {"credits": 0, "status_messages": []})()
-        reward = AnomalyReward(
-            kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits"
-        )
+        reward = AnomalyReward(kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits")
         apply_anomaly_reward(state, reward)
         assert len(state.status_messages) == 1
         assert "Anomaly recovered" in state.status_messages[0]
@@ -260,12 +252,8 @@ class TestAnomalyIsPillar4Safe:
 
     def test_rewards_are_flat_not_scaling(self) -> None:
         """Same reward amount on every roll (no progressive scaling)."""
-        r1 = AnomalyReward(
-            kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits"
-        )
-        r2 = AnomalyReward(
-            kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits"
-        )
+        r1 = AnomalyReward(kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits")
+        r2 = AnomalyReward(kind=AnomalyRewardKind.CREDITS, amount=50, label="+50 credits")
         assert r1.amount == r2.amount
 
 

@@ -319,7 +319,9 @@ class TestCheckOnNodeEntry:
 class TestFactionTensionOneShot:
     """One-shot per (faction, polarity) pair."""
 
-    def _try_trigger(self, state: Faction, faction: Faction, rep: int) -> FactionTensionResult | None:
+    def _try_trigger(
+        self, state: Faction, faction: Faction, rep: int
+    ) -> FactionTensionResult | None:
         """Try seeds until event triggers. Returns None if no seed triggered."""
         state.reputation = ReputationState()
         state.reputation.adjust(faction, rep, "test")
@@ -360,7 +362,9 @@ class TestFactionTensionOneShot:
                 )
                 # Either: skipped (already triggered) OR new rng state doesn't trigger
                 if result.event is None:
-                    assert "already triggered" in result.status_message or result.status_message == ""
+                    assert (
+                        "already triggered" in result.status_message or result.status_message == ""
+                    )
                     return
         # Otherwise: no seed triggered in 200 trials (statistically unlikely)
 

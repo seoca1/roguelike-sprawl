@@ -14,8 +14,9 @@ from __future__ import annotations
 import os
 import time
 from pathlib import Path
+from typing import Any, cast
 
-import requests  # type: ignore[import-untyped]
+import requests
 
 MINIMAX_API_URL = "https://api.minimaxi.com/v1/music_generation"
 MINIMAX_API_KEY = os.environ.get("MINIMAX_API_KEY", "")
@@ -134,7 +135,7 @@ def generate_music(prompt: str, duration_seconds: int = 30) -> bytes | None:
         response = requests.post(
             MINIMAX_API_URL,
             headers=headers,
-            json=payload,
+            json=cast(Any, payload),
             timeout=120,
         )
 

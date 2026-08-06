@@ -256,29 +256,35 @@ class TestRendering:
     """render_save_load produces a console without errors."""
 
     def test_render_does_not_crash(self) -> None:
+        from unittest.mock import MagicMock
+
         state = AppState()
         state.save_load_selected = 1
         import tcod.console
 
         console = tcod.console.Console(80, 50, order="F")
-        save_load_view.render_save_load(console, state)
+        save_load_view.render_save_load(console, state, MagicMock())
 
     def test_render_with_selected_slot(self) -> None:
+        from unittest.mock import MagicMock
+
         state = AppState()
         state.save_load_selected = 3
         import tcod.console
 
         console = tcod.console.Console(80, 50, order="F")
-        save_load_view.render_save_load(console, state)
+        save_load_view.render_save_load(console, state, MagicMock())
 
     def test_render_with_status_messages(self) -> None:
+        from unittest.mock import MagicMock
+
         state = AppState()
         state.status_messages = ["test1", "test2", "test3", "test4", "test5"]
         state.save_load_selected = 2
         import tcod.console
 
         console = tcod.console.Console(80, 50, order="F")
-        save_load_view.render_save_load(console, state)
+        save_load_view.render_save_load(console, state, MagicMock())
 
 
 class TestHubIntegration:

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
-"""Project-scoped audit for Game/roguelike_sprawl/ — wikilink integrity check."""
+"""Project-scoped audit for Game/roguelike_sprawl/ — wikilink integrity check.
+
+Includes cross-project Fiction wiki resolution per AGENTS.md §4.1.
+"""
 
 import re
 from pathlib import Path
@@ -7,6 +10,10 @@ from collections import defaultdict, Counter
 
 ROOT = Path(".")
 EXCLUDE = {".git", "node_modules", ".obsidian", ".pytest_cache", "__pycache__", "_archive", "_inventory", ".venv"}
+
+# AGENTS.md §4.1: cross-project Fiction wiki is the canonical reference for
+# Gibson-canon characters/settings/concepts. Path is relative to project root.
+FICTION_WIKI_ROOT = Path("..") / ".." / "Fiction" / "wiki"
 
 
 def md_files():
@@ -16,7 +23,7 @@ def md_files():
 
 
 def strip(text):
-    return re.sub(r"\A---\n.*?\n---\n", "", re.sub(r"```.*?```", "", text, flags=re.DOTALL), flags=re.DOTALL)
+    return re.sub(r"\A---\n.*?\n---\n", "", re.sub(r"`[^`]+`", "", re.sub(r"```.*?```", "", text, flags=re.DOTALL)), flags=re.DOTALL)
 
 
 def obsidian_slug(title):
@@ -26,8 +33,16 @@ def obsidian_slug(title):
     return s
 
 
+def _build_fiction_stem_index() -> dict[str, Path]:
+    """Index Fiction wiki files by stem (Obsidian-style vault-wide matching)."""
+    if not FICTION_WIKI_ROOT.exists():
+        return {}
+    return {p.stem: p for p in FICTION_WIKI_ROOT.rglob("*.md")}
+
+
 def main():
     files = [p for p in md_files()]
+    fiction_stems = _build_fiction_stem_index()
     anchor_index = {}
     for p in files:
         for m in re.finditer(r"^(#{1,6})\s+(.+?)\s*$", p.read_text(errors="ignore"), re.MULTILINE):
@@ -38,7 +53,7 @@ def main():
 
     stems = {p.stem: p for p in files}
     WIKILINK = re.compile(r"(?<!`)\[\[([^\]|#]+)(?:#[^\]|]+)?(?:\|[^\]]+)?\]\]")
-    MDLINK = re.compile(r"(?<!`)\[[^\]]+\]\(([^\)]+\.md)(?:#[^\)]*)?\)")
+    MDLINK = re.compile(r"\[([^\]]+)\]\(([^\)]+\.md)(?:#[^\)]*)?\)")
 
     cats = defaultdict(list)
     broken = 0
@@ -56,10 +71,12 @@ def main():
                 ok = False
             if not ok:
                 ok = w in stems
+            if not ok:
+                ok = w in fiction_stems
             if not ok and w in anchor_index:
                 ok = True
             if ok:
-                resolved = (f.parent / (w + ".md")).resolve() if (f.parent / (w + ".md")).exists() else stems.get(w, anchor_index.get(w))
+                resolved = (f.parent / (w + ".md")).resolve() if (f.parent / (w + ".md")).exists() else stems.get(w, fiction_stems.get(w, anchor_index.get(w)))
                 if resolved and resolved != f:
                     inbound[resolved].add(f)
                 continue
@@ -78,7 +95,7 @@ def main():
                 cat = "OTHER"
             cats[cat].append((f.relative_to(ROOT), w))
         for m in MDLINK.finditer(txt):
-            target = m.group(1)
+            target = m.group(2)
             if "://" in target or target.startswith(("mailto:", "tel:", "ftp:")):
                 continue
             target_path = (f.parent / target).resolve()

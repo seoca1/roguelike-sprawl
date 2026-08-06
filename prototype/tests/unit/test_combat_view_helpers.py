@@ -272,27 +272,19 @@ class TestCombatReputation:
     def test_each_entry_sums_to_minus_two(self) -> None:
         """Net per faction: -3 self + 1 rival = -2 (player loses net rep per defeat)."""
         for defender, deltas in COMBAT_REPUTATION.items():
-            assert sum(deltas.values()) == -2, (
-                f"{defender} entry doesn't sum to -2: {deltas}"
-            )
+            assert sum(deltas.values()) == -2, f"{defender} entry doesn't sum to -2: {deltas}"
 
     def test_self_deltas_are_always_negative(self) -> None:
         """Defending faction (where you infiltrated) always loses rep."""
         for defender, deltas in COMBAT_REPUTATION.items():
-            assert deltas[defender] == -3, (
-                f"{defender} self-delta should be -3 (you hurt them)"
-            )
+            assert deltas[defender] == -3, f"{defender} self-delta should be -3 (you hurt them)"
 
     def test_only_one_rival_bonus_per_entry(self) -> None:
         """Each faction has exactly one +1 (one opposing rival gains)."""
         for defender, deltas in COMBAT_REPUTATION.items():
             bonuses = [v for v in deltas.values() if v > 0]
-            assert len(bonuses) == 1, (
-                f"{defender} should have exactly 1 bonus, got {bonuses}"
-            )
-            assert bonuses[0] == 1, (
-                f"{defender} bonus should be +1, got {bonuses[0]}"
-            )
+            assert len(bonuses) == 1, f"{defender} should have exactly 1 bonus, got {bonuses}"
+            assert bonuses[0] == 1, f"{defender} bonus should be +1, got {bonuses[0]}"
 
 
 def _make_node(

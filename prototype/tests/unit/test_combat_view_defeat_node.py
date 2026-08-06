@@ -27,7 +27,12 @@ def _make_node(id: str, kind: NodeKind = NodeKind.DATA) -> Node:
     )
 
 
-def _make_state_with_matrix(nodes: list[Node], edges: list[tuple[str, str]] | tuple[tuple[str, str], ...], entry_id: str, current_id: str) -> AppState:
+def _make_state_with_matrix(
+    nodes: list[Node],
+    edges: list[tuple[str, str]] | tuple[tuple[str, str], ...],
+    entry_id: str,
+    current_id: str,
+) -> AppState:
     """Construct an AppState with a populated matrix graph."""
     state = AppState()
     state.matrix = MatrixGraph(

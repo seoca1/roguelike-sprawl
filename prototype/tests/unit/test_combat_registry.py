@@ -98,9 +98,7 @@ class TestProgramRegistryLoad:
     def test_loaded_skills_override_defaults(self, tmp_path: Path) -> None:
         """Loaded skill with same key as default → replaces default."""
         path = tmp_path / "override.json"
-        path.write_text(
-            '{"wisp": {"name": "Custom Wisp", "damage": 999}}', encoding="utf-8"
-        )
+        path.write_text('{"wisp": {"name": "Custom Wisp", "damage": 999}}', encoding="utf-8")
         reg = ProgramRegistry.load(path)
         skill = reg.get("wisp")
         assert skill is not None
