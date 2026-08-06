@@ -44,3 +44,7 @@ prototype/data/saves/*.json
 !prototype/data/saves/.gitkeep
 prototype/data/saves/*.log
 prototype/data/jockeys/deceased.json
+
+# pytest-cov report files
+coverage.json
+htmlcov/
