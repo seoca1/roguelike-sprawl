@@ -1,6 +1,6 @@
 # ADR-0031: Original Scenario Integration (단편 → 프롤로그 → 초반 플레이 통합)
 
-> **상태**: Draft
+> **상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 > **날짜**: 2026-06-20
 > **결정자**: 사용자
 > **관련**: ADR-0009 (Story/News), ADR-0010 (i18n), ADR-0011 (Portrait), ADR-0013 (Story Events), ADR-0019 (Aftermath), ADR-0020 (Exploration), ADR-0022 (Original Story 골격)
@@ -220,3 +220,11 @@ Roguelike Sprawl의 오리지널 시나리오는 다음 자산을 보유하고 �
 - `ADR-0009` (Story/News) — meatspace 미표시 원칙
 - `ADR-0010` (i18n) — en 1차, ko 보조
 - `ADR-0019` (Aftermath) — 4-importance + 7인물 반응
+
+## 결과 (Consequences)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 Accepted 로 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: `engine/original_story.py` (17.5KB) + `data/scenes/{case,sil,kas,suit,wigan,angie,sally,3jane,neuromancer}/` 81 씬 + `data/story/chapters/` JSON. 9자 × 8 씬 + 4 ending 패턴 통합 완료.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

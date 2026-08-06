@@ -1,6 +1,6 @@
 # ADR-0032: Graphic Novel Auto-Play Mode + Main Menu 확장
 
-> **상태**: Draft
+> **상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 > **날짜**: 2026-06-20
 > **결정자**: 사용자
 > **관련**: ADR-0031 (Original Scenario), ADR-0009 (Story/News), ADR-0011 (Portrait), ADR-0019 (Aftermath), ADR-0021 (Save/Load)
@@ -343,3 +343,11 @@ SAVED_PROGRESS (= 종료 화면)
 | 테스트 | 30+ tests × ~20 lines = ~600 |
 | **총 작업량** | **~2,400 lines + ASCII 아트** |
 | **예상 소요** | **3~4 세션** |
+
+## 결과 (Consequences)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 Accepted 로 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: `engine/{graphic_novel_view,gn_menu,gn_render}.py` (총 ~50KB) — 7 옵션 메인메뉴 (ADR-0032 + ADR-0040 + Phase 7) + 81 GN 씬 자동재생. 단편→엔딩 통합.ADR-0083 (시청 시간 GN 진행) 포함.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

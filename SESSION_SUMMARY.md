@@ -1,14 +1,18 @@
 # Roguelike Sprawl — Session Index
 
-> **Latest session**: 2026-08-05 — see [SESSION_SUMMARY_2026-08-05.md](./SESSION_SUMMARY_2026-08-05.md)
+> **Latest session**: 2026-08-05 (session close) — see [_archive/audits/session-close-2026-08-05.md](./_archive/audits/session-close-2026-08-05.md)
 
 This is an **index** file pointing to the most recent dated session snapshot. Per project `AGENTS.md §9`, `SESSION_SUMMARY.md` should always point at the current/latest session.
+
+> **SESSION CLOSED 2026-08-05.** All auto-quality-gates green. 14 Draft ADRs → Accepted. 6 real bugs fixed. Auto-doable work exhausted. Only PyPI v1.1.0 release (user-action territory) remains.
 
 ## Recent sessions
 
 | Date | File | Summary |
 |---|---|---|
-| **2026-08-05** | [SESSION_SUMMARY_2026-08-05.md](./SESSION_SUMMARY_2026-08-05.md) | Workspace file reorganization — session summaries archived + Python tools/scripts consolidated |
+| **2026-08-05 (session close)** | [_archive/audits/session-close-2026-08-05.md](./_archive/audits/session-close-2026-08-05.md) | **SESSION CLOSED.** 16-iteration audit + cleanup complete. Definitive close document. **Latest.** |
+| 2026-08-05 (cycle audit) | [SESSION_SUMMARY_2026-08-05_cycle-audit.md](./SESSION_SUMMARY_2026-08-05_cycle-audit.md) | Quality audit: 11 cycles of cleanup, 5 real bugs fixed, 14 Draft ADRs → Accepted, coverage 68.8% → 73.36% |
+| 2026-08-05 (workspace reorg) | [SESSION_SUMMARY_2026-08-05.md](./SESSION_SUMMARY_2026-08-05.md) | Workspace file reorganization — session summaries archived + Python tools/scripts consolidated |
 | 2026-08-03 | [SESSION_SUMMARY_2026-08-03.md](./SESSION_SUMMARY_2026-08-03.md) | Diagnostics + Fiction lift streak: 8 C → B novels + 1 synthesis page + dashboard refresh |
 | 2026-07-28 | [SESSION_SUMMARY_2026-07-28_v1.1.0a1.md](./_archive/sessions/SESSION_SUMMARY_2026-07-28_v1.1.0a1.md) | v1.1.0a1 release |
 | 2026-07-28 | [SESSION_SUMMARY_2026-07-28.md](./_archive/sessions/SESSION_SUMMARY_2026-07-28.md) | v1.0.0 FINAL |

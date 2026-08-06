@@ -1,6 +1,6 @@
 # ADR-0040: Death & Restart Cycle (자키 사이클)
 
-> **상태**: Draft
+> **상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 > **날짜**: 2026-06-20
 > **결정자**: 사용자
 > **관련**: ADR-0003 (Combat RT-MS), ADR-0006 (Run structure), ADR-0008 (Progression), ADR-0017 (Missions), ADR-0019 (Aftermath), ADR-0021 (Save/Load)
@@ -281,3 +281,11 @@ HUB (기존 jack_out_to_hub와 동일)
 | 테스트 30+ | ~600 |
 | **총** | **~900 lines** |
 | **예상 소요** | **1.5~2 세션** |
+
+## 결과 (Consequences)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 Accepted 로 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: `engine/death.py` (20KB) + `engine/jockey_history.py` (19KB) + `data/jockeys/deceased.json` (12,223 자키 보존). Death → DEATH_SUMMARY → HALL_OF_DEAD → 새 자키 풀 사이클 구현.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

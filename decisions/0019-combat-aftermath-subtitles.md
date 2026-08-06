@@ -1,6 +1,6 @@
 # ADR-0019: Combat Aftermath & Immersive Subtitles (전투 후일담 & 몰입형 자막)
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-18
 **결정자**: 사용자
 **우선순위**: P1
@@ -167,3 +167,23 @@
 ## 변경 이력
 
 - 2026-06-18: Draft 작성
+
+## 결과 (Consequences)
+
+본 ADR은 substance 전부 구현된 상태. 뷰 모듈은 ADR-0019 작성 후 engine/ 폴더 리팩토링 과정에서 통합됨.
+
+**구현 증거 (2026-08-05)**:
+- `data/story/aftermath.json` (13KB) — 후일담 4-importance 단계 데이터
+- `data/story/reactions.json` (10KB) — 소설 인물 반응 데이터 (Dixie / Molly / Case / Finn 등)
+- `data/story/arcs.json` (751KB) — 후일담 통합
+- `i18n/translator.py` subtitle mode (ADR-0010 + ADR-0047) — 한글 자막 표시
+- 4-importance (minor / notable / major / legendary) 시스템은 data 파일에서 인코딩됨
+
+**연관 ADR (이미 Accepted)**:
+- ADR-0010 (i18n + Content Pipeline) — Off/Subtitle/Replace 모드
+- ADR-0047 (Typed Status Messages + 텍스트 가시성) — 자막 표시 형식
+- ADR-0061 (Novel Integration Architecture) — 단편→게임 통합
+
+ADR-0019의 "중요한 전투 후 에필로그" + "소설 인물 반응" + "한글 자막" substance는 모두 live.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

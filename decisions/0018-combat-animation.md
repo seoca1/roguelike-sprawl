@@ -1,6 +1,6 @@
 # ADR-0018: Combat Animation (전투 ASCII 애니메이션)
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-18
 **결정자**: 사용자
 **우선순위**: P1
@@ -231,3 +231,25 @@ Frame 7:  X
 ## 변경 이력
 
 - 2026-06-18: Draft 작성
+
+## 결과 (Consequences)
+
+본 ADR은 substance 전부 구현된 상태. 원본 ADR이 참조한 모듈 이름은 split cycle (ADR-0112 / 0144 / 0145) 후 변경됨.
+
+**구현 증거 (2026-08-05)**:
+- `combat/effects_vfx_animations.py` (8.8KB) — 14 스킬 애니메이션 generator
+- `combat/effects_vfx_cinematics.py` (9.9KB) — ICE intro/death 시퀀스
+- `combat/effects_vfx_compose.py` (11.7KB) — CombatEffects + 10 spawn function
+- `combat/effects_data.py` (14.7KB) — 12 data class
+- `data/animations/frames.json` (4.7KB) — frame 정의
+
+**연관 ADR (이미 Accepted)**:
+- ADR-0018 본체 (ASCII 애니메이션, 5-Layer VFX)
+- ADR-0112 (effects.py partial split 정당화)
+- ADR-0118 (VFX 5-Layer 시스템, ADR-0112 의 후속)
+- ADR-0144 (effects.py 데이터 추출)
+- ADR-0145 (effects_vfx 3-way split)
+
+ADR-0018 의 contrast (normal vs skill) + Gibson tone (글리치, ASCII 깨짐, 단절된 빛) 디자인 원칙은 effects_vfx_animations.py 의 `critical_hit_animation`, `get_animation_for_effect` 등에서 실현됨.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

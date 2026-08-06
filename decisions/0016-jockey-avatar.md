@@ -1,6 +1,6 @@
 # ADR-0016: Jockey Avatar (자키 아바타 — 스탯 시각화)
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-18
 **결정자**: 사용자
 **우선순위**: P1
@@ -246,3 +246,11 @@ PPL/ZDR 비교 = 전체 자세 결정.
 
 - 2026-06-18: Draft 작성
 - 2026-06-18: 사용자 결정 (Option 1: Stick Figure Avatar)
+
+### Auto-conversion Confirmation (2026-08-05)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: `avatar/` 패키지 3 .py 모듈 + `engine/jockey_history.py` (19KB). 자키 스탯 시각화 + Die/Restart cycle. AppState.reputation과 통합.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

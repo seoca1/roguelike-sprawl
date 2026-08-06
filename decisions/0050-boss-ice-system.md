@@ -1,6 +1,6 @@
 # ADR-0050: 보스 ICE 시스템 — 다단계 페이즈 + 신규 보스 타입
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-21
 **결정자**: 사용자
 **우선순위**: P1
@@ -163,3 +163,11 @@
 - T-A Phase 2: spire+subjugate (1.2×, red)
 - T-A Phase 3: replicate+drain (1.8×, purple)
 - Summary table: HP% → phase mapping 정확
+
+### Auto-conversion Confirmation (2026-08-05)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: `combat/{boss,bosses}.py` + 58 ICE 타입 (`data/combat/ice_types.json`, T1-T6 분포). **ADR-0125 (2026-07-26 Accepted)** 가 보스 Phase B-3 향상 (AoE + Minion Spawn) 으로 추가 Acceptance 증거 제공. Wintermute/T-A Prime 3-phase 보스 작동 확인.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

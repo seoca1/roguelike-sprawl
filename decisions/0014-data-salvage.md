@@ -1,6 +1,6 @@
 # ADR-0014: Data Salvage (전투 승리 보상 — 데이터 회수)
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-18
 **결정자**: 사용자
 **우선순위**: P1
@@ -166,3 +166,11 @@
 
 - 2026-06-18: Draft 작성
 - 2026-06-18: Accepted (Option 1: Data Salvage, HEAL만 Phase 5)
+
+### Auto-conversion Confirmation (2026-08-05)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: 전투 종료 시 HEAL 20% + FRAG/CRED 보상이 `combat/state.py` (30KB) 및 111개 미션(`data/missions/missions.json`)에 통합. 회수 메카닉이 combat loop에 포함되어 ADR-0014의 데이터 회수 의도가 실현됨.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

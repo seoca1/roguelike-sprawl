@@ -1,6 +1,6 @@
 # ADR-0051: 미션 스토리 메타데이터 보강 + 소설 줄거리
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-22
 **결정자**: 사용자
 **우선순위**: P1
@@ -134,3 +134,11 @@
 - `design/story_skeleton.md` — plot bones (5 arcs)
 - `dashboard/story.html` — 기존 story 대시보드
 - `dashboard/stories.html` — 단편 카드 대시보드
+
+## 결과 (Consequences)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 Accepted 로 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: 111 미션 × `story.{synopsis_en,source,character_ref}` 메타데이터. `missions/mission.py` + `engine/mission_completion.py`. 단편→미션 매핑 47/47 (구 47) + 신규 64 미션으로 111/111 전체 통합.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

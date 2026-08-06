@@ -65,6 +65,11 @@ Architecture Decision Records. 모든 주요 결정은 여기 추적된다.
 | 0133 | graphic_novel_view.py Split — Implementation (Supplements ADR-0111) | **Accepted** | 2026-07-27 | P2 (Build Health) |
 | 0140 | Engagement Layer for v1.1.0 (8 proposals) | **Accepted (Option 1 partial — Top 3)** | 2026-07-28 | P2 (v1.1.0 후보) |
 | 0141 | Additional Module Splits (matrix_view, combat/state) | **Accepted (Option 1 partial — Top 2)** | 2026-07-28 | P3 (v1.1.0+ backlog) |
+| 0142 | graphic_novel_view Split v2 — Implementation (3-way split) | **Accepted** | 2026-08-05 | P2 (Build Health) |
+| 0143 | combat_view Split — Implementation (4-way split) | **Accepted** | 2026-08-05 | P2 (Build Health) |
+| 0144 | combat/effects Split — Data Extraction | **Accepted** | 2026-08-05 | P2 (Build Health) |
+| 0145 | combat/effects_vfx Split — 3-Way Concern Split | **Accepted** | 2026-08-05 | P2 (Build Health) |
+| 0146 | Stage Flow — black_market & ghost_encounter 전이 추가 (Validator FAIL 해결) | **Accepted** | 2026-08-05 | P2 (The Matrix) |
 | 0104 | GN Save Slot 확장 (3 슬롯) | **Accepted (2026-07-25)** | 2026-06-21 | P2 |
 
 ### 2026-07-01 통합 작업 (P1~P4 + B)

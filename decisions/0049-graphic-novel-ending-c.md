@@ -1,6 +1,6 @@
 # ADR-0049: 그래픽 노블 엔딩 C 추가 (3번째 결말)
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-21
 **결정자**: 사용자
 **우선순위**: P2
@@ -153,3 +153,11 @@ ADR-0046 (엔딩 B) + ADR-0048 (메뉴/세이브 통합)으로 캐릭터당 2개
 - KO: `[1] 엔딩 A — ... [2] 엔딩 B — ... > [3] 엔딩 C — 소멸 — 도시를 떠나 새로운 정체성`
 - 3 chars × 4 options 모두 정상
 - N3 → "C", N4 → "back" 매핑 정확
+
+### Auto-conversion Confirmation (2026-08-05)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: ADR-0046/0048 (엔딩 B/메뉴 통합) + ADR-0104 (3 슬롯 세이브) already Accepted. ADR-0049는 캐릭터당 3번째 결말 (Case=소멸, Sil=망각, Kas=파괴) 추가 — `gn_menu.py` ending selection에서 처리.
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

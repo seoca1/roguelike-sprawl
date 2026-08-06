@@ -1,6 +1,6 @@
 # ADR-0020: Fog of War + Exploration (안개 / 탐험 메카닉)
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-18
 **결정자**: 사용자
 **우선순위**: P1
@@ -137,3 +137,22 @@ Path: E → R₀ → I₀
 
 - 2026-06-18: Draft 작성
 - 2026-06-18: Accepted (Light Fog)
+
+## 결과 (Consequences)
+
+본 ADR은 substance 전부 구현된 상태. 파일 경로는 ADR-0020 작성 후 변경됨 (matrix/ 폴더 신설, engine 분할).
+
+**구현 증거 (2026-08-05)**:
+- `matrix/exploration.py` (2.9KB) — Light Fog 4단계 가시성 (current/adjacent/discovered/unknown)
+- `engine/matrix_minimap.py` (3.2KB) — 미니맵 + breadcrumb
+- `data/cyberspace/worlds.json` — cyberspace 노드 데이터
+- `engine/matrix_view.py` 에서 `render_fog_overlay()` 호출 확인 가능
+
+ADR-0020 의 Light Fog 디자인 (3단계 가시성: current 강조, adjacent 외곽선, discovered 박스, unknown `?` placeholder) 은 `matrix/exploration.py` 의 `FogState` 와 `engine/matrix_minimap.py` 의 breadcrumb visualization 에 그대로 구현됨.
+
+**연관 ADR (이미 Accepted)**:
+- ADR-0060 (Dungeon Exploration Redesign — NetHack + VFX Overlay) — 본 ADR 의 후속, dungeon 통합
+- ADR-0103 (Dungeon-only Mode) — matrix_view 의 deprecated 경로 확정
+
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

@@ -1,6 +1,6 @@
 # ADR-0015: Material & Crafting System (재료 & 제작)
 
-**상태**: Draft
+**상태**: Accepted (auto-converted 2026-08-05, user-confirmed)
 **날짜**: 2026-06-18
 **결정자**: 사용자
 **우선순위**: P1
@@ -196,3 +196,11 @@ ice_construct + upgrade(T3) → Black ICE-tier program (T3~T4)
 
 - 2026-06-18: Draft 작성
 - 2026-06-18: 사용자 결정 (Option 2: 3-tier, 5종 원료)
+
+### Auto-conversion Confirmation (2026-08-05)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 auto-convert 완료. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: `crafting/` 패키지 2 .py 모듈 + `data/crafting/{materials,recipes}.json` (845B). 3-tier 재료 시스템 (5 raw → 4 components → final) — ADR-0015 설계와 일치. Info Market 통합 (`engine/hub.py` 4-패널).
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).

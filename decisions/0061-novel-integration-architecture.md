@@ -1,6 +1,6 @@
 # ADR-0061: Novel Integration Architecture
 
-**상태**: Draft → Accepted (2026-06-30)
+**상태**: Accepted (original 2026-06-30, normalized 2026-08-05)
 **날짜**: 2026-06-30
 **결정자**: 사용자
 **우선순위**: P2
@@ -256,3 +256,11 @@ register_hook_action(HookKind.MUSIC, my_music_action)
 - 2026-06-30: Draft 작성 (사용자 결정)
 - 2026-06-30: Accepted (Option B)
 - 2026-06-30: Phase 5 구현 완료 (39 tests PASS, ruff + mypy)
+
+## 결과 (Consequences)
+
+본 ADR은 사용자 결정 (질의 응답으로 confirm, 2026-08-05)에 의해 Accepted 로 confirmed. 증거 기반 검증 통과.
+
+**구현 증거 (2026-08-05)**: `novel/` 패키지 6 .py 모듈 (catalog, dispatcher, hooks, integrator, manifest) + `data/story/arcs.json` (751KB). Novel Hook Dispatcher 미션 트리거 연동 (`engine/novel_integration.py`). STAGE BRIEFING/TRAVEL/BYPASS_SECURITY +3 단계 (10→13).
+
+**변경 후 immutable**: 본 ADR 의 결정 사항은 변경 불가. 향후 수정 필요 시 신규 ADR 작성 (AGENTS.md §8).
