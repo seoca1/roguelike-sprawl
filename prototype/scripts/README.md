@@ -737,6 +737,85 @@ for m in ss['missions']:
 
 ---
 
+---
+
+## 8. 보조 / 신규 스크립트 (2026-08-05 추가)
+
+기존 7개 절에서 누락됐던 보조 스크립트. 본 README 갱신 (2026-08-05).
+
+### 전투 / 밸런스
+
+#### `combat_grades_demo.py`
+PPL vs Enemy 스케일링 밸런스를 5등급 × 4 시나리오로 검증. `combat_grades.py`는 단일 등급 출력, 본 스크립트는 다중 시나리오 비교.
+
+```bash
+uv run python scripts/combat_grades_demo.py              # 전 시나리오
+uv run python scripts/combat_grades_demo.py --scenario A # 단일 시나리오
+uv run python scripts/combat_grades_demo.py --verbose    # 상세 stats
+```
+
+### 사운드 / BGM (section 5 보완)
+
+#### `demo_minimax_bgms.py`
+MiniMax 외부 생성 12 트랙 BGM 검증 — `afplay`로 각 WAV 첫 5초 재생 확인.
+
+```bash
+uv run python scripts/demo_minimax_bgms.py           # 5초씩 (빠른 검증)
+uv run python scripts/demo_minimax_bgms.py --full   # 30초씩 전곡 (감상)
+```
+
+#### `upgrade_sounds.py`
+사전 합성 placeholder WAV → ffmpeg로 생성한 cyberpunk 톤 사운드로 일괄 교체. ADR-0061 사운드 폴리시 단계.
+
+```bash
+uv run python scripts/upgrade_sounds.py
+```
+
+### 그래픽 노블 (section 2 보완)
+
+#### `save_slot_demo.py`
+GN 3슬롯 시스템 (ADR-0104) 시연 — list/save/load/delete + 레거시 단일 슬롯 마이그레이션.
+
+```bash
+uv run python scripts/save_slot_demo.py
+```
+
+### Phase 6 (Arc Chapter / Phase) — section 6 보완
+
+#### `play_arc_chapter.py` / `play_arc_phase.py`
+Arc 레벨 통합 데모. `expanded.json → chapter_flow.json → arc.json` 파이프라인을 headless로 실행 후 ASCII 렌더.
+
+```bash
+uv run python scripts/play_arc_chapter.py   # 데이터 단계만 (no tcod)
+uv run python scripts/play_arc_phase.py     # tcod ASCII 렌더 포함
+```
+
+### 스토리 검증 (section 7 보완)
+
+#### `verify_story_links.py`
+`missions.json`의 `story.source` 필드가 실제 단편 HTML 파일과 매핑되는지 검증.
+
+```bash
+uv run python scripts/verify_story_links.py                 # vault 루트에서 실행
+uv run python scripts/verify_story_links.py --missing-only  # 누락 항목만
+```
+
+#### `verify_story_pipeline.py`
+expanded.json → chapter_flow.json → arc.json 전체 파이프라인 무결성 검증.
+
+```bash
+uv run python scripts/verify_story_pipeline.py
+```
+
+#### `generate_story_html.py`
+챕터 JSON 파일 → e-book 스타일 HTML 변환. `output/stories/{case,sil,kas}.html` 출력.
+
+```bash
+uv run python scripts/generate_story_html.py --lang both  # en + ko 동시
+```
+
+---
+
 ## 9. 회귀 테스트 (자동)
 
 ```bash

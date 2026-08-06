@@ -199,3 +199,52 @@ class CombatState:
 4. **P2**: NPC_ENCOUNTER → 실제 대화
 5. **P2**: HACK_SYSTEM → 실제 해킹 미니게임 (스텁 해제)
 6. **P3**: CORE_ACCESS → 실제 코어 브리칭
+
+## Special Encounter (v1.1.0+) — Loa 유령신 조우
+
+> **상위 결정**: ADR-0146 (Stage Flow, Draft — user acceptance pending)
+
+DEEP/CORE/TA 존 매트릭스 런 중 무작위로 발생하는 특수 이벤트. 매트릭스 깊이 진입 시 깁슨 원작의 'vodoun Loa' 와 같은 유령 신을 조우.
+
+### 트리거 조건
+- 매트릭스 노드 진입 시 확률적 (zone 깊이에 비례해 확률 증가)
+- DEEP/CORE/TA 한정. SURFACE/MID/FREESIDE 는 미발생
+
+### 선택지 (3가지)
+| 선택 | 결과 |
+|------|------|
+| **Talk** | Loa 의 메시지 + 데이터 프래그먼트 1개 (깁슨 톤 dialogue) |
+| **Fight** | ICE 전투 (Loa = ICE proxy). victory 시 데이터 프래그먼트 2개 |
+| **Leave** | 이벤트 종료. 보상 없음 |
+
+### 종료 처리 (ADR-0146 Option 3 Hybrid)
+- **`ghost_encounter.is_terminal: true`** — Talk / Fight / Leave 어느 선택이든 encounter 종료 의미
+- 다음 stage = `defeat_ice` 으로 main flow 복귀 (fight 선택 시 즉시, 다른 선택 시 다음 매트릭스 노드)
+- Stage 종료 후 run 자체는 계속 (run_cycle 종료 아님)
+
+### 디자인 의도
+- 깁슨 원작의 Loa / vodoun 시스템 반영 (`Mona Lisa Overdrive` 참조)
+- 매트릭스에 'mystical encounter' 측면 부여 — 순수 ICE 전투만 아닌 다양성
+- 데이터 fragment 보상으로 player에게 run 중 의미 있는 보상 제공
+
+---
+
+## Hub 사이클 — Black Market (v1.1.0+)
+
+> **상위 결정**: ADR-0146 (Stage Flow, Draft — user acceptance pending)
+
+`black_market` 는 매트릭스가 아닌 **Hub 사이클** 의 일부. run 사이의 credits / materials 거래를 위한 vendor.
+
+### 트리거 조건
+- Hub 화면에서 "BLACK MARKET" 메뉴 선택 시 진입
+- Run 종료 후 (`complete`, `death_restart` 직후) 첫 pending 으로 복귀하기 직전 단계에서 접근 가능
+
+### 종료 처리 (ADR-0146 Option 3 Hybrid)
+- **`black_market → pending` transition** ("after_vendor_exit") — vendor 화면 종료 시 정상 hub 사이클 복귀
+- is_terminal: false 유지 (Hub loop 의 일부이므로 terminal 마크 부적절)
+
+### 디자인 의도
+- 깁슨 Sprawl 의 'street-level commerce' 측면 (Armitage 의 fixer, Finn 의 정보상)
+- Credits / materials 양쪽 모두 거래 (material 은 crafting 시스템 [ADR-0015] 활용)
+- Program / deck upgrade 구매 가능 → 다음 run 의 진입 강도 상승
+
