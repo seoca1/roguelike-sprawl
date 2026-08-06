@@ -1,3 +1,45 @@
+## [2026-08-06] chore | 2026-08-05 dirty tree 8-way atomic commit session closure
+
+**Status**: ✅ 완료 — 8 atomic commits landed. Working tree clean. All validators pass.
+
+### 범위
+2026-08-05 multi-project commit session + 2026-08-05 cycle-audit session 의 code/docs/tests 가 dirty-tree 에 누적된 채 미 commit 상태. 사용자가 직접 commit 하지 않고 다음 세션으로 carry-over. 본 세션에서 8 atomic commits 로 일괄 정리.
+
+### 8 atomic commits
+| # | Hash | Subject |
+|---|---|---|
+| 1 | `d620ade` | chore(deps): update pyproject.toml + uv.lock + .gitignore |
+| 2 | `2508551` | chore(dashboard): regenerate dashboard data + build artifacts |
+| 3 | `8be2b4a` | refactor(tests): delete 7 obsolete test files (consolidation) |
+| 4 | `8aecad3` | docs(refresh): roguelike_sprawl 2026-08-05 documentation sync (+ ADR-0146) |
+| 5 | `57ea956` | docs(design): add dungeon_events + scripts/README + tools/README |
+| 6 | `0a79417` | test(coverage): 10 new test files + TC-SYSTEM-STAGE-FLOW (Coverage Round 2-7) |
+| 7 | `c2b24d3` | docs(audit): 2026-08-05 cycle-audit session summary + 4 audit reports archive |
+| 8 | `208fc4e` | feat/fix/refactor: roguelike_sprawl 2026-08-05 code changes |
+
+### 발견 + 처리
+- **deps + dashboard regen**: pyproject.toml, uv.lock, .gitignore, dashboard 19 JSON auto-regenerated
+- **7 obsolete test deletions**: test_achievements_dashboard, test_cross_dashboard, test_novel, test_novel_integration, test_novels, test_stage_dashboard, test_stories_dashboard (총 -2,060 lines). 통합/대체 후 obsolete 된 테스트 정리.
+- **docs refresh**: 2026-08-05 closure entries (10개) + AGENTS.md §10 menu options 5→7 sync + decisions/README.md ADR-0146 추가 + 14 ADR metadata refresh
+- **new design + scripts docs**: design/systems/dungeon_events.md (49 lines), prototype/scripts/README.md (79 lines), tools/README.md (+4)
+- **10 new test files + testcase**: Coverage Round 2-7 (~2,632 lines). 새로 0% → 73% coverage 모듈들에 대한 테스트.
+- **5 archive files**: SESSION_SUMMARY_2026-08-05_cycle-audit.md (213 lines) + _archive/audits/ (4 files: audit-2026-08-05, draft-adr-status, session-close, stage-flow-findings)
+- **code changes**: stage_structure.json (ADR-0146 stage flow transitions), bgm_manager.py, minimax_music.py, save_load_view.py (Cycle 6 bugfix), 7 test modifications, scripts/validate_stage_structure.py, tools/audit_sprawl.py (+27), tools/find_broken_links.py (+88)
+
+### 검증
+| Check | Result |
+|---|---|
+| `uv run pytest prototype/tests/` | ✅ 3835 passed, 462 skipped, 1 xfailed, 4 xpassed |
+| `uv run ruff check prototype/src/` | ✅ All checks passed |
+| `uv run mypy prototype/src/` | ✅ 0 errors (159 source files) |
+| `git status` | ✅ Working tree clean |
+
+### Push 상태
+- 8 commits ahead of `origin/main` (이전 89 + 8 = **97 total pushable**)
+- `gh auth` GH_TOKEN invalid → push blocked (user action)
+
+---
+
 ## [2026-08-05] chore | File reorganization — session summaries archived + Python tools/scripts consolidated
 
 **Status**: ✅ 완료 — vault lint CLEAN, 모든 스크립트 정상 작동
