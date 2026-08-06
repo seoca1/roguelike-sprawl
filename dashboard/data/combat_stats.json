@@ -62,10 +62,10 @@
     "ice_screaming_fist"
   ],
   "skill_effects_total": 14,
-  "skill_effect_animations_total": 15,
+  "skill_effect_animations_total": 0,
   "programs_total": 9,
   "combat_mode": "RT-MS",
   "ppl_version": "v1",
   "zdr_version": "v1",
-  "_generated_at": "2026-08-03T19:46:02"
+  "_generated_at": "2026-08-06T14:42:44"
 }
