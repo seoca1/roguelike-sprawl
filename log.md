@@ -3560,3 +3560,47 @@ User "continue" 후 작은 진단:
 **최종 정합성**: 8/8 자동 게이트 + 5/5 audit 도구 + i18n 1:1 + dashboard HTML fetch 무결.
 
 **자동화 가능 작업 진정한 zero** — 추가 발견 가능한 미세 버그/누락은 agent scope 밖에 있음.
+
+## [2026-08-06] docs | index.md stats refresh + orphan re-verification (false positive)
+
+**Status**: ✅ 완료 — index.md 메타데이터 stale 통계 갱신 + 8 페이지 orphan 재검증 (false positive였음).
+
+### 변경
+**index.md 라인 5** (게임 stats):
+- 3894 tests pass → **3835 tests pass** (462 skipped, 1 xfailed, 4 xpassed; 4302 collected)
+- 38 missions → **111 missions**
+- 41 short stories (en+ko) → **242 short stories** (137 EN + 105 KO)
+- 13 stages → **14 stages** (briefing, travel, bypass_security, pending, meet_npc, extract_data, defeat_ice, jack_out, reward, complete, death_restart, failed, black_market, ghost_encounter)
+- 5 arcs × 12 grade ranges 신규 추가
+
+**index.md 라인 36** (derivative_stories.md):
+- "⚠️ STALE 2026-07-21: 47/111 missions" → "105 KO + 137 EN = 242 stories / 111 missions mapped"
+
+### Orphan 8 페이지 false positive 발견
+사용자 작업 1 & 2 에서 "8 wiki world pages orphan" 으로 보고했으나 **재검증 결과 모두 인덱스됨** (markdown link syntax `[Label](wiki/world/X.md)`).
+
+이전 grep 은 `[[wikilink]]` syntax 만 검색 — Obsidian 의 `[Label](path.md)` markdown link 는 미검출.
+
+| 페이지 | md-link | wikilink | 상태 |
+|---|---:|---:|---|
+| boss-ice-reference | 1 | 0 | ✅ |
+| cross-project-integration | 1 | 0 | ✅ |
+| cyberspace | 1 | 0 | ✅ |
+| derivative_stories | 1 | 0 | ✅ |
+| factions | 1 | 0 | ✅ |
+| glossary | 2 | 0 | ✅ |
+| sprawl_universe | 1 | 0 | ✅ |
+| style_guide | 1 | 0 | ✅ |
+
+작업 2 (8 페이지 인덱스 link) **이미 해결된 상태** — 추가 작업 불필요.
+
+### 검증
+| Check | Result |
+|---|---|
+| `python3 tools/audit_sprawl.py` | ✅ No errors |
+| `python3 tools/find_broken_links.py` | ✅ 0 broken |
+| `python3 audit_vault.py` (workspace) | ✅ CLEAN |
+| `python3 dashboard_pipeline_audit.py` | ✅ 0 errors |
+
+### Commit
+- `e207a9d` docs(index): refresh game stats to current state (2026-08-06)
